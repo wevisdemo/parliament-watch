@@ -1,2 +1,9 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+	import { DataTableSkeleton } from 'carbon-components-svelte';
+</script>
+
+<div class="p-4 space-y-6">
+	<h1>Parliament Watch 👀</h1>
+	<p>Coming soon...</p>
+	<DataTableSkeleton />
+</div>
