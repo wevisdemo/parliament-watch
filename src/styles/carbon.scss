@@ -1,0 +1,20 @@
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/themes/scss';
+
+$carbon--theme: $carbon--theme--white;
+@include carbon--theme();
+
+$css--font-face: false;
+$css--helpers: true;
+$css--body: false;
+$css--use-layer: false;
+$css--reset: false;
+$css--default-type: true;
+$css--plex: false;
+
+$feature-flags: (
+	ui-shell: true,
+	grid-columns-16: true
+);
+
+@import 'carbon-components/scss/globals/scss/styles.scss';
+@import 'carbon-components-svelte/css/_popover.scss';

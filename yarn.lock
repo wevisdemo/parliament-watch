@@ -42,6 +42,16 @@
     chalk "^2.4.2"
     js-tokens "^4.0.0"
 
+"@bufbuild/protobuf@^1.0.0":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-1.3.1.tgz#c4de66bacbe7ac97fe054e68314aeba6f45177f9"
+  integrity sha512-BUyJWutgP2S8K/1NphOJokuwDckXS4qI2T1pGZAlkFdZchWae3jm6fCdkcGbLlM1QLOcNFFePd+7Feo4BYGrJQ==
+
+"@carbon/telemetry@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@carbon/telemetry/-/telemetry-0.1.0.tgz#57b331cd5a855b4abbf55457456da8211624d879"
+  integrity sha512-kNWt0bkgPwGW0i5h7HFuljbKRXPvIhsKbB+1tEURAYLXoJg9iJLF1eGvWN5iVoFCS2zje4GR3OGOsvvKVe7Hlg==
+
 "@commitlint/cli@^17.7.0":
   version "17.7.0"
   resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-17.7.0.tgz#c62213abdf47764704c8dc3d2ca5f53fb1fa1371"
@@ -774,6 +784,11 @@ browserslist@^4.21.5:
     node-releases "^2.0.13"
     update-browserslist-db "^1.0.11"
 
+buffer-builder@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/buffer-builder/-/buffer-builder-0.2.0.tgz#3322cd307d8296dab1f604618593b261a3fade8f"
+  integrity sha512-7VPMEPuYznPSoR21NE1zvd2Xna6c/CloiZCfcMXR1Jny6PjX0N4Nsa38zcBFo/FMK+BlA+FLKbJCQ0i2yxp+Xg==
+
 buffer-crc32@^0.2.5:
   version "0.2.13"
   resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
@@ -821,6 +836,16 @@ carbon-components-svelte@^0.79.0:
   integrity sha512-xq9XgfcHIfbKUtAI7s1HDdkFKuP7PyNHfr14d2Xzx072DJw3DNnMBe0xmQE6z9M5tKTRaJziUVMYprzBI+Y1SQ==
   dependencies:
     flatpickr "4.6.9"
+
+carbon-components@^10.58.10:
+  version "10.58.10"
+  resolved "https://registry.yarnpkg.com/carbon-components/-/carbon-components-10.58.10.tgz#712eadb48faa8cce26096659f5956bce41811db5"
+  integrity sha512-RnTFB5s27rTKiGELIZVF72CKCFNy6Mz3x4cU6wVifbgjYKRDVlFCyXsmo56pNIhfGi5LPFHfLl/+sc/+ImkOsg==
+  dependencies:
+    "@carbon/telemetry" "0.1.0"
+    flatpickr "4.6.1"
+    lodash.debounce "^4.0.8"
+    warning "^3.0.0"
 
 chalk@5.2.0:
   version "5.2.0"
@@ -1420,6 +1445,11 @@ flat-cache@^3.0.4:
     flatted "^3.1.0"
     rimraf "^3.0.2"
 
+flatpickr@4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.1.tgz#9eb498ab805dd27f5ae02e1ac6ac6c099ce45e94"
+  integrity sha512-3ULSxbXmcMIRzer/2jLNweoqHpwDvsjEawO2FUd9UFR8uPwLM+LruZcPDpuZStcEgbQKhuFOfXo4nYdGladSNw==
+
 flatpickr@4.6.9:
   version "4.6.9"
   resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.9.tgz#9a13383e8a6814bda5d232eae3fcdccb97dc1499"
@@ -1608,6 +1638,11 @@ ignore@^5.2.0:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
+immutable@^4.0.0:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.3.4.tgz#2e07b33837b4bb7662f288c244d1ced1ef65a78f"
+  integrity sha512-fsXeu4J4i6WNWSikpI88v/PcVflZz+6kMhUfIwc5SY+poQRPnaf5V7qds6SUyUN3cVxEzuCab7QIoLOQ+DQ1wA==
+
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -1744,7 +1779,7 @@ jiti@^1.18.2, jiti@^1.19.1:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.19.1.tgz#fa99e4b76a23053e0e7cde098efe1704a14c16f1"
   integrity sha512-oVhqoRDaBXf7sjkll95LHVS6Myyyb1zaunVwk4Z0+WPSW4gjS0pl01zYKHScTuyEhQsFxV5L4DR5r+YqSyqyyg==
 
-js-tokens@^4.0.0:
+"js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
@@ -1880,6 +1915,11 @@ lodash.camelcase@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==
 
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+  integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
+
 lodash.isfunction@^3.0.9:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/lodash.isfunction/-/lodash.isfunction-3.0.9.tgz#06de25df4db327ac931981d1bdb067e5af68d051"
@@ -1939,6 +1979,13 @@ log-update@^4.0.0:
     cli-cursor "^3.1.0"
     slice-ansi "^4.0.0"
     wrap-ansi "^6.2.0"
+
+loose-envify@^1.0.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
+  integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
+  dependencies:
+    js-tokens "^3.0.0 || ^4.0.0"
 
 lru-cache@^6.0.0:
   version "6.0.0"
@@ -2549,7 +2596,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@^7.8.0:
+rxjs@^7.4.0, rxjs@^7.8.0:
   version "7.8.1"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.1.tgz#6f6f3d99ea8044291efd92e7c7fcf562c4057543"
   integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==
@@ -2577,6 +2624,67 @@ sander@^0.5.0:
     graceful-fs "^4.1.3"
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
+
+sass-embedded-darwin-arm64@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-darwin-arm64/-/sass-embedded-darwin-arm64-1.66.1.tgz#7f7490965d3687795d30a91fe373e9840894eb10"
+  integrity sha512-XdvA4KThDRLvUweMGWEsEd3swOSeiGuLelNUKbvB4H3Peh+O0m9XfKwWxh1FJZP0gVK3moMXPyVflYrUWVHGCA==
+
+sass-embedded-darwin-x64@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-darwin-x64/-/sass-embedded-darwin-x64-1.66.1.tgz#c08527ba7ac9875d66c89750e8024cc66e69c93a"
+  integrity sha512-y3kLVhFPFUvN+uZwNhl0wZ4V7ghPzXxOwoTC1n6LHUe/xRcDP5Nl+7zBHpwhW94lLgjDhEd1+mnpz8HGVHdIAw==
+
+sass-embedded-linux-arm64@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-arm64/-/sass-embedded-linux-arm64-1.66.1.tgz#d67429cb3648dd3cf7511a8350184b50c693753b"
+  integrity sha512-HPy8ScfUMSdG5TjRSsr6rnGQjG/PzyslwVGL0UB+8LTkj2PyDEu35jmHBgWggSCmIqvu7phw4OgiWEUuaxwXgg==
+
+sass-embedded-linux-arm@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-arm/-/sass-embedded-linux-arm-1.66.1.tgz#475730804f53fb352ec590a7aa3ce195d95f522a"
+  integrity sha512-lPkMTR0Wwc9NTuvWsKo4a+/slHFcEypPpjfL+HFKaoq4NqMkX/DBewD5wl9rA45KCfJ47wf47H4aJ0Qcd82Iyg==
+
+sass-embedded-linux-ia32@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-ia32/-/sass-embedded-linux-ia32-1.66.1.tgz#66b35d1bd0f94ea811c28d65d96860a65b5a77ec"
+  integrity sha512-DhxaQpWNpPrvSCFqgWUWv0dlnB6PzLBeMaA87pILCgJGnJs2vaPYr5JgVBK+nFQYaKVZ3PC5K0OfcY8ruQVdPw==
+
+sass-embedded-linux-x64@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-linux-x64/-/sass-embedded-linux-x64-1.66.1.tgz#832c41c123621ee5a96f3915ff83f70a2588b4a1"
+  integrity sha512-tIRa/fn34x4NrbSEmfekAcQSHPKheNJ+/uqCGmxeBSr7Yw7S4CoP1/yvtY/geKmx4uSmgSJhdEYB9X1f+MoSQw==
+
+sass-embedded-win32-ia32@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-win32-ia32/-/sass-embedded-win32-ia32-1.66.1.tgz#292dfd3fc79bb38dd4d90bf3b360b868fbba2b35"
+  integrity sha512-h9uNhQbJN6rP5+MXZZj4vL9phTsjLj/8PH/fyhKdUvJP7+5+k6qmCttkJX8Xvws2veFhgRW+mt/erdGGkc4nFA==
+
+sass-embedded-win32-x64@1.66.1:
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded-win32-x64/-/sass-embedded-win32-x64-1.66.1.tgz#f5b8bdcf96fd4924d1e4f267a8436a9c7692a3fc"
+  integrity sha512-TdZilrwiDBMYUjFSnaoQdRtm5QYV+73bsMKN+JYd1KFI56KM8XHcCeMTUH37+uKw2O8pR17O/JRFSNWBJTl5kw==
+
+"sass@npm:sass-embedded":
+  version "1.66.1"
+  resolved "https://registry.yarnpkg.com/sass-embedded/-/sass-embedded-1.66.1.tgz#76fcdbf217e33a1875a940d3d84a03cc74156388"
+  integrity sha512-bHTFMSpcIJxrCav9ac69dMMYoiWIhiw/88eApojX7j1gsCAAx3nQMkTKr7FKIVVofWla8sE1KM9qtFya2k8svw==
+  dependencies:
+    "@bufbuild/protobuf" "^1.0.0"
+    buffer-builder "^0.2.0"
+    immutable "^4.0.0"
+    rxjs "^7.4.0"
+    supports-color "^8.1.1"
+    varint "^6.0.0"
+  optionalDependencies:
+    sass-embedded-darwin-arm64 "1.66.1"
+    sass-embedded-darwin-x64 "1.66.1"
+    sass-embedded-linux-arm "1.66.1"
+    sass-embedded-linux-arm64 "1.66.1"
+    sass-embedded-linux-ia32 "1.66.1"
+    sass-embedded-linux-x64 "1.66.1"
+    sass-embedded-win32-ia32 "1.66.1"
+    sass-embedded-win32-x64 "1.66.1"
 
 "semver@2 || 3 || 4 || 5":
   version "5.7.2"
@@ -2795,6 +2903,13 @@ supports-color@^7.1.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-7.2.0.tgz#1b7dcdcb32b8138801b3e478ba6a51caa89648da"
   integrity sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
+  dependencies:
+    has-flag "^4.0.0"
+
+supports-color@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-8.1.1.tgz#cd6fc17e28500cff56c1b86c0a7fd4a54a73005c"
+  integrity sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==
   dependencies:
     has-flag "^4.0.0"
 
@@ -3043,6 +3158,11 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
+varint@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/varint/-/varint-6.0.0.tgz#9881eb0ce8feaea6512439d19ddf84bf551661d0"
+  integrity sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg==
+
 vite@^4.4.2:
   version "4.4.9"
   resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.9.tgz#1402423f1a2f8d66fd8d15e351127c7236d29d3d"
@@ -3058,6 +3178,13 @@ vitefu@^0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/vitefu/-/vitefu-0.2.4.tgz#212dc1a9d0254afe65e579351bed4e25d81e0b35"
   integrity sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==
+
+warning@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/warning/-/warning-3.0.0.tgz#32e5377cb572de4ab04753bdf8821c01ed605b7c"
+  integrity sha512-jMBt6pUrKn5I+OGgtQ4YZLdhIeJmObddh6CsibPxyQ5yPZm1XExSyzC1LCNX7BzhxWgiHmizBWJTHJIjMjTQYQ==
+  dependencies:
+    loose-envify "^1.0.0"
 
 which@^2.0.1:
   version "2.0.2"
