@@ -3,7 +3,7 @@
 </script>
 
 <div class="p-4 space-y-6">
-	<h1 class="type-fluid-display-01">Parliament Watch 👀</h1>
+	<h1 class="fluid-display-01 text-blue-60">Parliament Watch 👀</h1>
 	<p>Coming soon...</p>
 	<Button>Button</Button>
 
