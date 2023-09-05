@@ -1,0 +1,75 @@
+// Modified Carbon type system tokens
+// carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/_styles.scss
+
+// Body
+.body-compact-01 {
+	@include type-style('body-short-01');
+}
+.body-compact-02 {
+	@include type-style('body-short-02');
+}
+.body-01 {
+	@include type-style('body-long-01');
+}
+.body-02 {
+	@include type-style('body-long-02');
+}
+
+// Utility
+.label-01 {
+	@include type-style('label-01');
+}
+.label-02 {
+	@include type-style('label-02');
+}
+.helper-text-01 {
+	@include type-style('helper-text-01');
+}
+.helper-text-02 {
+	@include type-style('helper-text-02');
+}
+
+// Fixed heading
+.heading-compact-01 {
+	@include type-style('productive-heading-01');
+}
+.heading-compact-02 {
+	@include type-style('productive-heading-02');
+}
+.heading-01 {
+	@include type-style('expressive-heading-01');
+}
+.heading-02 {
+	@include type-style('expressive-heading-02');
+}
+.heading-03 {
+	@include type-style('expressive-heading-03');
+	@apply font-semibold;
+}
+
+// Fluid
+.fluid-heading-03 {
+	@include type-style('expressive-heading-03', true);
+	@apply font-serif;
+	font-weight: 700 !important;
+}
+.fluid-heading-04 {
+	@include type-style('expressive-heading-04', true);
+	@apply font-serif;
+	font-weight: 700 !important;
+}
+.fluid-heading-05 {
+	@include type-style('expressive-heading-05', true);
+	@apply font-serif;
+	font-weight: 700 !important;
+}
+.fluid-display-01 {
+	@include type-style('display-01', true);
+	@apply font-serif;
+	font-weight: 700 !important;
+}
+.fluid-display-03 {
+	@include type-style('display-03', true);
+	@apply font-serif;
+	font-weight: 700 !important;
+}
