@@ -14,8 +14,9 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"lint-staged": {
-		"*": "prettier --plugin-search-dir . --write --ignore-unknown",
-		"*.{js,ts,svelte}": "eslint --fix"
+		"*.md": "doctoc --github --update-only",
+		"*.{js,ts,svelte}": "eslint --fix",
+		"*": "prettier --plugin-search-dir . --write --ignore-unknown"
 	},
 	"dependencies": {
 		"@sveltejs/adapter-static": "^2.0.3"
@@ -30,6 +31,7 @@
 		"autoprefixer": "^10.4.14",
 		"carbon-components": "^10.58.10",
 		"carbon-components-svelte": "^0.79.0",
+		"doctoc": "^2.2.1",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte": "^2.30.0",
