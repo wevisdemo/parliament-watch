@@ -9,7 +9,6 @@ $css--plex: false;
 @import 'carbon-components/scss/globals/scss/_css--reset.scss';
 @import 'carbon-components/scss/globals/scss/_css--helpers.scss';
 @import 'carbon-components/scss/globals/scss/_css--body.scss';
-
 @import 'carbon-components/scss/globals/scss/_mixins.scss';
 @import 'carbon-components/scss/globals/scss/_spacing.scss';
 
@@ -21,7 +20,7 @@ $css--plex: false;
 // @import 'carbon-components/scss/components/combo-box/combo-box';
 // @import 'carbon-components/scss/components/content-switcher/content-switcher';
 // @import 'carbon-components/scss/components/copy-button/copy-button';
-// @import 'carbon-components/scss/components/data-table/data-table';
+@import 'carbon-components/scss/components/data-table/data-table';
 // @import 'carbon-components/scss/components/date-picker/date-picker';
 // @import 'carbon-components/scss/components/dropdown/dropdown';
 // @import 'carbon-components/scss/components/file-uploader/file-uploader';
