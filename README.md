@@ -1,18 +1,28 @@
-# Parliament Watch
+# Parliament Watch 👀
 
-Citizens is watching 👀
+Citizens are watching
+
+**Table of Content**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Environment](#environment)
 - [Tech Stack](#tech-stack)
 - [Set Up](#set-up)
 - [Using the Design System](#using-the-design-system)
   - [Typography](#typography)
   - [Colors](#colors)
-  - [Component](#component)
+  - [Components](#components)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Environment
+
+| Name       | URL                                |
+| ---------- | ---------------------------------- |
+| Staging    | https://parliament-watch.pages.dev |
+| Production | -                                  |
 
 ## Tech Stack
 
@@ -50,9 +60,9 @@ The project design system is based on Carbon Design System with some modificatio
   - [tailwind.config.js](tailwind.config.js) which can be used in Tailwind utility classes
 - See [Figma design file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>)
 
-### Component
+### Components
 
-Use [Carbon Component Svelte](https://carbon-components-svelte.onrender.com)
+Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
 
 - Avoid developing new component from scratch if not nessesary.
 - We import only nessesary Carbon's stylesheet. After adding a new component, please uncomment coresponded import statement in [carbon.scss](src/styles/carbon.scss)
