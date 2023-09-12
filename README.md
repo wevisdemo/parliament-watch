@@ -25,11 +25,11 @@ Citizens are watching
 
 ## 🌎 Environments
 
-| Name             | URL                                     |
-| ---------------- | --------------------------------------- |
-| Per Pull Request | Provided by Cloudflare Pages in each PR |
-| Staging          | https://parliament-watch.pages.dev      |
-| Production       | -                                       |
+| Name                   | URL                                |
+| ---------------------- | ---------------------------------- |
+| Branch Preview         | Provided by Cloudflare Pages       |
+| Staging (main branche) | https://parliament-watch.pages.dev |
+| Production             | -                                  |
 
 ## 🍱 Tech Stack
 
@@ -49,7 +49,7 @@ Citizens are watching
 
 ### Deployment pipeline
 
-- [Cloudflare Pages](https://pages.cloudflare.com) will automatically deploy staging (main branch) and per pull request environment.
+- [Cloudflare Pages](https://pages.cloudflare.com) will automatically deploy staging (main branch) and per branch preview.
 
 ## 🪄 Set Up
 
@@ -95,7 +95,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 ## 🤝 Contribution Guideline
 
-- For each issue, create a new branch name in the format of `username/short-description`
+- For each issue, create a new branch name in the format of `username/issuenumber-description`
 - Open the pull requests (PR), with the same name of the issue, when you need a discussion or ready to be reviewed.
 
 ## 📜 License and Terms of Use
