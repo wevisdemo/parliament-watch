@@ -17,6 +17,7 @@ Citizens are watching
   - [Typography](#typography)
   - [Colors](#colors)
   - [Components](#components)
+  - [Icons](#icons)
 - [🤝 Contribution Guideline](#-contribution-guideline)
 - [📜 License and Terms of Use](#-license-and-terms-of-use)
 
@@ -66,7 +67,7 @@ yarn dev
 
 ## 🍭 Design System
 
-The project design system is based on Carbon Design System with some modification.
+The project design system is based on Carbon Design System v10 with some modification.
 
 ### Typography
 
@@ -82,10 +83,15 @@ The project design system is based on Carbon Design System with some modificatio
 
 ### Components
 
-Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
-
+- Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
 - Avoid developing new component from scratch if not nessesary.
 - We import only nessesary Carbon's stylesheet. After adding a new component, please uncomment coresponded import statement in [carbon.scss](src/styles/carbon.scss)
+
+### Icons
+
+- Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
+- We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon.
+- See [Figma design file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
 
 ## 🤝 Contribution Guideline
 

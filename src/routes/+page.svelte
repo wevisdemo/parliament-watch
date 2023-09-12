@@ -1,5 +1,11 @@
 <script>
 	import { Button, DataTableSkeleton } from 'carbon-components-svelte';
+	import Vote from '../components/icons/vote.svelte';
+	import Politician from '../components/icons/politician.svelte';
+	import General from '../components/icons/general.svelte';
+	import Law from '../components/icons/law.svelte';
+	import MobileRotate from '../components/icons/mobile-rotate.svelte';
+	import People from '../components/icons/people.svelte';
 </script>
 
 <div class="p-4 space-y-6 min-h-screen h-full">
@@ -13,6 +19,15 @@
 	</div>
 
 	<DataTableSkeleton showHeader={false} showToolbar={false} size="tall" />
+
+	<div class="flex flex-row gap-2">
+		<Vote />
+		<Politician />
+		<General />
+		<Law />
+		<MobileRotate />
+		<People />
+	</div>
 
 	<div>
 		{#each ['body-compact', 'body', 'label', 'helper-text', 'heading-compact', 'heading'] as typo}

@@ -891,6 +891,11 @@ carbon-components@^10.58.10:
     lodash.debounce "^4.0.8"
     warning "^3.0.0"
 
+carbon-icons-svelte@^12.3.0:
+  version "12.3.0"
+  resolved "https://registry.yarnpkg.com/carbon-icons-svelte/-/carbon-icons-svelte-12.3.0.tgz#7c4dcea9c4e458bcff277a29fc0180081789f6d6"
+  integrity sha512-RZI1nJEjnpgBka4A6zwEkNNqYfV9H7WjcyQ4JYPLoMO8a7N7mAVbaG9ngHUEahxf/byaHBp+EJD3Natf1dkylQ==
+
 ccount@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/ccount/-/ccount-1.1.0.tgz#246687debb6014735131be8abab2d93898f8d043"
