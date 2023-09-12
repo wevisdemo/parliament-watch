@@ -96,6 +96,7 @@ The project design system is based on Carbon Design System v10 with some modific
 ## 🤝 Contribution Guideline
 
 - For each issue, create a new branch name in the format of `username/issuenumber-description`
+- Add issue number as a commit message scope eg. `feat(issuenumber): commit description`
 - Open the pull requests (PR), with the same name of the issue, when you need a discussion or ready to be reviewed.
 
 ## 📜 License and Terms of Use
