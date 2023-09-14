@@ -13,8 +13,8 @@ export interface Politician {
 	assetValue: number;
 	debtValue: number;
 	contacts: Contact[];
-	assemblyHistories: AssemblyHistory[];
-	partyHistories: PartyHistory[];
+	assemblyRoles: AssemblyRole[];
+	partyRoles: PartyRole[];
 }
 
 interface Contact {
@@ -22,15 +22,15 @@ interface Contact {
 	href: string;
 }
 
-interface AssemblyHistory extends History {
+interface AssemblyRole extends Role {
 	assembly: Assembly;
 }
 
-interface PartyHistory extends History {
+interface PartyRole extends Role {
 	party: Party;
 }
 
-interface History {
+interface Role {
 	role: string | undefined;
 	from: Date;
 	to?: Date;

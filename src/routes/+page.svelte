@@ -3,7 +3,9 @@
 
 	<ul class="list-disc list-inside">
 		<li>
-			<a href="/people/สมชาติ-สกุลสมมุติ">[WEV-12] Users can learn about a politician's details</a>
+			<a href="/politicians/สมชาติ-สกุลสมมุติ"
+				>[WEV-12] Users can learn about a politician's details</a
+			>
 		</li>
 	</ul>
 </div>

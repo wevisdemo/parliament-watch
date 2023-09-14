@@ -3,7 +3,7 @@ import { rep26, gov35 } from '../../../mocks/data/assembly';
 import { movingForwardParty } from '../../../mocks/data/party';
 
 export function load({ params }) {
-	const [firstname, lastname] = params.slug.split('-');
+	const [firstname, lastname] = params.id.split('-');
 
 	const politician: Politician = {
 		firstname,
@@ -20,7 +20,7 @@ export function load({ params }) {
 			{ label: 'Facebook', href: 'https://facebook.com' },
 			{ label: 'Twitter', href: 'https://twitter.com' }
 		],
-		assemblyHistories: [
+		assemblyRoles: [
 			{ role: 'สมาชิกแบบบัญชีรายชื่อ', assembly: rep26, from: new Date('2023-01-01') },
 			{
 				role: 'รองประธานสภา คนที่ 1',
@@ -35,7 +35,7 @@ export function load({ params }) {
 				to: new Date('2023-06-12')
 			}
 		],
-		partyHistories: [
+		partyRoles: [
 			{
 				role: 'เลขาธิการพรรค',
 				party: movingForwardParty,
