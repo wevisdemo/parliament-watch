@@ -18,6 +18,7 @@ Citizens are watching
   - [Colors](#colors)
   - [Components](#components)
   - [Icons](#icons)
+- [💾 Data Models](#-data-models)
 - [🤝 Contribution Guideline](#-contribution-guideline)
 - [📜 License and Terms of Use](#-license-and-terms-of-use)
 
@@ -92,6 +93,10 @@ The project design system is based on Carbon Design System v10 with some modific
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
 - We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon.
 - See [Figma design file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
+
+## 💾 Data Models
+
+ER Diagram and TypeScript's interfaces are avaiable in [src/models](src/models)
 
 ## 🤝 Contribution Guideline
 
