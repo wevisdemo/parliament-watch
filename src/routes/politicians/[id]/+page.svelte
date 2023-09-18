@@ -1,9 +1,11 @@
 <script lang="ts">
 	import General from '$components/icons/general.svelte';
 	import Politician from '$components/icons/politician.svelte';
+	import Vote from '$components/icons/vote.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import Share from '$components/politicians/Share.svelte';
+	import { Button, InlineNotification, Tag } from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
@@ -271,13 +273,162 @@
 				</ul>
 			</div>
 		</Section>
-		<section class="bg-white rounded-sm p-4 md:p-8">
-			<details>
-				<summary>Data</summary>
-				<pre>
-					{JSON.stringify(politician, null, 2)}
-				</pre>
-			</details>
-		</section>
+		<Section id="politics" title="ประวัติการลงมติ">
+			<Vote slot="icon" size="32" />
+			<InlineNotification
+				slot="header-extension"
+				class="m-0 mt-1"
+				lowContrast
+				kind="info"
+				subtitle="การประเมินพฤติกรรมการลงมติ จะพิจารณาเพียงชื่อมติไม่ได้ ควรศึกษาเนื้อหาของมตินั้นๆ ประกอบด้วย"
+			/>
+			<div class="flex flex-col gap-6">
+				<div class="flex flex-col gap-2">
+					<h3 class="body-02 px-2 py-1 bg-teal-20">
+						5 มติล่าสุด ที่{politician.firstname}<span class="heading-02">เห็นด้วย</span>
+					</h3>
+					<!-- TODO: add links -->
+					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+							</a>
+						</li>
+					</ul>
+					<!-- TODO: add links -->
+					<a
+						href="/"
+						class="mr-auto helper-text-01 flex gap-2 items-center"
+						target="_blank"
+						rel="nofollow noopener noreferrer"
+					>
+						<span>ดู xx มติที่เห็นด้วย</span>
+						<ArrowRight />
+					</a>
+				</div>
+				<div class="flex flex-col gap-2">
+					<h3 class="body-02 px-2 py-1 bg-red-20">
+						5 มติล่าสุด ที่{politician.firstname}<span class="heading-02">ไม่เห็นด้วย</span>
+					</h3>
+					<!-- TODO: add links -->
+					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+							</a>
+						</li>
+						<li>
+							<a class="text-black no-underline cursor-pointer" href="/">
+								<span class="underline"
+									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
+								>
+								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+							</a>
+						</li>
+					</ul>
+					<!-- TODO: add links -->
+					<a
+						href="/"
+						class="mr-auto helper-text-01 flex gap-2 items-center"
+						target="_blank"
+						rel="nofollow noopener noreferrer"
+					>
+						<span>ดู xx มติที่เห็นด้วย</span>
+						<ArrowRight />
+					</a>
+				</div>
+				<div class="flex flex-col gap-2">
+					<h3 class="body-02 px-2 py-1 bg-gray-10 heading-02">การลา/ขาดประชุม</h3>
+					<!-- TODO: add numbers -->
+					<p class="body-02">
+						{politician.firstname}ลา/ขาดประชุมในการลงมติ xxx มติ (xx%) จากทั้งหมด x,xxx
+						มติในฐานข้อมูล ซึ่งน้อยกว่าค่ากลางของสมาชิกในสภาทั้งหมด (xx%)
+					</p>
+					<p class="label-01 text-gray-60">
+						หมายเหตุ: การขาดลงมติ เกิดจากหลายสาเหตุ เช่น ติดประชุมอื่น ติดภารกิจสำคัญ เจ็บป่วย
+						จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
+					</p>
+					<!-- TODO: add links -->
+					<a
+						href="/"
+						class="mr-auto helper-text-01 flex gap-2 items-center"
+						target="_blank"
+						rel="nofollow noopener noreferrer"
+					>
+						<span>ดู xx มติที่ขาด</span>
+						<ArrowRight />
+					</a>
+				</div>
+				<!-- TODO: add link -->
+				<Button href="/" kind="tertiary" icon={ArrowRight} size="small">ดูการลงมติทั้งหมด</Button>
+			</div>
+		</Section>
+		<Section id="data" title="Data">
+			<div class="overflow-x-auto">
+				<pre>{JSON.stringify(politician, null, 2)}</pre>
+			</div>
+		</Section>
 	</div>
 </div>
