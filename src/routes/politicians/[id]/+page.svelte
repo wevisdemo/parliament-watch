@@ -1,5 +1,6 @@
 <script lang="ts">
 	import General from '$components/icons/general.svelte';
+	import Politician from '$components/icons/politician.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import Share from '$components/politicians/Share.svelte';
@@ -105,11 +106,10 @@
 						<ArrowRight class="hidden md:group-data-[active]:block" />
 					</div>
 					<ul class="label-01 text-white/60">
-						<!-- FIXME: ถามว่าตำแหน่งคืออะไร -->
 						{#if politician.assemblyRoles.length > 0}
 							<li>{politician.assemblyRoles.length} ตำแหน่ง</li>
 						{/if}
-						<!-- FIXME: ถามว่าพรรคการเมืองนับยังไง -->
+						<!-- TODO: นับพรรคการเมือง -->
 						<li>3 พรรคการเมือง</li>
 					</ul>
 				</a>
@@ -174,7 +174,7 @@
 					</ul>
 				{/if}
 			</div>
-			<hr class="border-0 border-solid border-gray-50 border-t w-full m-0 box-border" />
+			<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
 			<div>
 				<ul class="mb-1">
 					<li>
@@ -198,7 +198,7 @@
 				</a>
 			</div>
 			{#if politician.contacts.length > 0}
-				<hr class="border-0 border-solid border-gray-50 border-t w-full m-0 box-border" />
+				<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
 				<div>
 					<span class="heading-02">ช่องทางติดต่อ</span>
 					<ul class="flex flex-wrap gap-3 helper-text-01">
@@ -212,6 +212,64 @@
 					</ul>
 				</div>
 			{/if}
+		</Section>
+		<Section id="politics" title="ประวัติทางการเมือง">
+			<Politician slot="icon" size="32" />
+			<p slot="header-extension" class="label-01 text-gray-60">
+				หมายเหตุ: ข้อมูลย้อนหลังถึงปี 2562
+			</p>
+			{#if politician.assemblyRoles.length > 0}
+				<div>
+					<h3 class="heading-02">{politician.assemblyRoles.length} ตำแหน่งทางการเมือง</h3>
+					<ul class="ml-8 list-disc">
+						{#each politician.assemblyRoles as role}
+							<li>
+								{role.role}
+								<!-- TODO: add links -->
+								<a class="text-black" href="/">
+									{role.assembly.abbreviation} ชุดที่ {role.assembly.term}
+								</a>
+								<span class="body-compact-02 text-gray-60">
+									({role.from.toLocaleDateString('th-TH', {
+										month: 'short',
+										year: '2-digit'
+									})}
+									- {role.to
+										? role.to.toLocaleDateString('th-TH', {
+												month: 'short',
+												year: '2-digit'
+										  })
+										: 'ปัจจุบัน'})
+								</span>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+			<!-- TODO: ใส่ข้อมูลพรรค -->
+			<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
+			<div>
+				<h3 class="heading-02">3 พรรคที่เคยสังกัด</h3>
+				<!-- TODO: add links -->
+				<ul class="flex flex-col gap-[2px] ml-8 list-disc">
+					<li>
+						<a class="text-black" href="/">อนาคตใหม่</a>
+						<span class="text-gray-60">(ม.ค. 63 - ปัจจุบัน)</span>
+						<span class="block label-01">
+							ตำแหน่ง : เลขาธิการพรรค <span class="text-gray-60">(พ.ค. 63 - ปัจจุบัน)</span>,
+							หัวหน้าพรรค <span class="text-gray-60">(ม.ค. 63 - พ.ค. 63)</span>
+						</span>
+					</li>
+					<li>
+						<a class="text-black" href="/">พลังประชารัฐ</a>
+						<span class="text-gray-60">(ม.ค. 62 - ม.ค. 63)</span>
+					</li>
+					<li>
+						<a class="text-black" href="/">ประชาธิปัติ</a>
+						<span class="text-gray-60">(ม.ค. 62 - ม.ค. 63)</span>
+					</li>
+				</ul>
+			</div>
 		</Section>
 		<section class="bg-white rounded-sm p-4 md:p-8">
 			<details>
