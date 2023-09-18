@@ -276,7 +276,7 @@
 			<Vote slot="icon" size="32" />
 			<InlineNotification
 				slot="header-extension"
-				class="m-0 mt-1"
+				class="m-0 mt-1 min-w-0"
 				lowContrast
 				kind="info"
 				subtitle="การประเมินพฤติกรรมการลงมติ จะพิจารณาเพียงชื่อมติไม่ได้ ควรศึกษาเนื้อหาของมตินั้นๆ ประกอบด้วย"
@@ -289,43 +289,43 @@
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
 							</a>
 						</li>
 					</ul>
@@ -347,43 +347,43 @@
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="teal">ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
 							</a>
 						</li>
 						<li>
-							<a class="text-black no-underline cursor-pointer" href="/">
-								<span class="underline"
+							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+								<span class="flex-1 max-w-max underline"
 									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
 								>
-								<Tag class="cursor-pointer m-0" type="red">ไม่ผ่าน</Tag>
+								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
 							</a>
 						</li>
 					</ul>
