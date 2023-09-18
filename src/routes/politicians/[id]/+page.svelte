@@ -1,14 +1,19 @@
 <script lang="ts">
+	import General from '$components/icons/general.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
+	import Section from '$components/politicians/Section.svelte';
 	import Share from '$components/politicians/Share.svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 
 	export let data;
 
 	const { politician } = data;
+
+	const age = new Date(Date.now() - politician.birthdate.getTime()).getFullYear() - 1970;
 </script>
 
 <header class="font-sans px-4 py-8 md:px-16 md:py-12">
@@ -143,8 +148,72 @@
 			</li>
 		</menu>
 	</nav>
-	<div class="flex-1 flex flex-col gap-6">
-		<section class="bg-white">
+	<div class="flex-1 flex flex-col gap-6 w-full">
+		<Section id="personal" title="ข้อมูลพื้นฐาน">
+			<General slot="icon" size="32" />
+			<div>
+				<p>
+					<span class="heading-02">เพศ</span>
+					{politician.sex} <span class="heading-02">ปีเกิด</span>
+					{politician.birthdate.getFullYear() + 543} ({age} ปี)
+				</p>
+				{#if politician.educations.length > 0}
+					<span class="heading-02">การศึกษา</span>
+					<ul class="ml-8 list-disc">
+						{#each politician.educations as education}
+							<li>{education}</li>
+						{/each}
+					</ul>
+				{/if}
+				{#if politician.previousOccupations.length > 0}
+					<span class="heading-02">อาชีพเดิม</span>
+					<ul class="ml-8 list-disc">
+						{#each politician.previousOccupations as oldjob}
+							<li>{oldjob}</li>
+						{/each}
+					</ul>
+				{/if}
+			</div>
+			<hr class="border-0 border-solid border-gray-50 border-t w-full m-0 box-border" />
+			<div>
+				<ul class="mb-1">
+					<li>
+						<span class="heading-02">ทรัพย์สิน</span>
+						{politician.assetValue.toLocaleString('th-TH')} บาท
+					</li>
+					<li>
+						<span class="heading-02">หนี้สิน</span>
+						{politician.debtValue.toLocaleString('th-TH')} บาท
+					</li>
+				</ul>
+				<!-- TODO: Add link -->
+				<a
+					href="/"
+					class="mr-auto helper-text-01 flex gap-2 items-center w-fit"
+					target="_blank"
+					rel="nofollow noopener noreferrer"
+				>
+					<span>ตรวจสอบประวัติทางธุรกิจ</span>
+					<ArrowUpRight />
+				</a>
+			</div>
+			{#if politician.contacts.length > 0}
+				<hr class="border-0 border-solid border-gray-50 border-t w-full m-0 box-border" />
+				<div>
+					<span class="heading-02">ช่องทางติดต่อ</span>
+					<ul class="flex flex-wrap gap-3 helper-text-01">
+						{#each politician.contacts as contact}
+							<li>
+								<a href={contact.href} target="_blank" rel="nofollow noopener noreferrer">
+									{contact.label}
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+		</Section>
+		<section class="bg-white rounded-sm p-4 md:p-8">
 			<details>
 				<summary>Data</summary>
 				<pre>
