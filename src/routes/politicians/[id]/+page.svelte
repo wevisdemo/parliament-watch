@@ -69,9 +69,20 @@
 	</div>
 </header>
 
-<details>
-	<summary>Data</summary>
-	<pre>
-		{JSON.stringify(politician, null, 2)}
-	</pre>
-</details>
+<!-- FIXME: Get current party to avoid partyRoles being empty arr -->
+<div
+	class="flex flex-col gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16"
+	style:--party={politician.partyRoles[0].party.color}
+>
+	<nav>Nav</nav>
+	<div class="flex-1 flex flex-col gap-6">
+		<section class="bg-white">
+			<details>
+				<summary>Data</summary>
+				<pre>
+					{JSON.stringify(politician, null, 2)}
+				</pre>
+			</details>
+		</section>
+	</div>
+</div>
