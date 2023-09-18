@@ -1,8 +1,10 @@
 <script lang="ts">
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
+	import Share from '$components/politicians/Share.svelte';
+	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
-	import Share from '$components/politicians/Share.svelte';
 
 	export let data;
 
@@ -71,10 +73,76 @@
 
 <!-- FIXME: Get current party to avoid partyRoles being empty arr -->
 <div
-	class="flex flex-col gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16"
+	class="flex flex-col items-start gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16 font-sans heading-01"
 	style:--party={politician.partyRoles[0].party.color}
 >
-	<nav>Nav</nav>
+	<nav class="w-full bg-gray-100 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px]">
+		<menu class="flex flex-col gap-[1px] list-none">
+			<li
+				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
+				data-active
+			>
+				<a href="#personal" class="text-white no-underline">
+					<div class="flex justify-between">
+						<span>ข้อมูลพื้นฐาน</span>
+						<ArrowDown class="md:hidden" />
+						<ArrowRight class="hidden md:group-data-[active]:block" />
+					</div>
+				</a>
+			</li>
+			<li
+				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
+			>
+				<a href="#politics" class="text-white no-underline">
+					<div class="flex justify-between">
+						<span>ประวัติทางการเมือง</span>
+						<ArrowDown class="md:hidden" />
+						<ArrowRight class="hidden md:group-data-[active]:block" />
+					</div>
+					<ul class="label-01 text-white/60">
+						<!-- FIXME: ถามว่าตำแหน่งคืออะไร -->
+						{#if politician.assemblyRoles.length > 0}
+							<li>{politician.assemblyRoles.length} ตำแหน่ง</li>
+						{/if}
+						<!-- FIXME: ถามว่าพรรคการเมืองนับยังไง -->
+						<li>3 พรรคการเมือง</li>
+					</ul>
+				</a>
+			</li>
+			<li
+				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
+			>
+				<a href="#votelog" class="text-white no-underline">
+					<div class="flex justify-between">
+						<span>ประวัติการลงมติ</span>
+						<ArrowDown class="md:hidden" />
+						<ArrowRight class="hidden md:group-data-[active]:block" />
+					</div>
+					<ul class="label-01 text-white/60">
+						<!-- TODO: เพิ่มนับมติ -->
+						<li>เห็นด้วย xxx มติ</li>
+						<li>ไม่เห็นด้วย xxx มติ</li>
+						<li>ลา/ขาดประชุม xxx มติ</li>
+					</ul>
+				</a>
+			</li>
+			<li
+				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
+			>
+				<a href="#bill" class="text-white no-underline">
+					<div class="flex justify-between">
+						<span>ประวัติการเสนอกฏหมาย</span>
+						<ArrowDown class="md:hidden" />
+						<ArrowRight class="hidden md:group-data-[active]:block" />
+					</div>
+					<ul class="label-01 text-white/60">
+						<!-- TODO: เพิ่มนับร่าง -->
+						<li>xxx ร่าง</li>
+					</ul>
+				</a>
+			</li>
+		</menu>
+	</nav>
 	<div class="flex-1 flex flex-col gap-6">
 		<section class="bg-white">
 			<details>
