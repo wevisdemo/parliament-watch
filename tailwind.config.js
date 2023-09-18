@@ -51,7 +51,11 @@ export default {
 			'ui-04': '#8D8D8D',
 			'ui-05': '#161616'
 		},
-		extend: {}
+		extend: {
+			transitionTimingFunction: {
+				'productive-in-out': 'cubic-bezier(0.2, 0.2, 0.38, 0.9)'
+			}
+		}
 	},
 	plugins: []
 };

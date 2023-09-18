@@ -18,14 +18,14 @@
 <div class="flex gap-2 items-center">
 	<strong class="heading-01">แชร์ประวัติ</strong>
 	<button
-		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors ease-[cubic-bezier(0.2,0.2,0.38,0.9)] duration-[110ms]"
+		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors productive-in-out duration-[110ms]"
 		type="button"
 		on:click={copyUrl}
 	>
 		<Link />
 	</button>
 	<a
-		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors ease-[cubic-bezier(0.2,0.2,0.38,0.9)] duration-[110ms]"
+		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors ease-productive-in-out duration-[110ms]"
 		href={'http://www.facebook.com/sharer/sharer.php?u=' + encodedURL}
 		target="_blank"
 		rel="nofollow noopener noreferrer"
@@ -40,7 +40,7 @@
 		>
 	</a>
 	<a
-		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors ease-[cubic-bezier(0.2,0.2,0.38,0.9)] duration-[110ms]"
+		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors productive-in-out duration-[110ms]"
 		href={'https://twitter.com/intent/tweet?url=' + encodedURL}
 		target="_blank"
 		rel="nofollow noopener noreferrer"

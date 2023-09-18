@@ -2,6 +2,7 @@
 	import General from '$components/icons/general.svelte';
 	import Politician from '$components/icons/politician.svelte';
 	import Vote from '$components/icons/vote.svelte';
+	import PartyDetail from '$components/politicians/PartyDetail.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import Share from '$components/politicians/Share.svelte';
@@ -11,7 +12,8 @@
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
-	import PartyDetail from '$components/politicians/PartyDetail.svelte';
+	import scrollama from 'scrollama';
+	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -26,6 +28,26 @@
 	const age = new Date(Date.now() - politician.birthdate.getTime()).getFullYear() - 1970;
 	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
 	const partyCount = Object.keys(parties).length;
+
+	let currentNavElementIndex = 0;
+	onMount(() => {
+		// TODO: recheck desktop size
+		if (window.matchMedia('(min-width: 768px)').matches) {
+			const scroller = scrollama();
+
+			scroller
+				.setup({
+					step: '.politician-section',
+					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
+					offset: '33px'
+				})
+				.onStepEnter((response) => {
+					currentNavElementIndex = response.index;
+				});
+
+			return scroller.destroy;
+		}
+	});
 </script>
 
 <header class="font-sans px-4 py-8 md:px-16 md:py-12">
@@ -93,13 +115,15 @@
 	class="flex flex-col items-start gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16 font-sans heading-01"
 	style:--party={politician.partyRoles[0].party.color}
 >
-	<nav class="w-full bg-gray-100 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px]">
+	<nav
+		class="w-full bg-gray-100 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px] md:flex-[0_0_224px]"
+	>
 		<menu class="flex flex-col gap-[1px] list-none">
 			<li
-				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
-				data-active
+				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[111ms] ease-productive-in-out"
+				data-active={currentNavElementIndex === 0 || null}
 			>
-				<a href="#personal" class="text-white no-underline">
+				<a href="#personal" class="block p-4 text-white no-underline">
 					<div class="flex justify-between">
 						<span>ข้อมูลพื้นฐาน</span>
 						<ArrowDown class="md:hidden" />
@@ -108,9 +132,10 @@
 				</a>
 			</li>
 			<li
-				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
+				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[113ms] ease-productive-in-out"
+				data-active={currentNavElementIndex === 1 || null}
 			>
-				<a href="#politics" class="text-white no-underline">
+				<a href="#politics" class="block p-4 text-white no-underline">
 					<div class="flex justify-between">
 						<span>ประวัติทางการเมือง</span>
 						<ArrowDown class="md:hidden" />
@@ -129,9 +154,10 @@
 				</a>
 			</li>
 			<li
-				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
+				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[114ms] ease-productive-in-out"
+				data-active={currentNavElementIndex === 2 || null}
 			>
-				<a href="#votelog" class="text-white no-underline">
+				<a href="#votelog" class="block p-4 text-white no-underline">
 					<div class="flex justify-between">
 						<span>ประวัติการลงมติ</span>
 						<ArrowDown class="md:hidden" />
@@ -146,9 +172,10 @@
 				</a>
 			</li>
 			<li
-				class="group p-4 bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100"
+				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[112ms] ease-productive-in-out"
+				data-active={currentNavElementIndex === 3 || null}
 			>
-				<a href="#bill" class="text-white no-underline">
+				<a href="#bill" class="block p-4 text-white no-underline">
 					<div class="flex justify-between">
 						<span>ประวัติการเสนอกฏหมาย</span>
 						<ArrowDown class="md:hidden" />
@@ -162,7 +189,7 @@
 			</li>
 		</menu>
 	</nav>
-	<div class="flex-1 flex flex-col gap-6 w-full">
+	<div class="flex-1 flex flex-col gap-6 w-full min-w-0">
 		<Section id="personal" title="ข้อมูลพื้นฐาน">
 			<General slot="icon" size="32" />
 			<div>
@@ -272,7 +299,7 @@
 				</div>
 			{/if}
 		</Section>
-		<Section id="politics" title="ประวัติการลงมติ">
+		<Section id="votelog" title="ประวัติการลงมติ">
 			<Vote slot="icon" size="32" />
 			<InlineNotification
 				slot="header-extension"
@@ -424,10 +451,10 @@
 				<Button href="/" kind="tertiary" icon={ArrowRight} size="small">ดูการลงมติทั้งหมด</Button>
 			</div>
 		</Section>
-		<Section id="data" title="Data">
+		<!-- <Section id="data" title="Data">
 			<div class="overflow-x-auto">
 				<pre>{JSON.stringify(politician, null, 2)}</pre>
 			</div>
-		</Section>
+		</Section> -->
 	</div>
 </div>

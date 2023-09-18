@@ -3093,6 +3093,11 @@ sass-embedded-win32-x64@1.66.1:
     sass-embedded-win32-ia32 "1.66.1"
     sass-embedded-win32-x64 "1.66.1"
 
+scrollama@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/scrollama/-/scrollama-3.2.0.tgz#90ac1765a1d2b7999ab7f971b4f71b9e2508b60c"
+  integrity sha512-PIPwB1kYBnbw/ezvPBJa5dCN5qEwokfpAkI3BmpZWAwcVID4nDf1qH6WV16A2fQaJmsKx0un5S/zhxN+PQeKDQ==
+
 "semver@2 || 3 || 4 || 5":
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.2.tgz#48d55db737c3287cd4835e17fa13feace1c41ef8"
