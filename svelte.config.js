@@ -8,7 +8,9 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$components: './src/components',
-			'$components/*': './src/components/*'
+			'$components/*': './src/components/*',
+			$models: './src/models',
+			'$models/*': './src/models/*'
 		}
 	}
 };

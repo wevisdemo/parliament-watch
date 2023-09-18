@@ -26,7 +26,7 @@ interface AssemblyRole extends Role {
 	assembly: Assembly;
 }
 
-interface PartyRole extends Role {
+export interface PartyRole extends Role {
 	party: Party;
 }
 

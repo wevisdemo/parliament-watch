@@ -11,12 +11,21 @@
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
+	import PartyDetail from '$components/politicians/PartyDetail.svelte';
 
 	export let data;
 
 	const { politician } = data;
 
+	const groupBy = <T, K extends keyof any>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
+		arr.reduce(
+			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
+			{} as Record<K, T[]>
+		);
+
 	const age = new Date(Date.now() - politician.birthdate.getTime()).getFullYear() - 1970;
+	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
+	const partyCount = Object.keys(parties).length;
 </script>
 
 <header class="font-sans px-4 py-8 md:px-16 md:py-12">
@@ -107,13 +116,16 @@
 						<ArrowDown class="md:hidden" />
 						<ArrowRight class="hidden md:group-data-[active]:block" />
 					</div>
-					<ul class="label-01 text-white/60">
-						{#if politician.assemblyRoles.length > 0}
-							<li>{politician.assemblyRoles.length} ตำแหน่ง</li>
-						{/if}
-						<!-- TODO: นับพรรคการเมือง -->
-						<li>3 พรรคการเมือง</li>
-					</ul>
+					{#if politician.assemblyRoles.length + partyCount > 0}
+						<ul class="label-01 text-white/60">
+							{#if politician.assemblyRoles.length > 0}
+								<li>{politician.assemblyRoles.length} ตำแหน่ง</li>
+							{/if}
+							{#if partyCount > 0}
+								<li>{partyCount} พรรคการเมือง</li>
+							{/if}
+						</ul>
+					{/if}
 				</a>
 			</li>
 			<li
@@ -248,30 +260,17 @@
 					</ul>
 				</div>
 			{/if}
-			<!-- TODO: ใส่ข้อมูลพรรค -->
-			<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
-			<div>
-				<h3 class="heading-02">3 พรรคที่เคยสังกัด</h3>
-				<!-- TODO: add links -->
-				<ul class="flex flex-col gap-[2px] ml-8 list-disc">
-					<li>
-						<a class="text-black" href="/">อนาคตใหม่</a>
-						<span class="text-gray-60">(ม.ค. 63 - ปัจจุบัน)</span>
-						<span class="block label-01">
-							ตำแหน่ง : เลขาธิการพรรค <span class="text-gray-60">(พ.ค. 63 - ปัจจุบัน)</span>,
-							หัวหน้าพรรค <span class="text-gray-60">(ม.ค. 63 - พ.ค. 63)</span>
-						</span>
-					</li>
-					<li>
-						<a class="text-black" href="/">พลังประชารัฐ</a>
-						<span class="text-gray-60">(ม.ค. 62 - ม.ค. 63)</span>
-					</li>
-					<li>
-						<a class="text-black" href="/">ประชาธิปัติ</a>
-						<span class="text-gray-60">(ม.ค. 62 - ม.ค. 63)</span>
-					</li>
-				</ul>
-			</div>
+			{#if partyCount > 0}
+				<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
+				<div>
+					<h3 class="heading-02">{partyCount} พรรคที่เคยสังกัด</h3>
+					<ul class="flex flex-col gap-[2px] ml-8 list-disc">
+						{#each Object.entries(parties) as [party, data]}
+							<PartyDetail {party} {data} />
+						{/each}
+					</ul>
+				</div>
+			{/if}
 		</Section>
 		<Section id="politics" title="ประวัติการลงมติ">
 			<Vote slot="icon" size="32" />
