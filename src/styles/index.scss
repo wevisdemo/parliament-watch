@@ -7,4 +7,9 @@
 @import './typography.scss';
 
 @tailwind components;
+
+.bx--search-magnifier-icon {
+	left: 1rem;
+}
+
 @tailwind utilities;
