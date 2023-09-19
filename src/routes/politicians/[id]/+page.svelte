@@ -6,7 +6,13 @@
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import Share from '$components/politicians/Share.svelte';
-	import { Button, InlineNotification, Tag } from 'carbon-components-svelte';
+	import {
+		Breadcrumb,
+		BreadcrumbItem,
+		Button,
+		InlineNotification,
+		Tag
+	} from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
@@ -50,6 +56,16 @@
 	});
 </script>
 
+<Breadcrumb
+	noTrailingSlash
+	class="px-4 py-2 font-sans body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+>
+	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
+	<BreadcrumbItem href="/politicians">สส. ชุดที่ 26</BreadcrumbItem>
+	<BreadcrumbItem href="/politicians/{politician.firstname}-{politician.lastname}" isCurrentPage
+		>{politician.firstname}</BreadcrumbItem
+	>
+</Breadcrumb>
 <header class="font-sans px-4 py-8 md:px-16 md:py-12">
 	<div class="relative w-[120px] h-[120px] mb-4">
 		<img
