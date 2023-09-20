@@ -73,14 +73,12 @@ The project design system is based on Carbon Design System v10 with some modific
 ### Typography
 
 - The utility classes is globally available as declared in [typography.scss](src/styles/typography.scss)
-- See [Figma design file](<https://www.figma.com/file/wydykFjb2U2SLFIz5YmiE8/(v11)-Text-Styles---IBM-Design-Language-(Community)>)
+- See [Figma file](<https://www.figma.com/file/wydykFjb2U2SLFIz5YmiE8/(v11)-Text-Styles---IBM-Design-Language-(Community)>)
 
 ### Colors
 
-- Color scheme are defined in
-  - [colors.scss](src/styles/colors.scss) as a global sass variable
-  - [tailwind.config.js](tailwind.config.js) which can be used in Tailwind utility classes
-- See [Figma design file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>)
+- [tailwind.config.js](tailwind.config.js) define utility classes based on color function name according to the Carbon's theme (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)>))
+- [colors.scss](src/styles/colors.scss) define global sass variable of all color palette (see [Figma file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>))
 
 ### Components
 
@@ -92,7 +90,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
 - We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon.
-- See [Figma design file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
+- See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
 
 ## 💾 Data Models
 
