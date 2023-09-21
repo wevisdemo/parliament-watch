@@ -12,9 +12,21 @@
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 
+	import { DataTable } from 'carbon-components-svelte';
+
 	export let data;
 
 	const { votelog } = data;
+
+	let rows = Array.from({ length: 102 }).map((_, i) => ({
+		id: i,
+		name: 'Load Balancer ' + (i + 1),
+		protocol: 'HTTP',
+		port: 3000 + i * 10,
+		rule: i % 2 ? 'Round robin' : 'DNS delegation'
+	}));
+	let pageSize = 10;
+	let page = 1;
 </script>
 
 <Breadcrumb
@@ -77,6 +89,32 @@
 		</div>
 	</div>
 	<div class="flex-1 bg-white">
+		<DataTable
+			class="[&>*>.bx--data-table--sticky-header]:max-h-[calc(100vh-40px)]"
+			size="tall"
+			headers={[
+				{ key: 'name', value: 'Name' },
+				{ key: 'protocol', value: 'Protocol' },
+				{ key: 'port', value: 'Port' },
+				{ key: 'rule', value: 'Rule' }
+			]}
+			{pageSize}
+			{page}
+			{rows}
+		/>
+		<Pagination
+			class="sticky bottom-0"
+			bind:pageSize
+			bind:page
+			totalItems={rows.length}
+			pageSizeInputDisabled
+			forwardText="หน้าถัดไป"
+			backwardText="หน้าก่อนหน้า"
+			itemRangeText={(min, max, total) => `${min} – ${max} จาก ${total} มติ`}
+			pageRangeText={(_, total) => `จาก ${total} หน้า`}
+		/>
+	</div>
+	<!-- <div class="flex-1 bg-white">
 		<div class="sticky top-0 w-full h-12 bg-red-40">THEAD</div>
 		{#each Array(50) as _}
 			<div class="h-12 bg-gray-20">TROW</div>
@@ -91,5 +129,5 @@
 			itemRangeText={(min, max, total) => `${min} – ${max} จาก ${total} มติ`}
 			pageRangeText={(_, total) => `จาก ${total} หน้า`}
 		/>
-	</div>
+	</div> -->
 </div>
