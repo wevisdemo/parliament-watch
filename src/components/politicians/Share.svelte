@@ -1,13 +1,31 @@
 <script lang="ts">
 	import Link from 'carbon-icons-svelte/lib/Link.svelte';
+	import { Tooltip } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 
 	export let url = '';
+	let copyTooltip = false;
+	let copyTooltipTimeout: number;
+	let copyResult = 'Copied!';
 
 	$: encodedURL = encodeURIComponent(url);
 
 	const copyUrl = () => {
-		window.navigator.clipboard.writeText(url);
+		window.navigator.clipboard
+			.writeText(url)
+			.then(() => {
+				copyResult = 'Copied!';
+			})
+			.catch(() => {
+				copyResult = 'Error!';
+			})
+			.finally(() => {
+				if (copyTooltipTimeout) clearTimeout(copyTooltipTimeout);
+				copyTooltip = true;
+				copyTooltipTimeout = setTimeout(() => {
+					copyTooltip = false;
+				}, 2000);
+			});
 	};
 
 	onMount(() => {
@@ -23,6 +41,14 @@
 		on:click={copyUrl}
 	>
 		<Link />
+		<Tooltip
+			bind:open={copyTooltip}
+			hideIcon
+			ref={null}
+			class="-translate-x-[7px] translate-y-1 [&>.bx--tooltip]:py-1 [&>.bx--tooltip]:px-4 [&>.bx--tooltip]:min-w-0"
+		>
+			{copyResult}
+		</Tooltip>
 	</button>
 	<a
 		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors ease-productive-in-out duration-[110ms]"
