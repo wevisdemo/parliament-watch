@@ -6,6 +6,11 @@
 @import './fonts.scss';
 @import './typography.scss';
 
+body {
+	@apply font-sans;
+	@include type-style('body-long-02');
+}
+
 @tailwind components;
 
 .bx--search-magnifier-icon {
