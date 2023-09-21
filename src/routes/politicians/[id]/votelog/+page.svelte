@@ -30,7 +30,7 @@
 		>ประวัติการลงมติ</BreadcrumbItem
 	>
 </Breadcrumb>
-<header class="px-4 py-3 bg-gray-10 md:px-16">
+<header class="px-4 py-3 bg-ui-01 md:px-16">
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<!-- FIXME: ไม่มีคำนำหน้า -->
 	<h1 class="fluid-heading-03 mb-1">{votelog.firstname} {votelog.lastname}</h1>
@@ -44,7 +44,7 @@
 				subtitle="การประเมินพฤติกรรมการลงมติ จะพิจารณาเพียงชื่อมติไม่ได้ ควรศึกษาเนื้อหาของมตินั้นๆ ประกอบด้วย"
 			/>
 		</div>
-		<div class="flex flex-col gap-2 border border-solid border-gray-20 rounded-sm p-3">
+		<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3">
 			<div class="flex items-center gap-1">
 				<Download />
 				<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
@@ -58,7 +58,7 @@
 	</div>
 </header>
 
-<div class="flex gap-1 bg-gray-10 min-h-screen">
+<div class="flex gap-1 bg-ui-01 min-h-screen">
 	<div class="sticky top-0 max-h-screen flex flex-col bg-white w-[250px] flex-[0_0_250px]">
 		<div class="sticky top-0 flex w-full pl-6">
 			<Search class="flex-1 !px-12" placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง" light />

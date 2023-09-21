@@ -107,7 +107,7 @@
 			{/if}
 		</div>
 		<div class="flex flex-col gap-2">
-			<div class="flex flex-col gap-2 border border-solid border-gray-20 rounded-sm p-3">
+			<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3">
 				<div class="flex items-center gap-1">
 					<Download />
 					<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
@@ -132,11 +132,11 @@
 	style:--party={politician.partyRoles[0].party.color}
 >
 	<nav
-		class="w-full bg-gray-100 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px] md:flex-[0_0_224px]"
+		class="w-full bg-ui-05 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px] md:flex-[0_0_224px]"
 	>
 		<menu class="flex flex-col gap-[1px] list-none">
 			<li
-				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[111ms] ease-productive-in-out"
+				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[111ms] ease-productive-in-out"
 				data-active={currentNavElementIndex === 0 || null}
 			>
 				<a href="#personal" class="block p-4 text-white no-underline">
@@ -148,7 +148,7 @@
 				</a>
 			</li>
 			<li
-				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[113ms] ease-productive-in-out"
+				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[113ms] ease-productive-in-out"
 				data-active={currentNavElementIndex === 1 || null}
 			>
 				<a href="#politics" class="block p-4 text-white no-underline">
@@ -170,7 +170,7 @@
 				</a>
 			</li>
 			<li
-				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[114ms] ease-productive-in-out"
+				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[114ms] ease-productive-in-out"
 				data-active={currentNavElementIndex === 2 || null}
 			>
 				<a href="#votelog" class="block p-4 text-white no-underline">
@@ -188,7 +188,7 @@
 				</a>
 			</li>
 			<li
-				class="group bg-gray-80 hover:bg-[#313131] md:data-[active]:bg-gray-100 md:data-[active]:hover:bg-gray-100 transition-colors duration-[112ms] ease-productive-in-out"
+				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[112ms] ease-productive-in-out"
 				data-active={currentNavElementIndex === 3 || null}
 			>
 				<a href="#bill" class="block p-4 text-white no-underline">
