@@ -33,7 +33,9 @@
 
 	const age = new Date(Date.now() - politician.birthdate.getTime()).getFullYear() - 1970;
 	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
+	const currentParty = politician.partyRoles.find((e) => !e.to);
 	const partyCount = Object.keys(parties).length;
+	const currentRoles = politician.assemblyRoles.filter((e) => !e.to);
 
 	let currentNavElementIndex = 0;
 	onMount(() => {
@@ -77,26 +79,27 @@
 			loading="lazy"
 			decoding="async"
 		/>
-		<!-- FIXME: Get current party to avoid partyRoles being empty arr -->
-		<img
-			class="absolute right-0 bottom-0 rounded-full overflow-hidden w-[32px] h-auto aspect-square bg-white border border-gray-30 border-solid object-contain"
-			src={politician.partyRoles[0].party.logo}
-			alt={politician.partyRoles[0].party.name}
-			width="32"
-			height="32"
-			loading="lazy"
-			decoding="async"
-		/>
+		{#if currentParty}
+			<img
+				class="absolute right-0 bottom-0 rounded-full overflow-hidden w-[32px] h-auto aspect-square bg-white border border-gray-30 border-solid object-contain"
+				src={currentParty.party.logo}
+				alt={currentParty.party.name}
+				width="32"
+				height="32"
+				loading="lazy"
+				decoding="async"
+			/>
+		{/if}
 	</div>
 	<div class="flex flex-col gap-8 md:flex-row md:gap-16">
 		<div class="flex-1 flex flex-col gap-2">
 			<!-- FIXME: ไม่มีคำนำหน้า -->
 			<h1 class="fluid-heading-05">{politician.firstname} {politician.lastname}</h1>
 			<PositionStatus isActive={politician.isActive} />
-			{#if politician.assemblyRoles.length > 0}
+			{#if currentRoles.length > 0}
 				<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
 				<ul class="body-01 list-disc ml-8">
-					{#each politician.assemblyRoles as role}
+					{#each currentRoles as role}
 						<!-- TODO: add link -->
 						<li>
 							{role.role} ใน
@@ -126,10 +129,9 @@
 	</div>
 </header>
 
-<!-- FIXME: Get current party to avoid partyRoles being empty arr -->
 <div
 	class="flex flex-col items-start gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16 heading-01"
-	style:--party={politician.partyRoles[0].party.color}
+	style:--party={currentParty?.party.color ?? '#F4F4F4'}
 >
 	<nav
 		class="w-full bg-ui-05 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px] md:flex-[0_0_224px]"
