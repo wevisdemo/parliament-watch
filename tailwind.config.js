@@ -7,6 +7,9 @@ export default {
 		preflight: false
 	},
 	theme: {
+		screens: {
+			md: '672px'
+		},
 		fontFamily: {
 			serif: ['Kondolar Thai', ...defaultTheme.fontFamily.serif],
 			sans: ['IBM Plex Sans Thai Looped', ...defaultTheme.fontFamily.sans]
