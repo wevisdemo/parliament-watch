@@ -58,7 +58,7 @@
 
 <Breadcrumb
 	noTrailingSlash
-	class="px-4 py-2 font-sans body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/politicians">สส. ชุดที่ 26</BreadcrumbItem>
@@ -66,7 +66,7 @@
 		>{politician.firstname}</BreadcrumbItem
 	>
 </Breadcrumb>
-<header class="font-sans px-4 py-8 md:px-16 md:py-12">
+<header class="px-4 py-8 md:px-16 md:py-12">
 	<div class="relative w-[120px] h-[120px] mb-4">
 		<img
 			class="rounded-full overflow-hidden w-full h-full object-cover"
@@ -128,7 +128,7 @@
 
 <!-- FIXME: Get current party to avoid partyRoles being empty arr -->
 <div
-	class="flex flex-col items-start gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16 font-sans heading-01"
+	class="flex flex-col items-start gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16 heading-01"
 	style:--party={politician.partyRoles[0].party.color}
 >
 	<nav

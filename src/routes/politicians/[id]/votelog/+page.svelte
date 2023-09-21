@@ -19,7 +19,7 @@
 
 <Breadcrumb
 	noTrailingSlash
-	class="px-4 py-2 font-sans body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/politicians">สส. ชุดที่ 26</BreadcrumbItem>
@@ -30,7 +30,7 @@
 		>ประวัติการลงมติ</BreadcrumbItem
 	>
 </Breadcrumb>
-<header class="px-4 py-3 bg-gray-10 font-sans md:px-16">
+<header class="px-4 py-3 bg-gray-10 md:px-16">
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<!-- FIXME: ไม่มีคำนำหน้า -->
 	<h1 class="fluid-heading-03 mb-1">{votelog.firstname} {votelog.lastname}</h1>
@@ -58,7 +58,7 @@
 	</div>
 </header>
 
-<div class="flex gap-1 bg-gray-10 min-h-screen font-sans">
+<div class="flex gap-1 bg-gray-10 min-h-screen">
 	<div class="sticky top-0 max-h-screen flex flex-col bg-white w-[250px] flex-[0_0_250px]">
 		<div class="sticky top-0 flex w-full pl-6">
 			<Search class="flex-1 !px-12" placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง" light />
