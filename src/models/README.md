@@ -14,6 +14,7 @@ erDiagram
 
   Politician {
     string id PK "firstname-lastname"
+    string prefix
     string firstname
     string lastname
     boolean isActive
@@ -65,9 +66,9 @@ erDiagram
     Date date
     string meetingType
     string[] participatedAssembleIds FK
-    string[] voteOptions
+    VoteOption[] voteOptions "label: string, color: string"
     string winningCondition
-    number winningOption "voteOptions index"
+    string result "passed | failed | string (other result)"
     number relatedBillId FK
     string sourceUrl
     Link[] files "label: string, url: string"
@@ -76,7 +77,7 @@ erDiagram
   Vote {
     string politicianId FK
     string votingId FK
-    number option "voteOptions index"
+    number voteOptionIndex "refer to Voting"
   }
 
   Event {

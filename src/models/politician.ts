@@ -1,7 +1,10 @@
 import type { Assembly } from './assembly';
+import type { Link } from './link';
 import type { Party } from './party';
 
 export interface Politician {
+	id: string;
+	prefix?: string;
 	firstname: string;
 	lastname: string;
 	isActive: boolean;
@@ -12,14 +15,9 @@ export interface Politician {
 	previousOccupations: string[];
 	assetValue: number;
 	debtValue: number;
-	contacts: Contact[];
+	contacts: Link[];
 	assemblyRoles: AssemblyRole[];
 	partyRoles: PartyRole[];
-}
-
-interface Contact {
-	label: string;
-	href: string;
 }
 
 interface AssemblyRole extends Role {
