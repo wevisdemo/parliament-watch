@@ -1,11 +1,21 @@
 import type { Politician } from '../../../models/politician';
 import { rep26, gov35 } from '../../../mocks/data/assembly';
 import { movingForwardParty } from '../../../mocks/data/party';
+import type { VotingSummary } from '$models/voting';
+import { failedVotingSummary, passedVotingSummary } from '../../../mocks/data/voting';
+
+interface VotingAbsentStats {
+	totalVoting: number;
+	absentVoting: number;
+	averageAbsentVoting: number;
+}
 
 export function load({ params }) {
 	const [firstname, lastname] = params.id.split('-');
 
 	const politician: Politician = {
+		id: params.id,
+		prefix: 'นาย',
 		firstname,
 		lastname,
 		isActive: true,
@@ -50,5 +60,27 @@ export function load({ params }) {
 		]
 	};
 
-	return { politician };
+	const latestAgreedVoting: VotingSummary[] = [
+		failedVotingSummary,
+		passedVotingSummary,
+		passedVotingSummary,
+		failedVotingSummary,
+		passedVotingSummary
+	];
+
+	const latestDisagreedVoting: VotingSummary[] = [
+		failedVotingSummary,
+		passedVotingSummary,
+		passedVotingSummary,
+		failedVotingSummary,
+		passedVotingSummary
+	];
+
+	const votingAbsentStats: VotingAbsentStats = {
+		totalVoting: 100,
+		absentVoting: 15,
+		averageAbsentVoting: 22
+	};
+
+	return { politician, latestAgreedVoting, latestDisagreedVoting, votingAbsentStats };
 }

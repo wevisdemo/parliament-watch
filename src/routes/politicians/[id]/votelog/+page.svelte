@@ -16,7 +16,7 @@
 
 	export let data;
 
-	const { votelog } = data;
+	const { prefix, firstname, lastname, votings } = data;
 
 	let rows = Array.from({ length: 102 }).map((_, i) => ({
 		id: i,
@@ -35,17 +35,15 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/politicians">สส. ชุดที่ 26</BreadcrumbItem>
-	<BreadcrumbItem href="/politicians/{votelog.firstname}-{votelog.lastname}"
-		>{votelog.firstname}</BreadcrumbItem
-	>
-	<BreadcrumbItem href="/politicians/{votelog.firstname}-{votelog.lastname}/votelog" isCurrentPage
+	<BreadcrumbItem href="/politicians/{firstname}-{lastname}">{firstname}</BreadcrumbItem>
+	<BreadcrumbItem href="/politicians/{firstname}-{lastname}/votelog" isCurrentPage
 		>ประวัติการลงมติ</BreadcrumbItem
 	>
 </Breadcrumb>
 <header class="px-4 py-3 bg-ui-01 md:px-16">
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<!-- FIXME: ไม่มีคำนำหน้า -->
-	<h1 class="fluid-heading-03 mb-1">{votelog.firstname} {votelog.lastname}</h1>
+	<h1 class="fluid-heading-03 mb-1">{firstname} {lastname}</h1>
 	<div class="flex flex-col gap-1 md:flex-row md:gap-16">
 		<div class="flex-1">
 			<InlineNotification
