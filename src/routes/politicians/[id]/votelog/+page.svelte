@@ -3,31 +3,25 @@
 		Breadcrumb,
 		BreadcrumbItem,
 		Button,
-		ButtonSet,
+		Checkbox,
+		DataTable,
 		FormGroup,
 		InlineNotification,
 		Pagination,
-		Search
+		Search,
+		Tag
 	} from 'carbon-components-svelte';
+	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
+	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
-	import { DataTable } from 'carbon-components-svelte';
-	import { Checkbox } from 'carbon-components-svelte';
-	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import { onMount } from 'svelte';
 
 	export let data;
 
 	const { prefix, firstname, lastname, votings } = data;
 
-	let rows = Array.from({ length: 102 }).map((_, i) => ({
-		id: i,
-		name: 'Load Balancer ' + (i + 1),
-		protocol: 'HTTP',
-		port: 3000 + i * 10,
-		rule: i % 2 ? 'Round robin' : 'DNS delegation'
-	}));
 	let pageSize = 10;
 	let page = 1;
 
@@ -56,7 +50,12 @@
 	<header class="px-4 py-3 bg-ui-01 md:px-16">
 		<p class="heading-01">ประวัติการลงมติ</p>
 		<!-- FIXME: ไม่มีคำนำหน้า -->
-		<h1 class="fluid-heading-03 mb-1">{firstname} {lastname}</h1>
+		<h1 class="fluid-heading-03 mb-1">
+			<a
+				class="no-underline text-black hover:text-blue-70"
+				href="/politicians/{firstname}-{lastname}">{prefix} {firstname} {lastname}</a
+			>
+		</h1>
 		<div class="flex flex-col gap-1 md:flex-row md:gap-16">
 			<div class="flex-1">
 				<InlineNotification
@@ -114,31 +113,39 @@
 				</div>
 				<div class="flex-[1_1_auto] h-0 overflow-y-scroll py-4 px-6">
 					<FormGroup legendText="สมัยการทำงาน">
-						<Checkbox id="era-26" labelText="สภาผู้แทนราษฎรชุดที่ 26 (2566 - ปัจจุบัน)" />
-						<Checkbox id="era-25" labelText="สภาผู้แทนราษฎรชุดที่ 25 (2563 - 2566)" />
+						<Checkbox id="era-26" labelText="สภาผู้แทนราษฎรชุดที่ 26 (2566 - ปัจจุบัน)" checked />
+						<Checkbox id="era-25" labelText="สภาผู้แทนราษฎรชุดที่ 25 (2563 - 2566)" checked />
 					</FormGroup>
 					<FormGroup legendText="ประเภทการลงมติ">
-						<Checkbox id="type-yes" labelText="เห็นด้วย (xxx)" />
-						<Checkbox id="type-no" labelText="ไม่เห็นด้วย (xxx)" />
-						<Checkbox id="type-abstain" labelText="งดออกเสียง (xxx)" />
-						<Checkbox id="type-novote" labelText="ไม่ลงคะแนน (xxx)" />
-						<Checkbox id="type-absent" labelText="ลา/ขาดประชุม (xxx)" />
-						<Checkbox id="type-other" labelText="อื่นๆ (xxx)" />
+						<Checkbox id="type-yes" labelText="เห็นด้วย (xxx)" checked />
+						<Checkbox id="type-no" labelText="ไม่เห็นด้วย (xxx)" checked />
+						<Checkbox id="type-abstain" labelText="งดออกเสียง (xxx)" checked />
+						<Checkbox id="type-novote" labelText="ไม่ลงคะแนน (xxx)" checked />
+						<Checkbox id="type-absent" labelText="ลา/ขาดประชุม (xxx)" checked />
+						<Checkbox id="type-other" labelText="อื่นๆ (xxx)" checked />
 					</FormGroup>
 					<FormGroup legendText="เงื่อนไขพิเศษ">
-						<Checkbox id="special-different" labelText="ลงมติต่างจากเสียงส่วนใหญ่ในพรรค (xxx)" />
-						<Checkbox id="special-follow" labelText="ลงมติเหมือนเสียงส่วนใหญ่ในพรรค (xxx)" />
+						<Checkbox
+							id="special-different"
+							labelText="ลงมติต่างจากเสียงส่วนใหญ่ในพรรค (xxx)"
+							checked
+						/>
+						<Checkbox
+							id="special-follow"
+							labelText="ลงมติเหมือนเสียงส่วนใหญ่ในพรรค (xxx)"
+							checked
+						/>
 					</FormGroup>
 					<FormGroup legendText="หมวดมติ (1&nbsp;มติ มีได้มากกว่า 1&nbsp;หมวด)" class="mb-0">
-						<Checkbox id="catg-เศรษฐกิจ" labelText="เศรษฐกิจ (xxx)" />
-						<Checkbox id="catg-ขนส่งสาธารณะ" labelText="ขนส่งสาธารณะ (xxx)" />
-						<Checkbox id="catg-แก้รัฐธรรมนูญ" labelText="แก้รัฐธรรมนูญ (xxx)" />
-						<Checkbox id="catg-ที่อยู่อาศัย" labelText="ที่อยู่อาศัย (xxx)" />
+						<Checkbox id="catg-เศรษฐกิจ" labelText="เศรษฐกิจ (xxx)" checked />
+						<Checkbox id="catg-ขนส่งสาธารณะ" labelText="ขนส่งสาธารณะ (xxx)" checked />
+						<Checkbox id="catg-แก้รัฐธรรมนูญ" labelText="แก้รัฐธรรมนูญ (xxx)" checked />
+						<Checkbox id="catg-ที่อยู่อาศัย" labelText="ที่อยู่อาศัย (xxx)" checked />
 						{#if showAllCatg}
-							<Checkbox id="catg-สวัสดิการ" labelText="สวัสดิการ (xxx)" />
-							<Checkbox id="catg-การศึกษา" labelText="การศึกษา (xxx)" />
-							<Checkbox id="catg-สิ่งแวดล้อม" labelText="สิ่งแวดล้อม (xxx)" />
-							<Checkbox id="catg-สังคม" labelText="สังคม (xxx)" />
+							<Checkbox id="catg-สวัสดิการ" labelText="สวัสดิการ (xxx)" checked />
+							<Checkbox id="catg-การศึกษา" labelText="การศึกษา (xxx)" checked />
+							<Checkbox id="catg-สิ่งแวดล้อม" labelText="สิ่งแวดล้อม (xxx)" checked />
+							<Checkbox id="catg-สังคม" labelText="สังคม (xxx)" checked />
 							<Button
 								class="underline"
 								kind="ghost"
@@ -182,21 +189,49 @@
 				class="[&>*>.bx--data-table--sticky-header]:max-h-[calc(100vh-40px)]"
 				size="tall"
 				headers={[
-					{ key: 'name', value: 'Name' },
-					{ key: 'protocol', value: 'Protocol' },
-					{ key: 'port', value: 'Port' },
-					{ key: 'rule', value: 'Rule' }
+					{ key: 'date', value: 'วันที่' },
+					{ key: 'title', value: 'ชื่อมติ' },
+					{ key: 'result', value: 'ผลลัพธ์' },
+					{ key: 'files', value: 'เอกสาร' }
 				]}
+				rows={votings}
 				{pageSize}
 				{page}
-				{rows}
-			/>
+			>
+				<svelte:fragment slot="cell" let:row let:cell>
+					{#if cell.key === 'date'}
+						{cell.value.toLocaleDateString('th-TH', {
+							day: 'numeric',
+							month: 'short',
+							year: '2-digit'
+						})}
+					{:else if cell.key === 'title'}
+						<!-- TODO: Add link -->
+						<a class="text-text-01" href="/">{cell.value}</a>
+					{:else if cell.key === 'result'}
+						<Tag class="m-0 whitespace-nowrap" type={cell.value === 'passed' ? 'teal' : 'red'}
+							>{cell.value === 'passed' ? 'ผ่าน' : 'ไม่ผ่าน'}</Tag
+						>
+					{:else if cell.key === 'files'}
+						{@const files = cell.value}
+						{#if files.length > 0}
+							{#each files as file}
+								<a href={file} download><DocumentPdf /></a>
+							{/each}
+						{:else}
+							-
+						{/if}
+					{:else}
+						{cell.value}
+					{/if}
+				</svelte:fragment>
+			</DataTable>
 			<div class="flex-1" />
 			<Pagination
 				class="sticky bottom-0"
 				bind:pageSize
 				bind:page
-				totalItems={rows.length}
+				totalItems={votings.length}
 				pageSizeInputDisabled
 				forwardText="หน้าถัดไป"
 				backwardText="หน้าก่อนหน้า"

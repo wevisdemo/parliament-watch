@@ -6,7 +6,9 @@ export async function load({ params }) {
 
 	const votings: VotingSummary[] = new Array(100).fill(passedVotingSummary).map((voting, i) => ({
 		...voting,
-		result: i % 2 ? DefaultVotingResult.Passed : DefaultVotingResult.Failed
+		id: i,
+		result: i % 3 ? DefaultVotingResult.Passed : DefaultVotingResult.Failed,
+		files: i % 2 ? ['/'] : []
 	}));
 
 	return { prefix: 'นาย', firstname, lastname, votings };
