@@ -39,8 +39,7 @@
 
 	let currentNavElementIndex = 0;
 	onMount(() => {
-		// TODO: recheck desktop size
-		if (window.matchMedia('(min-width: 768px)').matches) {
+		if (window.matchMedia('(min-width: 672px)').matches) {
 			const scroller = scrollama();
 
 			scroller
