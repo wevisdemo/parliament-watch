@@ -6,13 +6,8 @@
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import Share from '$components/politicians/Share.svelte';
-	import {
-		Breadcrumb,
-		BreadcrumbItem,
-		Button,
-		InlineNotification,
-		Tag
-	} from 'carbon-components-svelte';
+	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
+	import { Breadcrumb, BreadcrumbItem, Button, InlineNotification } from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
@@ -22,14 +17,14 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-
-	const { politician } = data;
+	const { politician, latestAgreedVoting, latestDisagreedVoting, votingAbsentStats } = data;
 
 	const groupBy = <T, K extends keyof any>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
 			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
 			{} as Record<K, T[]>
 		);
+	const safePercent = (n: number, outOf: number) => Math.round((n / (outOf || 1)) * 10000) / 100;
 
 	const age = new Date(Date.now() - politician.birthdate.getTime()).getFullYear() - 1970;
 	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
@@ -332,46 +327,17 @@
 					</h3>
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
-							</a>
-						</li>
+						{#each latestAgreedVoting as voting}
+							<li>
+								<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+									<span class="flex-1 max-w-max underline">{voting.title}</span>
+									<VotingResultTag
+										class="cursor-pointer m-0 whitespace-nowrap"
+										result={voting.result}
+									/>
+								</a>
+							</li>
+						{/each}
 					</ul>
 					<a
 						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=yes"
@@ -389,46 +355,17 @@
 					</h3>
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="teal">ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
-							</a>
-						</li>
-						<li>
-							<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-								<span class="flex-1 max-w-max underline"
-									>ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)</span
-								>
-								<Tag class="cursor-pointer m-0 whitespace-nowrap" type="red">ไม่ผ่าน</Tag>
-							</a>
-						</li>
+						{#each latestDisagreedVoting as voting}
+							<li>
+								<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
+									<span class="flex-1 max-w-max underline">{voting.title}</span>
+									<VotingResultTag
+										class="cursor-pointer m-0 whitespace-nowrap"
+										result={voting.result}
+									/>
+								</a>
+							</li>
+						{/each}
 					</ul>
 					<a
 						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=no"
@@ -442,10 +379,21 @@
 				</div>
 				<div class="flex flex-col gap-2">
 					<h3 class="body-02 px-2 py-1 bg-gray-10 heading-02">การลา/ขาดประชุม</h3>
-					<!-- TODO: add numbers -->
 					<p class="body-02">
-						{politician.firstname}ลา/ขาดประชุมในการลงมติ xxx มติ (xx%) จากทั้งหมด x,xxx
-						มติในฐานข้อมูล ซึ่งน้อยกว่าค่ากลางของสมาชิกในสภาทั้งหมด (xx%)
+						{politician.firstname}ลา/ขาดประชุมในการลงมติ {votingAbsentStats.absentVoting} มติ ({safePercent(
+							votingAbsentStats.absentVoting,
+							votingAbsentStats.totalVoting
+						)}%) จากทั้งหมด
+						{votingAbsentStats.totalVoting}
+						มติในฐานข้อมูล ซึ่ง{votingAbsentStats.absentVoting ===
+						votingAbsentStats.averageAbsentVoting
+							? 'เท่ากับ'
+							: votingAbsentStats.absentVoting < votingAbsentStats.averageAbsentVoting
+							? 'น้อยกว่า'
+							: 'มากกว่า'}ค่ากลางของสมาชิกในสภาทั้งหมด ({safePercent(
+							votingAbsentStats.averageAbsentVoting,
+							votingAbsentStats.totalVoting
+						)}%)
 					</p>
 					<p class="label-01 text-gray-60">
 						หมายเหตุ: การขาดลงมติ เกิดจากหลายสาเหตุ เช่น ติดประชุมอื่น ติดภารกิจสำคัญ เจ็บป่วย
