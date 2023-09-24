@@ -373,9 +373,8 @@
 							</a>
 						</li>
 					</ul>
-					<!-- TODO: add links -->
 					<a
-						href="/"
+						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=yes"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -431,9 +430,8 @@
 							</a>
 						</li>
 					</ul>
-					<!-- TODO: add links -->
 					<a
-						href="/"
+						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=no"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -453,9 +451,8 @@
 						หมายเหตุ: การขาดลงมติ เกิดจากหลายสาเหตุ เช่น ติดประชุมอื่น ติดภารกิจสำคัญ เจ็บป่วย
 						จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
 					</p>
-					<!-- TODO: add links -->
 					<a
-						href="/"
+						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=absent"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -464,8 +461,12 @@
 						<ArrowRight />
 					</a>
 				</div>
-				<!-- TODO: add link -->
-				<Button href="/" kind="tertiary" icon={ArrowRight} size="small">ดูการลงมติทั้งหมด</Button>
+				<Button
+					href="/politicians/{politician.firstname}-{politician.lastname}/votelog"
+					kind="tertiary"
+					icon={ArrowRight}
+					size="small">ดูการลงมติทั้งหมด</Button
+				>
 			</div>
 		</Section>
 		<!-- <Section id="data" title="Data">
