@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -9,8 +10,7 @@
 		FormGroup,
 		InlineNotification,
 		Pagination,
-		Search,
-		Tag
+		Search
 	} from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
@@ -316,9 +316,7 @@
 						<!-- TODO: Add link -->
 						<a class="text-text-01" href="/">{cell.value}</a>
 					{:else if cell.key === 'result'}
-						<Tag class="m-0 whitespace-nowrap" type={cell.value === 'passed' ? 'teal' : 'red'}
-							>{cell.value === 'passed' ? 'ผ่าน' : 'ไม่ผ่าน'}</Tag
-						>
+						<VotingResultTag class="m-0 whitespace-nowrap" result={cell.value} />
 					{:else if cell.key === 'files'}
 						{@const files = cell.value}
 						{#if files.length > 0}
