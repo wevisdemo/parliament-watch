@@ -102,7 +102,6 @@
 	</Breadcrumb>
 	<header class="px-4 py-3 bg-ui-01 md:px-16">
 		<p class="heading-01">ประวัติการลงมติ</p>
-		<!-- FIXME: ไม่มีคำนำหน้า -->
 		<h1 class="fluid-heading-03 mb-1">
 			<a
 				class="no-underline text-black hover:text-blue-70"

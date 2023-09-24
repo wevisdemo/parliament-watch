@@ -87,8 +87,11 @@
 	</div>
 	<div class="flex flex-col gap-8 md:flex-row md:gap-16">
 		<div class="flex-1 flex flex-col gap-2">
-			<!-- FIXME: ไม่มีคำนำหน้า -->
-			<h1 class="fluid-heading-05">{politician.firstname} {politician.lastname}</h1>
+			<h1 class="fluid-heading-05">
+				{politician.prefix}
+				{politician.firstname}
+				{politician.lastname}
+			</h1>
 			<PositionStatus isActive={politician.isActive} />
 			{#if currentRoles.length > 0}
 				<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
