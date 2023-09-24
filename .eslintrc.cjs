@@ -26,5 +26,9 @@ module.exports = {
 				parser: '@typescript-eslint/parser'
 			}
 		}
-	]
+	],
+	rules: {
+		'svelte/require-each-key': 'warn',
+		'@typescript-eslint/no-shadow': 'warn'
+	}
 };

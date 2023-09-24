@@ -26,7 +26,7 @@
 	>
 	<span class="block label-01">
 		ตำแหน่ง:
-		{#each data as role, idx}
+		{#each data as role, idx (idx)}
 			<span>
 				{role.role}
 				<span class="text-gray-60"

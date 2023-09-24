@@ -305,7 +305,7 @@
 				pageSize={tablePageSize}
 				page={tableCurrentPage}
 			>
-				<svelte:fragment slot="cell" let:row let:cell>
+				<svelte:fragment slot="cell" let:cell>
 					{#if cell.key === 'date'}
 						{cell.value.toLocaleDateString('th-TH', {
 							day: 'numeric',
@@ -320,7 +320,7 @@
 					{:else if cell.key === 'files'}
 						{@const files = cell.value}
 						{#if files.length > 0}
-							{#each files as file}
+							{#each files as file (file)}
 								<a href={file} download><DocumentPdf /></a>
 							{/each}
 						{:else}

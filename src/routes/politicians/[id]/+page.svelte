@@ -19,7 +19,7 @@
 	export let data;
 	const { politician, latestAgreedVoting, latestDisagreedVoting, votingAbsentStats } = data;
 
-	const groupBy = <T, K extends keyof any>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
+	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
 			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
 			{} as Record<K, T[]>
@@ -93,7 +93,7 @@
 			{#if currentRoles.length > 0}
 				<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
 				<ul class="body-01 list-disc ml-8">
-					{#each currentRoles as role}
+					{#each currentRoles as role, idx (idx)}
 						<!-- TODO: add link -->
 						<li>
 							{role.role} ใน
@@ -213,7 +213,7 @@
 				{#if politician.educations.length > 0}
 					<span class="heading-02">การศึกษา</span>
 					<ul class="ml-8 list-disc">
-						{#each politician.educations as education}
+						{#each politician.educations as education, idx (idx)}
 							<li>{education}</li>
 						{/each}
 					</ul>
@@ -221,7 +221,7 @@
 				{#if politician.previousOccupations.length > 0}
 					<span class="heading-02">อาชีพเดิม</span>
 					<ul class="ml-8 list-disc">
-						{#each politician.previousOccupations as oldjob}
+						{#each politician.previousOccupations as oldjob, idx (idx)}
 							<li>{oldjob}</li>
 						{/each}
 					</ul>
@@ -255,7 +255,7 @@
 				<div>
 					<span class="heading-02">ช่องทางติดต่อ</span>
 					<ul class="flex flex-wrap gap-3 helper-text-01">
-						{#each politician.contacts as contact}
+						{#each politician.contacts as contact (contact.label)}
 							<li>
 								<a href={contact.href} target="_blank" rel="nofollow noopener noreferrer">
 									{contact.label}
@@ -275,7 +275,7 @@
 				<div>
 					<h3 class="heading-02">{politician.assemblyRoles.length} ตำแหน่งทางการเมือง</h3>
 					<ul class="ml-8 list-disc">
-						{#each politician.assemblyRoles as role}
+						{#each politician.assemblyRoles as role, idx (idx)}
 							<li>
 								{role.role}
 								<!-- TODO: add links -->
@@ -304,8 +304,8 @@
 				<div>
 					<h3 class="heading-02">{partyCount} พรรคที่เคยสังกัด</h3>
 					<ul class="flex flex-col gap-[2px] ml-8 list-disc">
-						{#each Object.entries(parties) as [party, data]}
-							<PartyDetail {party} {data} />
+						{#each Object.entries(parties) as [party, partyData] (party)}
+							<PartyDetail {party} data={partyData} />
 						{/each}
 					</ul>
 				</div>
@@ -327,7 +327,7 @@
 					</h3>
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-						{#each latestAgreedVoting as voting}
+						{#each latestAgreedVoting as voting, idx (idx)}
 							<li>
 								<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
 									<span class="flex-1 max-w-max underline">{voting.title}</span>
@@ -355,7 +355,7 @@
 					</h3>
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-						{#each latestDisagreedVoting as voting}
+						{#each latestDisagreedVoting as voting, idx (idx)}
 							<li>
 								<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
 									<span class="flex-1 max-w-max underline">{voting.title}</span>
