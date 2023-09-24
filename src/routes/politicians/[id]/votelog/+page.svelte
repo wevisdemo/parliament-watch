@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -19,14 +20,66 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-
 	const { prefix, firstname, lastname, votings } = data;
 
-	let pageSize = 10;
-	let page = 1;
+	let tablePageSize = 10;
+	let tableCurrentPage = 1;
 
+	let searchQuery = '';
 	let showFilter = true;
 	let showAllCatg = false;
+	let filterCheckbox: Record<string, boolean> = {
+		'era-25': true,
+		'era-26': true,
+		'votetype-yes': true,
+		'votetype-no': true,
+		'votetype-abstain': true,
+		'votetype-novote': true,
+		'votetype-absent': true,
+		'votetype-other': true,
+		'votedirection-different': true,
+		'votedirection-follow': true,
+		'category-เศรษฐกิจ': true,
+		'category-ขนส่งสาธารณะ': true,
+		'category-แก้รัฐธรรมนูญ': true,
+		'category-ที่อยู่อาศัย': true,
+		'category-สวัสดิการ': true,
+		'category-การศึกษา': true,
+		'category-สิ่งแวดล้อม': true,
+		'category-สังคม': true
+	};
+
+	switch ($page.url.searchParams.get('votetype')) {
+		case 'yes':
+			filterCheckbox['votetype-no'] = false;
+			filterCheckbox['votetype-abstain'] = false;
+			filterCheckbox['votetype-novote'] = false;
+			filterCheckbox['votetype-absent'] = false;
+			filterCheckbox['votetype-other'] = false;
+			break;
+		case 'no':
+			filterCheckbox['votetype-yes'] = false;
+			filterCheckbox['votetype-abstain'] = false;
+			filterCheckbox['votetype-novote'] = false;
+			filterCheckbox['votetype-absent'] = false;
+			filterCheckbox['votetype-other'] = false;
+			break;
+		case 'absent':
+			filterCheckbox['votetype-yes'] = false;
+			filterCheckbox['votetype-no'] = false;
+			filterCheckbox['votetype-abstain'] = false;
+			filterCheckbox['votetype-novote'] = false;
+			filterCheckbox['votetype-other'] = false;
+			break;
+	}
+
+	const filterTickAll = (value = true) => {
+		for (let k in filterCheckbox) {
+			filterCheckbox[k] = value;
+		}
+	};
+
+	$: isFilterAllFalse = Object.values(filterCheckbox).every((e) => e === false);
 
 	let mounted = false;
 	onMount(() => {
@@ -88,7 +141,12 @@
 					showFilter = true;
 				}}
 			/> -->
-			<Search class="flex-1 !px-12" placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง" light />
+			<Search
+				class="flex-1 !px-12"
+				placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+				light
+				bind:value={searchQuery}
+			/>
 		</div>
 	</header>
 	<div class="flex-1 flex gap-1 bg-ui-01">
@@ -99,7 +157,12 @@
 				} fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-10`}
 			>
 				<div class="sticky top-0 flex w-full pl-6">
-					<Search class="flex-1 !px-12" placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง" light />
+					<Search
+						class="flex-1 !px-12"
+						placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+						light
+						bind:value={searchQuery}
+					/>
 					<Button
 						kind="ghost"
 						icon={Minimize}
@@ -113,39 +176,73 @@
 				</div>
 				<div class="flex-[1_1_auto] h-0 overflow-y-scroll py-4 px-6">
 					<FormGroup legendText="สมัยการทำงาน">
-						<Checkbox id="era-26" labelText="สภาผู้แทนราษฎรชุดที่ 26 (2566 - ปัจจุบัน)" checked />
-						<Checkbox id="era-25" labelText="สภาผู้แทนราษฎรชุดที่ 25 (2563 - 2566)" checked />
+						<Checkbox
+							bind:checked={filterCheckbox['era-26']}
+							labelText="สภาผู้แทนราษฎรชุดที่ 26 (2566 - ปัจจุบัน)"
+						/>
+						<Checkbox
+							bind:checked={filterCheckbox['era-25']}
+							labelText="สภาผู้แทนราษฎรชุดที่ 25 (2563 - 2566)"
+						/>
 					</FormGroup>
 					<FormGroup legendText="ประเภทการลงมติ">
-						<Checkbox id="type-yes" labelText="เห็นด้วย (xxx)" checked />
-						<Checkbox id="type-no" labelText="ไม่เห็นด้วย (xxx)" checked />
-						<Checkbox id="type-abstain" labelText="งดออกเสียง (xxx)" checked />
-						<Checkbox id="type-novote" labelText="ไม่ลงคะแนน (xxx)" checked />
-						<Checkbox id="type-absent" labelText="ลา/ขาดประชุม (xxx)" checked />
-						<Checkbox id="type-other" labelText="อื่นๆ (xxx)" checked />
+						<Checkbox bind:checked={filterCheckbox['votetype-yes']} labelText="เห็นด้วย (xxx)" />
+						<Checkbox bind:checked={filterCheckbox['votetype-no']} labelText="ไม่เห็นด้วย (xxx)" />
+						<Checkbox
+							bind:checked={filterCheckbox['votetype-abstain']}
+							labelText="งดออกเสียง (xxx)"
+						/>
+						<Checkbox
+							bind:checked={filterCheckbox['votetype-novote']}
+							labelText="ไม่ลงคะแนน (xxx)"
+						/>
+						<Checkbox
+							bind:checked={filterCheckbox['votetype-absent']}
+							labelText="ลา/ขาดประชุม (xxx)"
+						/>
+						<Checkbox bind:checked={filterCheckbox['votetype-other']} labelText="อื่นๆ (xxx)" />
 					</FormGroup>
 					<FormGroup legendText="เงื่อนไขพิเศษ">
 						<Checkbox
-							id="special-different"
+							bind:checked={filterCheckbox['votedirection-different']}
 							labelText="ลงมติต่างจากเสียงส่วนใหญ่ในพรรค (xxx)"
-							checked
 						/>
 						<Checkbox
-							id="special-follow"
+							bind:checked={filterCheckbox['votedirection-follow']}
 							labelText="ลงมติเหมือนเสียงส่วนใหญ่ในพรรค (xxx)"
-							checked
 						/>
 					</FormGroup>
 					<FormGroup legendText="หมวดมติ (1&nbsp;มติ มีได้มากกว่า 1&nbsp;หมวด)" class="mb-0">
-						<Checkbox id="catg-เศรษฐกิจ" labelText="เศรษฐกิจ (xxx)" checked />
-						<Checkbox id="catg-ขนส่งสาธารณะ" labelText="ขนส่งสาธารณะ (xxx)" checked />
-						<Checkbox id="catg-แก้รัฐธรรมนูญ" labelText="แก้รัฐธรรมนูญ (xxx)" checked />
-						<Checkbox id="catg-ที่อยู่อาศัย" labelText="ที่อยู่อาศัย (xxx)" checked />
+						<Checkbox
+							labelText="เศรษฐกิจ (xxx)"
+							bind:checked={filterCheckbox['category-เศรษฐกิจ']}
+						/>
+						<Checkbox
+							labelText="ขนส่งสาธารณะ (xxx)"
+							bind:checked={filterCheckbox['category-ขนส่งสาธารณะ']}
+						/>
+						<Checkbox
+							labelText="แก้รัฐธรรมนูญ (xxx)"
+							bind:checked={filterCheckbox['category-แก้รัฐธรรมนูญ']}
+						/>
+						<Checkbox
+							labelText="ที่อยู่อาศัย (xxx)"
+							bind:checked={filterCheckbox['category-ที่อยู่อาศัย']}
+						/>
 						{#if showAllCatg}
-							<Checkbox id="catg-สวัสดิการ" labelText="สวัสดิการ (xxx)" checked />
-							<Checkbox id="catg-การศึกษา" labelText="การศึกษา (xxx)" checked />
-							<Checkbox id="catg-สิ่งแวดล้อม" labelText="สิ่งแวดล้อม (xxx)" checked />
-							<Checkbox id="catg-สังคม" labelText="สังคม (xxx)" checked />
+							<Checkbox
+								labelText="สวัสดิการ (xxx)"
+								bind:checked={filterCheckbox['category-สวัสดิการ']}
+							/>
+							<Checkbox
+								labelText="การศึกษา (xxx)"
+								bind:checked={filterCheckbox['category-การศึกษา']}
+							/>
+							<Checkbox
+								labelText="สิ่งแวดล้อม (xxx)"
+								bind:checked={filterCheckbox['category-สิ่งแวดล้อม']}
+							/>
+							<Checkbox labelText="สังคม (xxx)" bind:checked={filterCheckbox['category-สังคม']} />
 							<Button
 								class="underline"
 								kind="ghost"
@@ -167,7 +264,17 @@
 					</FormGroup>
 				</div>
 				<div class="flex gap-[1px] sticky bottom-0 body-compact-01 bg-white">
-					<Button class="flex-1 min-w-0 pr-4" kind="tertiary">ล้างตัวเลือก</Button>
+					{#if isFilterAllFalse}
+						<Button class="flex-1 min-w-0 pr-4" kind="secondary" on:click={() => filterTickAll()}
+							>เลือกทั้งหมด</Button
+						>
+					{:else}
+						<Button
+							class="flex-1 min-w-0 pr-4"
+							kind="tertiary"
+							on:click={() => filterTickAll(false)}>ล้างตัวเลือก</Button
+						>
+					{/if}
 					<Button class="flex-1 min-w-0 pr-4">ดูที่เลือก</Button>
 				</div>
 			</div>
@@ -195,8 +302,8 @@
 					{ key: 'files', value: 'เอกสาร' }
 				]}
 				rows={votings}
-				{pageSize}
-				{page}
+				pageSize={tablePageSize}
+				page={tableCurrentPage}
 			>
 				<svelte:fragment slot="cell" let:row let:cell>
 					{#if cell.key === 'date'}
@@ -229,8 +336,8 @@
 			<div class="flex-1" />
 			<Pagination
 				class="sticky bottom-0"
-				bind:pageSize
-				bind:page
+				bind:pageSize={tablePageSize}
+				bind:page={tableCurrentPage}
 				totalItems={votings.length}
 				pageSizeInputDisabled
 				forwardText="หน้าถัดไป"
