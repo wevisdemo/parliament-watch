@@ -182,7 +182,7 @@
 						<!-- TODO: เพิ่มนับมติ -->
 						<li>เห็นด้วย xxx มติ</li>
 						<li>ไม่เห็นด้วย xxx มติ</li>
-						<li>ลา/ขาดประชุม xxx มติ</li>
+						<li>ลา/ขาดประชุม {votingAbsentStats.absentVoting} มติ</li>
 					</ul>
 				</a>
 			</li>
@@ -408,7 +408,7 @@
 						target="_blank"
 						rel="nofollow noopener noreferrer"
 					>
-						<span>ดู xx มติที่ขาด</span>
+						<span>ดู {votingAbsentStats.absentVoting} มติที่ขาด</span>
 						<ArrowRight />
 					</a>
 				</div>
