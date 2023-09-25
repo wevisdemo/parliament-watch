@@ -95,7 +95,6 @@
 		class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-		<BreadcrumbItem href="/politicians">สส. ชุดที่ 26</BreadcrumbItem>
 		<BreadcrumbItem href="/politicians/{firstname}-{lastname}">{firstname}</BreadcrumbItem>
 		<BreadcrumbItem href="/politicians/{firstname}-{lastname}/votelog" isCurrentPage
 			>ประวัติการลงมติ</BreadcrumbItem
