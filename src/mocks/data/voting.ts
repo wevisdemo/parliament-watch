@@ -1,9 +1,4 @@
-import {
-	DefaultVotingResult,
-	type VoteOption,
-	type Voting,
-	type VotingSummary
-} from '$models/voting';
+import { DefaultVotingResult, type VoteOption, type Voting } from '$models/voting';
 import { rep26 } from './assembly';
 
 const yesNoVoteOptions: VoteOption[] = [
@@ -31,15 +26,7 @@ export const passedVoting: Voting = {
 	files: []
 };
 
-export const passedVotingSummary: VotingSummary = {
-	id: passedVoting.id,
-	title: passedVoting.title,
-	result: passedVoting.result,
-	date: passedVoting.date,
-	files: passedVoting.files
-};
-
-export const failedVotingSummary: VotingSummary = {
-	...passedVotingSummary,
+export const failedVoting: Voting = {
+	...passedVoting,
 	result: DefaultVotingResult.Failed
 };

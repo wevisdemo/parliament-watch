@@ -25,5 +25,3 @@ export interface VoteOption {
 	label: string;
 	color: string;
 }
-
-export type VotingSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files'>;

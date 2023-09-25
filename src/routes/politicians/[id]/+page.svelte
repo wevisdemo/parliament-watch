@@ -17,7 +17,7 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-	const { politician, latestAgreedVoting, latestDisagreedVoting, votingAbsentStats } = data;
+	const { politician, agreedVoting, disagreedVoting, votingAbsentStats } = data;
 
 	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
@@ -330,7 +330,7 @@
 					</h3>
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-						{#each latestAgreedVoting as voting, idx (idx)}
+						{#each agreedVoting.latest as voting, idx (idx)}
 							<li>
 								<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
 									<span class="flex-1 max-w-max underline">{voting.title}</span>
@@ -348,7 +348,7 @@
 						target="_blank"
 						rel="nofollow noopener noreferrer"
 					>
-						<span>ดู xx มติที่เห็นด้วย</span>
+						<span>ดู {agreedVoting.total} มติที่เห็นด้วย</span>
 						<ArrowRight />
 					</a>
 				</div>
@@ -358,7 +358,7 @@
 					</h3>
 					<!-- TODO: add links -->
 					<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-						{#each latestDisagreedVoting as voting, idx (idx)}
+						{#each disagreedVoting.latest as voting, idx (idx)}
 							<li>
 								<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
 									<span class="flex-1 max-w-max underline">{voting.title}</span>
@@ -376,7 +376,7 @@
 						target="_blank"
 						rel="nofollow noopener noreferrer"
 					>
-						<span>ดู xx มติที่เห็นด้วย</span>
+						<span>ดู {disagreedVoting.latest} มติที่ไม่เห็นด้วย</span>
 						<ArrowRight />
 					</a>
 				</div>

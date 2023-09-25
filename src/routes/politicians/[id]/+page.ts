@@ -1,8 +1,13 @@
 import type { Politician } from '../../../models/politician';
 import { rep26, gov35 } from '../../../mocks/data/assembly';
 import { movingForwardParty } from '../../../mocks/data/party';
-import type { VotingSummary } from '$models/voting';
-import { failedVotingSummary, passedVotingSummary } from '../../../mocks/data/voting';
+import type { Voting } from '$models/voting';
+import { failedVoting, passedVoting } from '../../../mocks/data/voting';
+
+interface VotingHistory {
+	total: number;
+	latest: Pick<Voting, 'id' | 'title' | 'result'>[];
+}
 
 interface VotingAbsentStats {
 	totalVoting: number;
@@ -60,21 +65,23 @@ export function load({ params }) {
 		]
 	};
 
-	const latestAgreedVoting: VotingSummary[] = [
-		failedVotingSummary,
-		passedVotingSummary,
-		passedVotingSummary,
-		failedVotingSummary,
-		passedVotingSummary
-	];
+	const mockLatestVoting: VotingHistory['latest'] = [
+		failedVoting,
+		passedVoting,
+		passedVoting,
+		failedVoting,
+		passedVoting
+	].map(({ id, title, result }) => ({ id, title, result }));
 
-	const latestDisagreedVoting: VotingSummary[] = [
-		failedVotingSummary,
-		passedVotingSummary,
-		passedVotingSummary,
-		failedVotingSummary,
-		passedVotingSummary
-	];
+	const agreedVoting: VotingHistory = {
+		total: 23,
+		latest: mockLatestVoting
+	};
+
+	const disagreedVoting: VotingHistory = {
+		total: 14,
+		latest: mockLatestVoting
+	};
 
 	const votingAbsentStats: VotingAbsentStats = {
 		totalVoting: 100,
@@ -82,5 +89,5 @@ export function load({ params }) {
 		averageAbsentVoting: 22
 	};
 
-	return { politician, latestAgreedVoting, latestDisagreedVoting, votingAbsentStats };
+	return { politician, agreedVoting, disagreedVoting, votingAbsentStats };
 }
