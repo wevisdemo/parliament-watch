@@ -15,6 +15,7 @@
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
+	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import { onMount } from 'svelte';
@@ -27,7 +28,6 @@
 
 	let searchQuery = '';
 	let showFilter = true;
-	let showAllCatg = false;
 	let filterCheckbox: Record<string, boolean> = {
 		'era-25': true,
 		'era-26': true,
@@ -79,6 +79,7 @@
 		}
 	};
 
+	$: isFilterSomeFalse = Object.values(filterCheckbox).some((e) => e === false);
 	$: isFilterAllFalse = Object.values(filterCheckbox).every((e) => e === false);
 
 	let mounted = false;
@@ -131,21 +132,20 @@
 			</div>
 		</div>
 		<div class="md:hidden flex gap-2 items-center mt-2">
-			<!-- <Button
-				tooltipAlignment="start"
-				tooltipPosition="top"
-				iconDescription="แสดงตัวเลือก"
-				icon={Filter}
+			<button
+				type="button"
+				class="flex-1 border-0 bg-white/0 p-0"
 				on:click={() => {
 					showFilter = true;
 				}}
-			/> -->
-			<Search
-				class="flex-1 !px-12"
-				placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
-				light
-				bind:value={searchQuery}
-			/>
+			>
+				<Search
+					class="!pl-12 !pr-4 pointer-events-none [&+button]:hidden"
+					placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+					light
+					bind:value={searchQuery}
+				/>
+			</button>
 		</div>
 	</header>
 	<div class="flex-1 flex gap-1 bg-ui-01">
@@ -228,38 +228,19 @@
 							labelText="ที่อยู่อาศัย (xxx)"
 							bind:checked={filterCheckbox['category-ที่อยู่อาศัย']}
 						/>
-						{#if showAllCatg}
-							<Checkbox
-								labelText="สวัสดิการ (xxx)"
-								bind:checked={filterCheckbox['category-สวัสดิการ']}
-							/>
-							<Checkbox
-								labelText="การศึกษา (xxx)"
-								bind:checked={filterCheckbox['category-การศึกษา']}
-							/>
-							<Checkbox
-								labelText="สิ่งแวดล้อม (xxx)"
-								bind:checked={filterCheckbox['category-สิ่งแวดล้อม']}
-							/>
-							<Checkbox labelText="สังคม (xxx)" bind:checked={filterCheckbox['category-สังคม']} />
-							<Button
-								class="underline"
-								kind="ghost"
-								size="small"
-								on:click={() => {
-									showAllCatg = false;
-								}}>แสดงน้อยลง</Button
-							>
-						{:else}
-							<Button
-								class="underline"
-								kind="ghost"
-								size="small"
-								on:click={() => {
-									showAllCatg = true;
-								}}>ดูทั้งหมด (10)</Button
-							>
-						{/if}
+						<Checkbox
+							labelText="สวัสดิการ (xxx)"
+							bind:checked={filterCheckbox['category-สวัสดิการ']}
+						/>
+						<Checkbox
+							labelText="การศึกษา (xxx)"
+							bind:checked={filterCheckbox['category-การศึกษา']}
+						/>
+						<Checkbox
+							labelText="สิ่งแวดล้อม (xxx)"
+							bind:checked={filterCheckbox['category-สิ่งแวดล้อม']}
+						/>
+						<Checkbox labelText="สังคม (xxx)" bind:checked={filterCheckbox['category-สังคม']} />
 					</FormGroup>
 				</div>
 				<div class="flex gap-[1px] sticky bottom-0 body-compact-01 bg-white">
@@ -283,7 +264,8 @@
 					tooltipAlignment="start"
 					tooltipPosition="top"
 					iconDescription="แสดงตัวเลือก"
-					icon={Filter}
+					icon={isFilterSomeFalse ? FilterEdit : Filter}
+					kind={isFilterSomeFalse ? 'secondary' : 'primary'}
 					on:click={() => {
 						showFilter = true;
 					}}
@@ -330,6 +312,13 @@
 					{/if}
 				</svelte:fragment>
 			</DataTable>
+			{#if votings.length === 0}
+				<div
+					class="h-10 body-compact-01 text-gray-60 px-4 flex items-center border-solid border-b border-b-ui-03"
+				>
+					ไม่พบข้อมูลที่ค้นหา
+				</div>
+			{/if}
 			<div class="flex-1" />
 			<Pagination
 				class="sticky bottom-0"
@@ -343,21 +332,5 @@
 				pageRangeText={(_, total) => `จาก ${total} หน้า`}
 			/>
 		</div>
-		<!-- <div class="flex-1 bg-white">
-			<div class="sticky top-0 w-full h-12 bg-red-40">THEAD</div>
-			{#each Array(50) as _}
-				<div class="h-12 bg-gray-20">TROW</div>
-			{/each}
-			<Pagination
-				class="sticky bottom-0"
-				pageSize={100}
-				totalItems={102}
-				pageSizeInputDisabled
-				forwardText="หน้าถัดไป"
-				backwardText="หน้าก่อนหน้า"
-				itemRangeText={(min, max, total) => `${min} – ${max} จาก ${total} มติ`}
-				pageRangeText={(_, total) => `จาก ${total} หน้า`}
-			/>
-		</div> -->
 	</div>
 </div>
