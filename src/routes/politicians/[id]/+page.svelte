@@ -393,7 +393,7 @@
 							? 'เท่ากับ'
 							: votingAbsentStats.absentVoting < votingAbsentStats.averageAbsentVoting
 							? 'น้อยกว่า'
-							: 'มากกว่า'}ค่ากลางของสมาชิกในสภาทั้งหมด ({safePercent(
+							: 'มากกว่า'}ค่ากลางของสมาชิกในสภาทั้งหมด (ค่ากลาง = {safePercent(
 							votingAbsentStats.averageAbsentVoting,
 							votingAbsentStats.totalVoting
 						)}%)
