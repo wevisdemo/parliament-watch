@@ -32,8 +32,8 @@ export function load({ params }) {
 		assetValue: 3490000000,
 		debtValue: 39494040,
 		contacts: [
-			{ label: 'Facebook', href: 'https://facebook.com' },
-			{ label: 'Twitter', href: 'https://twitter.com' }
+			{ label: 'Facebook', url: 'https://facebook.com' },
+			{ label: 'Twitter', url: 'https://twitter.com' }
 		],
 		assemblyRoles: [
 			{ role: 'สมาชิกแบบบัญชีรายชื่อ', assembly: rep26, from: new Date('2023-01-01') },

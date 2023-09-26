@@ -257,7 +257,7 @@
 					<ul class="flex flex-wrap gap-3 helper-text-01">
 						{#each politician.contacts as contact (contact.label)}
 							<li>
-								<a href={contact.href} target="_blank" rel="nofollow noopener noreferrer">
+								<a href={contact.url} target="_blank" rel="nofollow noopener noreferrer">
 									{contact.label}
 								</a>
 							</li>
