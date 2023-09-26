@@ -21,7 +21,7 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-	const { prefix, firstname, lastname, votings } = data;
+	const { politician, votings } = data;
 
 	let tablePageSize = 10;
 	let tableCurrentPage = 1;
@@ -94,17 +94,16 @@
 		class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-		<BreadcrumbItem href="/politicians/{firstname}-{lastname}">{firstname}</BreadcrumbItem>
-		<BreadcrumbItem href="/politicians/{firstname}-{lastname}/votelog" isCurrentPage
+		<BreadcrumbItem href="/politicians/{politician.id}">{politician.firstname}</BreadcrumbItem>
+		<BreadcrumbItem href="/politicians/{politician.id}/votelog" isCurrentPage
 			>ประวัติการลงมติ</BreadcrumbItem
 		>
 	</Breadcrumb>
 	<header class="px-4 py-3 bg-ui-01 md:px-16">
 		<p class="heading-01">ประวัติการลงมติ</p>
 		<h1 class="fluid-heading-03 mb-1">
-			<a
-				class="no-underline text-black hover:text-blue-70"
-				href="/politicians/{firstname}-{lastname}">{prefix} {firstname} {lastname}</a
+			<a class="no-underline text-black hover:text-blue-70" href="/politicians/{politician.id}"
+				>{politician.prefix} {politician.firstname} {politician.lastname}</a
 			>
 		</h1>
 		<div class="flex flex-col gap-1 md:flex-row md:gap-16">

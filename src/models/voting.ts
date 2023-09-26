@@ -1,10 +1,5 @@
 import type { Link } from './link';
 
-export enum DefaultVotingResult {
-	Passed = 'passed',
-	Failed = 'failed'
-}
-
 export interface Voting {
 	id: number;
 	title: string;
@@ -13,7 +8,7 @@ export interface Voting {
 	date: Date;
 	meetingType: string;
 	participatedAssembleIds: string[];
-	voteOptions: VoteOption[];
+	voteOptions: DefaultVoteOption[] | VoteOption[];
 	winningCondition: string;
 	result: DefaultVotingResult | string;
 	relatedBillId?: number;
@@ -24,4 +19,17 @@ export interface Voting {
 export interface VoteOption {
 	label: string;
 	color: string;
+}
+
+export enum DefaultVotingResult {
+	Passed = 'ผ่าน',
+	Failed = 'ไม่ผ่าน'
+}
+
+export enum DefaultVoteOption {
+	Agreed = 'เห็นด้วย',
+	Disagreed = 'ไม่เห็นด้วย',
+	Novote = 'งดออกเสียง',
+	Abstain = 'ไม่ลงคะแนน',
+	Absent = 'ลา/ขาดประชุม'
 }
