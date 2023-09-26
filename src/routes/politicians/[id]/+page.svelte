@@ -185,7 +185,7 @@
 					</ul>
 				</a>
 			</li>
-			<li
+			<!-- <li
 				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[112ms] ease-productive-in-out"
 				data-active={currentNavElementIndex === 3 || null}
 			>
@@ -196,11 +196,10 @@
 						<ArrowRight class="hidden md:group-data-[active]:block" />
 					</div>
 					<ul class="label-01 text-white/60">
-						<!-- TODO: เพิ่มนับร่าง -->
 						<li>xxx ร่าง</li>
 					</ul>
 				</a>
-			</li>
+			</li> -->
 		</menu>
 	</nav>
 	<div class="flex-1 flex flex-col gap-6 w-full min-w-0">
