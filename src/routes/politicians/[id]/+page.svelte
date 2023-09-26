@@ -17,7 +17,7 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-	const { politician, agreedVoting, disagreedVoting, votingAbsentStats } = data;
+	const { politician, agreedVoting, disagreedVoting, votingAbsentStats, totalProposedBill } = data;
 
 	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
@@ -178,7 +178,6 @@
 						<ArrowRight class="hidden md:group-data-[active]:block" />
 					</div>
 					<ul class="label-01 text-white/60">
-						<!-- TODO: เพิ่มนับมติ -->
 						<li>เห็นด้วย {agreedVoting.total} มติ</li>
 						<li>ไม่เห็นด้วย {disagreedVoting.total} มติ</li>
 						<li>ลา/ขาดประชุม {votingAbsentStats.absentVoting} มติ</li>
@@ -196,7 +195,7 @@
 						<ArrowRight class="hidden md:group-data-[active]:block" />
 					</div>
 					<ul class="label-01 text-white/60">
-						<li>xxx ร่าง</li>
+						<li>{totalProposedBill} ร่าง</li>
 					</ul>
 				</a>
 			</li> -->

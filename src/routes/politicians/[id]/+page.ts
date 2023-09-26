@@ -89,5 +89,11 @@ export function load({ params }) {
 		averageAbsentVoting: 22
 	};
 
-	return { politician, agreedVoting, disagreedVoting, votingAbsentStats };
+	return {
+		politician,
+		agreedVoting,
+		disagreedVoting,
+		votingAbsentStats,
+		totalProposedBill: 6
+	};
 }
