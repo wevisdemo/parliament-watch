@@ -49,30 +49,6 @@
 		'category-สังคม': true
 	};
 
-	switch ($page.url.searchParams.get('votetype')) {
-		case 'yes':
-			filterCheckbox['votetype-no'] = false;
-			filterCheckbox['votetype-abstain'] = false;
-			filterCheckbox['votetype-novote'] = false;
-			filterCheckbox['votetype-absent'] = false;
-			filterCheckbox['votetype-other'] = false;
-			break;
-		case 'no':
-			filterCheckbox['votetype-yes'] = false;
-			filterCheckbox['votetype-abstain'] = false;
-			filterCheckbox['votetype-novote'] = false;
-			filterCheckbox['votetype-absent'] = false;
-			filterCheckbox['votetype-other'] = false;
-			break;
-		case 'absent':
-			filterCheckbox['votetype-yes'] = false;
-			filterCheckbox['votetype-no'] = false;
-			filterCheckbox['votetype-abstain'] = false;
-			filterCheckbox['votetype-novote'] = false;
-			filterCheckbox['votetype-other'] = false;
-			break;
-	}
-
 	const filterTickAll = (value = true) => {
 		for (let k in filterCheckbox) {
 			filterCheckbox[k] = value;
@@ -86,6 +62,29 @@
 	onMount(() => {
 		mounted = true;
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
+		switch ($page.url.searchParams.get('votetype')) {
+			case 'yes':
+				filterCheckbox['votetype-no'] = false;
+				filterCheckbox['votetype-abstain'] = false;
+				filterCheckbox['votetype-novote'] = false;
+				filterCheckbox['votetype-absent'] = false;
+				filterCheckbox['votetype-other'] = false;
+				break;
+			case 'no':
+				filterCheckbox['votetype-yes'] = false;
+				filterCheckbox['votetype-abstain'] = false;
+				filterCheckbox['votetype-novote'] = false;
+				filterCheckbox['votetype-absent'] = false;
+				filterCheckbox['votetype-other'] = false;
+				break;
+			case 'absent':
+				filterCheckbox['votetype-yes'] = false;
+				filterCheckbox['votetype-no'] = false;
+				filterCheckbox['votetype-abstain'] = false;
+				filterCheckbox['votetype-novote'] = false;
+				filterCheckbox['votetype-other'] = false;
+				break;
+		}
 	});
 </script>
 
