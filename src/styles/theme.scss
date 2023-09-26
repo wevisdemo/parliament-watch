@@ -1,3 +1,4 @@
+@use 'sass:map';
 @import 'carbon-components/scss/globals/scss/vendor/@carbon/themes/scss';
 
 $parliament-watch--theme: (
@@ -71,5 +72,5 @@ $parliament-watch--theme: (
 	disabled-03: $gray-50
 ) !default;
 
-$carbon--theme: $parliament-watch--theme;
+$carbon--theme: map.merge($carbon--theme--white, $parliament-watch--theme);
 @include carbon--theme();

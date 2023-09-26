@@ -6,11 +6,20 @@ $css--reset: true;
 $css--default-type: true;
 $css--plex: false;
 
-@import 'carbon-components/scss/globals/scss/_css--reset.scss';
-@import 'carbon-components/scss/globals/scss/_css--helpers.scss';
-@import 'carbon-components/scss/globals/scss/_css--body.scss';
-@import 'carbon-components/scss/globals/scss/_mixins.scss';
-@import 'carbon-components/scss/globals/scss/_spacing.scss';
+@import 'carbon-components/scss/globals/scss/_feature-flags';
+@import 'carbon-components/scss/globals/scss/_vars';
+@import 'carbon-components/scss/globals/scss/_colors';
+@import 'carbon-components/scss/globals/scss/_theme';
+@import 'carbon-components/scss/globals/scss/_mixins';
+@import 'carbon-components/scss/globals/scss/_layout';
+@import 'carbon-components/scss/globals/scss/_layer';
+@import 'carbon-components/scss/globals/scss/_spacing';
+@import 'carbon-components/scss/globals/scss/_typography';
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
+@import 'carbon-components/scss/globals/scss/_css--reset';
+@import 'carbon-components/scss/globals/scss/_css--font-face';
+@import 'carbon-components/scss/globals/scss/_css--helpers';
+@import 'carbon-components/scss/globals/scss/_css--body';
 
 // @import 'carbon-components/scss/components/accordion/accordion';
 @import 'carbon-components/scss/components/breadcrumb/breadcrumb';
