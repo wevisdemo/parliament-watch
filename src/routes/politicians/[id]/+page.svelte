@@ -179,8 +179,8 @@
 					</div>
 					<ul class="label-01 text-white/60">
 						<!-- TODO: เพิ่มนับมติ -->
-						<li>เห็นด้วย xxx มติ</li>
-						<li>ไม่เห็นด้วย xxx มติ</li>
+						<li>เห็นด้วย {agreedVoting.total} มติ</li>
+						<li>ไม่เห็นด้วย {disagreedVoting.total} มติ</li>
 						<li>ลา/ขาดประชุม {votingAbsentStats.absentVoting} มติ</li>
 					</ul>
 				</a>
@@ -375,7 +375,7 @@
 						target="_blank"
 						rel="nofollow noopener noreferrer"
 					>
-						<span>ดู {disagreedVoting.latest} มติที่ไม่เห็นด้วย</span>
+						<span>ดู {disagreedVoting.total} มติที่ไม่เห็นด้วย</span>
 						<ArrowRight />
 					</a>
 				</div>
