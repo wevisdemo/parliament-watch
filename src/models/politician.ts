@@ -30,6 +30,6 @@ export interface PartyRole extends Role {
 
 interface Role {
 	role: string | undefined;
-	from: Date;
-	to?: Date;
+	startedAt: Date;
+	endedAt?: Date;
 }

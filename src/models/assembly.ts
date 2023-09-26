@@ -3,4 +3,6 @@ export interface Assembly {
 	name: string;
 	abbreviation?: string;
 	term: number;
+	startedAt: Date;
+	endedAt?: Date;
 }

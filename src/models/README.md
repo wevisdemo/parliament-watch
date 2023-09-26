@@ -33,8 +33,8 @@ erDiagram
     string partyId FK "only for party"
     string assemblyId FK "only for assembly"
     string role
-    Date from
-    Date to
+    Date startedAt
+    Date endedAt
   }
 
   Party {
@@ -48,6 +48,8 @@ erDiagram
     string name
     string abbreviation
     string term
+    Date startedAt
+    Date endedAt
   }
 
   Bill {

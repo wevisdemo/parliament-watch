@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { PartyRole } from '$models/politician.ts';
+	import type { PartyRole } from '$models/politician';
 	export let party: string;
 	export let data: PartyRole[];
 
 	// NOTE: assume ว่า data จะ sort มาแล้ว + มีข้อมูลอย่างน้อย 1
-	let partyFrom = data.at(-1)?.from;
-	let partyTo = data[0].to;
+	let partyFrom = data.at(-1)?.startedAt;
+	let partyTo = data[0].endedAt;
 </script>
 
 <li>
@@ -30,11 +30,11 @@
 			<span>
 				{role.role}
 				<span class="text-gray-60"
-					>({new Date(role.from).toLocaleDateString('th-TH', {
+					>({new Date(role.startedAt).toLocaleDateString('th-TH', {
 						month: 'short',
 						year: '2-digit'
-					})} - {role.to
-						? new Date(role.to).toLocaleDateString('th-TH', {
+					})} - {role.endedAt
+						? new Date(role.endedAt).toLocaleDateString('th-TH', {
 								month: 'short',
 								year: '2-digit'
 						  })

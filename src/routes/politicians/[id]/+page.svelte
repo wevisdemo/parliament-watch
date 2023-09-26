@@ -28,9 +28,9 @@
 
 	const age = new Date(Date.now() - politician.birthdate.getTime()).getFullYear() - 1970;
 	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
-	const currentParty = politician.partyRoles.find((e) => !e.to);
+	const currentParty = politician.partyRoles.find((e) => !e.endedAt);
 	const partyCount = Object.keys(parties).length;
-	const currentRoles = politician.assemblyRoles.filter((e) => !e.to);
+	const currentRoles = politician.assemblyRoles.filter((e) => !e.endedAt);
 
 	let currentNavElementIndex = 0;
 	onMount(() => {
@@ -283,12 +283,12 @@
 									{role.assembly.abbreviation} ชุดที่ {role.assembly.term}
 								</a>
 								<span class="body-compact-02 text-gray-60">
-									({role.from.toLocaleDateString('th-TH', {
+									({role.startedAt.toLocaleDateString('th-TH', {
 										month: 'short',
 										year: '2-digit'
 									})}
-									- {role.to
-										? role.to.toLocaleDateString('th-TH', {
+									- {role.endedAt
+										? role.endedAt.toLocaleDateString('th-TH', {
 												month: 'short',
 												year: '2-digit'
 										  })

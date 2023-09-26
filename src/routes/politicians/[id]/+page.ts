@@ -36,31 +36,31 @@ export function load({ params }) {
 			{ label: 'Twitter', url: 'https://twitter.com' }
 		],
 		assemblyRoles: [
-			{ role: 'สมาชิกแบบบัญชีรายชื่อ', assembly: rep26, from: new Date('2023-01-01') },
+			{ role: 'สมาชิกแบบบัญชีรายชื่อ', assembly: rep26, startedAt: new Date('2023-01-01') },
 			{
 				role: 'รองประธานสภา คนที่ 1',
 				assembly: rep26,
-				from: new Date('2023-01-01'),
-				to: new Date('2023-06-12')
+				startedAt: new Date('2023-01-01'),
+				endedAt: new Date('2023-06-12')
 			},
 			{
 				role: 'รัฐมนตรีกระทรวงมหาดไทย',
 				assembly: gov35,
-				from: new Date('2023-01-01'),
-				to: new Date('2023-06-12')
+				startedAt: new Date('2023-01-01'),
+				endedAt: new Date('2023-06-12')
 			}
 		],
 		partyRoles: [
 			{
 				role: 'เลขาธิการพรรค',
 				party: movingForwardParty,
-				from: new Date('2023-05-01')
+				startedAt: new Date('2023-05-01')
 			},
 			{
 				role: 'หัวหน้าพรรค',
 				party: movingForwardParty,
-				from: new Date('2023-01-01'),
-				to: new Date('2023-05-01')
+				startedAt: new Date('2023-01-01'),
+				endedAt: new Date('2023-05-01')
 			}
 		]
 	};
