@@ -31,10 +31,10 @@
 	let filterCheckbox: Record<string, boolean> = {
 		'era-25': true,
 		'era-26': true,
-		'votetype-yes': true,
-		'votetype-no': true,
-		'votetype-abstain': true,
+		'votetype-agreed': true,
+		'votetype-disagreed': true,
 		'votetype-novote': true,
+		'votetype-abstain': true,
 		'votetype-absent': true,
 		'votetype-other': true,
 		'votedirection-different': true,
@@ -63,25 +63,25 @@
 		mounted = true;
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		switch ($page.url.searchParams.get('votetype')) {
-			case 'yes':
-				filterCheckbox['votetype-no'] = false;
-				filterCheckbox['votetype-abstain'] = false;
+			case 'agreed':
+				filterCheckbox['votetype-disagreed'] = false;
 				filterCheckbox['votetype-novote'] = false;
+				filterCheckbox['votetype-abstain'] = false;
 				filterCheckbox['votetype-absent'] = false;
 				filterCheckbox['votetype-other'] = false;
 				break;
-			case 'no':
-				filterCheckbox['votetype-yes'] = false;
-				filterCheckbox['votetype-abstain'] = false;
+			case 'disagreed':
+				filterCheckbox['votetype-agreed'] = false;
 				filterCheckbox['votetype-novote'] = false;
+				filterCheckbox['votetype-abstain'] = false;
 				filterCheckbox['votetype-absent'] = false;
 				filterCheckbox['votetype-other'] = false;
 				break;
 			case 'absent':
-				filterCheckbox['votetype-yes'] = false;
-				filterCheckbox['votetype-no'] = false;
-				filterCheckbox['votetype-abstain'] = false;
+				filterCheckbox['votetype-agreed'] = false;
+				filterCheckbox['votetype-disagreed'] = false;
 				filterCheckbox['votetype-novote'] = false;
+				filterCheckbox['votetype-abstain'] = false;
 				filterCheckbox['votetype-other'] = false;
 				break;
 		}
@@ -182,14 +182,17 @@
 						/>
 					</FormGroup>
 					<FormGroup legendText="ประเภทการลงมติ">
-						<Checkbox bind:checked={filterCheckbox['votetype-yes']} labelText="เห็นด้วย (xxx)" />
-						<Checkbox bind:checked={filterCheckbox['votetype-no']} labelText="ไม่เห็นด้วย (xxx)" />
+						<Checkbox bind:checked={filterCheckbox['votetype-agreed']} labelText="เห็นด้วย (xxx)" />
 						<Checkbox
-							bind:checked={filterCheckbox['votetype-abstain']}
-							labelText="งดออกเสียง (xxx)"
+							bind:checked={filterCheckbox['votetype-disagreed']}
+							labelText="ไม่เห็นด้วย (xxx)"
 						/>
 						<Checkbox
 							bind:checked={filterCheckbox['votetype-novote']}
+							labelText="งดออกเสียง (xxx)"
+						/>
+						<Checkbox
+							bind:checked={filterCheckbox['votetype-abstain']}
 							labelText="ไม่ลงคะแนน (xxx)"
 						/>
 						<Checkbox

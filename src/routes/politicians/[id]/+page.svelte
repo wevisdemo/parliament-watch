@@ -340,7 +340,7 @@
 						{/each}
 					</ul>
 					<a
-						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=yes"
+						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=agreed"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -368,7 +368,7 @@
 						{/each}
 					</ul>
 					<a
-						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=no"
+						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=disagreed"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
