@@ -6,6 +6,9 @@ $css--reset: true;
 $css--default-type: true;
 $css--plex: false;
 
+// Custom theme
+@import './theme.scss';
+
 // Global css
 @import 'carbon-components/scss/globals/scss/_feature-flags';
 @import 'carbon-components/scss/globals/scss/_vars';
@@ -21,6 +24,9 @@ $css--plex: false;
 @import 'carbon-components/scss/globals/scss/_css--font-face';
 @import 'carbon-components/scss/globals/scss/_css--helpers';
 @import 'carbon-components/scss/globals/scss/_css--body';
+
+// Custom typography
+@import './typography.scss';
 
 // Components
 @import 'carbon-components/scss/components/accordion/accordion';
@@ -71,7 +77,3 @@ $css--plex: false;
 @import 'carbon-components/scss/components/ui-shell/ui-shell';
 @import 'carbon-components/scss/components/treeview/treeview';
 @import 'carbon-components-svelte/css/_popover.scss';
-
-// Custom theme and typography
-@import './theme.scss';
-@import './typography.scss';
