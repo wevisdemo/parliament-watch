@@ -7,5 +7,12 @@
 				>[WEV-12] Users can learn about a politician's details</a
 			>
 		</li>
+		<li>
+			[WEV-14] Users can learn more about an assembly
+			<ul class="list-disc list-inside ml-4">
+				<li><a href="/assemblies/rep-26">สส.</a></li>
+				<li>สว. coming soon</li>
+			</ul>
+		</li>
 	</ul>
 </div>

@@ -50,6 +50,8 @@ erDiagram
     string term
     Date startedAt
     Date endedAt
+    string origin
+    string[] mainRoles
   }
 
   Bill {
@@ -68,7 +70,7 @@ erDiagram
     Date date
     string meetingType
     string[] participatedAssembleIds FK
-    VoteOption[] voteOptions "label: string, color: string"
+    VoteOption[] voteOptions "DefaultVotOption | {label: string, color: string}"
     string winningCondition
     string result "passed | failed | string (other result)"
     number relatedBillId FK

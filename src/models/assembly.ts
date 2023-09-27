@@ -5,4 +5,6 @@ export interface Assembly {
 	term: number;
 	startedAt: Date;
 	endedAt?: Date;
+	origin: string;
+	mainRoles: string[];
 }
