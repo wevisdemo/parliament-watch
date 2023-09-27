@@ -129,33 +129,23 @@
 				</a>
 			</div>
 		</div>
-		<div class="md:hidden flex gap-2 items-center mt-2">
-			<button
-				type="button"
-				class="flex-1 border-0 bg-white/0 p-0"
-				on:click={() => {
-					showFilter = true;
-				}}
-			>
-				<Search
-					class="!pl-12 !pr-4 pointer-events-none [&+button]:hidden"
-					placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
-					light
-					bind:value={searchQuery}
-				/>
-			</button>
-		</div>
+		<Search
+			searchClass="md:hidden mt-2"
+			placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+			light
+			bind:value={searchQuery}
+		/>
 	</header>
-	<div class="flex-1 flex gap-1 bg-ui-01">
+	<div class="flex-1 flex gap-1 bg-ui-01 w-full">
 		{#if showFilter}
 			<div
-				class={`${
-					!mounted ? 'hidden md:flex' : ''
-				} fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-10`}
+				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-10"
+				class:md:flex={!mounted}
+				class:hidden={!mounted}
 			>
 				<div class="sticky top-0 flex w-full pl-6">
 					<Search
-						class="flex-1 !px-12"
+						class="flex-1"
 						placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
 						light
 						bind:value={searchQuery}
@@ -256,7 +246,12 @@
 							on:click={() => filterTickAll(false)}>ล้างตัวเลือก</Button
 						>
 					{/if}
-					<Button class="flex-1 min-w-0 pr-4">ดูที่เลือก</Button>
+					<Button
+						class="flex-1 min-w-0 pr-4 md:hidden"
+						on:click={() => {
+							showFilter = false;
+						}}>ดูที่เลือก</Button
+					>
 				</div>
 			</div>
 		{:else}
@@ -274,50 +269,52 @@
 			</div>
 		{/if}
 		<div class="flex-1 flex flex-col bg-white">
-			<DataTable
-				class="[&>*>.bx--data-table--sticky-header]:max-h-[calc(100vh-40px)] pt-0"
-				size="tall"
-				headers={[
-					{ key: 'date', value: 'วันที่' },
-					{ key: 'title', value: 'ชื่อมติ' },
-					{ key: 'voteOption', value: 'การลงมติ' },
-					{ key: 'result', value: 'ผลลัพธ์' },
-					{ key: 'files', value: 'เอกสาร' }
-				]}
-				rows={votings}
-				pageSize={tablePageSize}
-				page={tableCurrentPage}
-			>
-				<svelte:fragment slot="cell" let:cell>
-					{#if cell.key === 'date'}
-						{cell.value.toLocaleDateString('th-TH', {
-							day: 'numeric',
-							month: 'short',
-							year: '2-digit'
-						})}
-					{:else if cell.key === 'title'}
-						<!-- TODO: Add link -->
-						<a class="text-text-01" href="/">{cell.value}</a>
-					{:else if cell.key === 'result'}
-						<VotingResultTag class="m-0 whitespace-nowrap" result={cell.value} />
-					{:else if cell.key === 'voteOption'}
-						<VotingOptionTag voteOption={cell.value} />
-					{:else if cell.key === 'files'}
-						{@const files = cell.value}
-						{#if files.length > 0}
-							{#each files as file (file)}
-								<a href={file.url} download title={file.label}
-									><DocumentPdf /><span class="sr-only">{file.label}</span></a
-								>
-							{/each}
+			<div class="overflow-x-auto overflow-y-hidden">
+				<DataTable
+					class="pt-0 w-0 min-w-full"
+					size="tall"
+					headers={[
+						{ key: 'date', value: 'วันที่' },
+						{ key: 'title', value: 'ชื่อมติ' },
+						{ key: 'voteOption', value: 'การลงมติ' },
+						{ key: 'result', value: 'ผลลัพธ์' },
+						{ key: 'files', value: 'เอกสาร' }
+					]}
+					rows={votings}
+					pageSize={tablePageSize}
+					page={tableCurrentPage}
+				>
+					<svelte:fragment slot="cell" let:cell>
+						{#if cell.key === 'date'}
+							{cell.value.toLocaleDateString('th-TH', {
+								day: 'numeric',
+								month: 'short',
+								year: '2-digit'
+							})}
+						{:else if cell.key === 'title'}
+							<!-- TODO: Add link -->
+							<a class="text-text-01" href="/">{cell.value}</a>
+						{:else if cell.key === 'result'}
+							<VotingResultTag class="m-0 whitespace-nowrap" result={cell.value} />
+						{:else if cell.key === 'voteOption'}
+							<VotingOptionTag voteOption={cell.value} />
+						{:else if cell.key === 'files'}
+							{@const files = cell.value}
+							{#if files.length > 0}
+								{#each files as file (file)}
+									<a href={file.url} download title={file.label}
+										><DocumentPdf /><span class="sr-only">{file.label}</span></a
+									>
+								{/each}
+							{:else}
+								-
+							{/if}
 						{:else}
-							-
+							{cell.value}
 						{/if}
-					{:else}
-						{cell.value}
-					{/if}
-				</svelte:fragment>
-			</DataTable>
+					</svelte:fragment>
+				</DataTable>
+			</div>
 			{#if votings.length === 0}
 				<div
 					class="h-10 body-compact-01 text-gray-60 px-4 flex items-center border-solid border-b border-b-ui-03"
@@ -327,7 +324,7 @@
 			{/if}
 			<div class="flex-1" />
 			<Pagination
-				class="sticky bottom-0"
+				class="sticky bottom-0 overflow-x-hidden"
 				bind:pageSize={tablePageSize}
 				bind:page={tableCurrentPage}
 				totalItems={votings.length}
