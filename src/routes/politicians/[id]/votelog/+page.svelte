@@ -275,7 +275,7 @@
 		{/if}
 		<div class="flex-1 flex flex-col bg-white">
 			<DataTable
-				class="[&>*>.bx--data-table--sticky-header]:max-h-[calc(100vh-40px)]"
+				class="[&>*>.bx--data-table--sticky-header]:max-h-[calc(100vh-40px)] pt-0"
 				size="tall"
 				headers={[
 					{ key: 'date', value: 'วันที่' },
@@ -306,7 +306,9 @@
 						{@const files = cell.value}
 						{#if files.length > 0}
 							{#each files as file (file)}
-								<a href={file} download><DocumentPdf /></a>
+								<a href={file.url} download title={file.label}
+									><DocumentPdf /><span class="sr-only">{file.label}</span></a
+								>
 							{/each}
 						{:else}
 							-
