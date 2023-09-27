@@ -55,7 +55,7 @@ export async function load({ params }) {
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : [],
 		voteOption:
 			i % defaultVoteOptions.length
-				? defaultVoteOptions[i & defaultVoteOptions.length]
+				? defaultVoteOptions[i % defaultVoteOptions.length]
 				: customVoteOption[i % customVoteOption.length],
 		isVoteAlignWithPartyMajority: i % 5 !== 0
 	}));

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
+	import VotingOptionTag from '$components/politicians/VotingOptionTag.svelte';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -279,6 +280,7 @@
 				headers={[
 					{ key: 'date', value: 'วันที่' },
 					{ key: 'title', value: 'ชื่อมติ' },
+					{ key: 'voteOption', value: 'การลงมติ' },
 					{ key: 'result', value: 'ผลลัพธ์' },
 					{ key: 'files', value: 'เอกสาร' }
 				]}
@@ -298,6 +300,8 @@
 						<a class="text-text-01" href="/">{cell.value}</a>
 					{:else if cell.key === 'result'}
 						<VotingResultTag class="m-0 whitespace-nowrap" result={cell.value} />
+					{:else if cell.key === 'voteOption'}
+						<VotingOptionTag voteOption={cell.value} />
 					{:else if cell.key === 'files'}
 						{@const files = cell.value}
 						{#if files.length > 0}
