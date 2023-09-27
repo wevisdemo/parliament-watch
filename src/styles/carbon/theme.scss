@@ -1,5 +1,6 @@
 @use 'sass:map';
 @import 'carbon-components/scss/globals/scss/vendor/@carbon/themes/scss';
+@import './colors.scss';
 
 $parliament-watch--theme: (
 	// Core

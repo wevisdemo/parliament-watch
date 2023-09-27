@@ -68,7 +68,7 @@ yarn dev
 
 ## 🍭 Design System
 
-The project design system is based on Carbon Design System v10 with some modification.
+The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with scss in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `yarn compile:sass` command.
 
 ### Typography
 
@@ -78,13 +78,13 @@ The project design system is based on Carbon Design System v10 with some modific
 ### Colors
 
 - [tailwind.config.js](tailwind.config.js) define utility classes based on color function name according to the Carbon's theme (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)>))
-- [colors.scss](src/styles/colors.scss) define global sass variable of all color palette (see [Figma file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>))
+- [colors.scss](src/styles/carbon/colors.scss) define global sass variable of all color palette (see [Figma file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>))
 
 ### Components
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
-- Avoid developing new component from scratch if not nessesary.
-- We import only nessesary Carbon's stylesheet. After adding a new component, please uncomment coresponded import statement in [carbon.scss](src/styles/carbon.scss)
+- We have custom shared component available in [src/components/](src/components/) when needed. See all planned component in [Figma file.]()
+- Avoid developing new component from scratch if not nessesary. (Please check from the above sources first)
 
 ### Icons
 

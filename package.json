@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"compile:sass": "sass --load-path=node_modules --style=compressed --no-source-map src/styles/carbon/index.scss src/styles/carbon/pre-compiled.css"
 	},
 	"lint-staged": {
 		"*.md": "doctoc --github --update-only",
@@ -42,7 +43,7 @@
 		"postcss": "^8.4.27",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.10.1",
-		"sass": "npm:sass-embedded",
+		"sass": "^1.67.0",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
 		"tailwindcss": "^3.3.3",
