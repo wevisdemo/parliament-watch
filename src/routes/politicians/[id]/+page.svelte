@@ -57,7 +57,7 @@
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem href="/politicians/{politician.firstname}-{politician.lastname}" isCurrentPage
+	<BreadcrumbItem href="/politicians/{politician.id}" isCurrentPage
 		>{politician.firstname}</BreadcrumbItem
 	>
 </Breadcrumb>
@@ -340,7 +340,7 @@
 						{/each}
 					</ul>
 					<a
-						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=agreed"
+						href="/politicians/{politician.id}/votelog?votetype=agreed"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -368,7 +368,7 @@
 						{/each}
 					</ul>
 					<a
-						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=disagreed"
+						href="/politicians/{politician.id}/votelog?votetype=disagreed"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -400,7 +400,7 @@
 						จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
 					</p>
 					<a
-						href="/politicians/{politician.firstname}-{politician.lastname}/votelog?votetype=absent"
+						href="/politicians/{politician.id}/votelog?votetype=absent"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -410,7 +410,7 @@
 					</a>
 				</div>
 				<Button
-					href="/politicians/{politician.firstname}-{politician.lastname}/votelog"
+					href="/politicians/{politician.id}/votelog"
 					kind="tertiary"
 					icon={ArrowRight}
 					size="small">ดูการลงมติทั้งหมด</Button
