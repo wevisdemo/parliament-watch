@@ -20,44 +20,59 @@
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import { onMount } from 'svelte';
+	import { DefaultVoteOption } from '$models/voting.js';
 
 	export let data;
-	const { politician, votings } = data;
+	const { politician, filterOptions, votings } = data;
+
+	const VOTEOPTIONS = [
+		DefaultVoteOption.Agreed,
+		DefaultVoteOption.Disagreed,
+		DefaultVoteOption.Novote,
+		DefaultVoteOption.Abstain,
+		DefaultVoteOption.Absent,
+		'อื่นๆ'
+	];
+	const VOTEDIRECTIONS = ['ลงมติต่างจากเสียงส่วนใหญ่ในพรรค', 'ลงมติเหมือนเสียงส่วนใหญ่ในพรรค'];
+
+	const FILTER_ASSEMBLY_DEFAULT = filterOptions.assemblies.map((e) => e.id);
+	const FILTER_VOTETYPE_DEFAULT = [...VOTEOPTIONS];
+	const FILTER_VOTEDIRECTION_DEFAULT = [...VOTEDIRECTIONS];
+	const FILTER_CATEGORY_DEFAULT = filterOptions.categories;
+	$: ALL_FILTER_COUNT =
+		FILTER_ASSEMBLY_DEFAULT.length +
+		FILTER_VOTETYPE_DEFAULT.length +
+		FILTER_VOTEDIRECTION_DEFAULT.length +
+		FILTER_CATEGORY_DEFAULT.length;
 
 	let tablePageSize = 10;
 	let tableCurrentPage = 1;
 
 	let searchQuery = '';
 	let showFilter = true;
-	let filterCheckbox: Record<string, boolean> = {
-		'era-25': true,
-		'era-26': true,
-		'votetype-agreed': true,
-		'votetype-disagreed': true,
-		'votetype-novote': true,
-		'votetype-abstain': true,
-		'votetype-absent': true,
-		'votetype-other': true,
-		'votedirection-different': true,
-		'votedirection-follow': true,
-		'category-เศรษฐกิจ': true,
-		'category-ขนส่งสาธารณะ': true,
-		'category-แก้รัฐธรรมนูญ': true,
-		'category-ที่อยู่อาศัย': true,
-		'category-สวัสดิการ': true,
-		'category-การศึกษา': true,
-		'category-สิ่งแวดล้อม': true,
-		'category-สังคม': true
-	};
+	let filterAssembly: string[] = [...FILTER_ASSEMBLY_DEFAULT];
+	let filterVoteType: string[] = [...FILTER_VOTETYPE_DEFAULT];
+	let filterVoteDirection: string[] = [...FILTER_VOTEDIRECTION_DEFAULT];
+	let filterCatg: string[] = [...FILTER_CATEGORY_DEFAULT];
+	$: tickedFilterCount =
+		filterAssembly.length + filterVoteType.length + filterVoteDirection.length + filterCatg.length;
 
 	const filterTickAll = (value = true) => {
-		for (let k in filterCheckbox) {
-			filterCheckbox[k] = value;
+		if (value) {
+			filterAssembly = [...FILTER_ASSEMBLY_DEFAULT];
+			filterVoteType = [...FILTER_VOTETYPE_DEFAULT];
+			filterVoteDirection = [...FILTER_VOTEDIRECTION_DEFAULT];
+			filterCatg = [...FILTER_CATEGORY_DEFAULT];
+		} else {
+			filterAssembly = [];
+			filterVoteType = [];
+			filterVoteDirection = [];
+			filterCatg = [];
 		}
 	};
 
-	$: isFilterSomeFalse = Object.values(filterCheckbox).some((e) => e === false);
-	$: isFilterAllFalse = Object.values(filterCheckbox).every((e) => e === false);
+	$: isFilterSomeFalse = tickedFilterCount < ALL_FILTER_COUNT;
+	$: isFilterAllFalse = tickedFilterCount === 0;
 
 	let mounted = false;
 	onMount(() => {
@@ -65,25 +80,13 @@
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		switch ($page.url.searchParams.get('votetype')) {
 			case 'agreed':
-				filterCheckbox['votetype-disagreed'] = false;
-				filterCheckbox['votetype-novote'] = false;
-				filterCheckbox['votetype-abstain'] = false;
-				filterCheckbox['votetype-absent'] = false;
-				filterCheckbox['votetype-other'] = false;
+				filterVoteType = [DefaultVoteOption.Agreed];
 				break;
 			case 'disagreed':
-				filterCheckbox['votetype-agreed'] = false;
-				filterCheckbox['votetype-novote'] = false;
-				filterCheckbox['votetype-abstain'] = false;
-				filterCheckbox['votetype-absent'] = false;
-				filterCheckbox['votetype-other'] = false;
+				filterVoteType = [DefaultVoteOption.Disagreed];
 				break;
 			case 'absent':
-				filterCheckbox['votetype-agreed'] = false;
-				filterCheckbox['votetype-disagreed'] = false;
-				filterCheckbox['votetype-novote'] = false;
-				filterCheckbox['votetype-abstain'] = false;
-				filterCheckbox['votetype-other'] = false;
+				filterVoteType = [DefaultVoteOption.Absent];
 				break;
 		}
 	});
@@ -163,75 +166,36 @@
 				</div>
 				<div class="flex-[1_1_auto] h-0 overflow-y-scroll py-4 px-6">
 					<FormGroup legendText="สมัยการทำงาน">
-						<Checkbox
-							bind:checked={filterCheckbox['era-26']}
-							labelText="สภาผู้แทนราษฎรชุดที่ 26 (2566 - ปัจจุบัน)"
-						/>
-						<Checkbox
-							bind:checked={filterCheckbox['era-25']}
-							labelText="สภาผู้แทนราษฎรชุดที่ 25 (2563 - 2566)"
-						/>
+						{#each filterOptions.assemblies as assembly (assembly.id)}
+							<Checkbox
+								bind:group={filterAssembly}
+								value={assembly.id}
+								labelText="{assembly.name}ชุดที่ {assembly.term} ({assembly.startedAt.toLocaleString(
+									'th-TH',
+									{ year: 'numeric' }
+								)} - {assembly?.endedAt?.toLocaleString('th-TH', { year: 'numeric' }) ??
+									'ปัจจุบัน'})"
+							/>
+						{/each}
 					</FormGroup>
 					<FormGroup legendText="ประเภทการลงมติ">
-						<Checkbox bind:checked={filterCheckbox['votetype-agreed']} labelText="เห็นด้วย (xxx)" />
-						<Checkbox
-							bind:checked={filterCheckbox['votetype-disagreed']}
-							labelText="ไม่เห็นด้วย (xxx)"
-						/>
-						<Checkbox
-							bind:checked={filterCheckbox['votetype-novote']}
-							labelText="งดออกเสียง (xxx)"
-						/>
-						<Checkbox
-							bind:checked={filterCheckbox['votetype-abstain']}
-							labelText="ไม่ลงคะแนน (xxx)"
-						/>
-						<Checkbox
-							bind:checked={filterCheckbox['votetype-absent']}
-							labelText="ลา/ขาดประชุม (xxx)"
-						/>
-						<Checkbox bind:checked={filterCheckbox['votetype-other']} labelText="อื่นๆ (xxx)" />
+						{#each FILTER_VOTETYPE_DEFAULT as votetype (votetype)}
+							<Checkbox bind:group={filterVoteType} value={votetype} labelText="{votetype} (xxx)" />
+						{/each}
 					</FormGroup>
 					<FormGroup legendText="เงื่อนไขพิเศษ">
-						<Checkbox
-							bind:checked={filterCheckbox['votedirection-different']}
-							labelText="ลงมติต่างจากเสียงส่วนใหญ่ในพรรค (xxx)"
-						/>
-						<Checkbox
-							bind:checked={filterCheckbox['votedirection-follow']}
-							labelText="ลงมติเหมือนเสียงส่วนใหญ่ในพรรค (xxx)"
-						/>
+						{#each FILTER_VOTEDIRECTION_DEFAULT as votedirection (votedirection)}
+							<Checkbox
+								bind:group={filterVoteDirection}
+								value={votedirection}
+								labelText="{votedirection} (xxx)"
+							/>
+						{/each}
 					</FormGroup>
 					<FormGroup legendText="หมวดมติ (1&nbsp;มติ มีได้มากกว่า 1&nbsp;หมวด)" class="mb-0">
-						<Checkbox
-							labelText="เศรษฐกิจ (xxx)"
-							bind:checked={filterCheckbox['category-เศรษฐกิจ']}
-						/>
-						<Checkbox
-							labelText="ขนส่งสาธารณะ (xxx)"
-							bind:checked={filterCheckbox['category-ขนส่งสาธารณะ']}
-						/>
-						<Checkbox
-							labelText="แก้รัฐธรรมนูญ (xxx)"
-							bind:checked={filterCheckbox['category-แก้รัฐธรรมนูญ']}
-						/>
-						<Checkbox
-							labelText="ที่อยู่อาศัย (xxx)"
-							bind:checked={filterCheckbox['category-ที่อยู่อาศัย']}
-						/>
-						<Checkbox
-							labelText="สวัสดิการ (xxx)"
-							bind:checked={filterCheckbox['category-สวัสดิการ']}
-						/>
-						<Checkbox
-							labelText="การศึกษา (xxx)"
-							bind:checked={filterCheckbox['category-การศึกษา']}
-						/>
-						<Checkbox
-							labelText="สิ่งแวดล้อม (xxx)"
-							bind:checked={filterCheckbox['category-สิ่งแวดล้อม']}
-						/>
-						<Checkbox labelText="สังคม (xxx)" bind:checked={filterCheckbox['category-สังคม']} />
+						{#each filterOptions.categories as catg (catg)}
+							<Checkbox bind:group={filterCatg} value={catg} labelText="{catg} (xxx)" />
+						{/each}
 					</FormGroup>
 				</div>
 				<div class="flex gap-[1px] sticky bottom-0 body-compact-01 bg-white">
