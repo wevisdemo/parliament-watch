@@ -8,7 +8,7 @@ export interface Voting {
 	date: Date;
 	meetingType: string;
 	participatedAssembleIds: string[];
-	voteOptions: DefaultVoteOption[] | VoteOption[];
+	voteOptions: (DefaultVoteOption | string)[];
 	winningCondition: string;
 	result: DefaultVotingResult | string;
 	relatedBillId?: number;
@@ -16,9 +16,9 @@ export interface Voting {
 	files: Link[];
 }
 
-export interface VoteOption {
+export interface CustomVoteOption {
 	label: string;
-	color: string;
+	colorIntensity: number; // 0-1
 }
 
 export enum DefaultVotingResult {

@@ -1,29 +1,22 @@
 import {
 	DefaultVoteOption,
 	DefaultVotingResult,
-	type VoteOption,
+	type CustomVoteOption,
 	type Voting
 } from '$models/voting';
 import { rep26 } from './assembly';
 
-export const defaultVoteOptions: VoteOption[] = [
-	{
-		label: DefaultVoteOption.Agreed,
-		color: '#00A1AB'
-	},
-	{ label: DefaultVoteOption.Disagreed, color: '#E52900' },
-	{
-		label: DefaultVoteOption.Novote,
-		color: '#393939'
-	},
-	{
-		label: DefaultVoteOption.Abstain,
-		color: '#8D8D8D'
-	},
-	{
-		label: DefaultVoteOption.Absent,
-		color: '#E0E0E0'
-	}
+export const defaultVoteOptions: DefaultVoteOption[] = [
+	DefaultVoteOption.Agreed,
+	DefaultVoteOption.Disagreed,
+	DefaultVoteOption.Novote,
+	DefaultVoteOption.Abstain,
+	DefaultVoteOption.Absent
+];
+export const customVoteOption: CustomVoteOption[] = [
+	{ label: 'ชื่อแคนดิเดต 1', colorIntensity: 0 },
+	{ label: 'ชื่อแคนดิเดต 2', colorIntensity: 0.5 },
+	{ label: 'ชื่อแคนดิเดต 3', colorIntensity: 1 }
 ];
 
 export const mockCategory = [

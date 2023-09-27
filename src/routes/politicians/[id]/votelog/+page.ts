@@ -1,15 +1,25 @@
 import type { Politician } from '$models/politician.js';
-import { DefaultVotingResult, type VoteOption, type Voting } from '$models/voting.js';
+import {
+	DefaultVoteOption,
+	DefaultVotingResult,
+	type CustomVoteOption,
+	type Voting
+} from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
 import { gov35, rep26 } from '../../../../mocks/data/assembly.js';
-import { defaultVoteOptions, mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
+import {
+	customVoteOption,
+	defaultVoteOptions,
+	mockCategory,
+	passedVoting
+} from '../../../../mocks/data/voting.js';
 
 interface VotingSummary
 	extends Pick<
 		Voting,
 		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssembleIds' | 'category'
 	> {
-	voteOption: VoteOption;
+	voteOption: DefaultVoteOption | CustomVoteOption;
 	isVoteAlignWithPartyMajority: boolean;
 }
 
@@ -43,7 +53,10 @@ export async function load({ params }) {
 		category: mockCategory[i % mockCategory.length],
 		result: i % 3 ? DefaultVotingResult.Passed : DefaultVotingResult.Failed,
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : [],
-		voteOption: defaultVoteOptions[i & defaultVoteOptions.length],
+		voteOption:
+			i % defaultVoteOptions.length
+				? defaultVoteOptions[i & defaultVoteOptions.length]
+				: customVoteOption[i % customVoteOption.length],
 		isVoteAlignWithPartyMajority: i % 5 !== 0
 	}));
 
