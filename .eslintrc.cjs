@@ -25,6 +25,12 @@ module.exports = {
 			parserOptions: {
 				parser: '@typescript-eslint/parser'
 			}
+		},
+		{
+			files: ['*story.svelte'],
+			rules: {
+				'no-import-assign': 'off'
+			}
 		}
 	],
 	rules: {

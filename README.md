@@ -39,6 +39,7 @@ Citizens are watching
 - [Svelte](https://svelte.dev) + [SvelteKit](https://kit.svelte.dev)
 - [Carbon Design System (v10)](https://v10.carbondesignsystem.com) + [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
 - [TailwindCSS](https://tailwindcss.com)
+- [Histoire](https://histoire.dev/) for the components documentation
 
 ### Local development
 
@@ -67,6 +68,12 @@ yarn
 yarn dev
 ```
 
+Run Histoire to see a collection of custom components with
+
+```bash
+yarn story:dev
+```
+
 ## 🍭 Design System
 
 The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with scss in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `yarn compile:sass` command.
@@ -84,13 +91,19 @@ The project design system is based on Carbon Design System v10 with some modific
 ### Components
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
-- We have custom shared component available in [src/components/](src/components/) when needed. See all planned component in [Figma file.]()
-- Avoid developing new component from scratch if not nessesary. (Please check from the above sources first)
+- We have custom shared component available in [src/components/](src/components/).
+  - To see shared components' story, open Histoire in local with `yarn story:dev` or browse it in the [staging/stories](https://parliament-watch.pages.dev/stories)
+  - See all planned component in [Figma file.](https://www.figma.com/file/cdtZnPegHm5CGHWqIND5Im/Design_Phase01?node-id=40%3A67247)
+- If the component is not yet developed:
+  - If the component is used by only a specific route, create it in _src/components/route-name-and-sub-route-if-exist/_
+  - If the component is shared, create a folder _src/components/ComponentName/_ with following files:
+    - **ComponentName.svelte** for the component source code.
+    - **ComponentName.story.svelte** for the Histoire's story file. Follow [a guide on writing stories](https://histoire.dev/guide/svelte3/stories.html).
 
 ### Icons
 
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
-- We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon.
+- We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also avaiable in Histoire)
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
 
 ## 💾 Data Models
