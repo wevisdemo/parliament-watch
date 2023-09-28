@@ -19,7 +19,7 @@ Citizens are watching
   - [Components](#components)
   - [Icons](#icons)
 - [💾 Data Models](#-data-models)
-- [🤝 Contribution Guideline](#-contribution-guideline)
+- [🤝 Contributing Guideline](#-contributing-guideline)
 - [📜 License and Terms of Use](#-license-and-terms-of-use)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -110,11 +110,9 @@ The project design system is based on Carbon Design System v10 with some modific
 
 ER Diagram and TypeScript's interfaces are avaiable in [src/models](src/models)
 
-## 🤝 Contribution Guideline
+## 🤝 Contributing Guideline
 
-- For each issue, create a new branch name in the format of `username/issuenumber-description`
-- Add issue number as a commit message scope eg. `feat(issuenumber): commit description`
-- Open the pull requests (PR), with the same name of the issue, when you need a discussion or ready to be reviewed.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## 📜 License and Terms of Use
 
