@@ -3,12 +3,23 @@
 	import { Tag } from 'carbon-components-svelte';
 
 	export let result: DefaultVotingResult | string;
-	$: isPassed = result === DefaultVotingResult.Passed || result === 'passed';
+
+	let tagColor = 'bg-purple-70';
+	let label = result;
+
+	switch (result) {
+		case DefaultVotingResult.Passed:
+			tagColor = 'bg-teal-30';
+			label = DefaultVotingResult.Passed;
+			break;
+		case DefaultVotingResult.Failed:
+			tagColor = 'bg-red-30';
+			label = DefaultVotingResult.Failed;
+			break;
+	}
 
 	let className = '';
 	export { className as class };
 </script>
 
-<Tag class={className} type={isPassed ? 'teal' : 'red'}>
-	{isPassed ? 'ผ่าน' : 'ไม่ผ่าน'}
-</Tag>
+<Tag class="{tagColor} {className}">{label}</Tag>

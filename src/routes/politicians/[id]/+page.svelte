@@ -322,7 +322,7 @@
 			/>
 			<div class="flex flex-col gap-6">
 				<div class="flex flex-col gap-2">
-					<h3 class="body-02 px-2 py-1 bg-teal-20">
+					<h3 class="body-02 px-2 py-1 bg-teal-50">
 						5 มติล่าสุด ที่{politician.firstname}<span class="heading-02">เห็นด้วย</span>
 					</h3>
 					<!-- TODO: add links -->
@@ -350,7 +350,7 @@
 					</a>
 				</div>
 				<div class="flex flex-col gap-2">
-					<h3 class="body-02 px-2 py-1 bg-red-20">
+					<h3 class="body-02 px-2 py-1 bg-red-50 text-white">
 						5 มติล่าสุด ที่{politician.firstname}<span class="heading-02">ไม่เห็นด้วย</span>
 					</h3>
 					<!-- TODO: add links -->
@@ -378,7 +378,7 @@
 					</a>
 				</div>
 				<div class="flex flex-col gap-2">
-					<h3 class="body-02 px-2 py-1 bg-gray-10 heading-02">การลา/ขาดประชุม</h3>
+					<h3 class="body-02 px-2 py-1 bg-gray-20 heading-02">การลา/ขาดประชุม</h3>
 					<p class="body-02">
 						{politician.firstname}ลา/ขาดประชุมในการลงมติ {votingAbsentStats.absentVoting} มติ ({safePercent(
 							votingAbsentStats.absentVoting,
