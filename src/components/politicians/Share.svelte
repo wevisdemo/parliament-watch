@@ -5,7 +5,7 @@
 
 	export let url = '';
 	let copyTooltip = false;
-	let copyTooltipTimeout: number;
+	let copyTooltipTimeout: ReturnType<typeof setTimeout>;
 	let copyResult = 'Copied!';
 
 	$: encodedURL = encodeURIComponent(url);
