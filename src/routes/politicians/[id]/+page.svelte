@@ -1,7 +1,7 @@
 <script lang="ts">
-	import General from '$components/icons/general.svelte';
-	import Politician from '$components/icons/politician.svelte';
-	import Vote from '$components/icons/vote.svelte';
+	import General from '$components/icons/GeneralIcon.svelte';
+	import Politician from '$components/icons/PoliticianIcon.svelte';
+	import Vote from '$components/icons/VoteIcon.svelte';
 	import PartyDetail from '$components/politicians/PartyDetail.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';

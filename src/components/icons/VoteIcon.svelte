@@ -1,5 +1,5 @@
 <script>
-	import BaseSvg from './base-svg.svelte';
+	import BaseSvg from './BaseSvg.svelte';
 </script>
 
 <BaseSvg {...$$restProps}>
