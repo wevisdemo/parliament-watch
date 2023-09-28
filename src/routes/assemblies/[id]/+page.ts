@@ -1,16 +1,13 @@
-import type { Assembly } from '$models/assembly.js';
 import type { Party } from '$models/party.js';
 import type { Politician } from '$models/politician.js';
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
-import { rep26 } from '../../../mocks/data/assembly.js';
+import { rep26, sen12 } from '../../../mocks/data/assembly.js';
 import {
 	bhumjaithaiParty,
 	democratsParty,
 	movingForwardParty,
 	pheuThaiParty
 } from '../../../mocks/data/party.js';
-
-type AssemblySummary = Omit<Assembly, 'mainRoles'>;
 
 interface Summary {
 	totalMembers: number;
@@ -30,8 +27,8 @@ interface MemberGroup {
 interface MainMember {
 	assemblyRole: string;
 	politician: Pick<Politician, 'id' | 'firstname' | 'lastname'>;
-	party: Party;
-	partyRole: string;
+	party?: Party;
+	partyRole?: string;
 }
 
 interface VoteCard {
@@ -44,12 +41,8 @@ interface VoteCard {
 }
 
 export function load({ params }) {
-	const { mainRoles, ...rep26Summary } = rep26;
-
-	const assembly: AssemblySummary = {
-		...rep26Summary,
-		id: params.id
-	};
+	const isSenates = params.id === sen12.id;
+	const { mainRoles, ...assembly } = isSenates ? sen12 : rep26;
 
 	const mainMembers: MainMember[] = mainRoles.map((assemblyRole) => ({
 		assemblyRole,
@@ -58,30 +51,49 @@ export function load({ params }) {
 			firstname: 'สมชาติ',
 			lastname: 'สกุลสมมุติ'
 		},
-		party: movingForwardParty,
-		partyRole: 'สส. บัญชีรายชื่อ'
+		...(isSenates
+			? {}
+			: {
+					party: movingForwardParty,
+					partyRole: 'สส. บัญชีรายชื่อ'
+			  })
 	}));
 
 	const summary: Summary = {
 		totalMembers: 500,
-		highlightGroup: [
-			{
-				name: 'ฝ่ายรัฐบาล',
-				total: 300,
-				parties: [
-					{ ...pheuThaiParty, count: 200 },
-					{ ...bhumjaithaiParty, count: 100 }
-				]
-			},
-			{
-				name: 'ฝ่ายค้าน',
-				total: 200,
-				parties: [
-					{ ...movingForwardParty, count: 150 },
-					{ ...democratsParty, count: 50 }
-				]
-			}
-		],
+		highlightGroup: isSenates
+			? [
+					{
+						name: 'เลือกโดย คสช.',
+						total: 194
+					},
+					{
+						name: 'เลือกกันเอง',
+						total: 50
+					},
+					{
+						name: 'โดยตำแหน่ง',
+						total: 6
+					}
+			  ]
+			: [
+					{
+						name: 'ฝ่ายรัฐบาล',
+						total: 300,
+						parties: [
+							{ ...pheuThaiParty, count: 200 },
+							{ ...bhumjaithaiParty, count: 100 }
+						]
+					},
+					{
+						name: 'ฝ่ายค้าน',
+						total: 200,
+						parties: [
+							{ ...movingForwardParty, count: 150 },
+							{ ...democratsParty, count: 50 }
+						]
+					}
+			  ],
 		groupBySex: [
 			{
 				name: 'ชาย',
