@@ -8,38 +8,42 @@
 	let className = '';
 	export { className as class };
 
-	let tagColor: TagProps['type'];
-	let label: string;
+	let tagColorClass = 'bg-purple-70';
+	let tagBgOpacity = 1;
+	let label = '';
 
-	// FIXME: Consult Designer Tag Color
 	if (typeof voteOption === 'string') {
 		switch (voteOption as DefaultVoteOption) {
 			case DefaultVoteOption.Agreed:
 				label = DefaultVoteOption.Agreed;
-				tagColor = 'teal';
+				tagColorClass = 'bg-teal-50';
 				break;
 			case DefaultVoteOption.Disagreed:
 				label = DefaultVoteOption.Disagreed;
-				tagColor = 'red';
+				tagColorClass = 'bg-red-50 text-white';
 				break;
 			case DefaultVoteOption.Novote:
 				label = DefaultVoteOption.Novote;
-				tagColor = 'high-contrast';
+				tagColorClass = 'bg-gray-80 text-white';
 				break;
 			case DefaultVoteOption.Abstain:
 				label = DefaultVoteOption.Abstain;
-				tagColor = 'gray';
+				tagColorClass = 'bg-gray-50 text-white';
 				break;
 			case DefaultVoteOption.Absent:
 				label = DefaultVoteOption.Absent;
-				tagColor = 'outline';
+				tagColorClass = 'bg-gray-20';
 				break;
 		}
 	} else {
-		// TODO: shade the purple
-		tagColor = 'purple';
-		label = voteOption?.label ?? 'WOT';
+		tagColorClass = 'bg-purple-70';
+		tagBgOpacity = voteOption?.colorIntensity * 0.7 + 0.3 ?? 1;
+		if (tagBgOpacity > 0.45) tagColorClass += ' text-white';
+		label = voteOption?.label ?? '';
 	}
 </script>
 
-<Tag class="m-0 whitespace-nowrap {className}" type={tagColor}>{label}</Tag>
+<Tag
+	class="m-0 whitespace-nowrap {tagColorClass} {className}"
+	style="--tw-bg-opacity:{tagBgOpacity}">{label}</Tag
+>

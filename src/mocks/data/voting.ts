@@ -14,9 +14,9 @@ export const defaultVoteOptions: DefaultVoteOption[] = [
 	DefaultVoteOption.Absent
 ];
 export const customVoteOption: CustomVoteOption[] = [
-	{ label: 'ชื่อแคนดิเดต 1', colorIntensity: 0 },
+	{ label: 'ชื่อแคนดิเดต 1', colorIntensity: 1 },
 	{ label: 'ชื่อแคนดิเดต 2', colorIntensity: 0.5 },
-	{ label: 'ชื่อแคนดิเดต 3', colorIntensity: 1 }
+	{ label: 'ชื่อแคนดิเดต 3', colorIntensity: 0 }
 ];
 
 export const mockCategory = [
