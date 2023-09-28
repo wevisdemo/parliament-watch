@@ -44,8 +44,9 @@ Citizens are watching
 
 - [Yarn v1](https://classic.yarnpkg.com) as a package manager
 - Husky and lint-staged will
-  - Lint (ESLint) and format (Prettier) code when commiting
+  - Lint (ESLint) and format (Prettier) code before commiting
   - Validate that commit message is align with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
+  - Run svelte-check before pushing
 - For VSCode user, format on save is enabled and [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when open the project.
 
 ### Deployment pipeline
