@@ -20,7 +20,7 @@
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import { onMount } from 'svelte';
-	import { DefaultVoteOption } from '$models/voting.js';
+	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
 
 	export let data;
 	const { politician, filterOptions, votings } = data;
@@ -33,11 +33,14 @@
 		DefaultVoteOption.Absent,
 		'อื่นๆ'
 	];
-	const VOTEDIRECTIONS = ['ลงมติต่างจากเสียงส่วนใหญ่ในพรรค', 'ลงมติเหมือนเสียงส่วนใหญ่ในพรรค'];
+	const VOTEDIRECTIONS = [
+		{ label: 'ลงมติต่างจากเสียงส่วนใหญ่ในพรรค', value: false },
+		{ label: 'ลงมติเหมือนเสียงส่วนใหญ่ในพรรค', value: true }
+	];
 
 	const FILTER_ASSEMBLY_DEFAULT = filterOptions.assemblies.map((e) => e.id);
 	const FILTER_VOTETYPE_DEFAULT = [...VOTEOPTIONS];
-	const FILTER_VOTEDIRECTION_DEFAULT = [...VOTEDIRECTIONS];
+	const FILTER_VOTEDIRECTION_DEFAULT = [...VOTEDIRECTIONS.map((e) => e.value)];
 	const FILTER_CATEGORY_DEFAULT = filterOptions.categories;
 	$: ALL_FILTER_COUNT =
 		FILTER_ASSEMBLY_DEFAULT.length +
@@ -52,7 +55,7 @@
 	let showFilter = true;
 	let filterAssembly: string[] = [...FILTER_ASSEMBLY_DEFAULT];
 	let filterVoteType: string[] = [...FILTER_VOTETYPE_DEFAULT];
-	let filterVoteDirection: string[] = [...FILTER_VOTEDIRECTION_DEFAULT];
+	let filterVoteDirection: boolean[] = [...FILTER_VOTEDIRECTION_DEFAULT];
 	let filterCatg: string[] = [...FILTER_CATEGORY_DEFAULT];
 	$: tickedFilterCount =
 		filterAssembly.length + filterVoteType.length + filterVoteDirection.length + filterCatg.length;
@@ -71,8 +74,26 @@
 		}
 	};
 
+	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption) =>
+		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
+
 	$: isFilterSomeFalse = tickedFilterCount < ALL_FILTER_COUNT;
 	$: isFilterAllFalse = tickedFilterCount === 0;
+
+	$: filteredData = isFilterAllFalse
+		? []
+		: votings.filter((votingDataEntry) => {
+				const search = searchQuery.trim();
+				if (search && !votingDataEntry.title.includes(search)) return;
+				return (
+					filterAssembly.some((assemblyId) =>
+						votingDataEntry.participatedAssembleIds.includes(assemblyId)
+					) &&
+					filterVoteType.includes(generalVoteType(votingDataEntry.voteOption)) &&
+					filterVoteDirection.includes(votingDataEntry.isVoteAlignWithPartyMajority) &&
+					filterCatg.includes(votingDataEntry.category)
+				);
+		  });
 
 	let mounted = false;
 	onMount(() => {
@@ -184,11 +205,11 @@
 						{/each}
 					</FormGroup>
 					<FormGroup legendText="เงื่อนไขพิเศษ">
-						{#each FILTER_VOTEDIRECTION_DEFAULT as votedirection (votedirection)}
+						{#each VOTEDIRECTIONS as votedirection (votedirection.label)}
 							<Checkbox
 								bind:group={filterVoteDirection}
-								value={votedirection}
-								labelText="{votedirection} (xxx)"
+								value={votedirection.value}
+								labelText="{votedirection.label} (xxx)"
 							/>
 						{/each}
 					</FormGroup>
@@ -244,7 +265,7 @@
 						{ key: 'result', value: 'ผลลัพธ์' },
 						{ key: 'files', value: 'เอกสาร' }
 					]}
-					rows={votings}
+					rows={filteredData}
 					pageSize={tablePageSize}
 					page={tableCurrentPage}
 				>
@@ -279,7 +300,7 @@
 					</svelte:fragment>
 				</DataTable>
 			</div>
-			{#if votings.length === 0}
+			{#if filteredData.length === 0}
 				<div
 					class="h-10 body-compact-01 text-gray-60 px-4 flex items-center border-solid border-b border-b-ui-03"
 				>
@@ -291,7 +312,7 @@
 				class="sticky bottom-0 overflow-x-hidden"
 				bind:pageSize={tablePageSize}
 				bind:page={tableCurrentPage}
-				totalItems={votings.length}
+				totalItems={filteredData.length}
 				pageSizeInputDisabled
 				forwardText="หน้าถัดไป"
 				backwardText="หน้าก่อนหน้า"

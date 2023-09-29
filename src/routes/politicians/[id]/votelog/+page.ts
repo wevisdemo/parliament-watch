@@ -47,7 +47,7 @@ export async function load({ params }) {
 
 	const votings: VotingSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
 		id: i,
-		title,
+		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
 		participatedAssembleIds: [i % 2 ? rep26.id : gov35.id],
 		category: mockCategory[i % mockCategory.length],
