@@ -1,4 +1,6 @@
 <script lang="ts">
+	import SideNav from '../../../components/politicians/SideNav.svelte';
+
 	import General from '$components/icons/GeneralIcon.svelte';
 	import Politician from '$components/icons/PoliticianIcon.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
@@ -8,7 +10,6 @@
 	import Share from '$components/politicians/Share.svelte';
 	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button, InlineNotification } from 'carbon-components-svelte';
-	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
@@ -129,78 +130,14 @@
 	class="flex flex-col items-start gap-4 p-4 min-h-screen bg-[--party] md:flex-row md:gap-8 md:py-8 md:px-16 heading-01"
 	style:--party={currentParty?.party.color ?? '#F4F4F4'}
 >
-	<nav
-		class="w-full bg-ui-05 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px] md:flex-[0_0_224px]"
-	>
-		<menu class="flex flex-col gap-[1px] list-none">
-			<li
-				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[111ms] ease-productive-in-out"
-				data-active={currentNavElementIndex === 0 || null}
-			>
-				<a href="#personal" class="block p-4 text-white no-underline">
-					<div class="flex justify-between">
-						<span>ข้อมูลพื้นฐาน</span>
-						<ArrowDown class="md:hidden" />
-						<ArrowRight class="hidden md:group-data-[active]:block" />
-					</div>
-				</a>
-			</li>
-			<li
-				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[113ms] ease-productive-in-out"
-				data-active={currentNavElementIndex === 1 || null}
-			>
-				<a href="#politics" class="block p-4 text-white no-underline">
-					<div class="flex justify-between">
-						<span>ประวัติทางการเมือง</span>
-						<ArrowDown class="md:hidden" />
-						<ArrowRight class="hidden md:group-data-[active]:block" />
-					</div>
-					{#if politician.assemblyRoles.length + partyCount > 0}
-						<ul class="label-01 text-white/60">
-							{#if politician.assemblyRoles.length > 0}
-								<li>{politician.assemblyRoles.length} ตำแหน่ง</li>
-							{/if}
-							{#if partyCount > 0}
-								<li>{partyCount} พรรคการเมือง</li>
-							{/if}
-						</ul>
-					{/if}
-				</a>
-			</li>
-			<li
-				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[114ms] ease-productive-in-out"
-				data-active={currentNavElementIndex === 2 || null}
-			>
-				<a href="#votelog" class="block p-4 text-white no-underline">
-					<div class="flex justify-between">
-						<span>ประวัติการลงมติ</span>
-						<ArrowDown class="md:hidden" />
-						<ArrowRight class="hidden md:group-data-[active]:block" />
-					</div>
-					<ul class="label-01 text-white/60">
-						<li>เห็นด้วย {agreedVoting.total} มติ</li>
-						<li>ไม่เห็นด้วย {disagreedVoting.total} มติ</li>
-						<li>ลา/ขาดประชุม {votingAbsentStats.absentVoting} มติ</li>
-					</ul>
-				</a>
-			</li>
-			<!-- <li
-				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[112ms] ease-productive-in-out"
-				data-active={currentNavElementIndex === 3 || null}
-			>
-				<a href="#bill" class="block p-4 text-white no-underline">
-					<div class="flex justify-between">
-						<span>ประวัติการเสนอกฏหมาย</span>
-						<ArrowDown class="md:hidden" />
-						<ArrowRight class="hidden md:group-data-[active]:block" />
-					</div>
-					<ul class="label-01 text-white/60">
-						<li>{totalProposedBill} ร่าง</li>
-					</ul>
-				</a>
-			</li> -->
-		</menu>
-	</nav>
+	<SideNav
+		{currentNavElementIndex}
+		assemblyRolesLength={politician.assemblyRoles.length}
+		{partyCount}
+		agreedVoting={agreedVoting.total}
+		disagreedVoting={disagreedVoting.total}
+		absentTotal={votingAbsentStats.absentVoting}
+	/>
 	<div class="flex-1 flex flex-col gap-6 w-full min-w-0">
 		<Section id="personal" title="ข้อมูลพื้นฐาน">
 			<General slot="icon" size="32" />
