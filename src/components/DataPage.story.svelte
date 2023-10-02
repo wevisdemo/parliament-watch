@@ -23,12 +23,10 @@
 			choices: [
 				{
 					label: 'ลงมติต่างจากเสียงส่วนใหญ่ในพรรค',
-					extension: 50,
 					value: false
 				},
 				{
 					label: 'ลงมติเหมือนเสียงส่วนใหญ่ในพรรค',
-					extension: 50,
 					value: true
 				}
 			]

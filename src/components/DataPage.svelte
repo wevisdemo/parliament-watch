@@ -1,7 +1,6 @@
 <script lang="ts" context="module">
 	export interface FilterChoice {
 		label: string;
-		extension?: string | number;
 		value: string | number | boolean;
 	}
 
@@ -158,8 +157,7 @@
 								<Checkbox
 									bind:group={selectedFilter[optionGroup.key]}
 									value={choice.value}
-									labelText={choice.label +
-										(choice.extension !== undefined ? ` (${choice.extension})` : '')}
+									labelText={choice.label}
 									skeleton={!mounted}
 								/>
 							{/each}
@@ -167,21 +165,18 @@
 					{/each}
 				</div>
 				<div class="flex gap-[1px] sticky bottom-0 body-compact-01 bg-white">
-					{#if isFilterAllFalse}
-						<Button
-							class="flex-1 min-w-0 pr-4"
-							kind="secondary"
-							on:click={() => filterTickAll()}
-							skeleton={!mounted}>เลือกทั้งหมด</Button
-						>
-					{:else}
-						<Button
-							class="flex-1 min-w-0 pr-4"
-							kind="tertiary"
-							on:click={() => filterTickAll(false)}
-							skeleton={!mounted}>ล้างตัวเลือก</Button
-						>
-					{/if}
+					<Button
+						class="flex-[2_2_0%] min-w-0 pr-4"
+						kind="tertiary"
+						on:click={() => filterTickAll(false)}
+						skeleton={!mounted}>ล้างตัวเลือก</Button
+					>
+					<Button
+						class="flex-[2_2_0%] min-w-0 pr-4"
+						kind={'tertiary' || 'secondary'}
+						on:click={() => filterTickAll()}
+						skeleton={!mounted}>เลือกทั้งหมด</Button
+					>
 					<Button
 						class="flex-1 min-w-0 pr-4 md:hidden"
 						on:click={() => {

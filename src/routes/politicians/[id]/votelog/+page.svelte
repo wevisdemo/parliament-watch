@@ -20,28 +20,14 @@
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};
 
-	const votingFilterCount: Record<string, number> = {};
-	for (let vote of votings) {
-		const catg = vote.category;
-		votingFilterCount[catg] = (votingFilterCount[catg] ?? 0) + 1;
-		const type = generalVoteType(vote.voteOption);
-		votingFilterCount[type] = (votingFilterCount[type] ?? 0) + 1;
-		if (vote.isVoteAlignWithPartyMajority) {
-			votingFilterCount['align'] = (votingFilterCount['align'] ?? 0) + 1;
-		} else {
-			votingFilterCount['not-align'] = (votingFilterCount['not-align'] ?? 0) + 1;
-		}
-	}
-
 	const filterList: FilterGroup[] = [
 		{
 			key: 'filterAssembly',
 			legend: 'สมัยการทำงาน',
 			choices: filterOptions.assemblies.map((assembly) => ({
-				label: `${assembly.name}ชุดที่ ${assembly.term}`,
-				extension: `${formatThaiYear(assembly.startedAt)} - ${
+				label: `${assembly.name}ชุดที่ ${assembly.term} (${formatThaiYear(assembly.startedAt)} - ${
 					formatThaiYear(assembly?.endedAt) ?? 'ปัจจุบัน'
-				}`,
+				})`,
 				value: assembly.id
 			}))
 		},
@@ -57,7 +43,6 @@
 				'อื่นๆ'
 			].map((type) => ({
 				label: type,
-				extension: votingFilterCount[type],
 				value: type
 			}))
 		},
@@ -67,12 +52,10 @@
 			choices: [
 				{
 					label: 'ลงมติต่างจากเสียงส่วนใหญ่ในพรรค',
-					extension: votingFilterCount['not-align'],
 					value: false
 				},
 				{
 					label: 'ลงมติเหมือนเสียงส่วนใหญ่ในพรรค',
-					extension: votingFilterCount['align'],
 					value: true
 				}
 			]
@@ -82,7 +65,6 @@
 			legend: 'หมวดมติ (1 มติ มีได้มากกว่า 1 หมวด)',
 			choices: filterOptions.categories.map((catg) => ({
 				label: catg,
-				extension: votingFilterCount[catg],
 				value: catg
 			}))
 		}
