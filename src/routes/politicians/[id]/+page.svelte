@@ -17,6 +17,8 @@
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 
+	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+
 	export let data;
 	const { politician, agreedVoting, disagreedVoting, votingAbsentStats, totalProposedBill } = data;
 
@@ -107,17 +109,7 @@
 			{/if}
 		</div>
 		<div class="flex flex-col gap-2">
-			<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3">
-				<div class="flex items-center gap-1">
-					<Download />
-					<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
-				</div>
-				<!-- TODO: add link -->
-				<a href="/" class="flex items-center gap-1 mr-auto helper-text-01">
-					<TableSplit />
-					<span>ผลการลงมติรายคน</span>
-				</a>
-			</div>
+			<DownloadData links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
 			<p class="label-01 text-gray-60">อัปเดตข้อมูล: 18 ส.ค. 2566</p>
 			<!-- TODO: add link -->
 			<a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a>
