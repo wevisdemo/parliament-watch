@@ -7,7 +7,7 @@
 	import PartyDetail from '$components/politicians/PartyDetail.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
-	import Share from '$components/politicians/Share.svelte';
+	import Share from '$components/Share/Share.svelte';
 	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button, InlineNotification } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
@@ -121,7 +121,7 @@
 			<p class="label-01 text-gray-60">อัปเดตข้อมูล: 18 ส.ค. 2566</p>
 			<!-- TODO: add link -->
 			<a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a>
-			<Share />
+			<Share label="แชร์ประวัติ" />
 		</div>
 	</div>
 </header>

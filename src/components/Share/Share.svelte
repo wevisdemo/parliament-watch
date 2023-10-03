@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 
 	export let url = '';
+	export let label = 'แชร์';
 	let copyTooltip = false;
 	let copyTooltipTimeout: ReturnType<typeof setTimeout>;
 	let copyResult = 'Copied!';
@@ -34,7 +35,7 @@
 </script>
 
 <div class="flex gap-2 items-center">
-	<strong class="heading-01">แชร์ประวัติ</strong>
+	<strong class="heading-01">{label}</strong>
 	<button
 		class="flex items-center justify-center border border-solid border-black rounded-full bg-black/0 w-[28px] h-[28px] text-black cursor-pointer hover:bg-black hover:text-white transition-colors productive-in-out duration-[110ms]"
 		type="button"
