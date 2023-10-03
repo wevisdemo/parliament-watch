@@ -42,17 +42,18 @@
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	export let filteredData: { id: any; [key: string]: any }[];
 	export let tableHeader: { key: string; value: string }[];
+	export let tablePageSize = 10;
 
 	// For binding
 	export let searchQuery = '';
 	export let selectedFilter: SelectedFilterType = Object.fromEntries(
 		filterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
-	export let isFilterSomeFalse = true;
-	export let isFilterAllFalse = true;
+	export let isFilterSomeFalse = false;
+	export let isFilterAllFalse = false;
+	export let mounted = false;
 
 	// Reactive
-	let tablePageSize = 10;
 	let tableCurrentPage = 1;
 
 	const ALL_FILTER_COUNT = Object.values(filterList)
@@ -76,7 +77,6 @@
 	$: isFilterAllFalse = tickedFilterCount === 0;
 
 	let showFilter = true;
-	export let mounted = false;
 	onMount(() => {
 		mounted = true;
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
@@ -95,11 +95,11 @@
 		{/each}
 	</Breadcrumb>
 	<header class="px-4 py-3 bg-ui-01 md:px-16">
-		<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-end">
+		<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
 			<div class="flex-1">
 				<slot />
 			</div>
-			<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3">
+			<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end">
 				<div class="flex items-center gap-1">
 					<Download />
 					<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
@@ -227,7 +227,7 @@
 				<div class="flex-1" />
 				<Pagination
 					class="sticky bottom-0 overflow-x-hidden"
-					bind:pageSize={tablePageSize}
+					pageSize={tablePageSize}
 					bind:page={tableCurrentPage}
 					totalItems={filteredData.length}
 					pageSizeInputDisabled

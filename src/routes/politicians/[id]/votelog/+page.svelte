@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import DataPage from '$components/DataPage.svelte';
+	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/politicians/VotingOptionTag.svelte';
 	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
-	import type { FilterGroup, SelectedFilterType } from '../../../../components/DataPage.svelte';
+	import type { FilterGroup, SelectedFilterType } from '$components/DataPage/DataPage.svelte';
 
 	export let data;
 	const { politician, filterOptions, votings } = data;
