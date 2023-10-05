@@ -1,7 +1,4 @@
 <script lang="ts">
-	import '../../styles/carbon/pre-compiled.css';
-	import '../../styles/index.css';
-
 	import type { Hst } from '@histoire/plugin-svelte';
 	import DataPage, {
 		type SelectedComboboxValueType,

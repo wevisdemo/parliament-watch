@@ -13,7 +13,7 @@
 		<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
 	</div>
 	<!-- TODO: add link -->
-	{#each links as link}
+	{#each links as link (link.url)}
 		{#if link.url.includes('.pdf')}
 			<a href={link.url} class="flex items-center gap-1 mr-auto helper-text-01">
 				<DocumentPdf />

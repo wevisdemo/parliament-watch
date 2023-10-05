@@ -1,6 +1,4 @@
 <script lang="ts">
-	import '../../styles/carbon/pre-compiled.css';
-	import '../../styles/index.css';
 	import type { Hst } from '@histoire/plugin-svelte';
 	import Share from './Share.svelte';
 	export let Hst: Hst;
@@ -10,7 +8,10 @@
 </script>
 
 <Hst.Story title="Share">
-	<Share {url} {label} />
+	<div class="font-sans body-02">
+		<Share {url} {label} />
+	</div>
+
 	<svelte:fragment slot="controls">
 		<Hst.Text bind:value={url} title="URL" />
 		<Hst.Text bind:value={label} title="Label" />
