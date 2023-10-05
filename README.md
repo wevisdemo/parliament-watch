@@ -12,7 +12,10 @@ Citizens are watching
   - [Front-end](#front-end)
   - [Local development](#local-development)
   - [Deployment pipeline](#deployment-pipeline)
-- [🪄 Set Up](#-set-up)
+- [🪄 Useful Commands](#-useful-commands)
+  - [Start SvelteKit](#start-sveltekit)
+  - [Start Histoire](#start-histoire)
+  - [Generate a new component](#generate-a-new-component)
 - [🍭 Design System](#-design-system)
   - [Typography](#typography)
   - [Colors](#colors)
@@ -49,30 +52,42 @@ Citizens are watching
   - Validate that commit message is align with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
   - Run svelte-check before pushing
 - For VSCode user, format on save is enabled and [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when open the project.
+- [Hygen](http://www.hygen.io) for code generation
 
 ### Deployment pipeline
 
 - [Cloudflare Pages](https://pages.cloudflare.com) will automatically deploy staging (main branch) and per branch preview.
 
-## 🪄 Set Up
+## 🪄 Useful Commands
 
-1. Install dependencies with Yarn
+### Start SvelteKit
 
-```bash
-yarn
-```
-
-2. Run in development mode
+Start the project in development mode
 
 ```bash
 yarn dev
 ```
 
-Run Histoire to see a collection of custom components with
+### Start Histoire
+
+to see/develop custom components from Histoire's stories
 
 ```bash
 yarn story:dev
 ```
+
+### Generate a new component
+
+For a shared component
+
+```bash
+yarn gen:component
+```
+
+_src/components/ComponentName/_ directory will be created with the follwing files:
+
+- **ComponentName.svelte** for the component source code.
+- **ComponentName.story.svelte** for the Histoire's story file. Follow [a guide on writing stories](https://histoire.dev/guide/svelte3/stories.html).
 
 ## 🍭 Design System
 
@@ -96,9 +111,7 @@ The project design system is based on Carbon Design System v10 with some modific
   - See all planned component in [Figma file.](https://www.figma.com/file/cdtZnPegHm5CGHWqIND5Im/Design_Phase01?node-id=40%3A67247)
 - If the component is not yet developed:
   - If the component is used by only a specific route, create it in _src/components/route-name-and-sub-route-if-exist/_
-  - If the component is shared, create a folder _src/components/ComponentName/_ with following files:
-    - **ComponentName.svelte** for the component source code.
-    - **ComponentName.story.svelte** for the Histoire's story file. Follow [a guide on writing stories](https://histoire.dev/guide/svelte3/stories.html).
+  - If the component is shared, run `yarn gen:component` to generate a new component. Don't forget to update a story file for the component documentation.
 
 ### Icons
 

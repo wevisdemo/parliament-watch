@@ -15,7 +15,8 @@
 		"compile:sass": "sass --load-path=node_modules --style=compressed --no-source-map src/styles/carbon/index.scss src/styles/carbon/pre-compiled.css",
 		"story:dev": "histoire dev",
 		"story:build": "HISTOIRE_BASE=/stories/ histoire build",
-		"story:preview": "histoire preview"
+		"story:preview": "histoire preview",
+		"gen:component": "hygen component new"
 	},
 	"lint-staged": {
 		"*.md": "doctoc --github --update-only",
@@ -44,6 +45,7 @@
 		"eslint-plugin-svelte": "^2.30.0",
 		"histoire": "^0.17.2",
 		"husky": "^8.0.3",
+		"hygen": "^6.2.11",
 		"lint-staged": "^13.2.3",
 		"postcss": "^8.4.27",
 		"prettier": "^2.8.0",
