@@ -7,7 +7,10 @@
 	import { InlineNotification } from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
-	import type { FilterGroup, SelectedFilterType } from '$components/DataPage/DataPage.svelte';
+	import type {
+		CheckboxFilterGroup,
+		SelectedCheckboxValueType
+	} from '$components/DataPage/DataPage.svelte';
 
 	export let data;
 	const { politician, filterOptions, votings } = data;
@@ -20,7 +23,7 @@
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};
 
-	const filterList: FilterGroup[] = [
+	const checkboxFilterList: CheckboxFilterGroup[] = [
 		{
 			key: 'filterAssembly',
 			legend: 'สมัยการทำงาน',
@@ -71,17 +74,17 @@
 	];
 
 	let searchQuery = '';
-	let isFilterAllFalse: boolean;
-	let selectedFilter: SelectedFilterType;
+	let selectedCheckboxValue: SelectedCheckboxValueType;
 
 	$: filteredData =
-		selectedFilter === undefined || isFilterAllFalse
+		selectedCheckboxValue === undefined ||
+		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: votings.filter((votingDataEntry) => {
 					const search = searchQuery.trim();
 					if (search && !votingDataEntry.title.includes(search)) return;
 					const { filterAssembly, filterVoteType, filterVoteDirection, filterCatg } =
-						selectedFilter;
+						selectedCheckboxValue;
 					return (
 						filterAssembly.some((assemblyId) =>
 							votingDataEntry.participatedAssembleIds.includes(assemblyId as string)
@@ -95,13 +98,13 @@
 	onMount(() => {
 		switch ($page.url.searchParams.get('votetype')) {
 			case 'agreed':
-				selectedFilter.filterVoteType = [DefaultVoteOption.Agreed];
+				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Agreed];
 				break;
 			case 'disagreed':
-				selectedFilter.filterVoteType = [DefaultVoteOption.Disagreed];
+				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Disagreed];
 				break;
 			case 'absent':
-				selectedFilter.filterVoteType = [DefaultVoteOption.Absent];
+				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Absent];
 				break;
 		}
 	});
@@ -113,7 +116,7 @@
 		{ url: `/politicians/${politician.id}`, label: politician.firstname },
 		{ url: `/politicians/${politician.id}/votelog`, label: 'ประวัติการลงมติ' }
 	]}
-	{filterList}
+	{checkboxFilterList}
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
@@ -123,8 +126,7 @@
 		{ key: 'files', value: 'เอกสาร' }
 	]}
 	bind:searchQuery
-	bind:selectedFilter
-	bind:isFilterAllFalse
+	bind:selectedCheckboxValue
 >
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<h1 class="fluid-heading-03 mb-1">

@@ -11,43 +11,64 @@ icon: 'carbon:table-split'
 ## Interfaces
 
 ```ts
-export interface FilterChoice {
+export interface CheckboxFilterChoice {
 	label: string;
 	value: string | number | boolean;
 }
 
-export interface FilterGroup {
+export interface CheckboxFilterGroup {
 	key: string;
 	legend: string;
-	choices: FilterChoice[];
+	choices: CheckboxFilterChoice[];
 }
 
-export type SelectedFilterType = Record<FilterGroup['key'], FilterChoice['value'][]>;
+export type SelectedCheckboxValueType = Record<
+	CheckboxFilterGroup['key'],
+	CheckboxFilterChoice['value'][]
+>;
+
+export interface ComboboxFilterChoice {
+	id: string | number;
+	text: string;
+}
+
+export interface ComboboxFilterGroup {
+	key: string;
+	legend: string;
+	placeholder: string;
+	choices: ComboboxFilterChoice[];
+}
+
+export type SelectedComboboxValueType = Record<
+	ComboboxFilterGroup['key'],
+	ComboboxFilterChoice['id'] | undefined
+>;
 ```
 
 ## Props
 
-| Props            | Type                                | Meaning                                          |
-| ---------------- | ----------------------------------- | ------------------------------------------------ |
-| `breadcrumbList` | `{ label: string; url: string }[]`  | ข้อมูล Breadcrumb                                |
-| `filterList`     | `FilterGroup[]`                     | ข้อมูล Filter ว่าจะต้องมีอะไรบ้าง                |
-| `filteredData`   | `{ id: any; [key: string]: any }[]` | ข้อมูลใส่ตารางที่ผ่านการ filter มาจากด้านนอกแล้ว |
-| `tableHeader`    | `{ key: string; value: string }[]`  | ข้อมูลหัวตาราง                                   |
-| `tablePageSize`  | `number = 10`                       | จำนวนข้อมูลต่อหน้า                               |
+| Props                | Type                                | Meaning                                           |
+| -------------------- | ----------------------------------- | ------------------------------------------------- |
+| `breadcrumbList`     | `{ label: string; url: string }[]`  | ข้อมูล Breadcrumb                                 |
+| `comboboxFilterList` | `ComboboxFilterGroup[] = []`        | ข้อมูล Filter ประเภท Combobox ว่าจะต้องมีอะไรบ้าง |
+| `checkboxFilterList` | `CheckboxFilterGroup[]`             | ข้อมูล Filter ประเภท Checkbox ว่าจะต้องมีอะไรบ้าง |
+| `filteredData`       | `{ id: any; [key: string]: any }[]` | ข้อมูลใส่ตารางที่ผ่านการ filter มาจากด้านนอกแล้ว  |
+| `tableHeader`        | `{ key: string; value: string }[]`  | ข้อมูลหัวตาราง                                    |
+| `tablePageSize`      | `number = 10`                       | จำนวนข้อมูลต่อหน้า                                |
 
 ## Reactive Props
 
 Props เหล่านี้ต้อง `bind:props` เพื่อให้ parent component สามารถทราบ state ด้านใน component ได้
 
-| Props                    | Type                             | Meaning                                                                                                      |
-| ------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `bind:searchQuery`       | `string = ""`                    | ข้อความในกล่องค้นหา                                                                                          |
-| `bind:selectedFilter`    | `SelectedFilterType = ทุกชอยส์*` | เป็น Object ที่จะมีชื่อกลุ่ม filter เป็น key และค่า checkbox ที่เลือกเป็น value ใน array ของกลุ่มใครกลุ่มมัน |
-| `bind:isFilterSomeFalse` | `boolean = false`                | เอาไว้ sync กับด้านนอกว่าตอนนี้ Filter **บางอัน**ไม่ถูกเลือกหรือเปล่า                                        |
-| `bind:isFilterAllFalse`  | `boolean = false`                | เอาไว้ sync กับด้านนอกว่าตอนนี้ Filter **ทุกอัน**ไม่ถูกเลือกหรือเปล่า                                        |
-| `bind:mounted`           | `boolean = false`                | เอาไว้ sync กับด้านนอกว่าตอนนี้ DataPage mount แล้วหรือยัง                                                   |
+| Props                        | Type                                                 | Meaning                                                                                                        |
+| ---------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `bind:searchQuery`           | `string = ""`                                        | ข้อความในกล่องค้นหา                                                                                            |
+| `bind:selectedComboboxValue` | `SelectedComboboxValueType = ทุกช่องเป็น undefined*` | เป็น Object ที่จะมี key เป็น key ของ combobox นั้น และ value เป็น value ของ combobox นั้นๆ                     |
+| `bind:selectedCheckboxValue` | `SelectedCheckboxValueType = ทุกชอยส์**`             | เป็น Object ที่จะมี key เป็น key ของ checkbox กลุ่มนั้น และ value เป็น array ของ choice ขอกลุ่ม checkbox นั้นๆ |
+| `bind:mounted`               | `boolean = false`                                    | เอาไว้ sync กับด้านนอกว่าตอนนี้ DataPage mount แล้วหรือยัง                                                     |
 
-> \*ทุกชอยส์ คือ `Object.fromEntries(filterList.map((group) => [group.key, group.choices.map((choice) => choice.value)]));`
+> - \*ทุกช่องเป็น undefined = `Object.fromEntries(comboboxFilterList.map((group) => [group.key, undefined]));`
+> - \*ทุกชอยส์ = `Object.fromEntries(checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)]));`
 
 ## Slots
 

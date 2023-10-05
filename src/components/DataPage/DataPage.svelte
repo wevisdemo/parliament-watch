@@ -1,16 +1,36 @@
 <script lang="ts" context="module">
-	export interface FilterChoice {
+	export interface CheckboxFilterChoice {
 		label: string;
 		value: string | number | boolean;
 	}
 
-	export interface FilterGroup {
+	export interface CheckboxFilterGroup {
 		key: string;
 		legend: string;
-		choices: FilterChoice[];
+		choices: CheckboxFilterChoice[];
 	}
 
-	export type SelectedFilterType = Record<FilterGroup['key'], FilterChoice['value'][]>;
+	export type SelectedCheckboxValueType = Record<
+		CheckboxFilterGroup['key'],
+		CheckboxFilterChoice['value'][]
+	>;
+
+	export interface ComboboxFilterChoice {
+		id: string | number;
+		text: string;
+	}
+
+	export interface ComboboxFilterGroup {
+		key: string;
+		legend: string;
+		placeholder: string;
+		choices: ComboboxFilterChoice[];
+	}
+
+	export type SelectedComboboxValueType = Record<
+		ComboboxFilterGroup['key'],
+		ComboboxFilterChoice['id'] | undefined
+	>;
 </script>
 
 <script lang="ts">
@@ -19,6 +39,7 @@
 		BreadcrumbItem,
 		Button,
 		Checkbox,
+		ComboBox,
 		DataTable,
 		DataTableSkeleton,
 		FormGroup,
@@ -33,12 +54,25 @@
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import { onMount } from 'svelte';
 
+	function shouldFilterItem(item: { text: string }, value: undefined | string) {
+		if (!value) return true;
+		return item.text.toLowerCase().includes(value.toLowerCase());
+	}
+
 	// Just props
 	export let breadcrumbList: {
 		label: string;
 		url: string;
 	}[];
-	export let filterList: FilterGroup[];
+	export let comboboxFilterList: ComboboxFilterGroup[] = [];
+	export let checkboxFilterList: CheckboxFilterGroup[];
+	// Optimization Tips:
+	// | On the grounds that each checkbox group can cover 100% of data,
+	// | if some group of checkbox is empty, the result will be empty.
+	// | This should be done to prevent unwanted calculation
+	// ```
+	// Object.values(selectedCheckboxValue).some(e => e.length === 0) ? [] : filteredData;
+	// ```
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	export let filteredData: { id: any; [key: string]: any }[];
 	export let tableHeader: { key: string; value: string }[];
@@ -46,36 +80,38 @@
 
 	// For binding
 	export let searchQuery = '';
-	export let selectedFilter: SelectedFilterType = Object.fromEntries(
-		filterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
+	export let selectedComboboxValue: SelectedComboboxValueType = Object.fromEntries(
+		comboboxFilterList.map((group) => [group.key, undefined])
 	);
-	export let isFilterSomeFalse = false;
-	export let isFilterAllFalse = false;
+	export let selectedCheckboxValue: SelectedCheckboxValueType = Object.fromEntries(
+		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
+	);
 	export let mounted = false;
 
 	// Reactive
 	let tableCurrentPage = 1;
 
-	const ALL_FILTER_COUNT = Object.values(filterList)
-		.map((e) => e.choices.length)
-		.reduce((a, c) => a + c);
-
 	const filterTickAll = (value = true) => {
+		selectedComboboxValue = Object.fromEntries(
+			comboboxFilterList.map((group) => [group.key, undefined])
+		);
 		if (value) {
-			selectedFilter = Object.fromEntries(
-				filterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
+			selectedCheckboxValue = Object.fromEntries(
+				checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 			);
 		} else {
-			selectedFilter = Object.fromEntries(filterList.map((group) => [group.key, []]));
+			selectedCheckboxValue = Object.fromEntries(
+				checkboxFilterList.map((group) => [group.key, []])
+			);
 		}
 	};
 
-	$: tickedFilterCount = Object.values(selectedFilter)
-		.map((e) => e.length)
-		.reduce((a, c) => a + c);
-	$: isFilterSomeFalse = tickedFilterCount < ALL_FILTER_COUNT;
-	$: isFilterAllFalse = tickedFilterCount === 0;
+	$: isFilterNotDefault =
+		Object.values(selectedCheckboxValue).flat().length <
+			Object.values(checkboxFilterList).flat().length ||
+		Object.values(selectedComboboxValue).some((e) => e !== undefined);
 
+	let comboboxInternal: Record<string, string> = {};
 	let showFilter = true;
 	onMount(() => {
 		mounted = true;
@@ -148,14 +184,28 @@
 					/>
 				</div>
 				<div class="flex-[1_1_auto] h-0 overflow-y-scroll py-4 px-6">
-					{#each filterList as optionGroup, idx (optionGroup.key)}
+					{#each comboboxFilterList as optionGroup (optionGroup.key)}
+						<div class="mb-8">
+							<ComboBox
+								titleText={optionGroup.legend}
+								placeholder={optionGroup.placeholder}
+								on:select={(e) => (selectedComboboxValue[optionGroup.key] = e.detail.selectedId)}
+								on:clear={() => (selectedComboboxValue[optionGroup.key] = undefined)}
+								items={optionGroup.choices}
+								disabled={!mounted}
+								bind:selectedId={comboboxInternal[optionGroup.key]}
+								{shouldFilterItem}
+							/>
+						</div>
+					{/each}
+					{#each checkboxFilterList as optionGroup, idx (optionGroup.key)}
 						<FormGroup
 							legendText={optionGroup.legend}
-							class={idx === filterList.length - 1 ? 'mb-0' : ''}
+							class={idx === checkboxFilterList.length - 1 ? 'mb-0' : ''}
 						>
 							{#each optionGroup.choices as choice (choice.label)}
 								<Checkbox
-									bind:group={selectedFilter[optionGroup.key]}
+									bind:group={selectedCheckboxValue[optionGroup.key]}
 									value={choice.value}
 									labelText={choice.label}
 									skeleton={!mounted}
@@ -192,8 +242,8 @@
 					tooltipAlignment="start"
 					tooltipPosition="top"
 					iconDescription="แสดงตัวเลือก"
-					icon={isFilterSomeFalse ? FilterEdit : Filter}
-					kind={isFilterSomeFalse ? 'secondary' : 'primary'}
+					icon={isFilterNotDefault ? FilterEdit : Filter}
+					kind={isFilterNotDefault ? 'secondary' : 'primary'}
 					on:click={() => {
 						showFilter = true;
 					}}
