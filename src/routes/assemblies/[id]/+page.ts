@@ -41,7 +41,7 @@ export interface VoteCardProps {
 	}[];
 }
 
-export function load({ params }) {
+export function load({ params }: { params: { id: string } }) {
 	const isSenates = params.id === sen12.id;
 	const { mainRoles, ...rest }: Assembly = isSenates ? sen12 : rep26;
 	const assembly: Omit<Assembly, 'mainRoles'> = rest;
@@ -56,46 +56,46 @@ export function load({ params }) {
 		...(isSenates
 			? {}
 			: {
-					party: movingForwardParty,
-					partyRole: 'สส. บัญชีรายชื่อ'
-			  })
+				party: movingForwardParty,
+				partyRole: 'สส. บัญชีรายชื่อ'
+			})
 	}));
 
 	const summary: Summary = {
 		totalMembers: 500,
 		highlightGroup: isSenates
 			? [
-					{
-						name: 'เลือกโดย คสช.',
-						total: 194
-					},
-					{
-						name: 'เลือกกันเอง',
-						total: 50
-					},
-					{
-						name: 'โดยตำแหน่ง',
-						total: 6
-					}
-			  ]
+				{
+					name: 'เลือกโดย คสช.',
+					total: 194
+				},
+				{
+					name: 'เลือกกันเอง',
+					total: 50
+				},
+				{
+					name: 'โดยตำแหน่ง',
+					total: 6
+				}
+			]
 			: [
-					{
-						name: 'ฝ่ายรัฐบาล',
-						total: 300,
-						parties: [
-							{ ...pheuThaiParty, count: 200 },
-							{ ...bhumjaithaiParty, count: 100 }
-						]
-					},
-					{
-						name: 'ฝ่ายค้าน',
-						total: 200,
-						parties: [
-							{ ...movingForwardParty, count: 150 },
-							{ ...democratsParty, count: 50 }
-						]
-					}
-			  ],
+				{
+					name: 'ฝ่ายรัฐบาล',
+					total: 300,
+					parties: [
+						{ ...pheuThaiParty, count: 200 },
+						{ ...bhumjaithaiParty, count: 100 }
+					]
+				},
+				{
+					name: 'ฝ่ายค้าน',
+					total: 200,
+					parties: [
+						{ ...movingForwardParty, count: 150 },
+						{ ...democratsParty, count: 50 }
+					]
+				}
+			],
 		groupBySex: [
 			{
 				name: 'ชาย',
@@ -292,7 +292,8 @@ export function load({ params }) {
 				date: new Date(`09/${i + 1}/2023`),
 				title:
 					i % 3 < 2 ? 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)' : 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-				result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed, 'ชื่อแคนดิเดต'][i % 3]
+				result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed, 'ชื่อแคนดิเดต'][i % 3],
+				sourceUrl: '#'
 			},
 			highlightedVoteByGroups
 		}));
