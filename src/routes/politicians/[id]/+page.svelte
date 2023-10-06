@@ -1,23 +1,23 @@
 <script lang="ts">
-	import SideNav from '../../../components/politicians/SideNav.svelte';
+	import SideNav from '$components/politicians/SideNav.svelte';
 
+	import Share from '$components/Share/Share.svelte';
 	import General from '$components/icons/GeneralIcon.svelte';
 	import Politician from '$components/icons/PoliticianIcon.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
 	import PartyDetail from '$components/politicians/PartyDetail.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
-	import Share from '$components/Share/Share.svelte';
 	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button, InlineNotification } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
-	import Download from 'carbon-icons-svelte/lib/Download.svelte';
-	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import VoteCard from '$components/votes/VoteCard.svelte';
+	import { passedVoting } from '../../../mocks/data/voting';
 
 	export let data;
 	const { politician, agreedVoting, disagreedVoting, votingAbsentStats, totalProposedBill } = data;

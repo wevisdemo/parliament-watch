@@ -1,7 +1,15 @@
 <script lang="ts">
-	export let data;
+	import VoteCard from '$components/votes/VoteCard.svelte';
+	import type { load } from './+page';
+
+	export let data: ReturnType<typeof load>;
 </script>
 
 <div class="whitespace-pre">
-	{JSON.stringify(data, undefined, 2)}
+	{#each data.latestVotes as latestVote}
+		<VoteCard
+			voting={latestVote.voting}
+			highlightedVoteByGroups={latestVote.highlightedVoteByGroups}
+		/>
+	{/each}
 </div>

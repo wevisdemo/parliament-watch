@@ -1,3 +1,4 @@
+import type { Assembly } from '$models/assembly.js';
 import type { Party } from '$models/party.js';
 import type { Politician } from '$models/politician.js';
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
@@ -32,7 +33,7 @@ interface MainMember {
 }
 
 interface VoteCard {
-	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
+	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result' | 'sourceUrl'>;
 	highlightedVoteByGroups: {
 		name: string;
 		count: number;
@@ -40,9 +41,10 @@ interface VoteCard {
 	}[];
 }
 
-export function load({ params }) {
+export function load({ params }: { params: { id: string } }) {
 	const isSenates = params.id === sen12.id;
-	const { mainRoles, ...assembly } = isSenates ? sen12 : rep26;
+	const { mainRoles, ...rest }: Assembly = isSenates ? sen12 : rep26;
+	const assembly: Omit<Assembly, 'mainRoles'> = rest;
 
 	const mainMembers: MainMember[] = mainRoles.map((assemblyRole) => ({
 		assemblyRole,
@@ -290,7 +292,8 @@ export function load({ params }) {
 				date: new Date(`09/${i + 1}/2023`),
 				title:
 					i % 3 < 2 ? 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)' : 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-				result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed, 'ชื่อแคนดิเดต'][i % 3]
+				result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed, 'ชื่อแคนดิเดต'][i % 3],
+				sourceUrl: '#'
 			},
 			highlightedVoteByGroups
 		}));
