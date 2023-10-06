@@ -16,6 +16,7 @@ Citizens are watching
   - [Start SvelteKit](#start-sveltekit)
   - [Start Histoire](#start-histoire)
   - [Generate a new component](#generate-a-new-component)
+- [🗃️ Directory Structure](#-directory-structure)
 - [🍭 Design System](#-design-system)
   - [Typography](#typography)
   - [Colors](#colors)
@@ -88,6 +89,18 @@ _src/components/ComponentName/_ directory will be created with the follwing file
 
 - **ComponentName.svelte** for the component source code.
 - **ComponentName.story.svelte** for the Histoire's story file. Follow [a guide on writing stories](https://histoire.dev/guide/svelte3/stories.html).
+
+## 🗃️ Directory Structure
+
+- **/\_templates** Hygen's code generation templates
+- **/.husky** Husky's git hooks
+- **/src** main source codes
+  - **/components** Svelte's components
+  - **/mocks** Mock data, while we still don't have backend
+  - **/models** Main data structure defined with TypeScript interface
+  - **/routes** Sveltekit's routes
+  - **/styles** Stylesheets, including custom Carbon Design System, tailwind and fonts
+- **/static** static assets such as logos
 
 ## 🍭 Design System
 
