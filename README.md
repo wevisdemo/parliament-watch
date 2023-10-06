@@ -7,6 +7,7 @@ Citizens are watching
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [⭐ Goal](#-goal)
 - [🌎 Environments](#-environments)
 - [🍱 Tech Stack](#-tech-stack)
   - [Front-end](#front-end)
@@ -28,13 +29,19 @@ Citizens are watching
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## ⭐ Goal
+
+We want to record and visualise the Thai parliament information including politicians, assemblies, bills, voting processes, and promises.
+
+This project can be seen as a renovated combination of [They Work for Us](https://github.com/wevisdemo/they-work-for-us), [Law Watch](https://github.com/wevisdemo/law-watch), and [Promise Tracker](https://github.com/wevisdemo/promise-tracker) which aim to support several election era.
+
 ## 🌎 Environments
 
-| Name                   | URL                                |
-| ---------------------- | ---------------------------------- |
-| Branch Preview         | Provided by Cloudflare Pages       |
-| Staging (main branche) | https://parliament-watch.pages.dev |
-| Production             | -                                  |
+| Name                  | URL                                |
+| --------------------- | ---------------------------------- |
+| Branch Preview        | Provided by Cloudflare Pages       |
+| Staging (main branch) | https://parliament-watch.pages.dev |
+| Production            | -                                  |
 
 ## 🍱 Tech Stack
 
@@ -53,7 +60,7 @@ Citizens are watching
   - Validate that commit message is align with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
   - Run svelte-check before pushing
 - For VSCode user, format on save is enabled and [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when open the project.
-- [Hygen](http://www.hygen.io) for code generation
+- [Hygen](http://www.hygen.io) for a code generation
 
 ### Deployment pipeline
 
