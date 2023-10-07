@@ -1,3 +1,50 @@
+<script lang="ts">
+	import LawIcon from '$components/icons/LawIcon.svelte';
+	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
+	import type { Link } from '$models/link';
+	import FooterContact from './FooterContact.svelte';
+	import FooterMenuGroup from './FooterMenuGroup.svelte';
+	import logo from '/static/images/logo/pw-short-white.png';
+
+	const representativeMenu: Link[] = [
+		{
+			label: 'สภาผู้แทนราษฎร',
+			url: '/'
+		},
+		{
+			label: 'วุฒิสภา',
+			url: '/'
+		}
+	];
+
+	const legistrationMenu: Link[] = [
+		{
+			label: 'กฎหมายในกระบวนการ',
+			url: '/'
+		},
+		{
+			label: 'รัฐออกกฎหมายอย่างไร',
+			url: '/'
+		}
+	];
+
+	const aboutUsMenu: Link[] = [
+		{
+			label: 'ที่มาของโครงการ',
+			url: '/'
+		},
+		{
+			label: 'ข้อมูลในเว็บนี้',
+			url: '/'
+		},
+		{
+			label: 'เกี่ยวกับ WeVis',
+			url: '/'
+		}
+	];
+</script>
+
 <div class="grid grid-cols-1 gap-4 bg-white py-8 px-16 text-sm">
 	<div>
 		เว็บไซต์นี้สร้างโดย<br />
@@ -25,14 +72,28 @@
 </div>
 <div class="bg-black py-8 px-16 text-white">
 	<div
-		class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 pb-4 border-solid border-0 border-b border-white"
+		class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-4 pb-4 border-solid border-0 border-b border-white text-gray-30"
 	>
-		<div class="row-span-2">logo</div>
-		<div>สมาชิกรัฐสภา</div>
-		<div>สมาชิกรัฐสภา</div>
+		<div class="row-span-2">
+			<img width="120px" height="34px" src={logo} alt="logo short" />
+		</div>
+		<FooterMenuGroup title="สมาชิกรัฐสภา" menuItems={representativeMenu}>
+			<svelte:fragment slot="titleIcon">
+				<PoliticianIcon class="text-inverse-link" />
+			</svelte:fragment>
+		</FooterMenuGroup>
+		<FooterMenuGroup title="สมาชิกรัฐสภา" menuItems={legistrationMenu}>
+			<svelte:fragment slot="titleIcon">
+				<LawIcon class="text-inverse-link" />
+			</svelte:fragment>
+		</FooterMenuGroup>
 		<div>การลงมติ</div>
-		<div>เกี่ยวกับเรา</div>
-		<div>ติดต่อ</div>
+		<FooterMenuGroup title="เกี่ยวกับเรา" menuItems={aboutUsMenu}>
+			<svelte:fragment slot="titleIcon">
+				<WeVisIcon class="text-white" />
+			</svelte:fragment>
+		</FooterMenuGroup>
+		<FooterContact />
 	</div>
 	<div class="flex justify-between mt-4">
 		<div>@ Parliament Watch 2023</div>
