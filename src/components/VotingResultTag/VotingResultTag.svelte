@@ -6,7 +6,6 @@
 	export let isLarge = false;
 
 	let tagColor = 'bg-purple-70 text-text-04';
-	let size = isLarge ? 'default' : 'sm';
 
 	$: label = result;
 	$: switch (result) {
@@ -19,6 +18,7 @@
 			label = DefaultVotingResult.Failed;
 			break;
 		default:
+			// purple tag and white text
 			tagColor = 'bg-purple-70 text-text-04';
 			label = result;
 			break;
@@ -28,4 +28,4 @@
 	export { className as class };
 </script>
 
-<Tag class="{tagColor} {className}" {size}>{label}</Tag>
+<Tag class="{tagColor} {className}" size={isLarge ? 'default' : 'sm'}>{label}</Tag>
