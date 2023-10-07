@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { Party } from '$models/party';
 
-	export let id: string;
+	export let id: number;
 	export let firstname: string;
 	export let lastname: string;
 	export let avatar: string;
 	export let party: Party;
 	export let role: string;
-	export let isLarge: boolean;
+	export let isLarge = false;
 
 	$: fullname = `${firstname} ${lastname}`;
 </script>
