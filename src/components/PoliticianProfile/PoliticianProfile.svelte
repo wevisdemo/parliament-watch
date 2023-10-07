@@ -26,7 +26,7 @@
 					decoding="async"
 				/>
 				<div
-					class="w-[16px] h-[16px] flex items-center justify-center overflow-hidden absolute bottom-0 right-0 rounded-full border-solid border bg-white border-[#C0BFBE]"
+					class="w-[16px] h-[16px] absolute bottom-0 right-0 rounded-full border-solid border border-[#C0BFBE] bg-white overflow-hidden p-[2px] flex items-center justify-center"
 				>
 					<img
 						class="w-full h-full object-contain"
@@ -40,9 +40,9 @@
 				</div>
 			</div>
 			<div>
-				<p class="text-lg leading-6 text-text-01 font-bold font-serif">{fullname}</p>
-				<p class="leading-4 text-text-02">พรรค{party.name}</p>
-				<p class="leading-4 text-text-02">{role}</p>
+				<p class="text-lg leading-[28px] text-text-01 font-bold font-serif">{fullname}</p>
+				<p class="leading-[18px] text-text-02">พรรค{party.name}</p>
+				<p class="leading-[18px] text-text-02">{role}</p>
 			</div>
 		</div>
 	</div>
@@ -59,7 +59,7 @@
 				decoding="async"
 			/>
 			<div
-				class="w-[16px] h-[16px] absolute bottom-0 right-0 rounded-full border-solid border border-[#C0BFBE] bg-white"
+				class="w-[16px] h-[16px] absolute bottom-0 right-0 rounded-full border-solid border border-[#C0BFBE] bg-white overflow-hidden p-[2px] flex items-center justify-center"
 			>
 				<img
 					class="w-full h-full object-contain"
@@ -73,9 +73,9 @@
 			</div>
 		</div>
 		<div>
-			<p class="text-sm leading-5 text-text-01 underline mb-1">{fullname}</p>
-			<p class="text-xs leading-4 text-text-02">พรรค{party.name}</p>
-			<p class="text-xs leading-4 text-text-02">{role}</p>
+			<p class="text-sm leading-[18px] text-text-01 underline mb-1">{fullname}</p>
+			<p class="text-xs leading-[16px] text-text-02">พรรค{party.name}</p>
+			<p class="text-xs leading-[16px] text-text-02">{role}</p>
 		</div>
 	</div>
 {/if}
