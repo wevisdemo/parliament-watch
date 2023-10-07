@@ -14,7 +14,7 @@
 	// by 'showAt' value.
 	export let showAt = 50;
 
-	// Funciton for auto appending 'px' unit.
+	// Function for auto appending 'px' unit.
 	function appendPx(value = '') {
 		value = value.toLowerCase();
 		if (
@@ -109,9 +109,6 @@
 		</svg>
 	</div>
 </div>
-
-<!-- Bind the 'scrollY' value to the window's scrollY value. -->
-<!-- <svelte:window bind:scrollY /> -->
 
 <style lang="scss">
 	@import 'src/styles/carbon/theme.scss';
