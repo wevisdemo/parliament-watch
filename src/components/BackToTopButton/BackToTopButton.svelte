@@ -6,6 +6,7 @@
 	export let size = '40px';
 	export let padding = '12px';
 	export let color = '';
+	export let bgColor = '';
 	export let border = '1px';
 	export let borderRadius = '2px';
 	export let margin = '20px';
@@ -89,6 +90,7 @@
 	style="--size:{size}; 
             --padding:{padding};
             --color:{color}; 
+            --bgColor:{bgColor}; 
             --border:{border}; 
             --border-radius:{borderRadius};
             --margin:{margin};
@@ -100,7 +102,7 @@
 >
 	<div class="btn">
 		<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<rect width="16" height="16" fill="white" style="mix-blend-mode:multiply" />
+			<rect width="16" height="16" style="mix-blend-mode:multiply" />
 			<!-- The 'currentColor' value will be replaced by the 'color' prop. -->
 			<path d="M8 7L3 12L3.7 12.7L8 8.4L12.3 12.7L13 12L8 7Z" fill="currentColor" />
 			<path d="M14 4H2V5H14V4Z" fill="currentColor" />
@@ -134,6 +136,7 @@
 			height: var(--size);
 			border: var(--border) solid;
 			border-color: var(--color, $interactive-03);
+			background-color: var(--bgColor, transparent);
 			border-radius: var(--border-radius);
 			display: flex;
 			justify-content: center;

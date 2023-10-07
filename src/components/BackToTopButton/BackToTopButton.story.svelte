@@ -10,10 +10,12 @@
 		padding="12px"
 		border="1px"
 		borderRadius="2px"
+		color=""
+		bgColor=""
 		margin="20px"
 		showAt={50}
 	/>
-	<pre>
+	<pre style="background-color: rgba(0, 0, 0, 0.1);">
 		P
 		l
 		e
