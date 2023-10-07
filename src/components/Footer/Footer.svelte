@@ -95,8 +95,8 @@
 		</FooterMenuGroup>
 		<FooterContact />
 	</div>
-	<div class="flex justify-between mt-4">
-		<div>@ Parliament Watch 2023</div>
-		<div>นโยบายความปลอดภัย | Privacy Policy</div>
+	<div class="flex flex-col md:flex-row md:justify-between mt-4">
+		<div>©Parliament Watch 2023</div>
+		<div class="text-gray-30">นโยบายความปลอดภัย | Privacy Policy</div>
 	</div>
 </div>
