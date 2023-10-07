@@ -6,6 +6,7 @@
 	import People from './PeopleIcon.svelte';
 	import Politician from './PoliticianIcon.svelte';
 	import Vote from './VoteIcon.svelte';
+	import WeVisIcon from './WeVisIcon.svelte';
 
 	export let Hst: Hst;
 
@@ -31,6 +32,9 @@
 	</Hst.Variant>
 	<Hst.Variant title="VoteIcon">
 		<Vote {size} />
+	</Hst.Variant>
+	<Hst.Variant title="WeVisIcon">
+		<WeVisIcon {size} />
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">
