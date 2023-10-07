@@ -4,20 +4,11 @@
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
-	import { failedVotingSummary } from '../../mocks/data/voting';
-	import Icons from '$components/icons/Icons.story.svelte';
+	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-	interface VoteCardProps {
-		voting: Pick<Voting, 'id' | 'title' | 'date' | 'result' | 'sourceUrl'>;
-		highlightedVoteByGroups: {
-			name: string;
-			count: number;
-			total: number;
-		}[];
-	}
 	interface VoteCardTheme {
 		bg: string;
 		hoveredBg: string;
@@ -48,26 +39,34 @@
 	export let voting: VoteCardProps['voting'] = {} as Voting;
 	export let highlightedVoteByGroups: VoteCardProps['highlightedVoteByGroups'] = [];
 
-	const { totalCount, totalAmount } = failedVotingSummary.reduce(
-		(acc, assembly) => {
-			return {
-				totalCount: acc.totalCount + assembly.count,
-				totalAmount: acc.totalAmount + assembly.total
-			};
-		},
+	interface HighlightedVoteSummary {
+		totalCount: number;
+		totalAmount: number;
+	}
+	$: ({ totalCount, totalAmount } = highlightedVoteByGroups.reduce<HighlightedVoteSummary>(
+		reduceHighlightedVoteSummary,
 		{ totalCount: 0, totalAmount: 0 }
-	);
-
+	));
 	$: theme = CARD_THEMES[voting.result as DefaultVotingResult] || CANDIDATE_CARD_THEME;
 	$: isCandidate = ![DefaultVotingResult.Failed, DefaultVotingResult.Passed].includes(
 		voting.result as DefaultVotingResult
 	);
+
+	function reduceHighlightedVoteSummary(
+		{ totalAmount, totalCount }: HighlightedVoteSummary,
+		{ count, total }: VoteCardProps['highlightedVoteByGroups'][number]
+	): HighlightedVoteSummary {
+		return {
+			totalCount: totalCount + count,
+			totalAmount: totalAmount + total
+		};
+	}
 </script>
 
 <div
 	class={`vote-card relative p-4 flex flex-col gap-y-2 w-72 h-64.5 whitespace-break-spaces ${theme.bg} ${theme.hoveredBg}`}
 >
-	<p class="text-02">{dayjs(voting.date).format('D MMM BB')}</p>
+	<p class="text-text-02">{dayjs(voting.date).format('D MMM BB')}</p>
 	<a
 		class="vote-card--url after:inset text-text-01 text-xl font-[700] no-underline after:absolute w-56"
 		href={voting.sourceUrl}
@@ -85,11 +84,11 @@
 				</p>
 			</div>
 			<ul class="vote-card__result--list">
-				{#each highlightedVoteByGroups as voteByGroup}
+				{#each highlightedVoteByGroups as voteByGroup (voteByGroup.name)}
 					<li class="vote-card__result--item flex flex-row align-middle justify-between">
-						<p>{voteByGroup.name}</p>
+						<p class="text-text-01">{voteByGroup.name}</p>
 						<p>
-							<span class="mr-[2px] text-text-primary">{voteByGroup.count}</span>
+							<span class="text-text-primary mr-[2px]">{voteByGroup.count}</span>
 							<span class="text-text-02">/{voteByGroup.total}</span>
 						</p>
 					</li>

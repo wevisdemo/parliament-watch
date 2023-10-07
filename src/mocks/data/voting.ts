@@ -53,15 +53,3 @@ export const candidateVoting: Voting = {
 	...passedVoting,
 	result: 'ชื่อแคนดิเดต'
 };
-
-export const passedVotingSummary = [
-	{ name: 'สส. ฝ่ายรัฐบาล', count: 160, total: 315 },
-	{ name: 'สส. ฝ่ายค้าน', count: 164, total: 185 },
-	{ name: 'สว.', count: 200, total: 250 }
-];
-
-export const failedVotingSummary = [
-	{ name: 'สส. ฝ่ายรัฐบาล', count: 16, total: 315 },
-	{ name: 'สส. ฝ่ายค้าน', count: 4, total: 185 },
-	{ name: 'สว.', count: 20, total: 250 }
-];

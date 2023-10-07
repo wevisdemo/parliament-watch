@@ -6,7 +6,7 @@
 </script>
 
 <div class="whitespace-pre">
-	{#each data.latestVotes as latestVote}
+	{#each data.latestVotes as latestVote (latestVote.voting.id)}
 		<VoteCard
 			voting={latestVote.voting}
 			highlightedVoteByGroups={latestVote.highlightedVoteByGroups}

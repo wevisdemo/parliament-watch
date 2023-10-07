@@ -32,7 +32,7 @@ interface MainMember {
 	partyRole?: string;
 }
 
-interface VoteCard {
+export interface VoteCardProps {
 	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result' | 'sourceUrl'>;
 	highlightedVoteByGroups: {
 		name: string;
@@ -280,13 +280,13 @@ export function load({ params }: { params: { id: string } }) {
 		]
 	};
 
-	const latestVotes: VoteCard[] = new Array(5)
+	const latestVotes: VoteCardProps[] = new Array(5)
 		.fill([
 			{ name: 'สส. ฝ่ายรัฐบาล', count: 160, total: 315 },
 			{ name: 'สส. ฝ่ายค้าน', count: 164, total: 185 },
 			{ name: 'สว.', count: 200, total: 250 }
 		])
-		.map((highlightedVoteByGroups, i) => ({
+		.map<VoteCardProps>((highlightedVoteByGroups, i) => ({
 			voting: {
 				id: i + 1,
 				date: new Date(`09/${i + 1}/2023`),
