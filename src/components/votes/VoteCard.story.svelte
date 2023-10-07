@@ -22,14 +22,6 @@
 		sourceUrl: '/politicians/1/votelog'
 	};
 
-	const candidateVoting: VoteCardProps['voting'] = {
-		id: 3,
-		date: new Date('2023-09-02T17:00:00.000Z'),
-		title: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-		result: 'Mr. Candidate Krub',
-		sourceUrl: '/politicians/1/votelog'
-	};
-
 	const passedHighlightedVoteByGroups: VoteCardProps['highlightedVoteByGroups'] = [
 		{
 			name: 'สส. ฝ่ายรัฐบาล',
@@ -76,20 +68,32 @@
 			highlightedVoteByGroups: failedHighlightedVoteByGroups
 		}
 	};
-	const candidateVoteCardProps: VoteCardProps = {
+
+	let result: DefaultVotingResult = DefaultVotingResult.Passed;
+	let candidateName = '';
+
+	$: isCandidateResult = 'candidate' === (result as string);
+	$: ({ voting, highlightedVoteByGroups } = dictVoteCardProps[result] || candidateVoteCardProps);
+
+	$: candidateVoting = {
+		id: 3,
+		date: new Date('2023-09-02T17:00:00.000Z'),
+		title: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
+		result: candidateName || 'Mr. Candidate Krub',
+		sourceUrl: '/politicians/1/votelog'
+	} satisfies VoteCardProps['voting'];
+
+	$: candidateVoteCardProps = {
 		voting: candidateVoting,
 		highlightedVoteByGroups: passedHighlightedVoteByGroups
-	};
-
-	let result = DefaultVotingResult.Passed;
-
-	$: ({ voting, highlightedVoteByGroups } = dictVoteCardProps[result] || candidateVoteCardProps);
+	} satisfies VoteCardProps;
 </script>
 
 <Hst.Story title="VoteCard">
 	<VoteCard {voting} {highlightedVoteByGroups} />
 
 	<svelte:fragment slot="controls">
+		<p>Card Result:</p>
 		<Hst.Select
 			title="Voting Result"
 			bind:value={result}
@@ -99,7 +103,11 @@
 				{ label: 'Any String (Candidate Name)', value: 'candidate' }
 			]}
 		/>
+		{#if isCandidateResult}
+			<Hst.Text title="Candidate Name" bind:value={candidateName} />
+		{/if}
 
+		<p>Example Props</p>
 		<Hst.Json title="Example `voting` Prop" bind:value={voting} />
 		<Hst.Json title="Example `highlightedVoteByGroups` Prop" bind:value={highlightedVoteByGroups} />
 	</svelte:fragment>
