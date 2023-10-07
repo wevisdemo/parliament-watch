@@ -8,79 +8,56 @@
 		bhumjaithaiParty
 	} from '../../mocks/data/party';
 	export let Hst: Hst;
+
+	let politicians = [
+		{
+			id: 1,
+			firstname: 'ปิยบุตร',
+			lastname: 'แสงกนกกุล',
+			avatar: 'https://via.placeholder.com/64',
+			party: movingForwardParty,
+			role: 'สส. บัญชีรายชื่อ'
+		},
+		{
+			id: 2,
+			firstname: 'จุรินทร์',
+			lastname: 'ลักษณวิศิษฏ์',
+			avatar: 'https://via.placeholder.com/64',
+			party: democratsParty,
+			role: 'สส. บัญชีรายชื่อ'
+		},
+		{
+			id: 3,
+			firstname: 'เศรษฐา',
+			lastname: 'ทวีสิน',
+			avatar: 'https://via.placeholder.com/64',
+			party: pheuThaiParty,
+			role: 'สส. บัญชีรายชื่อ'
+		},
+		{
+			id: 4,
+			firstname: 'อนุทิน',
+			lastname: 'ชาญวีรกูล',
+			avatar: 'https://via.placeholder.com/64',
+			party: bhumjaithaiParty,
+			role: 'สส. บัญชีรายชื่อ'
+		}
+	];
 </script>
 
-<Hst.Story title="PoliticianProfile">
+<Hst.Story title="Politician Profile">
 	<div class="grid grid-cols-2 gap-4">
-		<PoliticianProfile
-			id={1}
-			firstname="ปิยบุตร"
-			lastname="แสงกนกกุล"
-			avatar="https://via.placeholder.com/64"
-			party={movingForwardParty}
-			role="สส. บัญชีรายชื่อ"
-		/>
-		<PoliticianProfile
-			id={1}
-			firstname="จุรินทร์"
-			lastname="ลักษณวิศิษฏ์"
-			avatar="https://via.placeholder.com/64"
-			party={democratsParty}
-			role="สส. บัญชีรายชื่อ"
-		/>
-		<PoliticianProfile
-			id={1}
-			firstname="เศรษฐา"
-			lastname="ทวีสิน"
-			avatar="https://via.placeholder.com/64"
-			party={pheuThaiParty}
-			role="สส. บัญชีรายชื่อ"
-		/>
-		<PoliticianProfile
-			id={1}
-			firstname="อนุทิน"
-			lastname="ชาญวีรกูล"
-			avatar="https://via.placeholder.com/64"
-			party={bhumjaithaiParty}
-			role="สส. บัญชีรายชื่อ"
-		/>
+		{#each politicians as politician}
+			<PoliticianProfile {...politician} />
+		{/each}
 	</div>
 	<div class="grid grid-cols-2 gap-4 mt-5">
-		<PoliticianProfile
-			id={1}
-			firstname="ปิยบุตร"
-			lastname="แสงกนกกุล"
-			avatar="https://via.placeholder.com/64"
-			party={movingForwardParty}
-			role="สส. บัญชีรายชื่อ"
-			isLarge
-		/>
-		<PoliticianProfile
-			id={1}
-			firstname="จุรินทร์"
-			lastname="ลักษณวิศิษฏ์"
-			avatar="https://via.placeholder.com/64"
-			party={democratsParty}
-			role="สส. บัญชีรายชื่อ"
-			isLarge
-		/>
-		<PoliticianProfile
-			id={1}
-			firstname="เศรษฐา"
-			lastname="ทวีสิน"
-			avatar="https://via.placeholder.com/64"
-			party={pheuThaiParty}
-			role="สส. บัญชีรายชื่อ"
-			isLarge
-		/>
-		<PoliticianProfile
-			id={1}
-			firstname="อนุทิน"
-			lastname="ชาญวีรกูล"
-			avatar="https://via.placeholder.com/64"
-			party={bhumjaithaiParty}
-			role="สส. บัญชีรายชื่อ"
-			isLarge
-		/>
+		{#each politicians as politician}
+			<PoliticianProfile {...politician} isLarge />
+		{/each}
 	</div>
+
+	<svelte:fragment slot="controls">
+		<Hst.Json bind:value={politicians} title="politicians" />
+	</svelte:fragment>
 </Hst.Story>
