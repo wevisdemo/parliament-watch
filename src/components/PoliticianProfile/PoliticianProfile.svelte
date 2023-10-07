@@ -13,7 +13,7 @@
 </script>
 
 {#if isLarge}
-	<div class="p-2">
+	<div class="p-2 font-sans">
 		<div class="flex gap-4">
 			<div class="w-[64px] h-[64px] relative">
 				<img
@@ -40,14 +40,14 @@
 				</div>
 			</div>
 			<div>
-				<p class="text-lg leading-6 text-text-01 font-bold">{fullname}</p>
+				<p class="text-lg leading-6 text-text-01 font-bold font-serif">{fullname}</p>
 				<p class="leading-4 text-text-02">พรรค{party.name}</p>
 				<p class="leading-4 text-text-02">{role}</p>
 			</div>
 		</div>
 	</div>
 {:else}
-	<div class="p-2 flex gap-4">
+	<div class="p-2 font-sans flex gap-4">
 		<div class="w-[40px] h-[40px] relative">
 			<img
 				src={avatar}
