@@ -8,7 +8,11 @@ export default {
 	},
 	theme: {
 		screens: {
-			md: '672px'
+			sm: '576px', // Small screens
+			md: '672px', // Medium screens
+			lg: '992px', // Large screens
+			xl: '1200px', // Extra-large screens
+			'2xl': '1400px' // Extra-extra-large screens
 		},
 		fontFamily: {
 			serif: ['Kondolar Thai', ...defaultTheme.fontFamily.serif],
