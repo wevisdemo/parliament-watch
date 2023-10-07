@@ -1,17 +1,27 @@
 <script lang="ts">
 	import type { Link } from '$models/link';
 	import { ArrowUpRight } from 'carbon-icons-svelte';
-	import { stringify } from 'postcss';
 
 	export let title: string;
-	export let menuItems: Link[];
+	export let url: string | undefined = undefined;
+	export let menuItems: Link[] = [];
 </script>
 
 <div>
-	<div class="flex flex-row items-center font-semibold text-base mb-2">
-		<slot name="titleIcon" />
-		<span class="ml-3">{title}</span>
-	</div>
+	{#if url}
+		<a href={url} class="text-grey-30">
+			<div class="flex flex-row items-center font-semibold text-base mb-2">
+				<slot name="titleIcon" />
+				<span class="ml-3 mr-2 text-gray-30">{title}</span>
+				<ArrowUpRight class="text-gray-30" size={16} />
+			</div>
+		</a>
+	{:else}
+		<div class="flex flex-row items-center font-semibold text-base mb-2">
+			<slot name="titleIcon" />
+			<span class="ml-3">{title}</span>
+		</div>
+	{/if}
 	<div class="flex flex-col">
 		{#each menuItems as menuItem}
 			<a href={menuItem.url} class="text-gray-30">

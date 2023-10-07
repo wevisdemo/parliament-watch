@@ -1,6 +1,7 @@
 <script lang="ts">
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import type { Link } from '$models/link';
 	import FooterContact from './FooterContact.svelte';
@@ -87,7 +88,11 @@
 				<LawIcon class="text-inverse-link" />
 			</svelte:fragment>
 		</FooterMenuGroup>
-		<div>การลงมติ</div>
+		<FooterMenuGroup title="การลงมติ" url="/">
+			<svelte:fragment slot="titleIcon">
+				<VoteIcon class="text-inverse-link" />
+			</svelte:fragment>
+		</FooterMenuGroup>
 		<FooterMenuGroup title="เกี่ยวกับเรา" menuItems={aboutUsMenu}>
 			<svelte:fragment slot="titleIcon">
 				<WeVisIcon class="text-white" />
