@@ -4,9 +4,11 @@
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import type { Link } from '$models/link';
+	import { ArrowUpRight } from 'carbon-icons-svelte';
 	import FooterContact from './FooterContact.svelte';
 	import FooterMenuGroup from './FooterMenuGroup.svelte';
-	import logo from '/static/images/logo/pw-short-white.png';
+	import pwLogo from '/static/images/logo/pw-short-white.png';
+	import wevisLogo from '/static/images/logo/wevis-full-black.png';
 
 	const representativeMenu: Link[] = [
 		{
@@ -49,8 +51,13 @@
 <div class="grid grid-cols-1 gap-4 bg-white py-8 px-16 text-sm">
 	<div>
 		เว็บไซต์นี้สร้างโดย<br />
-		WeVis<br />
-		ซึ่งเป็น… เริ่มสร้างเว็บไซต์นี้โดยมีจุดประสงค์เพื่อ… และได้รับการสนับสนุนจาก….
+		<a href="https://wevis.info/">
+			<div class="flex flex-row items-end">
+				<img width="79px" height="24px" src={wevisLogo} alt="wevis-logo" />
+				<ArrowUpRight class="text-black ml-2" size={16} />
+			</div>
+		</a>
+		<span>ซึ่งเป็น… เริ่มสร้างเว็บไซต์นี้โดยมีจุดประสงค์เพื่อ… และได้รับการสนับสนุนจาก….</span>
 	</div>
 	<div>
 		<div class="font-semibold">ความถูกต้องและการอ้างอิงข้อมูลในเว็บไซต์</div>
@@ -76,7 +83,7 @@
 		class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-4 pb-4 border-solid border-0 border-b border-ui-04 text-gray-30"
 	>
 		<div class="row-span-2">
-			<img width="120px" height="34px" src={logo} alt="logo short" />
+			<img width="120px" height="34px" src={pwLogo} alt="logo short" />
 		</div>
 		<FooterMenuGroup title="สมาชิกรัฐสภา" menuItems={representativeMenu}>
 			<svelte:fragment slot="titleIcon">
