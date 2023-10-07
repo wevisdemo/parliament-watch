@@ -16,8 +16,6 @@
 	import { onMount } from 'svelte';
 
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
-	import VoteCard from '$components/votes/VoteCard.svelte';
-	import { passedVoting } from '../../../mocks/data/voting';
 
 	export let data;
 	const { politician, agreedVoting, disagreedVoting, votingAbsentStats, totalProposedBill } = data;

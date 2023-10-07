@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
 	import { DefaultVotingResult, type Voting } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
 	import dayjs from 'dayjs';
@@ -64,28 +65,27 @@
 </script>
 
 <div
-	class={`vote-card relative p-4 flex flex-col gap-y-2 w-72 h-64.5 whitespace-break-spaces ${theme.bg} ${theme.hoveredBg}`}
+	class={`vote-card rounded-sm relative p-4 flex flex-col gap-y-2 w-72 h-64.5 whitespace-break-spaces ${theme.bg} ${theme.hoveredBg}`}
 >
-	<p class="text-text-02">{dayjs(voting.date).format('D MMM BB')}</p>
-	<a
-		class="vote-card--url after:inset text-text-01 text-xl font-[700] no-underline after:absolute w-56"
-		href={voting.sourceUrl}
-	>
-		{voting.title}
+	<p class="body-compact-01 text-text-02">
+		{dayjs(voting.date).format('D MMM BB')}
+	</p>
+	<a class="vote-card--url after:inset no-underline after:absolute w-56" href={voting.sourceUrl}>
+		<h3 class="fluid-heading-03 text-text-01">{voting.title}</h3>
 	</a>
 	<section class="vote-card__result flex flex-col gap-y-2 w-56">
-		<Tag class={`${theme.tagFontColor} ${theme.tagBg} w-fit m-0`}>{voting.result}</Tag>
+		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} w-fit m-0`}>{voting.result}</Tag>
 		<div class="flex flex-col gap-x-1">
 			<div class="flex align-middle justify-between">
-				<p class="text-text-01 font-[600]">{isCandidate ? voting.result : 'เห็นด้วย'}</p>
+				<p class="text-text-01 heading-01">{isCandidate ? voting.result : 'เห็นด้วย'}</p>
 				<p>
-					<span class="mr-[2px] text-text-primary font-[600]">{totalCount}</span>
-					<span class="text-text-02">/{totalAmount}</span>
+					<span class="mr-[2px] text-text-primary heading-01">{totalCount}</span>
+					<span class="text-text-02 body-01">/{totalAmount}</span>
 				</p>
 			</div>
 			<ul class="vote-card__result--list">
 				{#each highlightedVoteByGroups as voteByGroup (voteByGroup.name)}
-					<li class="vote-card__result--item flex flex-row align-middle justify-between">
+					<li class="vote-card__result--item flex flex-row align-middle justify-between body-01">
 						<p class="text-text-01">{voteByGroup.name}</p>
 						<p>
 							<span class="text-text-primary mr-[2px]">{voteByGroup.count}</span>
@@ -96,6 +96,7 @@
 			</ul>
 		</div>
 	</section>
+	<DirectionStraightRight class="ml-auto" />
 </div>
 
 <style lang="scss">
