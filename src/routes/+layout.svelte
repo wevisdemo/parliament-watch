@@ -2,10 +2,11 @@
 	import '../styles/carbon/pre-compiled.css';
 	import '../styles/carbon/colors.scss';
 	import '../styles/index.css';
-
+	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
 	import { InlineNotification } from 'carbon-components-svelte';
 </script>
 
+<NavigationBar />
 <slot />
 <InlineNotification
 	class="fixed z-50 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
