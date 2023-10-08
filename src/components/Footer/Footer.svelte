@@ -48,7 +48,7 @@
 	];
 </script>
 
-<div class="grid grid-cols-1 gap-4 bg-white py-8 px-16 text-sm">
+<div class="grid grid-cols-1 gap-4 bg-white py-8 px-6 md:px-12 lg:px-16 text-sm">
 	<div>
 		เว็บไซต์นี้สร้างโดย<br />
 		<a href="https://wevis.info/">
@@ -78,9 +78,9 @@
 		</div>
 	</div>
 </div>
-<div class="bg-black py-8 px-16 text-white">
+<div class="bg-black py-8 px-6 md:px-12 lg:px-16 text-white">
 	<div
-		class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-4 pb-4 border-solid border-0 border-b border-ui-04 text-gray-30"
+		class="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-6 sm:gap-y-4 md:gap-x-6 gap-y-4 pb-4 border-solid border-0 border-b border-ui-04 text-gray-30"
 	>
 		<div class="row-span-2">
 			<img width="120px" height="34px" src={pwLogo} alt="logo short" />
@@ -95,11 +95,13 @@
 				<LawIcon class="text-inverse-link" />
 			</svelte:fragment>
 		</FooterMenuGroup>
-		<FooterMenuGroup title="การลงมติ" url="/">
-			<svelte:fragment slot="titleIcon">
-				<VoteIcon class="text-inverse-link" />
-			</svelte:fragment>
-		</FooterMenuGroup>
+		<div class="row-span-2">
+			<FooterMenuGroup title="การลงมติ" url="/">
+				<svelte:fragment slot="titleIcon">
+					<VoteIcon class="text-inverse-link" />
+				</svelte:fragment>
+			</FooterMenuGroup>
+		</div>
 		<FooterMenuGroup title="เกี่ยวกับเรา" menuItems={aboutUsMenu}>
 			<svelte:fragment slot="titleIcon">
 				<WeVisIcon class="text-white" />
