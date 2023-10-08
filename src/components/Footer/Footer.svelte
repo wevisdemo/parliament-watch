@@ -3,12 +3,12 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
+	import WeVisText from '$components/icons/WeVisText.svelte';
 	import type { Link } from '$models/link';
 	import { ArrowUpRight } from 'carbon-icons-svelte';
 	import FooterContact from './FooterContact.svelte';
 	import FooterMenuGroup from './FooterMenuGroup.svelte';
 	import pwLogo from '/static/images/logo/pw-short-white.png';
-	import wevisLogo from '/static/images/logo/wevis-full-black.png';
 
 	const representativeMenu: Link[] = [
 		{
@@ -53,7 +53,7 @@
 		เว็บไซต์นี้สร้างโดย<br />
 		<a href="https://wevis.info/">
 			<div class="flex flex-row items-end">
-				<img width="79px" height="24px" src={wevisLogo} alt="wevis-logo" />
+				<WeVisText width="79px" height="24px" viewBox="0 0 79 24" class="text-black" />
 				<ArrowUpRight class="text-black ml-2" size={16} />
 			</div>
 		</a>

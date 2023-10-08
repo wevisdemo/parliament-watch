@@ -1,9 +1,9 @@
 <script lang="ts">
-	import githubLogo from '/static/images/logo/github.png';
-	import faceBookLogo from '/static/images/logo/facebook.png';
-	import instagramLogo from '/static/images/logo/instagram.png';
-	import xLogo from '/static/images/logo/x.png';
 	import Email from 'carbon-icons-svelte/lib/Email.svelte';
+	import GithubIcon from '$components/icons/GithubIcon.svelte';
+	import FacebookIcon from '$components/icons/FacebookIcon.svelte';
+	import InstagramIcon from '$components/icons/InstagramIcon.svelte';
+	import XIcon from '$components/icons/XIcon.svelte';
 </script>
 
 <div class="flex flex-col">
@@ -20,23 +20,29 @@
 		<div class="mb-2">ติดตาม</div>
 		<div class="flex flex-row">
 			<div class="mr-3">
-				<a href="https://github.com/wevisdemo/parliament-watch">
-					<img src={githubLogo} alt="github-logo" />
+				<a
+					href="https://github.com/wevisdemo/parliament-watch"
+					class="text-gray-30 hover:text-white"
+				>
+					<GithubIcon size={32} viewBox="0 0 32 32" />
 				</a>
 			</div>
 			<div class="mr-3">
-				<a href="https://www.facebook.com/wevisdemo">
-					<img src={faceBookLogo} alt="facebook-logo" />
+				<a href="https://www.facebook.com/wevisdemo" class="text-gray-30 hover:text-white">
+					<FacebookIcon size={32} viewBox="0 0 32 32" />
 				</a>
 			</div>
 			<div class="mr-3">
-				<a href="https://github.com/wevisdemo/parliament-watch">
-					<img src={instagramLogo} alt="instagram-logo" />
+				<a
+					href="https://github.com/wevisdemo/parliament-watch"
+					class="text-gray-30 hover:text-white"
+				>
+					<InstagramIcon size={32} viewBox="0 0 32 32" />
 				</a>
 			</div>
 			<div class="mr-3">
-				<a href="https://twitter.com/wevisdemo">
-					<img src={xLogo} alt="x-logo" />
+				<a href="https://twitter.com/wevisdemo" class="text-gray-30 hover:text-white">
+					<XIcon size={32} viewBox="0 0 32 32" />
 				</a>
 			</div>
 		</div>
