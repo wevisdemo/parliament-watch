@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
-	import type { TagProps } from 'carbon-components-svelte/types/Tag/Tag.svelte';
 
 	export let voteOption: DefaultVoteOption | CustomVoteOption;
 
