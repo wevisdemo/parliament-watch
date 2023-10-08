@@ -8,6 +8,7 @@ export default {
 	},
 	theme: {
 		screens: {
+			sm: '320px',
 			md: '672px'
 		},
 		fontFamily: {
