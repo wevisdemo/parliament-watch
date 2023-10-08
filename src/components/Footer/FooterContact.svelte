@@ -9,7 +9,7 @@
 <div class="flex flex-col">
 	<div class="text-sm mb-3">
 		<div class="mb-2">ติดต่อ</div>
-		<a href="mailto:info@punchup.world" class="text-gray-30">
+		<a href="mailto:info@punchup.world" class="text-gray-30 hover:text-white no-underline">
 			<div class="flex flex-row items-center">
 				<Email size={16} />
 				<span class="ml-2">info@punchup.world</span>
