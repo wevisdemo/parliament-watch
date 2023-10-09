@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import DataPage from '$components/DataPage/DataPage.svelte';
-	import VotingOptionTag from '$components/politicians/VotingOptionTag.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
 	import { InlineNotification } from 'carbon-components-svelte';
