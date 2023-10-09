@@ -25,7 +25,7 @@
 	<div class="flex flex-col">
 		{#each menuItems as menuItem}
 			<a href={menuItem.url} class="text-gray-30 hover:text-white no-underline">
-				<div class="flex flex-row items-center">
+				<div class="flex flex-row items-center h-6">
 					<span class="mr-2">{menuItem.label}</span>
 					<ArrowUpRight size={16} />
 				</div>
