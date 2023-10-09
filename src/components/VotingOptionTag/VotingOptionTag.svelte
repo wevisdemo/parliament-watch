@@ -11,7 +11,7 @@
 	let tagBgOpacity = 1;
 	let label = '';
 
-	switch (voteOption) {
+	$: switch (voteOption) {
 		case DefaultVoteOption.Agreed:
 			label = DefaultVoteOption.Agreed;
 			tagColorClass = 'bg-teal-50';
