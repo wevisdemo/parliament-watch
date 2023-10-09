@@ -52,7 +52,7 @@
 	<div>
 		เว็บไซต์นี้สร้างโดย<br />
 		<a href="https://wevis.info/">
-			<div class="flex flex-row items-end">
+			<div class="flex flex-row items-end mb-2">
 				<WeVisText width="79px" height="24px" viewBox="0 0 79 24" class="text-black" />
 				<ArrowUpRight class="text-black ml-2" size={16} />
 			</div>
