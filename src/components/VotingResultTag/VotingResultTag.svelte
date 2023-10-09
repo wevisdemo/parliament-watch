@@ -6,8 +6,8 @@
 	export let isLarge = false;
 
 	let tagColor = 'bg-purple-70 text-text-04';
+	let label = '';
 
-	$: label = result;
 	$: switch (result) {
 		case DefaultVotingResult.Passed:
 			tagColor = 'bg-teal-30';
