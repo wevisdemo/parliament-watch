@@ -14,11 +14,11 @@
 	href="/"
 	class="flex items-center w-full pl-7 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200 {additionalClass}"
 >
-	<div class="w-4">
+	<div class="flex w-4">
 		<svelte:component this={linkMenu.icon} class="text-inverse-link" />
 	</div>
 	<p class="p-3 whitespace-nowrap">{linkMenu.label}</p>
-	<div class="w-4 ml-auto mr-4">
+	<div class="flex w-4 ml-auto mr-4">
 		<ArrowUpRightIcon />
 	</div>
 </a>
