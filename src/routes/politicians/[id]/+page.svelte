@@ -8,7 +8,7 @@
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import Share from '$components/Share/Share.svelte';
-	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button, InlineNotification } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
