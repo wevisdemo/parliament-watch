@@ -1,0 +1,24 @@
+<script lang="ts">
+	import type { Menu } from '$models/menu';
+	import ArrowUpRightIcon from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
+	export let linkMenu: Menu;
+	export let additionalClass = '';
+	// export let index: number;
+</script>
+
+<!-- <hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40 w-11/12 ml-auto" /> -->
+<!-- {#if index == 0}
+	<hr class="  border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
+{/if} -->
+<a
+	href="/"
+	class="flex items-center w-full pl-7 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200 {additionalClass}"
+>
+	<div class="w-4">
+		<svelte:component this={linkMenu.icon} class="text-inverse-link" />
+	</div>
+	<p class="p-3 whitespace-nowrap">{linkMenu.label}</p>
+	<div class="w-4 ml-auto mr-4">
+		<ArrowUpRightIcon />
+	</div>
+</a>

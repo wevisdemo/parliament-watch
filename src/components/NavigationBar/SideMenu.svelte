@@ -1,17 +1,16 @@
 <script lang="ts">
-	import MenuIcon from 'carbon-icons-svelte/lib/Menu.svelte';
-	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';
+	import type { Menu } from '$models/menu';
 
-	export let isActive = false;
+	export let menu: Menu;
+	// export let index: number;
 </script>
 
-<button
-	class="flex items-center justify-left bg-gray-100 border-0 p-0 mr-4 cursor-pointer lg:hidden"
-	on:click
->
-	{#if !isActive}
-		<MenuIcon fill="white" size={24} aria-label="Open Menu" />
-	{:else}
-		<CloseIcon fill="white" size={24} aria-label="Close Menu" />
-	{/if}
-</button>
+<div class="flex flex-col">
+	<div class="flex items-center pl-7">
+		<div class="w-4">
+			<svelte:component this={menu.icon} class="text-inverse-link" />
+		</div>
+		<p class="font-gray-10 p-3 whitespace-nowrap">{menu.label}</p>
+	</div>
+	<slot />
+</div>

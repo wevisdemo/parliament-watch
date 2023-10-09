@@ -1,52 +1,83 @@
 <script lang="ts">
-	import { TestTool } from 'carbon-icons-svelte';
-	import SideMenu from './SideMenu.svelte';
+	import type { Menu } from '$models/menu';
+
+	import SideMenuButton from './SideMenuButton.svelte';
 	import SideNav from './SideNav.svelte';
+	import SideMenuList from './SideMenuList.svelte';
+
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
+	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
 	let sideNavActive = false;
 	let screenSize: number;
 	$: if (screenSize > 1056) sideNavActive = false;
 
-	let menuList = [
+	/// FOR TESTING MENU UI
+	let menuList: Menu[] = [
 		{
 			label: 'สมาชิกรัฐสภา',
 			icon: PoliticianIcon,
-			sub: [
-				{ label: 'สภาผู้แทนราษฎร', icon: '' },
-				{ label: 'วุฒิสภา', icon: '' }
+			url: null,
+			subs: [
+				{ label: 'สภาผู้แทนราษฎร', url: '/representives' },
+				{ label: 'วุฒิสภา', url: '/senate' }
 			]
 		},
 		{
 			label: 'การออกกฎหมาย',
 			icon: LawIcon,
-			sub: [
-				{ label: 'กฎหมายในกระบวนการ', icon: '' },
-				{ label: 'รัฐออกกฎหมายอย่างไร', icon: '' }
+			url: null,
+			subs: [
+				{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess' },
+				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws' }
 			]
 		},
 		{
 			label: 'การลงมติ',
-			icon: VoteIcon
+			icon: VoteIcon,
+			url: '/voting'
 		},
 		{
 			label: 'เกี่ยวกับเรา',
-			icon: '',
-			sub: [
-				{ label: 'ที่มาของโครงการ', icon: '' },
-				{ label: 'ข้อมูลในเว็บนี้', icon: '' },
-				{ label: 'เกี่ยวกับ WeVis', icon: '' }
+			icon: WeVisIcon,
+			url: null,
+			subs: [
+				{ label: 'ที่มาของโครงการ', url: '/projectorigin' },
+				{ label: 'ข้อมูลในเว็บนี้', url: '/informations' },
+				{ label: 'เกี่ยวกับ WeVis', url: '/aboutus' }
 			]
 		}
+
+		////* FOR TEST SCROLLING IN NAV
+		// {
+		// 	label: 'เกี่ยวกับเรา',
+		// 	icon: WeVisIcon,
+		// 	url: null,
+		// 	subs: [
+		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin' },
+		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations' },
+		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus' }
+		// 	]
+		// },
+		// {
+		// 	label: 'เกี่ยวกับเรา',
+		// 	icon: WeVisIcon,
+		// 	url: null,
+		// 	subs: [
+		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin' },
+		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations' },
+		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus' }
+		// 	]
+		// }
 	];
 </script>
 
 <svelte:window bind:innerWidth={screenSize} />
 <header class="flex sticky items-center justify-between h-12 px-6 lg:px-10 bg-gray-100 z-20">
 	<div class="leading flex">
-		<SideMenu isActive={sideNavActive} on:click={() => (sideNavActive = !sideNavActive)} />
+		<SideMenuButton isActive={sideNavActive} on:click={() => (sideNavActive = !sideNavActive)} />
 		<a href="/">
 			<picture class="flex items-center h-full">
 				<source media="(min-width: 1056px)" srcset="/images/logo/pw-long-white.png" height="18" />
@@ -54,31 +85,15 @@
 			</picture>
 		</a>
 	</div>
-	<div class="nav" />
-	<div class="trailing" />
+	<div class="actions">
+		<!-- ! wait for menu -->
+	</div>
+	<div class="trailing">
+		<!--! wait for search box -->
+	</div>
 </header>
-<SideNav isActive={sideNavActive}>
-	<ul>
-		{#each menuList as menu}
-			<div class="flex flex-col">
-				<li class="font-gray-10 p-2">{menu.label}</li>
-				{#if menu.sub}
-					<div class="pl-8">
-						<ul>
-							{#each menu.sub as sub, idx}
-								{#if idx < menu.sub.length - 1}
-									<hr class="  border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
-								{/if}
-								<li class=" font-extralight font-gray-30 p-2">{sub.label}</li>
-								{#if idx < menu.sub.length - 1}
-									<hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
-								{/if}
-							{/each}
-						</ul>
-					</div>
-				{/if}
-			</div>
-			<hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
-		{/each}
-	</ul>
+<SideNav isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
+	{#if sideNavActive}
+		<SideMenuList {menuList} />
+	{/if}
 </SideNav>
