@@ -10,16 +10,14 @@
 		id: 1,
 		date: new Date('2023-08-31T17:00:00.000Z'),
 		title: 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)',
-		result: DefaultVotingResult.Passed,
-		sourceUrl: '/politicians/1/votelog'
+		result: DefaultVotingResult.Passed
 	};
 
 	const failedVoting: VoteCardProps['voting'] = {
 		id: 2,
 		date: new Date('2023-09-01T17:00:00.000Z'),
 		title: 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)',
-		result: 'ไม่ผ่าน',
-		sourceUrl: '/politicians/1/votelog'
+		result: DefaultVotingResult.Failed
 	};
 
 	const passedHighlightedVoteByGroups: VoteCardProps['highlightedVoteByGroups'] = [
@@ -77,10 +75,13 @@
 
 	$: candidateVoting = {
 		id: 3,
-		date: new Date('2023-09-02T17:00:00.000Z'),
+		/**
+		 * @author fResult <Styxmaz@gmail.com>
+		 * FIXME: Actually, it should be new Date('2023-09-02T17:00:00.000Z'), but I can't get Date object from Reactivity (Proxie)
+		 */
+		date: '2023-09-02T17:00:00.000Z' as unknown as Date,
 		title: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-		result: candidateName || 'Mr. Candidate Krub',
-		sourceUrl: '/politicians/1/votelog'
+		result: candidateName || 'Mr. Candidate Krub'
 	} satisfies VoteCardProps['voting'];
 
 	$: candidateVoteCardProps = {
@@ -107,7 +108,7 @@
 			<Hst.Text title="Candidate Name" bind:value={candidateName} />
 		{/if}
 
-		<p>Example Props</p>
+		<p>Example Props:</p>
 		<Hst.Json title="Example `voting` Prop" bind:value={voting} />
 		<Hst.Json title="Example `highlightedVoteByGroups` Prop" bind:value={highlightedVoteByGroups} />
 	</svelte:fragment>

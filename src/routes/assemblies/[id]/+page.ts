@@ -33,7 +33,7 @@ interface MainMember {
 }
 
 export interface VoteCardProps {
-	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result' | 'sourceUrl'>;
+	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
 	highlightedVoteByGroups: {
 		name: string;
 		count: number;
@@ -41,7 +41,7 @@ export interface VoteCardProps {
 	}[];
 }
 
-export function load({ params }: { params: { id: string } }) {
+export function load({ params }) {
 	const isSenates = params.id === sen12.id;
 	const { mainRoles, ...rest }: Assembly = isSenates ? sen12 : rep26;
 	const assembly: Omit<Assembly, 'mainRoles'> = rest;
@@ -292,8 +292,7 @@ export function load({ params }: { params: { id: string } }) {
 				date: new Date(`09/${i + 1}/2023`),
 				title:
 					i % 3 < 2 ? 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)' : 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-				result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed, 'ชื่อแคนดิเดต'][i % 3],
-				sourceUrl: '#'
+				result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed, 'ชื่อแคนดิเดต'][i % 3]
 			},
 			highlightedVoteByGroups
 		}));
