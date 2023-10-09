@@ -9,7 +9,8 @@ export default {
 	theme: {
 		screens: {
 			sm: '320px',
-			md: '672px'
+			md: '672px',
+			lg: '1056px'
 		},
 		fontFamily: {
 			serif: ['Kondolar Thai', ...defaultTheme.fontFamily.serif],
