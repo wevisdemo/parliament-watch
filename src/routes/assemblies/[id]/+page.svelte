@@ -1,5 +1,7 @@
 <script lang="ts">
-	export let data;
+	import type { load } from './+page';
+
+	export let data: ReturnType<typeof load>;
 </script>
 
 <div class="whitespace-pre">
