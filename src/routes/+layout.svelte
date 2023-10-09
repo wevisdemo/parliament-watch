@@ -4,11 +4,16 @@
 	import '../styles/index.css';
 
 	import { InlineNotification } from 'carbon-components-svelte';
+
+	import TailwindIndicator from '$components/tailwind-indicator.svelte';
 </script>
 
 <slot />
+
+<TailwindIndicator />
+
 <InlineNotification
-	class="fixed z-50 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
+	class="fixed z-40 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
 	lowContrast
 	kind="warning-alt"
 	title="คำเตือน:"
