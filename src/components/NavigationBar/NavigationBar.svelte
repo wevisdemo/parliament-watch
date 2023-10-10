@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { MenuTypes, type Menu } from '$models/menu';
 
-	import { slide } from 'svelte/transition';
+	import Banner from './Banner.svelte';
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
 	import SideMenuList from './SideMenuList.svelte';
@@ -10,11 +10,15 @@
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
+	import NavigationPane from './NavigationPane.svelte';
 
+	let logoLong = '/images/logo/pw-long-white.png';
+	let logoShort = '/images/logo/pw-short-white.png';
+	let screenSize: number;
 	let previousFromTop = 0;
 	let showHeader = true;
 	let sideNavActive = false;
-	let screenSize: number;
+
 	$: if (screenSize > 1056) sideNavActive = false;
 
 	/// FOR TESTING MENU UI
@@ -56,30 +60,6 @@
 				{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
 			]
 		}
-
-		////* FOR TEST SCROLLING IN NAV
-		// {
-		// 	label: 'เกี่ยวกับเรา',
-		// 	icon: WeVisIcon,
-		// 	url: null,
-		// 	type: MenuTypes.root,
-		// 	subs: [
-		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
-		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
-		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
-		// 	]
-		// },
-		// {
-		// 	label: 'เกี่ยวกับเรา',
-		// 	icon: WeVisIcon,
-		// 	url: null,
-		// 	type: MenuTypes.root,
-		// 	subs: [
-		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
-		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
-		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
-		// 	]
-		// }
 	];
 
 	function scrollEventHandler(ev: Event) {
@@ -100,33 +80,27 @@
 
 <header class="w-screen">
 	{#if showHeader}
-		<nav
-			class="flex fixed top-0 items-center w-full justify-between h-12 px-3 lg:px-10 bg-gray-100 z-20"
-			transition:slide={{ duration: 350, axis: 'y' }}
-		>
-			<div class="leading flex">
+		<NavigationPane>
+			<svelte:fragment slot="leading">
 				<SideMenuButton
 					isActive={sideNavActive}
 					on:click={() => (sideNavActive = !sideNavActive)}
 				/>
-				<a href="/">
-					<picture class="flex items-center h-full">
-						<source
-							media="(min-width: 672px)"
-							srcset="/images/logo/pw-long-white.png"
-							height="18"
-						/>
-						<img src="/images/logo/pw-short-white.png" alt="Parliament Watch" height="28" />
-					</picture>
-				</a>
-			</div>
-			<div class="actions">
-				<!-- ! wait for menu -->
-			</div>
-			<div class="trailing">
-				<!--! wait for search box -->
-			</div>
-		</nav>
+				<Banner {logoLong} {logoShort} />
+			</svelte:fragment>
+			<svelte:fragment slot="menu">
+				<div class="hidden lg:block">
+					<p class="text-white">-------MENU WILL GOING HERE-------</p>
+				</div>
+			</svelte:fragment>
+			<svelte:fragment slot="trailing">
+				<input
+					type="text"
+					aria-label="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
+					placeholder="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
+				/>
+			</svelte:fragment>
+		</NavigationPane>
 	{/if}
 </header>
 
