@@ -12,7 +12,7 @@
 {#if isActive}
 	<aside
 		class="absolute top-0 left-0 h-full pt-12 text-white bg-gray-90 z-10 w-80 opacity-100 transition-all duration-200 overflow-y-auto"
-		transition:slide={{ duration: 300, axis: 'x' }}
+		transition:slide={{ duration: 350, axis: 'x' }}
 	>
 		<div class="pt-2 pr-2">
 			<slot />

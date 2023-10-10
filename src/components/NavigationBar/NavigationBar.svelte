@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Menu } from '$models/menu';
+	import { MenuTypes, type Menu } from '$models/menu';
 
 	import SideMenuButton from './SideMenuButton.svelte';
-	import SideNav from './SideNav.svelte';
+	import SideMenuPane from './SideMenuPane.svelte';
 	import SideMenuList from './SideMenuList.svelte';
 
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
@@ -20,33 +20,37 @@
 			label: 'สมาชิกรัฐสภา',
 			icon: PoliticianIcon,
 			url: null,
+			type: MenuTypes.root,
 			subs: [
-				{ label: 'สภาผู้แทนราษฎร', url: '/representives' },
-				{ label: 'วุฒิสภา', url: '/senate' }
+				{ label: 'สภาผู้แทนราษฎร', url: '/representives', type: MenuTypes.link },
+				{ label: 'วุฒิสภา', url: '/senate', type: MenuTypes.link }
 			]
 		},
 		{
 			label: 'การออกกฎหมาย',
 			icon: LawIcon,
 			url: null,
+			type: MenuTypes.root,
 			subs: [
-				{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess' },
-				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws' }
+				{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess', type: MenuTypes.link },
+				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws', type: MenuTypes.link }
 			]
 		},
 		{
 			label: 'การลงมติ',
 			icon: VoteIcon,
-			url: '/voting'
+			url: '/voting',
+			type: MenuTypes.both
 		},
 		{
 			label: 'เกี่ยวกับเรา',
 			icon: WeVisIcon,
 			url: null,
+			type: MenuTypes.root,
 			subs: [
-				{ label: 'ที่มาของโครงการ', url: '/projectorigin' },
-				{ label: 'ข้อมูลในเว็บนี้', url: '/informations' },
-				{ label: 'เกี่ยวกับ WeVis', url: '/aboutus' }
+				{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
+				{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
+				{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
 			]
 		}
 
@@ -55,20 +59,22 @@
 		// 	label: 'เกี่ยวกับเรา',
 		// 	icon: WeVisIcon,
 		// 	url: null,
+		// 	type: MenuTypes.root,
 		// 	subs: [
-		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin' },
-		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations' },
-		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus' }
+		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
+		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
+		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
 		// 	]
 		// },
 		// {
 		// 	label: 'เกี่ยวกับเรา',
 		// 	icon: WeVisIcon,
 		// 	url: null,
+		// 	type: MenuTypes.root,
 		// 	subs: [
-		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin' },
-		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations' },
-		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus' }
+		// 		{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
+		// 		{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
+		// 		{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
 		// 	]
 		// }
 	];
@@ -92,8 +98,8 @@
 		<!--! wait for search box -->
 	</div>
 </header>
-<SideNav isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
+<SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
 		<SideMenuList {menuList} />
 	{/if}
-</SideNav>
+</SideMenuPane>

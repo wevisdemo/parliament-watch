@@ -6,6 +6,12 @@ import type PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 import type VoteIcon from '$components/icons/VoteIcon.svelte';
 import type WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
+export enum MenuTypes {
+	root = 'root',
+	link = 'link',
+	both = 'both'
+}
+
 export interface Menu {
 	label: string;
 	icon?:
@@ -18,5 +24,6 @@ export interface Menu {
 		| typeof WeVisIcon
 		| null;
 	url: string | null;
+	type: MenuTypes;
 	subs?: Menu[];
 }

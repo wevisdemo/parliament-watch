@@ -6,19 +6,20 @@
 	// export let index: number;
 </script>
 
-<!-- <hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40 w-11/12 ml-auto" /> -->
-<!-- {#if index == 0}
-	<hr class="  border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
-{/if} -->
+{#if linkMenu.type === 'link'}
+	<div class="w-80">
+		<hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40 w-10/12 ml-auto" />
+	</div>
+{/if}
 <a
 	href="/"
-	class="flex items-center w-full pl-7 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200 {additionalClass}"
+	class="flex items-center w-80 pl-7 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200 {additionalClass}"
 >
 	<div class="flex w-4">
 		<svelte:component this={linkMenu.icon} class="text-inverse-link" />
 	</div>
 	<p class="p-3 whitespace-nowrap">{linkMenu.label}</p>
-	<div class="flex w-4 ml-auto mr-4">
+	<div class="flex ml-auto mr-4">
 		<ArrowUpRightIcon />
 	</div>
 </a>
