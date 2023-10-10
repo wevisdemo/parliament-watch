@@ -1,7 +1,5 @@
 <script lang="ts">
 	import SideNav from '$components/politicians/SideNav.svelte';
-
-	import Share from '$components/Share/Share.svelte';
 	import General from '$components/icons/GeneralIcon.svelte';
 	import Politician from '$components/icons/PoliticianIcon.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
