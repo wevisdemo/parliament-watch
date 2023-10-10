@@ -13,16 +13,16 @@
 		type: 'grid'
 	}}
 >
-	<Hst.Variant title="In progress">
+	<Hst.Variant title="BillStatus.InProgress">
 		<BillStatusTag {isLarge} status={BillStatus.InProgress} />
 	</Hst.Variant>
-	<Hst.Variant title="Success">
+	<Hst.Variant title="BillStatus.Success">
 		<BillStatusTag {isLarge} status={BillStatus.Success} />
 	</Hst.Variant>
-	<Hst.Variant title="Rejected">
+	<Hst.Variant title="BillStatus.Rejected">
 		<BillStatusTag {isLarge} status={BillStatus.Rejected} />
 	</Hst.Variant>
-	<Hst.Variant title="Merged">
+	<Hst.Variant title="BillStatus.Merged">
 		<BillStatusTag {isLarge} status={BillStatus.Merged} />
 	</Hst.Variant>
 	<svelte:fragment slot="controls">
