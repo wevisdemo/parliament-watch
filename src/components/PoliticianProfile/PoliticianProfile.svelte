@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Party } from '$models/party';
 
-	export let id: number;
+	export let id: string;
 	export let firstname: string;
 	export let lastname: string;
 	export let avatar: string;

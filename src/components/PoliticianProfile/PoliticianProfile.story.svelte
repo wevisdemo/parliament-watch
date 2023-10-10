@@ -11,7 +11,7 @@
 
 	let politicians = [
 		{
-			id: 1,
+			id: '1',
 			firstname: 'ปิยบุตร',
 			lastname: 'แสงกนกกุล',
 			avatar: 'https://via.placeholder.com/64',
@@ -19,7 +19,7 @@
 			role: 'สส. บัญชีรายชื่อ'
 		},
 		{
-			id: 2,
+			id: '2',
 			firstname: 'จุรินทร์',
 			lastname: 'ลักษณวิศิษฏ์',
 			avatar: 'https://via.placeholder.com/64',
@@ -27,7 +27,7 @@
 			role: 'สส. บัญชีรายชื่อ'
 		},
 		{
-			id: 3,
+			id: '3',
 			firstname: 'เศรษฐา',
 			lastname: 'ทวีสิน',
 			avatar: 'https://via.placeholder.com/64',
@@ -35,7 +35,7 @@
 			role: 'สส. บัญชีรายชื่อ'
 		},
 		{
-			id: 4,
+			id: '4',
 			firstname: 'อนุทิน',
 			lastname: 'ชาญวีรกูล',
 			avatar: 'https://via.placeholder.com/64',
