@@ -151,7 +151,7 @@
 			<!-- TODO: Add link -->
 			<a class="text-text-01" href="/">{cellValue}</a>
 		{:else if cellKey === 'result'}
-			<VotingResultTag class="m-0 whitespace-nowrap" isLarge={true} result={cellValue} />
+			<VotingResultTag class="m-0 whitespace-nowrap" isLarge result={cellValue} />
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
 		{:else if cellKey === 'files'}
