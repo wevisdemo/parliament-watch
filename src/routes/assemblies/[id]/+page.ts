@@ -1,3 +1,4 @@
+import type { Assembly } from '$models/assembly.js';
 import type { Party } from '$models/party.js';
 import type { Politician } from '$models/politician.js';
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
@@ -31,7 +32,7 @@ interface MainMember {
 	partyRole?: string;
 }
 
-interface VoteCard {
+export interface VoteCardProps {
 	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
 	highlightedVoteByGroups: {
 		name: string;
@@ -42,7 +43,8 @@ interface VoteCard {
 
 export function load({ params }) {
 	const isSenates = params.id === sen12.id;
-	const { mainRoles, ...assembly } = isSenates ? sen12 : rep26;
+	const { mainRoles, ...rest }: Assembly = isSenates ? sen12 : rep26;
+	const assembly: Omit<Assembly, 'mainRoles'> = rest;
 
 	const mainMembers: MainMember[] = mainRoles.map((assemblyRole) => ({
 		assemblyRole,
@@ -278,13 +280,13 @@ export function load({ params }) {
 		]
 	};
 
-	const latestVotes: VoteCard[] = new Array(5)
+	const latestVotes: VoteCardProps[] = new Array(5)
 		.fill([
 			{ name: 'สส. ฝ่ายรัฐบาล', count: 160, total: 315 },
 			{ name: 'สส. ฝ่ายค้าน', count: 164, total: 185 },
 			{ name: 'สว.', count: 200, total: 250 }
 		])
-		.map((highlightedVoteByGroups, i) => ({
+		.map<VoteCardProps>((highlightedVoteByGroups, i) => ({
 			voting: {
 				id: i + 1,
 				date: new Date(`09/${i + 1}/2023`),

@@ -48,3 +48,8 @@ export const failedVoting: Voting = {
 	...passedVoting,
 	result: DefaultVotingResult.Failed
 };
+
+export const candidateVoting: Voting = {
+	...passedVoting,
+	result: 'ชื่อแคนดิเดต'
+};

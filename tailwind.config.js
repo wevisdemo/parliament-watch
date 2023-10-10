@@ -46,6 +46,7 @@ export default {
 			'text-02': '#6F6F6F',
 			'text-03': '#A8A8A8',
 			'text-04': '#FFFFFF',
+			'text-primary': '#161616',
 			'text-error': '#C72502',
 			'decorative-01': '#E0E0E0',
 			'ui-01': '#F4F4F4',
