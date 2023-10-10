@@ -344,10 +344,5 @@
 				>
 			</div>
 		</Section>
-		<!-- <Section id="data" title="Data">
-			<div class="overflow-x-auto">
-				<pre>{JSON.stringify(politician, null, 2)}</pre>
-			</div>
-		</Section> -->
 	</div>
 </div>
