@@ -6,13 +6,13 @@
 
 <Hst.Story title="BackToTopButton">
 	<BackToTopButton
-		size="40px"
-		padding="12px"
-		border="1px"
-		borderRadius="2px"
+		size={40}
+		padding={12}
+		border={1}
+		borderRadius={2}
 		color=""
 		bgColor=""
-		margin="20px"
+		margin={20}
 		showAt={50}
 	/>
 	<pre style="background-color: rgba(0, 0, 0, 0.1);">
