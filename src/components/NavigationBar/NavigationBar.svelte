@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { MenuTypes, type Menu } from '$models/menu';
 
+	import { slide } from 'svelte/transition';
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
 	import SideMenuList from './SideMenuList.svelte';
@@ -10,6 +11,8 @@
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
+	let previousFromTop = 0;
+	let showHeader = true;
 	let sideNavActive = false;
 	let screenSize: number;
 	$: if (screenSize > 1056) sideNavActive = false;
@@ -78,26 +81,55 @@
 		// 	]
 		// }
 	];
+
+	function scrollEventHandler(ev: Event) {
+		const currentFromTop = window.scrollY;
+		if (currentFromTop > previousFromTop) {
+			//scrolling down
+			showHeader = false;
+		} else {
+			//scrolling up
+			showHeader = true;
+		}
+		previousFromTop = currentFromTop;
+		sideNavActive = false;
+	}
 </script>
 
-<svelte:window bind:innerWidth={screenSize} />
-<header class="flex sticky items-center justify-between h-12 px-6 lg:px-10 bg-gray-100 z-20">
-	<div class="leading flex">
-		<SideMenuButton isActive={sideNavActive} on:click={() => (sideNavActive = !sideNavActive)} />
-		<a href="/">
-			<picture class="flex items-center h-full">
-				<source media="(min-width: 1056px)" srcset="/images/logo/pw-long-white.png" height="18" />
-				<img src="/images/logo/pw-short-white.png" alt="Parliament Watch" height="28" />
-			</picture>
-		</a>
-	</div>
-	<div class="actions">
-		<!-- ! wait for menu -->
-	</div>
-	<div class="trailing">
-		<!--! wait for search box -->
-	</div>
+<svelte:window bind:innerWidth={screenSize} on:scroll={scrollEventHandler} />
+
+<header class="w-screen">
+	{#if showHeader}
+		<nav
+			class="flex fixed top-0 items-center w-full justify-between h-12 px-3 lg:px-10 bg-gray-100 z-20"
+			transition:slide={{ duration: 350, axis: 'y' }}
+		>
+			<div class="leading flex">
+				<SideMenuButton
+					isActive={sideNavActive}
+					on:click={() => (sideNavActive = !sideNavActive)}
+				/>
+				<a href="/">
+					<picture class="flex items-center h-full">
+						<source
+							media="(min-width: 672px)"
+							srcset="/images/logo/pw-long-white.png"
+							height="18"
+						/>
+						<img src="/images/logo/pw-short-white.png" alt="Parliament Watch" height="28" />
+					</picture>
+				</a>
+			</div>
+			<div class="actions">
+				<!-- ! wait for menu -->
+			</div>
+			<div class="trailing">
+				<!--! wait for search box -->
+			</div>
+		</nav>
+	{/if}
 </header>
+
 <SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
 		<SideMenuList {menuList} />

@@ -7,7 +7,9 @@
 </script>
 
 <NavigationBar />
-<slot />
+<div class="mt-14">
+	<slot />
+</div>
 <InlineNotification
 	class="fixed z-50 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
 	lowContrast

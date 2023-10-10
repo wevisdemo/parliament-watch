@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex flex-col">
-	<div class="flex items-center pl-7">
+	<div class="flex items-center pl-4">
 		<div class="flex w-4">
 			<svelte:component this={menu.icon} class="text-inverse-link" />
 		</div>
