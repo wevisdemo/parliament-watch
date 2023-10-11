@@ -47,14 +47,18 @@
 
 <Hst.Story title="Politician Profile">
 	<div class="grid grid-cols-2 gap-4">
-		{#each politicians as politician}
-			<PoliticianProfile {...politician} />
-		{/each}
+		<Hst.Variant title="Small (Default)">
+			{#each politicians as politician}
+				<PoliticianProfile {...politician} />
+			{/each}
+		</Hst.Variant>
 	</div>
 	<div class="grid grid-cols-2 gap-4 mt-5">
-		{#each politicians as politician}
-			<PoliticianProfile {...politician} isLarge />
-		{/each}
+		<Hst.Variant title="Large">
+			{#each politicians as politician}
+				<PoliticianProfile {...politician} isLarge />
+			{/each}
+		</Hst.Variant>
 	</div>
 
 	<svelte:fragment slot="controls">
