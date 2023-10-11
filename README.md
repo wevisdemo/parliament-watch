@@ -48,6 +48,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 ### Front-end
 
 - [Svelte](https://svelte.dev) + [SvelteKit](https://kit.svelte.dev)
+- [TypeScript](https://www.typescriptlang.org/)
 - [Carbon Design System (v10)](https://v10.carbondesignsystem.com) + [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
 - [TailwindCSS](https://tailwindcss.com)
 - [Histoire](https://histoire.dev/) for the components documentation

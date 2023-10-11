@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import DataPage from '$components/DataPage/DataPage.svelte';
-	import VotingOptionTag from '$components/politicians/VotingOptionTag.svelte';
-	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
@@ -151,7 +151,7 @@
 			<!-- TODO: Add link -->
 			<a class="text-text-01" href="/">{cellValue}</a>
 		{:else if cellKey === 'result'}
-			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
+			<VotingResultTag class="m-0 whitespace-nowrap" isLarge result={cellValue} />
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
 		{:else if cellKey === 'files'}
