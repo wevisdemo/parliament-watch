@@ -2,6 +2,8 @@
 
 Citizens are watching
 
+> **HACKTOBERFEST 2023** 🎉 - get a free limited-edition sticker on approved PR [read more](https://www.facebook.com/wevisdemo/posts/pfbid0nhDdBgYsDqmfTN3mf3TQLQ1zPDcksUi7HM6zSysGCynu3m69GnxPBs7LRmuybw8Xl)
+
 **Table of Content**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
