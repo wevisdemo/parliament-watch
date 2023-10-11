@@ -76,8 +76,8 @@
 	<section class="vote-card__result flex flex-col gap-y-2 w-56">
 		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} w-fit m-0`}>{voting.result}</Tag>
 		<div class="flex flex-col gap-x-1">
-			<div class="flex align-middle justify-between">
-				<p class="text-text-01 heading-01">{isCandidate ? voting.result : 'เห็นด้วย'}</p>
+			<div class="flex items-center justify-between">
+				<p class="text-text-01 heading-01">{isCandidate ? 'ได้รับคะแนนเสียง' : 'เห็นด้วย'}</p>
 				<p>
 					<span class="mr-[2px] text-text-primary heading-01">{totalCount}</span>
 					<span class="text-text-02 body-01">/{totalAmount}</span>
@@ -85,9 +85,9 @@
 			</div>
 			<ul class="vote-card__result--list">
 				{#each highlightedVoteByGroups as voteByGroup (voteByGroup.name)}
-					<li class="vote-card__result--item flex flex-row align-middle justify-between body-01">
-						<p class="text-text-01">{voteByGroup.name}</p>
-						<p>
+					<li class="vote-card__result--item flex flex-row align-middle justify-between">
+						<p class="text-text-01 body-01">{voteByGroup.name}</p>
+						<p class="body-01">
 							<span class="text-text-primary mr-[2px]">{voteByGroup.count}</span>
 							<span class="text-text-02">/{voteByGroup.total}</span>
 						</p>
