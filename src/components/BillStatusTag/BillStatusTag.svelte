@@ -4,25 +4,25 @@
 
 	export let isLarge = false;
 	export let status: BillStatus;
-	let label = status;
-	let className = '';
+	let tagStyle = '';
 
 	switch (status) {
 		case BillStatus.InProgress:
-			className = 'bg-yellow-20 text-text-10';
+			tagStyle = 'bg-yellow-20 text-text-10';
 			break;
 		case BillStatus.Success:
-			className = 'bg-teal-80 text-text-04';
+			tagStyle = 'bg-teal-80 text-text-04';
 			break;
 		case BillStatus.Rejected:
-			className = 'bg-red-80 text-text-04';
+			tagStyle = 'bg-red-80 text-text-04';
 			break;
 		case BillStatus.Merged:
-			className = 'bg-purple-80 text-text-04';
+			tagStyle = 'bg-purple-80 text-text-04';
 			break;
 	}
 
+	let className = '';
 	export { className as class };
 </script>
 
-<Tag class=" {className}" size={isLarge ? 'default' : 'sm'}>{label}</Tag>
+<Tag class="{tagStyle} {className}" size={isLarge ? 'default' : 'sm'}>{status}</Tag>
