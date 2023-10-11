@@ -6,7 +6,7 @@
 	let links = [{ label: 'ผลการลงมติรายคน', url: '/' }];
 </script>
 
-<Hst.Story title="Download Data">
+<Hst.Story title="DownloadData">
 	<div class="font-sans body-02">
 		<DownloadData {links} />
 	</div>
