@@ -24,12 +24,12 @@
 					href="https://github.com/wevisdemo/parliament-watch"
 					class="text-gray-30 hover:text-gray-10"
 				>
-					<GithubIcon size={32} viewBox="0 0 32 32" />
+					<GithubIcon size={32} />
 				</a>
 			</div>
 			<div class="mr-3">
 				<a href="https://www.facebook.com/wevisdemo" class="text-gray-30 hover:text-gray-10">
-					<FacebookIcon size={32} viewBox="0 0 32 32" />
+					<FacebookIcon size={32} />
 				</a>
 			</div>
 			<div class="mr-3">
@@ -37,12 +37,12 @@
 					href="https://github.com/wevisdemo/parliament-watch"
 					class="text-gray-30 hover:text-gray-10"
 				>
-					<InstagramIcon size={32} viewBox="0 0 32 32" />
+					<InstagramIcon size={32} />
 				</a>
 			</div>
 			<div class="mr-3">
 				<a href="https://twitter.com/wevisdemo" class="text-gray-30 hover:text-gray-10">
-					<XIcon size={32} viewBox="0 0 32 32" />
+					<XIcon size={32} />
 				</a>
 			</div>
 		</div>

@@ -2,7 +2,7 @@
 	import BaseSvg from './BaseSvg.svelte';
 </script>
 
-<BaseSvg {...$$restProps}>
+<BaseSvg viewBox="0 0 32 32" {...$$restProps}>
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"

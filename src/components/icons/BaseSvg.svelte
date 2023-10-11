@@ -3,12 +3,13 @@
 	export let title: string | undefined = undefined;
 
 	$: labelled = $$props['aria-label'] || $$props['aria-labelledby'] || title;
+	$: viewBox = `0 0 ${size} ${size}`;
 </script>
 
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	fill="currentColor"
-	viewBox="0 0 16 16"
+	{viewBox}
 	preserveAspectRatio="xMidYMid meet"
 	width={size}
 	height={size}
