@@ -11,6 +11,8 @@
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import NavigationPane from './NavigationPane.svelte';
+	import AnnouncementPane from './AnnouncementPane.svelte';
+	import type { Announcement } from '$models/announcement';
 
 	let logoLong = '/images/logo/pw-long-white.png';
 	let logoShort = '/images/logo/pw-short-white.png';
@@ -62,6 +64,15 @@
 		}
 	];
 
+	/// FOR TESTING Announcement UI
+	let announcement: Announcement = {
+		title: 'รับสมัคร',
+		text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
+		dateStart: new Date('2023-10-15'),
+		dateEnd: new Date('2023-12-15'),
+		link: '/volunteer'
+	};
+
 	function scrollEventHandler(ev: Event) {
 		const currentFromTop = window.scrollY;
 		if (currentFromTop > previousFromTop) {
@@ -103,6 +114,8 @@
 		</NavigationPane>
 	{/if}
 </header>
+
+<AnnouncementPane {announcement} />
 
 <SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
