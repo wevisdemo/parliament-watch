@@ -5,7 +5,9 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		screens: {
-			md: '672px'
+			sm: '320px',
+			md: '672px',
+			lg: '1056px'
 		},
 		fontFamily: {
 			serif: ['Kondolar Thai', ...defaultTheme.fontFamily.serif],
