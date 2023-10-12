@@ -3,9 +3,15 @@
 	import '../styles/index.css';
 
 	import { InlineNotification } from 'carbon-components-svelte';
+	import Footer from '$components/Footer/Footer.svelte';
 </script>
 
-<slot />
+<main class="min-h-screen flex flex-col">
+	<div class="flex-1">
+		<slot />
+	</div>
+	<Footer />
+</main>
 
 <InlineNotification
 	class="fixed z-50 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
