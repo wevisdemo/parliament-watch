@@ -7,8 +7,8 @@
 </script>
 
 {#if linkMenu.type === 'link'}
-	<div class="w-80">
-		<hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40 w-screen md:w-10/12 ml-auto" />
+	<div class="w-screen md:w-80 pr-2">
+		<hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40 w-11/12 ml-auto" />
 	</div>
 {/if}
 <a

@@ -8,10 +8,34 @@
 
 	import { slide } from 'svelte/transition';
 
+	/** A announcement object.
+	 * - title -- A title of announcement
+	 * - text (Required) --  A text of announcement
+	 * - dateStart --  A start date of announcement
+	 * - dateEnd --  A end date of announcement
+	 * - link --  A link of announcement
+	 */
 	export let announcement: Announcement;
+	/** A string of background color class of the pane.
+	 * - default value -- "bg-blue-60"
+	 */
 	export let bgColor = 'bg-blue-60';
+	/** A type of leading icon
+	 * - "info" (default) -- InformationFilled Icon
+	 * - "help" -- HelpFilled Icon
+	 * - "warning" -- WarningAltFilled Icon
+	 * - "success" -- CheckmarkFilled Icon
+	 */
 	export let iconType: 'info' | 'help' | 'warning' | 'success' = 'info';
+	/** Boolean value that activate/deactivate function to hide a announcement pane on scrolling down
+	 * - default value -- true
+	 */
+	export let hideOnScroll = true;
+
 	let isShown = true;
+	let isScrollShown = true;
+	let previousFromTop = 0;
+	let topClass: 'top-12' | 'top-0' = 'top-12';
 	const iconMap = {
 		info: InformationFilledIcon,
 		help: HelpFilledIcon,
@@ -47,11 +71,32 @@
 		}).format(date);
 		return convertedDate;
 	}
+
+	function scrollEventHandler(ev: Event) {
+		const currentFromTop = window.scrollY;
+		if (currentFromTop > previousFromTop) {
+			//scrolling down
+			if (hideOnScroll) {
+				isScrollShown = false;
+			} else {
+				topClass = 'top-0';
+			}
+		} else {
+			//scrolling up
+			if (hideOnScroll) {
+				isScrollShown = true;
+			} else {
+				topClass = 'top-12';
+			}
+		}
+		previousFromTop = currentFromTop;
+	}
 </script>
 
-{#if announcement && isShown}
+<svelte:window on:scroll={scrollEventHandler} />
+{#if announcement && isShown && isScrollShown}
 	<div
-		class="flex items-center fixed px-4 lg:px-10 w-screen text-white top-12 h-12 font-normal {bgColor}"
+		class="{topClass} {bgColor} flex items-center fixed h-12 px-4 lg:px-10 w-screen text-white font-normal"
 		transition:slide={{ duration: 350, axis: 'y' }}
 	>
 		<div class="flex items-center pr-4">
@@ -64,7 +109,7 @@
 				>{dateStringBuilder(announcement.dateStart, announcement.dateEnd)}</span
 			>
 		</div>
-		<div class="ml-auto">
+		<div class="ml-auto pl-8">
 			{#if announcement.link}
 				<a class="text-white whitespace-nowrap" href={announcement.link} aria-label="รายละเอียด"
 					>รายละเอียด</a

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
-	import SideLinkMenu from './SideLinkMenu.svelte';
+	import SideMenuLink from './SideMenuLink.svelte';
 	import SideMenu from './SideMenu.svelte';
 
 	export let menuList: Menu[] = [];
@@ -10,7 +10,7 @@
 	{#each menuList as menu, index}
 		<li>
 			{#if menu.type === 'link' || menu.type === 'both'}
-				<SideLinkMenu linkMenu={menu} />
+				<SideMenuLink linkMenu={menu} />
 			{:else}
 				<SideMenu {menu}>
 					<svelte:self menuList={menu.subs} />

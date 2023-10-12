@@ -1,11 +1,8 @@
-<svg
-	xmlns="http://www.w3.org/2000/svg"
-	width="16"
-	height="8"
-	viewBox="0 0 16 8"
-	fill="none"
-	{...$$restProps}
->
+<script>
+	import BaseSvg from './BaseSvg.svelte';
+</script>
+
+<BaseSvg {...$$restProps}>
 	<g clip-path="url(#clip0_1862_10601)">
 		<path
 			d="M12.3494 0.571136V1.86151L12.9 2.00223C13.0867 2.04515 13.0874 2.17813 13.0005 2.49826L12.2255 5.50468H12.1542L11.3707 3.16526L10.4917 5.94935L11.0053 7.65977H13.5596L15.3255 2.074C15.3326 2.04982 15.3457 2.02778 15.3636 2.00985C15.3815 1.99191 15.4037 1.97866 15.4281 1.97127L15.9979 1.86151V0.571136H12.3494Z"
@@ -16,9 +13,4 @@
 			fill="white"
 		/>
 	</g>
-	<defs>
-		<clipPath id="clip0_1862_10601">
-			<rect width="16" height="7.08863" fill="white" transform="translate(0 0.571152)" />
-		</clipPath>
-	</defs>
-</svg>
+</BaseSvg>

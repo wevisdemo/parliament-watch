@@ -2,6 +2,8 @@
 	import { MenuTypes, type Menu } from '$models/menu';
 
 	import Banner from './Banner.svelte';
+	import MenuPane from './MenuPane.svelte';
+	import MenuList from './MenuList.svelte';
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
 	import SideMenuList from './SideMenuList.svelte';
@@ -11,11 +13,12 @@
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import NavigationPane from './NavigationPane.svelte';
-	import AnnouncementPane from './AnnouncementPane.svelte';
+	import AnnouncementBar from './AnnouncementBar.svelte';
 	import type { Announcement } from '$models/announcement';
 
-	let logoLong = '/images/logo/pw-long-white.png';
-	let logoShort = '/images/logo/pw-short-white.png';
+	import logoLong from '/static/images/logo/pw-long-white.png';
+	import logoShort from '/static/images/logo/pw-short-white.png';
+
 	let screenSize: number;
 	let previousFromTop = 0;
 	let showHeader = true;
@@ -100,9 +103,9 @@
 				<Banner {logoLong} {logoShort} />
 			</svelte:fragment>
 			<svelte:fragment slot="menu">
-				<div class="hidden lg:block">
-					<p class="text-white">-------MENU WILL GOING HERE-------</p>
-				</div>
+				<MenuPane>
+					<MenuList {menuList} />
+				</MenuPane>
 			</svelte:fragment>
 			<svelte:fragment slot="trailing">
 				<input
@@ -115,7 +118,7 @@
 	{/if}
 </header>
 
-<AnnouncementPane {announcement} />
+<AnnouncementBar {announcement} />
 
 <SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}

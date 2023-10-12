@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
+	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
 	export let menu: Menu;
 	// export let index: number;
@@ -8,9 +9,13 @@
 <div class="flex flex-col">
 	<div class="flex items-center pl-4">
 		<div class="flex w-4">
-			<svelte:component this={menu.icon} class="text-inverse-link" />
+			{#if menu.icon === WeVisIcon}
+				<svelte:component this={menu.icon} size={16} viewBoxWidth={16} viewBoxHeight={8} />
+			{:else}
+				<svelte:component this={menu.icon} class="text-inverse-link" />
+			{/if}
 		</div>
-		<p class="font-gray-10 p-3 whitespace-nowrap">{menu.label}</p>
+		<p class="text-gray-10 p-3 whitespace-nowrap">{menu.label}</p>
 	</div>
 	<slot />
 </div>
