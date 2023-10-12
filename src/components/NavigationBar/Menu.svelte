@@ -30,7 +30,8 @@
 		<span>
 			<ChevronDownIcon
 				size={16}
-				class="{active ? 'rotate-180' : ''}  transition-all duration-200"
+				class="{active ? 'rotate-180 !text-gray-10' : ''}
+                    text-gray-30 group-hover:text-gray-10 transition-all duration-200"
 			/>
 		</span>
 	</div>
