@@ -75,7 +75,7 @@
 			  );
 </script>
 
-<Hst.Story title="Data Page" layout={{ type: 'single', iframe: true }}>
+<Hst.Story title="DataPage" layout={{ type: 'single', iframe: true }}>
 	<div class="font-sans body-02 bg-white">
 		<DataPage
 			{breadcrumbList}

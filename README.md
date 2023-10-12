@@ -2,6 +2,8 @@
 
 Citizens are watching
 
+> **HACKTOBERFEST 2023** 🎉 - get a free limited-edition sticker on approved PR [read more](https://www.facebook.com/wevisdemo/posts/pfbid0nhDdBgYsDqmfTN3mf3TQLQ1zPDcksUi7HM6zSysGCynu3m69GnxPBs7LRmuybw8Xl)
+
 **Table of Content**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -48,6 +50,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 ### Front-end
 
 - [Svelte](https://svelte.dev) + [SvelteKit](https://kit.svelte.dev)
+- [TypeScript](https://www.typescriptlang.org/)
 - [Carbon Design System (v10)](https://v10.carbondesignsystem.com) + [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
 - [TailwindCSS](https://tailwindcss.com)
 - [Histoire](https://histoire.dev/) for the components documentation
@@ -121,7 +124,9 @@ The project design system is based on Carbon Design System v10 with some modific
 ### Colors
 
 - [tailwind.config.js](tailwind.config.js) define utility classes based on color function name according to the Carbon's theme (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)>))
-- [colors.scss](src/styles/carbon/colors.scss) define global sass variable of all color palette (see [Figma file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>))
+- scss variable (need to be imported where you want to use)
+  - [colors.scss](src/styles/carbon/colors.scss) define variable of all color palette (see [Figma file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>))
+  - [theme.scss](src/styles/carbon/theme.scss) define variable according to the carbom theme's color function name (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)?node-id=169%3A0>))
 
 ### Components
 

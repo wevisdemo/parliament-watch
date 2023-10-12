@@ -1,14 +1,13 @@
 <script lang="ts">
 	import SideNav from '$components/politicians/SideNav.svelte';
-
-	import Share from '$components/Share/Share.svelte';
 	import General from '$components/icons/GeneralIcon.svelte';
 	import Politician from '$components/icons/PoliticianIcon.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
 	import PartyDetail from '$components/politicians/PartyDetail.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
-	import VotingResultTag from '$components/politicians/VotingResultTag.svelte';
+	import Share from '$components/Share/Share.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button, InlineNotification } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
@@ -344,10 +343,5 @@
 				>
 			</div>
 		</Section>
-		<!-- <Section id="data" title="Data">
-			<div class="overflow-x-auto">
-				<pre>{JSON.stringify(politician, null, 2)}</pre>
-			</div>
-		</Section> -->
 	</div>
 </div>
