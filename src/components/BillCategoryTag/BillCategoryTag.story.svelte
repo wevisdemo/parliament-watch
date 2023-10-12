@@ -7,8 +7,8 @@
 </script>
 
 <Hst.Story title="BillCategoryTag" layout={{ type: 'grid' }}>
-	<Hst.Variant title="BillCategory">
-		<BillCategoryTag {isLarge} />
+	<Hst.Variant title="PublicTransport">
+		<BillCategoryTag {isLarge} label="ขนส่งสาธารณะ" />
 	</Hst.Variant>
 	<svelte:fragment slot="controls">
 		<Hst.Checkbox title="isLarge" bind:value={isLarge} />
