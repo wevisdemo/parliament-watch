@@ -14,11 +14,18 @@
 				<li><a href="/assemblies/senates-12">สว.</a></li>
 			</ul>
 		</li>
+		<li>
+			<a href="/legislative-process">[WEV-18] Users can learn the legislative process</a>
+		</li>
 	</ul>
 </div>
 
 <style>
 	ul {
 		@apply list-disc list-inside;
+	}
+
+	a {
+		@apply underline;
 	}
 </style>
