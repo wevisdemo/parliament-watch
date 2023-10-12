@@ -6,6 +6,7 @@ export default defineConfig({
 	setupFile: '/src/histoire.setup.ts',
 	outDir: 'build/stories',
 	vite: {
-		base: process.env.HISTOIRE_BASE || '/'
+		base: process.env.HISTOIRE_BASE || '/',
+		publicDir: 'static'
 	}
 });
