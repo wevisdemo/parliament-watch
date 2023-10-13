@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Header from '$components/Assemblies/Header.svelte';
-	import Overall from '$components/Assemblies/Overall.svelte';
+	import Overall from '$components/Assemblies/Summary.svelte';
 
 	export let data;
 </script>
 
 <div class="md:px-[64px] px-[16px]">
 	<Header data={data.assembly} />
-	<Overall />
+	<Overall summary={data.summary} />
 </div>
 
 <!-- <div class="whitespace-pre">

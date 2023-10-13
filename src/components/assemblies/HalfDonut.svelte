@@ -1,26 +1,25 @@
-<!-- FILEPATH: /Users/petchsongpon/projects/wevis/parliament-watch/src/components/assemblies/HalfCircle.svelte -->
-
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
 
 	export let percent = 0;
 	export let color = '#3904E9';
+	export let id: string;
 
 	const roundedPercent: number = Math.round(percent);
 
 	let width = 144;
-	let height = 144;
-	let radius: number = Math.min(width, height) / 2;
+	let height = 72;
+	let radius = 72;
 
 	onMount(() => {
 		let svg = d3
-			.selectAll('#half-donut')
+			.selectAll(`#${id}`)
 			.append('svg')
 			.attr('width', width)
 			.attr('height', height)
 			.append('g')
-			.attr('transform', `translate(${width / 2}, ${height / 2})`);
+			.attr('transform', `translate(${width / 2}, ${height})`);
 
 		let g = svg.append('g').attr('class', 'g-arc');
 
@@ -58,4 +57,4 @@
 	});
 </script>
 
-<div id="half-donut" />
+<div {id} />
