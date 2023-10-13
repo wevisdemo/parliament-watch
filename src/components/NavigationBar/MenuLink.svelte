@@ -2,7 +2,6 @@
 	import type { Menu } from '$models/menu';
 	export let linkMenu: Menu;
 	export let additionalClass = '';
-	// export let index: number;
 </script>
 
 <a

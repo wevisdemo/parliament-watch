@@ -1,17 +1,35 @@
+<script context="module" lang="ts">
+	let openMenu: HTMLButtonElement | null = null;
+</script>
+
 <script lang="ts">
 	import type { Menu } from '$models/menu';
+	import { slide } from 'svelte/transition';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import ChevronDownIcon from 'carbon-icons-svelte/lib/ChevronDown.svelte';
 
 	export let menu: Menu;
 	let active = false;
 	// export let index: number;
+
+	function menuOpen(ev: Event) {
+		const clickedMenu: HTMLButtonElement = ev.currentTarget as HTMLButtonElement;
+		// if open menu is not clicked menu, close open menu and open a clicked menu
+		// else if open menu is clicked menu, close open menu
+		if (clickedMenu !== openMenu) {
+			openMenu?.click();
+			openMenu = clickedMenu;
+		} else {
+			openMenu = null;
+		}
+		active = !active;
+	}
 </script>
 
 <button
 	class="flex bg-white/0 p-0 border-0 hover:bg-gray-90 cursor-pointer group
     {active ? '!bg-gray-90' : ''}"
-	on:click={() => (active = !active)}
+	on:click={menuOpen}
 >
 	<div class="flex items-center px-4">
 		<div class="flex w-4">
@@ -37,7 +55,7 @@
 	</div>
 </button>
 {#if active}
-	<div class="flex flex-col absolute bg-gray-90 w-[200px]">
+	<div class="flex flex-col absolute bg-gray-90 w-[225px]" transition:slide={{ duration: 250 }}>
 		<slot />
 	</div>
 {/if}
