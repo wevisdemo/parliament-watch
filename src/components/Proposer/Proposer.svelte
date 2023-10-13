@@ -77,11 +77,12 @@
 	</div>
 	<p class="body-01 sm:ml-1 break-words">
 		<span class="text-text-01">{proposerName()} {proposerTerm()}</span>
+		<br class="sm:hidden" />
 		{#if common?.description}
 			<span class="text-text-02">{common.description}</span>
 		{/if}
 		{#if partyPolitician?.party.name}
-			<br /><span class="text-text-02">พรรค{partyPolitician?.party.name}</span>
+			<span class="text-text-02">พรรค{partyPolitician?.party.name}</span>
 		{/if}
 	</p>
 </div>
