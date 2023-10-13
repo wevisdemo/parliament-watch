@@ -24,12 +24,28 @@
 		}
 		active = !active;
 	}
+
+	function clickOutSide(node: HTMLButtonElement) {
+		const handleClick = (ev: Event) => {
+			if (node && !node.contains(ev.target as Node) && !ev.defaultPrevented) {
+				active = false;
+				openMenu = null;
+			}
+		};
+		document.addEventListener('click', handleClick, true);
+		return {
+			destroy() {
+				document.removeEventListener('click', handleClick, true);
+			}
+		};
+	}
 </script>
 
 <button
 	class="flex bg-white/0 p-0 border-0 hover:bg-gray-90 cursor-pointer group
     {active ? '!bg-gray-90' : ''}"
 	on:click={menuOpen}
+	use:clickOutSide
 >
 	<div class="flex items-center px-4">
 		<div class="flex w-4">
@@ -55,7 +71,10 @@
 	</div>
 </button>
 {#if active}
-	<div class="flex flex-col absolute bg-gray-90 w-[225px]" transition:slide={{ duration: 250 }}>
+	<div
+		class="flex flex-col absolute bg-gray-90 w-[225px] overflow-hidden"
+		transition:slide={{ duration: 250 }}
+	>
 		<slot />
 	</div>
 {/if}
