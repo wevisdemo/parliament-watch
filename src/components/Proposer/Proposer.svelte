@@ -2,6 +2,7 @@
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import type { Assembly } from '$models/assembly';
+	import type { Politician } from '$models/politician';
 	import dayjs from 'dayjs';
 
 	type CommonProposer = {
@@ -9,11 +10,14 @@
 		description?: string;
 	};
 
+	export let politician: Politician | undefined = undefined;
 	export let assembly: Assembly | undefined = undefined;
 	export let common: CommonProposer | undefined = undefined;
 
 	$: proposerName = () => {
-		if (assembly) {
+		if (politician) {
+			return [politician.prefix ?? '', politician.firstname, politician.lastname].join(' ');
+		} else if (assembly) {
 			return assembly.name;
 		} else if (common) {
 			return common.name;
