@@ -5,6 +5,11 @@
 	import type { Party } from '$models/party';
 	import type { Politician } from '$models/politician';
 	import dayjs from 'dayjs';
+	import 'dayjs/locale/th';
+	import buddhistEra from 'dayjs/plugin/buddhistEra';
+
+	dayjs.extend(buddhistEra);
+	dayjs.locale('th');
 
 	type CommonProposer = {
 		name: string;
@@ -35,7 +40,7 @@
 	};
 
 	const getAssemblyTermText = (assembly: Assembly) =>
-		`ชุดที่ ${assembly.term} (${dayjs(assembly.startedAt).year()})`;
+		`ชุดที่ ${assembly.term} (${dayjs(assembly.startedAt).format('BBBB')})`;
 
 	$: proposerTerm = () => {
 		if (partyPolitician?.assembly) {
@@ -70,7 +75,7 @@
 			</div>
 		{/if}
 	</div>
-	<div class="sm:ml-1 break-words">
+	<p class="body-01 sm:ml-1 break-words">
 		<span class="text-text-01">{proposerName()} {proposerTerm()}</span>
 		{#if common?.description}
 			<span class="text-text-02">{common.description}</span>
@@ -78,5 +83,5 @@
 		{#if partyPolitician?.party.name}
 			<br /><span class="text-text-02">พรรค{partyPolitician?.party.name}</span>
 		{/if}
-	</div>
+	</p>
 </div>
