@@ -16,8 +16,11 @@
 	import AnnouncementBar from './AnnouncementBar.svelte';
 	import type { Announcement } from '$models/announcement';
 
-	import logoLong from '/static/images/logo/pw-long-white.png';
-	import logoShort from '/static/images/logo/pw-short-white.png';
+	//import logoLong from '/static/images/logo/pw-long-white.png';
+	//import logoShort from '/static/images/logo/pw-short-white.png';
+
+	const logoLong = '/images/logo/pw-long-white.png';
+	const logoShort = '/images/logo/pw-short-white.png';
 
 	let screenSize: number;
 	let previousFromTop = 0;
