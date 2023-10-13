@@ -13,6 +13,7 @@
 
 	type PartyPolitician = {
 		politician: Politician;
+		assembly: Assembly;
 		party: Party;
 	};
 
@@ -33,9 +34,16 @@
 		return '';
 	};
 
+	const getAssemblyTermText = (assembly: Assembly) =>
+		`ชุดที่ ${assembly.term} (${dayjs(assembly.startedAt).year()})`;
+
 	$: proposerTerm = () => {
-		if (assembly) {
-			return `ชุดที่ ${assembly.term} (${dayjs(assembly.startedAt).year()})`;
+		if (partyPolitician?.assembly) {
+			return `${partyPolitician.assembly.abbreviation} ${getAssemblyTermText(
+				partyPolitician.assembly
+			)}`;
+		} else if (assembly) {
+			return getAssemblyTermText(assembly);
 		}
 
 		return '';

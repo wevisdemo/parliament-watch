@@ -12,6 +12,7 @@
 	<Proposer
 		partyPolitician={{
 			politician: movingForwardPolitician,
+			assembly: rep26,
 			party: movingForwardParty
 		}}
 	/>
