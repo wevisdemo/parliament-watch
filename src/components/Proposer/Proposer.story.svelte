@@ -19,7 +19,7 @@
 	<Proposer assembly={rep26} />
 	<Proposer
 		common={{
-			name: 'นายยิ่งชีพ อัชชานนท',
+			name: 'นายยิ่งชีพ อัชชานนท์',
 			description: 'และประชาชน 200,000 คน'
 		}}
 	/>
