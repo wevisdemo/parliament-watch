@@ -8,7 +8,6 @@
 	import { ArrowUpRight } from 'carbon-icons-svelte';
 	import FooterContact from './FooterContact.svelte';
 	import FooterMenuGroup from './FooterMenuGroup.svelte';
-	import pwLogo from '/static/images/logo/pw-short-white.png';
 
 	const representativeMenu: Link[] = [
 		{
@@ -83,7 +82,7 @@
 		class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 md:gap-y-4 lg:gap-x-6 gap-y-4 pb-4 border-solid border-0 border-b border-ui-04 text-gray-30"
 	>
 		<div class="row-span-2">
-			<img width="120px" height="34px" src={pwLogo} alt="logo short" />
+			<img width="120px" height="34px" src="/images/logo/pw-short-white.png" alt="logo short" />
 		</div>
 		<FooterMenuGroup title="สมาชิกรัฐสภา" menuItems={representativeMenu}>
 			<svelte:fragment slot="titleIcon">
