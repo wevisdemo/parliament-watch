@@ -66,16 +66,16 @@ erDiagram
     number id PK
     string title
     string description
-    string category
+    string[] categories
     Date date
     string meetingType
     string[] participatedAssembleIds FK
-    VoteOption[] voteOptions "DefaultVotOption | {label: string, color: string}"
+    VoteOption[] voteOptions "DefaultVoteOption | {label: string, color: string}"
     string winningCondition
     string result "passed | failed | string (other result)"
     number relatedBillId FK
     string sourceUrl
-    Link[] files "label: string, url: string"
+    Link[] files "label: string, url: string, mediaType: string"
   }
 
   Vote {

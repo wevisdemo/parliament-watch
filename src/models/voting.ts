@@ -4,11 +4,11 @@ export interface Voting {
 	id: number;
 	title: string;
 	description?: string;
-	category: string;
+	categories: string[];
 	date: Date;
 	meetingType: string;
 	participatedAssembleIds: string[];
-	voteOptions: (DefaultVoteOption | string)[];
+	voteOptions: (DefaultVoteOption | CustomVoteOption | string)[];
 	winningCondition: string;
 	result: DefaultVotingResult | string;
 	relatedBillId?: number;

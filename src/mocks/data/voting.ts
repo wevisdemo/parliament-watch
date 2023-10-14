@@ -24,7 +24,8 @@ export const mockCategory = [
 	'ขนส่งสาธารณะ',
 	'แก้รัฐธรรมนูญ',
 	'ที่อยู่อาศัย',
-	'สวัสดิการ'
+	'สวัสดิการ',
+	'สิ่งแวดล้อม'
 ];
 
 export const passedVoting: Voting = {
@@ -32,7 +33,7 @@ export const passedVoting: Voting = {
 	title: 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)',
 	description:
 		'ร่างรัฐธรรมนูญแห่งราชอาณาจักรไทย แก้ไขเพิ่มเติม พุทธศักราช .... (แก้ไขเพิ่มเติมหมวด 14 มาตรา 249 มาตรา 250 มาตรา 251 มาตรา 252 มาตรา 253 มาตรา 254 เพิ่มมาตรา 254/1 มาตรา 254/2 มาตรา 254/3 มาตรา 254/4 มาตรา 254/5 และมาตรา 254/6)',
-	category: 'เศรษฐกิจ',
+	categories: ['ขนส่งสาธารณะ', 'สิ่งแวดล้อม'],
 	date: new Date(),
 	meetingType: 'สภาร่วม',
 	participatedAssembleIds: [rep26.id],
@@ -41,15 +42,34 @@ export const passedVoting: Voting = {
 		'1.ได้เสียงเกินกึ่งหนึ่งของสภา 2.ได้เสียงฝ่ายค้านอย่างน้อย 20% 3. ได้เสียง สว. อย่างน้อย 1 ใน 3',
 	result: DefaultVotingResult.Passed,
 	sourceUrl: 'https://google.com',
-	files: []
+	files: [
+		{
+			label: 'เอกสารที่พิจารณา',
+			url: 'https://google.com',
+			mediaType: 'application/pdf'
+		},
+		{
+			label: 'เอกสารรายงานผลการลงมติ',
+			url: 'https://google.com',
+			mediaType: 'application/pdf'
+		},
+		{
+			label: 'ผลการลงมติรายคน',
+			url: 'https://google.com',
+			mediaType: 'text/csv'
+		}
+	]
 };
 
 export const failedVoting: Voting = {
 	...passedVoting,
+	id: 2,
 	result: DefaultVotingResult.Failed
 };
 
 export const candidateVoting: Voting = {
 	...passedVoting,
+	id: 3,
+	voteOptions: customVoteOption,
 	result: 'ชื่อแคนดิเดต'
 };
