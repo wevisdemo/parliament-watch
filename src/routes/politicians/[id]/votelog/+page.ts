@@ -17,7 +17,7 @@ import {
 interface VotingSummary
 	extends Pick<
 		Voting,
-		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssembleIds' | 'category'
+		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssembleIds' | 'categories'
 	> {
 	voteOption: DefaultVoteOption | CustomVoteOption;
 	isVoteAlignWithPartyMajority: boolean;
@@ -50,7 +50,7 @@ export async function load({ params }) {
 		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
 		participatedAssembleIds: [i % 2 ? rep26.id : gov35.id],
-		category: mockCategory[i % mockCategory.length],
+		categories: [mockCategory[i % mockCategory.length]],
 		result: i % 3 ? DefaultVotingResult.Passed : DefaultVotingResult.Failed,
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : [],
 		voteOption: [...defaultVoteOptions, ...customVoteOption][

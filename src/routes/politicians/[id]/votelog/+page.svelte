@@ -91,7 +91,7 @@
 						) &&
 						filterVoteType.includes(generalVoteType(votingDataEntry.voteOption)) &&
 						filterVoteDirection.includes(votingDataEntry.isVoteAlignWithPartyMajority) &&
-						filterCatg.includes(votingDataEntry.category)
+						filterCatg.some((category) => votingDataEntry.categories.includes(String(category)))
 					);
 			  });
 
