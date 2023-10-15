@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MenuTypes, type Menu } from '$models/menu';
+	import type { Menu } from '$models/menu';
 
 	import Banner from './Banner.svelte';
 	import MenuPane from './MenuPane.svelte';
@@ -13,91 +13,54 @@
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import NavigationPane from './NavigationPane.svelte';
-	import AnnouncementBar from './AnnouncementBar.svelte';
-	import type { Announcement } from '$models/announcement';
 	import SearchInput from './SearchInput.svelte';
 
 	//import logoLong from '/static/images/logo/pw-long-white.png';
 	//import logoShort from '/static/images/logo/pw-short-white.png';
 
 	export let searchActionLink = '/search';
-	/// FOR TESTING MENU UI
-	export let menuList: Menu[] = [
-		{
-			label: 'สมาชิกรัฐสภา',
-			icon: PoliticianIcon,
-			url: null,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'สภาผู้แทนราษฎร', url: '/representives', type: MenuTypes.link },
-				{ label: 'วุฒิสภา', url: '/senate', type: MenuTypes.link }
-			]
-		},
-		{
-			label: 'การออกกฎหมาย',
-			icon: LawIcon,
-			url: null,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess', type: MenuTypes.link },
-				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws', type: MenuTypes.link }
-			]
-		},
-		{
-			label: 'การลงมติ',
-			icon: VoteIcon,
-			url: '/voting',
-			type: MenuTypes.both
-		},
-		{
-			label: 'เกี่ยวกับเรา',
-			icon: WeVisIcon,
-			url: null,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
-				{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
-				{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
-			]
-		}
-	];
-	/// FOR TESTING Announcement UI
-	export let announcements: Announcement[] = [
-		{
-			title: 'รับสมัคร',
-			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
-			dateStart: new Date('2023-10-15'),
-			dateEnd: new Date('2023-12-15'),
-			link: '/volunteer'
-		},
-		{
-			title: 'รับสมัคร',
-			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
-			dateStart: new Date('2023-10-15'),
-			dateEnd: new Date('2023-12-15'),
-			link: '/volunteer',
-			bgColor: 'bg-blue-30',
-			iconType: 'help'
-		},
-		{
-			title: 'รับสมัคร',
-			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
-			dateStart: new Date('2023-10-15'),
-			dateEnd: new Date('2023-12-15'),
-			link: '/volunteer',
-			bgColor: 'bg-red-40',
-			iconType: 'warning'
-		},
-		{
-			title: 'รับสมัคร',
-			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
-			dateStart: new Date('2023-10-15'),
-			dateEnd: new Date('2023-12-15'),
-			link: '/volunteer',
-			bgColor: 'bg-green-40',
-			iconType: 'success'
-		}
-	];
+
+	export let menuList: Menu[];
+	//? DEFAULT MENU LIST
+	// = [
+	// 	{
+	// 		label: 'สมาชิกรัฐสภา',
+	// 		icon: PoliticianIcon,
+	// 		url: null,
+	// 		type: MenuTypes.root,
+	// 		subs: [
+	// 			{ label: 'สภาผู้แทนราษฎร', url: '/representives', type: MenuTypes.link },
+	// 			{ label: 'วุฒิสภา', url: '/senate', type: MenuTypes.link }
+	// 		]
+	// 	},
+	// 	{
+	// 		label: 'การออกกฎหมาย',
+	// 		icon: LawIcon,
+	// 		url: null,
+	// 		type: MenuTypes.root,
+	// 		subs: [
+	// 			{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess', type: MenuTypes.link },
+	// 			{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws', type: MenuTypes.link }
+	// 		]
+	// 	},
+	// 	{
+	// 		label: 'การลงมติ',
+	// 		icon: VoteIcon,
+	// 		url: '/voting',
+	// 		type: MenuTypes.both
+	// 	},
+	// 	{
+	// 		label: 'เกี่ยวกับเรา',
+	// 		icon: WeVisIcon,
+	// 		url: null,
+	// 		type: MenuTypes.root,
+	// 		subs: [
+	// 			{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
+	// 			{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
+	// 			{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
+	// 		]
+	// 	}
+	// ];
 
 	const logoLong = '/images/logo/pw-long-white.png';
 	const logoShort = '/images/logo/pw-short-white.png';
@@ -151,10 +114,6 @@
 		</NavigationPane>
 	{/if}
 </header>
-
-{#each announcements as announcement}
-	<AnnouncementBar {announcement} />
-{/each}
 
 <SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
