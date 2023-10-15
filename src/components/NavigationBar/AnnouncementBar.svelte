@@ -16,22 +16,19 @@
 	 * - link --  A link of announcement
 	 */
 	export let announcement: Announcement;
-	/** A string of background color class of the pane.
-	 * - default value -- "bg-blue-60"
+
+	/** Boolean value that activate/deactivate function to hide a announcement pane on scrolling down
+	 * - default value -- true
 	 */
-	export let bgColor = 'bg-blue-60';
+	export let hideOnScroll = true;
+
 	/** A type of leading icon
 	 * - "info" (default) -- InformationFilled Icon
 	 * - "help" -- HelpFilled Icon
 	 * - "warning" -- WarningAltFilled Icon
 	 * - "success" -- CheckmarkFilled Icon
 	 */
-	export let iconType: 'info' | 'help' | 'warning' | 'success' = 'info';
-	/** Boolean value that activate/deactivate function to hide a announcement pane on scrolling down
-	 * - default value -- true
-	 */
-	export let hideOnScroll = true;
-
+	let iconType = announcement.iconType ?? 'info';
 	let isShown = true;
 	let isScrollShown = true;
 	let previousFromTop = 0;
@@ -96,7 +93,8 @@
 <svelte:window on:scroll={scrollEventHandler} />
 {#if announcement && isShown && isScrollShown}
 	<div
-		class="{topClass} {bgColor} flex items-center fixed h-12 px-4 lg:px-10 w-screen text-white font-normal"
+		class="{topClass} {announcement.bgColor ??
+			'bg-blue-60'} flex items-center fixed h-12 px-4 lg:px-10 w-screen text-white font-normal"
 		transition:slide={{ duration: 350, axis: 'y' }}
 	>
 		<div class="flex items-center pr-4">

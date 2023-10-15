@@ -62,13 +62,42 @@
 		}
 	];
 	/// FOR TESTING Announcement UI
-	export let announcement: Announcement = {
-		title: 'รับสมัคร',
-		text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
-		dateStart: new Date('2023-10-15'),
-		dateEnd: new Date('2023-12-15'),
-		link: '/volunteer'
-	};
+	export let announcements: Announcement[] = [
+		{
+			title: 'รับสมัคร',
+			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
+			dateStart: new Date('2023-10-15'),
+			dateEnd: new Date('2023-12-15'),
+			link: '/volunteer'
+		},
+		{
+			title: 'รับสมัคร',
+			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
+			dateStart: new Date('2023-10-15'),
+			dateEnd: new Date('2023-12-15'),
+			link: '/volunteer',
+			bgColor: 'bg-blue-30',
+			iconType: 'help'
+		},
+		{
+			title: 'รับสมัคร',
+			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
+			dateStart: new Date('2023-10-15'),
+			dateEnd: new Date('2023-12-15'),
+			link: '/volunteer',
+			bgColor: 'bg-red-40',
+			iconType: 'warning'
+		},
+		{
+			title: 'รับสมัคร',
+			text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
+			dateStart: new Date('2023-10-15'),
+			dateEnd: new Date('2023-12-15'),
+			link: '/volunteer',
+			bgColor: 'bg-green-40',
+			iconType: 'success'
+		}
+	];
 
 	const logoLong = '/images/logo/pw-long-white.png';
 	const logoShort = '/images/logo/pw-short-white.png';
@@ -123,7 +152,9 @@
 	{/if}
 </header>
 
-<AnnouncementBar {announcement} />
+{#each announcements as announcement}
+	<AnnouncementBar {announcement} />
+{/each}
 
 <SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
