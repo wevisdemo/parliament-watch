@@ -15,7 +15,7 @@
 	import NavigationPane from './NavigationPane.svelte';
 	import AnnouncementBar from './AnnouncementBar.svelte';
 	import type { Announcement } from '$models/announcement';
-	import SearchingInput from './SearchingInput.svelte';
+	import SearchInput from './SearchInput.svelte';
 
 	//import logoLong from '/static/images/logo/pw-long-white.png';
 	//import logoShort from '/static/images/logo/pw-short-white.png';
@@ -113,7 +113,7 @@
 				</MenuPane>
 			</svelte:fragment>
 			<svelte:fragment slot="trailing">
-				<SearchingInput
+				<SearchInput
 					{searchActionLink}
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}
