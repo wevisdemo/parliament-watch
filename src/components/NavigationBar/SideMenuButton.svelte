@@ -6,7 +6,7 @@
 </script>
 
 <button
-	class="flex items-center justify-left bg-gray-100 border-0 p-0 mr-4 cursor-pointer lg:hidden"
+	class="flex items-center justify-left bg-gray-100 border-0 p-0 pl-4 cursor-pointer lg:hidden"
 	on:click
 >
 	{#if !isActive}

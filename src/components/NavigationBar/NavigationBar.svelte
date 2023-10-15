@@ -15,22 +15,14 @@
 	import NavigationPane from './NavigationPane.svelte';
 	import AnnouncementBar from './AnnouncementBar.svelte';
 	import type { Announcement } from '$models/announcement';
+	import SearchingInput from './SearchingInput.svelte';
 
 	//import logoLong from '/static/images/logo/pw-long-white.png';
 	//import logoShort from '/static/images/logo/pw-short-white.png';
 
-	const logoLong = '/images/logo/pw-long-white.png';
-	const logoShort = '/images/logo/pw-short-white.png';
-
-	let screenSize: number;
-	let previousFromTop = 0;
-	let showHeader = true;
-	let sideNavActive = false;
-
-	$: if (screenSize > 1056) sideNavActive = false;
-
+	export let searchActionLink = '/search';
 	/// FOR TESTING MENU UI
-	let menuList: Menu[] = [
+	export let menuList: Menu[] = [
 		{
 			label: 'สมาชิกรัฐสภา',
 			icon: PoliticianIcon,
@@ -69,15 +61,25 @@
 			]
 		}
 	];
-
 	/// FOR TESTING Announcement UI
-	let announcement: Announcement = {
+	export let announcement: Announcement = {
 		title: 'รับสมัคร',
 		text: 'อาสาสมัครกรอกข้อมูลกฎหมายที่ถูกเข้าชื่อเสนอ โดยประชาชน',
 		dateStart: new Date('2023-10-15'),
 		dateEnd: new Date('2023-12-15'),
 		link: '/volunteer'
 	};
+
+	const logoLong = '/images/logo/pw-long-white.png';
+	const logoShort = '/images/logo/pw-short-white.png';
+
+	let screenSize: number;
+	let previousFromTop = 0;
+	let showHeader = true;
+	let sideNavActive = false;
+	let hideMainMenu = false;
+
+	$: if (screenSize > 1056) sideNavActive = false;
 
 	function scrollEventHandler(ev: Event) {
 		const currentFromTop = window.scrollY;
@@ -106,15 +108,15 @@
 				<Banner {logoLong} {logoShort} />
 			</svelte:fragment>
 			<svelte:fragment slot="menu">
-				<MenuPane>
+				<MenuPane hide={hideMainMenu}>
 					<MenuList {menuList} />
 				</MenuPane>
 			</svelte:fragment>
 			<svelte:fragment slot="trailing">
-				<input
-					type="text"
-					aria-label="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
-					placeholder="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
+				<SearchingInput
+					{searchActionLink}
+					on:activate={() => (hideMainMenu = true)}
+					on:deactivate={() => (hideMainMenu = false)}
 				/>
 			</svelte:fragment>
 		</NavigationPane>

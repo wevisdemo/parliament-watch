@@ -1,4 +1,8 @@
-<div class="hidden lg:flex relative ml-4 h-full">
+<script lang="ts">
+	export let hide = false;
+</script>
+
+<div class="hidden {hide ? 'lg:hidden' : 'lg:flex'} xl:flex relative h-full">
 	<div class="vl" />
 	<div class="ml-4 flex h-full">
 		<slot />

@@ -61,7 +61,7 @@
 		>
 			{menu.label}
 		</p>
-		<span>
+		<span class="h-4">
 			<ChevronDownIcon
 				size={16}
 				class="{active ? 'rotate-180 !text-gray-10' : ''}
