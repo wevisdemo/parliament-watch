@@ -10,7 +10,7 @@ import {
 	pheuThaiParty
 } from '../../../mocks/data/party.js';
 
-interface Summary {
+export interface Summary {
 	totalMembers: number;
 	highlightGroup: MemberGroup[];
 	groupBySex: MemberGroup[];
@@ -19,15 +19,15 @@ interface Summary {
 	groupByAssetValue: MemberGroup[];
 }
 
-interface MemberGroup {
+export interface MemberGroup {
 	name: string;
 	total: number;
 	parties?: (Pick<Party, 'name' | 'color'> & { count: number })[];
 }
 
-interface MainMember {
+export interface MainMember {
 	assemblyRole: string;
-	politician: Pick<Politician, 'id' | 'firstname' | 'lastname'>;
+	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'>;
 	party?: Party;
 	partyRole?: string;
 }
@@ -51,51 +51,52 @@ export function load({ params }) {
 		politician: {
 			id: 'สมชาติ-สกุลสมมุติ',
 			firstname: 'สมชาติ',
-			lastname: 'สกุลสมมุติ'
+			lastname: 'สกุลสมมุติ',
+			avatar: 'https://via.placeholder.com/64'
 		},
 		...(isSenates
 			? {}
 			: {
-				party: movingForwardParty,
-				partyRole: 'สส. บัญชีรายชื่อ'
-			})
+					party: movingForwardParty,
+					partyRole: 'สส. บัญชีรายชื่อ'
+			  })
 	}));
 
 	const summary: Summary = {
 		totalMembers: 500,
 		highlightGroup: isSenates
 			? [
-				{
-					name: 'เลือกโดย คสช.',
-					total: 194
-				},
-				{
-					name: 'เลือกกันเอง',
-					total: 50
-				},
-				{
-					name: 'โดยตำแหน่ง',
-					total: 6
-				}
-			]
+					{
+						name: 'เลือกโดย คสช.',
+						total: 194
+					},
+					{
+						name: 'เลือกกันเอง',
+						total: 50
+					},
+					{
+						name: 'โดยตำแหน่ง',
+						total: 6
+					}
+			  ]
 			: [
-				{
-					name: 'ฝ่ายรัฐบาล',
-					total: 300,
-					parties: [
-						{ ...pheuThaiParty, count: 200 },
-						{ ...bhumjaithaiParty, count: 100 }
-					]
-				},
-				{
-					name: 'ฝ่ายค้าน',
-					total: 200,
-					parties: [
-						{ ...movingForwardParty, count: 150 },
-						{ ...democratsParty, count: 50 }
-					]
-				}
-			],
+					{
+						name: 'ฝ่ายรัฐบาล',
+						total: 300,
+						parties: [
+							{ ...pheuThaiParty, count: 200 },
+							{ ...bhumjaithaiParty, count: 100 }
+						]
+					},
+					{
+						name: 'ฝ่ายค้าน',
+						total: 200,
+						parties: [
+							{ ...movingForwardParty, count: 150 },
+							{ ...democratsParty, count: 50 }
+						]
+					}
+			  ],
 		groupBySex: [
 			{
 				name: 'ชาย',

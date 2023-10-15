@@ -2,18 +2,20 @@
 	import type { Party } from '$models/party';
 	import Badge from './Badge.svelte';
 	import HalfDonutWrapper from './HalfDonutWrapper.svelte';
+	import {
+		getPercentWidth,
+		getRoundedPercent,
+		getSumOfGroupsTotal,
+		getTopOfGroups,
+		getTopOfGroupsPercent,
+		type PartySelected
+	} from './shared';
 	export let title = '';
 	export let data: MemberGroup[] = [];
 	interface MemberGroup {
 		name: string;
 		total: number;
 		parties?: (Pick<Party, 'name' | 'color'> & { count: number })[];
-	}
-
-	interface PartySelected {
-		label: string;
-		count: number;
-		color: string;
 	}
 
 	const getRenderPartyList = (parties: MemberGroup['parties'] = []): PartySelected[] => {
@@ -38,46 +40,9 @@
 		}
 		return result;
 	};
-
-	const getSumOfGroupsTotal = (groups: MemberGroup[]) => {
-		return groups.reduce((acc, group) => acc + group.total, 0);
-	};
-
-	const getSumOfPartiesCount = (parties: MemberGroup['parties'] = []) => {
-		return parties.reduce((acc, party) => acc + party.count, 0);
-	};
-
-	const getRoundedPercent = (value: number, total: number) => {
-		return Math.round((value / total) * 100);
-	};
-
-	const getMaxtPercent = (groups: MemberGroup[]) => {
-		return Math.max(
-			...groups.map((group) => getRoundedPercent(group.total, getSumOfGroupsTotal(groups)))
-		);
-	};
-
-	const getTopOfGroups = (groups: MemberGroup[]): MemberGroup => {
-		return groups.reduce((acc, group) => {
-			if (group.total > acc.total) {
-				return group;
-			}
-			return acc;
-		}, groups[0]);
-	};
-
-	const getTopOfGroupsPercent = (groups: MemberGroup[]): number => {
-		return getRoundedPercent(getTopOfGroups(groups).total, getSumOfGroupsTotal(groups));
-	};
-
-	const getPercentWidth = (targetCount: number, groups: MemberGroup[]) => {
-		const maxPercent = getMaxtPercent(groups);
-		const targetPercent = getRoundedPercent(targetCount, getSumOfGroupsTotal(groups));
-		return getRoundedPercent(targetPercent, maxPercent);
-	};
 </script>
 
-<div class="bg-ui-01 p-[16px] m-auto w-fit min-w-[226px] flex flex-col">
+<div class="bg-ui-01 p-[16px] m-auto min-w-[226px] w-full flex flex-col h-full">
 	<p class="fluid-heading-03">{title}</p>
 	<HalfDonutWrapper
 		chartId="summary-{title}"

@@ -5,7 +5,7 @@
 	export let chartId: string;
 </script>
 
-<div class="text-center grid gap-[4px] w-fit p-[8px] m-auto">
+<div class="text-center grid gap-[4px] w-fit p-[8px] mx-auto">
 	<div class="relative w-fit m-auto">
 		<HalfDonut id={chartId} {percent} color="#3904E9" />
 		<span
