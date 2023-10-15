@@ -70,6 +70,11 @@ export const failedVoting: Voting = {
 export const candidateVoting: Voting = {
 	...passedVoting,
 	id: 3,
-	voteOptions: customVoteOption,
-	result: 'ชื่อแคนดิเดต'
+	voteOptions: [
+		...customVoteOption,
+		DefaultVoteOption.Novote,
+		DefaultVoteOption.Abstain,
+		DefaultVoteOption.Absent
+	],
+	result: 'ชื่อแคนดิเดต 1'
 };
