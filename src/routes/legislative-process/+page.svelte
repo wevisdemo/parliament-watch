@@ -9,7 +9,7 @@
 
 <div class="flex flex-col w-full">
 	<header class="bg-teal-20">
-		<div class="w-full max-w-[800px] px-10 py-10 md:py-20">
+		<div class="w-full max-w-[800px] px-10 py-10 md:py-20 mx-auto">
 			<h1 class="fluid-heading-05 mb-4">ร่างกฎหมายกลายเป็นกฎหมายได้อย่างไร</h1>
 			<p>
 				<span class="text-text-primary font-bold">อัปเดตล่าสุด :</span>
@@ -17,7 +17,9 @@
 			</p>
 		</div>
 	</header>
-	<div class="w-full max-w-[800px] flex flex-col gap-10 px-4 md:px-10 py-8 bg-ui-01 md:bg-white">
+	<div
+		class="w-full max-w-[800px] flex flex-col gap-10 px-4 md:px-10 py-8 bg-ui-01 md:bg-white mx-auto"
+	>
 		<section class="flex flex-col gap-4 bg-white px-4 md:px-0 py-8 md:py-0">
 			<h1 class="fluid-heading-05 text-text-primary mb-4">แนะนำภาพรวม</h1>
 			<div>
