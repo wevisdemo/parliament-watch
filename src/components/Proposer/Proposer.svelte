@@ -65,13 +65,13 @@
 				alt="{partyPolitician.politician.firstname} {partyPolitician.politician.lastname}"
 				src={partyPolitician.politician.avatar}
 			/>
-		{:else if assembly}
+		{:else}
 			<div class="flex items-center justify-center w-full h-full rounded-full bg-black">
-				<PoliticianIcon class="text-white" />
-			</div>
-		{:else if common}
-			<div class="flex items-center justify-center w-full h-full rounded-full bg-black">
-				<PeopleIcon class="text-white" />
+				{#if assembly}
+					<PoliticianIcon class="text-white" />
+				{:else if common}
+					<PeopleIcon class="text-white" />
+				{/if}
 			</div>
 		{/if}
 	</div>
