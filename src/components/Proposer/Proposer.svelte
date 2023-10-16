@@ -26,7 +26,7 @@
 	export let assembly: Assembly | undefined = undefined;
 	export let common: CommonProposer | undefined = undefined;
 
-	$: proposerName = () => {
+	$: proposerName = (() => {
 		if (partyPolitician) {
 			const { politician } = partyPolitician;
 			return [politician.prefix ?? '', politician.firstname, politician.lastname].join(' ');
@@ -37,12 +37,12 @@
 		}
 
 		return '';
-	};
+	})();
 
 	const getAssemblyTermText = (assembly: Assembly) =>
 		`ชุดที่ ${assembly.term} (${dayjs(assembly.startedAt).format('BBBB')})`;
 
-	$: proposerTerm = () => {
+	$: proposerTerm = (() => {
 		if (partyPolitician?.assembly) {
 			return `${partyPolitician.assembly.abbreviation} ${getAssemblyTermText(
 				partyPolitician.assembly
@@ -52,7 +52,7 @@
 		}
 
 		return '';
-	};
+	})();
 </script>
 
 <div class="flex flex-col sm:flex-row justify-start items-start">
@@ -62,7 +62,7 @@
 				class="w-full h-full rounded-full object-cover"
 				loading="lazy"
 				decoding="async"
-				alt={`${partyPolitician.politician.firstname} ${partyPolitician.politician.lastname}`}
+				alt="{partyPolitician.politician.firstname} {partyPolitician.politician.lastname}"
 				src={partyPolitician.politician.avatar}
 			/>
 		{:else if assembly}
@@ -76,7 +76,7 @@
 		{/if}
 	</div>
 	<p class="body-01 sm:ml-1 break-words">
-		<span class="text-text-01">{proposerName()} {proposerTerm()}</span>
+		<span class="text-text-01">{proposerName} {proposerTerm}</span>
 		<br class="sm:hidden" />
 		{#if common?.description}
 			<span class="text-text-02">{common.description}</span>
