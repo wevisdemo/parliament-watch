@@ -3,10 +3,7 @@
 	export let linkMenu: Menu;
 	export let additionalClass = '';
 
-	let hoverClass = '';
-	$: linkMenu.type === 'both'
-		? (hoverClass = 'hover:bg-gray-90')
-		: (hoverClass = 'hover:bg-gray-80');
+	$: hoverClass = linkMenu.type === 'both' ? 'hover:bg-gray-90' : 'hover:bg-gray-80';
 </script>
 
 <a

@@ -3,7 +3,6 @@
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
 	export let menu: Menu;
-	// export let index: number;
 </script>
 
 <div class="flex flex-col">

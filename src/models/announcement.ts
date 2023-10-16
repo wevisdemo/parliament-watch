@@ -4,6 +4,6 @@ export interface Announcement {
 	dateStart: Date;
 	dateEnd: Date;
 	link?: string;
-	bgColor?: string;
+	bgColor?: `bg-${string}`;
 	iconType?: 'info' | 'help' | 'warning' | 'success';
 }

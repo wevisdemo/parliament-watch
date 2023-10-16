@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Menu } from '$models/menu';
+	import { MenuTypes, type Menu } from '$models/menu';
 
 	import Banner from './Banner.svelte';
 	import MenuPane from './MenuPane.svelte';
@@ -15,52 +15,45 @@
 	import NavigationPane from './NavigationPane.svelte';
 	import SearchInput from './SearchInput.svelte';
 
-	//import logoLong from '/static/images/logo/pw-long-white.png';
-	//import logoShort from '/static/images/logo/pw-short-white.png';
-
-	export let searchActionLink = '/search';
-
-	export let menuList: Menu[];
-	//? DEFAULT MENU LIST
-	// = [
-	// 	{
-	// 		label: 'สมาชิกรัฐสภา',
-	// 		icon: PoliticianIcon,
-	// 		url: null,
-	// 		type: MenuTypes.root,
-	// 		subs: [
-	// 			{ label: 'สภาผู้แทนราษฎร', url: '/representives', type: MenuTypes.link },
-	// 			{ label: 'วุฒิสภา', url: '/senate', type: MenuTypes.link }
-	// 		]
-	// 	},
-	// 	{
-	// 		label: 'การออกกฎหมาย',
-	// 		icon: LawIcon,
-	// 		url: null,
-	// 		type: MenuTypes.root,
-	// 		subs: [
-	// 			{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess', type: MenuTypes.link },
-	// 			{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws', type: MenuTypes.link }
-	// 		]
-	// 	},
-	// 	{
-	// 		label: 'การลงมติ',
-	// 		icon: VoteIcon,
-	// 		url: '/voting',
-	// 		type: MenuTypes.both
-	// 	},
-	// 	{
-	// 		label: 'เกี่ยวกับเรา',
-	// 		icon: WeVisIcon,
-	// 		url: null,
-	// 		type: MenuTypes.root,
-	// 		subs: [
-	// 			{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
-	// 			{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
-	// 			{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
-	// 		]
-	// 	}
-	// ];
+	const menuList: Menu[] = [
+		{
+			label: 'สมาชิกรัฐสภา',
+			icon: PoliticianIcon,
+			url: null,
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'สภาผู้แทนราษฎร', url: '/representives', type: MenuTypes.link },
+				{ label: 'วุฒิสภา', url: '/senate', type: MenuTypes.link }
+			]
+		},
+		{
+			label: 'การออกกฎหมาย',
+			icon: LawIcon,
+			url: null,
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess', type: MenuTypes.link },
+				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws', type: MenuTypes.link }
+			]
+		},
+		{
+			label: 'การลงมติ',
+			icon: VoteIcon,
+			url: '/voting',
+			type: MenuTypes.both
+		},
+		{
+			label: 'เกี่ยวกับเรา',
+			icon: WeVisIcon,
+			url: null,
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
+				{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
+				{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
+			]
+		}
+	];
 
 	const logoLong = '/images/logo/pw-long-white.png';
 	const logoShort = '/images/logo/pw-short-white.png';
@@ -75,13 +68,7 @@
 
 	function scrollEventHandler(ev: Event) {
 		const currentFromTop = window.scrollY;
-		if (currentFromTop > previousFromTop) {
-			//scrolling down
-			showHeader = false;
-		} else {
-			//scrolling up
-			showHeader = true;
-		}
+		showHeader = currentFromTop <= previousFromTop;
 		previousFromTop = currentFromTop;
 		sideNavActive = false;
 	}
@@ -106,7 +93,6 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trailing">
 				<SearchInput
-					{searchActionLink}
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}
 				/>

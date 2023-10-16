@@ -10,12 +10,9 @@
 
 	export let menu: Menu;
 	let active = false;
-	// export let index: number;
 
 	function menuOpen(ev: Event) {
 		const clickedMenu: HTMLButtonElement = ev.currentTarget as HTMLButtonElement;
-		// if open menu is not clicked menu, close open menu and open a clicked menu
-		// else if open menu is clicked menu, close open menu
 		if (clickedMenu !== openMenu) {
 			openMenu?.click();
 			openMenu = clickedMenu;

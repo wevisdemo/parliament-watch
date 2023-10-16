@@ -7,11 +7,10 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let searchActionLink = '';
 	export let activeSearch = false;
 	let searchButton: HTMLButtonElement;
 	let searchInput: HTMLInputElement;
-	let searchForm: HTMLFormElement;
+	let searchValue: string = '';
 
 	function searchClickHandle() {
 		if (!activeSearch) {
@@ -22,13 +21,11 @@
 
 	function introEndHandler() {
 		searchInput.focus();
-		searchButton.type = 'submit';
 	}
 
 	function closeClickHandle() {
 		activeSearch = false;
-		searchInput.value = '';
-		searchButton.type = 'button';
+		searchValue = '';
 		dispatch('deactivate');
 	}
 </script>
@@ -50,22 +47,13 @@
 			transition:slide={{ axis: 'x', duration: 250 }}
 			on:introend={introEndHandler}
 		>
-			<form
-				id="top-search-input"
-				bind:this={searchForm}
-				class="flex h-full"
-				method="POST"
-				action={searchActionLink}
-				use:enhance
-			>
-				<input
-					bind:this={searchInput}
-					name="navSearch"
-					type="text"
-					class=" w-52 bg-white/0 outline-none border-0 text-white leading-4"
-					placeholder="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
-				/>
-			</form>
+			<input
+				bind:value={searchValue}
+				name="navSearch"
+				type="text"
+				class=" w-52 bg-white/0 outline-none border-0 text-white leading-4"
+				placeholder="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
+			/>
 			<button
 				class="grid place-content-center bg-white/0 border-0 text-white cursor-pointer w-12 h-12"
 				on:click={closeClickHandle}

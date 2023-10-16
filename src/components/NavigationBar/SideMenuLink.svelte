@@ -3,7 +3,6 @@
 	import ArrowUpRightIcon from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	export let linkMenu: Menu;
 	export let additionalClass = '';
-	// export let index: number;
 </script>
 
 {#if linkMenu.type === 'link'}

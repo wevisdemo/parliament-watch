@@ -9,7 +9,7 @@
 </script>
 
 <ul class="flex items-center justify-start text-white {additionalClass}">
-	{#each menuList as menu, index}
+	{#each menuList as menu}
 		{#if menu.type === 'link' || menu.type === 'both'}
 			<li class="w-full">
 				<MenuLink linkMenu={menu} />
