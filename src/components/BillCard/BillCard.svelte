@@ -68,7 +68,7 @@
 
 				<div>
 					<p class="text-sm font-semibold">สถานะ</p>
-					<BillStatusTag isLarge={true} {status} />
+					<BillStatusTag isLarge {status} />
 					{#if currentState}
 						<p class="text-sm font-semibold">{currentState}</p>
 					{/if}
