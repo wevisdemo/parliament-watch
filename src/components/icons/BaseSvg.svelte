@@ -1,5 +1,7 @@
 <script lang="ts">
 	export let size = 16;
+	export let viewBoxWidth: number | undefined = undefined;
+	export let viewBoxHeight: number | undefined = undefined;
 	export let title: string | undefined = undefined;
 
 	$: labelled = $$props['aria-label'] || $$props['aria-labelledby'] || title;
@@ -8,7 +10,7 @@
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	fill="currentColor"
-	viewBox="0 0 16 16"
+	viewBox="0 0 {viewBoxWidth ?? 16} {viewBoxHeight ?? 16}"
 	preserveAspectRatio="xMidYMid meet"
 	width={size}
 	height={size}

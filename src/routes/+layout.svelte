@@ -1,12 +1,13 @@
 <script>
 	import '../styles/carbon/pre-compiled.css';
 	import '../styles/index.css';
-
+	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import Footer from '$components/Footer/Footer.svelte';
 </script>
 
 <main class="min-h-screen flex flex-col">
+  <NavigationBar />
 	<div class="flex-1">
 		<slot />
 	</div>

@@ -5,9 +5,11 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		screens: {
+			// https://carbon-components-svelte.onrender.com/components/Breakpoint
 			sm: '320px',
 			md: '672px',
-			lg: '1056px'
+			lg: '1056px',
+			xl: '1312px'
 		},
 		fontFamily: {
 			serif: ['Kondolar Thai', ...defaultTheme.fontFamily.serif],
