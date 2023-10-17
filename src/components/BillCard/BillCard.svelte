@@ -20,14 +20,16 @@
 	export let currentState: string | undefined;
 	export let daySinceProposed: number;
 	export let billUrl: string;
+
+	$: isLandscape = orientation === 'landscape';
 </script>
 
 <div
-	class="flex relative p-4 bg-white hover:bg-gray-10 rounded-sm {orientation === 'landscape'
+	class="flex relative p-4 bg-white hover:bg-gray-10 rounded-sm {isLandscape
 		? 'flex-row gap-x-6'
 		: 'flex-col gap-y-4 pt-6'}"
 >
-	<div class="space-y-1 {orientation === 'landscape' ? 'w-2/3' : 'w-full'}">
+	<div class="space-y-1 {isLandscape ? 'w-2/3' : 'w-full'}">
 		<a href={billUrl} class="block after:absolute after:content-[''] after:inset-0">
 			<h3 class="fluid-heading-03">{nickname}</h3>
 		</a>
@@ -37,7 +39,7 @@
 		<div>
 			<p class="font-semibold">เสนอโดย</p>
 
-			<div class="flex {orientation === 'landscape' ? 'flex-row gap-x-2' : 'flex-col'}">
+			<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
 				<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
 					<img src={proposedBy.avatar} alt={proposedBy.name} class="w-full h-full" loading="lazy" />
 				</figure>
@@ -49,8 +51,8 @@
 		</div>
 	</div>
 
-	<div class={orientation === 'landscape' ? 'w-1/3' : 'w-full'}>
-		<div class="flex {orientation === 'landscape' ? 'flex-row gap-x-6' : 'flex-col gap-y-4'}">
+	<div class={isLandscape ? 'w-1/3' : 'w-full'}>
+		<div class="flex {isLandscape ? 'flex-row gap-x-6' : 'flex-col gap-y-4'}">
 			<div class="grow space-y-2">
 				<div>
 					<p class="text-sm font-semibold">วันที่เสนอ</p>
