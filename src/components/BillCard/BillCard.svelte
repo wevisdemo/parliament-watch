@@ -31,7 +31,7 @@
 >
 	<div class="space-y-1 {isLandscape ? 'w-2/3' : 'w-full'}">
 		<a href={billUrl} class="block after:absolute after:content-[''] after:inset-0">
-			<h3 class="fluid-heading-03">{nickname}</h3>
+			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
 
 		<p class="text-sm text-text-02"><span class="font-bold">ชื่อทางการ</span>{title}</p>
