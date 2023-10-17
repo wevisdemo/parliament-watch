@@ -1,11 +1,8 @@
 <script lang="ts">
-	export let logoLong: string;
-	export let logoShort: string;
+	const alt = 'WeVis Paliament Watch';
 </script>
 
-<a href="/" class="px-4">
-	<picture class="flex items-center h-full">
-		<source media="(min-width: 672px)" srcset={logoLong} height="16" />
-		<img src={logoShort} alt="Parliament Watch" height="24" />
-	</picture>
+<a href="/" class="px-4 flex items-center">
+	<img src="/images/logo/pw-long-white.png" {alt} class="h-4 hidden md:block" />
+	<img src="/images/logo/pw-short-white.png" {alt} class="h-6 md:hidden" />
 </a>

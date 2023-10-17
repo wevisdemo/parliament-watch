@@ -55,9 +55,6 @@
 		}
 	];
 
-	const logoLong = '/images/logo/pw-long-white.png';
-	const logoShort = '/images/logo/pw-short-white.png';
-
 	let screenSize: number;
 	let previousFromTop = 0;
 	let showHeader = true;
@@ -66,7 +63,9 @@
 
 	$: if (screenSize > 1056) sideNavActive = false;
 
-	function scrollEventHandler(ev: Event) {
+	function scrollEventHandler() {
+		if (sideNavActive) return;
+
 		const currentFromTop = window.scrollY;
 		showHeader = currentFromTop <= previousFromTop;
 		previousFromTop = currentFromTop;
@@ -76,7 +75,7 @@
 
 <svelte:window bind:innerWidth={screenSize} on:scroll={scrollEventHandler} />
 
-<header class="w-screen">
+<header class="w-screen sticky top-0 z-50">
 	{#if showHeader}
 		<NavigationPane>
 			<svelte:fragment slot="leading">
@@ -84,7 +83,7 @@
 					isActive={sideNavActive}
 					on:click={() => (sideNavActive = !sideNavActive)}
 				/>
-				<Banner {logoLong} {logoShort} />
+				<Banner />
 			</svelte:fragment>
 			<svelte:fragment slot="menu">
 				<MenuPane hide={hideMainMenu}>

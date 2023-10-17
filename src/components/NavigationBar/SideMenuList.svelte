@@ -7,7 +7,7 @@
 </script>
 
 <ul>
-	{#each menuList as menu, index}
+	{#each menuList as menu}
 		<li>
 			{#if menu.type === 'link' || menu.type === 'both'}
 				<SideMenuLink linkMenu={menu} />
@@ -18,7 +18,7 @@
 			{/if}
 		</li>
 		{#if menu.type === 'root' || menu.type === 'both'}
-			<hr class="  border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
+			<hr class="border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
 		{/if}
 	{/each}
 </ul>

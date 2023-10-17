@@ -15,8 +15,6 @@
 	export let Hst: Hst;
 
 	let size = 16;
-	let viewBoxWidth = 16;
-	let viewBoxHeight = 16;
 	let title = '';
 </script>
 
@@ -57,8 +55,6 @@
 
 	<svelte:fragment slot="controls">
 		<Hst.Number bind:value={size} title="Size" />
-		<Hst.Number bind:value={viewBoxWidth} title="View Box Width" />
-		<Hst.Number bind:value={viewBoxHeight} title="View Box Height" />
 		<Hst.Text bind:value={title} title="Title" />
 	</svelte:fragment>
 </Hst.Story>
