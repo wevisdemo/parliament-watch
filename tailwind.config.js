@@ -3,12 +3,9 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
-	corePlugins: {
-		preflight: false
-	},
 	theme: {
 		screens: {
-			///modified break point base on : https://carbon-components-svelte.onrender.com/components/Breakpoint
+			// https://carbon-components-svelte.onrender.com/components/Breakpoint
 			sm: '320px',
 			md: '672px',
 			lg: '1056px',
@@ -50,6 +47,7 @@ export default {
 			'text-02': '#6F6F6F',
 			'text-03': '#A8A8A8',
 			'text-04': '#FFFFFF',
+			'text-primary': '#161616',
 			'text-error': '#C72502',
 			'decorative-01': '#E0E0E0',
 			'ui-01': '#F4F4F4',

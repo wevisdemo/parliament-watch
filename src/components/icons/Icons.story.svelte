@@ -6,7 +6,11 @@
 	import People from './PeopleIcon.svelte';
 	import Politician from './PoliticianIcon.svelte';
 	import Vote from './VoteIcon.svelte';
-	import WeVis from './WeVisIcon.svelte';
+	import WeVisIcon from './WeVisIcon.svelte';
+	import GithubIcon from './GithubIcon.svelte';
+	import FacebookIcon from './FacebookIcon.svelte';
+	import InstagramIcon from './InstagramIcon.svelte';
+	import XIcon from './XIcon.svelte';
 
 	export let Hst: Hst;
 
@@ -36,7 +40,19 @@
 		<Vote {size} />
 	</Hst.Variant>
 	<Hst.Variant title="WeVisIcon">
-		<WeVis {size} {viewBoxWidth} {viewBoxHeight} />
+		<WeVisIcon {size} />
+	</Hst.Variant>
+	<Hst.Variant title="GithubIcon">
+		<GithubIcon {size} />
+	</Hst.Variant>
+	<Hst.Variant title="FacebookIcon">
+		<FacebookIcon {size} />
+	</Hst.Variant>
+	<Hst.Variant title="InstagramIcon">
+		<InstagramIcon {size} />
+	</Hst.Variant>
+	<Hst.Variant title="XIcon">
+		<XIcon {size} />
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">
