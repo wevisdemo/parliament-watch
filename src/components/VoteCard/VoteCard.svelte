@@ -70,7 +70,8 @@
 	<p class="body-compact-01 text-text-02">
 		{dayjs(voting.date).format('D MMM BB')}
 	</p>
-	<a class="vote-card--url after:inset no-underline after:absolute w-56" href="#{voting.id}">
+	<!-- TODO add link -->
+	<a class="vote-card--url after:inset no-underline after:absolute w-56" href="/">
 		<h3 class="fluid-heading-03 text-text-01">{voting.title}</h3>
 	</a>
 	<section class="vote-card__result flex flex-col gap-y-2 w-56">

@@ -24,7 +24,7 @@
 			<div>
 				<span class="heading-01">{member.assemblyRole}</span>
 				<PoliticianProfile
-					id={member.politician.id}
+					id={'politician-' + member.politician.id}
 					firstname={member.politician.firstname}
 					lastname={member.politician.lastname}
 					avatar={member.politician.avatar || ''}
