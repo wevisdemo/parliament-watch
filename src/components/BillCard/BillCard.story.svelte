@@ -24,7 +24,7 @@
 	title="BillCard"
 	layout={{
 		type: 'grid',
-		width: '608'
+		width: '1056'
 	}}
 >
 	<Hst.Variant title="BillCard.Landscape">
