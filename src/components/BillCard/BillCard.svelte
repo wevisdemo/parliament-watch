@@ -34,7 +34,7 @@
 			<h3 class="fluid-heading-03">{nickname}</h3>
 		</a>
 
-		<p class="text-sm text-text-02"><span class="font-bold">ชื่อทางการ</span> {title}</p>
+		<p class="text-sm text-text-02"><span class="font-bold">ชื่อทางการ</span>{title}</p>
 
 		<div>
 			<p class="font-semibold">เสนอโดย</p>
