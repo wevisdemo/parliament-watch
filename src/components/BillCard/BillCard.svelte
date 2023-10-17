@@ -26,8 +26,8 @@
 
 <div
 	class="flex relative p-4 bg-white hover:bg-gray-10 rounded-sm {isLandscape
-		? 'flex-row gap-x-6'
-		: 'flex-col gap-y-4 pt-6'}"
+		? 'flex-row gap-x-6 max-w-[640px]'
+		: 'flex-col gap-y-4 max-w-[242px] pt-6'}"
 >
 	<div class="space-y-1 {isLandscape ? 'w-2/3' : 'w-full'}">
 		<a href={billUrl} class="block after:absolute after:content-[''] after:inset-0">
