@@ -237,7 +237,7 @@
 				</div>
 			{/if}
 		</Section>
-		<Section id="votelog" title="ประวัติการลงมติ">
+		<Section id="votes" title="ประวัติการลงมติ">
 			<Vote slot="icon" size="32" />
 			<InlineNotification
 				slot="header-extension"
@@ -266,7 +266,7 @@
 						{/each}
 					</ul>
 					<a
-						href="/politicians/{politician.id}/votelog?votetype=agreed"
+						href="/politicians/{politician.id}/votes?votetype=agreed"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -294,7 +294,7 @@
 						{/each}
 					</ul>
 					<a
-						href="/politicians/{politician.id}/votelog?votetype=disagreed"
+						href="/politicians/{politician.id}/votes?votetype=disagreed"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -326,7 +326,7 @@
 						จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
 					</p>
 					<a
-						href="/politicians/{politician.id}/votelog?votetype=absent"
+						href="/politicians/{politician.id}/votes?votetype=absent"
 						class="mr-auto helper-text-01 flex gap-2 items-center"
 						target="_blank"
 						rel="nofollow noopener noreferrer"
@@ -336,7 +336,7 @@
 					</a>
 				</div>
 				<Button
-					href="/politicians/{politician.id}/votelog"
+					href="/politicians/{politician.id}/votes"
 					kind="tertiary"
 					icon={ArrowRight}
 					size="small">ดูการลงมติทั้งหมด</Button

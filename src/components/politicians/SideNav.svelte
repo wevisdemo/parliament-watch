@@ -52,7 +52,7 @@
 			class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[114ms] ease-productive-in-out"
 			data-active={currentNavElementIndex === 2 || null}
 		>
-			<a href="#votelog" class="block p-4 text-white no-underline">
+			<a href="#votes" class="block p-4 text-white no-underline">
 				<div class="flex justify-between">
 					<span>ประวัติการลงมติ</span>
 					<ArrowDown class="md:hidden" />

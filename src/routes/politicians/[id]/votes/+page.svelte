@@ -114,7 +114,7 @@
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ url: `/politicians/${politician.id}`, label: politician.firstname },
-		{ url: `/politicians/${politician.id}/votelog`, label: 'ประวัติการลงมติ' }
+		{ url: `/politicians/${politician.id}/votes`, label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
 	{filteredData}
