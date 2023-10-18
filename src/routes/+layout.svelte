@@ -8,7 +8,7 @@
 
 <main class="min-h-screen flex flex-col">
 	<NavigationBar />
-	<div class="mt-12 flex-1">
+	<div class="flex-1">
 		<slot />
 	</div>
 	<Footer />
