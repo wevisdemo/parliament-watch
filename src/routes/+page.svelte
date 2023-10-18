@@ -23,7 +23,7 @@
 	</ul>
 </div>
 
-<style>
+<style lang="postcss">
 	ul {
 		@apply list-disc list-inside;
 	}
