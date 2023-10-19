@@ -19,3 +19,7 @@
 	font-display: swap;
 	src: url(https://design-systems.wevis.info/KondolarThai-Black.otf) format('opentype');
 }
+
+html {
+	scroll-behavior: smooth;
+}
