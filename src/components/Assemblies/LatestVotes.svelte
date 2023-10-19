@@ -5,6 +5,7 @@
 	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page';
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	export let votes: VoteCardProps[] = [];
+	export let assemblyId: string;
 
 	const defaultParty: Party = {
 		name: '',
@@ -23,12 +24,11 @@
 		{#each votes as vote}
 			<VoteCard {...vote} />
 		{/each}
-		<!-- TODO: fill link -->
 		<a
-			href="/"
+			href="/assemblies/{assemblyId}/votes"
 			class="w-full max-w-[288px] h-full bg-blue-60 flex text-[#FFFFFF] justify-between hover:bg-blue-70"
 		>
-			<span class="fluid-heading-04 p-[16px]">ดูรายชื่อสมาชิกทั้งหมด</span>
+			<span class="fluid-heading-04 p-[16px]">ดูผลการลงมติทั้งหมด</span>
 			<div class="pr-[16px] pb-[16px] flex items-end">
 				<ArrowRight />
 			</div>
