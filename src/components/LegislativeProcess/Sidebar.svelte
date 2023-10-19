@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { SideNav, SideNavItems, SideNavMenu, SideNavMenuItem } from 'carbon-components-svelte';
-	import { onMount } from 'svelte';
 
-	let sections = [
+	const sections = [
 		{
 			menu: 'แนะนำภาพรวม',
 			menuItem: [
