@@ -7,7 +7,7 @@
 </script>
 
 <main class="min-h-screen flex flex-col">
-  <NavigationBar />
+	<NavigationBar />
 	<div class="flex-1">
 		<slot />
 	</div>
