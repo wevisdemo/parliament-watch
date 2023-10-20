@@ -19,8 +19,12 @@
 		</div>
 	</header>
 	<main class="flex flex-col justify-center md:flex-row items-center md:items-start">
-		<div class="md:my-0 my-10 legislative-process-sidebar">
-			<Sidebar />
+		<div
+			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8"
+		>
+			<div class="py-10 w-full bg-white flex items-center justify-center">
+				<Sidebar />
+			</div>
 		</div>
 		<div
 			class="w-full max-w-[800px] flex flex-col gap-10 px-4 md:px-10 py-8 bg-ui-01 md:bg-white flex-1"

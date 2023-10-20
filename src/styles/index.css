@@ -27,3 +27,7 @@ html {
 .legislative-process-sidebar .bx--side-nav__overlay-active {
 	background-color: transparent;
 }
+
+.legislative-process-sidebar .bx--side-nav--ux {
+	top: 0;
+}
