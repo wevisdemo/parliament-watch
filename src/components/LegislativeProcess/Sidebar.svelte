@@ -34,7 +34,7 @@
 	];
 </script>
 
-<SideNav isOpen={true} fixed={false} class="relative z-0">
+<SideNav isOpen={true} fixed={true} class="relative z-0">
 	<SideNavItems>
 		{#each sections as section}
 			<SideNavMenu text={section.menu} expanded class="font-bold text-black">
