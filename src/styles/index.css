@@ -23,3 +23,7 @@
 html {
 	scroll-behavior: smooth;
 }
+
+.bx--side-nav__overlay-active {
+	background-color: transparent;
+}
