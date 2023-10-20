@@ -19,7 +19,7 @@
 		</div>
 	</header>
 	<main class="flex flex-col justify-center md:flex-row items-center md:items-start">
-		<div class="md:my-0 my-10">
+		<div class="md:my-0 my-10 legislative-process-sidebar">
 			<Sidebar />
 		</div>
 		<div

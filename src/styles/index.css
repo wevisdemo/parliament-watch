@@ -24,6 +24,6 @@ html {
 	scroll-behavior: smooth;
 }
 
-.bx--side-nav__overlay-active {
+.legislative-process-sidebar .bx--side-nav__overlay-active {
 	background-color: transparent;
 }
