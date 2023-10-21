@@ -1,5 +1,7 @@
 <script lang="ts">
 	import SearchResultGroup from '$components/SearchResultGroup/SearchResultGroup.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
+	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import { BillStatus } from '$models/bill';
 	import type { SearchIndexes, SearchResultItem } from '$models/search';
@@ -64,7 +66,13 @@
 	];
 </script>
 
-<div>
+<div class="w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)]">
+	<SearchResultGroup heading={'นักการเมือง'} items={resultItems}>
+		<PoliticianIcon slot="icon" class="fill-interactive-01" />
+	</SearchResultGroup>
+	<SearchResultGroup heading={'การออกกฎหมาย'} items={resultItems}>
+		<LawIcon slot="icon" class="fill-interactive-01" />
+	</SearchResultGroup>
 	<SearchResultGroup heading={'การลงมติ'} items={resultItems}>
 		<VoteIcon slot="icon" class="fill-interactive-01" />
 	</SearchResultGroup>

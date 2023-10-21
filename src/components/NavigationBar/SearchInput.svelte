@@ -5,17 +5,22 @@
 	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{
+		activate: void;
+		deactivate: void;
+		searchText: string;
+	}>();
 
 	export let activeSearch = false;
 	let searchButton: HTMLButtonElement;
 	let searchInput: HTMLInputElement;
-	let searchValue: string = '';
+	let searchValue = '';
 
 	function searchClickHandle() {
 		if (!activeSearch) {
 			activeSearch = true;
 			dispatch('activate');
+			searchInput.focus();
 		}
 	}
 
@@ -27,6 +32,12 @@
 		activeSearch = false;
 		searchValue = '';
 		dispatch('deactivate');
+	}
+
+	$: if (activeSearch && searchValue.trim()) {
+		dispatch('searchText', searchValue.trim());
+	} else {
+		dispatch('searchText', '');
 	}
 </script>
 
@@ -48,10 +59,12 @@
 			on:introend={introEndHandler}
 		>
 			<input
+				bind:this={searchInput}
 				bind:value={searchValue}
+				on:blur={() => (activeSearch = false)}
 				name="navSearch"
 				type="text"
-				class=" w-52 bg-white/0 outline-none border-0 text-white leading-4"
+				class="w-[calc(320px-6rem)] bg-white/0 outline-none border-0 text-white leading-4"
 				placeholder="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
 			/>
 			<button

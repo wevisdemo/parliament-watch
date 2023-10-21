@@ -7,7 +7,7 @@
 </script>
 
 <a href={item.url}>
-	<div class="px-4">
+	<div class="px-4 bg-ui-background">
 		<div class="item-inner-container">
 			<div>
 				<div class="text-sm text-text-02">{item.heading}</div>
