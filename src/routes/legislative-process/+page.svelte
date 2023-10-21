@@ -123,7 +123,7 @@
 					</h2>
 					<hr />
 					<div class="flex flex-col gap-2 py-4">
-						{#each data.seniors as section, i}
+						{#each data.senates as section, i}
 							<h3 class="fluid-heading-03" id={section.heading}>
 								{i + 1}. {section.heading}
 							</h3>

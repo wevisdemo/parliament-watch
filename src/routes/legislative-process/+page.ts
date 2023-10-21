@@ -43,7 +43,7 @@ export function load() {
 			details: ['เสนอชื่อผู้ที่สมควรดำรงตำแหน่งเป็นนายกฯ', 'ลงมติเลือกนายกฯ']
 		}
 	];
-	const seniors: DutySection[] = [
+	const senates: DutySection[] = [
 		{
 			heading: 'พิจารณาร่างกฎหมาย (พ.ร.บ.)',
 			details: [
@@ -137,7 +137,7 @@ export function load() {
 
 	return {
 		representatives,
-		seniors,
+		senates,
 		both
 	};
 }
