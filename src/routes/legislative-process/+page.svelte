@@ -3,6 +3,8 @@
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
+	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
+	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
@@ -57,7 +59,32 @@
 					<h3 class="fluid-heading-03 my-6" id="การออกกฎหมายตามรัฐธรรมนูญ 2560">
 						กฎหมายที่ออกโดยรัฐสภา ต้องผ่านกระบวนการ 3 ขั้นตอนสำคัญ
 					</h3>
-					<div>Step images</div>
+					<div class="grid grid-cols-1 md:grid-cols-[1fr_16px_1fr_16px_1fr] gap-3">
+						<ProcessCard imgSrc="images/legislative-process/process-01.png" title="เสนอร่างกฎหมาย">
+							ผู้มีสิทธิเสนอร่างของกฎหมายแต่ละประเภท จะแตกต่างกัน
+						</ProcessCard>
+						<ProcessCardArrow />
+						<ProcessCard
+							imgSrc="images/legislative-process/process-02.png"
+							title="พิจารณาโดยรัฐสภา"
+						>
+							<ul class="list-disc">
+								<li>สส.</li>
+								<li>สว.</li>
+								<li>สภาร่วม (สส.+ สว.)</li>
+							</ul>
+						</ProcessCard>
+						<ProcessCardArrow />
+						<ProcessCard
+							imgSrc="images/legislative-process/process-03.png"
+							title="กลายเป็นกฎหมายโดยสมบูรณ์"
+						>
+							<ul class="list-disc">
+								<li>ไม่ขัดต่อรัฐธรรมนูญ</li>
+								<li>พระมหากษัตริย์ทรงลงพระปรมาภิไธย</li>
+							</ul>
+						</ProcessCard>
+					</div>
 					<ol class="list-decimal body-02">
 						<li>
 							<b>การเสนอร่างกฎหมาย</b> เป็นการจัดทำร่างกฎหมายและเสนอเข้าต่อรัฐสภา โดยผู้ที่มีสิทธิเสนอร่างกฎหมายจะแตกต่างกันขึ้นอยู่กับว่าเป็นร่างกฎหมายประเภทใดตามที่รัฐธรรมนูญระบุไว้
@@ -87,7 +114,7 @@
 						เว็บไซต์นี้จะไม่ปรากฎกฎหมายที่ถูกตราขึ้นผ่านคณะรัฐมนตรีและไม่ต้องผ่านการพิจารณาโดยรัฐสภา
 						เช่น พระราชกฤษฎีกา กฎกระทรวง และกฎหมายที่ตราโดยองค์กรปกครองส่วนท้องถิ่น
 					</p>
-					<div>Image scope process</div>
+					<div>Image</div>
 				</div>
 				<div>
 					<h2 class="fluid-heading-04" id="ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา">
