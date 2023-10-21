@@ -239,6 +239,7 @@
 		{:else}
 			<div class="fixed left-4 bottom-14 z-20">
 				<Button
+					class={isFilterNotDefault ? 'bg-interactive-02' : 'bg-interactive-01'}
 					tooltipAlignment="start"
 					tooltipPosition="top"
 					iconDescription="แสดงตัวเลือก"
