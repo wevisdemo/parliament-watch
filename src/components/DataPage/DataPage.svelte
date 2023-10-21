@@ -159,7 +159,7 @@
 	<div class="flex-1 flex gap-1 bg-ui-01 w-full">
 		{#if showFilter}
 			<div
-				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-10"
+				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-50 md:z-30"
 				class:md:flex={!mounted}
 				class:hidden={!mounted}
 			>
