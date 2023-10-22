@@ -7,6 +7,19 @@ export enum BillStatus {
 	Merged = 'ถูกรวมร่าง'
 }
 
+export enum BillProposerType {
+	Politician = 'สมาชิกรัฐสภา',
+	Cabinet = 'คณะรัฐมนตรี',
+	People = 'ประชาชน'
+}
+
+export interface PeopleProposer {
+	leadBy: string;
+	signatoryCount: number;
+}
+
+export type CabinetId = number;
+
 export interface Bill {
 	id: number;
 	title: string;
@@ -14,5 +27,6 @@ export interface Bill {
 	description: string;
 	status: BillStatus;
 	proposedOn: Date;
-	proposedBy: Politician[];
+	proposerType: BillProposerType;
+	proposedBy: Politician[] | CabinetId | PeopleProposer;
 }

@@ -61,7 +61,10 @@ erDiagram
     string description
     string status "inProgress | success | rejected | merged"
     Date proposedOn
+    string proposedBy "politicians | cabinet | people"
     string[] proposedByPoliticianIds FK
+    number proposedByCabinetId FK
+    PeopleProposer proposedByPeople "{ leadBy: string, signatoryCount: number}"
   }
 
   Voting {
