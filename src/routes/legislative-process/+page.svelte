@@ -68,7 +68,7 @@
 							imgSrc="images/legislative-process/process-02.png"
 							title="พิจารณาโดยรัฐสภา"
 						>
-							<ul class="list-disc">
+							<ul class="list-disc list-inside">
 								<li>สส.</li>
 								<li>สว.</li>
 								<li>สภาร่วม (สส.+ สว.)</li>
@@ -79,13 +79,13 @@
 							imgSrc="images/legislative-process/process-03.png"
 							title="กลายเป็นกฎหมายโดยสมบูรณ์"
 						>
-							<ul class="list-disc">
+							<ul class="list-disc list-inside">
 								<li>ไม่ขัดต่อรัฐธรรมนูญ</li>
 								<li>พระมหากษัตริย์ทรงลงพระปรมาภิไธย</li>
 							</ul>
 						</ProcessCard>
 					</div>
-					<ol class="list-decimal body-02 mt-6">
+					<ol class="list-decimal list-inside body-02 mt-6">
 						<li>
 							<b>การเสนอร่างกฎหมาย</b> เป็นการจัดทำร่างกฎหมายและเสนอเข้าต่อรัฐสภา โดยผู้ที่มีสิทธิเสนอร่างกฎหมายจะแตกต่างกันขึ้นอยู่กับว่าเป็นร่างกฎหมายประเภทใดตามที่รัฐธรรมนูญระบุไว้
 							เช่น ร่าง พ.ร.บ. สามารถเสนอโดยคณะรัฐมนตรี หรือ สส. จำนวนไม่น้อยกว่า 20 คน หรือ ประชาชนจำนวน10,000
