@@ -56,9 +56,11 @@ erDiagram
 
   Bill {
     number id PK
-    string titile
+    string title
     string nickname
     string description
+    string status "inProgress | success | rejected | merged"
+    Date proposedOn
     string[] proposedByPoliticianIds FK
   }
 
