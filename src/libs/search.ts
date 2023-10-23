@@ -1,4 +1,9 @@
-import type { SearchIndexes } from '$models/search';
+import type {
+	ScoreAndHighlightResultItem,
+	ScoreResultItem,
+	SearchIndexes,
+	SearchResults
+} from '$models/search';
 
 /**
  * Normalizes a search query by adding spaces around dots and numbers, splitting by whitespace, and removing duplicates.
@@ -14,7 +19,12 @@ export function normalizeSearchQuery(query: string) {
 		.filter((q, index, self) => self.indexOf(q) === index);
 }
 
-export const search = (query: string, searchIndexes: SearchIndexes, k = 5) => {
+export const search = (
+	query: string,
+	searchIndexes: SearchIndexes,
+	k = 5,
+	highlight = true
+): SearchResults => {
 	// Normalize query
 	const queries = normalizeSearchQuery(query);
 	const politicianCandidates = postCalcuateScore(
@@ -25,55 +35,63 @@ export const search = (query: string, searchIndexes: SearchIndexes, k = 5) => {
 	const votingCandidates = postCalcuateScore(calculateScore(queries, searchIndexes.votings), k);
 
 	return {
-		politicians: politicianCandidates,
-		bills: billCandidates,
-		votings: votingCandidates
+		politicians: politicianCandidates.map((candidate) => ({
+			heading: highlight ? candidate.highlightedName : candidate.item.name,
+			description: candidate.item.description,
+			url: ''
+		})),
+		bills: billCandidates.map((candidate) => ({
+			heading: highlight ? candidate.highlightedName : candidate.item.name,
+			billStatus: candidate.item.status,
+			url: ''
+		})),
+		votings: votingCandidates.map((candidate) => ({
+			heading: highlight ? candidate.highlightedName : candidate.item.name,
+			voteResult: candidate.item.result,
+			url: ''
+		}))
 	};
 };
 
-interface SearchResultItem {
-	name: string;
-	score: number;
-	matchedIndices: number[];
-}
-
-interface SearchResultItemWithHighlight extends SearchResultItem {
-	highlightedName: string;
-}
-
-export const calculateScore = (
+export const calculateScore = <T extends { name: string }>(
 	queries: string[],
-	searchItems: { name: string }[],
+	searchItems: T[],
 	includeAllQuery = true
-): SearchResultItem[] => {
-	return searchItems.map((item) => {
+): ScoreResultItem<T>[] => {
+	return searchItems.map((item: T) => {
 		let score = 0;
 		const matchedIndices: number[] = [];
-		for (let index = 0; index < queries.length; index++) {
-			const query = queries[index];
-
+		for (const query of queries) {
 			const stringMenu = item.name;
 			let matchedIndex = 0;
 			let startIndex = 0;
 			let addedScore = 0;
 
+			// If found query
 			while ((matchedIndex = stringMenu.indexOf(query, startIndex)) >= 0) {
+				// Get the end index of matched query
 				const endMatchedIndex = matchedIndex + query.length;
 
+				// Add score by the length of matched query divided by the length of stringMenu
 				addedScore += query.length / stringMenu.length;
+
+				// Add matched indices
 				for (let i = matchedIndex; i < endMatchedIndex; i++) {
+					// Skip if already added
 					if (matchedIndices.includes(i)) continue;
 					matchedIndices.push(i);
 				}
 
+				// Set the start index of next search
 				startIndex = endMatchedIndex;
 			}
 
+			// If not found query
 			if (addedScore == 0) {
 				// If all query must be matched, return score 0
 				if (includeAllQuery) {
 					return {
-						...item,
+						item,
 						score: 0,
 						matchedIndices: []
 					};
@@ -83,28 +101,36 @@ export const calculateScore = (
 				}
 			}
 
+			// Add score
 			score += addedScore;
 		}
 
 		return {
-			...item,
+			item,
 			score,
 			matchedIndices
 		};
 	});
 };
 
-const postCalcuateScore = (
-	candidates: SearchResultItem[],
+const postCalcuateScore = <T extends { name: string }>(
+	candidates: ScoreResultItem<T>[],
 	k = 5
-): SearchResultItemWithHighlight[] => {
-	return candidates
-		.sort((a, b) => b.score - a.score)
-		.slice(0, k)
-		.map((c: SearchResultItem) => ({
-			...c,
-			highlightedName: highlight(c.matchedIndices, c.name)
-		}));
+): ScoreAndHighlightResultItem<T>[] => {
+	return (
+		candidates
+			// Filter out score 0
+			.filter((c) => c.score > 0)
+			// Sort by score descending
+			.sort((a, b) => b.score - a.score)
+			// Take top k
+			.slice(0, k)
+			// Highlight matched indices
+			.map((c: ScoreResultItem<T>) => ({
+				...c,
+				highlightedName: highlight(c.matchedIndices, c.item.name)
+			}))
+	);
 };
 
 const HIGHTLIGHT_STYLE = {

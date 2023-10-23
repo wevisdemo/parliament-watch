@@ -49,7 +49,7 @@ describe('calculateScore', () => {
 		const items = [{ name: 'กข' }, { name: 'กก' }, { name: 'ขข' }, { name: 'กกขข' }];
 		const result = calculateScore(queries, items, false);
 		expect(result).length(4);
-		expect(result.sort((a, b) => b.score - a.score).map((r) => r.name)).toEqual([
+		expect(result.sort((a, b) => b.score - a.score).map((r) => r.item.name)).toEqual([
 			'กกขข',
 			'กก',
 			'ขข',
