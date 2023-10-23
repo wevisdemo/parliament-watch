@@ -42,3 +42,9 @@ export const getPercentWidth = (targetCount: number, groups: MemberGroup[]) => {
 	const targetPercent = getRoundedPercent(targetCount, getSumOfGroupsTotal(groups));
 	return getRoundedPercent(targetPercent, maxPercent);
 };
+
+export interface PartySeat {
+	name: string;
+	color: string;
+	count: number;
+}
