@@ -15,6 +15,7 @@
 	import NavigationPane from './NavigationPane.svelte';
 	import SearchInput from './SearchInput.svelte';
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
+	import type { SearchResults } from '$models/search';
 
 	const menuList: Menu[] = [
 		{
@@ -62,6 +63,7 @@
 	let sideNavActive = false;
 	let hideMainMenu = false;
 	let hideSearchResult = true;
+	let searchResults: SearchResults | null = null;
 
 	$: if (screenSize > 1056) sideNavActive = false;
 
@@ -96,12 +98,10 @@
 				<SearchInput
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}
-					on:searchText={(search) => {
-						hideSearchResult = search.detail.trim() === '';
-					}}
+					bind:searchResults
 				/>
-				{#if !hideSearchResult}
-					<SearchResult />
+				{#if searchResults !== null}
+					<SearchResult {searchResults} />
 				{/if}
 			</div>
 		</NavigationPane>
