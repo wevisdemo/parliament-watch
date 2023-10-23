@@ -2,6 +2,7 @@
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import type { SearchResultItem } from '$models/search';
+	import HightlightText from './HightlightText.svelte';
 
 	export let item: SearchResultItem;
 </script>
@@ -10,7 +11,11 @@
 	<div class="px-4 bg-ui-background">
 		<div class="item-inner-container">
 			<div>
-				<div class="text-sm text-text-02">{item.heading}</div>
+				{#if item.headingHighlight}
+					<HightlightText textList={item.headingHighlight} />
+				{:else}
+					<div class="text-sm text-text-02">{item.heading}</div>
+				{/if}
 				{#if item.description}
 					<p class="text-xs text-text-03">{item.description}</p>
 				{/if}
