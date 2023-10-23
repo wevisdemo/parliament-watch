@@ -3,9 +3,13 @@
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
+	import { DataTable } from 'carbon-components-svelte';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
+
+	export let data;
+	const { proposingALawTable } = data;
 </script>
 
 <div class="flex flex-col w-full">
@@ -64,6 +68,44 @@
 					<h2 class="fluid-heading-04" id="ขั้นตอนทั่วไป">ขั้นตอนทั่วไป</h2>
 					<hr />
 				</div>
+
+				<div>
+					ขั้นตอนการพิจารณาร่างกฎหมายแต่ละประเภทจะมีความแตกต่างกันในบางรายละเอียด แต่โดยทั่วไปแล้ว
+					กระบวนการออกกฎหมายโดยรัฐสภา อย่างเช่นการออก พ.ร.บ. หรือการอนุมัติ พ.ร.ก. จะดำเนินการผ่าน <b
+						>5 ขั้นตอน</b
+					>ดังต่อไปนี้
+				</div>
+				<div class="flex w-full justify-center items-center py-4">
+					<img
+						src={'images/legislative-process/general-process.png'}
+						alt="general-process-process"
+						class="max-w-480"
+					/>
+				</div>
+				<div class="py-6">
+					<h1 class="fluid-heading-01" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h1>
+					<p class="py-4">ผู้มีสิทธิเสนอร่างกฎหมาย และลำดับชั้นของกฎหมายที่เสนอได้</p>
+					<div class="relative">
+						<DataTable
+							headers={[
+								{ key: 'name', value: '' },
+								{ key: 'col1', value: 'ร่าง พ.ร.บ.' },
+								{ key: 'col2', value: 'ออก พ.ร.ก.' },
+								{ key: 'col3', value: 'ร่าง พ.ร.ป.' },
+								{ key: 'col4', value: '	ร่างแก้ไขบทบัญญัติใน รธน.' }
+							]}
+							rows={proposingALawTable.map((item, _) => ({
+								id: item.id,
+								name: item.id,
+								col1: item.col1,
+								col2: item.col2,
+								col3: item.col3,
+								col4: item.col4
+							}))}
+						/>
+					</div>
+				</div>
+
 				<div>
 					<h2 class="fluid-heading-04" id="ขั้นตอนพิเศษของกฎหมายบางประเภท">
 						ขั้นตอนพิเศษของกฎหมายบางประเภท
@@ -132,6 +174,29 @@
 	}
 
 	h2 {
+		@apply text-text-primary mb-4;
+	}
+
+	h3 {
+		@apply text-text-primary mb-4;
+	}
+
+	table {
+		@apply bg-magenta-30;
+	}
+
+	:global(.bx--data-table th) {
+		@apply py-4;
+	}
+
+	:global(.bx--data-table tbody tr td) {
+		@apply text-gray-100 py-4 bg-gray-10;
+	}
+	:global(.bx--data-table tbody tr td:first-child) {
+		@apply font-bold;
+	}
+
+	process-detail {
 		@apply text-text-primary mb-4;
 	}
 
