@@ -20,6 +20,14 @@ export function normalizeSearchQuery(query: string) {
 		.filter((q, index, self) => self.indexOf(q) === index);
 }
 
+/**
+ * Search function that takes a query string and search indexes, and returns search results.
+ * @param query - The query string to search for.
+ * @param searchIndexes - The search indexes to search in.
+ * @param k - The number of search results to return for each category. Default is 5.
+ * @param highlight - Whether to highlight the search query in the search results. Default is true.
+ * @returns The search results object containing politicians, bills, and votings categories.
+ */
 export const search = (
 	query: string,
 	searchIndexes: SearchIndexes,
@@ -57,6 +65,13 @@ export const search = (
 	};
 };
 
+/**
+ * Calculates the search score for each item in the searchItems array based on the queries array.
+ * @param queries - The array of search queries.
+ * @param searchItems - The array of search items.
+ * @param [includeAllQuery=true] - Whether all queries must be matched or not.
+ * @returns - The array of search result items with their scores and matched indices.
+ */
 export const calculateScore = <T extends { name: string }>(
 	queries: string[],
 	searchItems: T[],
@@ -117,6 +132,12 @@ export const calculateScore = <T extends { name: string }>(
 	});
 };
 
+/**
+ * Calculates the score and highlights the matched indices of the top k candidates.
+ * @param candidates - The list of candidates to be scored and highlighted.
+ * @param k - The number of top candidates to return.
+ * @returns - The list of top candidates with highlighted matched indices.
+ */
 const postCalcuateScore = <T extends { name: string }>(
 	candidates: ScoreResultItem<T>[],
 	k = 5
@@ -132,12 +153,18 @@ const postCalcuateScore = <T extends { name: string }>(
 			// Highlight matched indices
 			.map((c: ScoreResultItem<T>) => ({
 				...c,
-				highlightedName: breakText(c.item.name, c.matchedIndices)
+				highlightedName: highlightText(c.item.name, c.matchedIndices)
 			}))
 	);
 };
 
-export function breakText(text: string, indices: number[]): HighlightedText[] {
+/**
+ * Returns an array of objects representing the highlighted text.
+ * @param text - The text to highlight.
+ * @param indices - An array of indices representing the positions to highlight.
+ * @returns An array of objects representing the highlighted text.
+ */
+export function highlightText(text: string, indices: number[]): HighlightedText[] {
 	const result: HighlightedText[] = [];
 	for (let index = 0; index < text.length; index++) {
 		const char = text[index];

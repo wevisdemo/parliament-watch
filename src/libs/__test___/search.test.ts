@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeSearchQuery, calculateScore, breakText } from '../search';
+import { normalizeSearchQuery, calculateScore, highlightText } from '../search';
 
 describe('normalizeSearchQuery', () => {
 	it('should add spaces after dots from words', () => {
@@ -66,7 +66,7 @@ describe('calculateScore', () => {
 	});
 });
 
-describe('generateHighlightText', () => {
+describe('highlightText', () => {
 	it.each([
 		{
 			text: 'กขคง',
@@ -100,7 +100,7 @@ describe('generateHighlightText', () => {
 			expected: [{ text: 'ไก่จิกเด็กตาย', highlight: false }]
 		}
 	])('should return highlighted text $text $indices', ({ text, indices, expected }) => {
-		const result = breakText(text, indices);
+		const result = highlightText(text, indices);
 		expect(result).toEqual(expected);
 	});
 });
