@@ -12,7 +12,7 @@
 		<div class="item-inner-container">
 			<div>
 				{#if item.headingHighlight}
-					<HightlightText textList={item.headingHighlight} />
+					<HightlightText textList={item.headingHighlight} textClass="text-sm text-text-02" />
 				{:else}
 					<div class="text-sm text-text-02">{item.heading}</div>
 				{/if}
