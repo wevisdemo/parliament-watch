@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeSearchQuery, calculateScore } from '../search';
+import { normalizeSearchQuery, calculateScore, breakText } from '../search';
 
 describe('normalizeSearchQuery', () => {
 	it('should add spaces after dots from words', () => {
@@ -63,5 +63,44 @@ describe('calculateScore', () => {
 		const result = calculateScore(queries, items);
 		expect(result).length(1);
 		expect(result[0].score).toEqual(0);
+	});
+});
+
+describe('generateHighlightText', () => {
+	it.each([
+		{
+			text: 'กขคง',
+			indices: [0, 2],
+			expected: [
+				{ text: 'ก', highlight: true },
+				{ text: 'ข', highlight: false },
+				{ text: 'ค', highlight: true },
+				{ text: 'ง', highlight: false }
+			]
+		},
+		{
+			text: 'ไก่จิกเด็กตาย',
+			indices: [0, 1, 2, 3, 4, 5],
+			expected: [
+				{ text: 'ไก่จิก', highlight: true },
+				{ text: 'เด็กตาย', highlight: false }
+			]
+		},
+		{
+			text: 'ไก่จิกเด็กตาย',
+			indices: [10, 11, 12],
+			expected: [
+				{ text: 'ไก่จิกเด็ก', highlight: false },
+				{ text: 'ตาย', highlight: true }
+			]
+		},
+		{
+			text: 'ไก่จิกเด็กตาย',
+			indices: [],
+			expected: [{ text: 'ไก่จิกเด็กตาย', highlight: false }]
+		}
+	])('should return highlighted text $text $indices', ({ text, indices, expected }) => {
+		const result = breakText(text, indices);
+		expect(result).toEqual(expected);
 	});
 });

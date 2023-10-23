@@ -18,6 +18,7 @@ export interface SearchIndexes {
 
 interface BaseSearchResultItem {
 	heading: string;
+	headingHighlight?: HighlightedText[];
 	description?: string;
 	url: string;
 }
@@ -55,5 +56,10 @@ export interface ScoreResultItem<T> {
 }
 
 export interface ScoreAndHighlightResultItem<T> extends ScoreResultItem<T> {
-	highlightedName: string;
+	highlightedName: HighlightedText[];
+}
+
+export interface HighlightedText {
+	text: string;
+	highlight: boolean;
 }

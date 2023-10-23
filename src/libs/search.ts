@@ -2,7 +2,8 @@ import type {
 	ScoreAndHighlightResultItem,
 	ScoreResultItem,
 	SearchIndexes,
-	SearchResults
+	SearchResults,
+	HighlightedText
 } from '$models/search';
 
 /**
@@ -36,17 +37,20 @@ export const search = (
 
 	return {
 		politicians: politicianCandidates.map((candidate) => ({
-			heading: highlight ? candidate.highlightedName : candidate.item.name,
+			heading: candidate.item.name,
+			headingHighlight: highlight ? candidate.highlightedName : undefined,
 			description: candidate.item.description,
 			url: ''
 		})),
 		bills: billCandidates.map((candidate) => ({
-			heading: highlight ? candidate.highlightedName : candidate.item.name,
+			heading: candidate.item.name,
+			headingHighlight: highlight ? candidate.highlightedName : undefined,
 			billStatus: candidate.item.status,
 			url: ''
 		})),
 		votings: votingCandidates.map((candidate) => ({
-			heading: highlight ? candidate.highlightedName : candidate.item.name,
+			heading: candidate.item.name,
+			headingHighlight: highlight ? candidate.highlightedName : undefined,
 			voteResult: candidate.item.result,
 			url: ''
 		}))
@@ -128,60 +132,32 @@ const postCalcuateScore = <T extends { name: string }>(
 			// Highlight matched indices
 			.map((c: ScoreResultItem<T>) => ({
 				...c,
-				highlightedName: highlight(c.matchedIndices, c.item.name)
+				highlightedName: breakText(c.item.name, c.matchedIndices)
 			}))
 	);
 };
 
-const HIGHTLIGHT_STYLE = {
-	tagOpen: '<b>',
-	tagClose: '</b>'
-};
-
-function highlight(indices: number[], target: string) {
-	// Initialize the result string to an empty string.
-	let result = '';
-
-	// Initialize the tagClosed flag to true.
-	let tagClosed = true;
-
-	// Iterate over the characters in the target string.
-	for (let index = 0; index < target.length; index++) {
-		// Get the current character.
-		const char = target[index];
-
-		// If the current index is in the array of indices,
-		// and the previous index is not in the array of indices,
-		// then the current character is the beginning of a highlighted word.
+export function breakText(text: string, indices: number[]): HighlightedText[] {
+	const result: HighlightedText[] = [];
+	for (let index = 0; index < text.length; index++) {
+		const char = text[index];
 		if (indices.includes(index) && !indices.includes(index - 1)) {
-			// Add the opening tag to the result string.
-			result += HIGHTLIGHT_STYLE.tagOpen;
-
-			// Set the tagClosed flag to false.
-			tagClosed = false;
+			result.push({
+				text: '',
+				highlight: true
+			});
+		} else if (!indices.includes(index) && indices.includes(index - 1)) {
+			result.push({
+				text: '',
+				highlight: false
+			});
+		} else if (result.length === 0) {
+			result.push({
+				text: '',
+				highlight: false
+			});
 		}
-
-		// If the current index is not in the array of indices,
-		// and the previous index is in the array of indices,
-		// then the current character is the end of a highlighted word.
-		else if (!indices.includes(index) && indices.includes(index - 1)) {
-			// Add the closing tag to the result string.
-			result += HIGHTLIGHT_STYLE.tagClose;
-
-			// Set the tagClosed flag to true.
-			tagClosed = true;
-		}
-
-		// Add the current character to the result string.
-		result += char;
+		result[result.length - 1].text += char;
 	}
-
-	// If the tagClosed flag is false, then the last character is the end of a highlighted word.
-	if (tagClosed === false) {
-		// Add the closing tag to the result string.
-		result += HIGHTLIGHT_STYLE.tagClose;
-	}
-
-	// Return the result string.
 	return result;
 }
