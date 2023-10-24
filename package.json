@@ -16,7 +16,8 @@
 		"story:dev": "histoire dev",
 		"story:build": "HISTOIRE_BASE=/stories/ histoire build",
 		"story:preview": "histoire preview",
-		"gen:component": "hygen component new"
+		"gen:component": "hygen component new",
+		"test:unit": "vitest"
 	},
 	"lint-staged": {
 		"*.md": "doctoc --github --update-only",
