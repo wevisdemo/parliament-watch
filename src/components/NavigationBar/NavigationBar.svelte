@@ -62,7 +62,6 @@
 	let showHeader = true;
 	let sideNavActive = false;
 	let hideMainMenu = false;
-	let hideSearchResult = true;
 	let searchResults: SearchResults | null = null;
 
 	$: if (screenSize > 1056) sideNavActive = false;
@@ -94,7 +93,7 @@
 					<MenuList {menuList} />
 				</MenuPane>
 			</svelte:fragment>
-			<div slot="trailing">
+			<div slot="trailing" class="absolute right-0">
 				<SearchInput
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}

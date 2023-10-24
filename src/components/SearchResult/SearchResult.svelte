@@ -11,7 +11,10 @@
 	$: hasAnyResult = Object.values(searchResults).some((results) => results.length > 0);
 </script>
 
-<div class="w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)]">
+<div
+	class="w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)]"
+	style="box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.30);"
+>
 	{#if hasAnyResult}
 		<SearchResultGroup heading="นักการเมือง" items={searchResults.politicians}>
 			<PoliticianIcon slot="icon" class="fill-interactive-01" />
