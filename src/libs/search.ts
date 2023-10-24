@@ -24,24 +24,27 @@ export function normalizeSearchQuery(query: string) {
  * Search function that takes a query string and search indexes, and returns search results.
  * @param query - The query string to search for.
  * @param searchIndexes - The search indexes to search in.
- * @param k - The number of search results to return for each category. Default is 5.
+ * @param keepTopN - The number of search results to return for each category. Default is 5.
  * @param highlight - Whether to highlight the search query in the search results. Default is true.
  * @returns The search results object containing politicians, bills, and votings categories.
  */
 export const search = (
 	query: string,
 	searchIndexes: SearchIndexes,
-	k = 5,
+	keepTopN = 5,
 	highlight = true
 ): SearchResults => {
 	// Normalize query
 	const queries = normalizeSearchQuery(query);
 	const politicianCandidates = postCalcuateScore(
 		calculateScore(queries, searchIndexes.politicians),
-		k
+		keepTopN
 	);
-	const billCandidates = postCalcuateScore(calculateScore(queries, searchIndexes.bills), k);
-	const votingCandidates = postCalcuateScore(calculateScore(queries, searchIndexes.votings), k);
+	const billCandidates = postCalcuateScore(calculateScore(queries, searchIndexes.bills), keepTopN);
+	const votingCandidates = postCalcuateScore(
+		calculateScore(queries, searchIndexes.votings),
+		keepTopN
+	);
 
 	return {
 		politicians: politicianCandidates.map((candidate) => ({
@@ -135,12 +138,12 @@ export const calculateScore = <T extends { name: string }>(
 /**
  * Calculates the score and highlights the matched indices of the top k candidates.
  * @param candidates - The list of candidates to be scored and highlighted.
- * @param k - The number of top candidates to return.
+ * @param keepTopN - The number of top candidates to return.
  * @returns - The list of top candidates with highlighted matched indices.
  */
 const postCalcuateScore = <T extends { name: string }>(
 	candidates: ScoreResultItem<T>[],
-	k = 5
+	keepTopN = 5
 ): ScoreAndHighlightResultItem<T>[] => {
 	return (
 		candidates
@@ -149,7 +152,7 @@ const postCalcuateScore = <T extends { name: string }>(
 			// Sort by score descending
 			.sort((a, b) => b.score - a.score)
 			// Take top k
-			.slice(0, k)
+			.slice(0, keepTopN)
 			// Highlight matched indices
 			.map((c: ScoreResultItem<T>) => ({
 				...c,
@@ -168,22 +171,29 @@ export function highlightText(text: string, indices: number[]): HighlightedText[
 	const result: HighlightedText[] = [];
 	for (let index = 0; index < text.length; index++) {
 		const char = text[index];
-		if (indices.includes(index) && !indices.includes(index - 1)) {
+		if (
+			// If the current character is highlighted,
+			indices.includes(index) &&
+			// and the previous character is not highlighted,
+			!indices.includes(index - 1)
+		) {
 			result.push({
 				text: '',
 				highlight: true
 			});
-		} else if (!indices.includes(index) && indices.includes(index - 1)) {
-			result.push({
-				text: '',
-				highlight: false
-			});
-		} else if (result.length === 0) {
+		} else if (
+			// If the current character is not highlighted,
+			// and the previous character is highlighted,
+			(!indices.includes(index) && indices.includes(index - 1)) ||
+			// the result array is empty
+			result.length == 0
+		) {
 			result.push({
 				text: '',
 				highlight: false
 			});
 		}
+
 		result[result.length - 1].text += char;
 	}
 	return result;
