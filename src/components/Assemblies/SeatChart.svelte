@@ -15,11 +15,6 @@
 	let outterRadius = 224;
 	let circleDiameter = 8.5;
 
-	let width = 300;
-	let height = 150; // Half of the width
-
-	let circles = [];
-
 	interface LineCalculator {
 		total: number;
 		count: number;
@@ -68,21 +63,28 @@
 		return -1;
 	}
 
+	let component: HTMLDivElement | null = null;
+
 	onMount(() => {
 		const svg = d3.select('#half-circle-chart');
 		const points = getPoints();
 
 		points.forEach((value) => {
-			const circle = svg
+			svg
 				.append('circle')
-				.attr('cx', value.x + 230)
-				.attr('cy', value.y + 230)
+				.attr('cx', value.x + outterRadius + circleDiameter)
+				.attr('cy', value.y + outterRadius + circleDiameter)
 				.attr('r', 4)
 				.attr('fill', value.color); // Change the fill color as needed
-
-			circles.push(circle);
 		});
 	});
 </script>
 
-<svg id="half-circle-chart" class="w-full h-full" />
+<div bind:this={component} class="w-full h-full relative flex justify-center items-center">
+	<svg
+		id="half-circle-chart"
+		width={(outterRadius + circleDiameter) * 2}
+		height={outterRadius + circleDiameter * 2}
+		class=""
+	/>
+</div>
