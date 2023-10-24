@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import ResultItem from './ResultItem.svelte';
-	import type { SearchResultItem, SearchResults } from '$models/search';
+	import type { SearchResultItem } from '$models/search';
 	import { BillStatus } from '$models/bill';
 	import { DefaultVotingResult } from '$models/voting';
 	export let Hst: Hst;
 
-	type ResultItemType = {
+	interface ResultItemType {
 		title: string;
 		item: SearchResultItem;
-	};
+	}
 
 	const resultItems: ResultItemType[] = [
 		{

@@ -21,7 +21,7 @@
 				{/if}
 			</div>
 			{#if item.billStatus !== undefined || item.voteResult !== undefined}
-				<div class=" shrink-0">
+				<div class="shrink-0">
 					{#if item.billStatus}
 						<BillStatusTag status={item.billStatus} />
 					{/if}

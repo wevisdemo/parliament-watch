@@ -69,7 +69,6 @@
 				status: BillStatus.Success
 			}
 		],
-
 		votings: [
 			{
 				name: 'ร่าง พ.ร.บ. สุราก้าวหน้า (วาระที่ 1)',
