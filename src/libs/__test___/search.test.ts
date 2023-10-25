@@ -1,13 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { normalizeSearchQuery, calculateScore, highlightText } from '../search';
 
 describe('normalizeSearchQuery', () => {
-	it('should add spaces after dots from words', () => {
-		const query = 'Mr.John Doe';
-		const normalizedQuery = normalizeSearchQuery(query);
-		expect(normalizedQuery).toEqual(['Mr.', 'John', 'Doe']);
-	});
-
 	it('should add spaces around numbers', () => {
 		const query = 'I have 3apples and 2oranges';
 		const normalizedQuery = normalizeSearchQuery(query);
@@ -24,6 +18,27 @@ describe('normalizeSearchQuery', () => {
 		const query = '  ';
 		const normalizedQuery = normalizeSearchQuery(query);
 		expect(normalizedQuery).toEqual([]);
+	});
+
+	it('should split words', () => {
+		const query = 'นางสาวสมใจ ใจดี';
+		const normalizedQuery = normalizeSearchQuery(query);
+		expect(normalizedQuery).toEqual(['นางสาว', 'สมใจ', 'ใจดี']);
+	});
+
+	it('should split words by space when Intl is not available', () => {
+		vi.stubGlobal('Intl', undefined);
+		const query = 'นางสาวสมใจ ใจดี';
+		const normalizedQuery = normalizeSearchQuery(query);
+		expect(normalizedQuery).toEqual(['นางสาวสมใจ', 'ใจดี']);
+	});
+
+	it('should split words by space when Intl.Segmenter is not available', () => {
+		vi.stubGlobal('Intl', {});
+		vi.stubGlobal('Intl.Segmenter', undefined);
+		const query = 'นางสาวสมใจ ใจดี';
+		const normalizedQuery = normalizeSearchQuery(query);
+		expect(normalizedQuery).toEqual(['นางสาวสมใจ', 'ใจดี']);
 	});
 });
 
