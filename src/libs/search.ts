@@ -7,16 +7,33 @@ import type {
 } from '$models/search';
 
 /**
- * Normalizes a search query by adding spaces around dots and numbers, splitting by whitespace, and removing duplicates.
+ * Tokenizes the given text into an array of words.
+ * If the Intl.Segmenter API is available, it will be used to segment the text into words.
+ * Otherwise, the text will be split by spaces.
+ * @param text - The text to tokenize.
+ * @returns An array of words.
+ */
+const tokenize = (text: string) => {
+	// Use Intl.Segmenter API if available
+	if (Intl !== undefined && Intl.Segmenter !== undefined) {
+		const segmenter = new Intl.Segmenter('th', { granularity: 'word' });
+		return Array.from(segmenter.segment(text))
+			.map((segment) => segment.segment)
+			.filter((q) => q.trim().length > 0);
+	}
+	// Otherwise, split by spaces
+	return text.split(' ');
+};
+
+/**
+ * Normalizes a search query by adding spaces around dots and digits, and removing duplicate and empty tokens.
  * @param query - The search query to normalize.
- * @returns The normalized search query.
+ * @returns An array of normalized search tokens.
  */
 export function normalizeSearchQuery(query: string) {
-	return query
-		.replace(/\.([^\s])/g, '. $1')
-		.replace(/(\d+)/g, ' $1 ')
-		.split(/\s/g)
-		.filter((q) => q.length > 0)
+	const normalized = query.replace(/\.([^\s])/g, '. $1').replace(/(\d+)/g, ' $1 ');
+	return tokenize(normalized)
+		.filter((q) => q.trim().length > 0)
 		.filter((q, index, self) => self.indexOf(q) === index);
 }
 
