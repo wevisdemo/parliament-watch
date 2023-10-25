@@ -13,9 +13,9 @@ import type {
  * @param text - The text to tokenize.
  * @returns An array of words.
  */
-const tokenize = (text: string) => {
+function tokenize(text: string) {
 	// Use Intl.Segmenter API if available
-	if (Intl !== undefined && Intl.Segmenter !== undefined) {
+	if (Intl && Intl.Segmenter) {
 		const segmenter = new Intl.Segmenter('th', { granularity: 'word' });
 		return Array.from(segmenter.segment(text))
 			.map((segment) => segment.segment)
@@ -23,7 +23,7 @@ const tokenize = (text: string) => {
 	}
 	// Otherwise, split by spaces
 	return text.split(' ');
-};
+}
 
 /**
  * Normalizes a search query by adding spaces around dots and digits, and removing duplicate and empty tokens.
@@ -45,12 +45,12 @@ export function normalizeSearchQuery(query: string) {
  * @param highlight - Whether to highlight the search query in the search results. Default is true.
  * @returns The search results object containing politicians, bills, and votings categories.
  */
-export const search = (
+export function search(
 	query: string,
 	searchIndexes: SearchIndexes,
 	keepTopN = 5,
 	highlight = true
-): SearchResults => {
+): SearchResults {
 	// Normalize query
 	const queries = normalizeSearchQuery(query);
 	const politicianCandidates = postCalcuateScore(
@@ -83,7 +83,7 @@ export const search = (
 			url: ''
 		}))
 	};
-};
+}
 
 /**
  * Calculates the search score for each item in the searchItems array based on the queries array.
@@ -92,11 +92,11 @@ export const search = (
  * @param [includeAllQuery=true] - Whether all queries must be matched or not.
  * @returns - The array of search result items with their scores and matched indices.
  */
-export const calculateScore = <T extends { name: string }>(
+export function calculateScore<T extends { name: string }>(
 	queries: string[],
 	searchItems: T[],
 	includeAllQuery = true
-): ScoreResultItem<T>[] => {
+): ScoreResultItem<T>[] {
 	return searchItems.map((item: T) => {
 		let score = 0;
 		const matchedIndices: number[] = [];
@@ -150,7 +150,7 @@ export const calculateScore = <T extends { name: string }>(
 			matchedIndices
 		};
 	});
-};
+}
 
 /**
  * Calculates the score and highlights the matched indices of the top k candidates.
@@ -158,10 +158,10 @@ export const calculateScore = <T extends { name: string }>(
  * @param keepTopN - The number of top candidates to return.
  * @returns - The list of top candidates with highlighted matched indices.
  */
-const postCalcuateScore = <T extends { name: string }>(
+function postCalcuateScore<T extends { name: string }>(
 	candidates: ScoreResultItem<T>[],
 	keepTopN = 5
-): ScoreAndHighlightResultItem<T>[] => {
+): ScoreAndHighlightResultItem<T>[] {
 	return (
 		candidates
 			// Filter out score 0
@@ -176,7 +176,7 @@ const postCalcuateScore = <T extends { name: string }>(
 				highlightedName: highlightText(c.item.name, c.matchedIndices)
 			}))
 	);
-};
+}
 
 /**
  * Returns an array of objects representing the highlighted text.
