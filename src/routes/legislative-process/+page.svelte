@@ -3,13 +3,43 @@
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
-	import { DataTable } from 'carbon-components-svelte';
+	import DataTable from '../../components/DataTable/DataTable.svelte';
+
+	import 'carbon-components-svelte/css/all.css';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-	export let data;
-	const { proposingALawTable } = data;
+	const tableData = [
+		{
+			'': 'ครม.',
+			'ร่าง พ.ร.บ.': 'มีสิทธิเสนอร่าง',
+			'ออก พ.ร.ก.': 'มีสิทธิเสนอร่าง',
+			'ร่าง พ.ร.ป.': 'มีสิทธิเสนอร่าง',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': 'มีสิทธิเสนอร่าง'
+		},
+		{
+			'': 'สส.',
+			'ร่าง พ.ร.บ.': '20 คน',
+			'ออก พ.ร.ก.': '-',
+			'ร่าง พ.ร.ป.': 'สส. ไม่น้อยกว่า 1 ใน 10',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': 'สส. ไม่น้อยกว่า 1 ใน 5'
+		},
+		{
+			'': 'สมาชิกรัฐสภา',
+			'ร่าง พ.ร.บ.': '-',
+			'ออก พ.ร.ก.': '-',
+			'ร่าง พ.ร.ป.': '-',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': 'สส. และ สว. ไม่น้อยกว่า 1 ใน 5'
+		},
+		{
+			'': 'ประชาชนผู้มีสิทธิเลือกตั้ง',
+			'ร่าง พ.ร.บ.': '10,000 คน',
+			'ออก พ.ร.ก.': '-',
+			'ร่าง พ.ร.ป.': '-',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': '50,000 คน'
+		}
+	];
 </script>
 
 <div class="flex flex-col w-full">
@@ -68,7 +98,6 @@
 					<h2 class="fluid-heading-04" id="ขั้นตอนทั่วไป">ขั้นตอนทั่วไป</h2>
 					<hr />
 				</div>
-
 				<div>
 					ขั้นตอนการพิจารณาร่างกฎหมายแต่ละประเภทจะมีความแตกต่างกันในบางรายละเอียด แต่โดยทั่วไปแล้ว
 					กระบวนการออกกฎหมายโดยรัฐสภา อย่างเช่นการออก พ.ร.บ. หรือการอนุมัติ พ.ร.ก. จะดำเนินการผ่าน <b
@@ -83,26 +112,10 @@
 					/>
 				</div>
 				<div class="py-6">
-					<h1 class="fluid-heading-01" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h1>
+					<h3 class="fluid-heading-04 mb-0" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h3>
 					<p class="py-4">ผู้มีสิทธิเสนอร่างกฎหมาย และลำดับชั้นของกฎหมายที่เสนอได้</p>
 					<div class="relative">
-						<DataTable
-							headers={[
-								{ key: 'name', value: '' },
-								{ key: 'col1', value: 'ร่าง พ.ร.บ.' },
-								{ key: 'col2', value: 'ออก พ.ร.ก.' },
-								{ key: 'col3', value: 'ร่าง พ.ร.ป.' },
-								{ key: 'col4', value: '	ร่างแก้ไขบทบัญญัติใน รธน.' }
-							]}
-							rows={proposingALawTable.map((item, _) => ({
-								id: item.id,
-								name: item.id,
-								col1: item.col1,
-								col2: item.col2,
-								col3: item.col3,
-								col4: item.col4
-							}))}
-						/>
+						<DataTable {tableData} />
 					</div>
 				</div>
 
@@ -181,10 +194,6 @@
 		@apply text-text-primary mb-4;
 	}
 
-	table {
-		@apply bg-magenta-30;
-	}
-
 	:global(.bx--data-table th) {
 		@apply py-4;
 	}
@@ -194,10 +203,6 @@
 	}
 	:global(.bx--data-table tbody tr td:first-child) {
 		@apply font-bold;
-	}
-
-	process-detail {
-		@apply text-text-primary mb-4;
 	}
 
 	hr {
