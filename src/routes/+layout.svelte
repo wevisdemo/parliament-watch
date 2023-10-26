@@ -1,5 +1,4 @@
 <script>
-	import '../styles/carbon/pre-compiled.css';
 	import '../styles/index.css';
 	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
 	import { InlineNotification } from 'carbon-components-svelte';
