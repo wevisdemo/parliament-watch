@@ -40,7 +40,7 @@
 		<div class="flex flex-col gap-2">
 			<p>{details}</p>
 			<div class="flex flex-row items-center gap-1">
-				<span class="font-semibold mr-1 shrink-0 text-sm">เสนอโดย</span>
+				<strong class="mr-1 shrink-0 text-sm">เสนอโดย</strong>
 				{#each presentedBy as presenter, idx}
 					<div
 						class="flex flex-row items-baseline after:content-['/'] last:after:content-none after:ml-1"
@@ -50,7 +50,7 @@
 				{/each}
 			</div>
 			<div class="flex flex-row items-center gap-1 overflow-hidden">
-				<span class="font-semibold mr-1 shrink-0 text-sm">พิจารณาโดย</span>
+				<strong class="mr-1 shrink-0 text-sm">พิจารณาโดย</strong>
 				{#if Array.isArray(consideredBy)}
 					<Tag {...tagProps}>{consideredBy[0]}</Tag>
 					<ArrowRight />
@@ -60,7 +60,7 @@
 				{/if}
 			</div>
 			<div class="flex flex-row items-center gap-1">
-				<span class="font-semibold mr-1 shrink-0 text-sm">บังคับใช้เมื่อรับรองโดย</span>
+				<strong class="mr-1 shrink-0 text-sm">บังคับใช้เมื่อรับรองโดย</strong>
 				<Tag {...tagProps}>{endorsedBy}</Tag>
 			</div>
 		</div>
@@ -75,18 +75,19 @@
 					{/if}
 				</div>
 				<div class="flex flex-col gap-y-2">
-					<span class="font-bold">เริ่มต้น</span>
+					<strong>เริ่มต้น</strong>
 					{#each steps as step}
 						<div class="flex flex-row items-center gap-1">
 							<CheckmarkFilled size={24} class="fill-green-70" />
 							<hr class="w-3 width border-[1px]" />
 							<Tag
 								class="bg-text-primary text-ui-background font-semibold w-[364px] justify-start my-0"
-								>{step}</Tag
 							>
+								{step}
+							</Tag>
 						</div>
 					{/each}
-					<span class="font-bold">สำเร็จ</span>
+					<strong>สำเร็จ</strong>
 				</div>
 				<div class="flex flex-col gap-1">
 					<h4 class="font-semibold">ตัวอย่าง</h4>
