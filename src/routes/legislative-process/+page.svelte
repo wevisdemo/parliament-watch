@@ -76,12 +76,15 @@
 							]}
 							examples={[
 								{
-									link: '#',
+									link: 'https://theyworkforus.wevis.info/votelog/263/',
 									description: 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม (วาระ 1)'
 								},
-								{ link: '#', description: 'ร่าง พ.ร.บ. ล้มละลาย (วาระ 1)' },
 								{
-									link: '#',
+									link: 'https://theyworkforus.wevis.info/votelog/230/',
+									description: 'ร่าง พ.ร.บ. ล้มละลาย (วาระ 1)'
+								},
+								{
+									link: 'http://sql.ldd.go.th/intraaccount/Information_Law/File/Law-10.pdf',
 									description: 'พ.ร.บ. ด้วยการกระทำความผิดเกี่ยวกับคอมพิวเตอร์ พ.ศ. 2560'
 								}
 							]}
@@ -102,9 +105,18 @@
 								'ประกาศใช้เป็น พ.ร.บ. บนราชกิจจานุเบกษา'
 							]}
 							examples={[
-								{ link: '#', description: 'อนุมัติ พ.ร.ก. พิกัดอัตราศุลกากร' },
-								{ link: '#', description: 'อนุมัติ พ.ร.ก. เงินกู้โควิด-19 (ห้าแสนล้านบาท)' },
-								{ link: '#', description: 'พ.ร.ก.การประมง พ.ศ. 2558' }
+								{
+									link: 'https://theyworkforus.wevis.info/votelog/152/',
+									description: 'อนุมัติ พ.ร.ก. พิกัดอัตราศุลกากร'
+								},
+								{
+									link: 'https://theyworkforus.wevis.info/votelog/83/',
+									description: 'อนุมัติ พ.ร.ก. เงินกู้โควิด-19 (ห้าแสนล้านบาท)'
+								},
+								{
+									link: 'https://www4.fisheries.go.th/file_footer/20160517105511_file.pdf',
+									description: 'พ.ร.ก.การประมง พ.ศ. 2558'
+								}
 							]}
 						/>
 						<Collapsible
@@ -122,13 +134,19 @@
 								'ประกาศบนราชกิจจานุเบกษา'
 							]}
 							examples={[
-								{ link: '#', description: 'แก้ รธน. ปลดล็อคท้องถิ่น (คณะก้าวหน้า) (วาระ 1)' },
 								{
-									link: '#',
+									link: 'https://theyworkforus.wevis.info/votelog/262/',
+									description: 'แก้ รธน. ปลดล็อคท้องถิ่น (คณะก้าวหน้า) (วาระ 1)'
+								},
+								{
+									link: 'https://theyworkforus.wevis.info/votelog/45/',
 									description:
 										'แก้ รธน. ฉบับที่ 7 ร่างประชาชน รื้อ สร้าง ร่าง รัฐธรรมนูญใหม่ (โหวต 7 ฉบับ)'
 								},
-								{ link: '#', description: 'แก้ รธน. เพิ่มสิทธิพื้นฐาน (เพื่อไทย) (วาระ 1)' }
+								{
+									link: 'https://theyworkforus.wevis.info/votelog/291/',
+									description: 'แก้ รธน. เพิ่มสิทธิพื้นฐาน (เพื่อไทย) (วาระ 1)'
+								}
 							]}
 						/>
 						<Collapsible
@@ -146,12 +164,18 @@
 								'ประกาศบนราชกิจจานุเบกษา'
 							]}
 							examples={[
-								{ link: '#', description: 'ร่าง พ.ร.ป.พรรคการเมือง (ก้าวไกล) (วาระ 1)' },
 								{
-									link: '#',
+									link: 'https://theyworkforus.wevis.info/votelog/177/',
+									description: 'ร่าง พ.ร.ป.พรรคการเมือง (ก้าวไกล) (วาระ 1)'
+								},
+								{
+									link: 'https://theyworkforus.wevis.info/votelog/174/',
 									description: 'ร่าง พ.ร.ป.พรรคการเมือง (คณะรัฐมนตรี) (วาระ 1)'
 								},
-								{ link: '#', description: 'แก้ไขร่าง พ.ร.ป. ส.ส. เรื่องการคำนวณบัญชีรายชื่อ' }
+								{
+									link: 'https://theyworkforus.wevis.info/votelog/202/',
+									description: 'แก้ไขร่าง พ.ร.ป. ส.ส. เรื่องการคำนวณบัญชีรายชื่อ'
+								}
 							]}
 						/>
 					</div>
