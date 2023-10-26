@@ -32,20 +32,16 @@
 
 <Tile
 	on:click={toggle}
-	class="bg-teal-10 border border-solid border-gray-30 p-0 hover:cursor-pointer"
+	class="bg-teal-10 border border-solid border-gray-30 p-0 hover:cursor-pointer {$$restProps.class}"
 >
-	<div class="p-5 gap-y-4">
+	<div class="p-5 flex flex-col gap-y-4">
 		<h3 class="fluid-heading-03 mb-2">{title}</h3>
-		<div class="flex flex-col">
+		<div class="flex flex-col gap-2">
 			<p>{details}</p>
 			<div class="flex flex-row items-center gap-1">
 				<h4 class="font-semibold mr-1 shrink-0">เสนอโดย</h4>
 				{#each presentedBy as presenter, idx}
-					<div
-						class="flex flex-row items-baseline {idx != 0
-							? "before:content-['/'] before:self-center"
-							: ''}"
-					>
+					<div class="flex flex-row items-baseline after:content-['/'] last:after:content-none">
 						<Tag {...tagProps}>{presenter}</Tag>
 					</div>
 				{/each}
@@ -66,15 +62,15 @@
 			</div>
 		</div>
 		<div
-			class=" grid transition-[grid-template-rows] gap-y-4 {isOpen
-				? 'grid-rows-[1fr]'
-				: 'grid-rows-[0fr]'}"
+			class=" grid transition-[grid-template-rows] {isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}"
 		>
-			<div class="flex flex-col overflow-hidden gap-y-2">
-				<h4 class="font-semibold leading-loose -mb-1">ขั้นตอน</h4>
-				{#if stepDescription}
-					<p class="leading-snug">{stepDescription}</p>
-				{/if}
+			<div class="flex flex-col overflow-hidden gap-y-4">
+				<div>
+					<h4 class="font-semibold leading-loose">ขั้นตอน</h4>
+					{#if stepDescription}
+						<p class="leading-snug">{stepDescription}</p>
+					{/if}
+				</div>
 				<div class="flex flex-col gap-y-2">
 					<span class="font-bold">เริ่มต้น</span>
 					{#each steps as step}
