@@ -92,8 +92,10 @@
 					<h4 class="font-semibold">ตัวอย่าง</h4>
 					<ul class="list-inside list-disc leading-tight">
 						{#each examples as example}
-							<li>
-								<Link inline href={example.link}>{example.description}</Link>
+							<li class="whitespace-nowrap">
+								<Link on:click={(event) => event.stopPropagation()} inline href={example.link}>
+									{example.description}
+								</Link>
 							</li>
 						{/each}
 					</ul>
