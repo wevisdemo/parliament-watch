@@ -3,7 +3,7 @@
 	import LowerHouseSummary from './LowerHouseSummary.svelte';
 	import SeatChart from './SeatChart.svelte';
 	import UpperHouseSummary from './UpperHouseSummary.svelte';
-	import type { PartySeat } from './shared';
+	import { getSenateColorByTitle, type PartySeat } from './shared';
 
 	export let data: MemberGroup[] = [];
 	export let houseLevel = 'upper';
@@ -22,6 +22,9 @@
 		return result;
 	};
 
+	const lowerHouseSeatLines = [58, 54, 51, 49, 46, 43, 40, 37, 35, 32, 29, 26];
+	const upperHouseSeatLines = [39, 36, 33, 30, 28, 25, 22, 20, 17];
+
 	const getLowerHouseTotalPartie = (): PartySeat[] => {
 		const governmentGroup = data.find((group) => group.name === 'ฝ่ายรัฐบาล');
 		const oppositeGovGroup = data.find((group) => group.name === 'ฝ่ายค้าน');
@@ -34,20 +37,36 @@
 		return [...governmentParties, ...oppositeGovParties];
 	};
 
+	const getUpperHouseTotalPartie = (): PartySeat[] => {
+		return data.map((group) => {
+			return {
+				name: group.name,
+				count: group.total,
+				color: getSenateColorByTitle(group.name)
+			};
+		});
+	};
+
 	const getSeatParties = (): PartySeat[] => {
 		if (houseLevel === 'lower') {
 			return getLowerHouseTotalPartie();
 		}
-		// TODO: implement upper house
-		return [];
+		return getUpperHouseTotalPartie();
+	};
+
+	const getLineAmounts = (): number[] => {
+		if (houseLevel === 'lower') {
+			return lowerHouseSeatLines;
+		}
+		return upperHouseSeatLines;
 	};
 </script>
 
-<div class="flex md:flex-row flex-col">
-	<div class="w-[50%]">
-		<SeatChart parties={getSeatParties()} />
+<div class="flex md:flex-row flex-col space-y-[16px]">
+	<div class="md:w-[50%]">
+		<SeatChart parties={getSeatParties()} lineAmounts={getLineAmounts()} />
 	</div>
-	<div class="w-[50%]">
+	<div class="md:w-[50%]">
 		{#if houseLevel === 'lower'}
 			<LowerHouseSummary {data} />
 		{:else}

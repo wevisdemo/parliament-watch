@@ -26,7 +26,7 @@
 		{/each}
 		<a
 			href="/assemblies/{assemblyId}/votes"
-			class="w-full max-w-[288px] h-full bg-blue-60 flex text-[#FFFFFF] justify-between hover:bg-blue-70"
+			class="w-full max-w-[288px] h-fit bg-blue-60 flex text-[#FFFFFF] justify-between hover:bg-blue-70"
 		>
 			<span class="fluid-heading-04 p-[16px]">ดูผลการลงมติทั้งหมด</span>
 			<div class="pr-[16px] pb-[16px] flex items-end">
