@@ -26,7 +26,8 @@
 	let tagProps: ComponentProps<Tag> = {
 		type: 'outline',
 		size: 'sm',
-		class: 'border-[1px]  bg-[transparent] line-clamp-1 leading-normal'
+		class:
+			'text-xs border-[1px]  bg-[transparent] line-clamp-1 leading-normal m-0 pointer-events-none'
 	};
 </script>
 
@@ -39,15 +40,17 @@
 		<div class="flex flex-col gap-2">
 			<p>{details}</p>
 			<div class="flex flex-row items-center gap-1">
-				<h4 class="font-semibold mr-1 shrink-0">เสนอโดย</h4>
+				<span class="font-semibold mr-1 shrink-0 text-sm">เสนอโดย</span>
 				{#each presentedBy as presenter, idx}
-					<div class="flex flex-row items-baseline after:content-['/'] last:after:content-none">
+					<div
+						class="flex flex-row items-baseline after:content-['/'] last:after:content-none after:ml-1"
+					>
 						<Tag {...tagProps}>{presenter}</Tag>
 					</div>
 				{/each}
 			</div>
 			<div class="flex flex-row items-center gap-1 overflow-hidden">
-				<h4 class="font-semibold mr-1 shrink-0">พิจารณาโดย</h4>
+				<span class="font-semibold mr-1 shrink-0 text-sm">พิจารณาโดย</span>
 				{#if Array.isArray(consideredBy)}
 					<Tag {...tagProps}>{consideredBy[0]}</Tag>
 					<ArrowRight />
@@ -57,7 +60,7 @@
 				{/if}
 			</div>
 			<div class="flex flex-row items-center gap-1">
-				<h4 class="font-semibold mr-1 shrink-0">บังคับใช้เมื่อรับรองโดย</h4>
+				<span class="font-semibold mr-1 shrink-0 text-sm">บังคับใช้เมื่อรับรองโดย</span>
 				<Tag {...tagProps}>{endorsedBy}</Tag>
 			</div>
 		</div>
