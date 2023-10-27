@@ -1,43 +1,43 @@
 <script land="ts">
-	import dayjs from 'dayjs';
-	import buddhistEra from 'dayjs/plugin/buddhistEra';
-	import 'dayjs/locale/th';
-	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
-	import DataTable from '../../components/DataTable/DataTable.svelte';
+	import dayjs from "dayjs";
+	import buddhistEra from "dayjs/plugin/buddhistEra";
+	import "dayjs/locale/th";
+	import Sidebar from "$components/LegislativeProcess/Sidebar.svelte";
+	import DataTable from "../../components/DataTable/DataTable.svelte";
 
-	import 'carbon-components-svelte/css/all.css';
+	import "carbon-components-svelte/css/all.css";
 
 	dayjs.extend(buddhistEra);
-	dayjs.locale('th');
+	dayjs.locale("th");
 
 	const tableData = [
 		{
-			'': 'ครม.',
-			'ร่าง พ.ร.บ.': 'มีสิทธิเสนอร่าง',
-			'ออก พ.ร.ก.': 'มีสิทธิเสนอร่าง',
-			'ร่าง พ.ร.ป.': 'มีสิทธิเสนอร่าง',
-			'ร่างแก้ไขบทบัญญัติใน รธน.': 'มีสิทธิเสนอร่าง'
+			"": "ครม.",
+			"ร่าง พ.ร.บ.": "มีสิทธิเสนอร่าง",
+			"ออก พ.ร.ก.": "มีสิทธิเสนอร่าง",
+			"ร่าง พ.ร.ป.": "มีสิทธิเสนอร่าง",
+			"ร่างแก้ไขบทบัญญัติใน รธน.": "มีสิทธิเสนอร่าง"
 		},
 		{
-			'': 'สส.',
-			'ร่าง พ.ร.บ.': '20 คน',
-			'ออก พ.ร.ก.': '-',
-			'ร่าง พ.ร.ป.': 'สส. ไม่น้อยกว่า 1 ใน 10',
-			'ร่างแก้ไขบทบัญญัติใน รธน.': 'สส. ไม่น้อยกว่า 1 ใน 5'
+			"": "สส.",
+			"ร่าง พ.ร.บ.": "20 คน",
+			"ออก พ.ร.ก.": "-",
+			"ร่าง พ.ร.ป.": "สส. ไม่น้อยกว่า 1 ใน 10",
+			"ร่างแก้ไขบทบัญญัติใน รธน.": "สส. ไม่น้อยกว่า 1 ใน 5"
 		},
 		{
-			'': 'สมาชิกรัฐสภา',
-			'ร่าง พ.ร.บ.': '-',
-			'ออก พ.ร.ก.': '-',
-			'ร่าง พ.ร.ป.': '-',
-			'ร่างแก้ไขบทบัญญัติใน รธน.': 'สส. และ สว. ไม่น้อยกว่า 1 ใน 5'
+			"": "สมาชิกรัฐสภา",
+			"ร่าง พ.ร.บ.": "-",
+			"ออก พ.ร.ก.": "-",
+			"ร่าง พ.ร.ป.": "-",
+			"ร่างแก้ไขบทบัญญัติใน รธน.": "สส. และ สว. ไม่น้อยกว่า 1 ใน 5"
 		},
 		{
-			'': 'ประชาชนผู้มีสิทธิเลือกตั้ง',
-			'ร่าง พ.ร.บ.': '10,000 คน',
-			'ออก พ.ร.ก.': '-',
-			'ร่าง พ.ร.ป.': '-',
-			'ร่างแก้ไขบทบัญญัติใน รธน.': '50,000 คน'
+			"": "ประชาชนผู้มีสิทธิเลือกตั้ง",
+			"ร่าง พ.ร.บ.": "10,000 คน",
+			"ออก พ.ร.ก.": "-",
+			"ร่าง พ.ร.ป.": "-",
+			"ร่างแก้ไขบทบัญญัติใน รธน.": "50,000 คน"
 		}
 	];
 </script>
@@ -48,7 +48,7 @@
 			<h1 class="fluid-heading-05">ร่างกฎหมายกลายเป็นกฎหมายได้อย่างไร</h1>
 			<p>
 				<span class="text-text-primary font-bold">อัปเดตล่าสุด :</span>
-				<span class="text-helper-text-01">{dayjs(new Date()).format('DD MMM BBBB')}</span>
+				<span class="text-helper-text-01">{dayjs(new Date()).format("DD MMM BBBB")}</span>
 			</p>
 		</div>
 	</header>
@@ -106,7 +106,7 @@
 				</div>
 				<div class="flex w-full justify-center items-center py-4">
 					<img
-						src={'images/legislative-process/general-process.png'}
+						src={"images/legislative-process/general-process.png"}
 						alt="general-process-process"
 						class="max-w-480"
 					/>
