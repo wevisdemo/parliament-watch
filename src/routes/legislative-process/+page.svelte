@@ -194,17 +194,6 @@
 		@apply text-text-primary mb-4;
 	}
 
-	:global(.bx--data-table th) {
-		@apply py-4;
-	}
-
-	:global(.bx--data-table tbody tr td) {
-		@apply text-gray-100 py-4 bg-gray-10;
-	}
-	:global(.bx--data-table tbody tr td:first-child) {
-		@apply font-bold;
-	}
-
 	hr {
 		@apply border-0 border-solid border-gray-20 border-t w-full box-border;
 	}
