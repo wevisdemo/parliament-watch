@@ -11,7 +11,7 @@
 
 {#if isActive}
 	<aside
-		class="fixed top-0 left-0 h-full pt-12 text-white bg-gray-90 z-10 w-screen md:w-80 opacity-100 transition-all duration-200 overflow-hidden overflow-y-auto"
+		class="fixed top-0 left-0 h-full pt-12 text-white bg-gray-90 z-40 w-screen md:w-80 opacity-100 transition-all duration-200 overflow-hidden overflow-y-auto"
 		transition:slide={{ duration: 350, axis: 'x' }}
 	>
 		<div class="pt-2 pr-2">

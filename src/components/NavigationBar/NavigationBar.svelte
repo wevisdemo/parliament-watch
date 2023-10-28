@@ -14,6 +14,8 @@
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import NavigationPane from './NavigationPane.svelte';
 	import SearchInput from './SearchInput.svelte';
+	import SearchResult from '$components/SearchResult/SearchResult.svelte';
+	import type { SearchResults } from '$models/search';
 
 	const menuList: Menu[] = [
 		{
@@ -60,6 +62,7 @@
 	let showHeader = true;
 	let sideNavActive = false;
 	let hideMainMenu = false;
+	let searchResults: SearchResults | null = null;
 
 	$: if (screenSize > 1056) sideNavActive = false;
 
@@ -90,12 +93,16 @@
 					<MenuList {menuList} />
 				</MenuPane>
 			</svelte:fragment>
-			<svelte:fragment slot="trailing">
+			<div slot="trailing" class="absolute right-0">
 				<SearchInput
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}
+					bind:searchResults
 				/>
-			</svelte:fragment>
+				{#if searchResults !== null}
+					<SearchResult {searchResults} />
+				{/if}
+			</div>
 		</NavigationPane>
 	{/if}
 </header>

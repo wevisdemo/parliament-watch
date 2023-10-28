@@ -1,21 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './tailwind/base.css';
+@import './carbon/pre-compiled.css';
+@import './tailwind/component-utility.css';
+@import './font-face.css';
 
-@font-face {
-	font-family: 'Kondolar Thai';
-	font-display: swap;
-	src: url(https://design-systems.wevis.info/KondolarThai-Regular.otf) format('opentype');
+html {
+	scroll-behavior: smooth;
 }
-@font-face {
-	font-family: 'Kondolar Thai';
-	font-weight: 700;
-	font-display: swap;
-	src: url(https://design-systems.wevis.info/KondolarThai-Bold.otf) format('opentype');
+
+.legislative-process-sidebar .bx--side-nav__overlay-active {
+	background-color: transparent;
 }
-@font-face {
-	font-family: 'Kondolar Thai';
-	font-weight: 900;
-	font-display: swap;
-	src: url(https://design-systems.wevis.info/KondolarThai-Black.otf) format('opentype');
+
+.legislative-process-sidebar .bx--side-nav--ux {
+	top: 0;
 }

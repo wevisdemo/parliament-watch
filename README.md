@@ -118,7 +118,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 ### Typography
 
-- The utility classes is globally available as declared in [typography.scss](src/styles/typography.scss)
+- The utility classes is globally available as declared in [typography.scss](src/styles/carbon/typography.scss)
 - See [Figma file](<https://www.figma.com/file/wydykFjb2U2SLFIz5YmiE8/(v11)-Text-Styles---IBM-Design-Language-(Community)>)
 
 ### Colors
