@@ -105,7 +105,7 @@
 					</h2>
 					<hr />
 					<div class="flex flex-col gap-2 py-4">
-						{#each data.representatives as section, i}
+						{#each data.dutySection.representatives as section, i}
 							<h3 class="fluid-heading-03" id={section.heading}>
 								{i + 1}. {section.heading}
 							</h3>
@@ -123,7 +123,7 @@
 					</h2>
 					<hr />
 					<div class="flex flex-col gap-2 py-4">
-						{#each data.senates as section, i}
+						{#each data.dutySection.senates as section, i}
 							<h3 class="fluid-heading-03" id={section.heading}>
 								{i + 1}. {section.heading}
 							</h3>
@@ -142,7 +142,7 @@
 					<hr />
 					<p class="pt-4">รัฐสภาจะประชุมร่วมกันได้ต้องเป็นไปตามที่กำหนดไว้ในมาตรา</p>
 					<div class="flex flex-col gap-2 py-4">
-						{#each data.both as section, i}
+						{#each data.dutySection.both as section, i}
 							<h3 class="fluid-heading-03" id={section.heading}>
 								{i + 1}. {section.heading}
 							</h3>
@@ -179,6 +179,6 @@
 	}
 
 	ul {
-		@apply list-disc list-inside;
+		@apply list-disc list-outside ml-4;
 	}
 </style>
