@@ -4,8 +4,75 @@
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
 
+	import BillStatusCard from '$components/BillStatusCard/BillStatusCard.svelte';
+
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
+
+	import { BillStatus } from '$models/bill';
+	let nickname = 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
+	let title = 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
+	let proposedBy = {
+		avatar: 'https://placehold.co/24x24',
+		name: 'ดวงฤทธิ์ เบ็ญจาธิกุล ชัยรุ่งเรือง',
+		description: 'สส. ชุดที่ 26 (2566) พรรคก้าวไกล'
+	};
+	let proposedOn = new Date('July 13, 2023');
+	let status = BillStatus.InProgress;
+	let currentState = 'สส. พิจารณา วาระ 2';
+	let daySinceProposed = 210;
+	let billUrl = '#';
+
+	let billStatuses = [
+		{
+			billStatus: BillStatus.InProgress,
+			billAmount: 'xxxx',
+			descriptionTitle: 'ร่างกฎหมายอยู่ในขั้นตอนใดขั้นตอนหนึ่ง ได้แก่',
+			descriptionList: [
+				'ถูกเสนอเข้าสภา',
+				'สภาผู้แทนฯ พิจารณาวาระที่ 1, 2, 3',
+				'วุฒิสภาพิจารณาวาระที่ 1, 2, 3',
+				'แก้ไขเพิ่มเติมเพื่อพิจารณาใหม่',
+				'รัฐสภาพิจารณา'
+			],
+			learnMoreLabel: 'สำรวจกฎหมายที่อยู่ในกระบวนการพิจารณา',
+			learnMoreUrl: '#',
+			class: 'bg-yellow-10'
+		},
+		{
+			billStatus: BillStatus.Success,
+			billAmount: 'xxxx',
+			descriptionTitle: 'บังคับใช้เมื่อ',
+			descriptionList: ['พระมหากษัตริย์ลงพระปรมาภิไธย', 'ประกาศบนราชกิจจานุเบกษา'],
+			learnMoreLabel: 'สำรวจกฎหมายที่บังคับใช้',
+			learnMoreUrl: '#',
+			class: 'bg-teal-10'
+		},
+		{
+			billStatus: BillStatus.Rejected,
+			billAmount: 'xxxx',
+			descriptionTitle: 'ตัวอย่างสาเหตุที่ทำให้กฎหมายตกไป',
+			descriptionList: [
+				'นายกรัฐมนตรีไม่รับรอง',
+				'สส. มีมติไม่รับหลักการ',
+				'สส. มีมติไม่เห็นชอบ',
+				'สว. ยับยั้ง และ สส. มีมติไม่เห็นชอบ',
+				'ศาลรัฐธรรมนูญวินิจฉัยว่าขัดต่อรัฐธรรมนูญ'
+			],
+			learnMoreLabel: 'สำรวจกฎหมายที่ตกไป',
+			learnMoreUrl: '#',
+			class: 'bg-red-10'
+		},
+		{
+			billStatus: BillStatus.Merged,
+			billAmount: 'xxxx',
+			descriptionTitle: 'Description',
+			descriptionList: [],
+			learnMoreLabel: 'สำรวจกฎหมายที่ถูกรวมร่าง',
+			learnMoreUrl: '#',
+			class: 'bg-purple-10'
+		}
+	];
 </script>
 
 <div class="flex flex-col w-full">
@@ -54,6 +121,27 @@
 				<div>
 					<h2 class="fluid-heading-04" id="สถานะของกฎหมาย">สถานะของกฎหมาย</h2>
 					<hr />
+					<p class="mt-6">
+						การจัดแบ่งสถานะของร่างกฎหมายบนเว็บไซต์ Parliament Watch เป็นการจัดแบ่งที่ทีม WeVis
+						กำหนดขึ้นมาเพื่อให้ง่ายต่อการทำความเข้าใจของผู้ใช้ทั่วไป
+						การจัดสถานะของร่างกฎหมายแต่ละฉบับที่ปรากฏบนเว็บไซต์นี้
+						ไม่ได้เป็นสถานะของร่างกฎหมายอย่างเป็นทางการ
+					</p>
+
+					<h2 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h2>
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+						{#each billStatuses as billStatus}
+							<BillStatusCard
+								billAmount={billStatus.billAmount}
+								billStatus={billStatus.billStatus}
+								descriptionTitle={billStatus.descriptionTitle}
+								descriptionList={billStatus.descriptionList}
+								learnMoreLabel={billStatus.learnMoreLabel}
+								learnMoreUrl={billStatus.learnMoreUrl}
+								class={billStatus.class}
+							/>
+						{/each}
+					</div>
 				</div>
 			</section>
 			<section>
