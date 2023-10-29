@@ -6,15 +6,9 @@
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 
 	import type { ComponentProps } from 'svelte';
+	import type { Legislation } from '../../routes/legislative-process/+page';
 
-	export let title: string;
-	export let details: string;
-	export let presentedBy: string[];
-	export let consideredBy: string | [string, string];
-	export let endorsedBy: string;
-	export let stepDescription: string | undefined = undefined;
-	export let steps: string[];
-	export let examples: { link: string; description: string }[];
+	type $$Props = Legislation;
 
 	let isOpen = false;
 
@@ -22,6 +16,17 @@
 		event.stopPropagation();
 		isOpen = !isOpen;
 	}
+
+	const {
+		consideredBy,
+		details,
+		endorsedBy,
+		examples,
+		presentedBy,
+		steps,
+		title,
+		stepDescription
+	} = $$props as $$Props;
 
 	let tagProps: ComponentProps<Tag> = {
 		type: 'outline',
