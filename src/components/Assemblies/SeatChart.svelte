@@ -9,16 +9,18 @@
 		color: string;
 	}
 
-	export let parties: PartySeat[] = [];
-
-	let lineAmounts = [58, 54, 51, 49, 46, 43, 40, 37, 35, 32, 29, 26];
-	let outterRadius = 224;
-	let circleDiameter = 8.5;
-
 	interface LineCalculator {
 		total: number;
 		count: number;
 	}
+
+	export let parties: PartySeat[] = [];
+	export let lineAmounts: number[] = [];
+
+	let component: HTMLDivElement | null = null;
+	let outterRadius = 0;
+	let circleDiameter = outterRadius / 2 / lineAmounts.length;
+	let gap = 0;
 
 	const getIndexOfLine = (lineCals: LineCalculator[]) => {
 		const filledPercents = lineCals.map((lineCal) => lineCal.count / lineCal.total);
@@ -40,7 +42,7 @@
 			for (let i = 0; i < party.count; i++) {
 				let index = getIndexOfLine(lineCals);
 				let line = lineCals[index];
-				let radius = outterRadius - index * circleDiameter - index * 2.15;
+				let radius = outterRadius - index * circleDiameter - index * gap;
 				points.push({
 					x: radius * Math.cos((line.count / (line.total - 1)) * Math.PI + Math.PI),
 					y: radius * Math.sin((line.count / (line.total - 1)) * Math.PI + Math.PI),
@@ -63,28 +65,56 @@
 		return -1;
 	}
 
-	let component: HTMLDivElement | null = null;
+	const getOutterRadius = () => {
+		const componentWidth = component?.clientWidth || 0;
+		return Math.min((componentWidth - 20) / 2, 224);
+	};
 
-	onMount(() => {
+	const redraw = () => {
+		const seatComponents = d3.selectAll('.seat');
+		seatComponents.remove();
+		setUpComponentENV();
+		draw();
+	};
+
+	const draw = () => {
 		const svg = d3.select('#half-circle-chart');
 		const points = getPoints();
-
 		points.forEach((value) => {
 			svg
 				.append('circle')
 				.attr('cx', value.x + outterRadius + circleDiameter)
 				.attr('cy', value.y + outterRadius + circleDiameter)
-				.attr('r', 4)
-				.attr('fill', value.color); // Change the fill color as needed
+				.attr('r', circleDiameter / 2)
+				.attr('fill', value.color)
+				.attr('class', 'seat');
 		});
+	};
+
+	const setUpComponentENV = () => {
+		outterRadius = getOutterRadius();
+		circleDiameter = Math.max(4, outterRadius / 2 / lineAmounts.length);
+		gap = Math.max(
+			(outterRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
+			1
+		);
+	};
+
+	onMount(() => {
+		window.addEventListener('resize', () => redraw());
+		setUpComponentENV();
+		draw();
 	});
 </script>
 
-<div bind:this={component} class="w-full h-full relative flex justify-center items-center">
+<div
+	bind:this={component}
+	class="w-full md:max-w-[448px] max-w-[calc(100vw-32px)] h-full relative flex justify-center items-center m-auto"
+>
 	<svg
 		id="half-circle-chart"
 		width={(outterRadius + circleDiameter) * 2}
 		height={outterRadius + circleDiameter * 2}
-		class=""
+		class="transition-[height] ease-in-out duration-500"
 	/>
 </div>
