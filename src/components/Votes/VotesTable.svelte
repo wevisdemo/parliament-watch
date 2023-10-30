@@ -35,19 +35,11 @@
 			month: 'short',
 			year: '2-digit'
 		});
-
-	const onChangePage = (
-		e: CustomEvent<{
-			page?: number | undefined;
-			pageSize?: number | undefined;
-		}>
-	) => {
-		page = e.detail.page || 1;
-	};
 </script>
 
-<div>
+<div class="w-full max-w-[1056px]">
 	<DataTable
+		zebra
 		headers={[
 			{ key: 'date', value: 'วันที่' },
 			{ key: 'title', value: 'ชื่อมติ' },
@@ -67,8 +59,7 @@
 			{#if cell.key === 'date'}
 				<span class="body-01 text-gray-60">{cell.value}</span>
 			{:else if cell.key === 'title'}
-				<a href="/assemblies/votes/{row.id}" class="body-01 text-blue-60 hover:underline"
-					>{cell.value}</a
+				<a href="/assemblies/votes/{row.id}" class="body-01 text-gray-100 underline">{cell.value}</a
 				>
 			{:else if cell.key === 'result'}
 				{#if cell.value === DefaultVotingResult.Passed}
@@ -79,7 +70,7 @@
 			{:else if cell.key === 'file'}
 				{#if cell.value !== ''}
 					<a href={cell.value}>
-						<DocumentPdf />
+						<DocumentPdf class="w-[20px] h-[20px]" />
 					</a>
 				{/if}
 			{:else}
@@ -90,7 +81,9 @@
 	<Pagination
 		totalItems={votes.length}
 		{pageSize}
+		bind:page
 		pageSizeInputDisabled
-		on:change={(e) => onChangePage(e)}
+		itemRangeText={(min, max, total) => `${min} – ${max} จาก ${total} มติ`}
+		pageRangeText={(_current, total) => `จาก ${total} หน้า`}
 	/>
 </div>

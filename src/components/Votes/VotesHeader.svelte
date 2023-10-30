@@ -19,9 +19,9 @@
 </script>
 
 <div
-	class="flex md:flex-row flex-col w-full justify-between md:py-[48px] py-[16px] md:px-[64px] px-[16px]"
+	class="flex md:flex-row flex-col w-full justify-between md:py-[48px] py-[16px] md:px-[64px] px-[16px] bg-field-01"
 >
-	<div class="w-full max-w-[900px]">
+	<div class="w-full max-w-[900px] flex items-center">
 		<div class="flex md:flex-row flex-col">
 			<h2 class="fluid-heading-04">{data.assembly.name}</h2>
 			<div class="flex items-center md:ml-[16px] ml-[0px]">
