@@ -1,0 +1,52 @@
+<script lang="ts">
+	import { TableSplit } from 'carbon-icons-svelte';
+	import Download from 'carbon-icons-svelte/lib/Download.svelte';
+	import type {
+		AssemblySummary,
+		FilterOptions,
+		VotingSummary
+	} from '../../routes/assemblies/[id]/votes/+page';
+
+	export let data: Data;
+
+	interface Data {
+		assembly: AssemblySummary;
+		filterOptions: FilterOptions;
+		votings: VotingSummary[];
+	}
+
+	const startedYear = data.assembly.startedAt.getFullYear() + 543;
+</script>
+
+<div
+	class="flex md:flex-row flex-col w-full justify-between md:py-[48px] py-[16px] md:px-[64px] px-[16px]"
+>
+	<div class="w-full max-w-[900px]">
+		<div class="flex md:flex-row flex-col">
+			<h2 class="fluid-heading-04">{data.assembly.name}</h2>
+			<div class="flex items-center md:ml-[16px] ml-[0px]">
+				<!-- TODO: handler buttom next and prev-->
+				<img
+					src="/icons/angle-right.svg"
+					alt="angle-left"
+					class="rotate-180 w-[20px] mr-[16px] ml-[0px] fill-gray-300"
+				/>
+				<h3 class="fluid-heading-03">ชุดที่ {data.assembly.term} | {startedYear}</h3>
+				<img src="/icons/angle-right.svg" alt="angle-right" class="w-[20px] ml-[16px] mr-[0px]" />
+			</div>
+		</div>
+	</div>
+	<div class="grid gap-[8px] w-full md:max-w-[224px] max-w-full mt-[16px] md:mt-[0px]">
+		<div class="flex flex-col border border-gray-20 border-solid p-[12px] text-left">
+			<div class="flex">
+				<Download />
+				<span class="heading-01 ml-[4px]">ดาวน์โหลดข้อมูล</span>
+			</div>
+			<!-- TODO:fill link-->
+			<a href="/" class="flex items-center mt-[12px]">
+				<TableSplit />
+				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
+			</a>
+		</div>
+	</div>
+</div>

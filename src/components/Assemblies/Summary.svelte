@@ -15,5 +15,3 @@
 		<SummaryGroup title="ทรัพย์สิน" data={summary.groupByAssetValue} />
 	</div>
 </div>
-
-<style></style>
