@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
-	import DataTable from './DataTable.svelte';
+	import ComparisonTable from './ComparisonTable.svelte';
 	export let Hst: Hst;
 	let tableData = [
 		{
@@ -35,5 +35,5 @@
 </script>
 
 <Hst.Story title="Table">
-	<div class="font-sans body-02"><DataTable {tableData} /></div>
+	<div class="font-sans body-02"><ComparisonTable {tableData} /></div>
 </Hst.Story>

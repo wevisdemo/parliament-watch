@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let tableData = [{}];
+	export let tableData: { [key: string]: string }[];
 </script>
 
 {#if tableData.length > 0}
@@ -23,7 +23,7 @@
 	</table>
 {/if}
 
-<style lang="scss">
+<style lang="postcss">
 	td:first-child {
 		@apply font-bold;
 	}
