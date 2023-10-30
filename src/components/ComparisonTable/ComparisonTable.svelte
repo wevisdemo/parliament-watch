@@ -23,7 +23,7 @@
 	</table>
 {/if}
 
-<style lang="ts">
+<style lang="scss">
 	td:first-child {
 		@apply font-bold;
 	}
