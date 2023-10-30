@@ -95,7 +95,7 @@ For a shared component
 yarn gen:component
 ```
 
-_src/components/ComponentName/_ directory will be created with the follwing files:
+_src/components/ComponentName/_ directory will be created with the following files:
 
 - **ComponentName.svelte** for the component source code.
 - **ComponentName.story.svelte** for the Histoire's story file. Follow [a guide on writing stories](https://histoire.dev/guide/svelte3/stories.html).
@@ -126,7 +126,7 @@ The project design system is based on Carbon Design System v10 with some modific
 - [tailwind.config.js](tailwind.config.js) define utility classes based on color function name according to the Carbon's theme (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)>))
 - scss variable (need to be imported where you want to use)
   - [colors.scss](src/styles/carbon/colors.scss) define variable of all color palette (see [Figma file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>))
-  - [theme.scss](src/styles/carbon/theme.scss) define variable according to the carbom theme's color function name (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)?node-id=169%3A0>))
+  - [theme.scss](src/styles/carbon/theme.scss) define variable according to the Carbon theme's color function name (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)?node-id=169%3A0>))
 
 ### Components
 
@@ -141,7 +141,7 @@ The project design system is based on Carbon Design System v10 with some modific
 ### Icons
 
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
-- We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also avaiable in Histoire)
+- We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also available in Histoire)
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
 
 ## 💾 Data Models
