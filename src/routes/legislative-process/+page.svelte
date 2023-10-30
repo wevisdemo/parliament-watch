@@ -3,7 +3,7 @@
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
-	import VotingProcessImageCircle from '$components/LegislativeProcess/VotingProcessImageCircle/VotingProcessImageCircle.svelte';
+	import VotingProcessImageCircle from '$components/LegislativeProcess/VotingProcessImageCircle.svelte';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
@@ -104,10 +104,12 @@
 						<p><strong>1. การออกเสียงลงคะแนนเปิดเผย</strong></p>
 						<div class="flex gap-3 justify-center">
 							<VotingProcessImageCircle
+								src="https://placehold.co/120"
 								title="การลงคะแนนเสียงด้วยวาจา"
 								description="ผ่านการเรียกชื่อสมาชิกตามหมายเลขประจำตัว เช่น การโหวตเลือกนายกรัฐมนตรี"
 							/>
 							<VotingProcessImageCircle
+								src="https://placehold.co/120"
 								title="การใช้เครื่องลงคะแนนเสียง"
 								description="เพื่อลงมติเห็นด้วยหรือไม่ต่อประเด็นต่างๆ"
 							/>
@@ -115,10 +117,12 @@
 						<p><strong>2. การออกเสียงลงคะแนนลับ</strong></p>
 						<div class="flex gap-3 justify-center">
 							<VotingProcessImageCircle
+								src="https://placehold.co/120"
 								title="การทำเครื่องหมายบนแผ่นกระดาษ"
 								description="ใส่ซองที่เจ้าหน้าที่จัดให้"
 							/>
 							<VotingProcessImageCircle
+								src="https://placehold.co/120"
 								title="การใช้เครื่องออกเสียงลงคะแนน"
 								description="ตามที่ประชุมกำหนด"
 							/>
