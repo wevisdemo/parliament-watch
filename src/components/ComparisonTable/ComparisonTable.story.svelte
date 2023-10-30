@@ -2,7 +2,7 @@
 	import type { Hst } from '@histoire/plugin-svelte';
 	import ComparisonTable from './ComparisonTable.svelte';
 	export let Hst: Hst;
-	let tableData = [
+	let proposerComparisonTableData = [
 		{
 			'': 'ครม.',
 			'ร่าง พ.ร.บ.': 'มีสิทธิเสนอร่าง',
@@ -35,5 +35,5 @@
 </script>
 
 <Hst.Story title="Table">
-	<div class="font-sans body-02"><ComparisonTable {tableData} /></div>
+	<div class="font-sans body-02"><ComparisonTable {proposerComparisonTableData} /></div>
 </Hst.Story>
