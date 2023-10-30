@@ -6,7 +6,7 @@
 		VotingSummary
 	} from '../../routes/assemblies/[id]/votes/+page';
 	import VotesFilter from './VotesFilter.svelte';
-	import type { VotesFilter as IVotesFilter } from './shared.ts';
+	import type { VotesFilter as IVotesFilter } from './shared';
 
 	export let votes: VotingSummary[] = [];
 	export let filterOptions: FilterOptions;
