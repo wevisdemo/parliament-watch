@@ -3,11 +3,43 @@
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
+	import ComparisonTable from '$components/ComparisonTable/ComparisonTable.svelte';
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
+
+	const proposerComparisonTableData = [
+		{
+			'': 'ครม.',
+			'ร่าง พ.ร.บ.': 'มีสิทธิเสนอร่าง',
+			'ออก พ.ร.ก.': 'มีสิทธิเสนอร่าง',
+			'ร่าง พ.ร.ป.': 'มีสิทธิเสนอร่าง',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': 'มีสิทธิเสนอร่าง'
+		},
+		{
+			'': 'สส.',
+			'ร่าง พ.ร.บ.': '20 คน',
+			'ออก พ.ร.ก.': '-',
+			'ร่าง พ.ร.ป.': 'สส. ไม่น้อยกว่า 1 ใน 10',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': 'สส. ไม่น้อยกว่า 1 ใน 5'
+		},
+		{
+			'': 'สมาชิกรัฐสภา',
+			'ร่าง พ.ร.บ.': '-',
+			'ออก พ.ร.ก.': '-',
+			'ร่าง พ.ร.ป.': '-',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': 'สส. และ สว. ไม่น้อยกว่า 1 ใน 5'
+		},
+		{
+			'': 'ประชาชนผู้มีสิทธิเลือกตั้ง',
+			'ร่าง พ.ร.บ.': '10,000 คน',
+			'ออก พ.ร.ก.': '-',
+			'ร่าง พ.ร.ป.': '-',
+			'ร่างแก้ไขบทบัญญัติใน รธน.': '50,000 คน'
+		}
+	];
 </script>
 
 <div class="flex flex-col w-full">
@@ -142,6 +174,26 @@
 				<div>
 					<h2 class="fluid-heading-04" id="ขั้นตอนทั่วไป">ขั้นตอนทั่วไป</h2>
 					<hr />
+				</div>
+				<div>
+					ขั้นตอนการพิจารณาร่างกฎหมายแต่ละประเภทจะมีความแตกต่างกันในบางรายละเอียด แต่โดยทั่วไปแล้ว
+					กระบวนการออกกฎหมายโดยรัฐสภา อย่างเช่นการออก พ.ร.บ. หรือการอนุมัติ พ.ร.ก. จะดำเนินการผ่าน <b
+						>5 ขั้นตอน</b
+					>ดังต่อไปนี้
+				</div>
+				<div class="flex w-full justify-center items-center py-4">
+					<img
+						src="images/legislative-process/general-process.png"
+						alt="general-process-process"
+						class="max-w-480"
+					/>
+				</div>
+				<div class="py-6">
+					<h3 class="fluid-heading-04 mb-0" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h3>
+					<p class="py-4">ผู้มีสิทธิเสนอร่างกฎหมาย และลำดับชั้นของกฎหมายที่เสนอได้</p>
+					<div class="relative">
+						<ComparisonTable {proposerComparisonTableData} />
+					</div>
 				</div>
 				<div class="mb-6">
 					<h2 class="fluid-heading-04" id="ขั้นตอนพิเศษของกฎหมายบางประเภท">
@@ -298,11 +350,9 @@
 		@apply flex flex-col gap-4 bg-white px-4 md:px-0 py-8 md:py-0;
 	}
 
-	h1 {
-		@apply text-text-primary mb-4;
-	}
-
-	h2 {
+	h1,
+	h2,
+	h3 {
 		@apply text-text-primary mb-4;
 	}
 
