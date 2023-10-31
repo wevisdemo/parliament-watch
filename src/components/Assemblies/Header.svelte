@@ -76,5 +76,3 @@
 		<Share label="แชร์" />
 	</div>
 </div>
-
-<style></style>
