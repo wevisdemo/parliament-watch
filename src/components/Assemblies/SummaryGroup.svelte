@@ -63,8 +63,7 @@
 					style="--width: {getPercentWidth(group.total, data)}%;"
 				>
 					{#each getRenderPartyList(group.parties || []) as party}
-						<!-- <Badge color={party.color} title={party.label} subtitle={`${party.count} คน`} /> -->
-						<Badge color={party.color} />
+						<Badge color={party.color} title={party.label} subtitle={`${party.count} คน`} />
 					{/each}
 				</div>
 			</div>

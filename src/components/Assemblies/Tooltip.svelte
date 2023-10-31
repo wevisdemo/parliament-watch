@@ -70,6 +70,7 @@
 		class:bx--tooltip--align-center={align === 'center'}
 		class:bx--tooltip--align-end={align === 'end'}
 		style="width: 100%;"
+		class="cover"
 		on:click
 		on:mouseover
 		on:mouseenter
@@ -84,3 +85,10 @@
 		<slot name="tooltip">{tooltipText}</slot>
 	</div>
 </span>
+
+<!-- add this component to override tooltip style and slot-->
+<style>
+	.cover {
+		border-bottom: 0px solid transparent !important;
+	}
+</style>

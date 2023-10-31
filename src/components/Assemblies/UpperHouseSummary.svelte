@@ -18,7 +18,6 @@
 					class="flex space-x-[4px] w-[var(--width)]"
 					style="--width: {getPercentWidth(group.total, data)}%"
 				>
-					<!-- <Badge label={party.label} color={party.color} size="l" /> -->
 					<Badge color={getSenateColorByTitle(group.name)} size="l" />
 				</div>
 			</div>

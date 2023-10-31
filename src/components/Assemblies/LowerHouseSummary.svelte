@@ -30,8 +30,12 @@
 				</div>
 				<div class="flex space-x-[4px]" style="--width: {getPercentWidth(group.total, data)}%">
 					{#each getTop5OfGroup(group.parties) as party}
-						<!-- <Badge label={party.label} color={party.color} size="l" /> -->
-						<Badge color={party.color} size="l" />
+						<Badge
+							color={party.color}
+							title={party.label}
+							subtitle={`${party.count} คน`}
+							size="l"
+						/>
 					{/each}
 				</div>
 				<div class="grid md:grid-rows-4 md:grid-cols-none grid-cols-2 gap-[4px] mt-[8px]">
