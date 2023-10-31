@@ -1,22 +1,9 @@
 <script lang="ts">
 	import type { MemberGroup } from '../../routes/assemblies/[id]/+page';
 	import Badge from './Badge.svelte';
-	import { getPercentWidth } from './shared';
+	import { getPercentWidth, getSenateColorByTitle } from './shared';
 
 	export let data: MemberGroup[] = [];
-
-	const getColor = (title: string) => {
-		switch (title) {
-			case 'เลือกโดย คสช.':
-				return '#044317';
-			case 'เลือกกันเอง':
-				return '#B28600';
-			case 'โดยตำแหน่ง':
-				return '#A8A8A8';
-			default:
-				return '#A8A8A8';
-		}
-	};
 </script>
 
 <div class="grid">
@@ -32,11 +19,9 @@
 					style="--width: {getPercentWidth(group.total, data)}%"
 				>
 					<!-- <Badge label={party.label} color={party.color} size="l" /> -->
-					<Badge color={getColor(group.name)} size="l" />
+					<Badge color={getSenateColorByTitle(group.name)} size="l" />
 				</div>
 			</div>
 		{/each}
 	</div>
 </div>
-
-<style></style>

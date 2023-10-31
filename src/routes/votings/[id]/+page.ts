@@ -15,6 +15,8 @@ import {
 	prachachatParty
 } from '../../../mocks/data/party';
 import type { Politician } from '$models/politician';
+import type { Bill } from '$models/bill';
+import { inProgressBill } from '../../../mocks/data/bill';
 
 export type Results = VoteOptionResult[];
 
@@ -52,22 +54,24 @@ export function load({ params }) {
 	const requestedId = Number(params.id);
 
 	/*
-	 * | requestedId | Passed? | Default? | House  | Government Formed? |
-	 * | ----------- | ------- | -------- | ------ | ------------------ |
-	 * | 1           | T       | T        | Joint  | T                  |
-	 * | 2           | F       | T        | Joint  | T                  |
-	 * | 3           | T       | F (Cand) | Joint  | T                  |
-	 * | 4           | T       | F (Cand) | Joint  | F                  |
-	 * | 5           | T       | T        | Joint  | F                  |
-	 * | 6           | T       | T        | MP     | T                  |
-	 * | 7           | T       | T        | MP     | F                  |
-	 * | 8           | T       | T        | Senate | T                  |
+	 * | requestedId | Passed?   | Default? | House  | Government Formed? |
+	 * | ----------- | --------- | -------- | ------ | ------------------ |
+	 * | 1           | T         | T        | Joint  | T                  |
+	 * | 2           | F         | T        | Joint  | T                  |
+	 * | 3           | T         | F (Cand) | Joint  | T                  |
+	 * | 4           | T         | F (Cand) | Joint  | F                  |
+	 * | 5           | F (NoWin) | F (Cand) | Joint  | F                  |
+	 * | 6           | T         | T        | Joint  | F                  |
+	 * | 7           | T         | T        | MP     | T                  |
+	 * | 8           | T         | T        | MP     | F                  |
+	 * | 9           | T         | T        | Senate | T                  |
 	 */
 	const isFailedVoting = requestedId === 2;
-	const isCandidateVoting = requestedId === 3 || requestedId === 4;
-	const isGovernmentFormed = ![4, 5, 7].includes(requestedId);
-	const isOnlyMPs = [6, 7].includes(requestedId);
-	const isOnlySenates = requestedId === 8;
+	const isCandidateVoting = requestedId === 3 || requestedId === 4 || requestedId === 5;
+	const isFailedCandidateVoting = requestedId === 6;
+	const isGovernmentFormed = ![4, 5, 6, 8].includes(requestedId);
+	const isOnlyMPs = [7, 8].includes(requestedId);
+	const isOnlySenates = requestedId === 9;
 
 	const rawVotes = getRawVoteResults(isCandidateVoting);
 
@@ -75,6 +79,12 @@ export function load({ params }) {
 		...(isCandidateVoting ? candidateVoting : isFailedVoting ? failedVoting : passedVoting),
 		id: requestedId
 	};
+
+	const relatedBill: Bill = inProgressBill;
+
+	if (isFailedCandidateVoting) {
+		voting.result = 'ไม่มีผู้ชนะ';
+	}
 
 	let results: Results = [];
 	if (isOnlySenates) {
@@ -208,13 +218,16 @@ export function load({ params }) {
 		results: [
 			...getFakedMPResultByPersons({ party: movingForwardParty.name, isCandidateVoting }),
 			...getFakedMPResultByPersons({ party: pheuThaiParty.name, isCandidateVoting }),
+			...getFakedMPResultByPersons({ party: prachachatParty.name, isCandidateVoting }),
 			...getFakedMPResultByPersons({ party: bhumjaithaiParty.name, isCandidateVoting }),
+			...getFakedMPResultByPersons({ party: democratsParty.name, isCandidateVoting }),
 			...getFakedSenateResultByPersons({ isCandidateVoting })
 		]
 	};
 
 	return {
 		voting,
+		relatedBill,
 		results,
 		resultsByAffiliation,
 		resultsByPerson

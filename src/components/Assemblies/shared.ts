@@ -42,3 +42,22 @@ export const getPercentWidth = (targetCount: number, groups: MemberGroup[]) => {
 	const targetPercent = getRoundedPercent(targetCount, getSumOfGroupsTotal(groups));
 	return getRoundedPercent(targetPercent, maxPercent);
 };
+
+export interface PartySeat {
+	name: string;
+	color: string;
+	count: number;
+}
+
+export const getSenateColorByTitle = (title: string) => {
+	switch (title) {
+		case 'เลือกโดย คสช.':
+			return '#044317';
+		case 'เลือกกันเอง':
+			return '#B28600';
+		case 'โดยตำแหน่ง':
+			return '#A8A8A8';
+		default:
+			return '#A8A8A8';
+	}
+};

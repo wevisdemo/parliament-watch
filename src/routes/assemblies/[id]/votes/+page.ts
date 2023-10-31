@@ -3,13 +3,16 @@ import type { Assembly } from '$models/assembly';
 import { rep26, sen12 } from '../../../../mocks/data/assembly.js';
 import { mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
 
-type VotingSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
+export type VotingSummary = Pick<
+	Voting,
+	'id' | 'title' | 'result' | 'date' | 'files' | 'categories'
+>;
 
-interface FilterOptions {
+export interface FilterOptions {
 	categories: string[];
 }
 
-type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
+export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
 export async function load({ params }) {
 	const { id, name, term, startedAt } = params.id === sen12.id ? sen12 : rep26;
