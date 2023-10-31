@@ -24,6 +24,18 @@
 			result: vote.result,
 			file: vote.files.length > 0 ? vote.files[0].url : ''
 		}));
+		if (result.length % pageSize !== 0) {
+			const emptyRows = pageSize - (result.length % pageSize);
+			for (let i = 0; i < emptyRows; i++) {
+				result.push({
+					id: 999 + i, // mock id
+					date: '',
+					title: '',
+					result: '',
+					file: ''
+				});
+			}
+		}
 		return result;
 	};
 
@@ -64,7 +76,7 @@
 			{:else if cell.key === 'result'}
 				{#if cell.value === DefaultVotingResult.Passed}
 					<Tag type="teal">ผ่าน</Tag>
-				{:else}
+				{:else if cell.value === DefaultVotingResult.Failed}
 					<Tag type="red">ไม่ผ่าน</Tag>
 				{/if}
 			{:else if cell.key === 'file'}
