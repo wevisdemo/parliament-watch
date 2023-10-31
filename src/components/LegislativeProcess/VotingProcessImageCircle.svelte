@@ -7,7 +7,7 @@
 
 <div class="flex-1 max-w-[280px]">
 	<div class="mb-2 flex justify-center text-center">
-		<img class="w-[120px] h-[120px] rounded-full" {src} alt={alt || title} />
+		<img class="w-[120px] h-[120px] rounded-full" {src} alt={alt || title} loading="lazy" />
 	</div>
 	<div class="flex flex-col items-center text-center">
 		<p><strong>{title}</strong></p>
