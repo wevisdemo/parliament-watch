@@ -11,6 +11,8 @@
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
+  export let data;
+
 	const proposerComparisonTableData = [
 		{
 			'': 'ครม.',
@@ -412,17 +414,55 @@
 						หน้าที่ของสมาชิกสภาผู้แทนราษฏร (สส.)
 					</h2>
 					<hr />
+					<div class="flex flex-col gap-2 py-4">
+						{#each data.dutySection.representatives as section, i}
+							<h3 class="fluid-heading-03" id={section.heading}>
+								{i + 1}. {section.heading}
+							</h3>
+							<ul>
+								{#each section.details as duty}
+									<li>{duty}</li>
+								{/each}
+							</ul>
+						{/each}
+					</div>
 				</div>
 				<div>
 					<h2 class="fluid-heading-04" id="หน้าที่ของสมาชิกวุฒิสภา (สว.)">
 						หน้าที่ของสมาชิกวุฒิสภา (สว.)
 					</h2>
 					<hr />
+					<div class="flex flex-col gap-2 py-4">
+						{#each data.dutySection.senates as section, i}
+							<h3 class="fluid-heading-03" id={section.heading}>
+								{i + 1}. {section.heading}
+							</h3>
+							<ul>
+								{#each section.details as duty}
+									<li>{duty}</li>
+								{/each}
+							</ul>
+						{/each}
+					</div>
 				</div>
 				<div>
 					<h2 class="fluid-heading-04" id="หน้าที่ของสภาร่วม (ส.ส. + ส.ว.)">
 						หน้าที่ของสภาร่วม (ส.ส. + ส.ว.)
 					</h2>
+					<hr />
+					<p class="pt-4">รัฐสภาจะประชุมร่วมกันได้ต้องเป็นไปตามที่กำหนดไว้ในมาตรา</p>
+					<div class="flex flex-col gap-2 py-4">
+						{#each data.dutySection.both as section, i}
+							<h3 class="fluid-heading-03" id={section.heading}>
+								{i + 1}. {section.heading}
+							</h3>
+							<ul>
+								{#each section.details as duty}
+									<li>{duty}</li>
+								{/each}
+							</ul>
+						{/each}
+					</div>
 					<hr />
 				</div>
 			</section>
@@ -444,5 +484,9 @@
 
 	hr {
 		@apply border-0 border-solid border-gray-20 border-t w-full box-border;
+	}
+
+	ul {
+		@apply list-disc list-outside ml-4;
 	}
 </style>
