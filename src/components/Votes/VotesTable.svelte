@@ -24,7 +24,7 @@
 			result: vote.result,
 			file: vote.files.length > 0 ? vote.files[0].url : ''
 		}));
-		if (result.length % pageSize !== 0) {
+		if (result.length % pageSize !== 0 || result.length === 0) {
 			const emptyRows = pageSize - (result.length % pageSize);
 			for (let i = 0; i < emptyRows; i++) {
 				result.push({
@@ -36,6 +36,7 @@
 				});
 			}
 		}
+
 		return result;
 	};
 
