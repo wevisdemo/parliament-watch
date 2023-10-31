@@ -1,4 +1,5 @@
 <script land="ts">
+	import { BillStatus } from '$models/bill';
 	import dayjs from 'dayjs';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
@@ -6,26 +7,12 @@
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 
-	import BillStatusCard from '$components/BillStatusCard/BillStatusCard.svelte';
+	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-	import { BillStatus } from '$models/bill';
-	let nickname = 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
-	let title = 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
-	let proposedBy = {
-		avatar: 'https://placehold.co/24x24',
-		name: 'ดวงฤทธิ์ เบ็ญจาธิกุล ชัยรุ่งเรือง',
-		description: 'สส. ชุดที่ 26 (2566) พรรคก้าวไกล'
-	};
-	let proposedOn = new Date('July 13, 2023');
-	let status = BillStatus.InProgress;
-	let currentState = 'สส. พิจารณา วาระ 2';
-	let daySinceProposed = 210;
-	let billUrl = '#';
-
-	let billStatuses = [
+	const billStatuses = [
 		{
 			billStatus: BillStatus.InProgress,
 			billAmount: 'xxxx',
@@ -210,15 +197,7 @@
 					<h2 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h2>
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						{#each billStatuses as billStatus}
-							<BillStatusCard
-								billAmount={billStatus.billAmount}
-								billStatus={billStatus.billStatus}
-								descriptionTitle={billStatus.descriptionTitle}
-								descriptionList={billStatus.descriptionList}
-								learnMoreLabel={billStatus.learnMoreLabel}
-								learnMoreUrl={billStatus.learnMoreUrl}
-								class={billStatus.class}
-							/>
+							<BillStatusCard {...billStatus} />
 						{/each}
 					</div>
 				</div>
