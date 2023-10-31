@@ -3,10 +3,8 @@
 	import type { BillStatus } from '$models/bill';
 
 	export let billStatus: BillStatus;
-	// export let billType: string;
 	export let billAmount: string;
 	export let descriptionTitle: string | null;
-
 	export let descriptionList: Array<string>;
 	export let learnMoreLabel: string;
 	export let learnMoreUrl: string;
