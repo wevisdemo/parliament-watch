@@ -1,4 +1,5 @@
 <script land="ts">
+	import { BillStatus } from '$models/bill';
 	import dayjs from 'dayjs';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
@@ -8,10 +9,61 @@
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 
+	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
+
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-  export let data;
+	const billStatuses = [
+		{
+			billStatus: BillStatus.InProgress,
+			billAmount: 'xxxx',
+			descriptionTitle: 'ร่างกฎหมายอยู่ในขั้นตอนใดขั้นตอนหนึ่ง ได้แก่',
+			descriptionList: [
+				'ถูกเสนอเข้าสภา',
+				'สภาผู้แทนฯ พิจารณาวาระที่ 1, 2, 3',
+				'วุฒิสภาพิจารณาวาระที่ 1, 2, 3',
+				'แก้ไขเพิ่มเติมเพื่อพิจารณาใหม่',
+				'รัฐสภาพิจารณา'
+			],
+			learnMoreLabel: 'สำรวจกฎหมายที่อยู่ในกระบวนการพิจารณา',
+			learnMoreUrl: '#',
+			class: 'bg-yellow-10'
+		},
+		{
+			billStatus: BillStatus.Success,
+			billAmount: 'xxxx',
+			descriptionTitle: 'บังคับใช้เมื่อ',
+			descriptionList: ['พระมหากษัตริย์ลงพระปรมาภิไธย', 'ประกาศบนราชกิจจานุเบกษา'],
+			learnMoreLabel: 'สำรวจกฎหมายที่บังคับใช้',
+			learnMoreUrl: '#',
+			class: 'bg-teal-10'
+		},
+		{
+			billStatus: BillStatus.Rejected,
+			billAmount: 'xxxx',
+			descriptionTitle: 'ตัวอย่างสาเหตุที่ทำให้กฎหมายตกไป',
+			descriptionList: [
+				'นายกรัฐมนตรีไม่รับรอง',
+				'สส. มีมติไม่รับหลักการ',
+				'สส. มีมติไม่เห็นชอบ',
+				'สว. ยับยั้ง และ สส. มีมติไม่เห็นชอบ',
+				'ศาลรัฐธรรมนูญวินิจฉัยว่าขัดต่อรัฐธรรมนูญ'
+			],
+			learnMoreLabel: 'สำรวจกฎหมายที่ตกไป',
+			learnMoreUrl: '#',
+			class: 'bg-red-10'
+		},
+		{
+			billStatus: BillStatus.Merged,
+			billAmount: 'xxxx',
+			descriptionTitle: 'Description',
+			descriptionList: [],
+			learnMoreLabel: 'สำรวจกฎหมายที่ถูกรวมร่าง',
+			learnMoreUrl: '#',
+			class: 'bg-purple-10'
+		}
+	];
 
 	const proposerComparisonTableData = [
 		{
@@ -43,6 +95,8 @@
 			'ร่างแก้ไขบทบัญญัติใน รธน.': '50,000 คน'
 		}
 	];
+
+	export let data;
 </script>
 
 <div class="flex flex-col w-full">
@@ -168,6 +222,19 @@
 				<div>
 					<h2 class="fluid-heading-04" id="สถานะของกฎหมาย">สถานะของกฎหมาย</h2>
 					<hr />
+					<p class="mt-6">
+						การจัดแบ่งสถานะของร่างกฎหมายบนเว็บไซต์ Parliament Watch เป็นการจัดแบ่งที่ทีม WeVis
+						กำหนดขึ้นมาเพื่อให้ง่ายต่อการทำความเข้าใจของผู้ใช้ทั่วไป
+						การจัดสถานะของร่างกฎหมายแต่ละฉบับที่ปรากฏบนเว็บไซต์นี้
+						ไม่ได้เป็นสถานะของร่างกฎหมายอย่างเป็นทางการ
+					</p>
+
+					<h2 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h2>
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+						{#each billStatuses as billStatus}
+							<BillStatusCard {...billStatus} />
+						{/each}
+					</div>
 				</div>
 			</section>
 			<section>
