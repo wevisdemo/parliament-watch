@@ -261,9 +261,7 @@
 				<div class="py-6">
 					<h3 class="fluid-heading-04 mb-0" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h3>
 					<p class="py-4">ผู้มีสิทธิเสนอร่างกฎหมาย และลำดับชั้นของกฎหมายที่เสนอได้</p>
-					<div class="relative">
-						<ComparisonTable {proposerComparisonTableData} />
-					</div>
+					<ComparisonTable {proposerComparisonTableData} />
 				</div>
 				<div class="mb-6">
 					<h2 class="fluid-heading-04" id="ขั้นตอนพิเศษของกฎหมายบางประเภท">
