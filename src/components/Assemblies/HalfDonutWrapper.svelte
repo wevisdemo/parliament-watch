@@ -15,5 +15,3 @@
 	</div>
 	<span class="body-compact-01 text-[16px]">{label}</span>
 </div>
-
-<style></style>
