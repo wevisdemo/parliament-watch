@@ -72,8 +72,8 @@
 			{#if cell.key === 'date'}
 				<span class="body-01 text-gray-60">{cell.value}</span>
 			{:else if cell.key === 'title'}
-				<a href="/assemblies/votes/{row.id}" class="body-01 text-gray-100 underline">{cell.value}</a
-				>
+				<!-- TODO: add link to vote page /assemblies/votes/{row.id} -->
+				<a href="/votings/0" class="body-01 text-gray-100 underline">{cell.value}</a>
 			{:else if cell.key === 'result'}
 				{#if cell.value === DefaultVotingResult.Passed}
 					<Tag type="teal">ผ่าน</Tag>
