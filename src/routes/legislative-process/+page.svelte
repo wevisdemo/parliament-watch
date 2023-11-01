@@ -3,6 +3,9 @@
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
@@ -91,16 +94,9 @@
 					<div class="flex flex-col gap-4 mt-6">
 						<p>โดยทั่วไป การประชุมจะกำหนดให้ สส. และ สว. แสดงเจตจำนงต่อประเด็นที่ใช้ลงมติดังนี้</p>
 						<div class="flex gap-4">
-							<span
-								class="px-2 py-1 text-xs flex items-center justify-center rounded-full bg-teal-50"
-								>เห็นด้วย</span
-							><span
-								class="px-2 py-1 text-xs flex items-center justify-center rounded-full bg-red-50 text-white"
-								>ไม่เห็นด้วย</span
-							><span
-								class="px-2 py-1 text-xs flex items-center justify-center rounded-full bg-gray-80 text-white"
-								>งดออกเสียง</span
-							>
+							<VotingOptionTag voteOption={DefaultVoteOption.Agreed} />
+							<VotingOptionTag voteOption={DefaultVoteOption.Disagreed} />
+							<VotingOptionTag voteOption={DefaultVoteOption.Novote} />
 						</div>
 						<p>
 							หาก สส. หรือ สว. ไม่ได้แสดงเจตจำนงด้วยเหตุผลด้านการขาดการประชุมหรือไม่ได้ลงคะแนนเสียง
@@ -108,10 +104,7 @@
 						</p>
 						<div class="flex gap-2">
 							<div class="flex flex-col gap-2 basis-2/5">
-								<span
-									class="w-fit flex-grow-0 px-2 py-1 text-xs flex items-center justify-center rounded-full bg-gray-50"
-									>ไม่ลงคะแนน</span
-								>
+								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Abstain} />
 								<ul>
 									<li class="list-disc list-inside">สมาชิกอยู่ในองค์ประชุม แต่ไม่ลงมติ</li>
 									<li class="list-disc list-inside">
@@ -120,10 +113,7 @@
 								</ul>
 							</div>
 							<div class="flex flex-col gap-2 basis-3/5">
-								<span
-									class="w-fit flex-grow-0 px-2 py-1 text-xs flex items-center justify-center rounded-full bg-gray-20"
-									>ลา/ขาดลงมติ</span
-								>
+								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Absent} />
 								<ul>
 									<li class="list-disc list-inside">สมาชิกไม่ได้เข้าประชุม</li>
 									<li class="list-disc list-inside">จะไม่ถูกนับเป็นองค์ประชุม</li>
@@ -143,23 +133,14 @@
 							ดังนี้
 						</p>
 						<div class="flex gap-4">
-							<span
-								class="w-fit font-semibold flex-grow-0 px-2 py-1 flex items-center justify-center rounded-full bg-teal-30"
-								>มติผ่าน</span
-							>
-							<span
-								class="w-fit font-semibold flex-grow-0 px-2 py-1 flex items-center justify-center rounded-full bg-red-30"
-								>มติไม่ผ่าน</span
-							>
+							<VotingResultTag result={DefaultVotingResult.Passed} isLarge />
+							<VotingResultTag result={DefaultVotingResult.Failed} isLarge />
 						</div>
 						<p>
 							<b>การลงมติในรูปแบบอื่นๆ ที่ต้องให้ความเห็นชอบบุคคล</b> หากมีผู้ถูกเสนอชื่อมากกว่า 2 คนขึ้นไป
 							เช่น มติการเลือกนายกรัฐมนตรี มติเลือกประธาน/รองประธานสภาฯ จะมีผลการลงมติเป็นการรับรองผู้ที่ได้รับการโหวตมากที่สุด
 						</p>
-						<span
-							class="w-fit font-semibold flex-grow-0 px-2 py-1 flex items-center justify-center rounded-full bg-purple-70 text-white"
-							>บุคคลที่ได้รับการโหวตมากที่สุด</span
-						>
+						<VotingResultTag result={'บุคคลที่ได้รับการโหวตมากที่สุด'} class={'w-fit'} isLarge />
 					</div>
 				</div>
 			</section>
