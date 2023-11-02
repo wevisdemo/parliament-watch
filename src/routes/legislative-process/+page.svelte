@@ -4,6 +4,9 @@
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VotingProcessImageCircle from '$components/LegislativeProcess/VotingProcessImageCircle.svelte';
 	import ComparisonTable from '$components/ComparisonTable/ComparisonTable.svelte';
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
@@ -460,14 +463,60 @@
 						</div>
 					</div>
 				</div>
-
-				<div>
+				<div class="my-6">
 					<h2 class="fluid-heading-04" id="ประเภทการลงมติ">ประเภทการลงมติ</h2>
 					<hr />
+					<div class="flex flex-col gap-4 mt-6">
+						<p>โดยทั่วไป การประชุมจะกำหนดให้ สส. และ สว. แสดงเจตจำนงต่อประเด็นที่ใช้ลงมติดังนี้</p>
+						<div class="flex gap-4">
+							<VotingOptionTag voteOption={DefaultVoteOption.Agreed} />
+							<VotingOptionTag voteOption={DefaultVoteOption.Disagreed} />
+							<VotingOptionTag voteOption={DefaultVoteOption.Novote} />
+						</div>
+						<p>
+							หาก สส. หรือ สว. ไม่ได้แสดงเจตจำนงด้วยเหตุผลด้านการขาดการประชุมหรือไม่ได้ลงคะแนนเสียง
+							ลักษณะของการออกคะแนนเสียงจะเป็นใน 2 รูปแบบคือ
+						</p>
+						<div class="flex gap-2">
+							<div class="flex flex-col gap-2 basis-2/5">
+								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Abstain} />
+								<ul>
+									<li class="list-disc list-inside">สมาชิกอยู่ในองค์ประชุม แต่ไม่ลงมติ</li>
+									<li class="list-disc list-inside">
+										จะถูกนับเป็นองค์ประชุม และถูกคำนวณในคะแนนเสียงของมติ
+									</li>
+								</ul>
+							</div>
+							<div class="flex flex-col gap-2 basis-3/5">
+								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Absent} />
+								<ul>
+									<li class="list-disc list-inside">สมาชิกไม่ได้เข้าประชุม</li>
+									<li class="list-disc list-inside">จะไม่ถูกนับเป็นองค์ประชุม</li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div>
+				<div class="my-6">
 					<h2 class="fluid-heading-04" id="ผลการลงมติ">ผลการลงมติ</h2>
 					<hr />
+					<div class="flex flex-col gap-4 mt-6">
+						<p>
+							<b>การลงมติที่เกี่ยวข้องกับนิติบัญญัติและญัตติต่างๆ ในสภา</b> เช่น การโหวตรับร่างกฎหมายเข้าสภา
+							การโหวตอนุมัติ พ.ร.ก. การพิจารณาญัตติ เป็นต้น จะใช้เสียงข้างมากของที่ประชุมของแต่ละสภา
+							หรือตามข้อกำหนดที่ระบุไว้ในรัฐธรรมนูญหรือข้อบังคับการประชุม ซึ่งโดยทั่วไปจะมีผลการลงมติ
+							ดังนี้
+						</p>
+						<div class="flex gap-4">
+							<VotingResultTag result={DefaultVotingResult.Passed} isLarge />
+							<VotingResultTag result={DefaultVotingResult.Failed} isLarge />
+						</div>
+						<p>
+							<b>การลงมติในรูปแบบอื่นๆ ที่ต้องให้ความเห็นชอบบุคคล</b> หากมีผู้ถูกเสนอชื่อมากกว่า 2 คนขึ้นไป
+							เช่น มติการเลือกนายกรัฐมนตรี มติเลือกประธาน/รองประธานสภาฯ จะมีผลการลงมติเป็นการรับรองผู้ที่ได้รับการโหวตมากที่สุด
+						</p>
+						<VotingResultTag result={'บุคคลที่ได้รับการโหวตมากที่สุด'} class={'w-fit'} isLarge />
+					</div>
 				</div>
 			</section>
 			<section>
