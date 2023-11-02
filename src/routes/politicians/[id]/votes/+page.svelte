@@ -149,7 +149,7 @@
 			})}
 		{:else if cellKey === 'title'}
 			<!-- TODO: Add link -->
-			<a class="text-text-01" href="/">{cellValue}</a>
+			<a class="text-text-01 hover:underline hover:text-interactive-01" href="/">{cellValue}</a>
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" isLarge result={cellValue} />
 		{:else if cellKey === 'voteOption'}
