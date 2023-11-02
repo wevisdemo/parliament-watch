@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { DataTable, Tag, Pagination } from 'carbon-components-svelte';
-	import type { VotingSummary } from '../../routes/assemblies/[id]/votes/+page';
+	import type { VoteSummary } from '../../routes/assemblies/[id]/votes/+page';
 	import { DefaultVotingResult } from '$models/voting';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 
-	export let votes: VotingSummary[] = [];
+	export let votes: VoteSummary[] = [];
 	let page = 1;
 	const pageSize = 10;
 
@@ -16,7 +16,7 @@
 		file: string;
 	}
 
-	const getTableRows = (votes: VotingSummary[]): TableRow[] => {
+	const getTableRows = (votes: VoteSummary[]): TableRow[] => {
 		const result: TableRow[] = votes.map((vote) => ({
 			id: vote.id,
 			date: convertToThatDate(vote.date),

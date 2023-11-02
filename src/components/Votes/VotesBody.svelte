@@ -3,12 +3,12 @@
 	import type {
 		AssemblySummary,
 		FilterOptions,
-		VotingSummary
+		VoteSummary
 	} from '../../routes/assemblies/[id]/votes/+page';
 	import VotesFilter from './VotesFilter.svelte';
 	import type { VotesFilter as IVotesFilter } from './shared';
 
-	export let votes: VotingSummary[] = [];
+	export let votes: VoteSummary[] = [];
 	export let filterOptions: FilterOptions;
 	let filter: IVotesFilter = {
 		name: '',

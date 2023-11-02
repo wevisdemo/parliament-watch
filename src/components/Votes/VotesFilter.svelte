@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Checkbox, Search } from 'carbon-components-svelte';
-	import type { VotingSummary } from '../../routes/assemblies/[id]/votes/+page';
+	import type { VoteSummary } from '../../routes/assemblies/[id]/votes/+page';
 	import type { VotesFilter } from './shared';
-	export let votes: VotingSummary[] = [];
+	export let votes: VoteSummary[] = [];
 	export let filter: VotesFilter;
 	let resultFilter = filter.result;
 	let catergoryFilter = filter.category;
