@@ -13,7 +13,7 @@
 	} from '$components/DataPage/DataPage.svelte';
 
 	export let data;
-	const { politician, filterOptions, votings } = data;
+	const { politician, filterOptions, votes } = data;
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
@@ -80,18 +80,18 @@
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votings.filter((votingDataEntry) => {
+			: votes.filter((vote) => {
 					const search = searchQuery.trim();
-					if (search && !votingDataEntry.title.includes(search)) return;
+					if (search && !vote.title.includes(search)) return;
 					const { filterAssembly, filterVoteType, filterVoteDirection, filterCatg } =
 						selectedCheckboxValue;
 					return (
 						filterAssembly.some((assemblyId) =>
-							votingDataEntry.participatedAssembleIds.includes(assemblyId as string)
+							vote.participatedAssembleIds.includes(assemblyId as string)
 						) &&
-						filterVoteType.includes(generalVoteType(votingDataEntry.voteOption)) &&
-						filterVoteDirection.includes(votingDataEntry.isVoteAlignWithPartyMajority) &&
-						filterCatg.some((category) => votingDataEntry.categories.includes(String(category)))
+						filterVoteType.includes(generalVoteType(vote.voteOption)) &&
+						filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority) &&
+						filterCatg.some((category) => vote.categories.includes(String(category)))
 					);
 			  });
 

@@ -4,6 +4,8 @@
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 
 	export let data;
+
+	const { assembly, votes, filterOptions } = data;
 </script>
 
 <div>
@@ -11,15 +13,15 @@
 		<Breadcrumb noTrailingSlash>
 			<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 			<!-- TODO: link this -->
-			<BreadcrumbItem href={`/`}>รัฐสภา</BreadcrumbItem>
-			<BreadcrumbItem href={`/assemblies/${data.assembly.id}`}>{data.assembly.name}</BreadcrumbItem>
-			<BreadcrumbItem href={`/assemblies/${data.assembly.id}/votes`} isCurrentPage
+			<BreadcrumbItem href="/">รัฐสภา</BreadcrumbItem>
+			<BreadcrumbItem href="/assemblies/{assembly.id}">{assembly.name}</BreadcrumbItem>
+			<BreadcrumbItem href="/assemblies/{assembly.id}/votes" isCurrentPage
 				>ประวัติการลงมติ</BreadcrumbItem
 			>
 		</Breadcrumb>
 	</div>
-	<VotesHeader {data} />
-	<VotesBody votes={data.votings} filterOptions={data.filterOptions} />
+	<VotesHeader {assembly} />
+	<VotesBody {votes} {filterOptions} />
 </div>
 
 <!-- <div class="whitespace-pre">{JSON.stringify(data, undefined, 2)}</div> -->

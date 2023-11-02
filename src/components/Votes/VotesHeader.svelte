@@ -1,21 +1,11 @@
 <script lang="ts">
 	import { TableSplit } from 'carbon-icons-svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
-	import type {
-		AssemblySummary,
-		FilterOptions,
-		VotingSummary
-	} from '../../routes/assemblies/[id]/votes/+page';
+	import type { AssemblySummary, VoteSummary } from '../../routes/assemblies/[id]/votes/+page';
 
-	export let data: Data;
+	export let assembly: AssemblySummary;
 
-	interface Data {
-		assembly: AssemblySummary;
-		filterOptions: FilterOptions;
-		votings: VotingSummary[];
-	}
-
-	const startedYear = data.assembly.startedAt.getFullYear() + 543;
+	const startedYear = assembly.startedAt.getFullYear() + 543;
 </script>
 
 <div
@@ -23,7 +13,7 @@
 >
 	<div class="w-full max-w-[900px] flex items-center">
 		<div class="flex md:flex-row flex-col">
-			<h2 class="fluid-heading-04">{data.assembly.name}</h2>
+			<h2 class="fluid-heading-04">{assembly.name}</h2>
 			<div class="flex items-center md:ml-[16px] ml-[0px]">
 				<!-- TODO: handler buttom next and prev-->
 				<img
@@ -31,7 +21,7 @@
 					alt="angle-left"
 					class="rotate-180 w-[20px] mr-[16px] ml-[0px] fill-gray-300"
 				/>
-				<h3 class="fluid-heading-03">ชุดที่ {data.assembly.term} | {startedYear}</h3>
+				<h3 class="fluid-heading-03">ชุดที่ {assembly.term} | {startedYear}</h3>
 				<img src="/icons/angle-right.svg" alt="angle-right" class="w-[20px] ml-[16px] mr-[0px]" />
 			</div>
 		</div>
