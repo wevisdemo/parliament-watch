@@ -7,8 +7,9 @@
 
 	import type { ComponentProps } from 'svelte';
 	import type { Legislation } from '../../routes/legislative-process/+page';
-
-	type $$Props = Legislation;
+	export let legislation: Legislation;
+	$: ({ consideredBy, details, endorsedBy, examples, presentedBy, steps, title, stepDescription } =
+		legislation);
 
 	let isOpen = false;
 
@@ -17,18 +18,7 @@
 		isOpen = !isOpen;
 	}
 
-	const {
-		consideredBy,
-		details,
-		endorsedBy,
-		examples,
-		presentedBy,
-		steps,
-		title,
-		stepDescription
-	} = $$props as $$Props;
-
-	let tagProps: ComponentProps<Tag> = {
+	const tagProps: ComponentProps<Tag> = {
 		type: 'outline',
 		size: 'sm',
 		class:
@@ -38,7 +28,7 @@
 
 <Tile
 	on:click={toggle}
-	class="bg-teal-10 border border-solid border-gray-30 p-0 hover:cursor-pointer {$$restProps.class}"
+	class="bg-teal-10 border border-solid border-gray-30 p-0 hover:cursor-pointer"
 >
 	<div class="p-5 flex flex-col gap-y-4">
 		<h3 class="fluid-heading-03 mb-2">{title}</h3>
@@ -46,7 +36,7 @@
 			<p>{details}</p>
 			<div class="flex flex-row items-center gap-1">
 				<strong class="mr-1 shrink-0 text-sm">เสนอโดย</strong>
-				{#each presentedBy as presenter, idx}
+				{#each presentedBy as presenter}
 					<div
 						class="flex flex-row items-baseline after:content-['/'] last:after:content-none after:ml-1"
 					>
@@ -70,7 +60,7 @@
 			</div>
 		</div>
 		<div
-			class=" grid transition-[grid-template-rows] {isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}"
+			class="grid transition-[grid-template-rows] {isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}"
 		>
 			<div class="flex flex-col overflow-hidden gap-y-4">
 				<div>

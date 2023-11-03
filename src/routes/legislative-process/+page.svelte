@@ -62,7 +62,7 @@
 					</div>
 					<div class="flex flex-col gap-4">
 						{#each data.legislations as legislation}
-							<Collapsible {...legislation} />
+							<Collapsible {legislation} />
 						{/each}
 					</div>
 				</div>
