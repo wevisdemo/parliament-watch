@@ -1,9 +1,9 @@
 <script land="ts">
-	import { BillStatus } from '$models/bill';
 	import dayjs from 'dayjs';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
+	import Collapsible from '$components/LegislativeProcess/Collapsible.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
@@ -11,8 +11,10 @@
 	import ComparisonTable from '$components/ComparisonTable/ComparisonTable.svelte';
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
-
 	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
+  import { BillStatus } from '$models/bill';
+
+  export let data;
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
@@ -216,11 +218,24 @@
 						alt="Overview of legislative process"
 					/>
 				</div>
-				<div>
-					<h2 class="fluid-heading-04" id="ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา">
-						ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา
-					</h2>
-					<hr />
+				<div class="flex flex-col gap-4">
+					<div>
+						<div class="mb-6">
+							<h2 class="fluid-heading-04" id="ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา">
+								ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา
+							</h2>
+							<hr />
+						</div>
+						<p>
+							รัฐสภาประกอบไปด้วยสภาผู้แทนราษฎร และวุฒิสภา
+							ทำหน้าที่พิจารณาและกลั่นกรองร่างกฏหมายก่อนการประกาศใช้ ประกอบด้วย
+						</p>
+					</div>
+					<div class="flex flex-col gap-4">
+						{#each data.legislations as legislation}
+							<Collapsible {legislation} />
+						{/each}
+					</div>
 				</div>
 				<div>
 					<h2 class="fluid-heading-04" id="สถานะของกฎหมาย">สถานะของกฎหมาย</h2>
