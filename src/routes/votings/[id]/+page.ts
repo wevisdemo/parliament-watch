@@ -4,7 +4,6 @@ import {
 	passedVoting,
 	failedVoting,
 	candidateVoting,
-	defaultVoteOptions,
 	customVoteOption
 } from '../../../mocks/data/voting';
 import {
@@ -14,9 +13,9 @@ import {
 	pheuThaiParty,
 	prachachatParty
 } from '../../../mocks/data/party';
-import type { Politician } from '$models/politician';
 import type { Bill } from '$models/bill';
 import { inProgressBill } from '../../../mocks/data/bill';
+import { createMockVotes } from '../../../mocks/data/votes';
 
 export type Results = VoteOptionResult[];
 
@@ -37,24 +36,11 @@ export interface ResultByAffiliation {
 	byParties?: ResultsByParty[];
 }
 
-export interface ResultsByPerson {
-	parties: string[];
-	positions: string[];
-	results: ResultByPerson[];
-}
-
-export type ResultByPerson = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'lastname'> & {
-	position: string;
-	role: string;
-	party?: string;
-	voteOption: DefaultVoteOption | CustomVoteOption | string;
-};
-
 export function load({ params }) {
-	const requestedId = Number(params.id);
+	const votingId = Number(params.id);
 
 	/*
-	 * | requestedId | Passed?   | Default? | House  | Government Formed? |
+	 * | votingId | Passed?   | Default? | House  | Government Formed? |
 	 * | ----------- | --------- | -------- | ------ | ------------------ |
 	 * | 1           | T         | T        | Joint  | T                  |
 	 * | 2           | F         | T        | Joint  | T                  |
@@ -66,18 +52,18 @@ export function load({ params }) {
 	 * | 8           | T         | T        | MP     | F                  |
 	 * | 9           | T         | T        | Senate | T                  |
 	 */
-	const isFailedVoting = requestedId === 2;
-	const isCandidateVoting = requestedId === 3 || requestedId === 4 || requestedId === 5;
-	const isFailedCandidateVoting = requestedId === 6;
-	const isGovernmentFormed = ![4, 5, 6, 8].includes(requestedId);
-	const isOnlyMPs = [7, 8].includes(requestedId);
-	const isOnlySenates = requestedId === 9;
+	const isFailedVoting = votingId === 2;
+	const isCandidateVoting = votingId === 3 || votingId === 4 || votingId === 5;
+	const isFailedCandidateVoting = votingId === 6;
+	const isGovernmentFormed = ![4, 5, 6, 8].includes(votingId);
+	const isOnlyMPs = [7, 8].includes(votingId);
+	const isOnlySenates = votingId === 9;
 
 	const rawVotes = getRawVoteResults(isCandidateVoting);
 
 	const voting: Voting = {
 		...(isCandidateVoting ? candidateVoting : isFailedVoting ? failedVoting : passedVoting),
-		id: requestedId
+		id: votingId
 	};
 
 	const relatedBill: Bill = inProgressBill;
@@ -206,24 +192,7 @@ export function load({ params }) {
 		});
 	}
 
-	const resultsByPerson: ResultsByPerson = {
-		parties: [
-			movingForwardParty.name,
-			pheuThaiParty.name,
-			prachachatParty.name,
-			bhumjaithaiParty.name,
-			democratsParty.name
-		],
-		positions: ['สมาชิกสภาผู้แทนราษฎร', 'สมาชิกวุฒิสภา'],
-		results: [
-			...getFakedMPResultByPersons({ party: movingForwardParty.name, isCandidateVoting }),
-			...getFakedMPResultByPersons({ party: pheuThaiParty.name, isCandidateVoting }),
-			...getFakedMPResultByPersons({ party: prachachatParty.name, isCandidateVoting }),
-			...getFakedMPResultByPersons({ party: bhumjaithaiParty.name, isCandidateVoting }),
-			...getFakedMPResultByPersons({ party: democratsParty.name, isCandidateVoting }),
-			...getFakedSenateResultByPersons({ isCandidateVoting })
-		]
-	};
+	const resultsByPerson = createMockVotes(isCandidateVoting);
 
 	return {
 		voting,
@@ -347,62 +316,4 @@ function filterFakedRawVoteResultsByParties(
 	return results.filter((result) =>
 		result.party ? parties.map((party) => party.name).includes(result.party.name) : false
 	);
-}
-
-function getFakedMPResultByPersons(options: {
-	party: ResultByPerson['party'];
-	isCandidateVoting?: boolean;
-}): ResultByPerson[] {
-	const roles = ['สส. แบ่งเขต จ. ระยอง', 'สส. บัญชีรายชื่อ'];
-	return getFakedResultByPersons({ roles, position: 'สมาชิกสภาผู้แทนราษฎร', ...options });
-}
-
-function getFakedSenateResultByPersons(options: { isCandidateVoting?: boolean }): ResultByPerson[] {
-	const roles = ['สว. เลือกโดย คสช.', 'สว. เลือกกันเอง', 'สว. โดยตำแหน่ง'];
-	return getFakedResultByPersons({ roles, position: 'สมาชิกวุฒิสภา', ...options });
-}
-
-function getFakedResultByPersons({
-	roles,
-	position,
-	party,
-	isCandidateVoting
-}: {
-	roles: string[];
-	position: string;
-	party?: ResultByPerson['party'];
-	isCandidateVoting?: boolean;
-}): ResultByPerson[] {
-	const voteOptions = isCandidateVoting ? candidateVoting.voteOptions : defaultVoteOptions;
-
-	const cases = roles.reduce(
-		(acc: { role: string; voteOption: CustomVoteOption | string }[], role) => [
-			...acc,
-			...voteOptions.map((voteOption) => ({ role, voteOption }))
-		],
-		[]
-	);
-
-	return cases.map(({ role, voteOption }, i) => {
-		const politician =
-			i % 2 === 0
-				? {
-						id: 'กมนทรรศน์-กิตติสุนทรสกุล',
-						firstname: 'กมนทรรศน์',
-						lastname: 'กิตติสุนทรสกุล'
-				  }
-				: {
-						id: 'พหล-สง่าเนตร',
-						firstname: 'สง่าเนตร',
-						lastname: 'กิตติสุนทรสกุล'
-				  };
-
-		return {
-			...politician,
-			position,
-			role,
-			party,
-			voteOption
-		};
-	});
 }

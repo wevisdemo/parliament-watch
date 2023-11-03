@@ -151,7 +151,7 @@
 				name="navSearch"
 				type="text"
 				class="w-[calc(320px-6rem)] bg-white/0 outline-none border-0 text-white leading-4"
-				placeholder="ค้นหาชื่อบุคคล/ร่างกฎหมาย"
+				placeholder="ค้นหาชื่อบุคคล/มติ/ร่างกฎหมาย"
 			/>
 			<button
 				class="grid place-content-center bg-white/0 border-0 text-white cursor-pointer w-12 h-12"

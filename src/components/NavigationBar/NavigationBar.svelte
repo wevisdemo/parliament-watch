@@ -1,3 +1,50 @@
+<script context="module" lang="ts">
+	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
+	import VoteIcon from '$components/icons/VoteIcon.svelte';
+	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
+
+	export const menuList: Menu[] = [
+		{
+			label: 'นักการเมือง',
+			icon: PoliticianIcon,
+			url: null,
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'สภาผู้แทนราษฎร', url: '/', type: MenuTypes.link },
+				{ label: 'วุฒิสภา', url: '/', type: MenuTypes.link }
+			]
+		},
+		{
+			label: 'การลงมติ',
+			icon: VoteIcon,
+			url: '/',
+			type: MenuTypes.both
+		},
+		{
+			label: 'การออกกฎหมาย',
+			icon: LawIcon,
+			url: null,
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'กฎหมายในกระบวนการ', url: '/', type: MenuTypes.link },
+				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
+			]
+		},
+		{
+			label: 'เกี่ยวกับเรา',
+			icon: WeVisIcon,
+			url: null,
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'ที่มาของโครงการ', url: '/', type: MenuTypes.link },
+				{ label: 'ข้อมูลในเว็บนี้', url: '/', type: MenuTypes.link },
+				{ label: 'เกี่ยวกับ WeVis', url: '/', type: MenuTypes.link }
+			]
+		}
+	];
+</script>
+
 <script lang="ts">
 	import { MenuTypes, type Menu } from '$models/menu';
 
@@ -7,55 +54,10 @@
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
 	import SideMenuList from './SideMenuList.svelte';
-
-	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import LawIcon from '$components/icons/LawIcon.svelte';
-	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import NavigationPane from './NavigationPane.svelte';
 	import SearchInput from './SearchInput.svelte';
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
 	import type { SearchResults } from '$models/search';
-
-	const menuList: Menu[] = [
-		{
-			label: 'สมาชิกรัฐสภา',
-			icon: PoliticianIcon,
-			url: null,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'สภาผู้แทนราษฎร', url: '/representives', type: MenuTypes.link },
-				{ label: 'วุฒิสภา', url: '/senate', type: MenuTypes.link }
-			]
-		},
-		{
-			label: 'การออกกฎหมาย',
-			icon: LawIcon,
-			url: null,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'กฎหมายในกระบวนการ', url: '/lawinprocess', type: MenuTypes.link },
-				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/howtomakelaws', type: MenuTypes.link }
-			]
-		},
-		{
-			label: 'การลงมติ',
-			icon: VoteIcon,
-			url: '/voting',
-			type: MenuTypes.both
-		},
-		{
-			label: 'เกี่ยวกับเรา',
-			icon: WeVisIcon,
-			url: null,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'ที่มาของโครงการ', url: '/projectorigin', type: MenuTypes.link },
-				{ label: 'ข้อมูลในเว็บนี้', url: '/informations', type: MenuTypes.link },
-				{ label: 'เกี่ยวกับ WeVis', url: '/aboutus', type: MenuTypes.link }
-			]
-		}
-	];
 
 	let screenSize: number;
 	let previousFromTop = 0;

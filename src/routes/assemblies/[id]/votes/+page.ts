@@ -3,13 +3,13 @@ import type { Assembly } from '$models/assembly';
 import { rep26, sen12 } from '../../../../mocks/data/assembly.js';
 import { mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
 
-type VotingSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
+export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
 
-interface FilterOptions {
+export interface FilterOptions {
 	categories: string[];
 }
 
-type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
+export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
 export async function load({ params }) {
 	const { id, name, term, startedAt } = params.id === sen12.id ? sen12 : rep26;
@@ -20,7 +20,7 @@ export async function load({ params }) {
 		categories: mockCategory
 	};
 
-	const votings: VotingSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
+	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
 		id: i,
 		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
@@ -29,5 +29,5 @@ export async function load({ params }) {
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : []
 	}));
 
-	return { assembly, filterOptions, votings };
+	return { assembly, filterOptions, votes };
 }

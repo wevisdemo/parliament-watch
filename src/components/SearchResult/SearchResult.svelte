@@ -19,11 +19,11 @@
 		<SearchResultGroup heading="นักการเมือง" items={searchResults.politicians}>
 			<PoliticianIcon slot="icon" class="fill-interactive-01" />
 		</SearchResultGroup>
-		<SearchResultGroup heading="การออกกฎหมาย" items={searchResults.bills}>
-			<LawIcon slot="icon" class="fill-interactive-01" />
-		</SearchResultGroup>
 		<SearchResultGroup heading="การลงมติ" items={searchResults.votings}>
 			<VoteIcon slot="icon" class="fill-interactive-01" />
+		</SearchResultGroup>
+		<SearchResultGroup heading="การออกกฎหมาย" items={searchResults.bills}>
+			<LawIcon slot="icon" class="fill-interactive-01" />
 		</SearchResultGroup>
 	{:else}
 		<NoResultItemsFound />
