@@ -26,7 +26,10 @@ export interface Bill {
 	nickname: string;
 	description: string;
 	status: BillStatus;
+	categories: string[];
 	proposedOn: Date;
 	proposerType: BillProposerType;
 	proposedBy: Politician[] | CabinetId | PeopleProposer;
+	mergedBillIds?: number[];
+	eventIds: number[];
 }

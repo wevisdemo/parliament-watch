@@ -61,6 +61,7 @@ erDiagram
     string title
     string nickname
     string description
+    string[] categories
     string status "inProgress | success | rejected | merged"
     Date proposedOn
     string proposedBy "politicians | cabinet | people"
@@ -94,12 +95,14 @@ erDiagram
   Event {
     number billId PK
     Date date
-    string type "voted | merged | enforced | other"
+    string type "hearing | mp1 | mp2 | mp3 | senate1 | senate2 | senate3 | royalAssent | enforcement | other"
     string title "for other"
     string description "for other"
-    number votedInVotingId FK "for voted"
-    number mergedIntoBillId FK "for merged"
-    string enforcementDocumentUrl "for enforced"
+    string status "succeed | in-progress | failed"
+    string actionType "voted | merged | enforced"
+    number votedInVotingId FK "for action voted"
+    number mergedIntoBillId FK "for action merged"
+    string enforcementDocumentUrl "for action enforced"
   }
 ```
 
