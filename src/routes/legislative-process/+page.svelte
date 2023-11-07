@@ -12,9 +12,9 @@
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
-  import { BillStatus } from '$models/bill';
+	import { BillStatus } from '$models/bill';
 
-  export let data;
+	export let data;
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
@@ -100,8 +100,6 @@
 			'ร่างแก้ไขบทบัญญัติใน รธน.': '50,000 คน'
 		}
 	];
-
-	export let data;
 </script>
 
 <div class="flex flex-col w-full">
