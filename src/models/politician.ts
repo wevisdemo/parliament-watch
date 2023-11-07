@@ -26,6 +26,8 @@ interface AssemblyRole extends Role {
 
 export interface PartyRole extends Role {
 	party: Party;
+	province?: string;
+	electorialDistrict?: number;
 }
 
 interface Role {

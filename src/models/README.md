@@ -31,6 +31,8 @@ erDiagram
   Role {
     string politicianId FK
     string partyId FK "only for party"
+    string province "only for party"
+    number electorialDistrict "only for party"
     string assemblyId FK "only for assembly"
     string role
     Date startedAt
