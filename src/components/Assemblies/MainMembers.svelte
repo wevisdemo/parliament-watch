@@ -4,7 +4,9 @@
 	import type { Party } from '$models/party';
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import type { MainMember } from '../../routes/assemblies/[id]/+page';
+
 	export let members: MainMember[] = [];
+	export let assemblyId: string;
 
 	const defaultParty: Party = {
 		name: '',
@@ -34,9 +36,8 @@
 				/>
 			</div>
 		{/each}
-		<!-- TODO: fill link -->
 		<a
-			href="/"
+			href="/assemblies/{assemblyId}/members"
 			class="w-full max-w-[288px] h-fit bg-blue-60 flex text-[#FFFFFF] justify-between hover:bg-blue-70"
 		>
 			<span class="fluid-heading-04 p-[16px]">ดูรายชื่อสมาชิกทั้งหมด</span>
