@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
+	import { Breadcrumb, BreadcrumbItem, Tab, Tabs } from 'carbon-components-svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	export let data;
 
 	function dateConvertor(date: Date) {
@@ -88,6 +89,35 @@
 			</div>
 			<div>
 				<DownloadData links={data.voting.files} />
+			</div>
+		</div>
+	</div>
+	<div class="flex flex-col w-full px-12 py-16">
+		<h1 class="fluid-heading-05 text-center">ผลการลงมติ</h1>
+		<Tabs class="w-full">
+			<Tab>สรุป</Tab>
+			<Tab>รายสังกัด</Tab>
+			<Tab>รายคน</Tab>
+		</Tabs>
+		<h2 class="fluid-heading-04 mt-10">สรุปผลการลงมติ</h2>
+		<div class="flex flex-col mt-4">
+			<div class="flex items-center text-teal-50">
+				<p class="fluid-heading-05 ml-1">
+					{data.results.find((v) => v.voteOption === 'เห็นด้วย')?.total || 0}%
+				</p>
+				<p class="fluid-heading-05">เห็นด้วย</p>
+			</div>
+			<div class="flex items-center gap-x-4">
+				<div class="flex items-center gap-x-1">
+					<p class="heading-02">สมาชิกสภา</p>
+					<p class="body-02">750</p>
+				</div>
+				{#each data.results as result}
+					<div class="flex items-center gap-x-1">
+						<p class="heading-02">{result.voteOption}</p>
+						<p class="body-02">{result.total}</p>
+					</div>
+				{/each}
 			</div>
 		</div>
 	</div>
