@@ -71,7 +71,7 @@
 	function scrollEventHandler() {
 		if (sideNavActive) return;
 
-		const currentFromTop = Math.max(window.scrollY, 0);
+		const currentFromTop = window.scrollY;
 		showHeader = currentFromTop <= previousFromTop;
 		previousFromTop = currentFromTop;
 		sideNavActive = false;
