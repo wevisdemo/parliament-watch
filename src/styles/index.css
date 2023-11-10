@@ -5,6 +5,7 @@
 
 html {
 	scroll-behavior: smooth;
+	overscroll-behavior: none;
 }
 
 .legislative-process-sidebar .bx--side-nav__overlay-active {
