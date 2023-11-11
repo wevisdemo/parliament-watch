@@ -30,7 +30,7 @@ export interface Event {
 	title?: string;
 	description?: string;
 	status: EventStatus;
-	actionType: EventActionType;
+	actionType?: EventActionType;
 	votedInVotingId?: number;
 	mergedIntoBillId?: number;
 	enforcementDocumentUrl?: string;

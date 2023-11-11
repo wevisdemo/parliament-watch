@@ -9,6 +9,7 @@ erDiagram
   Politician }|--o| Bill: "can propose"
   Vote }|--|| Voting: "are couted toward"
   Bill ||--o{ Event: "goes through"
+  Bill |o--o{ Bill: "can be merged to"
   Event }o--o| Bill: "can refer to"
   Event }o--o| Voting: "can refer to"
 
@@ -68,6 +69,7 @@ erDiagram
     string[] proposedByPoliticianIds FK
     number proposedByCabinetId FK
     PeopleProposer proposedByPeople "{ leadBy: string, signatoryCount: number}"
+    number mergedToBillId FK "for status merged"
   }
 
   Voting {
@@ -93,7 +95,8 @@ erDiagram
   }
 
   Event {
-    number billId PK
+    number eventId PK
+    number billId FK
     Date date
     string type "hearing | mp1 | mp2 | mp3 | senate1 | senate2 | senate3 | royalAssent | enforcement | other"
     string title "for other"

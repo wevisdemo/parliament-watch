@@ -29,7 +29,8 @@ export interface Bill {
 	categories: string[];
 	proposedOn: Date;
 	proposerType: BillProposerType;
-	proposedBy: Politician[] | CabinetId | PeopleProposer;
-	mergedBillIds?: number[];
-	eventIds: number[];
+	proposedLedByPolitician?: Politician;
+	coProposedByPoliticians?: Politician[];
+	proposedByCabinetId?: number;
+	proposedByPeople?: PeopleProposer;
 }
