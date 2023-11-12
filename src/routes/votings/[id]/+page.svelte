@@ -4,7 +4,7 @@
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
-	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
 	export let data;
 
 	function dateConvertor(date: Date) {
@@ -13,6 +13,27 @@
 			calendar: 'buddhist'
 		}).format(date);
 		return convertedDate;
+	}
+
+	function getVoteColor(vote: DefaultVoteOption | CustomVoteOption | string) {
+		switch (vote) {
+			case DefaultVoteOption.Agreed:
+				return 'bg-teal-50';
+			case DefaultVoteOption.Disagreed:
+				return 'bg-red-50';
+			case DefaultVoteOption.Novote:
+				return 'bg-gray-80';
+			case DefaultVoteOption.Abstain:
+				return 'bg-gray-50';
+			case DefaultVoteOption.Absent:
+				return 'bg-gray-20';
+			default:
+				return 'bg-purple-70';
+		}
+	}
+
+	function getWidthPercent(voteCount: number) {
+		return Math.round((voteCount / 750) * 100);
 	}
 </script>
 
@@ -101,9 +122,12 @@
 		</Tabs>
 		<h2 class="fluid-heading-04 mt-10">สรุปผลการลงมติ</h2>
 		<div class="flex flex-col mt-4">
-			<div class="flex items-center text-teal-50">
+			<div class="flex items-center text-teal-50 gap-x-1">
 				<p class="fluid-heading-05 ml-1">
-					{data.results.find((v) => v.voteOption === 'เห็นด้วย')?.total || 0}%
+					{(
+						((data.results.find((v) => v.voteOption === 'เห็นด้วย')?.total || 0) / 750) *
+						100
+					).toFixed(0)}%
 				</p>
 				<p class="fluid-heading-05">เห็นด้วย</p>
 			</div>
@@ -114,12 +138,40 @@
 				</div>
 				{#each data.results as result}
 					<div class="flex items-center gap-x-1">
+						<div class="w-4 h-4 rounded-sm {getVoteColor(result.voteOption)}" />
 						<p class="heading-02">{result.voteOption}</p>
 						<p class="body-02">{result.total}</p>
 					</div>
 				{/each}
 			</div>
 		</div>
+		<div class="flex w-full h-[50px] my-2">
+			{#each data.results as result}
+				<div
+					class="rounded-sm h-full {getVoteColor(result.voteOption)}"
+					style="width: {getWidthPercent(result.total)}%"
+				/>
+			{/each}
+		</div>
+		<div class="flex items-center gap-x-2 text-gray-60">
+			<VotingResultTag result={data.voting.result} isLarge />
+			<p class="heading-01">เงื่อนไข</p>
+			<span class="body-01 flex items-center gap-x-1">
+				<p class="heading-01">1.</p>
+				ได้เสียงเกินกึ่งหนึ่งของสภา
+			</span>
+			<span class="body-01 flex items-center gap-x-1">
+				<p class="heading-01">2.</p>
+				ได้เสียงฝ่ายค้านอย่างน้อย 20%
+			</span>
+			<span class="body-01 flex items-center gap-x-1">
+				<p class="heading-01">3.</p>
+				ได้เสียง สว. อย่างน้อย 1 ใน 3
+			</span>
+		</div>
+		<p class="cursor-pointer helper-text-01 mt-2 text-blue-60 underline">
+			งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
+		</p>
 	</div>
 	<div class="whitespace-pre">
 		{JSON.stringify(data, undefined, 2)}
