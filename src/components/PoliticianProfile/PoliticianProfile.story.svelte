@@ -17,6 +17,10 @@
 		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} />
 	</Hst.Variant>
 
+	<Hst.Variant title="Party is not given">
+		<PoliticianProfile {id} {firstname} {lastname} {avatar} {role} />
+	</Hst.Variant>
+
 	<Hst.Variant title="isLarge = true">
 		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} isLarge />
 	</Hst.Variant>

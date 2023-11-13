@@ -5,7 +5,7 @@
 	export let firstname: string;
 	export let lastname: string;
 	export let avatar: string;
-	export let party: Pick<Party, 'logo' | 'name'>;
+	export let party: Pick<Party, 'logo' | 'name'> | undefined = undefined;
 	export let role: string;
 	export let isLarge = false;
 	export let isActive = true;
@@ -31,23 +31,27 @@
 			loading="lazy"
 			decoding="async"
 		/>
-		<div
-			class="w-[16px] h-[16px] absolute bottom-0 right-0 rounded-full border-solid border border-[#C0BFBE] bg-white overflow-hidden p-[2px] flex items-center justify-center"
-		>
-			<img
-				class="object-contain"
-				src={party.logo}
-				alt={party.name}
-				width="16"
-				height="16"
-				loading="lazy"
-				decoding="async"
-			/>
-		</div>
+		{#if party}
+			<div
+				class="w-[16px] h-[16px] absolute bottom-0 right-0 rounded-full border-solid border border-[#C0BFBE] bg-white overflow-hidden p-[2px] flex items-center justify-center"
+			>
+				<img
+					class="object-contain"
+					src={party.logo}
+					alt={party.name}
+					width="16"
+					height="16"
+					loading="lazy"
+					decoding="async"
+				/>
+			</div>
+		{/if}
 	</div>
 	<div class="flex-1">
 		<p class="text-text-01 {titleClass}">{fullname}</p>
-		<p class="text-text-02 {subtitleClass}">พรรค{party.name}</p>
+		{#if party}
+			<p class="text-text-02 {subtitleClass}">พรรค{party.name}</p>
+		{/if}
 		<p class="text-text-02 {subtitleClass}">{role}</p>
 	</div>
 </div>
