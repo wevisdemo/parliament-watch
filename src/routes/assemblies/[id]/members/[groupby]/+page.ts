@@ -11,12 +11,16 @@ import {
 
 interface PoliticianGroup {
 	name: string;
-	subgroups: {
-		name: string;
-		icon?: string;
-		members: PoliticianSummary[];
-	}[];
+	icon?: string;
+	members: PoliticianSummary[];
 }
+
+type PoliticianGroupBy =
+	| PoliticianGroup[]
+	| {
+			name: string;
+			subgroups: PoliticianGroup[];
+	  };
 
 interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isLarge'> {
 	candidateType?: 'แบ่งเขต' | 'บัญชีรายชื่อ';
@@ -25,7 +29,7 @@ interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isL
 export function load({ params }) {
 	switch (params.groupby) {
 		case GroupByOption.Party: {
-			const groups: PoliticianGroup[] = [
+			const groups: PoliticianGroupBy[] = [
 				{
 					name: 'ฝ่ายรัฐบาล',
 					subgroups: [
@@ -62,7 +66,7 @@ export function load({ params }) {
 		}
 
 		case GroupByOption.Province: {
-			const groups: PoliticianGroup[] = [
+			const groups: PoliticianGroupBy[] = [
 				{
 					name: 'ภาคกลาง',
 					subgroups: [
@@ -161,13 +165,13 @@ const mockPoliticianSummaries = (
 		};
 	});
 
-const mockPoliticianGroupsWithPartySubgroups = (...names: string[]): PoliticianGroup[] =>
+const mockPoliticianGroupsWithPartySubgroups = (...names: string[]): PoliticianGroupBy[] =>
 	names.map((name) => ({
 		name,
 		subgroups: mockPartySubgroups()
 	}));
 
-const mockPartySubgroups = (): PoliticianGroup['subgroups'] =>
+const mockPartySubgroups = (): PoliticianGroup[] =>
 	[movingForwardParty, democratsParty, pheuThaiParty, bhumjaithaiParty]
 		.map((party) => ({
 			name: party.name,
