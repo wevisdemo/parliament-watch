@@ -1,4 +1,4 @@
-<script land="ts">
+<script lang="ts">
 	import dayjs from 'dayjs';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
@@ -13,6 +13,8 @@
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
 	import { BillStatus } from '$models/bill';
+	import { onMount } from 'svelte';
+	import scrollama from 'scrollama';
 
 	export let data;
 
@@ -100,6 +102,53 @@
 			'ร่างแก้ไขบทบัญญัติใน รธน.': '50,000 คน'
 		}
 	];
+
+	let overallElement1: HTMLElement,
+		overallElement2: HTMLElement,
+		overallElement3: HTMLElement,
+		overallElement4: HTMLElement,
+		overallElement5: HTMLElement;
+	let legislationProcessElement1: HTMLElement, legislationProcessElement2: HTMLElement;
+	let politicianVotingElement1: HTMLElement,
+		politicianVotingElement2: HTMLElement,
+		politicianVotingElement3: HTMLElement,
+		politicianVotingElement4: HTMLElement;
+	let politicianActionElement1: HTMLElement,
+		politicianActionElement2: HTMLElement,
+		politicianActionElement3: HTMLElement;
+	let currentNavElementId: string;
+	onMount(() => {
+		if (window.matchMedia('(min-width: 672px)').matches) {
+			const scroller = scrollama();
+
+			scroller
+				.setup({
+					step: [
+						overallElement1,
+						overallElement2,
+						overallElement3,
+						overallElement4,
+						overallElement5,
+						legislationProcessElement1,
+						legislationProcessElement2,
+						politicianVotingElement1,
+						politicianVotingElement2,
+						politicianVotingElement3,
+						politicianVotingElement4,
+						politicianActionElement1,
+						politicianActionElement2,
+						politicianActionElement3
+					],
+					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
+					offset: '33px'
+				})
+				.onStepEnter((response) => {
+					currentNavElementId = response.element.id;
+				});
+
+			return scroller.destroy;
+		}
+	});
 </script>
 
 <div class="flex flex-col w-full">
@@ -117,7 +166,7 @@
 			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8 md:top-0 md:sticky"
 		>
 			<div class="py-10 w-full bg-white flex items-center justify-center">
-				<Sidebar />
+				<Sidebar {currentNavElementId} />
 			</div>
 		</div>
 		<div
@@ -126,7 +175,11 @@
 			<section>
 				<h1 class="fluid-heading-05" id="แนะนำภาพรวม">แนะนำภาพรวม</h1>
 				<div>
-					<h2 class="fluid-heading-04" id="การออกกฎหมายตามรัฐธรรมนูญ 2560">
+					<h2
+						bind:this={overallElement1}
+						class="fluid-heading-04"
+						id="การออกกฎหมายตามรัฐธรรมนูญ 2560"
+					>
 						การออกกฎหมายตามรัฐธรรมนูญ 2560
 					</h2>
 					<hr />
@@ -151,7 +204,9 @@
 					</p>
 				</div>
 				<div>
-					<h2 class="fluid-heading-04" id="กฎหมายบังคับใช้ได้อย่างไร">กฎหมายบังคับใช้ได้อย่างไร</h2>
+					<h2 bind:this={overallElement2} class="fluid-heading-04" id="กฎหมายบังคับใช้ได้อย่างไร">
+						กฎหมายบังคับใช้ได้อย่างไร
+					</h2>
 					<hr />
 					<h3 class="fluid-heading-03 my-6" id="การออกกฎหมายตามรัฐธรรมนูญ 2560">
 						กฎหมายที่ออกโดยรัฐสภา ต้องผ่านกระบวนการ 3 ขั้นตอนสำคัญ
@@ -201,7 +256,9 @@
 					</ol>
 				</div>
 				<div>
-					<h2 class="fluid-heading-04" id="กฎหมายในเว็บไซต์นี้">กฎหมายในเว็บไซต์นี้</h2>
+					<h2 bind:this={overallElement3} class="fluid-heading-04" id="กฎหมายในเว็บไซต์นี้">
+						กฎหมายในเว็บไซต์นี้
+					</h2>
 					<hr />
 					<p class="body-02 mt-6 mb-4">
 						เว็บไซต์ Parliament Watch มุ่งนำเสนอกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา
@@ -219,7 +276,11 @@
 				<div class="flex flex-col gap-4">
 					<div>
 						<div class="mb-6">
-							<h2 class="fluid-heading-04" id="ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา">
+							<h2
+								bind:this={overallElement4}
+								class="fluid-heading-04"
+								id="ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา"
+							>
 								ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา
 							</h2>
 							<hr />
@@ -236,7 +297,9 @@
 					</div>
 				</div>
 				<div>
-					<h2 class="fluid-heading-04" id="สถานะของกฎหมาย">สถานะของกฎหมาย</h2>
+					<h2 bind:this={overallElement5} class="fluid-heading-04" id="สถานะของกฎหมาย">
+						สถานะของกฎหมาย
+					</h2>
 					<hr />
 					<p class="mt-6">
 						การจัดแบ่งสถานะของร่างกฎหมายบนเว็บไซต์ Parliament Watch เป็นการจัดแบ่งที่ทีม WeVis
@@ -258,7 +321,9 @@
 					ขั้นตอนการออกกฎหมายโดยรัฐสภา
 				</h1>
 				<div>
-					<h2 class="fluid-heading-04" id="ขั้นตอนทั่วไป">ขั้นตอนทั่วไป</h2>
+					<h2 bind:this={legislationProcessElement1} class="fluid-heading-04" id="ขั้นตอนทั่วไป">
+						ขั้นตอนทั่วไป
+					</h2>
 					<hr />
 				</div>
 				<div>
@@ -280,7 +345,11 @@
 					<ComparisonTable {proposerComparisonTableData} />
 				</div>
 				<div class="mb-6">
-					<h2 class="fluid-heading-04" id="ขั้นตอนพิเศษของกฎหมายบางประเภท">
+					<h2
+						bind:this={legislationProcessElement2}
+						class="fluid-heading-04"
+						id="ขั้นตอนพิเศษของกฎหมายบางประเภท"
+					>
 						ขั้นตอนพิเศษของกฎหมายบางประเภท
 					</h2>
 					<hr />
@@ -383,7 +452,11 @@
 					เข้าใจการลงมติของ สส. และ สว.
 				</h1>
 				<div class="mb-6">
-					<h2 class="fluid-heading-04" id="การลงมติคืออะไร เกิดขึ้นในขั้นตอนไหนบ้าง ?">
+					<h2
+						bind:this={politicianVotingElement1}
+						class="fluid-heading-04"
+						id="การลงมติคืออะไร เกิดขึ้นในขั้นตอนไหนบ้าง ?"
+					>
 						การลงมติคืออะไร เกิดขึ้นในขั้นตอนไหนบ้าง ?
 					</h2>
 					<hr />
@@ -400,7 +473,9 @@
 				</div>
 				<div class="my-6 grid gap-4">
 					<div>
-						<h2 class="fluid-heading-04" id="วิธีการลงมติ">วิธีการลงมติ</h2>
+						<h2 bind:this={politicianVotingElement2} class="fluid-heading-04" id="วิธีการลงมติ">
+							วิธีการลงมติ
+						</h2>
 						<hr />
 						<div class="mt-6">
 							<p>การลงมติในสภากระทำผ่านการออกเสียงลงคะแนน ซึ่งแบ่งเป็น 2 กรณี</p>
@@ -477,7 +552,9 @@
 					</div>
 				</div>
 				<div class="my-6">
-					<h2 class="fluid-heading-04" id="ประเภทการลงมติ">ประเภทการลงมติ</h2>
+					<h2 bind:this={politicianVotingElement3} class="fluid-heading-04" id="ประเภทการลงมติ">
+						ประเภทการลงมติ
+					</h2>
 					<hr />
 					<div class="flex flex-col gap-4 mt-6">
 						<p>โดยทั่วไป การประชุมจะกำหนดให้ สส. และ สว. แสดงเจตจำนงต่อประเด็นที่ใช้ลงมติดังนี้</p>
@@ -511,7 +588,9 @@
 					</div>
 				</div>
 				<div class="my-6">
-					<h2 class="fluid-heading-04" id="ผลการลงมติ">ผลการลงมติ</h2>
+					<h2 bind:this={politicianVotingElement4} class="fluid-heading-04" id="ผลการลงมติ">
+						ผลการลงมติ
+					</h2>
 					<hr />
 					<div class="flex flex-col gap-4 mt-6">
 						<p>
@@ -537,7 +616,11 @@
 					ส.ส. และ ส.ว. ทำอะไรบ้างในสภา
 				</h1>
 				<div>
-					<h2 class="fluid-heading-04" id="หน้าที่ของสมาชิกสภาผู้แทนราษฏร (สส.)">
+					<h2
+						bind:this={politicianActionElement1}
+						class="fluid-heading-04"
+						id="หน้าที่ของสมาชิกสภาผู้แทนราษฏร (สส.)"
+					>
 						หน้าที่ของสมาชิกสภาผู้แทนราษฏร (สส.)
 					</h2>
 					<hr />
@@ -555,7 +638,11 @@
 					</div>
 				</div>
 				<div>
-					<h2 class="fluid-heading-04" id="หน้าที่ของสมาชิกวุฒิสภา (สว.)">
+					<h2
+						bind:this={politicianActionElement2}
+						class="fluid-heading-04"
+						id="หน้าที่ของสมาชิกวุฒิสภา (สว.)"
+					>
 						หน้าที่ของสมาชิกวุฒิสภา (สว.)
 					</h2>
 					<hr />
@@ -573,7 +660,11 @@
 					</div>
 				</div>
 				<div>
-					<h2 class="fluid-heading-04" id="หน้าที่ของสภาร่วม (ส.ส. + ส.ว.)">
+					<h2
+						bind:this={politicianActionElement3}
+						class="fluid-heading-04"
+						id="หน้าที่ของสภาร่วม (ส.ส. + ส.ว.)"
+					>
 						หน้าที่ของสภาร่วม (ส.ส. + ส.ว.)
 					</h2>
 					<hr />
