@@ -114,7 +114,7 @@
 	</header>
 	<main class="flex flex-col justify-center md:flex-row items-center md:items-start">
 		<div
-			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8"
+			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8 md:top-0 md:sticky"
 		>
 			<div class="py-10 w-full bg-white flex items-center justify-center">
 				<Sidebar />
