@@ -31,6 +31,6 @@ export interface Bill {
 	proposerType: BillProposerType;
 	proposedLedByPolitician?: Politician;
 	coProposedByPoliticians?: Politician[];
-	proposedByCabinetId?: number;
+	proposedByCabinetId?: string;
 	proposedByPeople?: PeopleProposer;
 }

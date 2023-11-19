@@ -30,6 +30,11 @@
 		</li>
 		<li>
 			<a href="/bills">[WEV-16] Users can browse for a bill</a>
+			<ul>
+				<li>
+					<a href="/bills/search">bills data table page</a>
+				</li>
+			</ul>
 		</li>
 	</ul>
 </div>
