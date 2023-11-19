@@ -28,6 +28,9 @@
 		<li>
 			<a href="/bills/1">[WEV-15] Users can view details and track progress of a bill</a>
 		</li>
+		<li>
+			<a href="/bills">[WEV-16] Users can browse for a bill</a>
+		</li>
 	</ul>
 </div>
 
