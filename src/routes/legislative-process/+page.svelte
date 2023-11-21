@@ -308,7 +308,7 @@
 						ไม่ได้เป็นสถานะของร่างกฎหมายอย่างเป็นทางการ
 					</p>
 
-					<h2 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h2>
+					<h3 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h3>
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						{#each billStatuses as billStatus}
 							<BillStatusCard {...billStatus} />
