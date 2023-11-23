@@ -1,4 +1,4 @@
-<script land="ts">
+<script lang="ts">
 	import dayjs from 'dayjs';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import 'dayjs/locale/th';
@@ -13,6 +13,8 @@
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
 	import { BillStatus } from '$models/bill';
+	import { onMount } from 'svelte';
+	import scrollama from 'scrollama';
 
 	export let data;
 
@@ -100,6 +102,26 @@
 			'ร่างแก้ไขบทบัญญัติใน รธน.': '50,000 คน'
 		}
 	];
+
+	let bodyContainer: HTMLElement;
+	let currentNavElementId: string;
+	onMount(() => {
+		if (window.matchMedia('(min-width: 672px)').matches) {
+			const scroller = scrollama();
+
+			scroller
+				.setup({
+					step: bodyContainer.querySelectorAll('h2'),
+					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
+					offset: '33px'
+				})
+				.onStepEnter((response) => {
+					currentNavElementId = response.element.id;
+				});
+
+			return scroller.destroy;
+		}
+	});
 </script>
 
 <div class="flex flex-col w-full">
@@ -114,14 +136,15 @@
 	</header>
 	<main class="flex flex-col justify-center md:flex-row items-center md:items-start">
 		<div
-			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8"
+			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8 md:top-0 md:sticky"
 		>
 			<div class="py-10 w-full bg-white flex items-center justify-center">
-				<Sidebar />
+				<Sidebar {currentNavElementId} />
 			</div>
 		</div>
 		<div
 			class="w-full max-w-[800px] flex flex-col gap-10 px-4 md:px-10 py-8 bg-ui-01 md:bg-white flex-1"
+			bind:this={bodyContainer}
 		>
 			<section>
 				<h1 class="fluid-heading-05" id="แนะนำภาพรวม">แนะนำภาพรวม</h1>
@@ -245,7 +268,7 @@
 						ไม่ได้เป็นสถานะของร่างกฎหมายอย่างเป็นทางการ
 					</p>
 
-					<h2 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h2>
+					<h3 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h3>
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						{#each billStatuses as billStatus}
 							<BillStatusCard {...billStatus} />
