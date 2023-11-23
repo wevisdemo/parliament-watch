@@ -12,7 +12,4 @@
 </script>
 
 <Header {data} {searchQuery} {mounted} />
-
-<b>Assembly member child route:</b>
-
 <slot />
