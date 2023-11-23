@@ -10,6 +10,7 @@
 
 	export let votes: VoteSummary[] = [];
 	export let filterOptions: FilterOptions;
+	export let showFilter = true;
 	let filter: IVotesFilter = {
 		name: '',
 		result: ['ผ่าน', 'ไม่ผ่าน'],
@@ -28,6 +29,6 @@
 </script>
 
 <div class="flex bg-white flex flex-col md:flex-row justify-center">
-	<VotesFilter {votes} bind:filter />
-	<VotesTable votes={filteredVotes} />
+	<VotesFilter {votes} bind:filter bind:showFilter />
+	<VotesTable votes={filteredVotes} bind:showFilter />
 </div>
