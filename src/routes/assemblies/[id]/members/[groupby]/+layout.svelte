@@ -1,19 +1,17 @@
 <script lang="ts">
+	import Header from '$components/Assemblies/Members/Header.svelte';
+	import { onMount } from 'svelte';
+
 	export let data;
-	$: ({ assembly, groupByTabs } = data);
+
+	let searchQuery = '';
+	let mounted = false;
+	onMount(() => {
+		mounted = true;
+	});
 </script>
 
-<b>Assembly member layout:</b>
-
-<div class="whitespace-pre">
-	{JSON.stringify(assembly, undefined, 2)}
-</div>
-
-<div class="my-6 flex flex-row gap-2">
-	{#each groupByTabs as { label, path, isActive }}
-		<a href="/assemblies/{assembly.id}/members/{path}" class:underline={isActive}>{label}</a>
-	{/each}
-</div>
+<Header {data} {searchQuery} {mounted} />
 
 <b>Assembly member child route:</b>
 

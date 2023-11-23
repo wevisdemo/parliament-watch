@@ -1,0 +1,88 @@
+<script lang="ts">
+	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
+	import Download from 'carbon-icons-svelte/lib/Download.svelte';
+	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
+	import type {
+		AssemblySummary,
+		GroupByTab
+	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout';
+
+	export let data: {
+		assembly: AssemblySummary;
+		groupByTabs: GroupByTab[];
+	};
+	$: ({ assembly, groupByTabs } = data);
+
+	export let searchQuery = '';
+	export let mounted = false;
+	$: startedYear = assembly?.startedAt ? assembly.startedAt.getFullYear() + 543 : null;
+</script>
+
+<Breadcrumb
+	noTrailingSlash
+	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+>
+	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
+	<BreadcrumbItem href="/assemblies">รัฐสภา</BreadcrumbItem>
+	<BreadcrumbItem href="/assemblies/representatives-26">สภาผู้แทนราษฎร</BreadcrumbItem>
+	<BreadcrumbItem href="/assemblies/representatives-26/members/party" isCurrentPage
+		>รายชื่อสมาชิก</BreadcrumbItem
+	>
+</Breadcrumb>
+
+<header class="px-4 py-3 bg-ui-01 md:px-16 md:pb-0">
+	<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
+		<div class="flex-1 flex items-center flex-wrap gap-x-4">
+			<h1 class="fluid-heading-04" style="text-wrap:balance">รายชื่อ{assembly.name}</h1>
+			<div class="flex items-center gap-4">
+				<!-- TODO: handler buttom next and prev-->
+				<img
+					src="/icons/angle-right.svg"
+					alt="angle-left"
+					class="rotate-180 w-[20px] fill-gray-300"
+				/>
+				<h2 class="fluid-heading-03">ชุดที่ {assembly.term} | {startedYear}</h2>
+				<img src="/icons/angle-right.svg" alt="angle-right" class="w-[20px]" />
+			</div>
+		</div>
+		<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end">
+			<div class="flex items-center gap-1">
+				<Download />
+				<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
+			</div>
+			<!-- TODO: add link -->
+			<a href="/" class="flex items-center gap-1 mr-auto helper-text-01">
+				<TableSplit />
+				<span>ผลการลงมติรายคน</span>
+			</a>
+		</div>
+	</div>
+	<Search
+		class="md:hidden {!mounted ? '-mt-4' : ''}"
+		searchClass="md:hidden mt-2"
+		placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+		light
+		bind:value={searchQuery}
+		skeleton={!mounted}
+	/>
+</header>
+
+<nav class="px-4 bg-ui-01 md:px-16">
+	<h2 class="pl-4 py-2 text-gray-60 label-01">แบ่งตาม</h2>
+	<menu class="flex overflow-x-auto">
+		{#each groupByTabs as { label, path, isActive } (path)}
+			<li
+				class="flex body-compact-01 h-12 border-r border-solid border-ui-04 last:border-r-0 {isActive
+					? 'bg-white font-semibold text-gray-100 border-y-2 border-solid border-t-blue-60 border-b-white'
+					: 'bg-ui-03 text-gray-60'}"
+			>
+				<a
+					class="flex items-center px-4 text-[inherit] whitespace-nowrap"
+					href="/assemblies/{assembly.id}/members/{path}"
+				>
+					{label}
+				</a>
+			</li>
+		{/each}
+	</menu>
+</nav>
