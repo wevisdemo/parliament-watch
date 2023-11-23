@@ -165,6 +165,9 @@
 						{politician.debtValue.toLocaleString('th-TH')} บาท
 					</li>
 				</ul>
+				<span class="label-01 text-gray-60">
+					หมายเหตุ: ข้อมูลจากการยื่นบัญชีทรัพย์สินครั้งล่าสุด
+				</span>
 				<!-- TODO: Add link -->
 				<a
 					href="/"
