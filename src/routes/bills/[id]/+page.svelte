@@ -1,33 +1,38 @@
 <script lang="ts">
 	export let data;
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { DocumentMultiple_02, Information, ArrowRight, Undefined } from 'carbon-icons-svelte';
+	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
+	import {
+		DocumentMultiple_02,
+		Information,
+		ArrowRight,
+		CheckmarkFilled,
+		CircleDash,
+		Misuse
+	} from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import Tooltip from '$components/Assemblies/Tooltip.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
-	import { BillProposerType } from '$models/bill';
+	import { BillProposerType, BillStatus } from '$models/bill';
+	import { EventActionType, EventStatus } from '$models/event';
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
-	import CircleDash from 'carbon-icons-svelte/lib/CircleDash.svelte';
-	import Misuse from 'carbon-icons-svelte/lib/Misuse.svelte';
 	import { range } from 'd3';
-	import { EventActionType, EventStatus } from '$models/event';
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import type { VoteCardProps } from '../../assemblies/[id]/+page.js';
-
-	const toolrtip = 'การรวมร่างกฎหมาย คือ xxxxxxxxxxxxxxx';
+	import RoyalGazette from '$components/icons/RoyalGazette.svelte';
+	import BillCard from '$components/BillCard/BillCard.svelte';
 
 	const { bill, mergedBills, events, mergedIntoBill, relatedVotingResults } = data;
+	const tooltipText = 'การรวมร่างกฎหมาย คือ xxxxxxxxxxxxxxx';
+	const lastestEvent = events[events.length - 1];
 	const dateTimeFormat: Intl.DateTimeFormatOptions = {
 		year: '2-digit',
 		month: 'short',
 		day: 'numeric'
 	};
 	const proposedOn = bill.proposedOn.toLocaleDateString('th-TH', dateTimeFormat);
-
 	const eventDescription = {
 		hearing: {
 			title: 'รับฟังความเห็น',
@@ -71,13 +76,22 @@
 		}
 	};
 
-	function getVoting(id: number | undefined) {
-		if (id === undefined) return undefined;
+	function getNumberOfDays() {
+		const start = new Date(events[0].date);
+		const end =
+			bill.status === BillStatus.InProgress ? new Date() : new Date(events[events.length - 1].date);
+		const timeDifference = Math.abs(end.getTime() - start.getTime());
+		const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+		return daysDifference;
+	}
+
+	function getVoting(votingResultsId: number | undefined) {
+		if (votingResultsId === undefined) return undefined;
 		let voting: VoteCardProps['voting'] = {
-			id: Number(events[id].votedInVotingId),
-			date: relatedVotingResults[Number(events[id].votedInVotingId)].voting.date,
-			title: relatedVotingResults[Number(events[id].votedInVotingId)].voting.title,
-			result: relatedVotingResults[Number(events[id].votedInVotingId)].voting.result
+			id: Number(votingResultsId),
+			date: relatedVotingResults[Number(votingResultsId)].voting.date,
+			title: relatedVotingResults[Number(votingResultsId)].voting.title,
+			result: relatedVotingResults[Number(votingResultsId)].voting.result
 		};
 		return voting;
 	}
@@ -92,8 +106,6 @@
 			};
 		});
 	}
-
-	const lastestEvent = events[events.length - 1];
 </script>
 
 <Breadcrumb
@@ -115,7 +127,7 @@
 			</p>
 			<div class="flex items-center gap-1 font-bold">
 				<BillStatusTag isLarge={true} status={bill.status} />
-				<b class="text-support-04">ใช้เวลา x วัน</b>
+				<b class="text-support-04">ใช้เวลา {getNumberOfDays()} วัน</b>
 			</div>
 		</div>
 		<div class="flex flex-col gap-8 md:flex-row md:gap-16">
@@ -174,29 +186,16 @@
 						<BillCategoryTag label={category} />
 					{/each}
 				</div>
-				<div>
-					<b>นโยบายที่เกี่ยวข้อง</b>
-					<div class="flex justify-between gap-6 p-5 bg-gray-10">
-						<div class="flex flex-col">
-							<h2 class="luid-heading-03">xxxxxxxxx</h2>
-							<p class="text-text-02">หาเสียงโดย</p>
-							<div class="flex gap-1 items-center">
-								<img src="" alt="" class="w-5 h-5 rounded-full object-cover bg-cool-gray-50" />
-								<b>xxx</b>
-								<p>ปี xxx</p>
-							</div>
-						</div>
-						<ArrowRight size={24} />
-					</div>
-				</div>
 				{#if mergedBills !== undefined && mergedBills.length > 0}
 					<div>
 						<div class="flex gap-1 items-center">
 							<DocumentMultiple_02 size={24} color="#2600A3" />
-							<b>ร่างกฎหมาย x ฉบับ ที่ถูกนำมารวมกับร่างนี้</b>
-							<Tooltip tooltipText={toolrtip} direction="top">
-								<Information color="#525252" data-tool />
-							</Tooltip>
+							<span>
+								<b>ร่างกฎหมาย x ฉบับ ที่ถูกนำมารวมกับร่างนี้</b>
+								<Tooltip class="absolute mt-0.5 ml-1" {tooltipText} direction="top">
+									<Information color="#525252" />
+								</Tooltip>
+							</span>
 						</div>
 						<ul class="ml-8 mt-1 list-disc">
 							{#each mergedBills as mergedBill, idx}
@@ -258,7 +257,7 @@
 						</p>
 						<div>
 							<p class="body-01 text-text-02 mr-2">เรียงตามตัวอักษร</p>
-							TO DO Popup
+							<!-- TO DO Popup -->
 							{#each bill.coProposedByPoliticians as coProposed, i}
 								<div class="flex gap-1 items-center">
 									<p class="body-01 text-text-02 mr-2">{i}</p>
@@ -288,7 +287,7 @@
 					<BillStatusTag isLarge={true} status={bill.status} />
 				</div>
 				<div>
-					TO DO Popup
+					<!-- TO DO Popup -->
 					<p class="helper-text-01 text-link-01 underline">
 						มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?
 					</p>
@@ -302,7 +301,7 @@
 						<li class="mb-10 ms-4">
 							<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
 							<div class="flex flex-col md:flex-row">
-								<div class="flex flex-col ml-1 md:basis-1/3">
+								<div class="flex flex-col ml-1 md:basis-1/3 md:pr-6">
 									<p>
 										{events[i].date.toLocaleDateString('th-TH', dateTimeFormat)}
 									</p>
@@ -310,10 +309,16 @@
 									<p>{eventDescription[events[i].type].description}</p>
 								</div>
 								{#if events[i].actionType !== undefined && events[i].actionType === EventActionType.Voted && events[i].votedInVotingId !== undefined}
-									<VoteCard
-										voting={getVoting(events[i].votedInVotingId)}
-										highlightedVoteByGroups={getHighlightedVoteByGroups(events[i].votedInVotingId)}
-									/>
+									<div class="flex flex-col w-full md:basis-2/3">
+										<p class="text-text-02">ผลการลงมติ</p>
+										<VoteCard
+											isFullWidth={true}
+											voting={getVoting(events[i].votedInVotingId)}
+											highlightedVoteByGroups={getHighlightedVoteByGroups(
+												events[i].votedInVotingId
+											)}
+										/>
+									</div>
 								{/if}
 							</div>
 						</li>
@@ -322,7 +327,7 @@
 				<div title="End timeline">
 					<ol class="relative ml-2">
 						<li class="mb-10 ms-4">
-							{#if lastestEvent.status === EventStatus.Succeed}
+							{#if lastestEvent.status === EventStatus.Succeed || bill.status === BillStatus.Merged}
 								<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
 							{:else if lastestEvent.status === EventStatus.InProgress}
 								<CircleDash size={24} class="absolute -start-3 " color="#8D8D8D" />
@@ -330,14 +335,15 @@
 								<Misuse size={24} class="absolute -start-3" color="#981B00" />
 							{/if}
 							<div class="flex flex-col md:flex-row">
-								<div class="flex flex-col ml-1 md:basis-1/3">
-									{#if lastestEvent.status !== 'in-progress'}
+								<div class="flex flex-col ml-1 md:basis-1/3 md:pr-6">
+									{#if !(lastestEvent.status === EventStatus.InProgress && bill.status === BillStatus.InProgress)}
 										<p>
 											{lastestEvent.date.toLocaleDateString('th-TH', dateTimeFormat)}
 										</p>
 									{/if}
 									<div
-										class={lastestEvent.status === 'in-progress'
+										class={lastestEvent.status === EventStatus.InProgress &&
+										bill.status === BillStatus.InProgress
 											? 'text-text-02'
 											: 'text-text-primary'}
 									>
@@ -345,14 +351,44 @@
 										<p>{eventDescription[lastestEvent.type].description}</p>
 									</div>
 								</div>
-								{#if lastestEvent.actionType !== undefined && lastestEvent.actionType === EventActionType.Voted}
-									<div class="w-full mr-0">
+								{#if lastestEvent.actionType === EventActionType.Voted}
+									<div class="flex flex-col md:basis-2/3">
+										<p class="text-text-02">ผลการลงมติ</p>
 										<VoteCard
+											isFullWidth={true}
 											voting={getVoting(lastestEvent.votedInVotingId)}
 											highlightedVoteByGroups={getHighlightedVoteByGroups(
 												lastestEvent.votedInVotingId
 											)}
 										/>
+									</div>
+								{:else if lastestEvent.actionType === EventActionType.Enforced}
+									<div class="w-full pt-5 md:basis-2/3">
+										<RoyalGazette />
+										<Button
+											class="mt-1 ml-0.5"
+											href="/"
+											kind="tertiary"
+											icon={ArrowRight}
+											size="small">ดูประกาศราชกิจจา</Button
+										>
+									</div>
+								{:else if lastestEvent.actionType === EventActionType.Merged && mergedIntoBill}
+									<div class="flex flex-col gap-2 md:basis-2/3">
+										<DocumentMultiple_02 size={24} color="#2600A3" />
+										<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
+										<div class="w-full border border-gray-20 rounded-sm">
+											<BillCard
+												orientation="portrait"
+												nickname={mergedIntoBill.nickname}
+												status={mergedIntoBill.status}
+												billUrl="#"
+												isFullWidth={true}
+											/>
+										</div>
+										<div class="text-text-02">
+											{tooltipText}
+										</div>
 									</div>
 								{/if}
 							</div>
@@ -363,3 +399,7 @@
 		</div>
 	</section>
 </div>
+
+<!-- <div class="whitespace-pre">
+	{JSON.stringify(data, undefined, 2)}
+</div> -->
