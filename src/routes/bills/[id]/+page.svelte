@@ -106,8 +106,10 @@
 			};
 		});
 	}
+	$: innerWidth = 0;
 </script>
 
+<svelte:window bind:innerWidth />
 <Breadcrumb
 	noTrailingSlash
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
@@ -192,7 +194,13 @@
 							<DocumentMultiple_02 size={24} color="#2600A3" />
 							<span>
 								<b>ร่างกฎหมาย x ฉบับ ที่ถูกนำมารวมกับร่างนี้</b>
-								<Tooltip class="absolute mt-0.5 ml-1" {tooltipText} direction="top">
+								<Tooltip
+									class="absolute mt-0.5 ml-1"
+									{tooltipText}
+									direction="top"
+									align={innerWidth <= 500 ? (innerWidth <= 366 ? 'center' : 'end') : 'center'}
+									open={true}
+								>
 									<Information color="#525252" />
 								</Tooltip>
 							</span>
