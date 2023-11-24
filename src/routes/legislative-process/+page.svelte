@@ -88,12 +88,12 @@
 							<h5 class="heading-01">ผลลัพท์</h5>
 							<div class="flex flex-row w-full justify-between">
 								<div class="w-full">
-									<VotingResultTag result={DefaultVotingResult.Passed} />
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-02">ร่างกฎหมายจะถูกนำไปพิจารณาวาระที่สอง</p>
 								</div>
 								<div class="vertical-gray-line" />
 								<div class="w-full pl-2">
-									<VotingResultTag result={DefaultVotingResult.Failed} />
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<p class="body-02">ร่างกฎหมายนั้นก็จะตกไปและไม่ถูกพิจารณาต่อ</p>
 								</div>
 							</div>
@@ -141,12 +141,12 @@
 							<h5 class="heading-01">ผลลัพท์</h5>
 							<div class="flex flex-row w-full justify-between">
 								<div class="w-full">
-									<VotingResultTag result={DefaultVotingResult.Passed} />
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-02">นำไปสู่การพิจารณาของ สว.</p>
 								</div>
 								<div class="vertical-gray-line" />
 								<div class="w-full pl-2">
-									<VotingResultTag result={DefaultVotingResult.Failed} />
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<p class="body-02">ร่างกฎหมายนั้นเป็นอันตกไป</p>
 								</div>
 							</div>
@@ -175,14 +175,19 @@
 								<br /> พิจารณาร่างกฎหมายแล้วสามารถลงมติได้ 3 กรณี
 							</p>
 
-							<div class="flex flex-col md:flex-row body-01 w-full">
+							<div class="flex flex-col md:flex-row body-01 w-full mt-2">
 								<div class="w-full md:w-4/12">
-									<VotingResultTag result={DefaultVotingResult.Passed} />
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-01">เตรียมนำร่างกฎหมายฯ <br /> เข้าสู่ขั้นตอนประกาศใช้</p>
 								</div>
 								<div class="vertical-gray-line" />
 								<div class="w-full md:w-4/12 pt-2 md:px-2 md:pt-0">
-									<VotingResultTag result={DefaultVotingResult.Passed} />
+									<h5 class="heading-01">แก้ไขเพิ่มเติม</h5>
+									<p class="label-01 text-gray-60 mb-2 mt-2">
+										โดยลงมติ
+										<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} /> <br />
+										ให้กับมติที่นำไปสู่การแก้ไขเพิ่มเติม
+									</p>
 									<ul>
 										<li>
 											ให้ส่งร่างที่แก้ไขเพิ่มเติมให้ สส. เห็นชอบ หรือตั้ง <br />
@@ -200,12 +205,7 @@
 								</div>
 								<div class="vertical-gray-line" />
 								<div class="w-full md:w-4/12 pt-2 md:px-2 md:pt-0">
-									<h5 class="heading-01 mb-2">แก้ไขเพิ่มเติม</h5>
-									<p class="label-01 text-gray-60 mb-2">
-										โดยลงมติ
-										<VotingResultTag result={DefaultVotingResult.Passed} /> <br />
-										ให้กับมติที่นำไปสู่การแก้ไขเพิ่มเติม
-									</p>
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<ul>
 										<li>ให้ "ยับยั้ง" ไว้</li>
 										<li>
@@ -232,7 +232,7 @@
 							<h5 class="heading-01 mb-2">ผลลัพท์</h5>
 							<div class="flex flex-col md:flex-row body-01 w-full">
 								<div class="w-full md:w-4/12">
-									<VotingResultTag result={DefaultVotingResult.Passed} />
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-01">ถ้าไม่มีข้อความที่ขัดต่อรัฐธรรมนูญ</p>
 								</div>
 								<div class="vertical-gray-line" />
@@ -242,7 +242,7 @@
 								</div>
 								<div class="vertical-gray-line" />
 								<div class="w-full md:w-4/12 pt-2 md:pt-0">
-									<VotingResultTag result={DefaultVotingResult.Failed} />
+									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<p class="body-01">ถ้ามีข้อความที่ขัดต่อรัฐธรรมนูญและเป็นสาระสำคัญของร่าง</p>
 								</div>
 							</div>
