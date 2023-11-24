@@ -9,7 +9,7 @@
 		</li>
 		<li>
 			[WEV-14] Users can learn more about an assembly
-			<ul class="ml-4">
+			<ul>
 				<li><a href="/assemblies/representatives-26">สส.</a></li>
 				<li><a href="/assemblies/senates-12">สว.</a></li>
 			</ul>
@@ -19,6 +19,22 @@
 		</li>
 		<li>
 			<a href="/votings/1">[WEV-10] Users can view voting details</a>
+			<ul>
+				<li>
+					<a href="/votings/1/votes">votes data table page</a>
+				</li>
+			</ul>
+		</li>
+		<li>
+			<a href="/bills/1">[WEV-15] Users can view details and track progress of a bill</a>
+		</li>
+		<li>
+			<a href="/bills">[WEV-16] Users can browse for a bill</a>
+			<ul>
+				<li>
+					<a href="/bills/search">bills data table page</a>
+				</li>
+			</ul>
 		</li>
 	</ul>
 </div>
@@ -26,6 +42,10 @@
 <style lang="postcss">
 	ul {
 		@apply list-disc list-inside;
+	}
+
+	li > ul {
+		@apply ml-4;
 	}
 
 	a {

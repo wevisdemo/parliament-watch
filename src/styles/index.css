@@ -1,27 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@font-face {
-	font-family: 'Kondolar Thai';
-	font-display: swap;
-	src: url(https://design-systems.wevis.info/KondolarThai-Regular.otf) format('opentype');
-}
-@font-face {
-	font-family: 'Kondolar Thai';
-	font-weight: 700;
-	font-display: swap;
-	src: url(https://design-systems.wevis.info/KondolarThai-Bold.otf) format('opentype');
-}
-@font-face {
-	font-family: 'Kondolar Thai';
-	font-weight: 900;
-	font-display: swap;
-	src: url(https://design-systems.wevis.info/KondolarThai-Black.otf) format('opentype');
-}
+@import './tailwind/base.css';
+@import './carbon/pre-compiled.css';
+@import './tailwind/component-utility.css';
+@import './font-face.css';
 
 html {
 	scroll-behavior: smooth;
+	overscroll-behavior: none;
 }
 
 .legislative-process-sidebar .bx--side-nav__overlay-active {

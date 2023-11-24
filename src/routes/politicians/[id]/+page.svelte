@@ -165,6 +165,9 @@
 						{politician.debtValue.toLocaleString('th-TH')} บาท
 					</li>
 				</ul>
+				<span class="label-01 text-gray-60">
+					หมายเหตุ: ข้อมูลจากการยื่นบัญชีทรัพย์สินครั้งล่าสุด
+				</span>
 				<!-- TODO: Add link -->
 				<a
 					href="/"
@@ -304,9 +307,9 @@
 					</a>
 				</div>
 				<div class="flex flex-col gap-2">
-					<h3 class="body-02 px-2 py-1 bg-gray-20 heading-02">การลา/ขาดประชุม</h3>
+					<h3 class="body-02 px-2 py-1 bg-gray-20 heading-02">การลา/ขาดลงมติ</h3>
 					<p class="body-02">
-						{politician.firstname}ลา/ขาดประชุมในการลงมติ {votingAbsentStats.absentVoting} มติ ({safePercent(
+						{politician.firstname}ลา/ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({safePercent(
 							votingAbsentStats.absentVoting,
 							votingAbsentStats.totalVoting
 						)}%) จากทั้งหมด

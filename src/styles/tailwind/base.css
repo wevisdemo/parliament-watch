@@ -1,0 +1,5 @@
+@tailwind base;
+
+input {
+	border-radius: 0;
+}

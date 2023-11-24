@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { SideNav, SideNavItems, SideNavMenu, SideNavMenuItem } from 'carbon-components-svelte';
 
+	export let currentNavElementId: string;
+
 	const sections = [
 		{
 			menu: 'แนะนำภาพรวม',
@@ -41,7 +43,9 @@
 		{#each sections as section}
 			<SideNavMenu text={section.menu} expanded class="font-bold text-black">
 				{#each section.menuItem as item}
-					<SideNavMenuItem href="#{item.text}">{item.text}</SideNavMenuItem>
+					<SideNavMenuItem isSelected={currentNavElementId === item.text} href="#{item.text}"
+						>{item.text}</SideNavMenuItem
+					>
 				{/each}
 			</SideNavMenu>
 		{/each}

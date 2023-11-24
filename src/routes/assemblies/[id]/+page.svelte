@@ -13,10 +13,6 @@
 		summary={data.summary}
 		houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}
 	/>
-	<MainMembers members={data.mainMembers} />
+	<MainMembers members={data.mainMembers} assemblyId={data.assembly.id} />
 	<LatestVotes votes={data.latestVotes} assemblyId={data.assembly.id} />
 </div>
-
-<!-- <div class="whitespace-pre">
-	{JSON.stringify(data, undefined, 2)}
-</div> -->

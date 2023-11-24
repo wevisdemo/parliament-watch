@@ -1,50 +1,11 @@
 <script lang="ts">
-	import LawIcon from '$components/icons/LawIcon.svelte';
-	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import WeVisText from '$components/icons/WeVisText.svelte';
-	import type { Link } from '$models/link';
 	import { ArrowUpRight } from 'carbon-icons-svelte';
 	import FooterContact from './FooterContact.svelte';
 	import FooterMenuGroup from './FooterMenuGroup.svelte';
+	import { menuList } from '$components/NavigationBar/NavigationBar.svelte';
 
-	const representativeMenu: Link[] = [
-		{
-			label: 'สภาผู้แทนราษฎร',
-			url: '/'
-		},
-		{
-			label: 'วุฒิสภา',
-			url: '/'
-		}
-	];
-
-	const legistrationMenu: Link[] = [
-		{
-			label: 'กฎหมายในกระบวนการ',
-			url: '/'
-		},
-		{
-			label: 'รัฐออกกฎหมายอย่างไร',
-			url: '/'
-		}
-	];
-
-	const aboutUsMenu: Link[] = [
-		{
-			label: 'ที่มาของโครงการ',
-			url: '/'
-		},
-		{
-			label: 'ข้อมูลในเว็บนี้',
-			url: '/'
-		},
-		{
-			label: 'เกี่ยวกับ WeVis',
-			url: '/'
-		}
-	];
+	menuList;
 </script>
 
 <div class="grid grid-cols-1 gap-4 bg-white py-8 px-6 md:px-12 lg:px-16 text-sm">
@@ -84,28 +45,13 @@
 		<div class="row-span-2">
 			<img width="120px" height="34px" src="/images/logo/pw-short-white.png" alt="logo short" />
 		</div>
-		<FooterMenuGroup title="สมาชิกรัฐสภา" menuItems={representativeMenu}>
-			<svelte:fragment slot="titleIcon">
-				<PoliticianIcon class="text-inverse-link" />
-			</svelte:fragment>
-		</FooterMenuGroup>
-		<FooterMenuGroup title="สมาชิกรัฐสภา" menuItems={legistrationMenu}>
-			<svelte:fragment slot="titleIcon">
-				<LawIcon class="text-inverse-link" />
-			</svelte:fragment>
-		</FooterMenuGroup>
-		<div class="row-span-2">
-			<FooterMenuGroup title="การลงมติ" url="/">
+		{#each menuList as { label, icon, subs }}
+			<FooterMenuGroup title={label} menuItems={subs}>
 				<svelte:fragment slot="titleIcon">
-					<VoteIcon class="text-inverse-link" />
+					<svelte:component this={icon} class="text-inverse-link" />
 				</svelte:fragment>
 			</FooterMenuGroup>
-		</div>
-		<FooterMenuGroup title="เกี่ยวกับเรา" menuItems={aboutUsMenu}>
-			<svelte:fragment slot="titleIcon">
-				<WeVisIcon class="text-white" />
-			</svelte:fragment>
-		</FooterMenuGroup>
+		{/each}
 		<FooterContact />
 	</div>
 	<div class="flex flex-col md:flex-row md:justify-between mt-4">

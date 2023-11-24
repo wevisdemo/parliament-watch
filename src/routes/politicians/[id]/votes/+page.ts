@@ -14,7 +14,7 @@ import {
 	passedVoting
 } from '../../../../mocks/data/voting.js';
 
-interface VotingSummary
+interface VoteSummary
 	extends Pick<
 		Voting,
 		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssembleIds' | 'categories'
@@ -45,7 +45,7 @@ export async function load({ params }) {
 		categories: mockCategory
 	};
 
-	const votings: VotingSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
+	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
 		id: i,
 		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
@@ -59,5 +59,5 @@ export async function load({ params }) {
 		isVoteAlignWithPartyMajority: i % 5 !== 0
 	}));
 
-	return { politician, filterOptions, votings };
+	return { politician, filterOptions, votes };
 }

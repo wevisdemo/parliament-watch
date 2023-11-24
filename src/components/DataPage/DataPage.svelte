@@ -106,9 +106,13 @@
 		}
 	};
 
+	$: checkboxFilterListCount = Object.values(checkboxFilterList).flatMap(
+		({ choices }) => choices
+	).length;
+
 	$: isFilterNotDefault =
-		Object.values(selectedCheckboxValue).flat().length <
-			Object.values(checkboxFilterList).flat().length ||
+		searchQuery ||
+		Object.values(selectedCheckboxValue).flat().length < checkboxFilterListCount ||
 		Object.values(selectedComboboxValue).some((e) => e !== undefined);
 
 	let comboboxInternal: Record<string, string> = {};
@@ -117,7 +121,17 @@
 		mounted = true;
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 	});
+
+	let previousFromTop = 0;
+	let showHeader = true;
+	function scrollEventHandler() {
+		const currentFromTop = window.scrollY;
+		showHeader = currentFromTop <= previousFromTop;
+		previousFromTop = currentFromTop;
+	}
 </script>
+
+<svelte:window on:scroll|passive={scrollEventHandler} />
 
 <div class="flex flex-col min-h-screen">
 	<Breadcrumb
@@ -159,11 +173,14 @@
 	<div class="flex-1 flex gap-1 bg-ui-01 w-full">
 		{#if showFilter}
 			<div
-				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-10"
+				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-50 md:z-30"
 				class:md:flex={!mounted}
 				class:hidden={!mounted}
 			>
-				<div class="sticky top-0 flex w-full pl-6">
+				<div
+					class="sticky top-0 md:top-12 flex w-full pl-6 duration-300 z-30 bg-white"
+					class:md:top-12={showHeader}
+				>
 					<Search
 						class="flex-1 {!mounted ? '-mt-6' : ''}"
 						placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
@@ -214,7 +231,7 @@
 						</FormGroup>
 					{/each}
 				</div>
-				<div class="flex gap-[1px] sticky bottom-0 body-compact-01 bg-white">
+				<div class="flex space-x-[-1px] sticky bottom-0 body-compact-01 bg-white">
 					<Button
 						class="flex-[2_2_0%] min-w-0 pr-4"
 						kind="tertiary"
@@ -235,20 +252,6 @@
 						skeleton={!mounted}>ดูที่เลือก</Button
 					>
 				</div>
-			</div>
-		{:else}
-			<div class="fixed left-4 bottom-14 z-20">
-				<Button
-					tooltipAlignment="start"
-					tooltipPosition="top"
-					iconDescription="แสดงตัวเลือก"
-					icon={isFilterNotDefault ? FilterEdit : Filter}
-					kind={isFilterNotDefault ? 'secondary' : 'primary'}
-					on:click={() => {
-						showFilter = true;
-					}}
-					skeleton={!mounted}
-				/>
 			</div>
 		{/if}
 		<div class="flex-1 flex flex-col bg-white">
@@ -275,17 +278,33 @@
 					</div>
 				{/if}
 				<div class="flex-1" />
-				<Pagination
-					class="sticky bottom-0 overflow-x-hidden"
-					pageSize={tablePageSize}
-					bind:page={tableCurrentPage}
-					totalItems={filteredData.length}
-					pageSizeInputDisabled
-					forwardText="หน้าถัดไป"
-					backwardText="หน้าก่อนหน้า"
-					itemRangeText={(min, max, total) => `${min} – ${max} จาก ${total} มติ`}
-					pageRangeText={(_, total) => `จาก ${total} หน้า`}
-				/>
+				<div class="sticky bottom-0">
+					{#if !showFilter}
+						<Button
+							class="m-4"
+							tooltipAlignment="start"
+							tooltipPosition="top"
+							iconDescription="แสดงตัวเลือก"
+							icon={isFilterNotDefault ? FilterEdit : Filter}
+							kind={isFilterNotDefault ? 'secondary' : 'primary'}
+							on:click={() => {
+								showFilter = true;
+							}}
+							skeleton={!mounted}
+						/>
+					{/if}
+					<Pagination
+						class="overflow-x-hidden"
+						pageSize={tablePageSize}
+						bind:page={tableCurrentPage}
+						totalItems={filteredData.length}
+						pageSizeInputDisabled
+						forwardText="หน้าถัดไป"
+						backwardText="หน้าก่อนหน้า"
+						itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} มติ`}
+						pageRangeText={(_, total) => `จาก ${total} หน้า`}
+					/>
+				</div>
 			{:else}
 				<div class="overflow-x-auto overflow-y-hidden">
 					<DataTableSkeleton

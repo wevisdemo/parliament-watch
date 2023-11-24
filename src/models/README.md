@@ -9,6 +9,7 @@ erDiagram
   Politician }|--o| Bill: "can propose"
   Vote }|--|| Voting: "are couted toward"
   Bill ||--o{ Event: "goes through"
+  Bill |o--o{ Bill: "can be merged to"
   Event }o--o| Bill: "can refer to"
   Event }o--o| Voting: "can refer to"
 
@@ -31,6 +32,8 @@ erDiagram
   Role {
     string politicianId FK
     string partyId FK "only for party"
+    string province "only for party"
+    number electorialDistrict "only for party"
     string assemblyId FK "only for assembly"
     string role
     Date startedAt
@@ -56,10 +59,17 @@ erDiagram
 
   Bill {
     number id PK
-    string titile
+    string title
     string nickname
     string description
+    string[] categories
+    string status "inProgress | success | rejected | merged"
+    Date proposedOn
+    string proposedBy "politicians | cabinet | people"
     string[] proposedByPoliticianIds FK
+    number proposedByCabinetId FK
+    PeopleProposer proposedByPeople "{ leadBy: string, signatoryCount: number}"
+    number mergedToBillId FK "for status merged"
   }
 
   Voting {
@@ -85,14 +95,17 @@ erDiagram
   }
 
   Event {
-    number billId PK
+    number eventId PK
+    number billId FK
     Date date
-    string type "voted | merged | enforced | other"
+    string type "hearing | mp1 | mp2 | mp3 | senate1 | senate2 | senate3 | royalAssent | enforcement | other"
     string title "for other"
     string description "for other"
-    number votedInVotingId FK "for voted"
-    number mergedIntoBillId FK "for merged"
-    string enforcementDocumentUrl "for enforced"
+    string status "succeed | in-progress | failed"
+    string actionType "voted | merged | enforced"
+    number votedInVotingId FK "for action voted"
+    number mergedIntoBillId FK "for action merged"
+    string enforcementDocumentUrl "for action enforced"
   }
 ```
 
