@@ -21,8 +21,10 @@
 	import { range } from 'd3';
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import type { VoteCardProps } from '../../assemblies/[id]/+page.js';
-	import RoyalGazette from '$components/icons/RoyalGazette.svelte';
+	import RoyalGazette from '$components/bills/RoyalGazette.svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
+	import Model from '$components/bills/ModalLawProcess.svelte';
+	import { showModal } from '$components/bills/store';
 
 	const { bill, mergedBills, events, mergedIntoBill, relatedVotingResults } = data;
 	const tooltipText = 'การรวมร่างกฎหมาย คือ xxxxxxxxxxxxxxx';
@@ -199,7 +201,6 @@
 									{tooltipText}
 									direction="top"
 									align={innerWidth <= 500 ? (innerWidth <= 366 ? 'center' : 'end') : 'center'}
-									open={true}
 								>
 									<Information color="#525252" />
 								</Tooltip>
@@ -296,9 +297,15 @@
 				</div>
 				<div>
 					<!-- TO DO Popup -->
-					<p class="helper-text-01 text-link-01 underline">
+					<button
+						class="helper-text-01 text-link-01 underline"
+						on:click={() => {
+							$showModal = true;
+						}}
+					>
 						มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?
-					</p>
+					</button>
+					<Model />
 				</div>
 			</div>
 			<div title="timeline">
