@@ -172,7 +172,7 @@
 						{:else if bill.proposerType === BillProposerType.People && bill.proposedByPeople !== undefined}
 							<Proposer
 								common={{
-									name: bill.proposedByPeople.leadBy,
+									name: bill.proposedByPeople.ledBy,
 									description: 'และประชาชน ' + bill.proposedByPeople.signatoryCount + ' คน'
 								}}
 							/>
@@ -218,10 +218,10 @@
 												' ' +
 												mergedBill.proposedLedByPolitician.lastname +
 												' xxx'}
-										{:else if mergedBill.proposerType === BillProposerType.Cabinet && mergedBill.proposedByCabinetId !== undefined}
+										{:else if mergedBill.proposerType === BillProposerType.Cabinet && mergedBill.proposedByAssembly !== undefined}
 											{'ครม. ชุดที่ xx'}
 										{:else if mergedBill.proposerType === BillProposerType.People && mergedBill.proposedByPeople !== undefined}
-											{mergedBill.proposedByPeople.leadBy +
+											{mergedBill.proposedByPeople.ledBy +
 												' และประชาชน' +
 												mergedBill.proposedByPeople.signatoryCount +
 												' คน'}
