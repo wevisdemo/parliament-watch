@@ -63,12 +63,13 @@ erDiagram
     string nickname
     string description
     string[] categories
-    string status "inProgress | success | rejected | merged"
+    string status "inProgress | enacted | rejected | merged"
     Date proposedOn
     string proposedBy "politicians | cabinet | people"
     string[] proposedByPoliticianIds FK
-    number proposedByCabinetId FK
-    PeopleProposer proposedByPeople "{ leadBy: string, signatoryCount: number}"
+    number proposedByAssemblyId FK
+    PeopleProposer proposedByPeople "{ ledBy: string, signatoryCount: number}"
+    Date enactedOn
     number mergedToBillId FK "for status merged"
   }
 

@@ -31,7 +31,7 @@
 			{ heading: 'ร่าง พ.ร.บ.สุขภาพจิต', billStatus: BillStatus.Merged, url: '' },
 			{ heading: 'ร่าง พ.ร.บ.สุขภาพแห่งชาติ', billStatus: BillStatus.Rejected, url: '' },
 			{ heading: 'ร่าง พ.ร.บ.สุขาภิบาล', billStatus: BillStatus.Rejected, url: '' },
-			{ heading: 'ร่าง พ.ร.บ.สุสานและฌาปนสถาน', billStatus: BillStatus.Success, url: '' }
+			{ heading: 'ร่าง พ.ร.บ.สุสานและฌาปนสถาน', billStatus: BillStatus.Enacted, url: '' }
 		],
 		votings: [
 			{

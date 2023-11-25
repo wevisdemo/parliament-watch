@@ -1,7 +1,7 @@
 import { BillStatus, type Bill } from '$models/bill.js';
 import type { Event } from '$models/event.js';
 import type { Voting } from '$models/voting.js';
-import { inProgressBill, succeededBill } from '../../../mocks/data/bill.js';
+import { inProgressBill, enactedBill } from '../../../mocks/data/bill.js';
 import {
 	enforcementEvent,
 	failingMp3Event,
@@ -38,7 +38,7 @@ export function load({ params }) {
 	 * | 4      | Merged      |
 	 */
 	const billId = Number(params.id);
-	const bill = succeededBill;
+	const bill = enactedBill;
 	bill.id = billId;
 
 	let mergedBills: Bill[] | undefined;
@@ -55,15 +55,15 @@ export function load({ params }) {
 	if (billId === 1) {
 		bill.status = BillStatus.InProgress;
 		mergedBills = [
-			{ ...succeededBill, status: BillStatus.Merged },
-			{ ...succeededBill, status: BillStatus.Merged }
+			{ ...enactedBill, status: BillStatus.Merged },
+			{ ...enactedBill, status: BillStatus.Merged }
 		];
 		events = [hearingEvent, passingMp1Event, inProgressMp2Event];
 		relatedVotingResults = {
 			1: { voting: passedVoting, resultSummary: fakeMpPassedVotingResultSummary }
 		};
 	} else if (billId === 2) {
-		bill.status = BillStatus.Success;
+		bill.status = BillStatus.Enacted;
 		events = [
 			hearingEvent,
 			passingMp1Event,
