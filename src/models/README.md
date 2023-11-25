@@ -67,8 +67,9 @@ erDiagram
     Date proposedOn
     string proposedBy "politicians | cabinet | people"
     string[] proposedByPoliticianIds FK
-    number proposedByCabinetId FK
-    PeopleProposer proposedByPeople "{ leadBy: string, signatoryCount: number}"
+    number proposedByAssemblyId FK
+    PeopleProposer proposedByPeople "{ ledBy: string, signatoryCount: number}"
+    Date enactedOn
     number mergedToBillId FK "for status merged"
   }
 

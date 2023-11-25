@@ -1,4 +1,6 @@
 import { BillStatus, type Bill, BillProposerType } from '$models/bill';
+import { gov35 } from '../../mocks/data/assembly';
+import { succeededBill } from '../../mocks/data/bill';
 
 export interface BillsByStatus {
 	status: BillStatus;
@@ -63,11 +65,36 @@ export function load() {
 			};
 		}
 	);
+	const latestSucceedBills: Bill[] = [
+		succeededBill,
+		{
+			// Cabinet-proposed
+			...succeededBill,
+			proposerType: BillProposerType.Cabinet,
+			proposedByAssembly: gov35,
+			proposedLedByPolitician: undefined,
+			coProposedByPoliticians: undefined
+		},
+		{
+			// People-proposed
+			...succeededBill,
+			proposerType: BillProposerType.People,
+			proposedByPeople: {
+				ledBy: 'จีรนุช เปรมชัยพร',
+				signatoryCount: 205700
+			},
+			proposedLedByPolitician: undefined,
+			coProposedByPoliticians: undefined
+		},
+		succeededBill,
+		succeededBill
+	];
 
 	return {
 		totalCount,
 		byStatus,
 		byCategory,
-		byProposerType
+		byProposerType,
+		latestSucceedBills
 	};
 }
