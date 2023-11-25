@@ -10,7 +10,7 @@
 		case BillStatus.InProgress:
 			tagStyle = 'bg-yellow-20 text-text-10';
 			break;
-		case BillStatus.Success:
+		case BillStatus.Enacted:
 			tagStyle = 'bg-teal-80 text-text-04';
 			break;
 		case BillStatus.Rejected:

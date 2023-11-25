@@ -1,6 +1,6 @@
 import { BillStatus, type Bill, BillProposerType } from '$models/bill';
 import { gov35 } from '../../mocks/data/assembly';
-import { succeededBill } from '../../mocks/data/bill';
+import { enactedBill } from '../../mocks/data/bill';
 
 export interface BillsByStatus {
 	status: BillStatus;
@@ -58,18 +58,18 @@ export function load() {
 				count: 300,
 				countByStatus: {
 					[BillStatus.InProgress]: 100,
-					[BillStatus.Success]: 95,
+					[BillStatus.Enacted]: 95,
 					[BillStatus.Rejected]: 45,
 					[BillStatus.Merged]: 60
 				}
 			};
 		}
 	);
-	const latestSucceedBills: Bill[] = [
-		succeededBill,
+	const latestEnactedBills: Bill[] = [
+		enactedBill,
 		{
 			// Cabinet-proposed
-			...succeededBill,
+			...enactedBill,
 			proposerType: BillProposerType.Cabinet,
 			proposedByAssembly: gov35,
 			proposedLedByPolitician: undefined,
@@ -77,7 +77,7 @@ export function load() {
 		},
 		{
 			// People-proposed
-			...succeededBill,
+			...enactedBill,
 			proposerType: BillProposerType.People,
 			proposedByPeople: {
 				ledBy: 'จีรนุช เปรมชัยพร',
@@ -86,8 +86,8 @@ export function load() {
 			proposedLedByPolitician: undefined,
 			coProposedByPoliticians: undefined
 		},
-		succeededBill,
-		succeededBill
+		enactedBill,
+		enactedBill
 	];
 
 	return {
@@ -95,6 +95,6 @@ export function load() {
 		byStatus,
 		byCategory,
 		byProposerType,
-		latestSucceedBills
+		latestEnactedBills
 	};
 }

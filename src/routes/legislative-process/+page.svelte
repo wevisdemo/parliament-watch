@@ -38,7 +38,7 @@
 			class: 'bg-yellow-10'
 		},
 		{
-			billStatus: BillStatus.Success,
+			billStatus: BillStatus.Enacted,
 			billAmount: 'xxxx',
 			descriptionTitle: 'บังคับใช้เมื่อ',
 			descriptionList: ['พระมหากษัตริย์ลงพระปรมาภิไธย', 'ประกาศบนราชกิจจานุเบกษา'],

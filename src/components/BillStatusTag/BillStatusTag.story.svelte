@@ -16,8 +16,8 @@
 	<Hst.Variant title="BillStatus.InProgress">
 		<BillStatusTag {isLarge} status={BillStatus.InProgress} />
 	</Hst.Variant>
-	<Hst.Variant title="BillStatus.Success">
-		<BillStatusTag {isLarge} status={BillStatus.Success} />
+	<Hst.Variant title="BillStatus.Enacted">
+		<BillStatusTag {isLarge} status={BillStatus.Enacted} />
 	</Hst.Variant>
 	<Hst.Variant title="BillStatus.Rejected">
 		<BillStatusTag {isLarge} status={BillStatus.Rejected} />
