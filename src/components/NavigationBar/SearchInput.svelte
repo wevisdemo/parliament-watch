@@ -54,7 +54,7 @@
 			},
 			{
 				name: 'ร่าง พ.ร.บ. แก้กฎหมายค้ามนุษย์',
-				status: BillStatus.Success
+				status: BillStatus.Enacted
 			},
 			{
 				name: 'ร่าง พ.ร.บ. ควบคุมการครอบครองอาวุธปืน',
@@ -66,7 +66,7 @@
 			},
 			{
 				name: 'ร่าง พ.ร.บ. คุ้มครองสิทธิผู้บริโภค',
-				status: BillStatus.Success
+				status: BillStatus.Enacted
 			}
 		],
 		votings: [

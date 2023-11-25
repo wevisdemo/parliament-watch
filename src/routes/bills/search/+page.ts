@@ -1,7 +1,7 @@
 import type { Assembly } from '$models/assembly';
 import { BillStatus, type Bill, BillProposerType } from '$models/bill';
 import { rep25, rep26 } from '../../../mocks/data/assembly';
-import { succeededBill } from '../../../mocks/data/bill';
+import { enactedBill } from '../../../mocks/data/bill';
 import { movingForwardPolitician } from '../../../mocks/data/politician';
 
 interface FilterOptions {
@@ -43,9 +43,9 @@ export function load() {
 
 	const bills: BillSummary[] = new Array(100).fill({}).map((i) => ({
 		id: i,
-		title: succeededBill.title,
-		nickname: succeededBill.nickname,
-		proposedOn: succeededBill.proposedOn,
+		title: enactedBill.title,
+		nickname: enactedBill.nickname,
+		proposedOn: enactedBill.proposedOn,
 		purposedAtMpAssemblyId: i % 2 ? rep25.id : rep26.id,
 		status: billStatuses[i % billStatuses.length],
 		categories: [mockCategories[i % mockCategories.length]],

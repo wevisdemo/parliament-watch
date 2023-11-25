@@ -3,7 +3,7 @@ import type { Politician } from './politician';
 
 export enum BillStatus {
 	InProgress = 'กำลังดำเนินการ',
-	Success = 'ออกเป็นกฎหมาย',
+	Enacted = 'ออกเป็นกฎหมาย',
 	Rejected = 'ตกไป',
 	Merged = 'ถูกรวมร่าง'
 }
