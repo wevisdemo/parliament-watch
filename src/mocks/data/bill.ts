@@ -26,5 +26,6 @@ export const succeededBill: Bill = {
 	proposedOn: new Date('2022-07-13'),
 	proposerType: BillProposerType.Politician,
 	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician, movingForwardPolitician]
+	coProposedByPoliticians: [movingForwardPolitician, movingForwardPolitician],
+	enactedOn: new Date('2023-02-01')
 };

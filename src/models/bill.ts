@@ -1,3 +1,4 @@
+import type { Assembly } from './assembly';
 import type { Politician } from './politician';
 
 export enum BillStatus {
@@ -14,7 +15,7 @@ export enum BillProposerType {
 }
 
 export interface PeopleProposer {
-	leadBy: string;
+	ledBy: string;
 	signatoryCount: number;
 }
 
@@ -31,6 +32,7 @@ export interface Bill {
 	proposerType: BillProposerType;
 	proposedLedByPolitician?: Politician;
 	coProposedByPoliticians?: Politician[];
-	proposedByCabinetId?: string;
+	proposedByAssembly?: Assembly;
 	proposedByPeople?: PeopleProposer;
+	enactedOn?: Date;
 }
