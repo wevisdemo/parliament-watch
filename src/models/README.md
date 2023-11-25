@@ -63,7 +63,7 @@ erDiagram
     string nickname
     string description
     string[] categories
-    string status "inProgress | success | rejected | merged"
+    string status "inProgress | enacted | rejected | merged"
     Date proposedOn
     string proposedBy "politicians | cabinet | people"
     string[] proposedByPoliticianIds FK
