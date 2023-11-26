@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Breadcrumb, BreadcrumbItem, Tab, Tabs } from 'carbon-components-svelte';
+	import { Breadcrumb, BreadcrumbItem, Tab, Tabs, ToggleSkeleton } from 'carbon-components-svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
@@ -172,6 +172,16 @@
 		<p class="cursor-pointer helper-text-01 mt-2 text-blue-60 underline">
 			งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
 		</p>
+	</div>
+	<div class="flex flex-col w-full px-12 py-16">
+		<div class="flex items-center gap-x-3">
+			<h1 class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
+			<div class="flex items-center">
+				<ToggleSkeleton />
+				<p class="body-compact-01">ดูร้อยละ</p>
+			</div>
+		</div>
+		<p class="label-01">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
 	</div>
 	<div class="whitespace-pre">
 		{JSON.stringify(data, undefined, 2)}
