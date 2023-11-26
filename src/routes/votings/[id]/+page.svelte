@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { Breadcrumb, BreadcrumbItem, Tab, Tabs, ToggleSkeleton } from 'carbon-components-svelte';
+	import {
+		Breadcrumb,
+		BreadcrumbItem,
+		Button,
+		Tab,
+		Tabs,
+		TextInput,
+		ToggleSkeleton
+	} from 'carbon-components-svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
@@ -183,7 +191,7 @@
 		</div>
 		<p class="label-01">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
 	</div>
-	<div class="flex w-full px-12 mt-4 gap-x-8">
+	<div class="flex w-full px-12 mt-4 mb-10 gap-x-8">
 		{#each data.resultsByAffiliation as { affiliationName, resultSummary, byParties }}
 			{@const totalVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
 			<div class="flex flex-col w-1/3 border-t border-gray-30">
@@ -254,6 +262,14 @@
 				{/if}
 			</div>
 		{/each}
+	</div>
+	<div class="flex flex-col w-full px-12 mt-10">
+		<p class="text-right label-01">หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ</p>
+		<div class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
+		<div class="flex">
+			<TextInput size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" />
+			<Button>สำรวจแบบละเอียด</Button>
+		</div>
 	</div>
 	<div class="whitespace-pre">
 		{JSON.stringify(data, undefined, 2)}
