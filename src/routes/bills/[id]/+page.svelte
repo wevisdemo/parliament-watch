@@ -165,12 +165,12 @@
 				<b>ชื่อทางการ</b>
 				{bill.title}
 			</p>
-			<div class="flex items-center gap-1 font-bold">
+			<div class="flex items-center gap-1 font-bold -ml-1">
 				<BillStatusTag isLarge={true} status={bill.status} />
 				<b class="text-support-04">ใช้เวลา {getNumberOfDays()} วัน</b>
 			</div>
 		</div>
-		<div class="flex flex-col gap-8 md:flex-row md:gap-16">
+		<div class="flex flex-col gap-8 mt-7 md:flex-row md:gap-16">
 			<div class="flex-1 flex flex-col gap-5">
 				<div class="flex gap-4">
 					<div>
@@ -324,12 +324,14 @@
 							<div class="relative flex flex-col">
 								<table class="w-full">
 									{#each bill.coProposedByPoliticians as politician, i}
-										<CoProposer
-											index={i + 1}
-											logo={politician.partyRoles.find((e) => !e.endedAt)?.party.logo}
-											firstname={politician.firstname}
-											lastname={politician.lastname}
-										/>
+										{#if i < 8}
+											<CoProposer
+												index={i + 1}
+												logo={politician.partyRoles.find((e) => !e.endedAt)?.party.logo}
+												firstname={politician.firstname}
+												lastname={politician.lastname}
+											/>
+										{/if}
 									{/each}
 								</table>
 
