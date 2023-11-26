@@ -23,10 +23,15 @@
 	import type { VoteCardProps } from '../../assemblies/[id]/+page.js';
 	import RoyalGazette from '$components/bills/RoyalGazette.svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
-	import Model from '$components/bills/ModalLawProcess.svelte';
-	import { showModal } from '$components/bills/store';
+	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
+	import { showModalLawProcess, showModalListCoProposer } from '$components/bills/store';
+	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
+	import CoProposer from '$components/bills/CoProposer.svelte';
+	import type { Politician } from '$models/politician.js';
+	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 
 	const { bill, mergedBills, events, mergedIntoBill, relatedVotingResults } = data;
+	// TO DO update data tooltipText
 	const tooltipText = 'การรวมร่างกฎหมาย คือ xxxxxxxxxxxxxxx';
 	const lastestEvent = events[events.length - 1];
 	const dateTimeFormat: Intl.DateTimeFormatOptions = {
@@ -78,6 +83,25 @@
 		}
 	};
 
+	const currentPartyOfLedPolitician = bill.proposedLedByPolitician
+		? bill.proposedLedByPolitician.partyRoles.find((e) => !e.endedAt)
+		: null;
+	const currentRolesOfLedPolitician = bill.proposedLedByPolitician
+		? bill.proposedLedByPolitician.assemblyRoles.find((e) => !e.endedAt)
+		: null;
+
+	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
+		arr.reduce(
+			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
+			{} as Record<K, T[]>
+		);
+	const partiescoProposed = bill.coProposedByPoliticians
+		? groupBy(
+				bill.coProposedByPoliticians,
+				(politician) => politician.partyRoles.find((e) => !e.endedAt)!.party.name
+		  )
+		: null;
+
 	function getNumberOfDays() {
 		const start = new Date(events[0].date);
 		const end =
@@ -98,15 +122,27 @@
 		return voting;
 	}
 
-	function getHighlightedVoteByGroups(id: number | undefined) {
+	function getHighlightedVoteByGroups(id: number | undefined, eventType: string) {
 		if (id === undefined) return undefined;
-		return relatedVotingResults[id].resultSummary.subResults?.map((subResult) => {
-			return {
-				name: subResult.affiliationName,
-				count: Number(subResult.agreed),
-				total: Number(subResult.total)
-			};
-		});
+		let resultSummary = relatedVotingResults[id].resultSummary;
+		if (resultSummary.subResults) {
+			return resultSummary.subResults.map((subResult) => {
+				return {
+					name: subResult.affiliationName,
+					count: Number(subResult.agreed),
+					total: Number(subResult.total)
+				};
+			});
+		} else if (eventType.includes('senate')) {
+			return [
+				{
+					name: 'สว.',
+					count: Number(resultSummary.agreed),
+					total: Number(resultSummary.total)
+				}
+			];
+		}
+		return undefined;
 	}
 	$: innerWidth = 0;
 </script>
@@ -143,32 +179,37 @@
 					</div>
 					<div>
 						<b>เสนอโดย</b>
-						{#if bill.proposerType === BillProposerType.Politician}
+						{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician}
 							<div class="flex flex-col md:flex-row gap-1">
 								<img
-									src={bill.proposedLedByPolitician?.avatar}
-									alt={bill.proposedLedByPolitician?.firstname +
+									src={bill.proposedLedByPolitician.avatar}
+									alt={bill.proposedLedByPolitician.firstname +
 										' ' +
-										bill.proposedLedByPolitician?.lastname}
+										bill.proposedLedByPolitician.lastname}
 									class="w-8 h-8 rounded-full object-cover bg-cool-gray-50"
 								/>
 								<div>
 									<p>
-										{bill.proposedLedByPolitician?.firstname}
-										{bill.proposedLedByPolitician?.lastname}
+										{bill.proposedLedByPolitician.firstname}
+										{bill.proposedLedByPolitician.lastname}
 									</p>
 									<p class="text-text-02">
-										พรรค{bill.proposedLedByPolitician?.partyRoles[0].party.name}
+										พรรค{currentPartyOfLedPolitician?.party.name}
 									</p>
 								</div>
 							</div>
-							<!-- <Proposer
-								partyPolitician={{
-									politician: bill.proposedLedByPolitician
-								}}
-							/> -->
+							<!-- TO DO missing mock data Politician.assembly -->
+							<!-- {#if currentRolesOfLedPolitician && currentPartyOfLedPolitician}
+								<Proposer
+									partyPolitician={{
+										politician: bill.proposedLedByPolitician,
+										assembly: currentRolesOfLedPolitician.assembly,
+										party: currentPartyOfLedPolitician.party
+									}}
+								/>
+							{/if} -->
 						{:else if bill.proposerType === BillProposerType.Cabinet}
-							<Proposer />
+							<Proposer assembly={bill.proposedByAssembly} />
 						{:else if bill.proposerType === BillProposerType.People && bill.proposedByPeople !== undefined}
 							<Proposer
 								common={{
@@ -195,7 +236,7 @@
 						<div class="flex gap-1 items-center">
 							<DocumentMultiple_02 size={24} color="#2600A3" />
 							<span>
-								<b>ร่างกฎหมาย x ฉบับ ที่ถูกนำมารวมกับร่างนี้</b>
+								<b>ร่างกฎหมาย {mergedBills.length} ฉบับ ที่ถูกนำมารวมกับร่างนี้</b>
 								<Tooltip
 									class="absolute mt-0.5 ml-1"
 									{tooltipText}
@@ -207,19 +248,23 @@
 							</span>
 						</div>
 						<ul class="ml-8 mt-1 list-disc">
-							{#each mergedBills as mergedBill, idx}
+							{#each mergedBills as mergedBill}
 								<li>
 									<u>{mergedBill.nickname}</u>
 									<br />
 									<span class="text-text-02"
 										>โดย
 										{#if mergedBill.proposerType === BillProposerType.Politician && mergedBill.proposedLedByPolitician !== undefined}
+											<!-- TO DO missing mock data Politician.assembly-->
 											{mergedBill.proposedLedByPolitician.firstname +
 												' ' +
 												mergedBill.proposedLedByPolitician.lastname +
 												' xxx'}
 										{:else if mergedBill.proposerType === BillProposerType.Cabinet && mergedBill.proposedByAssembly !== undefined}
-											{'ครม. ชุดที่ xx'}
+											{mergedBill.proposedByAssembly.abbreviation
+												? mergedBill.proposedByAssembly.name
+												: mergedBill.proposedByAssembly.abbreviation} ชุดที่
+											{mergedBill.proposedByAssembly.term}
 										{:else if mergedBill.proposerType === BillProposerType.People && mergedBill.proposedByPeople !== undefined}
 											{mergedBill.proposedByPeople.ledBy +
 												' และประชาชน' +
@@ -234,9 +279,11 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
+				<!-- TO DO: add label and link -->
 				<DownloadData links={[{ label: 'เอกสารxxxx', url: '/' }]} />
+				<!-- TO DO: add update info -->
 				<p class="label-01 text-text-02">อัปเดตข้อมูล: 18 ส.ค. 2566</p>
-				<!-- TODO: add link -->
+				<!-- TO DO: add link -->
 				<a href="/" class="mr-auto helper-text-01 underline"> ที่มาและข้อจำกัดข้อมูล </a>
 				<Share label="แชร์มติ" />
 			</div>
@@ -249,7 +296,7 @@
 				<h1 class="fluid-heading-04 text-text-primary">รายชื่อผู้เสนอกฏหมาย</h1>
 				<hr class="border-gray-30" />
 				<div class="flex flex-col gap-7 md:flex-row">
-					<div class="flex flex-col gap-3">
+					<div class="flex flex-col gap-3 md:w-1/3">
 						<b class="handing-02 text-text-primary">ผู้เสนอ</b>
 						<PoliticianProfile
 							id={bill.proposedLedByPolitician.id}
@@ -260,24 +307,46 @@
 							role="xxxxxxxxxxxxxx"
 						/>
 					</div>
-					<div class="flex flex-col gap-3">
+					<div class="flex flex-col gap-3 md:w-full">
 						<p class="body-02 text-text-02">
-							<b class="handing-02 text-text-primary">ผู้ร่วมเสนอ</b> xx คน
+							<b class="handing-02 text-text-primary">ผู้ร่วมเสนอ</b>
+							{bill.coProposedByPoliticians.length} คน
 						</p>
-						<div>
-							<p class="body-01 text-text-02 mr-2">เรียงตามตัวอักษร</p>
-							<!-- TO DO Popup -->
-							{#each bill.coProposedByPoliticians as coProposed, i}
-								<div class="flex gap-1 items-center">
-									<p class="body-01 text-text-02 mr-2">{i}</p>
+						<div class="flex flex-col flex-wrap md:flex-row gap-3 px-3">
+							{#if partiescoProposed}
+								{#each Object.entries(partiescoProposed) as [party, politicians] (party)}
+									<CoPartyProposer {party} {politicians} />
+								{/each}
+							{/if}
+						</div>
+						<div class="flex flex-col gap-2 px-5">
+							<p class="label-01 text-text-02 mr-2">เรียงตามตัวอักษร</p>
+							<div class="relative flex flex-col">
+								<table class="w-full">
+									{#each bill.coProposedByPoliticians as politician, i}
+										<CoProposer
+											index={i + 1}
+											logo={politician.partyRoles.find((e) => !e.endedAt)?.party.logo}
+											firstname={politician.firstname}
+											lastname={politician.lastname}
+										/>
+									{/each}
+								</table>
+
+								{#if bill.coProposedByPoliticians.length > 8}
 									<div
-										class="w-5 h-5 rounded-full object-cover border border-gray-30 items-center justify-center overflow-hidden"
+										class="absolute bottom-0 w-full h-12"
+										style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
 									>
-										<img src={coProposed.partyRoles[0].party.logo} alt="" />
-									</div>
-									<p class="underline">{coProposed.firstname + ' ' + coProposed.lastname}</p>
-								</div>
-							{/each}
+										<button
+											on:click={() => {
+												$showModalListCoProposer = true;
+											}}
+											class="absolute bottom-0 body-01 text-link-01 underline">ดูทั้งหมด</button
+										>
+									</div>{/if}
+							</div>
+							<ModalListCoProposers coProposedByPoliticians={bill.coProposedByPoliticians} />
 						</div>
 						<div />
 					</div>
@@ -296,16 +365,15 @@
 					<BillStatusTag isLarge={true} status={bill.status} />
 				</div>
 				<div>
-					<!-- TO DO Popup -->
 					<button
 						class="helper-text-01 text-link-01 underline"
 						on:click={() => {
-							$showModal = true;
+							$showModalLawProcess = true;
 						}}
 					>
 						มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?
 					</button>
-					<Model />
+					<ModalLawProcess />
 				</div>
 			</div>
 			<div title="timeline">
@@ -323,14 +391,16 @@
 									<b>{eventDescription[events[i].type].title}</b>
 									<p>{eventDescription[events[i].type].description}</p>
 								</div>
-								{#if events[i].actionType !== undefined && events[i].actionType === EventActionType.Voted && events[i].votedInVotingId !== undefined}
+								{#if events[i].actionType === EventActionType.Voted && events[i].votedInVotingId}
 									<div class="flex flex-col w-full md:basis-2/3">
 										<p class="text-text-02">ผลการลงมติ</p>
+										<!-- TO DO: add link go to voting detail page -->
 										<VoteCard
 											isFullWidth={true}
 											voting={getVoting(events[i].votedInVotingId)}
 											highlightedVoteByGroups={getHighlightedVoteByGroups(
-												events[i].votedInVotingId
+												events[i].votedInVotingId,
+												events[i].type
 											)}
 										/>
 									</div>
@@ -366,20 +436,23 @@
 										<p>{eventDescription[lastestEvent.type].description}</p>
 									</div>
 								</div>
-								{#if lastestEvent.actionType === EventActionType.Voted}
+								{#if lastestEvent.actionType === EventActionType.Voted && lastestEvent.votedInVotingId}
 									<div class="flex flex-col md:basis-2/3">
 										<p class="text-text-02">ผลการลงมติ</p>
+										<!-- TO DO: add link go to voting detail page -->
 										<VoteCard
 											isFullWidth={true}
 											voting={getVoting(lastestEvent.votedInVotingId)}
 											highlightedVoteByGroups={getHighlightedVoteByGroups(
-												lastestEvent.votedInVotingId
+												lastestEvent.votedInVotingId,
+												lastestEvent.type
 											)}
 										/>
 									</div>
 								{:else if lastestEvent.actionType === EventActionType.Enforced}
 									<div class="w-full pt-5 md:basis-2/3">
 										<RoyalGazette />
+										<!-- TO DO: add link go to ... page -->
 										<Button
 											class="mt-1 ml-0.5"
 											href="/"
@@ -393,6 +466,8 @@
 										<DocumentMultiple_02 size={24} color="#2600A3" />
 										<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
 										<div class="w-full border border-gray-20 rounded-sm">
+											<!-- TO DO: add link go to voting detail page -->
+											<!-- TO DO add eventDescription -->
 											<BillCard
 												orientation="portrait"
 												nickname={mergedIntoBill.nickname}

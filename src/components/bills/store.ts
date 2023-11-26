@@ -1,2 +1,3 @@
 import { writable, type Writable } from 'svelte/store';
-export const showModal = writable(false);
+export const showModalLawProcess = writable(false);
+export const showModalListCoProposer = writable(false);
