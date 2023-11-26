@@ -32,8 +32,8 @@
 		}
 	}
 
-	function getWidthPercent(voteCount: number) {
-		return Math.round((voteCount / 750) * 100);
+	function getWidthPercent(voteCount: number, totalVote = 750) {
+		return Math.round((voteCount / totalVote) * 100);
 	}
 </script>
 
@@ -173,7 +173,7 @@
 			งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
 		</p>
 	</div>
-	<div class="flex flex-col w-full px-12 py-16">
+	<div class="flex flex-col w-full px-12">
 		<div class="flex items-center gap-x-3">
 			<h1 class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
 			<div class="flex items-center">
@@ -182,6 +182,78 @@
 			</div>
 		</div>
 		<p class="label-01">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
+	</div>
+	<div class="flex w-full px-12 mt-4 gap-x-8">
+		{#each data.resultsByAffiliation as { affiliationName, resultSummary, byParties }}
+			{@const totalVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
+			<div class="flex flex-col w-1/3 border-t border-gray-30">
+				<div class="mt-2 flex items-center gap-x-1">
+					<p class="heading-02">{affiliationName}</p>
+					<p class="body-02 text-gray-60">{totalVote} คน</p>
+				</div>
+				<div class="mt-1 flex items-center gap-x-1 text-teal-50">
+					<p class="heading-03">
+						{resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total} คน
+					</p>
+					<p class="heading-03">เห็นด้วย</p>
+				</div>
+				<div class="mt-1 flex items-center gap-x-3 text-teal-50">
+					{#each resultSummary as vote}
+						<div class="flex items-center gap-x-1">
+							<div class="w-1 h-3 {getVoteColor(vote.voteOption)}" />
+							<p class="label-01">{vote.total}</p>
+						</div>
+					{/each}
+				</div>
+				<div class="flex w-full h-[30px] mt-1">
+					{#each resultSummary as vote}
+						<div
+							class="rounded-sm h-full {getVoteColor(vote.voteOption)}"
+							style="width: {getWidthPercent(vote.total, totalVote)}%"
+						/>
+					{/each}
+				</div>
+				{#if byParties}
+					<div class="flex flex-col w-full mt-4 gap-y-4">
+						{#each byParties as partyDetails}
+							<div class="flex items-start gap-x-1">
+								<img
+									class="rounded-full border border-gray-30 w-8 h-8"
+									src={partyDetails.party.logo}
+									alt={partyDetails.party.name}
+									loading="lazy"
+									decoding="async"
+								/>
+								<div class="flex justify-start items-start flex-col w-full">
+									<div class="flex items-center gap-x-1">
+										<p class="heading-02">{partyDetails.party.name}</p>
+										<p class="body-02 text-gray-60">
+											{partyDetails.resultSummary.reduce((acc, vote) => acc + vote.total, 0)} คน
+										</p>
+									</div>
+									<div class="mt-1 flex items-center gap-x-3 text-teal-50">
+										{#each partyDetails.resultSummary as partyVote}
+											<div class="flex items-center gap-x-1">
+												<div class="w-1 h-3 {getVoteColor(partyVote.voteOption)}" />
+												<p class="label-01">{partyVote.total}</p>
+											</div>
+										{/each}
+									</div>
+									<div class="flex w-full h-[20px] mt-1">
+										{#each partyDetails.resultSummary as partyVote}
+											<div
+												class="rounded-sm h-full {getVoteColor(partyVote.voteOption)}"
+												style="width: {getWidthPercent(partyVote.total, totalVote)}%"
+											/>
+										{/each}
+									</div>
+								</div>
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		{/each}
 	</div>
 	<div class="whitespace-pre">
 		{JSON.stringify(data, undefined, 2)}
