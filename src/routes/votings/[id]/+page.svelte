@@ -5,6 +5,7 @@
 		Button,
 		Tab,
 		Tabs,
+		Tag,
 		TextInput,
 		ToggleSkeleton
 	} from 'carbon-components-svelte';
@@ -28,9 +29,9 @@
 			case DefaultVoteOption.Agreed:
 				return 'bg-teal-50';
 			case DefaultVoteOption.Disagreed:
-				return 'bg-red-50';
+				return 'bg-red-50 text-white';
 			case DefaultVoteOption.Novote:
-				return 'bg-gray-80';
+				return 'bg-gray-80 text-white';
 			case DefaultVoteOption.Abstain:
 				return 'bg-gray-50';
 			case DefaultVoteOption.Absent:
@@ -270,6 +271,25 @@
 			<TextInput size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" />
 			<Button>สำรวจแบบละเอียด</Button>
 		</div>
+		<div class="flex w-full border-t border-gray-30">
+			<div class="w-1/4 heading-compact-01 py-[15px] px-4">ชื่อ-นามสกุล</div>
+			<div class="w-1/4 heading-compact-01 py-[15px] px-4">ตำแหน่ง</div>
+			<div class="w-1/4 heading-compact-01 py-[15px] px-4">สังกัดพรรค</div>
+			<div class="w-1/4 heading-compact-01 py-[15px] px-4">การลงมติ</div>
+		</div>
+		{#each data.resultsByPerson as voter}
+			<div class="flex w-full border-t border-gray-30">
+				<div class="w-1/4 body-01 underline py-[15px] px-4">
+					{voter.firstname}
+					{voter.lastname}
+				</div>
+				<div class="w-1/4 text-gray-60 body-compact-01 py-[15px] px-4">{voter.position}</div>
+				<div class="w-1/4 text-gray-60 body-compact-01 py-[15px] px-4">{voter.party}</div>
+				<div class="w-1/4 py-[15px] px-4">
+					<Tag class={getVoteColor(voter.voteOption)}>{voter.voteOption}</Tag>
+				</div>
+			</div>
+		{/each}
 	</div>
 	<div class="whitespace-pre">
 		{JSON.stringify(data, undefined, 2)}
