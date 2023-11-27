@@ -284,14 +284,13 @@
 					{voter.lastname}
 				</div>
 				<div class="w-1/4 text-gray-60 body-compact-01 py-[15px] px-4">{voter.position}</div>
-				<div class="w-1/4 text-gray-60 body-compact-01 py-[15px] px-4">{voter.party}</div>
+				<div class="w-1/4 text-gray-60 body-compact-01 py-[15px] px-4">
+					{voter.party ? voter.party : ''}
+				</div>
 				<div class="w-1/4 py-[15px] px-4">
 					<Tag class={getVoteColor(voter.voteOption)}>{voter.voteOption}</Tag>
 				</div>
 			</div>
 		{/each}
-	</div>
-	<div class="whitespace-pre">
-		{JSON.stringify(data, undefined, 2)}
 	</div>
 </div>
