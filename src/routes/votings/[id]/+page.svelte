@@ -51,8 +51,8 @@
 		noTrailingSlash
 		class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
-		<BreadcrumbItem href="/home">หน้าแรก</BreadcrumbItem>
-		<BreadcrumbItem href="/voting">การลงมติ</BreadcrumbItem>
+		<BreadcrumbItem href="#">หน้าแรก</BreadcrumbItem>
+		<BreadcrumbItem href="#">การลงมติ</BreadcrumbItem>
 		<BreadcrumbItem>{data.voting.title}</BreadcrumbItem>
 	</Breadcrumb>
 	<div class="flex flex-col gap-y-8 w-full bg-teal-10 px-12 py-16">
