@@ -1,12 +1,21 @@
+import type { Voting } from '$models/voting.js';
 import { createMockVotes } from '../../../../mocks/data/votes.js';
+import { passedVoting } from '../../../../mocks/data/voting';
 
 interface FilterOptions {
 	parties: string[];
 	positions: string[];
 }
 
+type VotingSummary = Pick<Voting, 'id' | 'title'>;
+
 export function load({ params }) {
 	const votingId = Number(params.id);
+
+	const voting: VotingSummary = {
+		id: votingId,
+		title: passedVoting.title
+	};
 
 	const isCandidateVoting = votingId >= 3 && votingId <= 5;
 	const votes = createMockVotes(isCandidateVoting);
@@ -16,7 +25,7 @@ export function load({ params }) {
 		positions: getSortedUniqueValue(votes, 'position').reverse()
 	};
 
-	return { filterOptions, votes };
+	return { voting, filterOptions, votes };
 }
 
 const getSortedUniqueValue = (list: { [key: string]: unknown }[], key: string): string[] =>
