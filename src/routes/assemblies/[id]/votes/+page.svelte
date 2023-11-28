@@ -5,7 +5,7 @@
 
 	export let data;
 
-	const { assembly, votes, filterOptions } = data;
+	const { assemblyIds, assembly, votes, filterOptions } = data;
 </script>
 
 <div>
@@ -20,7 +20,7 @@
 			>
 		</Breadcrumb>
 	</div>
-	<VotesHeader {assembly} />
+	<VotesHeader {assembly} {assemblyIds} />
 	<VotesBody {votes} {filterOptions} />
 </div>
 

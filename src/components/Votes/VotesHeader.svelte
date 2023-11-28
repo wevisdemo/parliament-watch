@@ -2,8 +2,10 @@
 	import { TableSplit } from 'carbon-icons-svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import type { AssemblySummary, VoteSummary } from '../../routes/assemblies/[id]/votes/+page';
+	import AssemblyIdRunner from '$components/Assemblies/AssemblyIdRunner.svelte';
 
 	export let assembly: AssemblySummary;
+	export let assemblyIds: string[] = [];
 
 	const startedYear = assembly.startedAt.getFullYear() + 543;
 </script>
@@ -14,16 +16,13 @@
 	<div class="w-full max-w-[900px] flex items-center">
 		<div class="flex md:flex-row flex-col">
 			<h2 class="fluid-heading-04">{assembly.name}</h2>
-			<div class="flex items-center md:ml-[16px] ml-[0px]">
-				<!-- TODO: handler buttom next and prev-->
-				<img
-					src="/icons/angle-right.svg"
-					alt="angle-left"
-					class="rotate-180 w-[20px] mr-[16px] ml-[0px] fill-gray-300"
-				/>
-				<h3 class="fluid-heading-03">ชุดที่ {assembly.term} | {startedYear}</h3>
-				<img src="/icons/angle-right.svg" alt="angle-right" class="w-[20px] ml-[16px] mr-[0px]" />
-			</div>
+			<AssemblyIdRunner
+				currentId={assembly.id}
+				{startedYear}
+				term={assembly.term}
+				{assemblyIds}
+				postfix="votes"
+			/>
 		</div>
 	</div>
 	<div class="grid gap-[8px] w-full md:max-w-[224px] max-w-full mt-[16px] md:mt-[0px]">
