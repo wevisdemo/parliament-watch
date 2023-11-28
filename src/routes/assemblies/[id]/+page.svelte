@@ -8,7 +8,7 @@
 </script>
 
 <div class="md:px-[64px] px-[16px]">
-	<Header data={data.assembly} />
+	<Header data={data.assembly} assemblyIds={data.assemblyIds} />
 	<Summary
 		summary={data.summary}
 		houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}

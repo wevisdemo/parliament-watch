@@ -2,6 +2,9 @@
 	import { Tag } from 'carbon-components-svelte';
 	import { Download, TableSplit } from 'carbon-icons-svelte';
 	import Share from '$components/Share/Share.svelte';
+	import AssemblyIdRunner from './AssemblyIdRunner.svelte';
+
+	export let assemblyIds: string[] = [];
 
 	export let data: {
 		id: string;
@@ -33,16 +36,7 @@
 	<div class="w-full max-w-[900px]">
 		<div class="flex md:flex-row flex-col">
 			<h2 class="fluid-heading-05">{data.name}</h2>
-			<div class="flex items-center md:ml-[16px] ml-[0px]">
-				<!-- TODO: handler buttom next and prev-->
-				<img
-					src="/icons/angle-right.svg"
-					alt="angle-left"
-					class="rotate-180 w-[20px] mr-[16px] ml-[0px] fill-gray-300"
-				/>
-				<h3 class="fluid-heading-03">ชุดที่ {data.term} | {startedYear}</h3>
-				<img src="/icons/angle-right.svg" alt="angle-right" class="w-[20px] ml-[16px] mr-[0px]" />
-			</div>
+			<AssemblyIdRunner currentId={data.id} {startedYear} term={data.term} {assemblyIds} />
 		</div>
 		<div class="flex items-center">
 			<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>
