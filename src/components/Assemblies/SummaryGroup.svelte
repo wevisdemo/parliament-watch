@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Party } from '$models/party';
+	import { Information } from 'carbon-icons-svelte';
 	import Badge from './Badge.svelte';
 	import HalfDonutWrapper from './HalfDonutWrapper.svelte';
 	import {
@@ -40,6 +41,17 @@
 		}
 		return result;
 	};
+
+	const redirectToMemberListWithFilter = (key: string, value: string) => {
+		// append path with /members?{key}={value}
+		const currentHref = window.location.href;
+		const newHref = currentHref.endsWith('/')
+			? // ? currentHref + `members?${key}=${encodeURIComponent(value)}`
+			  // : currentHref + `/members?${key}=${encodeURIComponent(value)}`;
+			  currentHref + `members?${key}=${value}`
+			: currentHref + `/members?${key}=${value}`;
+		window.location.href = newHref;
+	};
 </script>
 
 <div class="bg-ui-01 p-[16px] m-auto min-w-[226px] w-full flex flex-col h-full">
@@ -54,6 +66,14 @@
 			<div>
 				<div class="flex">
 					<p class="heading-01">{group.name}</p>
+					{#if group.name !== 'ไม่มีข้อมูล'}
+						<button
+							class="ml-[4px]"
+							on:click={() => redirectToMemberListWithFilter(title, group.name)}
+						>
+							<Information />
+						</button>
+					{/if}
 					<p class="body-compact-01 ml-[4px]">
 						{getRoundedPercent(group.total, getSumOfGroupsTotal(data))}%
 					</p>

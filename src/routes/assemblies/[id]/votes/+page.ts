@@ -1,6 +1,6 @@
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
-import { rep26, sen12 } from '../../../../mocks/data/assembly.js';
+import { gov35, rep25, rep26, sen12 } from '../../../../mocks/data/assembly.js';
 import { mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
@@ -29,5 +29,12 @@ export async function load({ params }) {
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : []
 	}));
 
-	return { assembly, filterOptions, votes };
+	const assemblyIds: string[] = [rep25, rep26, sen12, gov35].map((item) => item.id);
+
+	return {
+		assemblyIds,
+		assembly,
+		filterOptions,
+		votes
+	};
 }

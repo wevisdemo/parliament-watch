@@ -2,7 +2,7 @@ import type { Assembly } from '$models/assembly.js';
 import type { Party } from '$models/party.js';
 import type { Politician } from '$models/politician.js';
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
-import { rep26, sen12 } from '../../../mocks/data/assembly.js';
+import { gov35, rep25, rep26, sen12 } from '../../../mocks/data/assembly.js';
 import {
 	bhumjaithaiParty,
 	democratsParty,
@@ -298,7 +298,10 @@ export function load({ params }) {
 			highlightedVoteByGroups
 		}));
 
+	const assemblyIds: string[] = [rep25, rep26, sen12, gov35].map((assembly) => assembly.id);
+
 	return {
+		assemblyIds,
 		assembly,
 		summary,
 		mainMembers,
