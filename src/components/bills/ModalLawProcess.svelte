@@ -19,8 +19,7 @@
 			</div>
 			<LawProcess />
 			<div class="px-5 pt-5 pb-10 flex items-start">
-				<!-- TO DO add link -->
-				<a href="/" class="flex gap-3">
+				<a href="/legislative-process" class="flex gap-3">
 					<p class="body-compact-01 text-start text-link-01">อ่านรายละเอียดเพิ่มเติม</p>
 					<ArrowRight color="#3904E9" />
 				</a>

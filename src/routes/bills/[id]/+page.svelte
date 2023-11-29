@@ -31,8 +31,8 @@
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 
 	const { bill, mergedBills, events, mergedIntoBill, relatedVotingResults } = data;
-	// TO DO update data tooltipText
-	const tooltipText = 'การรวมร่างกฎหมาย คือ xxxxxxxxxxxxxxx';
+	const tooltipText =
+		'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
 	const lastestEvent = events[events.length - 1];
 	const dateTimeFormat: Intl.DateTimeFormatOptions = {
 		year: '2-digit',
@@ -153,7 +153,7 @@
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem href="/bills/{bill.id}">การเสนอกฏหมาย</BreadcrumbItem>
+	<BreadcrumbItem href="/bills">การเสนอกฏหมาย</BreadcrumbItem>
 	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage>{bill.nickname}</BreadcrumbItem>
 </Breadcrumb>
 
@@ -198,7 +198,7 @@
 									</p>
 								</div>
 							</div>
-							<!-- TO DO missing mock data Politician.assembly -->
+							<!-- TODO missing mock data Politician.assembly -->
 							<!-- {#if currentRolesOfLedPolitician && currentPartyOfLedPolitician}
 								<Proposer
 									partyPolitician={{
@@ -255,7 +255,7 @@
 									<span class="text-text-02"
 										>โดย
 										{#if mergedBill.proposerType === BillProposerType.Politician && mergedBill.proposedLedByPolitician !== undefined}
-											<!-- TO DO missing mock data Politician.assembly-->
+											<!-- TODO missing mock data Politician.assembly-->
 											{mergedBill.proposedLedByPolitician.firstname +
 												' ' +
 												mergedBill.proposedLedByPolitician.lastname +
@@ -279,11 +279,11 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
-				<!-- TO DO: add label and link -->
+				<!-- TODO: add label and link -->
 				<DownloadData links={[{ label: 'เอกสารxxxx', url: '/' }]} />
-				<!-- TO DO: add update info -->
+				<!-- TODO: add update info -->
 				<p class="label-01 text-text-02">อัปเดตข้อมูล: 18 ส.ค. 2566</p>
-				<!-- TO DO: add link -->
+				<!-- TODO: add link -->
 				<a href="/" class="mr-auto helper-text-01 underline"> ที่มาและข้อจำกัดข้อมูล </a>
 				<Share label="แชร์มติ" />
 			</div>
@@ -396,7 +396,7 @@
 								{#if events[i].actionType === EventActionType.Voted && events[i].votedInVotingId}
 									<div class="flex flex-col w-full md:basis-2/3">
 										<p class="text-text-02">ผลการลงมติ</p>
-										<!-- TO DO: add link go to voting detail page -->
+										<!-- TODO: add link go to voting detail page -->
 										<VoteCard
 											isFullWidth={true}
 											voting={getVoting(events[i].votedInVotingId)}
@@ -441,7 +441,7 @@
 								{#if lastestEvent.actionType === EventActionType.Voted && lastestEvent.votedInVotingId}
 									<div class="flex flex-col md:basis-2/3">
 										<p class="text-text-02">ผลการลงมติ</p>
-										<!-- TO DO: add link go to voting detail page -->
+										<!-- TODO: add link go to voting detail page -->
 										<VoteCard
 											isFullWidth={true}
 											voting={getVoting(lastestEvent.votedInVotingId)}
@@ -454,10 +454,10 @@
 								{:else if lastestEvent.actionType === EventActionType.Enforced}
 									<div class="w-full pt-5 md:basis-2/3">
 										<RoyalGazette />
-										<!-- TO DO: add link go to ... page -->
 										<Button
 											class="mt-1 ml-0.5"
-											href="/"
+											href={lastestEvent.enforcementDocumentUrl}
+											target="_blank"
 											kind="tertiary"
 											icon={ArrowRight}
 											size="small">ดูประกาศราชกิจจา</Button
@@ -468,13 +468,12 @@
 										<DocumentMultiple_02 size={24} color="#2600A3" />
 										<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
 										<div class="w-full border border-gray-20 rounded-sm">
-											<!-- TO DO: add link go to voting detail page -->
-											<!-- TO DO add eventDescription -->
+											<!-- TODO add eventDescription -->
 											<BillCard
 												orientation="portrait"
 												nickname={mergedIntoBill.nickname}
 												status={mergedIntoBill.status}
-												billUrl="#"
+												billUrl="/bills/{mergedIntoBill.id}"
 												isFullWidth={true}
 											/>
 										</div>
