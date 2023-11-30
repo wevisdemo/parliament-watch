@@ -24,6 +24,7 @@
 				<a
 					class="flex items-center px-4 text-[inherit] whitespace-nowrap"
 					href="/assemblies/{assembly.id}/members/{path}"
+					data-sveltekit-reload
 				>
 					{label}
 				</a>
