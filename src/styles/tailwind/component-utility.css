@@ -1,2 +1,9 @@
 @tailwind components;
+
+@layer components {
+	.accordion-content-full.bx--accordion > .bx--accordion__item > .bx--accordion__content {
+		@apply px-4;
+	}
+}
+
 @tailwind utilities;

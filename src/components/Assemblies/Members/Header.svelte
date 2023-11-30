@@ -11,7 +11,8 @@
 		assembly: AssemblySummary;
 		groupByTabs: GroupByTab[];
 	};
-	$: ({ assembly, groupByTabs } = data);
+
+	$: ({ assembly } = data);
 
 	export let searchQuery = '';
 	export let mounted = false;
@@ -60,29 +61,9 @@
 	<Search
 		class="md:hidden {!mounted ? '-mt-4' : ''}"
 		searchClass="md:hidden mt-2"
-		placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+		placeholder="ค้นหาชื่อบุคคล"
 		light
 		bind:value={searchQuery}
 		skeleton={!mounted}
 	/>
 </header>
-
-<nav class="px-4 bg-ui-01 md:px-16">
-	<h2 class="pl-4 py-2 text-gray-60 label-01">แบ่งตาม</h2>
-	<menu class="flex overflow-x-auto">
-		{#each groupByTabs as { label, path, isActive } (path)}
-			<li
-				class="flex body-compact-01 h-12 border-r border-solid border-ui-04 last:border-r-0 {isActive
-					? 'bg-white font-semibold text-gray-100 border-y-2 border-solid border-t-blue-60 border-b-white'
-					: 'bg-ui-03 text-gray-60'}"
-			>
-				<a
-					class="flex items-center px-4 text-[inherit] whitespace-nowrap"
-					href="/assemblies/{assembly.id}/members/{path}"
-				>
-					{label}
-				</a>
-			</li>
-		{/each}
-	</menu>
-</nav>
