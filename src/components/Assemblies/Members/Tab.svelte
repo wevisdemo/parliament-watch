@@ -12,7 +12,9 @@
 	$: ({ assembly, groupByTabs } = data);
 </script>
 
-<nav class="px-4 bg-ui-01 md:px-16 sticky top-0 z-10">
+<nav
+	class="px-4 bg-ui-01 md:px-16 sticky top-0 z-10 member-tab transition-[top] will-change-[top] duration-[350ms]"
+>
 	<h2 class="pl-4 py-2 text-gray-60 label-01">แบ่งตาม</h2>
 	<menu class="flex overflow-x-auto">
 		{#each groupByTabs as { label, path, isActive } (path)}

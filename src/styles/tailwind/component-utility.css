@@ -4,6 +4,14 @@
 	.accordion-content-full.bx--accordion > .bx--accordion__item > .bx--accordion__content {
 		@apply p-0;
 	}
+
+	html.navbar-shown .member-tab {
+		@apply top-12;
+	}
+
+	html.navbar-shown .member-aside {
+		@apply top-[128px] h-[calc(100dvh-128px)];
+	}
 }
 
 @tailwind utilities;
