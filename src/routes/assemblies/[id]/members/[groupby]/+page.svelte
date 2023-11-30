@@ -1,12 +1,15 @@
 <script lang="ts">
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import { Accordion, AccordionItem, Search } from 'carbon-components-svelte';
+	import { Accordion, AccordionItem, Checkbox, FormGroup, Search } from 'carbon-components-svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 
 	export let data;
 	$: ({ groups, groupByTabs } = data);
 	$: currentPath = groupByTabs.find((e) => e.isActive)?.path ?? '';
+
+	let แบ่งเขต = true;
+	let บัญชีรายชื่อ = true;
 
 	export let searchQuery = '';
 	let mounted = false;
@@ -40,8 +43,10 @@
 </script>
 
 <div class="flex">
-	<aside class="flex-none flex flex-col w-[250px] sticky top-[80px] h-[calc(100dvh-80px)] px-6">
-		<div class="flex mb-4">
+	<aside
+		class="flex-none flex flex-col gap-4 w-[250px] sticky top-[80px] h-[calc(100dvh-80px)] px-6"
+	>
+		<div class="flex">
 			<Search
 				class="flex-1 {!mounted ? '-mt-6' : ''}"
 				placeholder="ค้นหาชื่อบุคคล"
@@ -50,8 +55,21 @@
 				skeleton={!mounted}
 			/>
 		</div>
+		{#if currentPath === 'party'}
+			<FormGroup legendText="ประเภท" noMargin>
+				<div class="flex items-center justify-between">
+					<Checkbox labelText="แบ่งเขต" class="!m-0" bind:checked={แบ่งเขต} skeleton={!mounted} />
+					<Checkbox
+						labelText="บัญชีรายชื่อ"
+						class="!m-0"
+						bind:checked={บัญชีรายชื่อ}
+						skeleton={!mounted}
+					/>
+				</div>
+			</FormGroup>
+		{/if}
 		<div class="flex-[1_1_auto] h-0 overflow-y-auto">
-			<Accordion class="accordion-content-full">
+			<Accordion class="accordion-content-full" skeleton={!mounted}>
 				{#each groups as group, idx (group.name)}
 					<AccordionItem open={idx === 0}>
 						<span slot="title" class="font-semibold"
