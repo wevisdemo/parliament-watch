@@ -6,13 +6,13 @@ import {
 	type Voting
 } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
-import { gov35, rep26 } from '../../../../mocks/data/assembly.js';
 import {
 	customVoteOption,
 	defaultVoteOptions,
 	mockCategory,
 	passedVoting
 } from '../../../../mocks/data/voting.js';
+import { assemblies } from '../../../../libs/datasheets/index.js';
 
 interface VoteSummary
 	extends Pick<
@@ -40,16 +40,11 @@ export async function load({ params }) {
 		lastname
 	};
 
-	const filterOptions: FilterOptions = {
-		assemblies: [rep26, gov35],
-		categories: mockCategory
-	};
-
 	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
 		id: i,
 		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
-		participatedAssembleIds: [i % 2 ? rep26.id : gov35.id],
+		participatedAssembleIds: [i % 2 ? 'สมาชิกสภาผู้แทนราษฎร-25' : 'สมาชิกสภาผู้แทนราษฎร-26'],
 		categories: [mockCategory[i % mockCategory.length]],
 		result: i % 3 ? DefaultVotingResult.Passed : DefaultVotingResult.Failed,
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : [],
@@ -58,6 +53,15 @@ export async function load({ params }) {
 		],
 		isVoteAlignWithPartyMajority: i % 5 !== 0
 	}));
+
+	const uniqueParticipatedAssemblyIds = [
+		...new Set(votes.flatMap(({ participatedAssembleIds }) => participatedAssembleIds))
+	];
+
+	const filterOptions: FilterOptions = {
+		assemblies: assemblies.filter(({ id }) => uniqueParticipatedAssemblyIds.includes(id)),
+		categories: [...new Set(votes.flatMap(({ categories }) => categories))]
+	};
 
 	return { politician, filterOptions, votes };
 }

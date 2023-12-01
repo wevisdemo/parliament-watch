@@ -1,8 +1,9 @@
 import type { Politician } from '../../../models/politician';
-import { rep26, gov35 } from '../../../mocks/data/assembly';
 import { movingForwardParty } from '../../../mocks/data/party';
 import type { Voting } from '$models/voting';
 import { failedVoting, passedVoting } from '../../../mocks/data/voting';
+import { assemblies } from '../../../libs/datasheets';
+import type { Assembly } from '$models/assembly';
 
 interface VotingHistory {
 	total: number;
@@ -17,6 +18,8 @@ interface VotingAbsentStats {
 
 export function load({ params }) {
 	const [firstname, lastname] = params.id.split('-');
+
+	const rep26 = assemblies.find(({ id }) => id === 'สมาชิกสภาผู้แทนราษฎร-26') as Assembly;
 
 	const politician: Politician = {
 		id: params.id,
@@ -40,12 +43,6 @@ export function load({ params }) {
 			{
 				role: 'รองประธานสภา คนที่ 1',
 				assembly: rep26,
-				startedAt: new Date('2023-01-01'),
-				endedAt: new Date('2023-06-12')
-			},
-			{
-				role: 'รัฐมนตรีกระทรวงมหาดไทย',
-				assembly: gov35,
 				startedAt: new Date('2023-01-01'),
 				endedAt: new Date('2023-06-12')
 			}

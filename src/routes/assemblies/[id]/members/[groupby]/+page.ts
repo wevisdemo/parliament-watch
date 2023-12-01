@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { GroupByOption } from './groupby-options.js';
 import type { ComponentProps } from 'svelte';
 import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
@@ -8,7 +8,8 @@ import {
 	movingForwardParty,
 	pheuThaiParty
 } from '../../../../../mocks/data/party.js';
-import { sen12 } from '../../../../../mocks/data/assembly.js';
+import { assemblies } from '../../../../../libs/datasheets/index.js';
+import { AssemblyName } from '$models/assembly.js';
 
 interface PoliticianGroup {
 	name: string;
@@ -28,7 +29,13 @@ interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isL
 }
 
 export function load({ params }) {
-	const isSenate = params.id === sen12.id;
+	const assembly = assemblies.find(({ id }) => id === params.id);
+
+	if (!assembly) {
+		throw error(404, `Assembly ${params.id} not found`);
+	}
+
+	const isSenates = assembly.name === AssemblyName.Senates;
 
 	switch (params.groupby) {
 		case GroupByOption.Party: {
@@ -122,7 +129,7 @@ export function load({ params }) {
 
 		case GroupByOption.Sex: {
 			return {
-				groups: mockPoliticianGroupsWithSubgroups(['ชาย', 'หญิง', 'ไม่มีข้อมูล'], isSenate)
+				groups: mockPoliticianGroupsWithSubgroups(['ชาย', 'หญิง', 'ไม่มีข้อมูล'], isSenates)
 			};
 		}
 
@@ -130,7 +137,7 @@ export function load({ params }) {
 			return {
 				groups: mockPoliticianGroupsWithSubgroups(
 					['Silent Gen', 'Baby Boomers', 'Gen X', 'Gen Y', 'Gen Z', 'ไม่พบข้อมูล'],
-					isSenate
+					isSenates
 				)
 			};
 		}
@@ -139,7 +146,7 @@ export function load({ params }) {
 			return {
 				groups: mockPoliticianGroupsWithSubgroups(
 					['ต่ำกว่าปริญญาตรี', 'ปริญญาตรี', 'ปริญญาโท', 'ปริญญาเอก', 'สถาบันทหาร', 'ไม่พบข้อมูล'],
-					isSenate
+					isSenates
 				)
 			};
 		}
@@ -155,7 +162,7 @@ export function load({ params }) {
 						'1000 ล้านบาทขึ้นไป',
 						'ไม่พบข้อมูล'
 					],
-					isSenate
+					isSenates
 				)
 			};
 		}

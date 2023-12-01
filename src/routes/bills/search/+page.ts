@@ -1,6 +1,6 @@
-import type { Assembly } from '$models/assembly';
+import { AssemblyName, type Assembly } from '$models/assembly';
 import { BillStatus, type Bill, BillProposerType } from '$models/bill';
-import { rep25, rep26 } from '../../../mocks/data/assembly';
+import { assemblies } from '../../../libs/datasheets';
 import { enactedBill } from '../../../mocks/data/bill';
 import { movingForwardPolitician } from '../../../mocks/data/politician';
 
@@ -34,8 +34,10 @@ export function load() {
 	const mockCategories = ['ขนส่งสาธารณะ', 'เศรษฐกิจ', 'แก้รัฐธรรมนูญ', 'วัฒนธรรม', 'เกษตรกรรม'];
 	const billProposerTypes = Object.values(BillProposerType);
 
+	const mpAssemblies = assemblies.filter(({ name }) => name === AssemblyName.Representatives);
+
 	const filterOptions: FilterOptions = {
-		mpAssemblies: [rep25, rep26],
+		mpAssemblies,
 		status: billStatuses,
 		categories: mockCategories,
 		billProposerType: billProposerTypes
@@ -46,7 +48,7 @@ export function load() {
 		title: enactedBill.title,
 		nickname: enactedBill.nickname,
 		proposedOn: enactedBill.proposedOn,
-		purposedAtMpAssemblyId: i % 2 ? rep25.id : rep26.id,
+		purposedAtMpAssemblyId: mpAssemblies[i % 2].id,
 		status: billStatuses[i % billStatuses.length],
 		categories: [mockCategories[i % mockCategories.length]],
 		...getProposerProperties(i)

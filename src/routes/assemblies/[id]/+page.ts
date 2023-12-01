@@ -1,14 +1,15 @@
-import type { Assembly } from '$models/assembly.js';
-import type { Party } from '$models/party.js';
-import type { Politician } from '$models/politician.js';
-import { DefaultVotingResult, type Voting } from '$models/voting.js';
-import { gov35, rep25, rep26, sen12 } from '../../../mocks/data/assembly.js';
+import { AssemblyName } from '$models/assembly';
+import type { Party } from '$models/party';
+import type { Politician } from '$models/politician';
+import { DefaultVotingResult, type Voting } from '$models/voting';
+import { error } from '@sveltejs/kit';
+import { assemblies } from '../../../libs/datasheets';
 import {
 	bhumjaithaiParty,
 	democratsParty,
 	movingForwardParty,
 	pheuThaiParty
-} from '../../../mocks/data/party.js';
+} from '../../../mocks/data/party';
 
 export interface Summary {
 	totalMembers: number;
@@ -42,9 +43,14 @@ export interface VoteCardProps {
 }
 
 export function load({ params }) {
-	const isSenates = params.id === sen12.id;
-	const { mainRoles, ...rest }: Assembly = isSenates ? sen12 : rep26;
-	const assembly: Omit<Assembly, 'mainRoles'> = rest;
+	const fullAssembly = assemblies.find(({ id }) => id === params.id);
+
+	if (!fullAssembly) {
+		throw error(404, `Assembly ${params.id} not found`);
+	}
+
+	const { mainRoles, ...assembly } = fullAssembly;
+	const isSenates = assembly.name === AssemblyName.Senates;
 
 	const mainMembers: MainMember[] = mainRoles.map((assemblyRole) => ({
 		assemblyRole,
@@ -298,7 +304,7 @@ export function load({ params }) {
 			highlightedVoteByGroups
 		}));
 
-	const assemblyIds: string[] = [rep25, rep26, sen12, gov35].map((assembly) => assembly.id);
+	const assemblyIds: string[] = assemblies.map(({ id }) => id);
 
 	return {
 		assemblyIds,
