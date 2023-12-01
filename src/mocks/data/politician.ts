@@ -1,5 +1,6 @@
+import type { Assembly } from '$models/assembly';
+import { assemblies } from '../../libs/datasheets';
 import type { Politician } from '../../models/politician';
-import { rep26 } from './assembly';
 import { movingForwardParty } from './party';
 
 export const movingForwardPolitician: Politician = {
@@ -20,7 +21,7 @@ export const movingForwardPolitician: Politician = {
 	assemblyRoles: [
 		{
 			role: 'สมาชิกแบบบัญชีรายชื่อ',
-			assembly: rep26,
+			assembly: assemblies.find(({ id }) => id === 'สมาชิกสภาผู้แทนราษฎร-26') as Assembly,
 			startedAt: new Date('2023-01-01')
 		}
 	],

@@ -1,5 +1,6 @@
+import type { Assembly } from '$models/assembly';
 import { BillStatus, type Bill, BillProposerType } from '$models/bill';
-import { gov35 } from '../../mocks/data/assembly';
+import { assemblies } from '../../libs/datasheets';
 import { enactedBill } from '../../mocks/data/bill';
 
 export interface BillsByStatus {
@@ -71,7 +72,7 @@ export function load() {
 			// Cabinet-proposed
 			...enactedBill,
 			proposerType: BillProposerType.Cabinet,
-			proposedByAssembly: gov35,
+			proposedByAssembly: assemblies.find(({ id }) => id === 'สมาชิกสภาผู้แทนราษฎร-26') as Assembly,
 			proposedLedByPolitician: undefined,
 			coProposedByPoliticians: undefined
 		},
