@@ -83,13 +83,6 @@
 		}
 	};
 
-	const currentPartyOfLedPolitician = bill.proposedLedByPolitician
-		? bill.proposedLedByPolitician.partyRoles.find((e) => !e.endedAt)
-		: null;
-	const currentRolesOfLedPolitician = bill.proposedLedByPolitician
-		? bill.proposedLedByPolitician.assemblyRoles.find((e) => !e.endedAt)
-		: null;
-
 	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
 			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
@@ -101,6 +94,32 @@
 				(politician) => politician.partyRoles.find((e) => !e.endedAt)!.party.name
 		  )
 		: null;
+
+	function getCurrentParty(politician: Politician) {
+		let partyRole = politician.partyRoles.find((e) => !e.endedAt);
+		if (partyRole) {
+			return 'พรรค' + partyRole.party.name;
+		}
+		return '';
+	}
+
+	function getCurrentRoles(politician: Politician) {
+		let assemblyRole = politician.assemblyRoles.find((e) => !e.endedAt);
+		if (assemblyRole) {
+			let year = new Date(
+				assemblyRole.assembly.startedAt.toLocaleDateString('th-TH')
+			).getFullYear();
+			return (
+				assemblyRole.assembly.abbreviation +
+				' ชุดที่ ' +
+				assemblyRole.assembly.term +
+				' (' +
+				year +
+				')'
+			);
+		}
+		return '';
+	}
 
 	function getNumberOfDays() {
 		const start = new Date(events[0].date);
@@ -189,25 +208,21 @@
 									class="w-8 h-8 rounded-full object-cover bg-cool-gray-50"
 								/>
 								<div>
-									<p>
-										{bill.proposedLedByPolitician.firstname}
-										{bill.proposedLedByPolitician.lastname}
-									</p>
+									<div class="flex flex-wrap gap-1">
+										<p>
+											{bill.proposedLedByPolitician.firstname}
+											{bill.proposedLedByPolitician.lastname}
+										</p>
+										<u>
+											{getCurrentRoles(bill.proposedLedByPolitician)}
+										</u>
+									</div>
+
 									<p class="text-text-02">
-										พรรค{currentPartyOfLedPolitician?.party.name}
+										{getCurrentParty(bill.proposedLedByPolitician)}
 									</p>
 								</div>
 							</div>
-							<!-- TODO missing mock data Politician.assembly -->
-							<!-- {#if currentRolesOfLedPolitician && currentPartyOfLedPolitician}
-								<Proposer
-									partyPolitician={{
-										politician: bill.proposedLedByPolitician,
-										assembly: currentRolesOfLedPolitician.assembly,
-										party: currentPartyOfLedPolitician.party
-									}}
-								/>
-							{/if} -->
 						{:else if bill.proposerType === BillProposerType.Cabinet}
 							<Proposer assembly={bill.proposedByAssembly} />
 						{:else if bill.proposerType === BillProposerType.People && bill.proposedByPeople !== undefined}
@@ -254,18 +269,21 @@
 									<br />
 									<span class="text-text-02"
 										>โดย
-										{#if mergedBill.proposerType === BillProposerType.Politician && mergedBill.proposedLedByPolitician !== undefined}
+										{#if mergedBill.proposerType === BillProposerType.Politician && mergedBill.proposedLedByPolitician}
 											<!-- TODO missing mock data Politician.assembly-->
 											{mergedBill.proposedLedByPolitician.firstname +
 												' ' +
 												mergedBill.proposedLedByPolitician.lastname +
-												' xxx'}
-										{:else if mergedBill.proposerType === BillProposerType.Cabinet && mergedBill.proposedByAssembly !== undefined}
+												' ' +
+												getCurrentRoles(mergedBill.proposedLedByPolitician) +
+												' ' +
+												getCurrentParty(mergedBill.proposedLedByPolitician)}
+										{:else if mergedBill.proposerType === BillProposerType.Cabinet && mergedBill.proposedByAssembly}
 											{mergedBill.proposedByAssembly.abbreviation
 												? mergedBill.proposedByAssembly.name
 												: mergedBill.proposedByAssembly.abbreviation} ชุดที่
 											{mergedBill.proposedByAssembly.term}
-										{:else if mergedBill.proposerType === BillProposerType.People && mergedBill.proposedByPeople !== undefined}
+										{:else if mergedBill.proposerType === BillProposerType.People && mergedBill.proposedByPeople}
 											{mergedBill.proposedByPeople.ledBy +
 												' และประชาชน' +
 												mergedBill.proposedByPeople.signatoryCount +
@@ -303,8 +321,8 @@
 							firstname={bill.proposedLedByPolitician.firstname}
 							lastname={bill.proposedLedByPolitician.lastname}
 							avatar={bill.proposedLedByPolitician.avatar}
-							party={bill.proposedLedByPolitician.partyRoles[0].party}
-							role="xxxxxxxxxxxxxx"
+							party={bill.proposedLedByPolitician.partyRoles.find((e) => !e.endedAt)?.party}
+							role=""
 						/>
 					</div>
 					<div class="flex flex-col gap-3 md:w-full">
