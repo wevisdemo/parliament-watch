@@ -2,7 +2,7 @@ import type { Politician } from '../../../models/politician';
 import { movingForwardParty } from '../../../mocks/data/party';
 import type { Voting } from '$models/voting';
 import { failedVoting, passedVoting } from '../../../mocks/data/voting';
-import { assemblies } from '../../../libs/datasheets';
+import { fetchAssemblies } from '../../../libs/datasheets';
 import type { Assembly } from '$models/assembly';
 
 interface VotingHistory {
@@ -16,10 +16,12 @@ interface VotingAbsentStats {
 	averageAbsentVoting: number;
 }
 
-export function load({ params }) {
+export async function load({ params }) {
 	const [firstname, lastname] = params.id.split('-');
 
-	const rep26 = assemblies.find(({ id }) => id === 'สมาชิกสภาผู้แทนราษฎร-26') as Assembly;
+	const rep26 = (await fetchAssemblies()).find(
+		({ id }) => id === 'สมาชิกสภาผู้แทนราษฎร-26'
+	) as Assembly;
 
 	const politician: Politician = {
 		id: params.id,

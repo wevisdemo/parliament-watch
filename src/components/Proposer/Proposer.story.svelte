@@ -6,7 +6,7 @@
 	import { movingForwardParty } from '../../mocks/data/party';
 
 	const rep26: Assembly = {
-		id: 'representatives-26',
+		id: 'สมาชิกสภาผู้แทนราษฎร-26',
 		name: AssemblyName.Representatives,
 		abbreviation: 'สส.',
 		term: 26,
