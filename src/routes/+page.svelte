@@ -16,8 +16,8 @@
 		<li>
 			[WEV-14] Users can learn more about an assembly
 			<ul>
-				<li><a href="/assemblies/representatives-26">สส.</a></li>
-				<li><a href="/assemblies/senates-12">สว.</a></li>
+				<li><a href="/assemblies/สมาชิกสภาผู้แทนราษฎร-25">สส.</a></li>
+				<li><a href="/assemblies/วุฒิสภา-12">สว.</a></li>
 			</ul>
 		</li>
 		<li>

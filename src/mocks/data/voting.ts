@@ -4,7 +4,6 @@ import {
 	type CustomVoteOption,
 	type Voting
 } from '$models/voting';
-import { rep26 } from './assembly';
 
 export const defaultVoteOptions: DefaultVoteOption[] = [
 	DefaultVoteOption.Agreed,
@@ -36,7 +35,7 @@ export const passedVoting: Voting = {
 	categories: ['ขนส่งสาธารณะ', 'สิ่งแวดล้อม'],
 	date: new Date(),
 	meetingType: 'สภาร่วม',
-	participatedAssembleIds: [rep26.id],
+	participatedAssembleIds: ['สมาชิกสภาผู้แทนราษฎร-26'],
 	voteOptions: defaultVoteOptions,
 	winningCondition:
 		'1.ได้เสียงเกินกึ่งหนึ่งของสภา 2.ได้เสียงฝ่ายค้านอย่างน้อย 20% 3. ได้เสียง สว. อย่างน้อย 1 ใน 3',

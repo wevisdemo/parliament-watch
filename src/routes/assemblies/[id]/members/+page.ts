@@ -1,12 +1,19 @@
-import { redirect } from '@sveltejs/kit';
-import { sen12 } from '../../../../mocks/data/assembly.js';
+import { error, redirect } from '@sveltejs/kit';
 import { GroupByOption } from './[groupby]/groupby-options.js';
+import { assemblies } from '../../../../libs/datasheets/index.js';
+import { AssemblyName } from '$models/assembly.js';
 
 export function load({ params }) {
+	const assembly = assemblies.find(({ id }) => id === params.id);
+
+	if (!assembly) {
+		throw error(404, `Assembly ${params.id} not found`);
+	}
+
 	throw redirect(
 		307,
 		`/assemblies/${params.id}/members/${
-			params.id === sen12.id ? GroupByOption.Origin : GroupByOption.Party
+			assembly.name === AssemblyName.Senates ? GroupByOption.Origin : GroupByOption.Party
 		}`
 	);
 }

@@ -1,5 +1,6 @@
-import type { Assembly } from '$models/assembly';
-import { rep26, sen12 } from '../../../../../mocks/data/assembly.js';
+import { AssemblyName, type Assembly } from '$models/assembly';
+import { error } from '@sveltejs/kit';
+import { assemblies } from '../../../../../libs/datasheets/index.js';
 import { GroupByOption, groupByOptionLabelMap } from './groupby-options.js';
 
 export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
@@ -11,14 +12,18 @@ export interface GroupByTab {
 }
 
 export async function load({ params }) {
-	const isSenate = params.id === sen12.id;
+	const fullAssembly = assemblies.find(({ id }) => id === params.id);
 
-	const { id, name, term, startedAt } = isSenate ? sen12 : rep26;
+	if (!fullAssembly) {
+		throw error(404, `Assembly ${params.id} not found`);
+	}
+
+	const { id, name, term, startedAt } = fullAssembly;
 	const assembly: AssemblySummary = { id, name, term, startedAt };
 
 	const groupByTabs = Object.values(GroupByOption)
 		.filter(
-			isSenate
+			name === AssemblyName.Senates
 				? (path) => [GroupByOption.Party, GroupByOption.Province].every((option) => option !== path)
 				: (path) => path !== GroupByOption.Origin
 		)
