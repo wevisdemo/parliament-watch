@@ -12,7 +12,7 @@ import {
 	mockCategory,
 	passedVoting
 } from '../../../../mocks/data/voting.js';
-import { assemblies } from '../../../../libs/datasheets/index.js';
+import { fetchAssemblies } from '../../../../libs/datasheets/index.js';
 
 interface VoteSummary
 	extends Pick<
@@ -59,7 +59,9 @@ export async function load({ params }) {
 	];
 
 	const filterOptions: FilterOptions = {
-		assemblies: assemblies.filter(({ id }) => uniqueParticipatedAssemblyIds.includes(id)),
+		assemblies: (await fetchAssemblies()).filter(({ id }) =>
+			uniqueParticipatedAssemblyIds.includes(id)
+		),
 		categories: [...new Set(votes.flatMap(({ categories }) => categories))]
 	};
 

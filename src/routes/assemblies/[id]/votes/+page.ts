@@ -1,7 +1,7 @@
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
 import { mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
-import { assemblies } from '../../../../libs/datasheets/index.js';
+import { fetchAssemblies } from '../../../../libs/datasheets/index.js';
 import { error } from '@sveltejs/kit';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
@@ -13,7 +13,7 @@ export interface FilterOptions {
 export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
 export async function load({ params }) {
-	const fullAssembly = assemblies.find(({ id }) => id === params.id);
+	const fullAssembly = (await fetchAssemblies()).find(({ id }) => id === params.id);
 
 	if (!fullAssembly) {
 		throw error(404, `Assembly ${params.id} not found`);
@@ -35,7 +35,7 @@ export async function load({ params }) {
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : []
 	}));
 
-	const assemblyIds: string[] = assemblies.map((item) => item.id);
+	const assemblyIds: string[] = (await fetchAssemblies()).map((item) => item.id);
 
 	return {
 		assemblyIds,
