@@ -8,7 +8,7 @@ import {
 	movingForwardParty,
 	pheuThaiParty
 } from '../../../../../mocks/data/party.js';
-import { assemblies } from '../../../../../libs/datasheets/index.js';
+import { fetchAssemblies } from '../../../../../libs/datasheets/index.js';
 import { AssemblyName } from '$models/assembly.js';
 
 interface PoliticianGroup {
@@ -28,8 +28,8 @@ interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isL
 	candidateType?: 'แบ่งเขต' | 'บัญชีรายชื่อ';
 }
 
-export function load({ params }) {
-	const assembly = assemblies.find(({ id }) => id === params.id);
+export async function load({ params }) {
+	const assembly = (await fetchAssemblies()).find(({ id }) => id === params.id);
 
 	if (!assembly) {
 		throw error(404, `Assembly ${params.id} not found`);

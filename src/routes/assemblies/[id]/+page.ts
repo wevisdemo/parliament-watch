@@ -3,7 +3,7 @@ import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { DefaultVotingResult, type Voting } from '$models/voting';
 import { error } from '@sveltejs/kit';
-import { assemblies } from '../../../libs/datasheets';
+import { fetchAssemblies } from '../../../libs/datasheets';
 import {
 	bhumjaithaiParty,
 	democratsParty,
@@ -42,8 +42,8 @@ export interface VoteCardProps {
 	}[];
 }
 
-export function load({ params }) {
-	const fullAssembly = assemblies.find(({ id }) => id === params.id);
+export async function load({ params }) {
+	const fullAssembly = (await fetchAssemblies()).find(({ id }) => id === params.id);
 
 	if (!fullAssembly) {
 		throw error(404, `Assembly ${params.id} not found`);
@@ -304,7 +304,7 @@ export function load({ params }) {
 			highlightedVoteByGroups
 		}));
 
-	const assemblyIds: string[] = assemblies.map(({ id }) => id);
+	const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
 
 	return {
 		assemblyIds,
