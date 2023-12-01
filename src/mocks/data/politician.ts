@@ -1,4 +1,5 @@
 import type { Politician } from '../../models/politician';
+import { rep26 } from './assembly';
 import { movingForwardParty } from './party';
 
 export const movingForwardPolitician: Politician = {
@@ -16,7 +17,13 @@ export const movingForwardPolitician: Politician = {
 	assetValue: 10000000,
 	debtValue: 10000000,
 	contacts: [],
-	assemblyRoles: [],
+	assemblyRoles: [
+		{
+			role: 'สมาชิกแบบบัญชีรายชื่อ',
+			assembly: rep26,
+			startedAt: new Date('2023-01-01')
+		}
+	],
 	partyRoles: [
 		{
 			party: movingForwardParty,
