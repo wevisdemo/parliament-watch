@@ -1,0 +1,253 @@
+---
+title: "Migrate parliament Watch"
+output: html_notebook
+---
+
+
+```{r, echo=FALSE}
+library(tidyverse)
+```
+
+
+# Data Sources
+
+- TheyWorkForUs NocoDB: https://sheets.wevis.info
+- ผลการเลือกตั้งสมาชิกสภาผู้แทนราษฎร 2566: https://docs.google.com/spreadsheets/d/18MQd-PVFAoKYSwCvrj_0mDVDfvvCKtNInpjQJZ7SD2o/edit#gid=0
+
+
+# Helper functions
+
+```{r}
+split_fullname <- function(table, name) {
+  mutate(table, name = name |> 
+         gsub('^นางสาว', 'นางสาว ',x = _) |> 
+         gsub('^นาง(?!สาว)', 'นาง ',x = _, perl = TRUE) |> 
+         gsub('^นาย', 'นาย ',x = _) |> 
+         gsub('^ผู้ช่วยศาสตราจารย์', 'ผู้ช่วยศาสตราจารย์ ',x = _) |> 
+         gsub('^รองศาสตราจารย์', 'รองศาสตราจารย์ ',x = _) |> 
+         gsub('^หม่อมหลวง', 'หม่อมหลวง ',x = _) |> 
+         gsub('^คุณหญิง', 'คุณหญิง ',x = _)
+       ) |> 
+  separate_wider_delim(name, delim = ' ', names =  c('prefix', 'firstname', 'lastname'), too_many = 'merge')
+}
+
+merge_fullname_as_id <- function(table) {
+  unite(table, 'politician', firstname, lastname, sep = '-') |> 
+  mutate(politician = gsub(' ', '-', politician))
+}
+```
+
+# Politicians
+
+## 2562
+
+```{r}
+politicians62 <- read_csv('noco/People_exported_1.csv')
+politicians62
+```
+
+```{r}
+newPoliticians62 <- politicians62 |>
+  rename_with(tolower) |> 
+  select(title, name, starts_with('is'), starts_with('mp'), senatormethod, gender, birthdate, education, degree, graduation, exoccupation0, exoccupation1, facebook, twitter) |>
+  unite('education', education, degree, graduation, sep = ' ', na.rm = TRUE) |> 
+  mutate(education = paste('- ', gsub('ต่ำกว่าปริญญาตรี ', '', education))) |> 
+  mutate(across(starts_with('exoccupation'), .fns = ~ if_else(is.na(.x), NA, paste('- ', .x)))) |> 
+  unite('pastOccupation', starts_with('exoccupation'), sep = '\n', na.rm = TRUE) |> 
+  separate_wider_delim(name, delim = ' ', names =  c('firstname', 'lastname'), too_many = 'merge') |> 
+  rename(prefix=title, sex=gender, x=twitter)
+
+newPoliticians62
+```
+
+## 2566
+
+
+```{r}
+politicians66district <- read_csv('ผลการเลือกตั้งสมาชิกสภาผู้แทนราษฎร 2566 - แบบแบ่งเขต.csv')|> 
+  rename(province = 'จังหวัด', district = 'เขตเลือกตั้ง', name = 'ผู้ได้รับเลือก', party = 'สังกัดพรรคการเมือง') |> 
+  select(-starts_with('source')) 
+  
+politicians66district
+```
+
+```{r}
+politicians66partylist <- read_csv('ผลการเลือกตั้งสมาชิกสภาผู้แทนราษฎร 2566 - แบบบัญชีรายชื่อ.csv') |> 
+  rename(party='สังกัดพรรคการเมือง', listNumber='ลำดับ', name='รายชื่อ') |> 
+  select(-starts_with('source'))
+  
+politicians66partylist
+```
+
+```{r}
+newPoliticians66 <- full_join(politicians66district, politicians66partylist) |> 
+  split_fullname(name)
+
+newPoliticians66
+```
+
+## Combine politicians
+
+```{r}
+newPoliticians <- newPoliticians66 |> 
+  select(prefix, firstname, lastname) |> 
+  full_join(
+    newPoliticians62 |> select(-starts_with('is'), -starts_with('mp')),
+    by = c('prefix','firstname','lastname')
+  ) |> 
+  arrange(firstname, lastname) |> 
+  mutate(across(is.character, ~iconv(.x, 'utf-8', 'utf-8', sub='')))
+  
+newPoliticians
+```
+
+```{r}
+write_csv(newPoliticians,'out/politicians.csv', na = '')
+```
+
+
+# Assembly Role History
+
+
+## Representatives 25
+
+```{r}
+representatives25 <- newPoliticians62 |> 
+  filter(ismp) |> 
+  merge_fullname_as_id() |> 
+  mutate(
+    assembly = 'สมาชิกสภาผู้แทนราษฎร-25',
+    startedAt = '3/24/2019',
+    endedAt = if_else(isactive, '3/24/2023', '?'),
+  ) |> 
+  rename(appointmentMethod=mptype, province=mpprovince, districtNumber=mpzone, listNumber=mplist) |> 
+  select(politician, assembly, appointmentMethod, province, districtNumber, listNumber, startedAt, endedAt)
+
+representatives25
+```
+
+## Representatives 26
+
+```{r}
+representatives26 <- newPoliticians66 |> 
+  merge_fullname_as_id() |> 
+  mutate(
+    assembly = 'สมาชิกสภาผู้แทนราษฎร-26',
+    appointmentMethod = if_else(is.na(listNumber), 'แบ่งเขต', 'บัญชีรายชื่อ'),
+    startedAt = '5/24/2023',
+    endedAt = NA,
+  ) |> 
+  rename(districtNumber = district) |> 
+  select(politician, assembly, appointmentMethod, province, districtNumber, listNumber, startedAt, endedAt)
+
+representatives26
+```
+
+## Senates 12
+
+```{r}
+senates12 <- newPoliticians62 |> 
+  filter(issenator) |> 
+  merge_fullname_as_id() |> 
+  mutate(
+    assembly = 'วุฒิสภา-12',
+    startedAt = '5/11/2019',
+    endedAt = if_else(isactive, NA, '?'),
+  ) |> 
+  rename(appointmentMethod=senatormethod) |> 
+  select(politician, assembly, appointmentMethod, startedAt, endedAt)
+
+senates12
+```
+
+## Combine
+
+```{r}
+assemblyRoleHistory <- representatives25 |>
+  full_join(representatives26) |> 
+  full_join(senates12) |> 
+  arrange(assembly, appointmentMethod, province, districtNumber, listNumber)
+
+assemblyRoleHistory
+```
+
+```{r}
+write_csv(assemblyRoleHistory,'out/assemblyRoleHistory.csv', na = '')
+```
+
+
+# Party Role History
+
+## Representatives 62
+
+```{r}
+partyHistory62 <- read_csv('noco/PeoplePartyHistory_exported_1.csv') |> 
+  select(Person, Party, EstablishedDate) |> 
+  rename(party=Party, startedAt = EstablishedDate) |> 
+    separate_wider_delim(Person, delim = ' ', names =  c('firstname', 'lastname'), too_many = 'merge') |> 
+  merge_fullname_as_id() |> 
+  arrange(politician)
+  
+partyHistory62
+```
+
+## Representatives 66
+
+```{r}
+partyHistory66 <- politicians66district |> 
+  full_join(politicians66partylist) |> 
+  split_fullname('name') |> 
+  merge_fullname_as_id() |> 
+  select(politician, party)
+
+partyHistory66
+```
+
+```{r}
+partyHistory <- full_join(partyHistory62, partyHistory66, by = c('politician', 'party')) |> 
+  arrange(politician, startedAt)
+
+partyHistory
+```
+
+```{r}
+write_csv(partyHistory,'out/partyRoleHistory.csv', na = '')
+```
+
+
+# Party
+
+```{r}
+parties <- read_csv('noco/Parties_exported_1.csv')
+parties
+```
+
+```{r}
+newParties62 <- parties |>
+  filter(Id > 3) |>
+  select(Name, Color) |> 
+  rename_with(tolower)
+
+newParties62
+```
+
+```{r}
+newParties66 <- partyHistory |> 
+  group_by(party) |> 
+  summarise() |> 
+  rename(name=party)
+
+newParties66
+```
+
+```{r}
+newParties <- full_join(newParties62, newParties66) |> 
+  arrange(name)
+
+newParties
+```
+
+
+```{r}
+write_csv(newParties,'out/parties.csv', na = '')
+```
