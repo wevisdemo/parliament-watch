@@ -70,7 +70,7 @@
 				{ key: 'date', value: 'วันที่' },
 				{ key: 'title', value: 'ชื่อมติ' },
 				{ key: 'result', value: 'ผลลัพท์' },
-				{ key: 'file', value: 'เอกสาร' }
+				{ key: 'file', value: 'เอก สาร' }
 			]}
 			rows={getTableRows(displayList)}
 		>
