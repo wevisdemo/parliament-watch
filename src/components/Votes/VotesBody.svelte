@@ -6,11 +6,14 @@
 		VoteSummary
 	} from '../../routes/assemblies/[id]/votes/+page';
 	import VotesFilter from './VotesFilter.svelte';
+	import VotesFilterModal from './VotesFilterModal.svelte';
 	import type { VotesFilter as IVotesFilter } from './shared';
 
 	export let votes: VoteSummary[] = [];
 	export let filterOptions: FilterOptions;
-	export let showFilter = true;
+	$: outerWidth = 769;
+	$: isMD = outerWidth > 768;
+	$: showFilter = isMD ? true : false;
 	let filter: IVotesFilter = {
 		name: '',
 		result: ['ผ่าน', 'ไม่ผ่าน'],
@@ -28,7 +31,16 @@
 	});
 </script>
 
+<svelte:window bind:outerWidth />
+
 <div class="flex bg-white flex flex-col md:flex-row justify-center">
-	<VotesFilter {votes} bind:filter bind:showFilter />
+	<section class="md:block hidden flex">
+		<VotesFilter {votes} bind:filter bind:showFilter />
+	</section>
 	<VotesTable votes={filteredVotes} bind:showFilter />
+	{#if !isMD}
+		<section class="block md:hidden">
+			<VotesFilterModal {votes} bind:filter bind:showFilter />
+		</section>
+	{/if}
 </div>

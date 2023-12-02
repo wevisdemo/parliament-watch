@@ -8,7 +8,27 @@
 	export let filter: VotesFilter;
 	export let showFilter = true;
 	let resultFilter = filter.result;
+	// let catergoryFilter = [
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee',
+	// 	'Hello Mee'
+	// ];
 	let catergoryFilter = filter.category;
+
+	$: footAction =
+		filter.result.length > 0 || filter.category.length > 0 ? 'ล้างตัวเลือก' : 'เลือกทั้งหมด';
 
 	const getRowCountFilteredByCategory = (category: string) => {
 		let result = 0;
@@ -30,6 +50,22 @@
 		return result;
 	};
 
+	const doFooterAction = () => {
+		if (footAction === 'ล้างตัวเลือก') {
+			resetFilter();
+		} else {
+			selectAllFilter();
+		}
+	};
+
+	const selectAllFilter = () => {
+		filter = {
+			name: filter.name,
+			result: resultFilter,
+			category: catergoryFilter
+		};
+	};
+
 	const resetFilter = () => {
 		filter = {
 			name: '',
@@ -40,54 +76,57 @@
 </script>
 
 <div
-	class="relative md:max-w-[var(--max-width)] overflow-hidden transition-all duration-200"
+	class="relative md:max-w-[var(--max-width)] h-full overflow-hidden transition-all duration-200"
 	style="--max-width: {showFilter ? '256px' : '0px'}"
 >
 	<div class="w-[256px] relative flex flex-col h-full justify-between">
 		<button
-			class="absolute top-[0px] right-[0px] p-[10px] hover:cursor-pointer"
+			class="absolute top-[0px] right-[0px] p-[10px] hover:cursor-pointer z-10"
 			on:click={() => {
 				showFilter = !showFilter;
 			}}
 		>
 			<Minimize />
 		</button>
-		<div class="px-[24px]">
+		<div class="px-[24px] h-full flex flex-col relative">
 			<Search
 				placeholder="ค้นหาชื่อมติ/คำที่เกี่ยวข้อง"
 				bind:value={filter.name}
 				light
 				class="sticky top-0"
 			/>
-			<div class="mt-[16px]">
-				<span class="label-01 text-gray-60">ผลลัพท์</span>
-				{#each resultFilter as value}
-					<Checkbox bind:group={filter.result} {value}>
-						<div slot="labelText">
-							<span class="body-01">{value}</span>
-							<span class="body-01 text-gray-60">({getRowCountFilteredByResult(value)})</span>
-						</div>
-					</Checkbox>
-				{/each}
-			</div>
-			<div class="mt-[16px]">
-				<span class="label-01 text-gray-60">หมวดมติ</span>
-				{#each catergoryFilter as value}
-					<Checkbox bind:group={filter.category} {value}>
-						<div slot="labelText">
-							<span class="body-01">{value}</span>
-							<span class="body-01 text-gray-60">({getRowCountFilteredByCategory(value)})</span>
-						</div>
-					</Checkbox>
-				{/each}
+			<div class="overflow-scroll">
+				<div class="mt-[16px]">
+					<span class="label-01 text-gray-60">ผลลัพท์</span>
+					{#each resultFilter as value}
+						<Checkbox bind:group={filter.result} {value}>
+							<div slot="labelText">
+								<span class="body-01">{value}</span>
+								<span class="body-01 text-gray-60">({getRowCountFilteredByResult(value)})</span>
+							</div>
+						</Checkbox>
+					{/each}
+				</div>
+				<div class="mt-[16px]">
+					<span class="label-01 text-gray-60">หมวดมติ</span>
+					{#each catergoryFilter as value}
+						<Checkbox bind:group={filter.category} {value}>
+							<div slot="labelText">
+								<span class="body-01">{value}</span>
+								<span class="body-01 text-gray-60">({getRowCountFilteredByCategory(value)})</span>
+							</div>
+						</Checkbox>
+					{/each}
+				</div>
 			</div>
 		</div>
-		<button
-			class="bottom-[0px] p-[14px] w-full text-blue-90 border-blue-70 boder-solid border hover:cursor-pointer text-left"
-			on:click={resetFilter}
+		<Button
+			kind={footAction === 'ล้างตัวเลือก' ? 'tertiary' : 'secondary'}
+			class="bottom-[0px] left-[0px]  p-[14px] w-full text-left"
+			on:click={doFooterAction}
 		>
-			ล้างตัวเลือก
-		</button>
+			{footAction}
+		</Button>
 	</div>
 </div>
 
