@@ -45,6 +45,7 @@ export function load({ params }) {
 
 	let events: Event[] = [];
 	let mergedIntoBill: Bill | undefined;
+	let mergedIntoBillLatestEvent: Event | undefined;
 	let relatedVotingResults: {
 		[id: number]: {
 			voting: Voting;
@@ -90,6 +91,7 @@ export function load({ params }) {
 		bill.status = BillStatus.Merged;
 		events = [hearingEvent, passingMp1Event, passingMergedMp2Event];
 		mergedIntoBill = inProgressBill;
+		mergedIntoBillLatestEvent = { ...inProgressMp2Event, billId: inProgressBill.id };
 		relatedVotingResults = {
 			1: { voting: passedVoting, resultSummary: fakeMpPassedVotingResultSummary }
 		};
@@ -100,6 +102,7 @@ export function load({ params }) {
 		mergedBills, // Bills that got merged into this bill.
 		events,
 		mergedIntoBill, // The bill that this bill got merged into. (merged event)
+		mergedIntoBillLatestEvent,
 		relatedVotingResults // Info of votings in events
 	};
 }
