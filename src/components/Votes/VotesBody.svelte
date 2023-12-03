@@ -1,10 +1,7 @@
 <script lang="ts">
 	import VotesTable from '$components/Votes/VotesTable.svelte';
-	import type {
-		AssemblySummary,
-		FilterOptions,
-		VoteSummary
-	} from '../../routes/assemblies/[id]/votes/+page';
+	import { Search } from 'carbon-components-svelte';
+	import type { FilterOptions, VoteSummary } from '../../routes/assemblies/[id]/votes/+page';
 	import VotesFilter from './VotesFilter.svelte';
 	import VotesFilterModal from './VotesFilterModal.svelte';
 	import type { VotesFilter as IVotesFilter } from './shared';
@@ -34,6 +31,9 @@
 <svelte:window bind:outerWidth />
 
 <div class="flex bg-white flex flex-col md:flex-row justify-center">
+	<div class="top-[0px] bg-field-01 md:hidden px-[16px] pb-[12px]">
+		<Search placeholder="ค้นหาชื่อมติ/คำที่เกี่ยวข้อง" bind:value={filter.name} light />
+	</div>
 	<section class="md:block hidden flex">
 		<VotesFilter {votes} bind:filter bind:showFilter />
 	</section>
