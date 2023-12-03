@@ -3,6 +3,7 @@
 		Breadcrumb,
 		BreadcrumbItem,
 		Button,
+		Modal,
 		Tab,
 		Tabs,
 		Tag,
@@ -15,6 +16,8 @@
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
 	export let data;
+
+	let open = false;
 
 	function dateConvertor(date: Date) {
 		const convertedDate = Intl.DateTimeFormat('th', {
@@ -178,9 +181,18 @@
 				ได้เสียง สว. อย่างน้อย 1 ใน 3
 			</span>
 		</div>
-		<p class="cursor-pointer helper-text-01 mt-2 text-blue-60 underline">
+		<Modal passiveModal bind:open modalHeading="งดออกเสียง vs. ไม่ลงคะแนน" on:open on:close>
+			<p class="body-01">
+				งดออกเสียง เกิดจากการเสียบบัตรยืนยันตัวตน และลงคะแนนว่า “งดออกเสียง” <br />
+				ไม่ลงคะแนน เกิดจากการเสียบบัตรยืนยันตัวตนแล้ว แต่ไม่กดลงคะแนน
+			</p>
+		</Modal>
+		<button
+			class="cursor-pointer helper-text-01 mt-2 text-blue-60 underline text-left w-[260px]"
+			on:click={() => (open = false)}
+		>
 			งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
-		</p>
+		</button>
 	</div>
 	<div class="flex flex-col w-full px-12">
 		<div class="flex items-center gap-x-3">
