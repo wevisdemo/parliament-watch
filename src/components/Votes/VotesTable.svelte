@@ -54,29 +54,20 @@
 
 <div class="w-full max-w-[1056px] relative">
 	<div class="relative">
-		{#if !showFilter}
-			<button
-				class="absolute left-[0px] bottom-[0px] p-[10px] z-50"
-				on:click={() => {
-					showFilter = true;
-				}}
-			>
-				<Button icon={Filter} />
-			</button>
-		{/if}
 		<DataTable
+			class="[&>.bx--data-table>thead]:sticky [&>.bx--data-table>thead]:top-[0px]"
 			zebra
 			headers={[
 				{ key: 'date', value: 'วันที่' },
 				{ key: 'title', value: 'ชื่อมติ' },
 				{ key: 'result', value: 'ผลลัพท์' },
-				{ key: 'file', value: 'เอกสาร' }
+				{ key: 'file', value: 'เอก สาร' }
 			]}
 			rows={getTableRows(displayList)}
 		>
 			<svelte:fragment slot="cell-header" let:header>
-				{#if header.key === 'port'}
-					{header.value} (network)
+				{#if header.key === 'file'}
+					<span>เอก<br class="md:hidden" />สาร</span>
 				{:else}
 					{header.value}
 				{/if}
@@ -85,13 +76,12 @@
 				{#if cell.key === 'date'}
 					<span class="body-01 text-gray-60">{cell.value}</span>
 				{:else if cell.key === 'title'}
-					<!-- TODO: add link to vote page /assemblies/votes/{row.id} -->
-					<a href="/votings/0" class="body-01 text-gray-100 underline">{cell.value}</a>
+					<a href="/votings/{row.id}" class="body-01 text-gray-100 underline">{cell.value}</a>
 				{:else if cell.key === 'result'}
 					{#if cell.value === DefaultVotingResult.Passed}
-						<Tag type="teal">ผ่าน</Tag>
+						<Tag type="teal" class="">ผ่าน</Tag>
 					{:else if cell.value === DefaultVotingResult.Failed}
-						<Tag type="red">ไม่ผ่าน</Tag>
+						<Tag type="red" class="">ไม่ผ่าน</Tag>
 					{/if}
 				{:else if cell.key === 'file'}
 					{#if cell.value !== ''}
@@ -104,8 +94,20 @@
 				{/if}
 			</svelte:fragment>
 		</DataTable>
+		{#if !showFilter}
+			<div class="sticky md:absolute left-[0px] bottom-[0px] p-[10px] z-10">
+				<Button
+					icon={Filter}
+					iconDescription="Filter"
+					on:click={() => {
+						showFilter = true;
+					}}
+				/>
+			</div>
+		{/if}
 	</div>
 	<Pagination
+		class="[&>.bx--pagination__right]:hidden"
 		totalItems={votes.length}
 		{pageSize}
 		bind:page

@@ -32,7 +32,9 @@
 	const startedYear = data.startedAt.getFullYear() + 543;
 </script>
 
-<div class="flex md:flex-row flex-col w-full justify-between md:py-[48px] py-[16px]">
+<div
+	class="flex md:flex-row flex-col w-full justify-between md:py-[48px] py-[16px] md:space-x-[32px]"
+>
 	<div class="w-full max-w-[900px]">
 		<div class="flex md:flex-row flex-col">
 			<h2 class="fluid-heading-05">{data.name}</h2>
@@ -49,7 +51,7 @@
 			<p class="body-01 mt-[8px]">{data.origin}</p>
 		</div>
 	</div>
-	<div class="grid gap-[8px] w-full md:max-w-[224px] max-w-full mt-[16px] md:mt-[0px]">
+	<div class="grid gap-[8px] w-full md:max-w-[224px] max-w-full mt-[16px] md:mt-[0px] h-fit">
 		<div class="flex flex-col border border-gray-20 border-solid p-[12px] text-left">
 			<div class="flex">
 				<Download />
