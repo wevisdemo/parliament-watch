@@ -30,7 +30,14 @@
 	import type { Politician } from '$models/politician.js';
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 
-	const { bill, mergedBills, events, mergedIntoBill, relatedVotingResults } = data;
+	const {
+		bill,
+		mergedBills,
+		events,
+		mergedIntoBill,
+		mergedIntoBillLatestEvent,
+		relatedVotingResults
+	} = data;
 	const tooltipText =
 		'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
 	const lastestEvent = events[events.length - 1];
@@ -205,7 +212,7 @@
 									alt={bill.proposedLedByPolitician.firstname +
 										' ' +
 										bill.proposedLedByPolitician.lastname}
-									class="w-8 h-8 rounded-full object-cover bg-cool-gray-50"
+									class="w-6 h-6 rounded-full object-cover bg-cool-gray-50"
 								/>
 								<div>
 									<div class="flex flex-wrap gap-1">
@@ -270,7 +277,6 @@
 									<span class="text-text-02"
 										>โดย
 										{#if mergedBill.proposerType === BillProposerType.Politician && mergedBill.proposedLedByPolitician}
-											<!-- TODO missing mock data Politician.assembly-->
 											{mergedBill.proposedLedByPolitician.firstname +
 												' ' +
 												mergedBill.proposedLedByPolitician.lastname +
@@ -308,7 +314,7 @@
 		</div>
 	</section>
 
-	{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician !== undefined && bill.coProposedByPoliticians !== undefined}
+	{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician && bill.coProposedByPoliticians}
 		<section title="List of legal proponents" class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
 				<h1 class="fluid-heading-04 text-text-primary">รายชื่อผู้เสนอกฏหมาย</h1>
@@ -322,7 +328,7 @@
 							lastname={bill.proposedLedByPolitician.lastname}
 							avatar={bill.proposedLedByPolitician.avatar}
 							party={bill.proposedLedByPolitician.partyRoles.find((e) => !e.endedAt)?.party}
-							role=""
+							role={bill.proposedLedByPolitician.assemblyRoles.find((e) => !e.endedAt)?.role + ''}
 						/>
 					</div>
 					<div class="flex flex-col gap-3 md:w-full">
@@ -486,13 +492,15 @@
 										<DocumentMultiple_02 size={24} color="#2600A3" />
 										<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
 										<div class="w-full border border-gray-20 rounded-sm">
-											<!-- TODO add eventDescription -->
 											<BillCard
 												orientation="portrait"
 												nickname={mergedIntoBill.nickname}
 												status={mergedIntoBill.status}
 												billUrl="/bills/{mergedIntoBill.id}"
 												isFullWidth={true}
+												currentState={mergedIntoBillLatestEvent
+													? eventDescription[mergedIntoBillLatestEvent.type].title
+													: ''}
 											/>
 										</div>
 										<div class="text-text-02">
