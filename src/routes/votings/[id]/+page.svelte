@@ -20,6 +20,7 @@
 
 	let open = false;
 	let selectedTab = '';
+	let isViewPercent = false;
 
 	function dateConvertor(date: Date) {
 		const convertedDate = Intl.DateTimeFormat('th', {
@@ -200,7 +201,7 @@
 		<div class="flex flex-col md:flex-row items-start md:items-center gap-x-3">
 			<h1 class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
 			<div class="flex items-center">
-				<ToggleSkeleton />
+				<ToggleSkeleton class="outline-none" on:click={() => (isViewPercent = !isViewPercent)} />
 				<p class="body-compact-01">ดูร้อยละ</p>
 			</div>
 		</div>
@@ -221,7 +222,13 @@
 				</div>
 				<div class="mt-1 flex items-center gap-x-1 text-teal-50">
 					<p class="heading-03">
-						{resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total} คน
+						{isViewPercent
+							? (
+									((resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total || 0) /
+										totalVote) *
+									100
+							  ).toFixed(0) + '%'
+							: resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total + 'คน'}
 					</p>
 					<p class="heading-03">เห็นด้วย</p>
 				</div>
@@ -248,6 +255,10 @@
 							: 'hidden'} md:flex flex-col w-full mt-4 gap-y-4"
 					>
 						{#each byParties as partyDetails}
+							{@const totalPartyVote = partyDetails.resultSummary.reduce(
+								(acc, vote) => acc + vote.total,
+								0
+							)}
 							<div class="flex items-start gap-x-1">
 								<img
 									class="rounded-full border border-gray-30 w-8 h-8"
@@ -260,14 +271,18 @@
 									<div class="flex items-center gap-x-1">
 										<p class="heading-02">{partyDetails.party.name}</p>
 										<p class="body-02 text-gray-60">
-											{partyDetails.resultSummary.reduce((acc, vote) => acc + vote.total, 0)} คน
+											{totalPartyVote} คน
 										</p>
 									</div>
 									<div class="mt-1 flex items-center gap-x-3 text-teal-50">
 										{#each partyDetails.resultSummary as partyVote}
 											<div class="flex items-center gap-x-1">
 												<div class="w-1 h-3 {getVoteColor(partyVote.voteOption)}" />
-												<p class="label-01">{partyVote.total}</p>
+												<p class="label-01">
+													{isViewPercent
+														? ((partyVote.total / totalPartyVote) * 100).toFixed(2) + '%'
+														: partyVote.total}
+												</p>
 											</div>
 										{/each}
 									</div>
