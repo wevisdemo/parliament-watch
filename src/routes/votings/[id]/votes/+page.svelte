@@ -97,9 +97,9 @@
 
 <DataPage
 	breadcrumbList={[
-		{ url: '/', label: 'หน้าหลัก' },
-		{ url: `/voting`, label: 'การลงมติ' },
-		{ url: `/voting/${voting.id}`, label: voting.title },
+		{ url: '#', label: 'หน้าหลัก' },
+		{ url: `#`, label: 'การลงมติ' },
+		{ url: `#`, label: voting.title },
 		{ url: `#`, label: 'ผลการลงมติรายคน' }
 	]}
 	{comboboxFilterList}
