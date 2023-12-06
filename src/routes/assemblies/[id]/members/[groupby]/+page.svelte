@@ -14,16 +14,41 @@
 	import SearchLocate from 'carbon-icons-svelte/lib/SearchLocate.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
+	import type { PoliticianGroupBy } from './+page.js';
 
 	export let data;
 	$: ({ groups, groupByTabs } = data);
 	$: currentPath = groupByTabs.find((e) => e.isActive)?.path ?? '';
 
-	let แบ่งเขต = true;
-	let บัญชีรายชื่อ = true;
-
 	let showFilter = true;
 	let searchQuery = '';
+	let isByDistrict = true;
+	let isByPartylist = true;
+
+	$: formattedSearchQuery = searchQuery.trim();
+	$: filteredGroup =
+		formattedSearchQuery === '' && isByDistrict && isByPartylist
+			? groups
+			: (groups.map((group) => {
+					if ('subgroups' in group) {
+						return {
+							...group,
+							subgroups: group.subgroups.map((subgroup) => {
+								return {
+									...subgroup,
+									members: subgroup.members.filter((member) => {
+										return (
+											(member.firstname + ' ' + member.lastname).includes(formattedSearchQuery) &&
+											((isByDistrict && member.candidateType === 'แบ่งเขต') ||
+												(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
+										);
+									})
+								};
+							})
+						};
+					}
+					return group.name.includes(formattedSearchQuery);
+			  }) as PoliticianGroupBy);
 
 	let isMobile = false;
 	let mounted = false;
@@ -94,11 +119,16 @@
 			{#if currentPath === 'party'}
 				<FormGroup legendText="ประเภท" noMargin>
 					<div class="flex items-center justify-between overflow-hidden">
-						<Checkbox labelText="แบ่งเขต" class="!m-0" bind:checked={แบ่งเขต} skeleton={!mounted} />
+						<Checkbox
+							labelText="แบ่งเขต"
+							class="!m-0"
+							bind:checked={isByDistrict}
+							skeleton={!mounted}
+						/>
 						<Checkbox
 							labelText="บัญชีรายชื่อ"
 							class="!m-0"
-							bind:checked={บัญชีรายชื่อ}
+							bind:checked={isByPartylist}
 							skeleton={!mounted}
 						/>
 					</div>
@@ -106,7 +136,7 @@
 			{/if}
 			<div class="flex-[1_1_auto] h-0 overflow-y-auto">
 				<Accordion class="accordion-content-full" skeleton={!mounted}>
-					{#each groups as group (group.name)}
+					{#each filteredGroup as group (group.name)}
 						<AccordionItem open={currentPath === 'party'}>
 							<span slot="title" class="font-semibold"
 								>{group.name}
@@ -153,9 +183,8 @@
 			</div>
 		</aside>
 	{/if}
-
-	<div class="p-4 text-gray-100 flex flex-col gap-4">
-		{#each groups as group (group.name)}
+	<div class="flex-1 p-4 text-gray-100 flex flex-col gap-4">
+		{#each filteredGroup as group (group.name)}
 			<section>
 				<h2 class="py-[6px] text-gray-60 fluid-heading-04">{group.name}</h2>
 				{#if 'subgroups' in group}
