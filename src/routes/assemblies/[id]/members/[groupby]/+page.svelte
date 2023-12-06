@@ -1,6 +1,17 @@
 <script lang="ts">
+	import Header from '$components/Assemblies/Members/Header.svelte';
+	import Tab from '$components/Assemblies/Members/Tab.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import { Accordion, AccordionItem, Checkbox, FormGroup, Search } from 'carbon-components-svelte';
+	import {
+		Accordion,
+		AccordionItem,
+		Button,
+		Checkbox,
+		FormGroup,
+		Search
+	} from 'carbon-components-svelte';
+	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
+	import SearchLocate from 'carbon-icons-svelte/lib/SearchLocate.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 
@@ -14,12 +25,15 @@
 	let showFilter = true;
 	let searchQuery = '';
 
+	let isMobile = false;
 	let mounted = false;
 	let currentCatg = '';
 	onMount(() => {
 		mounted = true;
 
-		if ((showFilter = window.matchMedia(`(min-width: 672px)`).matches)) {
+		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
+		isMobile = !showFilter;
+		if (showFilter) {
 			currentCatg = (
 				groups[0].name +
 				'-' +
@@ -32,7 +46,7 @@
 				.setup({
 					step: '.subcategory',
 					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
-					offset: '80px'
+					offset: '128px'
 				})
 				.onStepEnter((response) => {
 					currentCatg = response.element.children[0].id;
@@ -43,12 +57,19 @@
 	});
 </script>
 
-<div class="flex">
+<Header {data} bind:searchQuery {mounted} />
+<Tab {data} />
+<div class="relative flex">
 	{#if showFilter}
 		<aside
-			class="flex-none flex flex-col gap-4 w-[250px] sticky top-[80px] h-[calc(100dvh-80px)] px-6 member-aside transition-[top,_height] will-change-[top,_height] duration-[350ms]"
+			class={[
+				'flex flex-col gap-4 px-6 bg-white',
+				'fixed left-0 right-0 top-0 bottom-0 z-40',
+				'md:sticky md:top-[80px] md:w-[250px] md:h-[calc(100dvh-80px)] md:flex-none md:z-0',
+				'member-aside'
+			].join(' ')}
 		>
-			<div class="flex">
+			<div class="flex -mr-6 md:mr-0">
 				<Search
 					class="flex-1 {!mounted ? '-mt-6' : ''}"
 					placeholder="ค้นหาชื่อบุคคล"
@@ -56,10 +77,23 @@
 					bind:value={searchQuery}
 					skeleton={!mounted}
 				/>
+				<div class="md:hidden flex">
+					<Button
+						kind="ghost"
+						icon={Minimize}
+						iconDescription="ซ่อนตัวเลือก"
+						tooltipPosition="right"
+						tooltipAlignment="end"
+						on:click={() => {
+							showFilter = false;
+						}}
+						skeleton={!mounted}
+					/>
+				</div>
 			</div>
 			{#if currentPath === 'party'}
 				<FormGroup legendText="ประเภท" noMargin>
-					<div class="flex items-center justify-between">
+					<div class="flex items-center justify-between overflow-hidden">
 						<Checkbox labelText="แบ่งเขต" class="!m-0" bind:checked={แบ่งเขต} skeleton={!mounted} />
 						<Checkbox
 							labelText="บัญชีรายชื่อ"
@@ -72,8 +106,8 @@
 			{/if}
 			<div class="flex-[1_1_auto] h-0 overflow-y-auto">
 				<Accordion class="accordion-content-full" skeleton={!mounted}>
-					{#each groups as group, idx (group.name)}
-						<AccordionItem open={idx === 0}>
+					{#each groups as group (group.name)}
+						<AccordionItem open={currentPath === 'party'}>
 							<span slot="title" class="font-semibold"
 								>{group.name}
 								{#if !['party', 'province'].includes(currentPath) && 'subgroups' in group}
@@ -91,6 +125,9 @@
 												class="flex items-center gap-2 body-01 text-gray-100 py-2 px-4 hover:bg-ui-03"
 												class:font-semibold={currentCatg ===
 													(group.name + '-' + name).replace(/ /g, '-')}
+												on:click={() => {
+													isMobile && (showFilter = false);
+												}}
 											>
 												{#if icon}
 													<img
@@ -116,6 +153,7 @@
 			</div>
 		</aside>
 	{/if}
+
 	<div class="p-4 text-gray-100 flex flex-col gap-4">
 		{#each groups as group (group.name)}
 			<section>
@@ -151,6 +189,22 @@
 			</section>
 		{/each}
 	</div>
+</div>
+<div class="flex-none sticky bottom-0 md:hidden">
+	{#if !showFilter}
+		<Button
+			class="m-4"
+			tooltipAlignment="start"
+			tooltipPosition="top"
+			iconDescription="แสดงตัวเลือก"
+			icon={SearchLocate}
+			kind="primary"
+			on:click={() => {
+				showFilter = true;
+			}}
+			skeleton={!mounted}
+		/>
+	{/if}
 </div>
 
 <style>

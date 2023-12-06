@@ -9,8 +9,12 @@
 		@apply top-12;
 	}
 
+	.member-aside {
+		@apply transition-[top,_height] will-change-[top,_height] duration-[350ms];
+	}
+
 	html.navbar-shown .member-aside {
-		@apply top-[128px] h-[calc(100dvh-128px)];
+		@apply top-[48px] md:top-[128px] md:h-[calc(100dvh-128px)];
 	}
 }
 
