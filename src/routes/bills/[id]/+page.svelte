@@ -1,34 +1,23 @@
 <script lang="ts">
 	export let data;
-	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
-	import {
-		DocumentMultiple_02,
-		Information,
-		ArrowRight,
-		CheckmarkFilled,
-		CircleDash,
-		Misuse
-	} from 'carbon-icons-svelte';
+	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
+	import { DocumentMultiple_02, Information } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import Tooltip from '$components/Assemblies/Tooltip.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import { BillProposerType, BillStatus } from '$models/bill';
-	import { EventActionType, EventStatus } from '$models/event';
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 	import { range } from 'd3';
-	import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	import type { VoteCardProps } from '../../assemblies/[id]/+page.js';
-	import RoyalGazette from '$components/bills/RoyalGazette.svelte';
-	import BillCard from '$components/BillCard/BillCard.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import { showModalLawProcess, showModalListCoProposer } from '$components/bills/store';
 	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
 	import CoProposer from '$components/bills/CoProposer.svelte';
 	import type { Politician } from '$models/politician.js';
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
+	import Progress from '$components/bills/Progress.svelte';
 
 	const {
 		bill,
@@ -47,48 +36,6 @@
 		day: 'numeric'
 	};
 	const proposedOn = bill.proposedOn.toLocaleDateString('th-TH', dateTimeFormat);
-	const eventDescription = {
-		hearing: {
-			title: 'รับฟังความเห็น',
-			description: ''
-		},
-		mp1: {
-			title: 'สส. พิจารณา วาระ 1',
-			description: 'รับหลักการและตั้งกรรมาธิการ'
-		},
-		mp2: {
-			title: 'สส. พิจารณา วาระ 2',
-			description: 'ขั้นกรรมาธิการ และ สส. ลงมติรับรายมาตรา'
-		},
-		mp3: {
-			title: 'สส. พิจารณา วาระ 3',
-			description: 'ขั้นลงมติเห็นชอบ'
-		},
-		senate1: {
-			title: 'สว. พิจารณา วาระ 1',
-			description: 'รับหลักการและตั้งกรรมาธิการ'
-		},
-		senate2: {
-			title: 'สว. พิจารณา วาระ 2',
-			description: 'ขั้นกรรมาธิการ และ สส. ลงมติรับรายมาตรา'
-		},
-		senate3: {
-			title: 'สว. พิจารณา วาระ 3',
-			description: 'ขั้นลงมติเห็นชอบ'
-		},
-		royalAssent: {
-			title: 'พระมหากษัตริย์ลงปรมาภิไธย',
-			description: ''
-		},
-		enforcement: {
-			title: 'ออกเป็นกฎหมาย',
-			description: ''
-		},
-		other: {
-			title: 'รับฟังความเห็น',
-			description: ''
-		}
-	};
 
 	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
@@ -135,40 +82,6 @@
 		const timeDifference = Math.abs(end.getTime() - start.getTime());
 		const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 		return daysDifference;
-	}
-
-	function getVoting(votingResultsId: number | undefined) {
-		if (votingResultsId === undefined) return undefined;
-		let voting: VoteCardProps['voting'] = {
-			id: Number(votingResultsId),
-			date: relatedVotingResults[Number(votingResultsId)].voting.date,
-			title: relatedVotingResults[Number(votingResultsId)].voting.title,
-			result: relatedVotingResults[Number(votingResultsId)].voting.result
-		};
-		return voting;
-	}
-
-	function getHighlightedVoteByGroups(id: number | undefined, eventType: string) {
-		if (id === undefined) return undefined;
-		let resultSummary = relatedVotingResults[id].resultSummary;
-		if (resultSummary.subResults) {
-			return resultSummary.subResults.map((subResult) => {
-				return {
-					name: subResult.affiliationName,
-					count: Number(subResult.agreed),
-					total: Number(subResult.total)
-				};
-			});
-		} else if (eventType.includes('senate')) {
-			return [
-				{
-					name: 'สว.',
-					count: Number(resultSummary.agreed),
-					total: Number(resultSummary.total)
-				}
-			];
-		}
-		return undefined;
 	}
 	$: innerWidth = 0;
 </script>
@@ -407,109 +320,26 @@
 					class="relative ml-2 border border-t-[transparent] border-e-[transparent] border-b-[transparent]"
 				>
 					{#each range(events.length - 1) as i}
-						<li class="mb-10 ms-4">
-							<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
-							<div class="flex flex-col md:flex-row">
-								<div class="flex flex-col ml-1 md:basis-1/3 md:pr-6">
-									<p>
-										{events[i].date.toLocaleDateString('th-TH', dateTimeFormat)}
-									</p>
-									<b>{eventDescription[events[i].type].title}</b>
-									<p>{eventDescription[events[i].type].description}</p>
-								</div>
-								{#if events[i].actionType === EventActionType.Voted && events[i].votedInVotingId}
-									<div class="flex flex-col w-full md:basis-2/3">
-										<p class="text-text-02">ผลการลงมติ</p>
-										<!-- TODO: add link go to voting detail page -->
-										<VoteCard
-											isFullWidth={true}
-											voting={getVoting(events[i].votedInVotingId)}
-											highlightedVoteByGroups={getHighlightedVoteByGroups(
-												events[i].votedInVotingId,
-												events[i].type
-											)}
-										/>
-									</div>
-								{/if}
-							</div>
-						</li>
+						<Progress
+							event={events[i]}
+							billStatus={bill.status}
+							{tooltipText}
+							{relatedVotingResults}
+							{mergedIntoBill}
+							{mergedIntoBillLatestEvent}
+						/>
 					{/each}
 				</ol>
-				<div title="End timeline">
+				<div>
 					<ol class="relative ml-2">
-						<li class="mb-10 ms-4">
-							{#if lastestEvent.status === EventStatus.Succeed || bill.status === BillStatus.Merged}
-								<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
-							{:else if lastestEvent.status === EventStatus.InProgress}
-								<CircleDash size={24} class="absolute -start-3 " color="#8D8D8D" />
-							{:else if lastestEvent.status === EventStatus.Failed}
-								<Misuse size={24} class="absolute -start-3" color="#981B00" />
-							{/if}
-							<div class="flex flex-col md:flex-row">
-								<div class="flex flex-col ml-1 md:basis-1/3 md:pr-6">
-									{#if !(lastestEvent.status === EventStatus.InProgress && bill.status === BillStatus.InProgress)}
-										<p>
-											{lastestEvent.date.toLocaleDateString('th-TH', dateTimeFormat)}
-										</p>
-									{/if}
-									<div
-										class={lastestEvent.status === EventStatus.InProgress &&
-										bill.status === BillStatus.InProgress
-											? 'text-text-02'
-											: 'text-text-primary'}
-									>
-										<b>{eventDescription[lastestEvent.type].title}</b>
-										<p>{eventDescription[lastestEvent.type].description}</p>
-									</div>
-								</div>
-								{#if lastestEvent.actionType === EventActionType.Voted && lastestEvent.votedInVotingId}
-									<div class="flex flex-col md:basis-2/3">
-										<p class="text-text-02">ผลการลงมติ</p>
-										<!-- TODO: add link go to voting detail page -->
-										<VoteCard
-											isFullWidth={true}
-											voting={getVoting(lastestEvent.votedInVotingId)}
-											highlightedVoteByGroups={getHighlightedVoteByGroups(
-												lastestEvent.votedInVotingId,
-												lastestEvent.type
-											)}
-										/>
-									</div>
-								{:else if lastestEvent.actionType === EventActionType.Enforced}
-									<div class="w-full pt-5 md:basis-2/3">
-										<RoyalGazette />
-										<Button
-											class="mt-1 ml-0.5"
-											href={lastestEvent.enforcementDocumentUrl}
-											target="_blank"
-											kind="tertiary"
-											icon={ArrowRight}
-											size="small">ดูประกาศราชกิจจา</Button
-										>
-									</div>
-								{:else if lastestEvent.actionType === EventActionType.Merged && mergedIntoBill}
-									<div class="flex flex-col gap-2 md:basis-2/3">
-										<DocumentMultiple_02 size={24} color="#2600A3" />
-										<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
-										<div class="w-full border border-gray-20 rounded-sm">
-											<BillCard
-												orientation="portrait"
-												nickname={mergedIntoBill.nickname}
-												status={mergedIntoBill.status}
-												billUrl="/bills/{mergedIntoBill.id}"
-												isFullWidth={true}
-												currentState={mergedIntoBillLatestEvent
-													? eventDescription[mergedIntoBillLatestEvent.type].title
-													: ''}
-											/>
-										</div>
-										<div class="text-text-02">
-											{tooltipText}
-										</div>
-									</div>
-								{/if}
-							</div>
-						</li>
+						<Progress
+							event={lastestEvent}
+							billStatus={bill.status}
+							{tooltipText}
+							{relatedVotingResults}
+							{mergedIntoBill}
+							{mergedIntoBillLatestEvent}
+						/>
 					</ol>
 				</div>
 			</div>

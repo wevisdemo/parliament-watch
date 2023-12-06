@@ -40,6 +40,7 @@
 	export let voting: VoteCardProps['voting'] = {} as Voting;
 	export let highlightedVoteByGroups: VoteCardProps['highlightedVoteByGroups'] = [];
 	export let isFullWidth = false;
+	export let link = '/';
 
 	interface HighlightedVoteSummary {
 		totalCount: number;
@@ -73,8 +74,7 @@
 	<p class="body-compact-01 text-text-02">
 		{dayjs(voting.date).format('D MMM BB')}
 	</p>
-	<!-- TODO add link -->
-	<a class="vote-card--url after:inset no-underline after:absolute w-56" href="/">
+	<a class="vote-card--url after:inset no-underline after:absolute w-56" href={link}>
 		<h3 class="fluid-heading-03 text-text-01">{voting.title}</h3>
 	</a>
 	<section class="vote-card__result flex flex-col gap-y-2 w-56">
