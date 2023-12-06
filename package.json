@@ -25,7 +25,6 @@
 		"*": "prettier --plugin-search-dir . --write --ignore-unknown"
 	},
 	"dependencies": {
-		"@sveltejs/adapter-static": "^2.0.3",
 		"d3": "^7.8.5",
 		"dayjs": "^1.11.10",
 		"scrollama": "^3.2.0"
@@ -34,7 +33,7 @@
 		"@commitlint/cli": "^17.7.0",
 		"@commitlint/config-conventional": "^17.7.0",
 		"@histoire/plugin-svelte": "^0.17.0",
-		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/d3": "^7.4.1",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
