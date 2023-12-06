@@ -24,9 +24,8 @@
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies">รัฐสภา</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies/representatives-26">สภาผู้แทนราษฎร</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies/representatives-26/members/party" isCurrentPage
+	<BreadcrumbItem href="/assemblies/{assembly.id}">{assembly.name} {assembly.term}</BreadcrumbItem>
+	<BreadcrumbItem href="/assemblies/{assembly.id}/members/party" isCurrentPage
 		>รายชื่อสมาชิก</BreadcrumbItem
 	>
 </Breadcrumb>
