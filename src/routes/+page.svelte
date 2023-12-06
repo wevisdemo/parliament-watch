@@ -1,3 +1,9 @@
+<script lang="ts">
+	import { Accordion, AccordionItem } from 'carbon-components-svelte';
+
+	export let data;
+</script>
+
 <div class="p-4 space-y-6">
 	<h1 class="fluid-display-01 text-blue-60">Parliament Watch 👀</h1>
 
@@ -37,6 +43,12 @@
 			</ul>
 		</li>
 	</ul>
+</div>
+
+<div class="p-4">
+	<Accordion>
+		<AccordionItem title="Data"><p>{JSON.stringify(data, null, 2)}</p></AccordionItem>
+	</Accordion>
 </div>
 
 <style lang="postcss">
