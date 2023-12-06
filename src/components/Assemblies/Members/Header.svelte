@@ -16,7 +16,9 @@
 
 	export let searchQuery = '';
 	export let mounted = false;
-	$: startedYear = assembly?.startedAt ? assembly.startedAt.getFullYear() + 543 : null;
+	$: startedYear = assembly?.startedAt
+		? assembly.startedAt.toLocaleDateString('th-TH', { year: 'numeric' })
+		: null;
 </script>
 
 <Breadcrumb

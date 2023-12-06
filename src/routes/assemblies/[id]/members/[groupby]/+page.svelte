@@ -15,10 +15,11 @@
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 	import type { PoliticianGroupBy } from './+page.js';
+	import { GroupByOption } from './groupby-options.js';
 
 	export let data;
 	$: ({ groups, groupByTabs } = data);
-	$: currentPath = groupByTabs.find((e) => e.isActive)?.path ?? '';
+	$: currentPath = groupByTabs.find(({ isActive }) => isActive)?.path ?? '';
 
 	let showFilter = true;
 	let searchQuery = '';
@@ -38,7 +39,10 @@
 									...subgroup,
 									members: subgroup.members.filter((member) => {
 										return (
-											(member.firstname + ' ' + member.lastname).includes(formattedSearchQuery) &&
+											(formattedSearchQuery === '' ||
+												(member.firstname + ' ' + member.lastname).includes(
+													formattedSearchQuery
+												)) &&
 											((isByDistrict && member.candidateType === 'แบ่งเขต') ||
 												(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
 										);
@@ -50,31 +54,37 @@
 					return group.name.includes(formattedSearchQuery);
 			  }) as PoliticianGroupBy);
 
+	const getSubgroupHeadingId = (group: { name: string }, name: string) =>
+		`${group.name}-${name}`.replaceAll(' ', '-');
+
+	let memberListSectionRef: HTMLDivElement;
+
 	let isMobile = false;
 	let mounted = false;
-	let currentCatg = '';
+	let currentCategory = '';
 	onMount(() => {
 		mounted = true;
 
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		isMobile = !showFilter;
 		if (showFilter) {
-			currentCatg = (
-				groups[0].name +
-				'-' +
-				('subgroups' in groups[0] ? groups[0].subgroups[0].name : '')
-			).replace(/ /g, '-');
+			currentCategory = getSubgroupHeadingId(
+				groups[0],
+				'subgroups' in groups[0] ? groups[0].subgroups[0].name : ''
+			);
 
 			const scroller = scrollama();
 
 			scroller
 				.setup({
-					step: '.member-subcategory',
+					step: [
+						...memberListSectionRef.getElementsByClassName('member-subcategory')
+					] as HTMLElement[],
 					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
 					offset: '128px'
 				})
 				.onStepEnter((response) => {
-					currentCatg = response.element.children[0].id;
+					currentCategory = response.element.children[0].id;
 				});
 
 			return scroller.destroy;
@@ -87,12 +97,7 @@
 <div class="relative flex">
 	{#if showFilter}
 		<aside
-			class={[
-				'flex flex-col gap-4 px-6 bg-white',
-				'fixed left-0 right-0 top-0 bottom-0 z-40',
-				'md:sticky md:top-[80px] md:w-[250px] md:h-[calc(100dvh-80px)] md:flex-none md:z-0',
-				'member-aside'
-			].join(' ')}
+			class="member-aside flex flex-col gap-4 px-6 bg-white fixed left-0 right-0 top-0 bottom-0 z-40 md:sticky md:top-[80px] md:w-[250px] md:h-[calc(100dvh-80px)] md:flex-none md:z-0"
 		>
 			<div class="flex -mr-6 md:mr-0">
 				<Search
@@ -116,7 +121,7 @@
 					/>
 				</div>
 			</div>
-			{#if currentPath === 'party'}
+			{#if currentPath === GroupByOption.Party}
 				<FormGroup legendText="ประเภท" noMargin>
 					<div class="flex items-center justify-between overflow-hidden">
 						<Checkbox
@@ -137,10 +142,10 @@
 			<div class="flex-[1_1_auto] h-0 overflow-y-auto">
 				<Accordion class="accordion-content-full" skeleton={!mounted}>
 					{#each filteredGroup as group (group.name)}
-						<AccordionItem open={currentPath === 'party'}>
+						<AccordionItem open={currentPath === GroupByOption.Party}>
 							<span slot="title" class="font-semibold"
 								>{group.name}
-								{#if !['party', 'province'].includes(currentPath) && 'subgroups' in group}
+								{#if currentPath !== GroupByOption.Party && currentPath !== GroupByOption.Province && 'subgroups' in group}
 									<span class="font-normal text-gray-60"
 										>({group.subgroups.map((e) => e.members.length).reduce((a, c) => a + c)})</span
 									>
@@ -151,10 +156,9 @@
 									{#each group.subgroups as { name, members, icon } (name)}
 										<li class="border-b border-b-solid border-b-gray-30 last:border-none">
 											<a
-												href="#{group.name.replace(/ /g, '-')}-{name.replace(/ /g, '-')}"
+												href="#{getSubgroupHeadingId(group, name)}"
 												class="flex items-center gap-2 body-01 text-gray-100 py-2 px-4 hover:bg-ui-03"
-												class:font-semibold={currentCatg ===
-													(group.name + '-' + name).replace(/ /g, '-')}
+												class:font-semibold={currentCategory === getSubgroupHeadingId(group, name)}
 												on:click={() => {
 													isMobile && (showFilter = false);
 												}}
@@ -183,33 +187,25 @@
 			</div>
 		</aside>
 	{/if}
-	<div class="flex-1 p-4 text-gray-100 flex flex-col gap-4">
+	<div bind:this={memberListSectionRef} class="flex-1 p-4 text-gray-100 flex flex-col gap-4">
 		{#each filteredGroup as group (group.name)}
 			<section>
 				<h2 class="py-[6px] text-gray-60 fluid-heading-04">{group.name}</h2>
 				{#if 'subgroups' in group}
-					{#each group.subgroups as { name: sgroup_name, members } (sgroup_name)}
+					{#each group.subgroups as { name: subGroupName, members } (subGroupName)}
 						<article class="member-subcategory">
 							<h3
-								id="{group.name.replace(/ /g, '-')}-{sgroup_name.replace(/ /g, '-')}"
+								id={getSubgroupHeadingId(group, subGroupName)}
 								class="flex items-baseline gap-2 p-4 mb-2 border-b border-solid border-b-gray-30 heading-compact-02 font-semibold"
 							>
-								{sgroup_name}
+								{subGroupName}
 								<span class="body-01 text-gray-60"
-									>{members.length} {currentPath === 'province' ? 'เขต' : 'คน'}</span
+									>{members.length} {currentPath === GroupByOption.Province ? 'เขต' : 'คน'}</span
 								>
 							</h3>
 							<div class="flex gap-y-2 flex-wrap">
-								{#each members as { id, avatar, firstname, lastname, role, isActive, party }, idx (id + idx)}
-									<PoliticianProfile
-										{id}
-										{avatar}
-										{firstname}
-										{lastname}
-										{role}
-										{isActive}
-										{party}
-									/>
+								{#each members as member, idx (member.id + idx)}
+									<PoliticianProfile {...member} />
 								{/each}
 							</div>
 						</article>
