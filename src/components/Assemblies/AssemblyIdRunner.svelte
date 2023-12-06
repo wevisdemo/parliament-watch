@@ -30,7 +30,6 @@
 
 	const checkIfFirstAssembly = () => {
 		const current = assemblyIds.findIndex((id) => id === currentId);
-		console.log(current, assemblyIds);
 		return current === 0;
 	};
 </script>

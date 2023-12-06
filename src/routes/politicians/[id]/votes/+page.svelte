@@ -123,7 +123,7 @@
 		{ key: 'title', value: 'ชื่อมติ' },
 		{ key: 'voteOption', value: 'การลงมติ' },
 		{ key: 'result', value: 'ผลลัพธ์' },
-		{ key: 'files', value: 'เอกสาร' }
+		{ key: 'files', value: 'เอก สาร' }
 	]}
 	bind:searchQuery
 	bind:selectedCheckboxValue
