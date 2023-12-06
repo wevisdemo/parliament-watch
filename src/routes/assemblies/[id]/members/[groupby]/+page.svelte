@@ -69,7 +69,7 @@
 
 			scroller
 				.setup({
-					step: '.subcategory',
+					step: '.member-subcategory',
 					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
 					offset: '128px'
 				})
@@ -189,7 +189,7 @@
 				<h2 class="py-[6px] text-gray-60 fluid-heading-04">{group.name}</h2>
 				{#if 'subgroups' in group}
 					{#each group.subgroups as { name: sgroup_name, members } (sgroup_name)}
-						<article class="subcategory">
+						<article class="member-subcategory">
 							<h3
 								id="{group.name.replace(/ /g, '-')}-{sgroup_name.replace(/ /g, '-')}"
 								class="flex items-baseline gap-2 p-4 mb-2 border-b border-solid border-b-gray-30 heading-compact-02 font-semibold"
@@ -237,7 +237,7 @@
 </div>
 
 <style>
-	.subcategory > h3 {
-		scroll-margin-top: 80px;
+	.member-subcategory > h3 {
+		scroll-margin-top: 128px;
 	}
 </style>
