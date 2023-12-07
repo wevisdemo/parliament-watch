@@ -27,7 +27,7 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/assemblies/{assembly.id}">{assembly.name} {assembly.term}</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies/{assembly.id}/members/party" isCurrentPage
+	<BreadcrumbItem href="/assemblies/{assembly.id}/members" isCurrentPage
 		>รายชื่อสมาชิก</BreadcrumbItem
 	>
 </Breadcrumb>
