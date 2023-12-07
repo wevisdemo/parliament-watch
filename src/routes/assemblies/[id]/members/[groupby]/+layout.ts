@@ -2,9 +2,9 @@ import type { Assembly } from '$models/assembly';
 import { rep26, sen12 } from '../../../../../mocks/data/assembly.js';
 import { GroupByOption, groupByOptionLabelMap } from './groupby-options.js';
 
-type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
+export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
-interface GroupByTab {
+export interface GroupByTab {
 	path: string;
 	label: string;
 	isActive: boolean;
