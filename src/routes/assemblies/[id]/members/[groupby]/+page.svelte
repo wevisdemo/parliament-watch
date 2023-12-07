@@ -54,10 +54,10 @@
 					return group.name.includes(formattedSearchQuery);
 			  }) as PoliticianGroupBy);
 
-	const getSubgroupHeadingId = (group: { name: string }, name: string) =>
-		`${group.name}-${name}`.replaceAll(' ', '-');
+	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
+		(name ? `${group.name}-${name}` : group.name).replaceAll(' ', '-');
 
-	let memberListSectionRef: HTMLDivElement;
+	let memberListSectionRef: HTMLElement;
 
 	let isMobile = false;
 	let mounted = false;
@@ -139,59 +139,97 @@
 					</div>
 				</FormGroup>
 			{/if}
-			<div class="flex-[1_1_auto] h-0 overflow-y-auto">
-				<Accordion class="accordion-content-full" skeleton={!mounted}>
-					{#each filteredGroup as group (group.name)}
-						<AccordionItem open={currentPath === GroupByOption.Party}>
-							<span slot="title" class="font-semibold"
-								>{group.name}
-								{#if currentPath !== GroupByOption.Party && currentPath !== GroupByOption.Province && 'subgroups' in group}
-									<span class="font-normal text-gray-60"
-										>({group.subgroups.map((e) => e.members.length).reduce((a, c) => a + c)})</span
-									>
-								{/if}
-							</span>
+			<div class="overflow-y-auto">
+				{#if filteredGroup.every((group) => 'subgroups' in group)}
+					<Accordion class="accordion-content-full" skeleton={!mounted}>
+						{#each filteredGroup as group (group.name)}
 							{#if 'subgroups' in group}
-								<ul class="flex flex-col">
-									{#each group.subgroups as { name, members, icon } (name)}
-										<li class="border-b border-b-solid border-b-gray-30 last:border-none">
-											<a
-												href="#{getSubgroupHeadingId(group, name)}"
-												class="flex items-center gap-2 body-01 text-gray-100 py-2 px-4 hover:bg-ui-03"
-												class:font-semibold={currentCategory === getSubgroupHeadingId(group, name)}
-												on:click={() => {
-													isMobile && (showFilter = false);
-												}}
+								<AccordionItem open={currentPath === GroupByOption.Party}>
+									<span slot="title" class="font-semibold"
+										>{group.name}
+										{#if currentPath !== GroupByOption.Party && currentPath !== GroupByOption.Province}
+											<span class="font-normal text-gray-60"
+												>({group.subgroups
+													.map((e) => e.members.length)
+													.reduce((a, c) => a + c)})</span
 											>
-												{#if icon}
-													<img
-														src={icon}
-														alt=""
-														width="16"
-														height="16"
-														class="aspect-square object-cover border border-solid border-gray-30 rounded-full bg-white"
-													/>
-												{/if}
-												<span class="mr-auto">
-													{name}
-												</span>
-												<span class="text-gray-60">{members.length}</span>
-											</a>
-										</li>
-									{/each}
-								</ul>
+										{/if}
+									</span>
+									<ul class="flex flex-col">
+										{#each group.subgroups as { name, members, icon } (name)}
+											<li class="border-b border-b-solid border-b-gray-30 last:border-none">
+												<a
+													href="#{getSubgroupHeadingId(group, name)}"
+													class="flex items-center gap-2 body-01 text-gray-100 py-2 px-4 hover:bg-ui-03"
+													class:font-semibold={currentCategory ===
+														getSubgroupHeadingId(group, name)}
+													on:click={() => {
+														isMobile && (showFilter = false);
+													}}
+												>
+													{#if icon}
+														<img
+															src={icon}
+															alt=""
+															width="16"
+															height="16"
+															class="aspect-square object-cover border border-solid border-gray-30 rounded-full bg-white"
+														/>
+													{/if}
+													<span class="mr-auto">
+														{name}
+													</span>
+													<span class="text-gray-60">{members.length}</span>
+												</a>
+											</li>
+										{/each}
+									</ul>
+								</AccordionItem>
 							{/if}
-						</AccordionItem>
-					{/each}
-				</Accordion>
+						{/each}
+					</Accordion>
+				{:else}
+					<ul class="flex flex-col">
+						{#each filteredGroup as group (group.name)}
+							{#if !('subgroups' in group)}
+								<li
+									class="border-b border-b-solid border-b-gray-30 first:border-t first:border-t-solid first:border-t-gray-30"
+								>
+									<a
+										href="#{getSubgroupHeadingId(group)}"
+										class="flex items-center gap-2 body-01 text-gray-100 py-2 px-4 hover:bg-ui-03"
+										class:font-semibold={currentCategory === getSubgroupHeadingId(group)}
+										on:click={() => {
+											isMobile && (showFilter = false);
+										}}
+									>
+										{#if group.icon}
+											<img
+												src={group.icon}
+												alt=""
+												width="16"
+												height="16"
+												class="aspect-square object-cover border border-solid border-gray-30 rounded-full bg-white"
+											/>
+										{/if}
+										<span class="mr-auto">
+											{group.name}
+										</span>
+										<span class="text-gray-60">{group.members.length}</span>
+									</a>
+								</li>
+							{/if}
+						{/each}
+					</ul>
+				{/if}
 			</div>
 		</aside>
 	{/if}
-	<div bind:this={memberListSectionRef} class="flex-1 p-4 text-gray-100 flex flex-col gap-4">
+	<section bind:this={memberListSectionRef} class="flex-1 p-4 text-gray-100 flex flex-col gap-4">
 		{#each filteredGroup as group (group.name)}
-			<section>
-				<h2 class="py-[6px] text-gray-60 fluid-heading-04">{group.name}</h2>
-				{#if 'subgroups' in group}
+			{#if 'subgroups' in group}
+				<div>
+					<h2 class="py-[6px] text-gray-60 fluid-heading-04">{group.name}</h2>
 					{#each group.subgroups as { name: subGroupName, members } (subGroupName)}
 						<article class="member-subcategory">
 							<h3
@@ -210,10 +248,27 @@
 							</div>
 						</article>
 					{/each}
-				{/if}
-			</section>
+				</div>
+			{:else}
+				<div class="member-subcategory">
+					<h2
+						id={getSubgroupHeadingId(group)}
+						class="flex items-baseline gap-2 p-4 mb-2 border-b border-solid border-b-gray-30 heading-compact-02 font-semibold"
+					>
+						{group.name}
+						<span class="body-01 text-gray-60"
+							>{group.members.length} {currentPath === GroupByOption.Province ? 'เขต' : 'คน'}</span
+						>
+					</h2>
+					<article class="flex gap-y-2 flex-wrap">
+						{#each group.members as member, idx (member.id + idx)}
+							<PoliticianProfile {...member} />
+						{/each}
+					</article>
+				</div>
+			{/if}
 		{/each}
-	</div>
+	</section>
 </div>
 <div class="flex-none sticky bottom-0 md:hidden">
 	{#if !showFilter}
@@ -233,7 +288,8 @@
 </div>
 
 <style>
-	.member-subcategory > h3 {
+	.member-subcategory > h2[id],
+	.member-subcategory > h3[id] {
 		scroll-margin-top: 128px;
 	}
 </style>
