@@ -113,7 +113,10 @@
 <DataPage
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
-		{ url: `/politicians/${politician.id}`, label: politician.firstname },
+		{
+			url: `/politicians/${politician.id}`,
+			label: `${politician.firstname} ${politician.lastname}`
+		},
 		{ url: `/politicians/${politician.id}/votes`, label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
