@@ -12,7 +12,11 @@ import {
 	mockCategory,
 	passedVoting
 } from '../../../../mocks/data/voting.js';
-import { fetchAssemblies } from '../../../../libs/datasheets/index.js';
+import {
+	fetchAssemblies,
+	fetchFromIdOr404,
+	fetchPoliticians
+} from '../../../../libs/datasheets/index.js';
 
 interface VoteSummary
 	extends Pick<
@@ -31,14 +35,7 @@ interface FilterOptions {
 type PoliticianSummary = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'lastname'>;
 
 export async function load({ params }) {
-	const [firstname, lastname] = params.id.split('-');
-
-	const politician: PoliticianSummary = {
-		id: `${firstname}-${lastname}`,
-		prefix: 'นาย',
-		firstname,
-		lastname
-	};
+	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
 
 	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
 		id: i,
@@ -65,5 +62,16 @@ export async function load({ params }) {
 		categories: [...new Set(votes.flatMap(({ categories }) => categories))]
 	};
 
-	return { politician, filterOptions, votes };
+	const politicianSummary: PoliticianSummary = (({ id, prefix, firstname, lastname }) => ({
+		id,
+		prefix,
+		firstname,
+		lastname
+	}))(politician);
+
+	return {
+		politician: politicianSummary,
+		filterOptions,
+		votes
+	};
 }
