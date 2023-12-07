@@ -9,7 +9,7 @@
 
 	<ul>
 		<li>
-			<a href="/politicians/สมชาติ-สกุลสมมุติ"
+			<a href="/politicians/กรณิศ-งามสุคนธ์รัตนา"
 				>[WEV-12] Users can learn about a politician's details</a
 			>
 		</li>

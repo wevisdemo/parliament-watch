@@ -1,9 +1,6 @@
-import type { Politician } from '../../../models/politician';
-import { movingForwardParty } from '../../../mocks/data/party';
 import type { Voting } from '$models/voting';
 import { failedVoting, passedVoting } from '../../../mocks/data/voting';
-import { fetchAssemblies } from '../../../libs/datasheets';
-import type { Assembly } from '$models/assembly';
+import { fetchFromIdOr404, fetchPoliticians } from '../../../libs/datasheets';
 
 interface VotingHistory {
 	total: number;
@@ -17,52 +14,7 @@ interface VotingAbsentStats {
 }
 
 export async function load({ params }) {
-	const [firstname, lastname] = params.id.split('-');
-
-	const rep26 = (await fetchAssemblies()).find(
-		({ id }) => id === 'สมาชิกสภาผู้แทนราษฎร-26'
-	) as Assembly;
-
-	const politician: Politician = {
-		id: params.id,
-		prefix: 'นาย',
-		firstname,
-		lastname,
-		isActive: true,
-		avatar: 'https://placehold.co/800?text=avatar',
-		sex: 'ชาย',
-		birthdate: new Date('1999-02-12'),
-		educations: ['ปริญญาเอก University of Toulouse, France'],
-		previousOccupations: ['อาจารย์คณะนิติศาสตร์ มหาวิทยาลัยธรรมศาสตร์'],
-		assetValue: 3490000000,
-		debtValue: 39494040,
-		contacts: [
-			{ label: 'Facebook', url: 'https://facebook.com' },
-			{ label: 'Twitter', url: 'https://twitter.com' }
-		],
-		assemblyRoles: [
-			{ role: 'สมาชิกแบบบัญชีรายชื่อ', assembly: rep26, startedAt: new Date('2023-01-01') },
-			{
-				role: 'รองประธานสภา คนที่ 1',
-				assembly: rep26,
-				startedAt: new Date('2023-01-01'),
-				endedAt: new Date('2023-06-12')
-			}
-		],
-		partyRoles: [
-			{
-				role: 'เลขาธิการพรรค',
-				party: movingForwardParty,
-				startedAt: new Date('2023-05-01')
-			},
-			{
-				role: 'หัวหน้าพรรค',
-				party: movingForwardParty,
-				startedAt: new Date('2023-01-01'),
-				endedAt: new Date('2023-05-01')
-			}
-		]
-	};
+	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
 
 	const mockLatestVoting: VotingHistory['latest'] = [
 		failedVoting,

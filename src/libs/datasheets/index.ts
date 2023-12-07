@@ -6,6 +6,7 @@ import {
 	createPartyRoleSchema,
 	createPoliticianSchema
 } from '$models/politician';
+import { error } from '@sveltejs/kit';
 
 export const fetchAssemblies = () => fetchAndParseSheet('Assemblies', assemblySchema);
 export const fetchParties = () => fetchAndParseSheet('Parties', partySchema);
@@ -21,3 +22,16 @@ export const fetchPoliticians = async () =>
 		'Politicians',
 		createPoliticianSchema(await fetchPartyRoleHistory(), await fetchAssemblyRoleHistory())
 	);
+
+export async function fetchFromIdOr404<T extends { id: string }>(
+	fetcher: () => Promise<T[]>,
+	id: string
+) {
+	const data = (await fetcher()).find((item) => item.id === id);
+
+	if (!data) {
+		throw error(404, { message: `id ${id} was not found with ${fetcher.name}` });
+	}
+
+	return data;
+}

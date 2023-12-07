@@ -13,7 +13,7 @@ export const partySchema = z
 			name,
 			color,
 			// TODO: map logo url
-			logo: `https://placehold.co/64x64/${color}/white?text=P`
+			logo: `https://placehold.co/64x64/${color.replace('#', '')}/white?text=party`
 		};
 	});
 
