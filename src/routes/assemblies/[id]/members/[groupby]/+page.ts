@@ -16,7 +16,7 @@ interface PoliticianGroup {
 	members: PoliticianSummary[];
 }
 
-type PoliticianGroupBy =
+export type PoliticianGroupBy =
 	| PoliticianGroup[]
 	| {
 			name: string;
