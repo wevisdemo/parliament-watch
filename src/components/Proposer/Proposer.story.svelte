@@ -3,7 +3,6 @@
 	import Proposer from './Proposer.svelte';
 	import { AssemblyName, type Assembly } from '$models/assembly';
 	import { movingForwardPolitician } from '../../mocks/data/politician';
-	import { movingForwardParty } from '../../mocks/data/party';
 
 	const rep26: Assembly = {
 		id: 'สมาชิกสภาผู้แทนราษฎร-26',
@@ -31,7 +30,11 @@
 			partyPolitician={{
 				politician: movingForwardPolitician,
 				assembly: rep26,
-				party: movingForwardParty
+				party: {
+					name: 'ก้าวไกล',
+					logo: 'https://www.moveforwardparty.org/wp-content/uploads/2021/03/400px-Move_Forward_Party_Logo.svg.png',
+					color: '#ff7f00'
+				}
 			}}
 		/>
 	</Hst.Variant>
