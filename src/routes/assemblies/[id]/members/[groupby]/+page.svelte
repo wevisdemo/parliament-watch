@@ -52,8 +52,21 @@
 							})
 						};
 					}
-					return group.name.includes(formattedSearchQuery);
+					return {
+						...group,
+						members: group.members.filter((member) => {
+							return (
+								(formattedSearchQuery === '' ||
+									(member.firstname + ' ' + member.lastname).includes(formattedSearchQuery)) &&
+								((isByDistrict && member.candidateType === 'แบ่งเขต') ||
+									(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
+							);
+						})
+					};
 			  }) as PoliticianGroupBy);
+	$: isDataHasSubgroup = [...filteredGroup].every(
+		(group: PoliticianGroupBy[number]) => 'subgroups' in group
+	);
 
 	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
 		(name ? `${group.name}-${name}` : group.name).replaceAll(' ', '-');
@@ -141,7 +154,7 @@
 				</FormGroup>
 			{/if}
 			<div class="overflow-y-auto">
-				{#if filteredGroup.every((group) => 'subgroups' in group)}
+				{#if isDataHasSubgroup}
 					<Accordion class="accordion-content-full" skeleton={!mounted}>
 						{#each filteredGroup as group (group.name)}
 							{#if 'subgroups' in group}
