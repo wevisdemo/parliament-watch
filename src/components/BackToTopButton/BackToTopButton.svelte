@@ -37,25 +37,23 @@
 	}
 
 	onMount(() => {
-		window.addEventListener('scroll', onScroll);
+		window.addEventListener('scroll', onScroll, { passive: true });
 
 		// Call onScroll() for  the first time.
 		onScroll();
-	});
 
-	onDestroy(() => {
-		window.removeEventListener('scroll', onScroll);
+		return () => window.removeEventListener('scroll', onScroll);
 	});
 </script>
 
 {#if show}
 	<button
 		class="back-to-top-button"
-		style="--size:{size}px; 
+		style="--size:{size}px;
             --padding:{padding}px;
-            --color:{color}; 
-            --bgColor:{bgColor}; 
-            --border:{border}px; 
+            --color:{color};
+            --bgColor:{bgColor};
+            --border:{border}px;
             --border-radius:{borderRadius}px;
             --margin:{margin}px;
             --scale: {scale}"
