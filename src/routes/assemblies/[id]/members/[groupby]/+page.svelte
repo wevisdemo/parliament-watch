@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Header from '$components/Assemblies/Members/Header.svelte';
 	import Tab from '$components/Assemblies/Members/Tab.svelte';
+	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 	import {
 		Accordion,
@@ -286,6 +287,7 @@
 		/>
 	{/if}
 </div>
+<BackToTopButton padding={10} border={1} margin={12} showAt={80} />
 
 <style>
 	.member-subcategory > h2[id],
