@@ -16,7 +16,7 @@
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 	import type { PoliticianGroupBy } from './+page.js';
-	import { GroupByOption } from './groupby-options.js';
+	import { GroupByOption } from './groupby.js';
 
 	export let data;
 	$: ({ groups, groupByTabs } = data);
