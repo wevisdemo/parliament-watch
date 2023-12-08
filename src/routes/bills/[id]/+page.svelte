@@ -96,7 +96,7 @@
 	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage>{bill.nickname}</BreadcrumbItem>
 </Breadcrumb>
 
-<div class="flex flex-col w-full">
+<div class="flex flex-col max-w-[1200px] mx-auto w-full">
 	<section class="px-4 py-8 md:px-16 md:py-12">
 		<div class="flex flex-col gap-1">
 			<h1 class="fluid-heading-05 text-text-primary">{bill.nickname}</h1>
@@ -216,10 +216,16 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
-				<!-- TODO: add label and link -->
-				<DownloadData links={[{ label: 'เอกสารxxxx', url: '/' }]} />
-				<!-- TODO: add update info -->
-				<p class="label-01 text-text-02">อัปเดตข้อมูล: 18 ส.ค. 2566</p>
+				{#if bill.attachment}
+					<DownloadData links={[{ label: bill.attachment.label, url: bill.attachment.url }]} />
+				{/if}
+				<p class="label-01 text-text-02">
+					อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+						year: 'numeric',
+						month: 'short',
+						day: 'numeric'
+					})}
+				</p>
 				<!-- TODO: add link -->
 				<a href="/" class="mr-auto helper-text-01 underline"> ที่มาและข้อจำกัดข้อมูล </a>
 				<Share label="แชร์มติ" />
