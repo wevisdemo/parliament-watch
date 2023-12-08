@@ -15,11 +15,11 @@
 	import SearchLocate from 'carbon-icons-svelte/lib/SearchLocate.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
-	import type { PoliticianGroupBy } from './+page.js';
+	import type { PoliticianSummaryGroupBy } from './+page.js';
 	import { GroupByOption } from './groupby.js';
 
 	export let data;
-	$: ({ groups, groupByTabs } = data);
+	$: ({ groups, groupByTabs, isDataHasSubgroup } = data);
 	$: currentPath = groupByTabs.find(({ isActive }) => isActive)?.path ?? '';
 
 	let showFilter = true;
@@ -63,10 +63,7 @@
 							);
 						})
 					};
-			  }) as PoliticianGroupBy);
-	$: isDataHasSubgroup = [...filteredGroup].every(
-		(group: PoliticianGroupBy[number]) => 'subgroups' in group
-	);
+			  }) as PoliticianSummaryGroupBy);
 
 	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
 		(name ? `${group.name}-${name}` : group.name).replaceAll(' ', '-');
