@@ -82,7 +82,9 @@ export async function load({ params }) {
 
 	const summary: Summary = {
 		totalMembers: members.length,
-		highlightGroup: parseMemberGroup(isSenates ? GroupByOption.Origin : GroupByOption.Party),
+		highlightGroup: parseMemberGroup(
+			isSenates ? GroupByOption.AppointmentMethod : GroupByOption.Party
+		),
 		groupBySex: parseMemberGroup(GroupByOption.Sex),
 		groupByAgeRange: parseMemberGroup(GroupByOption.Age),
 		groupByEducation: parseMemberGroup(GroupByOption.Education)

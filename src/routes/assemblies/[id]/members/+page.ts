@@ -8,6 +8,8 @@ export async function load({ params }) {
 
 	throw redirect(
 		307,
-		`members/${assembly.name === AssemblyName.Senates ? GroupByOption.Origin : GroupByOption.Party}`
+		`members/${
+			assembly.name === AssemblyName.Senates ? GroupByOption.AppointmentMethod : GroupByOption.Party
+		}`
 	);
 }

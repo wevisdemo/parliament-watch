@@ -24,7 +24,7 @@ interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isL
 export enum GroupByOption {
 	Party = 'party',
 	Province = 'province',
-	Origin = 'origin',
+	AppointmentMethod = 'appointment-method',
 	Sex = 'sex',
 	Age = 'age',
 	Education = 'education'
@@ -35,7 +35,7 @@ export enum GroupByOption {
 export const groupByOptionLabelMap = new Map<GroupByOption, string>([
 	[GroupByOption.Party, 'พรรค'],
 	[GroupByOption.Province, 'จังหวัด'],
-	[GroupByOption.Origin, 'ที่มา'],
+	[GroupByOption.AppointmentMethod, 'ที่มา'],
 	[GroupByOption.Sex, 'เพศสภาพ'],
 	[GroupByOption.Age, 'รุ่นอายุ'],
 	[GroupByOption.Education, 'การศึกษา']
@@ -77,7 +77,7 @@ export function getMemberGroup(
 			}));
 		}
 
-		case GroupByOption.Origin: {
+		case GroupByOption.AppointmentMethod: {
 			return createSubgroupByPartyOrAppointmentMethod(members, isSenates);
 		}
 
