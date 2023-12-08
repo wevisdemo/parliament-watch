@@ -4,20 +4,20 @@ import type { AssemblyMember } from '../../data';
 import type { Assembly } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
 
-interface PoliticianGroup {
+export interface PoliticianGroup {
 	name: string;
 	icon?: string;
 	members: AssemblyMember[];
 }
 
-export type PoliticianGroupBy =
-	| PoliticianGroup[]
-	| {
-			name: string;
-			subgroups: PoliticianGroup[];
-	  }[];
+export interface PoliticianSubGroup {
+	name: string;
+	subgroups: PoliticianGroup[];
+}
 
-interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isLarge'> {
+export type PoliticianGroupBy = PoliticianGroup[] | PoliticianSubGroup[];
+
+export interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isLarge'> {
 	candidateType?: 'แบ่งเขต' | 'บัญชีรายชื่อ';
 }
 
@@ -142,7 +142,7 @@ export function getMemberGroup(
 export function groupMembersBy<T>(
 	members: AssemblyMember[],
 	groupBy: (member: AssemblyMember) => T | undefined
-): [T, politicians: AssemblyMember[]][] {
+): [T, AssemblyMember[]][] {
 	const groupMap = members.reduce((map, member) => {
 		const group = groupBy(member);
 		if (group) {
