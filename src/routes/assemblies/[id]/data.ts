@@ -1,6 +1,6 @@
 import type { Assembly } from '$models/assembly';
 import dayjs from 'dayjs';
-import { fetchPoliticians } from '../../../libs/datasheets';
+import { fetchPoliticians } from '$lib/datasheets';
 
 export const fetchAssemblyMembers = async (assembly: Assembly) =>
 	(await fetchPoliticians())

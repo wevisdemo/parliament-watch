@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Assembly } from './assembly';
 import type { Link } from './link';
 import type { Party } from './party';
-import { joinMany, parseMarkdownListToArrayOfItems, safeFind } from '../libs/datasheets/processor';
+import { joinMany, parseMarkdownListToArrayOfItems, safeFind } from '$lib/datasheets/processor';
 
 export const createPoliticianSchema = (
 	partyRoleHistory: PartyRoleHistory[],
