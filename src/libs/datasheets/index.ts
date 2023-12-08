@@ -1,5 +1,5 @@
 import { fetchAndParseSheet } from './processor';
-import { assemblySchema } from '$models/assembly';
+import { createAssemblySchema } from '$models/assembly';
 import { partySchema } from '$models/party';
 import {
 	createAssemblyRoleSchema,
@@ -8,8 +8,10 @@ import {
 } from '$models/politician';
 import { error } from '@sveltejs/kit';
 
-export const fetchAssemblies = () => fetchAndParseSheet('Assemblies', assemblySchema);
 export const fetchParties = () => fetchAndParseSheet('Parties', partySchema);
+
+export const fetchAssemblies = async () =>
+	fetchAndParseSheet('Assemblies', createAssemblySchema(await fetchParties()));
 
 export const fetchAssemblyRoleHistory = async () =>
 	fetchAndParseSheet('AssemblyRoleHistory', createAssemblyRoleSchema(await fetchAssemblies()));
