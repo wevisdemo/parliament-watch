@@ -255,7 +255,10 @@
 									>{members.length} {currentPath === GroupByOption.Province ? 'เขต' : 'คน'}</span
 								>
 							</h3>
-							<div class="flex gap-y-2 flex-wrap">
+							<div
+								class="grid gap-y-2"
+								style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"
+							>
 								{#each members as member, idx (member.id + idx)}
 									<PoliticianProfile {...member} />
 								{/each}
@@ -274,7 +277,10 @@
 							>{group.members.length} {currentPath === GroupByOption.Province ? 'เขต' : 'คน'}</span
 						>
 					</h2>
-					<article class="flex gap-y-2 flex-wrap">
+					<article
+						class="grid gap-y-2"
+						style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"
+					>
 						{#each group.members as member, idx (member.id + idx)}
 							<PoliticianProfile {...member} />
 						{/each}
