@@ -294,7 +294,7 @@
 						<img
 							src="images/legislative-process/general-process.png"
 							alt="general-process-process"
-							class="max-w-480"
+							class="max-w-[440px]"
 						/>
 					</div>
 					<div class="py-6">
