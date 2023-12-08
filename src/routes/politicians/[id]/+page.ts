@@ -1,6 +1,6 @@
 import type { Voting } from '$models/voting';
 import { failedVoting, passedVoting } from '../../../mocks/data/voting';
-import { fetchFromIdOr404, fetchPoliticians } from '../../../libs/datasheets';
+import { fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
 
 interface VotingHistory {
 	total: number;

@@ -7,7 +7,7 @@
 	import type { SearchIndexes, SearchResults } from '$models/search';
 	import { BillStatus } from '$models/bill';
 	import { DefaultVotingResult } from '$models/voting';
-	import { search } from '../../libs/search';
+	import { search } from '$lib/search';
 
 	const dispatch = createEventDispatcher<{
 		activate: void;

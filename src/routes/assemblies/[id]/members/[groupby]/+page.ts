@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { GroupByOption, getMemberGroup, getPoliticianSummary } from './groupby.js';
-import { fetchAssemblies, fetchFromIdOr404 } from '../../../../../libs/datasheets/index.js';
+import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
 import { AssemblyName } from '$models/assembly.js';
 import { fetchAssemblyMembers } from '../../data.js';
 

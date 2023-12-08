@@ -2,7 +2,7 @@ import type { ComponentProps } from 'svelte';
 import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 import type { AssemblyMember } from '../../data';
 import type { Assembly } from '$models/assembly';
-import { provinceRegionMap } from '../../../../../libs/thai-province';
+import { provinceRegionMap } from '$lib/thai-province';
 
 interface PoliticianGroup {
 	name: string;
