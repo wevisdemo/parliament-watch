@@ -34,7 +34,9 @@ export const movingForwardPolitician: Politician = {
 					'รองประธานสภา คนที่ 2',
 					'ประธานฝ่ายรัฐบาล',
 					'ประธานฝ่ายค้าน'
-				]
+				],
+				governmentParties: [],
+				oppositionParties: []
 			},
 			startedAt: new Date('2023-01-01')
 		}

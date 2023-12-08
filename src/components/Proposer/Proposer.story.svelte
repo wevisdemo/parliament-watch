@@ -18,7 +18,9 @@
 			'รองประธานสภา คนที่ 2',
 			'ประธานฝ่ายรัฐบาล',
 			'ประธานฝ่ายค้าน'
-		]
+		],
+		governmentParties: [],
+		oppositionParties: []
 	};
 
 	export let Hst: Hst;
