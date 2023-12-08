@@ -1,7 +1,7 @@
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
 import { mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
-import { fetchAssemblies } from '../../../../libs/datasheets/index.js';
+import { fetchAssemblies } from '$lib/datasheets/index.js';
 import { error } from '@sveltejs/kit';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;

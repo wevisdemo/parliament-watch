@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { safeFind } from '../libs/datasheets/processor';
+import { safeFind } from '$lib/datasheets/processor';
 import type { Party } from './party';
 
 export enum AssemblyName {

@@ -12,11 +12,7 @@ import {
 	mockCategory,
 	passedVoting
 } from '../../../../mocks/data/voting.js';
-import {
-	fetchAssemblies,
-	fetchFromIdOr404,
-	fetchPoliticians
-} from '../../../../libs/datasheets/index.js';
+import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
 
 interface VoteSummary
 	extends Pick<

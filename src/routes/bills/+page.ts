@@ -1,6 +1,6 @@
 import type { Assembly } from '$models/assembly';
 import { BillStatus, type Bill, BillProposerType } from '$models/bill';
-import { fetchAssemblies } from '../../libs/datasheets';
+import { fetchAssemblies } from '$lib/datasheets';
 import { enactedBill } from '../../mocks/data/bill';
 
 export interface BillsByStatus {
