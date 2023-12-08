@@ -6,7 +6,7 @@
 	export let lastname: string;
 	export let avatar: string;
 	export let party: Pick<Party, 'logo' | 'name'> | undefined = undefined;
-	export let role: string;
+	export let role: string | undefined = undefined;
 	export let isLarge = false;
 	export let isActive = true;
 
@@ -52,6 +52,8 @@
 		{#if party}
 			<p class="text-text-02 {subtitleClass}">พรรค{party.name}</p>
 		{/if}
-		<p class="text-text-02 {subtitleClass}">{role}</p>
+		{#if role}
+			<p class="text-text-02 {subtitleClass}">{role}</p>
+		{/if}
 	</div>
 </div>

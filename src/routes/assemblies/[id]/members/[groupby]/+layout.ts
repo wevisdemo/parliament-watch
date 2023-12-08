@@ -1,7 +1,6 @@
 import { AssemblyName, type Assembly } from '$models/assembly';
-import { error } from '@sveltejs/kit';
-import { fetchAssemblies } from '../../../../../libs/datasheets/index.js';
-import { GroupByOption, groupByOptionLabelMap } from './groupby-options.js';
+import { fetchAssemblies, fetchFromIdOr404 } from '../../../../../libs/datasheets/index.js';
+import { GroupByOption, groupByOptionLabelMap } from './groupby.js';
 
 export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
@@ -12,11 +11,7 @@ export interface GroupByTab {
 }
 
 export async function load({ params }) {
-	const fullAssembly = (await fetchAssemblies()).find(({ id }) => id === params.id);
-
-	if (!fullAssembly) {
-		throw error(404, `Assembly ${params.id} not found`);
-	}
+	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 
 	const { id, name, term, startedAt } = fullAssembly;
 	const assembly: AssemblySummary = { id, name, term, startedAt };

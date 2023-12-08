@@ -2,14 +2,14 @@ import { AssemblyName } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { DefaultVotingResult, type Voting } from '$models/voting';
-import { error } from '@sveltejs/kit';
-import { fetchAssemblies } from '../../../libs/datasheets';
+import { fetchAssemblies, fetchFromIdOr404 } from '../../../libs/datasheets';
 import {
 	bhumjaithaiParty,
 	democratsParty,
 	movingForwardParty,
 	pheuThaiParty
 } from '../../../mocks/data/party';
+import { fetchAssemblyMembers } from './data';
 
 export interface Summary {
 	totalMembers: number;
@@ -30,7 +30,7 @@ export interface MainMember {
 	assemblyRole: string;
 	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'>;
 	party?: Party;
-	partyRole?: string;
+	description?: string;
 }
 
 export interface VoteCardProps {
@@ -43,30 +43,29 @@ export interface VoteCardProps {
 }
 
 export async function load({ params }) {
-	const fullAssembly = (await fetchAssemblies()).find(({ id }) => id === params.id);
-
-	if (!fullAssembly) {
-		throw error(404, `Assembly ${params.id} not found`);
-	}
+	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 
 	const { mainRoles, ...assembly } = fullAssembly;
 	const isSenates = assembly.name === AssemblyName.Senates;
 
-	const mainMembers: MainMember[] = mainRoles.map((assemblyRole) => ({
-		assemblyRole,
-		politician: {
-			id: 'สมชาติ-สกุลสมมุติ',
-			firstname: 'สมชาติ',
-			lastname: 'สกุลสมมุติ',
-			avatar: 'https://via.placeholder.com/64'
-		},
-		...(isSenates
-			? {}
-			: {
-					party: movingForwardParty,
-					partyRole: 'สส. บัญชีรายชื่อ'
-			  })
-	}));
+	const members = await fetchAssemblyMembers(fullAssembly);
+
+	// TODO: use first members while assemblies role in datasheet is not filled out yet
+	const mainMembers: MainMember[] = mainRoles.map((mainRole, i) => {
+		const { id, firstname, lastname, avatar, partyRole, assemblyRole } = members[i];
+
+		return {
+			assemblyRole: mainRole,
+			politician: {
+				id,
+				firstname,
+				lastname,
+				avatar
+			},
+			party: partyRole?.party,
+			description: assemblyRole?.appointmentMethod
+		};
+	});
 
 	const summary: Summary = {
 		totalMembers: 500,
