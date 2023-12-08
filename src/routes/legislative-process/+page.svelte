@@ -64,7 +64,8 @@
 		{
 			billStatus: BillStatus.Merged,
 			billAmount: 'xxxx',
-			descriptionTitle: 'Description',
+			descriptionTitle:
+				'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด',
 			descriptionList: [],
 			learnMoreLabel: 'สำรวจกฎหมายที่ถูกรวมร่าง',
 			learnMoreUrl: '#',
@@ -282,7 +283,25 @@
 				</h1>
 				<div>
 					<h2 class="fluid-heading-04" id="ขั้นตอนทั่วไป">ขั้นตอนทั่วไป</h2>
-					<hr />
+					<hr class="mb-6" />
+					<p>
+						ขั้นตอนการพิจารณาร่างกฎหมายแต่ละประเภทจะมีความแตกต่างกันในบางรายละเอียด แต่โดยทั่วไปแล้ว
+						กระบวนการออกกฎหมายโดยรัฐสภา อย่างเช่นการออก พ.ร.บ. หรือการอนุมัติ พ.ร.ก. จะดำเนินการผ่าน <b
+							>5 ขั้นตอน</b
+						>ดังต่อไปนี้
+					</p>
+					<div class="flex w-full justify-center items-center pt-4">
+						<img
+							src="images/legislative-process/general-process.png"
+							alt="general-process-process"
+							class="max-w-[440px]"
+						/>
+					</div>
+					<div class="py-6">
+						<h3 class="fluid-heading-03" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h3>
+						<p class="py-4">ผู้มีสิทธิเสนอร่างกฎหมาย และลำดับชั้นของกฎหมายที่เสนอได้</p>
+						<ComparisonTable {proposerComparisonTableData} />
+					</div>
 					<div>
 						<h3 class="fluid-heading-03">2. การพิจารณาโดยสภาผู้แทนราษฏร</h3>
 						<p>
@@ -475,24 +494,6 @@
 						</p>
 					</div>
 				</div>
-				<div>
-					ขั้นตอนการพิจารณาร่างกฎหมายแต่ละประเภทจะมีความแตกต่างกันในบางรายละเอียด แต่โดยทั่วไปแล้ว
-					กระบวนการออกกฎหมายโดยรัฐสภา อย่างเช่นการออก พ.ร.บ. หรือการอนุมัติ พ.ร.ก. จะดำเนินการผ่าน <b
-						>5 ขั้นตอน</b
-					>ดังต่อไปนี้
-				</div>
-				<div class="flex w-full justify-center items-center py-4">
-					<img
-						src="images/legislative-process/general-process.png"
-						alt="general-process-process"
-						class="max-w-480"
-					/>
-				</div>
-				<div class="py-6">
-					<h3 class="fluid-heading-04 mb-0" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h3>
-					<p class="py-4">ผู้มีสิทธิเสนอร่างกฎหมาย และลำดับชั้นของกฎหมายที่เสนอได้</p>
-					<ComparisonTable {proposerComparisonTableData} />
-				</div>
 				<div class="mb-6">
 					<h2 class="fluid-heading-04" id="ขั้นตอนพิเศษของกฎหมายบางประเภท">
 						ขั้นตอนพิเศษของกฎหมายบางประเภท
@@ -622,12 +623,12 @@
 						<p><strong>1. การออกเสียงลงคะแนนเปิดเผย</strong></p>
 						<div class="flex gap-3 justify-center">
 							<VotingProcessImageCircle
-								src="https://placehold.co/120"
+								src="/images/legislative-process/method-verbal.png"
 								title="การลงคะแนนเสียงด้วยวาจา"
 								description="ผ่านการเรียกชื่อสมาชิกตามหมายเลขประจำตัว เช่น การโหวตเลือกนายกรัฐมนตรี"
 							/>
 							<VotingProcessImageCircle
-								src="https://placehold.co/120"
+								src="/images/legislative-process/method-machine.png"
 								title="การใช้เครื่องลงคะแนนเสียง"
 								description="เพื่อลงมติเห็นด้วยหรือไม่ต่อประเด็นต่างๆ"
 							/>
@@ -635,13 +636,13 @@
 						<p><strong>2. การออกเสียงลงคะแนนลับ</strong></p>
 						<div class="flex gap-3 justify-center">
 							<VotingProcessImageCircle
-								src="https://placehold.co/120"
+								src="/images/legislative-process/method-paper.png"
 								title="การทำเครื่องหมายบนแผ่นกระดาษ"
 								description="ใส่ซองที่เจ้าหน้าที่จัดให้"
 							/>
 							<VotingProcessImageCircle
-								src="https://placehold.co/120"
-								title="การใช้เครื่องออกเสียงลงคะแนน"
+								src="/images/legislative-process/method-machine.png"
+								title="การใช้เครื่องลงคะแนนเสียง"
 								description="ตามที่ประชุมกำหนด"
 							/>
 						</div>

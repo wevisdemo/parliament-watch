@@ -73,6 +73,11 @@
 
 		const currentFromTop = window.scrollY;
 		showHeader = currentFromTop <= previousFromTop;
+		if (showHeader) {
+			document.documentElement.classList.add('navbar-shown');
+		} else {
+			document.documentElement.classList.remove('navbar-shown');
+		}
 		previousFromTop = currentFromTop;
 		sideNavActive = false;
 	}

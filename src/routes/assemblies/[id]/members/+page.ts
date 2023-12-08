@@ -1,12 +1,15 @@
 import { redirect } from '@sveltejs/kit';
-import { sen12 } from '../../../../mocks/data/assembly.js';
-import { GroupByOption } from './[groupby]/groupby-options.js';
+import { GroupByOption } from './[groupby]/groupby.js';
+import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
+import { AssemblyName } from '$models/assembly.js';
 
-export function load({ params }) {
+export async function load({ params }) {
+	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
+
 	throw redirect(
 		307,
-		`/assemblies/${params.id}/members/${
-			params.id === sen12.id ? GroupByOption.Origin : GroupByOption.Party
+		`members/${
+			assembly.name === AssemblyName.Senates ? GroupByOption.AppointmentMethod : GroupByOption.Party
 		}`
 	);
 }

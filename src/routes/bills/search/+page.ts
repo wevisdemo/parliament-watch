@@ -1,6 +1,6 @@
-import type { Assembly } from '$models/assembly';
+import { AssemblyName, type Assembly } from '$models/assembly';
 import { BillStatus, type Bill, BillProposerType } from '$models/bill';
-import { rep25, rep26 } from '../../../mocks/data/assembly';
+import { fetchAssemblies } from '$lib/datasheets';
 import { enactedBill } from '../../../mocks/data/bill';
 import { movingForwardPolitician } from '../../../mocks/data/politician';
 
@@ -29,24 +29,28 @@ interface BillSummary
 	proposedLedByPeopleName?: string;
 }
 
-export function load() {
+export async function load() {
 	const billStatuses = Object.values(BillStatus);
 	const mockCategories = ['ขนส่งสาธารณะ', 'เศรษฐกิจ', 'แก้รัฐธรรมนูญ', 'วัฒนธรรม', 'เกษตรกรรม'];
 	const billProposerTypes = Object.values(BillProposerType);
 
+	const mpAssemblies = (await fetchAssemblies()).filter(
+		({ name }) => name === AssemblyName.Representatives
+	);
+
 	const filterOptions: FilterOptions = {
-		mpAssemblies: [rep25, rep26],
+		mpAssemblies,
 		status: billStatuses,
 		categories: mockCategories,
 		billProposerType: billProposerTypes
 	};
 
-	const bills: BillSummary[] = new Array(100).fill({}).map((i) => ({
+	const bills: BillSummary[] = new Array(100).fill({}).map((_, i) => ({
 		id: i,
 		title: enactedBill.title,
 		nickname: enactedBill.nickname,
 		proposedOn: enactedBill.proposedOn,
-		purposedAtMpAssemblyId: i % 2 ? rep25.id : rep26.id,
+		purposedAtMpAssemblyId: mpAssemblies[i % mpAssemblies.length].id,
 		status: billStatuses[i % billStatuses.length],
 		categories: [mockCategories[i % mockCategories.length]],
 		...getProposerProperties(i)

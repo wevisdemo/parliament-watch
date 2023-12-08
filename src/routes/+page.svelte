@@ -1,17 +1,23 @@
+<script lang="ts">
+	import { Accordion, AccordionItem } from 'carbon-components-svelte';
+
+	export let data;
+</script>
+
 <div class="p-4 space-y-6">
 	<h1 class="fluid-display-01 text-blue-60">Parliament Watch 👀</h1>
 
 	<ul>
 		<li>
-			<a href="/politicians/สมชาติ-สกุลสมมุติ"
+			<a href="/politicians/กรณิศ-งามสุคนธ์รัตนา"
 				>[WEV-12] Users can learn about a politician's details</a
 			>
 		</li>
 		<li>
 			[WEV-14] Users can learn more about an assembly
 			<ul>
-				<li><a href="/assemblies/representatives-26">สส.</a></li>
-				<li><a href="/assemblies/senates-12">สว.</a></li>
+				<li><a href="/assemblies/สมาชิกสภาผู้แทนราษฎร-25">สส.</a></li>
+				<li><a href="/assemblies/วุฒิสภา-12">สว.</a></li>
 			</ul>
 		</li>
 		<li>
@@ -37,6 +43,12 @@
 			</ul>
 		</li>
 	</ul>
+</div>
+
+<div class="p-4">
+	<Accordion>
+		<AccordionItem title="Data"><p>{JSON.stringify(data, null, 2)}</p></AccordionItem>
+	</Accordion>
 </div>
 
 <style lang="postcss">

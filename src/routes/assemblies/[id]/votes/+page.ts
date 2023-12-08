@@ -1,7 +1,8 @@
 import { DefaultVotingResult, type Voting } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
-import { gov35, rep25, rep26, sen12 } from '../../../../mocks/data/assembly.js';
 import { mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
+import { fetchAssemblies } from '$lib/datasheets/index.js';
+import { error } from '@sveltejs/kit';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
 
@@ -12,8 +13,13 @@ export interface FilterOptions {
 export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
 export async function load({ params }) {
-	const { id, name, term, startedAt } = params.id === sen12.id ? sen12 : rep26;
+	const fullAssembly = (await fetchAssemblies()).find(({ id }) => id === params.id);
 
+	if (!fullAssembly) {
+		throw error(404, `Assembly ${params.id} not found`);
+	}
+
+	const { id, name, term, startedAt } = fullAssembly;
 	const assembly: AssemblySummary = { id, name, term, startedAt };
 
 	const filterOptions: FilterOptions = {
@@ -29,7 +35,7 @@ export async function load({ params }) {
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : []
 	}));
 
-	const assemblyIds: string[] = [rep25, rep26, sen12, gov35].map((item) => item.id);
+	const assemblyIds: string[] = (await fetchAssemblies()).map((item) => item.id);
 
 	return {
 		assemblyIds,

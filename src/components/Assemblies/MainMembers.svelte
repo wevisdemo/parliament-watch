@@ -7,12 +7,6 @@
 
 	export let members: MainMember[] = [];
 	export let assemblyId: string;
-
-	const defaultParty: Party = {
-		name: '',
-		color: '',
-		logo: ''
-	};
 </script>
 
 <div class="md:py-[32px] py-[16px]">
@@ -30,8 +24,8 @@
 					firstname={member.politician.firstname}
 					lastname={member.politician.lastname}
 					avatar={member.politician.avatar || ''}
-					party={member.party || defaultParty}
-					role={member.partyRole || ''}
+					party={member.party}
+					role={member.description}
 					isLarge={true}
 				/>
 			</div>

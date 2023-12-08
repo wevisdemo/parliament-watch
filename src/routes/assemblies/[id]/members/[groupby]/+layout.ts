@@ -1,26 +1,26 @@
-import type { Assembly } from '$models/assembly';
-import { rep26, sen12 } from '../../../../../mocks/data/assembly.js';
-import { GroupByOption, groupByOptionLabelMap } from './groupby-options.js';
+import { AssemblyName, type Assembly } from '$models/assembly';
+import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
+import { GroupByOption, groupByOptionLabelMap } from './groupby.js';
 
-type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
+export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
-interface GroupByTab {
+export interface GroupByTab {
 	path: string;
 	label: string;
 	isActive: boolean;
 }
 
 export async function load({ params }) {
-	const isSenate = params.id === sen12.id;
+	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 
-	const { id, name, term, startedAt } = isSenate ? sen12 : rep26;
+	const { id, name, term, startedAt } = fullAssembly;
 	const assembly: AssemblySummary = { id, name, term, startedAt };
 
 	const groupByTabs = Object.values(GroupByOption)
 		.filter(
-			isSenate
+			name === AssemblyName.Senates
 				? (path) => [GroupByOption.Party, GroupByOption.Province].every((option) => option !== path)
-				: (path) => path !== GroupByOption.Origin
+				: (path) => path !== GroupByOption.AppointmentMethod
 		)
 		.map<GroupByTab>((path) => ({
 			path,

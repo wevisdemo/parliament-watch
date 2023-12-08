@@ -13,7 +13,7 @@
 	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
-
+	import dayjs from 'dayjs';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 
 	export let data;
@@ -26,7 +26,6 @@
 		);
 	const safePercent = (n: number, outOf: number) => Math.round((n / (outOf || 1)) * 10000) / 100;
 
-	const age = new Date(Date.now() - politician.birthdate.getTime()).getFullYear() - 1970;
 	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
 	const currentParty = politician.partyRoles.find((e) => !e.endedAt);
 	const partyCount = Object.keys(parties).length;
@@ -58,7 +57,7 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/politicians/{politician.id}" isCurrentPage
-		>{politician.firstname}</BreadcrumbItem
+		>{politician.firstname} {politician.lastname}</BreadcrumbItem
 	>
 </Breadcrumb>
 <header>
@@ -67,7 +66,7 @@
 			<img
 				class="rounded-full overflow-hidden w-full h-full object-cover"
 				src={politician.avatar}
-				alt={politician.firstname + ' ' + politician.lastname}
+				alt="{politician.firstname}-{politician.lastname}"
 				width="120"
 				height="120"
 				loading="lazy"
@@ -135,9 +134,16 @@
 				<div>
 					<p>
 						<span class="heading-02">เพศ</span>
-						{politician.sex} <span class="heading-02">ปีเกิด</span>
-						{politician.birthdate.getFullYear() + 543} ({age} ปี)
+						{politician.sex}
+						{#if politician.birthdate}
+							{' '}<span class="heading-02">วันเกิด</span>
+							{' '}{politician.birthdate.toLocaleDateString('th-TH', { dateStyle: 'long' })} ({dayjs().diff(
+								politician.birthdate,
+								'years'
+							)} ปี)
+						{/if}
 					</p>
+
 					{#if politician.educations.length > 0}
 						<span class="heading-02">การศึกษา</span>
 						<ul class="ml-8 list-disc">
@@ -155,7 +161,8 @@
 						</ul>
 					{/if}
 				</div>
-				<!-- <hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
+				<!-- TODO: debt won't be released in phase 1
+					<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
 			<div>
 				<ul class="mb-1">
 					<li>

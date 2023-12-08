@@ -12,7 +12,7 @@
 	<Breadcrumb noTrailingSlash class="[&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap">
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 		<!-- TODO: link this -->
-		<BreadcrumbItem class="hidden md:block" href="/">รัฐสภา</BreadcrumbItem>
+		<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block" href="/assemblies/{data.assembly.id}"
 			>{data.assembly.name}</BreadcrumbItem
 		>

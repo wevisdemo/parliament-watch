@@ -25,7 +25,7 @@ Citizens are watching
   - [Colors](#colors)
   - [Components](#components)
   - [Icons](#icons)
-- [💾 Data Models](#-data-models)
+- [💾 Data Pipeline](#-data-pipeline)
 - [🤝 Contributing Guideline](#-contributing-guideline)
 - [📜 License and Terms of Use](#-license-and-terms-of-use)
 
@@ -144,9 +144,22 @@ The project design system is based on Carbon Design System v10 with some modific
 - We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also available in Histoire)
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
 
-## 💾 Data Models
+## 💾 Data Pipeline
 
-ER Diagram and TypeScript's interfaces are avaiable in [src/models](src/models)
+Data is pre-process server-side during the build step as following
+
+```mermaid
+flowchart TD
+    A[Google Sheets] -->|d3 fetch: fetch and parse| B(JS objects)
+    B --> |Zod: validate and transform| C(Type-safe objects)
+    C --> |imported by| D(Svelte's routes)
+    D --> |Svelte SSR| E(dev website)
+    D --> |Svelte SSG| F(prod website)
+```
+
+- Original data is avaiable at our public [Google Sheets](https://docs.google.com/spreadsheets/d/1SbX2kgAGsslbhGuB-EI_YdSAnIt3reU1_OEtWmDVOVk/edit?usp=sharing)
+- [lib/datasheets](src/lib/datasheets/index.ts) provides fetch functions for each tables wrapping [d3-fetch](https://d3js.org/d3-fetch#csv) and [Zod](https://zod.dev)'s validation.
+- Zod's schema for each data table are defined in [src/models](src/models) which also contains ER Diagram and other TypeScript's interfaces.
 
 ## 🤝 Contributing Guideline
 

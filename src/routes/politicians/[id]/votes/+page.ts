@@ -6,13 +6,13 @@ import {
 	type Voting
 } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
-import { gov35, rep26 } from '../../../../mocks/data/assembly.js';
 import {
 	customVoteOption,
 	defaultVoteOptions,
 	mockCategory,
 	passedVoting
 } from '../../../../mocks/data/voting.js';
+import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
 
 interface VoteSummary
 	extends Pick<
@@ -31,25 +31,13 @@ interface FilterOptions {
 type PoliticianSummary = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'lastname'>;
 
 export async function load({ params }) {
-	const [firstname, lastname] = params.id.split('-');
-
-	const politician: PoliticianSummary = {
-		id: `${firstname}-${lastname}`,
-		prefix: 'นาย',
-		firstname,
-		lastname
-	};
-
-	const filterOptions: FilterOptions = {
-		assemblies: [rep26, gov35],
-		categories: mockCategory
-	};
+	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
 
 	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
 		id: i,
 		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
-		participatedAssembleIds: [i % 2 ? rep26.id : gov35.id],
+		participatedAssembleIds: [i % 2 ? 'สมาชิกสภาผู้แทนราษฎร-25' : 'สมาชิกสภาผู้แทนราษฎร-26'],
 		categories: [mockCategory[i % mockCategory.length]],
 		result: i % 3 ? DefaultVotingResult.Passed : DefaultVotingResult.Failed,
 		files: i % 2 ? [{ label: 'some file', url: '/' }] : [],
@@ -59,5 +47,27 @@ export async function load({ params }) {
 		isVoteAlignWithPartyMajority: i % 5 !== 0
 	}));
 
-	return { politician, filterOptions, votes };
+	const uniqueParticipatedAssemblyIds = [
+		...new Set(votes.flatMap(({ participatedAssembleIds }) => participatedAssembleIds))
+	];
+
+	const filterOptions: FilterOptions = {
+		assemblies: (await fetchAssemblies()).filter(({ id }) =>
+			uniqueParticipatedAssemblyIds.includes(id)
+		),
+		categories: [...new Set(votes.flatMap(({ categories }) => categories))]
+	};
+
+	const politicianSummary: PoliticianSummary = (({ id, prefix, firstname, lastname }) => ({
+		id,
+		prefix,
+		firstname,
+		lastname
+	}))(politician);
+
+	return {
+		politician: politicianSummary,
+		filterOptions,
+		votes
+	};
 }

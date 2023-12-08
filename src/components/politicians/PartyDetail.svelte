@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { PartyRole } from '$models/politician';
+	import type { Politician } from '$models/politician';
 	export let party: string;
-	export let data: PartyRole[];
+	export let data: Politician['partyRoles'];
 
 	// NOTE: assume ว่า data จะ sort มาแล้ว + มีข้อมูลอย่างน้อย 1
 	let partyFrom = data.at(-1)?.startedAt;

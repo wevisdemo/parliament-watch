@@ -1,9 +1,27 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import Proposer from './Proposer.svelte';
-	import { rep26 } from '../../mocks/data/assembly';
+	import { AssemblyName, type Assembly } from '$models/assembly';
 	import { movingForwardPolitician } from '../../mocks/data/politician';
-	import { movingForwardParty } from '../../mocks/data/party';
+
+	const rep26: Assembly = {
+		id: 'สมาชิกสภาผู้แทนราษฎร-26',
+		name: AssemblyName.Representatives,
+		abbreviation: 'สส.',
+		term: 26,
+		startedAt: new Date('01/01/2023'),
+		origin:
+			'มาจากการเลือกตั้งทั่วไป พ.ศ. 2566 ประกอบด้วยสมาชิก (ส.ส.) 500 คน ตามระบบจัดสรรปันส่วนผสมโดย 400 คนเป็นผู้แทนเขต และอีก 100 คน มาจากระบบบัญชีรายชื่อ',
+		mainRoles: [
+			'ประธานสภา',
+			'รองประธานสภา คนที่ 1',
+			'รองประธานสภา คนที่ 2',
+			'ประธานฝ่ายรัฐบาล',
+			'ประธานฝ่ายค้าน'
+		],
+		governmentParties: [],
+		oppositionParties: []
+	};
 
 	export let Hst: Hst;
 </script>
@@ -14,7 +32,11 @@
 			partyPolitician={{
 				politician: movingForwardPolitician,
 				assembly: rep26,
-				party: movingForwardParty
+				party: {
+					name: 'ก้าวไกล',
+					logo: 'https://www.moveforwardparty.org/wp-content/uploads/2021/03/400px-Move_Forward_Party_Logo.svg.png',
+					color: '#ff7f00'
+				}
 			}}
 		/>
 	</Hst.Variant>
