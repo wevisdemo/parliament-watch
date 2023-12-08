@@ -7,7 +7,7 @@ import { provinceRegionMap } from '../../../../../libs/thai-province';
 interface PoliticianGroup {
 	name: string;
 	icon?: string;
-	members: PoliticianSummary[];
+	members: AssemblyMember[];
 }
 
 export type PoliticianGroupBy =
@@ -45,9 +45,9 @@ export const groupByOptionLabelMap = new Map<GroupByOption, string>([
 export function getMemberGroup(
 	assembly: Assembly,
 	members: AssemblyMember[],
-	groupby: string,
+	groupby: GroupByOption,
 	isSenates = false
-): PoliticianGroupBy | undefined {
+): PoliticianGroupBy {
 	switch (groupby) {
 		case GroupByOption.Party: {
 			return groupMembersBy(members, ({ partyRole }) =>
@@ -72,7 +72,7 @@ export function getMemberGroup(
 					({ assemblyRole }) => assemblyRole?.province
 				).map(([province, membersByProvince]) => ({
 					name: province,
-					members: membersByProvince.map(getPoliticianSummary)
+					members: membersByProvince
 				}))
 			}));
 		}
@@ -136,9 +136,6 @@ export function getMemberGroup(
 		// 		)
 		// 	};
 		// }
-
-		default:
-			return undefined;
 	}
 }
 
@@ -158,24 +155,27 @@ export function groupMembersBy<T>(
 	return [...groupMap.entries()].sort((a, z) => z[1].length - a[1].length);
 }
 
-function createSubgroupByPartyOrAppointmentMethod(members: AssemblyMember[], isSenates: boolean) {
+export function createSubgroupByPartyOrAppointmentMethod(
+	members: AssemblyMember[],
+	isSenates: boolean
+) {
 	return isSenates
 		? groupMembersBy(members, ({ assemblyRole }) => assemblyRole?.appointmentMethod).map(
-				([method, membersByParty]) => ({
+				([method, membersByRole]) => ({
 					name: method,
-					members: membersByParty.map(getPoliticianSummary)
+					members: membersByRole
 				})
 		  )
 		: groupMembersBy(members, ({ partyRole }) => partyRole?.party).map(
 				([party, membersByParty]) => ({
 					name: party.name,
 					icon: party.logo,
-					members: membersByParty.map(getPoliticianSummary)
+					members: membersByParty
 				})
 		  );
 }
 
-function getPoliticianSummary(member: AssemblyMember): PoliticianSummary {
+export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary {
 	const { id, firstname, lastname, avatar, isActive, partyRole, assemblyRole } = member;
 	return {
 		id,
