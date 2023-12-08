@@ -12,6 +12,7 @@
 		<SummaryGroup title="อายุ" data={summary.groupBySex} />
 		<SummaryGroup title="รุ่นอายุ" data={summary.groupByAgeRange} />
 		<SummaryGroup title="การศึกษา" data={summary.groupByEducation} />
-		<SummaryGroup title="ทรัพย์สิน" data={summary.groupByAssetValue} />
+		<!-- TODO: not release asset value in phase 1 -->
+		<!-- <SummaryGroup title="ทรัพย์สิน" data={summary.groupByAssetValue} /> -->
 	</div>
 </div>
