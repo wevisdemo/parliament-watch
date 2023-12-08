@@ -3,13 +3,8 @@ import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { DefaultVotingResult, type Voting } from '$models/voting';
 import { fetchAssemblies, fetchFromIdOr404 } from '../../../libs/datasheets';
-import {
-	bhumjaithaiParty,
-	democratsParty,
-	movingForwardParty,
-	pheuThaiParty
-} from '../../../mocks/data/party';
 import { fetchAssemblyMembers } from './data';
+import { GroupByOption, getMemberGroup } from './members/[groupby]/groupby';
 
 export interface Summary {
 	totalMembers: number;
@@ -17,7 +12,8 @@ export interface Summary {
 	groupBySex: MemberGroup[];
 	groupByAgeRange: MemberGroup[];
 	groupByEducation: MemberGroup[];
-	groupByAssetValue: MemberGroup[];
+	// TODO: not release asset value in phase 1
+	// groupByAssetValue: MemberGroup[];
 }
 
 export interface MemberGroup {
@@ -67,223 +63,30 @@ export async function load({ params }) {
 		};
 	});
 
+	const parseMemberGroup = (groupBy: GroupByOption) =>
+		getMemberGroup(fullAssembly, members, groupBy, isSenates).map((group) => ({
+			name: group.name,
+			...('subgroups' in group
+				? {
+						parties: group.subgroups.map((party) => ({
+							...party,
+							color: party.members[0].partyRole?.party.color as string,
+							count: party.members.length
+						})),
+						total: group.subgroups.reduce((sum, subGroup) => sum + subGroup.members.length, 0)
+				  }
+				: {
+						total: group.members.length
+				  })
+		}));
+
 	const summary: Summary = {
-		totalMembers: 500,
-		highlightGroup: isSenates
-			? [
-					{
-						name: 'เลือกโดย คสช.',
-						total: 194
-					},
-					{
-						name: 'เลือกกันเอง',
-						total: 50
-					},
-					{
-						name: 'โดยตำแหน่ง',
-						total: 6
-					}
-			  ]
-			: [
-					{
-						name: 'ฝ่ายรัฐบาล',
-						total: 300,
-						parties: [
-							{ ...pheuThaiParty, count: 200 },
-							{ ...bhumjaithaiParty, count: 100 }
-						]
-					},
-					{
-						name: 'ฝ่ายค้าน',
-						total: 200,
-						parties: [
-							{ ...movingForwardParty, count: 150 },
-							{ ...democratsParty, count: 50 }
-						]
-					}
-			  ],
-		groupBySex: [
-			{
-				name: 'ชาย',
-				total: 300,
-				parties: [
-					{ ...pheuThaiParty, count: 100 },
-					{ ...bhumjaithaiParty, count: 100 },
-					{ ...movingForwardParty, count: 50 },
-					{ ...democratsParty, count: 50 }
-				]
-			},
-			{
-				name: 'หญิง',
-				total: 150,
-				parties: [
-					{ ...pheuThaiParty, count: 50 },
-					{ ...bhumjaithaiParty, count: 50 },
-					{ ...movingForwardParty, count: 30 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{ name: 'ไม่มีข้อมูล', total: 50 }
-		],
-		groupByAgeRange: [
-			{
-				name: 'Silent Gen (19xx-19xx)',
-				total: 100,
-				parties: [
-					{ ...pheuThaiParty, count: 30 },
-					{ ...bhumjaithaiParty, count: 30 },
-					{ ...movingForwardParty, count: 20 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: 'Baby Boomers (19xx-19xx)',
-				total: 150,
-				parties: [
-					{ ...pheuThaiParty, count: 50 },
-					{ ...bhumjaithaiParty, count: 50 },
-					{ ...movingForwardParty, count: 30 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: 'Gen X (19xx-19xx)',
-				total: 80,
-				parties: [
-					{ ...pheuThaiParty, count: 20 },
-					{ ...bhumjaithaiParty, count: 20 },
-					{ ...movingForwardParty, count: 20 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: 'Gen Y (19xx-19xx)',
-				total: 70,
-				parties: [
-					{ ...pheuThaiParty, count: 30 },
-					{ ...bhumjaithaiParty, count: 20 },
-					{ ...movingForwardParty, count: 10 },
-					{ ...democratsParty, count: 10 }
-				]
-			},
-			{
-				name: 'Gen Z (19xx-19xx)',
-				total: 70,
-				parties: [
-					{ ...pheuThaiParty, count: 40 },
-					{ ...bhumjaithaiParty, count: 10 },
-					{ ...movingForwardParty, count: 10 },
-					{ ...democratsParty, count: 10 }
-				]
-			},
-			{ name: 'ไม่มีข้อมูล', total: 30 }
-		],
-		groupByEducation: [
-			{
-				name: 'สถาบันทหาร',
-				total: 100,
-				parties: [
-					{ ...pheuThaiParty, count: 30 },
-					{ ...bhumjaithaiParty, count: 20 },
-					{ ...movingForwardParty, count: 10 },
-					{ ...democratsParty, count: 10 }
-				]
-			},
-			{
-				name: 'ต่ำกว่าปริญญาตรี',
-				total: 150,
-				parties: [
-					{ ...pheuThaiParty, count: 50 },
-					{ ...bhumjaithaiParty, count: 50 },
-					{ ...movingForwardParty, count: 30 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: 'ปริญญาตรี',
-				total: 80,
-				parties: [
-					{ ...pheuThaiParty, count: 20 },
-					{ ...bhumjaithaiParty, count: 20 },
-					{ ...movingForwardParty, count: 20 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: 'ปริญญาโท',
-				total: 70,
-				parties: [
-					{ ...pheuThaiParty, count: 30 },
-					{ ...bhumjaithaiParty, count: 30 },
-					{ ...movingForwardParty, count: 20 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: 'ปริญญาเอก',
-				total: 70,
-				parties: [
-					{ ...pheuThaiParty, count: 40 },
-					{ ...bhumjaithaiParty, count: 10 },
-					{ ...movingForwardParty, count: 10 },
-					{ ...democratsParty, count: 10 }
-				]
-			},
-			{ name: 'ไม่มีข้อมูล', total: 30 }
-		],
-		groupByAssetValue: [
-			{
-				name: 'ต่ำกว่า 1 ล้านบาท',
-				total: 100,
-				parties: [
-					{ ...pheuThaiParty, count: 30 },
-					{ ...bhumjaithaiParty, count: 30 },
-					{ ...movingForwardParty, count: 20 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: '1-10 ล้านบาท',
-				total: 150,
-				parties: [
-					{ ...pheuThaiParty, count: 50 },
-					{ ...bhumjaithaiParty, count: 50 },
-					{ ...movingForwardParty, count: 30 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: '11-100 ล้านบาท',
-				total: 80,
-				parties: [
-					{ ...pheuThaiParty, count: 20 },
-					{ ...bhumjaithaiParty, count: 20 },
-					{ ...movingForwardParty, count: 20 },
-					{ ...democratsParty, count: 20 }
-				]
-			},
-			{
-				name: '101-1000 ล้านบาท',
-				total: 70,
-				parties: [
-					{ ...pheuThaiParty, count: 30 },
-					{ ...bhumjaithaiParty, count: 20 },
-					{ ...movingForwardParty, count: 10 },
-					{ ...democratsParty, count: 10 }
-				]
-			},
-			{
-				name: '1000 ล้านบาทขึ้นไป',
-				total: 70,
-				parties: [
-					{ ...pheuThaiParty, count: 40 },
-					{ ...bhumjaithaiParty, count: 10 },
-					{ ...movingForwardParty, count: 10 },
-					{ ...democratsParty, count: 10 }
-				]
-			},
-			{ name: 'ไม่มีข้อมูล', total: 30 }
-		]
+		totalMembers: members.length,
+		highlightGroup: parseMemberGroup(isSenates ? GroupByOption.Origin : GroupByOption.Party),
+		groupBySex: parseMemberGroup(GroupByOption.Sex),
+		groupByAgeRange: parseMemberGroup(GroupByOption.Age),
+		groupByEducation: parseMemberGroup(GroupByOption.Education)
+		// groupByAssetValue: [],
 	};
 
 	const latestVotes: VoteCardProps[] = new Array(5)
