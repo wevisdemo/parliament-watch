@@ -33,7 +33,8 @@ erDiagram
     string politicianId FK
     string partyId FK "only for party"
     string province "only for party"
-    number electorialDistrict "only for party"
+    number districtNumber "only for party"
+    number listNumber "only for party"
     string assemblyId FK "only for assembly"
     string role
     Date startedAt
@@ -55,6 +56,8 @@ erDiagram
     Date endedAt
     string origin
     string[] mainRoles
+    string[] governmentParties
+    string[] oppositionParties
   }
 
   Bill {
