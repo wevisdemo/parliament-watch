@@ -8,6 +8,7 @@ export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'fil
 
 export interface FilterOptions {
 	categories: string[];
+	result: string[];
 }
 
 export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
@@ -21,10 +22,6 @@ export async function load({ params }) {
 
 	const { id, name, term, startedAt } = fullAssembly;
 	const assembly: AssemblySummary = { id, name, term, startedAt };
-
-	const filterOptions: FilterOptions = {
-		categories: mockCategory
-	};
 
 	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
 		id: i,
@@ -40,7 +37,6 @@ export async function load({ params }) {
 	return {
 		assemblyIds,
 		assembly,
-		filterOptions,
 		votes
 	};
 }

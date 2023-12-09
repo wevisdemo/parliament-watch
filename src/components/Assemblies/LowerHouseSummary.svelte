@@ -38,9 +38,9 @@
 						/>
 					{/each}
 				</div>
-				<div class="grid md:grid-rows-4 md:grid-cols-none grid-cols-2 gap-[4px] mt-[8px]">
+				<div class="flex flex-wrap gap-[4px] mt-[8px]">
 					{#each group.parties || [] as party}
-						<div class="flex justify-between w-full max-w-[160px]">
+						<div class="flex justify-between w-full w-[160px] mr-[24px]">
 							<div class="flex space-x-[4px] items-center">
 								<div
 									class="w-[8px] h-[8px] rounded-[100%] bg-[var(--color)]"
