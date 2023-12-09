@@ -51,6 +51,28 @@ export const searchIndexes: SearchIndexes = {
 			status: BillStatus.Enacted
 		}
 	],
+	billProposers: [
+		{
+			name: 'สุชาติ ชมกลิ่น',
+			description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ',
+			proposedBillsCount: 0
+		},
+		{
+			name: 'สมคิด จาตุศรีพิทักษ์',
+			description: 'นายกรัฐมนตรี',
+			proposedBillsCount: 3
+		},
+		{
+			name: 'สุชาดา ชาตรี',
+			description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ',
+			proposedBillsCount: 2
+		},
+		{
+			name: 'ภาวัฒน์ พยัคฆบุตร',
+			description: 'ไทยสร้างไทย',
+			proposedBillsCount: 1
+		}
+	],
 	votings: [
 		{
 			name: 'ร่าง พ.ร.บ. สุราก้าวหน้า (วาระที่ 1)',

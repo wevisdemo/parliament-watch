@@ -53,36 +53,58 @@ export function search(
 ): SearchResults {
 	// Normalize query
 	const queries = normalizeSearchQuery(query);
-	const politicianCandidates = postCalcuateScore(
-		calculateScore(queries, searchIndexes.politicians),
-		keepTopN
-	);
-	const billCandidates = postCalcuateScore(calculateScore(queries, searchIndexes.bills), keepTopN);
-	const votingCandidates = postCalcuateScore(
-		calculateScore(queries, searchIndexes.votings),
-		keepTopN
-	);
 
 	return {
-		politicians: politicianCandidates.map((candidate) => ({
-			heading: candidate.item.name,
-			headingHighlight: highlight ? candidate.highlightedName : undefined,
-			description: candidate.item.description,
-			url: ''
-		})),
-		bills: billCandidates.map((candidate) => ({
-			heading: candidate.item.name,
-			headingHighlight: highlight ? candidate.highlightedName : undefined,
-			billStatus: candidate.item.status,
-			url: ''
-		})),
-		votings: votingCandidates.map((candidate) => ({
-			heading: candidate.item.name,
-			headingHighlight: highlight ? candidate.highlightedName : undefined,
-			voteResult: candidate.item.result,
-			url: ''
-		}))
+		politicians: searchIndexes.politicians
+			? getScoredAndHighlightedResultItems(queries, searchIndexes.politicians, keepTopN).map(
+					(candidate) => ({
+						heading: candidate.item.name,
+						headingHighlight: highlight ? candidate.highlightedName : undefined,
+						description: candidate.item.description,
+						url: ''
+					})
+			  )
+			: undefined,
+		bills: searchIndexes.bills
+			? getScoredAndHighlightedResultItems(queries, searchIndexes.bills, keepTopN).map(
+					(candidate) => ({
+						heading: candidate.item.name,
+						headingHighlight: highlight ? candidate.highlightedName : undefined,
+						billStatus: candidate.item.status,
+						url: ''
+					})
+			  )
+			: undefined,
+		votings: searchIndexes.votings
+			? getScoredAndHighlightedResultItems(queries, searchIndexes.votings, keepTopN).map(
+					(candidate) => ({
+						heading: candidate.item.name,
+						headingHighlight: highlight ? candidate.highlightedName : undefined,
+						voteResult: candidate.item.result,
+						url: ''
+					})
+			  )
+			: undefined,
+		billProposers: searchIndexes.billProposers
+			? getScoredAndHighlightedResultItems(queries, searchIndexes.billProposers, keepTopN).map(
+					(candidate) => ({
+						heading: candidate.item.name,
+						headingHighlight: highlight ? candidate.highlightedName : undefined,
+						description: candidate.item.description,
+						proposedBillsCount: candidate.item.proposedBillsCount,
+						url: ''
+					})
+			  )
+			: undefined
 	};
+}
+
+function getScoredAndHighlightedResultItems<T extends { name: string }>(
+	queries: string[],
+	searchIndexes: T[],
+	keepTopN: number
+) {
+	return postCalcuateScore(calculateScore(queries, searchIndexes), keepTopN);
 }
 
 /**
