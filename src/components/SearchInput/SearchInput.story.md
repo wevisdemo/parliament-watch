@@ -23,6 +23,17 @@ See [models/search.ts](/src/models/search.ts).
 Props เหล่านี้ต้อง `bind:props` เพื่อให้ parent component สามารถทราบ state ด้านใน component ได้
 
 | Props                | Type                           | Meaning                                                                                                                      |
-| -------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| -------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `bind:searchResults` | `SearchResults \| null = null` | ผลลัพธ์ของการค้นหา โดยจะแสดง properties เฉพาะที่มีใน index เท่านั้น; หากไม่มีใน index ผลการค้นหานั้นๆจะมีค่าเป็น `undefined` |
 | `bind:searchValue`   | `searchValue  \| null = ''`    | ข้อความในช่องค้นหา อาจใช้สำหรับการ reset ข้อความของ Input ได้                                                                |
+| `bind:ref`           | `HTMLInputElement              | null = null`                                                                                                                 | ใช้สำหรับเข้าถึง DOM API ของ underlining `HTMLInputElement` อาจใช้สำหรับการสั่ง `focus()` เป็นต้น |
+
+## Forwarded Events
+
+- on:change
+- on:input
+- on:keydown
+- on:keyup
+- on:focus
+- on:blur
+- on:paste

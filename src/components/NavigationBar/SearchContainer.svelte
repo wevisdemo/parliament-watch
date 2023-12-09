@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import SearchIcon from 'carbon-icons-svelte/lib/Search.svelte';
 	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';
-	import { SvelteComponent, createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import type { SearchResults } from '$models/search';
 	import { searchIndexes } from '../../mocks/data/searchIndexes';
 	import SearchInput from '$components/SearchInput/SearchInput.svelte';
@@ -15,7 +15,7 @@
 	export let activeSearch = false;
 	export let searchResults: SearchResults | null;
 	let searchButton: HTMLButtonElement;
-	let searchInput: SvelteComponent;
+	let searchInput: HTMLInputElement;
 	let searchValue = '';
 
 	function searchClickHandle() {
@@ -33,6 +33,7 @@
 	function closeClickHandle() {
 		activeSearch = false;
 		searchValue = '';
+		searchResults = null;
 		dispatch('deactivate');
 	}
 </script>
@@ -56,14 +57,15 @@
 		>
 			<SearchInput
 				{searchIndexes}
+				bind:ref={searchInput}
 				bind:searchResults
 				bind:searchValue
 				on:blur={() => {
-					activeSearch = false;
+					closeClickHandle();
 				}}
 				name="navSearch"
 				type="text"
-				class="w-[calc(320px-6rem)] h-12 leading-4 bg-white/0 outline-none border-0 text-white focus:outline-none"
+				class="w-[calc(320px-6rem)] h-12 p-0 bg-white/0 outline-none border-0 text-white focus:outline-none"
 				placeholder="ค้นหาชื่อบุคคล/มติ/ร่างกฎหมาย"
 			/>
 			<button
