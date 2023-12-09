@@ -107,7 +107,7 @@
 					bind:searchResults
 				/>
 				{#if searchResults !== null}
-					<SearchResult {searchResults} />
+					<SearchResult politician voting bill {searchResults} />
 				{/if}
 			</div>
 		</NavigationPane>

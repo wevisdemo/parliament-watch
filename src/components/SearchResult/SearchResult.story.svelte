@@ -6,19 +6,13 @@
 	import { DefaultVotingResult } from '$models/voting';
 	export let Hst: Hst;
 
-	const noResults: SearchResults = {
-		politicians: [],
-		bills: [],
-		votings: []
-	};
+	const noResults: SearchResults = {};
 
 	const hasPoliticains: SearchResults = {
 		politicians: [
 			{ heading: 'สุชาติ ชมกลิ่น', description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ', url: '' },
 			{ heading: 'สุชาติ ชมกลิ่น', description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ', url: '' }
-		],
-		bills: [],
-		votings: []
+		]
 	};
 
 	const searchResults: SearchResults = {
@@ -49,8 +43,27 @@
 				voteResult: DefaultVotingResult.Passed,
 				url: ''
 			}
+		],
+		billProposers: [
+			{
+				heading: 'สุชาติ ชมกลิ่น',
+				description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ',
+				proposedBillsCount: 1,
+				url: ''
+			},
+			{
+				heading: 'สุชาติ ชมกลิ่น',
+				description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ',
+				proposedBillsCount: 1,
+				url: ''
+			}
 		]
 	};
+
+	let politician = true;
+	let voting = false;
+	let bill = true;
+	let billProposer = false;
 </script>
 
 <Hst.Story title="SearchResult" layout={{ type: 'grid', width: '350px' }}>
@@ -64,5 +77,15 @@
 
 	<Hst.Variant title="Has all groups">
 		<SearchResult {searchResults} />
+	</Hst.Variant>
+
+	<Hst.Variant title="Specific to show some groups">
+		<SearchResult {politician} {bill} {voting} {billProposer} {searchResults} />
+		<svelte:fragment slot="controls">
+			<Hst.Checkbox title="Politician" bind:value={politician} />
+			<Hst.Checkbox title="Voting" bind:value={voting} />
+			<Hst.Checkbox title="Bill" bind:value={bill} />
+			<Hst.Checkbox title="Bill Proposer" bind:value={billProposer} />
+		</svelte:fragment>
 	</Hst.Variant>
 </Hst.Story>
