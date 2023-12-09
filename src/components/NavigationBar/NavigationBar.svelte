@@ -55,7 +55,7 @@
 	import SideMenuPane from './SideMenuPane.svelte';
 	import SideMenuList from './SideMenuList.svelte';
 	import NavigationPane from './NavigationPane.svelte';
-	import SearchInput from './SearchInput.svelte';
+	import SearchContainer from './SearchContainer.svelte';
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
 	import type { SearchResults } from '$models/search';
 
@@ -101,7 +101,7 @@
 				</MenuPane>
 			</svelte:fragment>
 			<div slot="trailing" class="absolute right-0">
-				<SearchInput
+				<SearchContainer
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}
 					bind:searchResults
