@@ -1,16 +1,31 @@
 <script lang="ts">
-	import VotesBody from '$components/Votes/VotesBody.svelte';
-	import VotesHeader from '$components/Votes/VotesHeader.svelte';
+	import VotesMain from '$components/Assemblies/Votes/VotesMain.svelte';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
 		OverflowMenu,
 		OverflowMenuItem
 	} from 'carbon-components-svelte';
+	import type { FilterOptions } from './+page.js';
 
 	export let data;
 
-	const { assemblyIds, assembly, votes, filterOptions } = data;
+	const { assemblyIds, assembly, votes } = data;
+
+	let categoryFilters = votes.reduce((acc, vote) => {
+		const categorys = vote.categories;
+		categorys.forEach((category) => {
+			if (!acc.includes(category)) {
+				acc.push(category);
+			}
+		});
+		return acc;
+	}, [] as string[]);
+
+	let filterOptions: FilterOptions = {
+		categories: categoryFilters,
+		result: ['ผ่าน', 'ไม่ผ่าน']
+	};
 </script>
 
 <div>
@@ -21,7 +36,7 @@
 			<BreadcrumbItem class="md:hidden">
 				<OverflowMenu>
 					<OverflowMenuItem href="/" text="รัฐสภา" />
-					<OverflowMenuItem href="assemblies/{assembly.id}" text={assembly.name} />
+					<OverflowMenuItem href="/assemblies/{assembly.id}" text={assembly.name} />
 				</OverflowMenu>
 			</BreadcrumbItem>
 
@@ -34,8 +49,5 @@
 			>
 		</Breadcrumb>
 	</div>
-	<VotesHeader {assembly} {assemblyIds} />
-	<VotesBody {votes} {filterOptions} />
+	<VotesMain {votes} {assembly} {assemblyIds} {filterOptions} />
 </div>
-
-<!-- <div class="whitespace-pre">{JSON.stringify(data, undefined, 2)}</div> -->
