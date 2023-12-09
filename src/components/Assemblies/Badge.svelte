@@ -17,15 +17,28 @@
 	};
 </script>
 
-<Tooltip class="w-full">
+{#if subtitle === '' && title === ''}
 	<div
 		class={`w-full ${getHeight()} bg-[var(--color)]`}
 		style="--color:{color};
   --height:{getHeight()};"
 		aria-describedby="idTooltipTarget"
 	/>
-	<p slot="tooltip" class="flex flex-col justify-center items-center">
+	<p class="flex flex-col justify-center items-center">
 		<span class="label-01 text-text-04">{title}</span>
 		<span class="label-01 text-text-03">{subtitle}</span>
 	</p>
-</Tooltip>
+{:else}
+	<Tooltip class="w-full">
+		<div
+			class={`w-full ${getHeight()} bg-[var(--color)]`}
+			style="--color:{color};
+		--height:{getHeight()};"
+			aria-describedby="idTooltipTarget"
+		/>
+		<p slot="tooltip" class="flex flex-col justify-center items-center">
+			<span class="label-01 text-text-04">{title}</span>
+			<span class="label-01 text-text-03">{subtitle}</span>
+		</p>
+	</Tooltip>
+{/if}
