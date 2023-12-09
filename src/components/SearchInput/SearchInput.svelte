@@ -6,6 +6,7 @@
 	export let searchIndexes: SearchIndexes;
 	export let searchResults: SearchResults | null;
 	export let searchValue: string | null = '';
+	export let ref: HTMLInputElement | null = null;
 
 	$: if (searchValue?.trim()) {
 		searchResults = search(searchValue.trim(), searchIndexes);
@@ -15,4 +16,15 @@
 	}
 </script>
 
-<TextInput bind:value={searchValue} {...$$restProps} />
+<TextInput
+	bind:ref
+	bind:value={searchValue}
+	{...$$restProps}
+	on:change
+	on:input
+	on:keydown
+	on:keyup
+	on:focus
+	on:blur
+	on:paste
+/>
