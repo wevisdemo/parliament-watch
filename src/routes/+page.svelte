@@ -26,7 +26,7 @@
 	<p class="flex gap-[10px] helper-text-01 text-gray-60">
 		<span>อัปเดตข้อมูล: 18 ส.ค. 2566</span>
 		<!-- TODO: Add link -->
-		<a href="#source" class="underline text-[color:inherit]">ที่มาและข้อจำกัดข้อมูล</a>
+		<a href="/" class="underline text-[color:inherit]">ที่มาและข้อจำกัดข้อมูล</a>
 	</p>
 	<img
 		class="absolute w-full max-w-[1280px] h-auto bottom-0 left-1/2 -translate-x-1/2"
@@ -116,17 +116,17 @@
 		</section>
 		<ul class="flex flex-col gap-[6px]">
 			<li>
-				<Button href="#b" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
 					สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
 				</Button>
 			</li>
 			<li>
-				<Button href="#b" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
+				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
 					>สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
 				>
 			</li>
 			<li>
-				<Button href="#b" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
+				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
 					>คณะรัฐมนตรี (ครม.) ทั้งหมด</Button
 				>
 			</li>
