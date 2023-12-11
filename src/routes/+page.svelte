@@ -1,4 +1,5 @@
 <script lang="ts">
+	import StatCard from '$components/Index/StatCard.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
@@ -6,6 +7,7 @@
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 
 	export let data;
+	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians } = data);
 </script>
 
 <header
@@ -29,7 +31,7 @@
 	<menu class="max-w-[1280px] mx-auto flex flex-col md:flex-row">
 		<li class="flex-1">
 			<a
-				href="#a"
+				href="#politician"
 				class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 !no-underline"
 			>
 				<PoliticianIcon class="aspect-square w-6 h-auto md:w-8" />
@@ -66,10 +68,39 @@
 		</li>
 	</menu>
 </nav>
-<section class="bg-ui-01">
-	<div class="p-4">
+<section class="bg-ui-01 text-text-01">
+	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
+		<div id="politician" class="flex flex-col gap-2 items-start md:flex-row">
+			<div class="flex gap-2 items-center md:flex-1">
+				<PoliticianIcon width="32" height="32" />
+				<h2 class="fluid-heading-05">นักการเมือง</h2>
+			</div>
+			<p class="md:flex-1 body-01">
+				รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
+				ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา
+			</p>
+		</div>
+		<div>กล่องค้นหาจ้า</div>
+		<section>
+			<h3 class="fluid-heading-04">นักการเมืองที่น่าสนใจ</h3>
+			<p class="label-01 text-gray-60 mb-6">
+				หมายเหตุ : ในกรณีที่มีมากกว่า 1 คน จะเลือกจากลำดับตัวอักษรในชื่อ
+			</p>
+			<div class="grid grid-cols-3 gap-3">
+				{#each highlightedPoliticians as politicianData (politicianData.reason)}
+					<StatCard {politicianData} />
+				{/each}
+			</div>
+			<hr />
+			<div class="grid grid-cols-3 gap-3">
+				{#each otherSourcesHighlightedPoliticians as politicianData (politicianData.reason)}
+					<StatCard {politicianData} />
+				{/each}
+			</div>
+		</section>
+		<hr />
 		<Accordion>
-			<AccordionItem title="Data"><p>{JSON.stringify(data, null, 2)}</p></AccordionItem>
+			<AccordionItem title="Data"><pre>{JSON.stringify(data, null, 2)}</pre></AccordionItem>
 		</Accordion>
 	</div>
 </section>
