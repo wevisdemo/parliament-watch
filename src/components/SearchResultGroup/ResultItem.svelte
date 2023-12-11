@@ -20,13 +20,16 @@
 					<p class="text-xs text-text-03">{item.description}</p>
 				{/if}
 			</div>
-			{#if item.billStatus !== undefined || item.voteResult !== undefined}
+			{#if item.billStatus !== undefined || item.voteResult !== undefined || item.proposedBillsCount !== undefined}
 				<div class="shrink-0">
 					{#if item.billStatus}
 						<BillStatusTag status={item.billStatus} />
 					{/if}
 					{#if item.voteResult}
 						<VotingResultTag result={item.voteResult} />
+					{/if}
+					{#if item.proposedBillsCount}
+						<p class="label-02 text-text-02">{item.proposedBillsCount} ร่าง</p>
 					{/if}
 				</div>
 			{/if}

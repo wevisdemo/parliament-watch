@@ -3,15 +3,17 @@
 	import ResultItem from './ResultItem.svelte';
 
 	export let heading: string;
-	export let items: SearchResultItem[];
+	export let items: SearchResultItem[] | undefined;
 </script>
 
 <div>
 	<div class="px-4 py-2 flex items-center gap-2 bg-ui-01">
 		<slot name="icon" />
-		<span class="text-xs">{heading}</span>
+		<span class="text-xs text-gray-90">{heading}</span>
 	</div>
-	{#each items as item}
-		<ResultItem {item} />
-	{/each}
+	{#if items}
+		{#each items as item}
+			<ResultItem {item} />
+		{/each}
+	{/if}
 </div>

@@ -265,8 +265,15 @@
 						pageSize={tablePageSize}
 						page={tableCurrentPage}
 					>
-						<svelte:fragment slot="cell" let:cell>
-							<slot name="table" cellKey={cell.key} cellValue={cell.value} />
+						<svelte:fragment slot="cell-header" let:header>
+							{#if header.key === 'files'}
+								<span>เอก<br class="md:hidden" />สาร</span>
+							{:else}
+								{header.value}
+							{/if}
+						</svelte:fragment>
+						<svelte:fragment slot="cell" let:cell let:row>
+							<slot name="table" cellKey={cell.key} cellValue={cell.value} {row} />
 						</svelte:fragment>
 					</DataTable>
 				</div>
