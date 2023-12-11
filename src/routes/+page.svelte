@@ -5,7 +5,7 @@
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import { Button } from 'carbon-components-svelte';
+	import { Button, Search } from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
@@ -83,7 +83,7 @@
 				ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา
 			</p>
 		</div>
-		<div>กล่องค้นหาจ้า</div>
+		<Search size="lg" placeholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช" />
 		<section>
 			<h3 class="fluid-heading-04">นักการเมืองที่น่าสนใจ</h3>
 			<p class="label-01 text-gray-60 mb-6">
