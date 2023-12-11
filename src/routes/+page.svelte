@@ -3,8 +3,9 @@
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import { Accordion, AccordionItem } from 'carbon-components-svelte';
+	import { Accordion, AccordionItem, Button } from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	export let data;
 	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians } = data);
@@ -91,13 +92,35 @@
 					<StatCard {politicianData} />
 				{/each}
 			</div>
-			<hr />
+		</section>
+		<section>
+			<h3 class="heading-01 text-center mb-6 relative">
+				<span class="absolute w-full h-[1px] bg-text-03 left-0 top-1/2" aria-hidden="true" />
+				<span class="relative text-text-03 bg-ui-01 px-2 z-10">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
+			</h3>
 			<div class="grid grid-cols-3 gap-3">
 				{#each otherSourcesHighlightedPoliticians as politicianData (politicianData.reason)}
 					<StatCard {politicianData} />
 				{/each}
 			</div>
 		</section>
+		<ul class="flex flex-col gap-[6px]">
+			<li>
+				<Button href="#b" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+					สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
+				</Button>
+			</li>
+			<li>
+				<Button href="#b" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
+					>สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
+				>
+			</li>
+			<li>
+				<Button href="#b" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
+					>คณะรัฐมนตรี (ครม.) ทั้งหมด</Button
+				>
+			</li>
+		</ul>
 		<hr />
 		<Accordion>
 			<AccordionItem title="Data"><pre>{JSON.stringify(data, null, 2)}</pre></AccordionItem>
@@ -105,6 +128,7 @@
 	</div>
 </section>
 
+<!-- TODO - What to do with these links? -->
 <!-- <div class="p-4 space-y-6">
 	<h1 class="fluid-display-01 text-blue-60">Parliament Watch 👀</h1>
 
