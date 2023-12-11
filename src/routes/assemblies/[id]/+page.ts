@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { AssemblyName } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
@@ -44,27 +45,37 @@ export async function load({ params }) {
 	const { mainRoles, ...assembly } = fullAssembly;
 	const isSenates = assembly.name === AssemblyName.Senates;
 
-	const members = await fetchAssemblyMembers(fullAssembly);
+	const activeMembers = (await fetchAssemblyMembers(fullAssembly)).filter(
+		({ assemblyRole }) =>
+			!assemblyRole?.endedAt ||
+			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
+	);
 
-	// TODO: use first members while assemblies role in datasheet is not filled out yet
-	const mainMembers: MainMember[] = mainRoles.map((mainRole, i) => {
-		const { id, firstname, lastname, avatar, partyRole, assemblyRole } = members[i];
+	const mainMembers = mainRoles.reduce((list, mainRole) => {
+		const member = activeMembers.find(({ assemblyRole }) => assemblyRole?.role === mainRole);
 
-		return {
-			assemblyRole: mainRole,
-			politician: {
-				id,
-				firstname,
-				lastname,
-				avatar
-			},
-			party: partyRole?.party,
-			description: assemblyRole?.appointmentMethod
-		};
-	});
+		if (!member) return list;
+
+		const { id, firstname, lastname, avatar, partyRole, assemblyRole } = member;
+
+		return [
+			...list,
+			{
+				assemblyRole: mainRole,
+				politician: {
+					id,
+					firstname,
+					lastname,
+					avatar
+				},
+				party: partyRole?.party,
+				description: assemblyRole?.appointmentMethod
+			}
+		];
+	}, [] as MainMember[]);
 
 	const parseMemberGroup = (groupBy: GroupByOption) =>
-		getMemberGroup(fullAssembly, members, groupBy, isSenates).map((group) => ({
+		getMemberGroup(fullAssembly, activeMembers, groupBy, isSenates).map((group) => ({
 			name: group.name,
 			...('subgroups' in group
 				? {
@@ -81,7 +92,7 @@ export async function load({ params }) {
 		}));
 
 	const summary: Summary = {
-		totalMembers: members.length,
+		totalMembers: activeMembers.length,
 		highlightGroup: parseMemberGroup(
 			isSenates ? GroupByOption.AppointmentMethod : GroupByOption.Party
 		),
