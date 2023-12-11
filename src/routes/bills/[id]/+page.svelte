@@ -27,9 +27,10 @@
 		mergedIntoBillLatestEvent,
 		relatedVotingResults
 	} = data;
+
 	const tooltipText =
 		'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
-	const lastestEvent = events[events.length - 1];
+
 	const dateTimeFormat: Intl.DateTimeFormatOptions = {
 		year: '2-digit',
 		month: 'short',
@@ -75,10 +76,13 @@
 		return '';
 	}
 
+	const lastestEvent = events.reduce((a, b) => {
+		return new Date(a.date) > new Date(b.date) ? a : b;
+	});
+
 	function getNumberOfDays() {
-		const start = new Date(events[0].date);
-		const end =
-			bill.status === BillStatus.InProgress ? new Date() : new Date(events[events.length - 1].date);
+		const start = bill.proposedOn;
+		const end = bill.status === BillStatus.InProgress ? new Date() : new Date(lastestEvent.date);
 		const timeDifference = Math.abs(end.getTime() - start.getTime());
 		const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 		return daysDifference;
@@ -339,7 +343,7 @@
 				<div>
 					<ol class="relative ml-2">
 						<Progress
-							event={lastestEvent}
+							event={events[events.length - 1]}
 							billStatus={bill.status}
 							{tooltipText}
 							{relatedVotingResults}
