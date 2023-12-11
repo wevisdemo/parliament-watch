@@ -7,7 +7,7 @@ export const removeNullProperties = (row: object) =>
 	Object.entries(row).reduce<{ [key: string]: unknown }>(
 		(output, [key, value]) =>
 			// TODO: value !== '?' while the data table is not filled up completely
-			value !== null && value !== '?' ? { ...output, [key]: value } : output,
+			value !== null ? { ...output, [key]: value } : output,
 		{}
 	);
 
