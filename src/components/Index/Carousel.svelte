@@ -35,7 +35,7 @@
 	</div>
 	<button
 		type="button"
-		class="absolute left-0 bottom-[75px] translate-y-1/2 md:-left-12"
+		class="absolute left-0 bottom-[75px] translate-y-1/2 xl:-left-6"
 		on:click={() => {
 			slider.prev();
 		}}
@@ -43,7 +43,7 @@
 	>
 	<button
 		type="button"
-		class="absolute right-0 bottom-[75px] translate-y-1/2 md:-right-12"
+		class="absolute right-0 bottom-[75px] translate-y-1/2 xl:-right-6"
 		on:click={() => {
 			slider.next();
 		}}
