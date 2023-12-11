@@ -1,7 +1,7 @@
 import type { Politician } from '$models/politician.js';
 import { movingForwardPolitician } from '../mocks/data/politician.js';
 
-enum HighlightedReason {
+export enum _HighlightedReason {
 	HighestAssetOwned = 'มีทรัพย์สินมากที่สุด',
 	HighestDebtOwned = 'มีหนี้สินมากที่สุด',
 	HighestPartySwitching = 'ย้ายพรรคบ่อยที่สุด',
@@ -18,8 +18,8 @@ enum HighlightedReason {
 	MostGunOwned = 'ครอบครองปืนมากที่สุด'
 }
 
-interface HighlightedPolitician {
-	reason: HighlightedReason;
+export interface HighlightedPolitician {
+	reason: _HighlightedReason;
 	value: number;
 	politician: Politician;
 }
@@ -46,32 +46,32 @@ interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPoliticia
 export function load({ params }) {
 	const highlightedPoliticians: HighlightedPolitician[] = [
 		{
-			reason: HighlightedReason.HighestAssetOwned,
+			reason: _HighlightedReason.HighestAssetOwned,
 			value: 95787230000,
 			politician: movingForwardPolitician
 		},
 		{
-			reason: HighlightedReason.HighestDebtOwned,
+			reason: _HighlightedReason.HighestDebtOwned,
 			value: 1862770000,
 			politician: movingForwardPolitician
 		},
 		{
-			reason: HighlightedReason.HighestPartySwitching,
+			reason: _HighlightedReason.HighestPartySwitching,
 			value: 12,
 			politician: movingForwardPolitician
 		},
 		{
-			reason: HighlightedReason.HighestAbsentRate,
+			reason: _HighlightedReason.HighestAbsentRate,
 			value: 0.98,
 			politician: movingForwardPolitician
 		},
 		{
-			reason: HighlightedReason.HighestBillProposed,
+			reason: _HighlightedReason.HighestBillProposed,
 			value: 87,
 			politician: movingForwardPolitician
 		},
 		{
-			reason: HighlightedReason.Youngest,
+			reason: _HighlightedReason.Youngest,
 			value: 25,
 			politician: movingForwardPolitician
 		}
@@ -79,36 +79,36 @@ export function load({ params }) {
 
 	const otherSourcesHighlightedPoliticians: HighlightedPolitician[] = [
 		{
-			reason: HighlightedReason.LongestServedInPoliticalPositions,
+			reason: _HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,
 			politician: movingForwardPolitician,
 			position: PoliticialPosition.MP,
 			year: 2512
 		} as LongestServedInPoliticalPositionsPolitician,
 		{
-			reason: HighlightedReason.MostFrequentlyElectedInConstituency,
+			reason: _HighlightedReason.MostFrequentlyElectedInConstituency,
 			value: 12,
 			politician: movingForwardPolitician
 		},
 		{
-			reason: HighlightedReason.MostFrequentlyServedAsMinister,
+			reason: _HighlightedReason.MostFrequentlyServedAsMinister,
 			value: 5,
 			politician: movingForwardPolitician,
 			cabinetTerms: [38, 42, 43, 45, 53]
 		} as MostFrequentlyServedAsMinisterPolitician,
 		{
-			reason: HighlightedReason.MostDiverseServedAsMinister,
+			reason: _HighlightedReason.MostDiverseServedAsMinister,
 			value: 6,
 			politician: movingForwardPolitician
 		},
 		{
-			reason: HighlightedReason.MostVisitedInWikipediaLastMonth,
+			reason: _HighlightedReason.MostVisitedInWikipediaLastMonth,
 			value: 476263,
 			politician: movingForwardPolitician,
 			updatedAt: new Date('2023-11-01')
 		} as MostVisitedInWikipediaLastMonthPolitician,
 		{
-			reason: HighlightedReason.MostGunOwned,
+			reason: _HighlightedReason.MostGunOwned,
 			value: 25,
 			politician: movingForwardPolitician
 		}
