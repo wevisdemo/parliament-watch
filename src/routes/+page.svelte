@@ -14,7 +14,7 @@
 </script>
 
 <header
-	class="h-[calc(100lvh-48px)] min-h-[340px] bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] flex items-center justify-center flex-col gap-[10px] px-4"
+	class="h-[calc(100lvh-48px)] min-h-[340px] bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] flex items-center justify-center flex-col gap-[10px] px-4 overflow-hidden"
 >
 	<h1 class="fluid-display-01 max-w-[1280px] text-center" style="text-wrap:balance">
 		<span class="whitespace-nowrap">ขับเคลื่อน</span><span class="whitespace-nowrap"
@@ -28,7 +28,15 @@
 		<!-- TODO: Add link -->
 		<a href="#source" class="underline text-[color:inherit]">ที่มาและข้อจำกัดข้อมูล</a>
 	</p>
-	<img class="absolute w-full h-auto bottom-0 left-0" src="/images/sapasathan.svg" alt="" />
+	<img
+		class="absolute w-full max-w-[1280px] h-auto bottom-0 left-1/2 -translate-x-1/2"
+		src="/images/sapasathan.svg"
+		alt=""
+		width="634"
+		height="153"
+		loading="eager"
+		decoding="async"
+	/>
 </header>
 <nav>
 	<menu class="max-w-[1280px] mx-auto flex flex-col md:flex-row">
