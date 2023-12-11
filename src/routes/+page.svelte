@@ -1,10 +1,11 @@
 <script lang="ts">
+	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import Carousel from '$components/Index/Carousel.svelte';
 	import StatCard from '$components/Index/StatCard.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import { Accordion, AccordionItem, Button } from 'carbon-components-svelte';
+	import { Button } from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
@@ -122,12 +123,9 @@
 				>
 			</li>
 		</ul>
-		<hr />
-		<Accordion>
-			<AccordionItem title="Data"><pre>{JSON.stringify(data, null, 2)}</pre></AccordionItem>
-		</Accordion>
 	</div>
 </section>
+<BackToTopButton />
 
 <!-- TODO - What to do with these links? -->
 <!-- <div class="p-4 space-y-6">
