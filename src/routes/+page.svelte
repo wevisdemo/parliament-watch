@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Carousel from '$components/Index/Carousel.svelte';
 	import StatCard from '$components/Index/StatCard.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
@@ -87,7 +88,7 @@
 			<p class="label-01 text-gray-60 mb-6">
 				หมายเหตุ : ในกรณีที่มีมากกว่า 1 คน จะเลือกจากลำดับตัวอักษรในชื่อ
 			</p>
-			<div class="grid grid-cols-3 gap-3">
+			<div class="grid grid-cols-1 gap-3 md:grid-cols-3">
 				{#each highlightedPoliticians as politicianData (politicianData.reason)}
 					<StatCard {politicianData} />
 				{/each}
@@ -98,11 +99,11 @@
 				<span class="absolute w-full h-[1px] bg-text-03 left-0 top-1/2" aria-hidden="true" />
 				<span class="relative text-text-03 bg-ui-01 px-2 z-10">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
 			</h3>
-			<div class="grid grid-cols-3 gap-3">
+			<Carousel>
 				{#each otherSourcesHighlightedPoliticians as politicianData (politicianData.reason)}
-					<StatCard {politicianData} />
+					<StatCard class="keen-slider__slide" {politicianData} />
 				{/each}
-			</div>
+			</Carousel>
 		</section>
 		<ul class="flex flex-col gap-[6px]">
 			<li>
