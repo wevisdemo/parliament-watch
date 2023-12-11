@@ -2,6 +2,9 @@
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import { _HighlightedReason, type HighlightedPolitician } from '../../routes/+page';
 
+	let className = '';
+	export { className as class };
+
 	export let politicianData: HighlightedPolitician;
 	$: ({ reason, value, politician } = politicianData);
 
@@ -82,11 +85,11 @@
 	$: description = DESC_LOOKUP[reason] ?? '';
 </script>
 
-<article>
+<article class="flex flex-col {className}">
 	<h4 class="heading-01 text-blue-70 mb-[2px]">{reason}</h4>
 	{#if description}
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		<p class="label-01 text-gray-60 h-[70px]">{@html description}</p>
+		<p class="flex-[1_1_70px] label-01 text-gray-60">{@html description}</p>
 	{/if}
 	<a
 		href={`/politicians/${politician.firstname} ${politician.lastname}`.replaceAll(' ', '-')}
@@ -119,7 +122,8 @@
 			</div>
 			<span class="heading-02 text-gray-100">{politician.firstname} {politician.lastname}</span>
 			<span class="-mt-2 label-01 text-gray-60"
-				>{politician.assemblyRoles[0].role} | พรรค{politician.partyRoles[0].party.name}</span
+				>{politician.assemblyRoles[0].role} |
+				<span class="whitespace-nowrap">พรรค{politician.partyRoles[0].party.name}</span></span
 			>
 			<span class="body-01 text-blue-70">{formattedValue} {unit}</span>
 		</div>
