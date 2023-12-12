@@ -20,7 +20,9 @@
 
 	let open = false;
 	let selectedTab = '';
+	let selectedMenu = 'summary';
 	let isViewPercent = false;
+	let searchQuery = '';
 
 	function dateConvertor(date: Date) {
 		const convertedDate = Intl.DateTimeFormat('th', {
@@ -130,11 +132,33 @@
 	</div>
 	<div class="flex flex-col w-full py-6 px-4 md:px-12 md:py-16">
 		<h1 class="fluid-heading-05 text-center">ผลการลงมติ</h1>
-		<Tabs class="w-full">
-			<Tab>สรุป</Tab>
-			<Tab>รายสังกัด</Tab>
-			<Tab>รายคน</Tab>
-		</Tabs>
+		<div class="w-full flex items-center gap-x-[1px] mt-4 sticky top-12 bg-white">
+			<button
+				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 {selectedMenu ===
+				'summary'
+					? 'text-gray-100 font-bold border-blue-60'
+					: 'text-gray-60 border-gray-30'}"
+				on:click={() => (selectedMenu = 'summary')}
+			>
+				สรุป
+			</button>
+			<div
+				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
+				'byParty'
+					? 'text-gray-100 font-bold border-blue-60'
+					: 'text-gray-60 border-gray-30'}"
+			>
+				รายสังกัด
+			</div>
+			<div
+				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
+				'byPerson'
+					? 'text-gray-100 font-bold border-blue-60'
+					: 'text-gray-60 border-gray-30'}"
+			>
+				รายคน
+			</div>
+		</div>
 		<h2 class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
 		<div class="flex flex-col mt-4">
 			<div class="flex items-center text-teal-50 gap-x-1">
@@ -196,151 +220,154 @@
 		>
 			งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
 		</button>
-	</div>
-	<div class="flex flex-col w-full px-4 md:px-12">
-		<div class="flex flex-col md:flex-row items-start md:items-center gap-x-3">
-			<h1 class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
-			<div class="flex items-center">
-				<ToggleSkeleton class="outline-none" on:click={() => (isViewPercent = !isViewPercent)} />
-				<p class="body-compact-01">ดูร้อยละ</p>
+		<div class="flex flex-col w-full mt-20">
+			<div class="flex flex-col md:flex-row items-start md:items-center gap-x-3">
+				<h1 class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
+				<div class="flex items-center">
+					<ToggleSkeleton class="outline-none" on:click={() => (isViewPercent = !isViewPercent)} />
+					<p class="body-compact-01">ดูร้อยละ</p>
+				</div>
 			</div>
+			<p class="label-01">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
 		</div>
-		<p class="label-01">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
-	</div>
-	<div class="flex flex-col md:flex-row w-full px-4 md:px-12 mt-4 mb-10 gap-x-8">
-		{#each data.resultsByAffiliation as { affiliationName, resultSummary, byParties }}
-			{@const totalVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
-			<div class="flex flex-col w-full md:w-1/3 border-t border-gray-30 pb-4 md:pb-0">
-				<div class="mt-2 flex items-center gap-x-1">
-					<p class="heading-02">{affiliationName}</p>
-					<p class="body-02 text-gray-60">{totalVote} คน</p>
-					<div class="flex md:hidden flex-1" />
-					<Add
-						on:click={() => (selectedTab = affiliationName)}
-						class="justify-self-start self-start flex md:hidden"
-					/>
-				</div>
-				<div class="mt-1 flex items-center gap-x-1 text-teal-50">
-					<p class="heading-03">
-						{isViewPercent
-							? (
-									((resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total || 0) /
-										totalVote) *
-									100
-							  ).toFixed(0) + '%'
-							: resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total + 'คน'}
-					</p>
-					<p class="heading-03">เห็นด้วย</p>
-				</div>
-				<div class="mt-1 flex items-center gap-x-3 text-teal-50">
-					{#each resultSummary as vote}
-						<div class="flex items-center gap-x-1">
-							<div class="w-1 h-3 {getVoteColor(vote.voteOption)}" />
-							<p class="label-01">{vote.total}</p>
-						</div>
-					{/each}
-				</div>
-				<div class="flex w-full h-[30px] mt-1">
-					{#each resultSummary as vote}
-						<div
-							class="rounded-sm h-full {getVoteColor(vote.voteOption)}"
-							style="width: {getWidthPercent(vote.total, totalVote)}%"
+		<div class="flex flex-col md:flex-row w-full mt-4 mb-10 gap-x-8">
+			{#each data.resultsByAffiliation as { affiliationName, resultSummary, byParties }}
+				{@const totalVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
+				<div class="flex flex-col w-full md:w-1/3 border-t border-gray-30 pb-4 md:pb-0">
+					<div class="mt-2 flex items-center gap-x-1">
+						<p class="heading-02">{affiliationName}</p>
+						<p class="body-02 text-gray-60">{totalVote} คน</p>
+						<div class="flex md:hidden flex-1" />
+						<Add
+							on:click={() => (selectedTab = affiliationName)}
+							class="justify-self-start self-start flex md:hidden"
 						/>
-					{/each}
-				</div>
-				{#if byParties}
-					<div
-						class="{selectedTab === affiliationName
-							? 'flex'
-							: 'hidden'} md:flex flex-col w-full mt-4 gap-y-4"
-					>
-						{#each byParties as partyDetails}
-							{@const totalPartyVote = partyDetails.resultSummary.reduce(
-								(acc, vote) => acc + vote.total,
-								0
-							)}
-							<div class="flex items-start gap-x-1">
-								<img
-									class="rounded-full border border-gray-30 w-8 h-8"
-									src={partyDetails.party.logo}
-									alt={partyDetails.party.name}
-									loading="lazy"
-									decoding="async"
-								/>
-								<div class="flex justify-start items-start flex-col w-full">
-									<div class="flex items-center gap-x-1">
-										<p class="heading-02">{partyDetails.party.name}</p>
-										<p class="body-02 text-gray-60">
-											{totalPartyVote} คน
-										</p>
-									</div>
-									<div class="mt-1 flex items-center gap-x-3 text-teal-50">
-										{#each partyDetails.resultSummary as partyVote}
-											<div class="flex items-center gap-x-1">
-												<div class="w-1 h-3 {getVoteColor(partyVote.voteOption)}" />
-												<p class="label-01">
-													{isViewPercent
-														? ((partyVote.total / totalPartyVote) * 100).toFixed(2) + '%'
-														: partyVote.total}
-												</p>
-											</div>
-										{/each}
-									</div>
-									<div class="flex w-full h-[20px] mt-1">
-										{#each partyDetails.resultSummary as partyVote}
-											<div
-												class="rounded-sm h-full {getVoteColor(partyVote.voteOption)}"
-												style="width: {getWidthPercent(partyVote.total, totalVote)}%"
-											/>
-										{/each}
-									</div>
-								</div>
+					</div>
+					<div class="mt-1 flex items-center gap-x-1 text-teal-50">
+						<p class="heading-03">
+							{isViewPercent
+								? (
+										((resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total || 0) /
+											totalVote) *
+										100
+								  ).toFixed(0) + '%'
+								: resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total + 'คน'}
+						</p>
+						<p class="heading-03">เห็นด้วย</p>
+					</div>
+					<div class="mt-1 flex items-center gap-x-3 text-teal-50">
+						{#each resultSummary as vote}
+							<div class="flex items-center gap-x-1">
+								<div class="w-1 h-3 {getVoteColor(vote.voteOption)}" />
+								<p class="label-01">{vote.total}</p>
 							</div>
 						{/each}
 					</div>
-				{/if}
-			</div>
-		{/each}
-	</div>
-	<div class="flex flex-col w-full px-4 md:px-12 mt-0 md:mt-10">
-		<p class="hidden md:block text-right label-01">
-			หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ
-		</p>
-		<div class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
-		<div class="flex">
-			<TextInput size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" />
-			<Button>สำรวจแบบละเอียด</Button>
+					<div class="flex w-full h-[30px] mt-1">
+						{#each resultSummary as vote}
+							<div
+								class="rounded-sm h-full {getVoteColor(vote.voteOption)}"
+								style="width: {getWidthPercent(vote.total, totalVote)}%"
+							/>
+						{/each}
+					</div>
+					{#if byParties}
+						<div
+							class="{selectedTab === affiliationName
+								? 'flex'
+								: 'hidden'} md:flex flex-col w-full mt-4 gap-y-4"
+						>
+							{#each byParties as partyDetails}
+								{@const totalPartyVote = partyDetails.resultSummary.reduce(
+									(acc, vote) => acc + vote.total,
+									0
+								)}
+								<div class="flex items-start gap-x-1">
+									<img
+										class="rounded-full border border-gray-30 w-8 h-8"
+										src={partyDetails.party.logo}
+										alt={partyDetails.party.name}
+										loading="lazy"
+										decoding="async"
+									/>
+									<div class="flex justify-start items-start flex-col w-full">
+										<div class="flex items-center gap-x-1">
+											<p class="heading-02">{partyDetails.party.name}</p>
+											<p class="body-02 text-gray-60">
+												{totalPartyVote} คน
+											</p>
+										</div>
+										<div class="mt-1 flex items-center gap-x-3 text-teal-50">
+											{#each partyDetails.resultSummary as partyVote}
+												<div class="flex items-center gap-x-1">
+													<div class="w-1 h-3 {getVoteColor(partyVote.voteOption)}" />
+													<p class="label-01">
+														{isViewPercent
+															? ((partyVote.total / totalPartyVote) * 100).toFixed(2) + '%'
+															: partyVote.total}
+													</p>
+												</div>
+											{/each}
+										</div>
+										<div class="flex w-full h-[20px] mt-1">
+											{#each partyDetails.resultSummary as partyVote}
+												<div
+													class="rounded-sm h-full {getVoteColor(partyVote.voteOption)}"
+													style="width: {getWidthPercent(partyVote.total, totalVote)}%"
+												/>
+											{/each}
+										</div>
+									</div>
+								</div>
+							{/each}
+						</div>
+					{/if}
+				</div>
+			{/each}
 		</div>
-		<div class="flex w-full border-t border-gray-30">
-			<div class="w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4">
-				ชื่อ-นามสกุล
+		<div class="flex flex-col w-full mt-0 md:mt-10">
+			<p class="hidden md:block text-right label-01">
+				หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ
+			</p>
+			<div class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
+			<div class="flex">
+				<TextInput size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" bind:value={searchQuery} />
+				<Button>สำรวจแบบละเอียด</Button>
 			</div>
-			<div class="w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4">ตำแหน่ง</div>
-			<div class="w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4">
-				สังกัดพรรค
-			</div>
-			<div
-				class="hidden md:block w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4"
-			>
-				การลงมติ
-			</div>
-		</div>
-		{#each data.resultsByPerson as voter}
 			<div class="flex w-full border-t border-gray-30">
-				<div class="w-[112px] md:w-1/4 body-01 underline py-[11px] md:py-[15px] px-4">
-					{voter.firstname}
-					{voter.lastname}
+				<div class="w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4">
+					ชื่อ-นามสกุล
 				</div>
-				<div class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4">
-					{voter.position}
+				<div class="w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4">ตำแหน่ง</div>
+				<div class="w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4">
+					สังกัดพรรค
 				</div>
-				<div class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4">
-					{voter.party ? voter.party : ''}
-				</div>
-				<div class="hidden md:block w-[112px] md:w-1/4 py-[11px] md:py-[15px] px-4">
-					<Tag class={getVoteColor(voter.voteOption)}>{voter.voteOption}</Tag>
+				<div
+					class="hidden md:block w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4"
+				>
+					การลงมติ
 				</div>
 			</div>
-		{/each}
+			{#each data.resultsByPerson.filter((v) => (v.firstname + v.lastname)
+					.trim()
+					.toLowerCase()
+					.includes(searchQuery.trim().toLowerCase())) as voter}
+				<div class="flex w-full border-t border-gray-30">
+					<div class="w-[112px] md:w-1/4 body-01 underline py-[11px] md:py-[15px] px-4">
+						{voter.firstname}
+						{voter.lastname}
+					</div>
+					<div class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4">
+						{voter.position}
+					</div>
+					<div class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4">
+						{voter.party ? voter.party : ''}
+					</div>
+					<div class="hidden md:block w-[112px] md:w-1/4 py-[11px] md:py-[15px] px-4">
+						<Tag class={getVoteColor(voter.voteOption)}>{voter.voteOption}</Tag>
+					</div>
+				</div>
+			{/each}
+		</div>
 	</div>
 </div>
