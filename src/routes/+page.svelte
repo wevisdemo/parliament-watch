@@ -116,63 +116,30 @@
 		</section>
 		<ul class="flex flex-col gap-[6px]">
 			<li>
-				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+				<Button
+					href="/assemblies/สมาชิกสภาผู้แทนราษฎร-25"
+					kind="secondary"
+					icon={ArrowRight}
+					class="w-full max-w-none"
+				>
 					สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
 				</Button>
 			</li>
 			<li>
-				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
-					>สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
+				<Button
+					href="/assemblies/วุฒิสภา-12"
+					kind="secondary"
+					icon={ArrowRight}
+					class="w-full max-w-none">สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
 				>
 			</li>
-			<li>
+			<!-- TODO: cabinet is not released in the 1st phase  -->
+			<!-- <li>
 				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
 					>คณะรัฐมนตรี (ครม.) ทั้งหมด</Button
 				>
-			</li>
+			</li> -->
 		</ul>
 	</div>
 </section>
 <BackToTopButton />
-
-<!-- TODO - What to do with these links? -->
-<!-- <div class="p-4 space-y-6">
-	<h1 class="fluid-display-01 text-blue-60">Parliament Watch 👀</h1>
-
-	<ul>
-		<li>
-			<a href="/politicians/กรณิศ-งามสุคนธ์รัตนา"
-				>[WEV-12] Users can learn about a politician's details</a
-			>
-		</li>
-		<li>
-			[WEV-14] Users can learn more about an assembly
-			<ul>
-				<li><a href="/assemblies/สมาชิกสภาผู้แทนราษฎร-25">สส.</a></li>
-				<li><a href="/assemblies/วุฒิสภา-12">สว.</a></li>
-			</ul>
-		</li>
-		<li>
-			<a href="/legislative-process">[WEV-18] Users can learn the legislative process</a>
-		</li>
-		<li>
-			<a href="/votings/1">[WEV-10] Users can view voting details</a>
-			<ul>
-				<li>
-					<a href="/votings/1/votes">votes data table page</a>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<a href="/bills/1">[WEV-15] Users can view details and track progress of a bill</a>
-		</li>
-		<li>
-			<a href="/bills">[WEV-16] Users can browse for a bill</a>
-			<ul>
-				<li>
-					<a href="/bills/search">bills data table page</a>
-				</li>
-			</ul>
-		</li>
-	</ul>
-</div> -->

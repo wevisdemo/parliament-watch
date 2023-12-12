@@ -11,14 +11,18 @@
 			url: null,
 			type: MenuTypes.root,
 			subs: [
-				{ label: 'สภาผู้แทนราษฎร', url: '/', type: MenuTypes.link },
-				{ label: 'วุฒิสภา', url: '/', type: MenuTypes.link }
+				{
+					label: 'สภาผู้แทนราษฎร',
+					url: '/assemblies/สมาชิกสภาผู้แทนราษฎร-25',
+					type: MenuTypes.link
+				},
+				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link }
 			]
 		},
 		{
 			label: 'การลงมติ',
 			icon: VoteIcon,
-			url: '/',
+			url: '/votings/1',
 			type: MenuTypes.both
 		},
 		{
@@ -27,7 +31,7 @@
 			url: null,
 			type: MenuTypes.root,
 			subs: [
-				{ label: 'กฎหมายในกระบวนการ', url: '/', type: MenuTypes.link },
+				{ label: 'กฎหมายในกระบวนการ', url: '/bills/1', type: MenuTypes.link },
 				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
 			]
 		},
