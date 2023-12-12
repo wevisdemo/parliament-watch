@@ -59,11 +59,6 @@
 			}
 		]
 	};
-
-	let politician = true;
-	let voting = false;
-	let bill = true;
-	let billProposer = false;
 </script>
 
 <Hst.Story title="SearchResult" layout={{ type: 'grid', width: '350px' }}>
@@ -71,21 +66,11 @@
 		<SearchResult searchResults={noResults} />
 	</Hst.Variant>
 
-	<Hst.Variant title="Has only one group">
+	<Hst.Variant title="Has some group">
 		<SearchResult searchResults={hasPoliticains} />
 	</Hst.Variant>
 
 	<Hst.Variant title="Has all groups">
 		<SearchResult {searchResults} />
-	</Hst.Variant>
-
-	<Hst.Variant title="Specific to show some groups">
-		<SearchResult {politician} {bill} {voting} {billProposer} {searchResults} />
-		<svelte:fragment slot="controls">
-			<Hst.Checkbox title="Politician" bind:value={politician} />
-			<Hst.Checkbox title="Voting" bind:value={voting} />
-			<Hst.Checkbox title="Bill" bind:value={bill} />
-			<Hst.Checkbox title="Bill Proposer" bind:value={billProposer} />
-		</svelte:fragment>
 	</Hst.Variant>
 </Hst.Story>

@@ -7,6 +7,8 @@
 	import { searchIndexes } from '../../mocks/data/searchIndexes';
 	import SearchInput from '$components/SearchInput/SearchInput.svelte';
 
+	const { politicians, votings, bills } = searchIndexes;
+
 	const dispatch = createEventDispatcher<{
 		activate: void;
 		deactivate: void;
@@ -56,7 +58,7 @@
 			on:introend={introEndHandler}
 		>
 			<SearchInput
-				{searchIndexes}
+				searchIndexes={{ politicians, votings, bills }}
 				bind:ref={searchInput}
 				bind:searchResults
 				bind:searchValue
