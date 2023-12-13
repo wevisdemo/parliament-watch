@@ -21,7 +21,7 @@
 
 <div class="md:h-[calc(100lvh-48px)] flex flex-col">
 	<header
-		class="h-[340px] md:h-auto md:flex-1 bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] flex items-center justify-center flex-col gap-[10px] px-4 overflow-hidden relative"
+		class="h-[400px] md:h-auto md:flex-1 bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] flex items-center justify-center flex-col gap-[10px] px-4 overflow-hidden relative"
 	>
 		<img
 			class="absolute w-full max-w-[1280px] h-auto bottom-0 left-1/2 -translate-x-1/2"
