@@ -3,7 +3,7 @@ import type { Politician } from '../../models/politician';
 import { movingForwardParty } from './party';
 
 export const movingForwardPolitician: Politician = {
-	id: '1',
+	id: 'พริษฐ์-วัชรสินธุ',
 	avatar: 'https://via.placeholder.com/64',
 	firstname: 'พริษฐ์',
 	lastname: 'วัชรสินธุ',
