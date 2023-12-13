@@ -2,15 +2,21 @@
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import Carousel from '$components/Index/Carousel.svelte';
 	import StatCard from '$components/Index/StatCard.svelte';
+	import SearchInput from '$components/SearchInput/SearchInput.svelte';
+	import SearchResult from '$components/SearchResult/SearchResult.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import { Button, Search } from 'carbon-components-svelte';
+	import type { SearchResults } from '$models/search';
+	import { Button } from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import { searchIndexes } from '../mocks/data/searchIndexes';
 
 	export let data;
 	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians } = data);
+
+	let searchResults: SearchResults | null;
 </script>
 
 <header
@@ -91,7 +97,17 @@
 				ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา
 			</p>
 		</div>
-		<Search size="lg" placeholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช" />
+		<div class="relative">
+			<SearchInput
+				{searchIndexes}
+				bind:searchResults
+				size="lg"
+				placeholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช"
+			/>
+			{#if searchResults}
+				<SearchResult {searchResults} class="w-full absolute left-0" />
+			{/if}
+		</div>
 		<section>
 			<h3 class="fluid-heading-04">นักการเมืองที่น่าสนใจ</h3>
 			<p class="label-01 text-gray-60 mb-6">
