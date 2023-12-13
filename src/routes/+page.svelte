@@ -19,72 +19,74 @@
 	let searchResults: SearchResults | null;
 </script>
 
-<header
-	class="h-[calc(100lvh-48px)] min-h-[340px] bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] flex items-center justify-center flex-col gap-[10px] px-4 overflow-hidden"
->
-	<h1 class="fluid-display-01 max-w-[1280px] text-center" style="text-wrap:balance">
-		<span class="whitespace-nowrap">ขับเคลื่อน</span><span class="whitespace-nowrap"
-			>ประชาธิปไตย</span
-		> <br class="hidden md:block" /><span class="whitespace-nowrap">ร่วมเฝ้าดู</span><span
-			class="whitespace-nowrap">ความเคลื่อนไหว</span
-		><span class="whitespace-nowrap">รัฐสภา</span>
-	</h1>
-	<p class="flex gap-[10px] helper-text-01 text-gray-60">
-		<span>อัปเดตข้อมูล: 18 ส.ค. 2566</span>
-		<!-- TODO: Add link -->
-		<a href="/" class="underline text-[color:inherit]">ที่มาและข้อจำกัดข้อมูล</a>
-	</p>
-	<img
-		class="absolute w-full max-w-[1280px] h-auto bottom-0 left-1/2 -translate-x-1/2"
-		src="/images/sapasathan.svg"
-		alt=""
-		width="634"
-		height="153"
-		loading="eager"
-		decoding="async"
-	/>
-</header>
-<nav>
-	<menu class="max-w-[1280px] mx-auto flex flex-col md:flex-row">
-		<li class="flex-1">
-			<a
-				href="#politician"
-				class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 !no-underline"
-			>
-				<PoliticianIcon class="aspect-square w-6 h-auto md:w-8" />
-				<span class="flex flex-col gap-1">
-					<span class="fluid-heading-03">นักการเมือง</span>
-					<span>ส่องประวัติและผลงานของคนที่คุณสนใจ</span>
+<div class="md:h-[calc(100lvh-48px)] flex flex-col">
+	<header
+		class="h-[340px] md:h-auto md:flex-1 bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] flex items-center justify-center flex-col gap-[10px] px-4 overflow-hidden relative"
+	>
+		<img
+			class="absolute w-full max-w-[1280px] h-auto bottom-0 left-1/2 -translate-x-1/2"
+			src="/images/sapasathan.svg"
+			alt=""
+			width="634"
+			height="153"
+			loading="eager"
+			decoding="async"
+		/>
+		<h1 class="relative fluid-display-01 max-w-[1280px] text-center" style="text-wrap:balance">
+			<span class="whitespace-nowrap">ขับเคลื่อน</span><span class="whitespace-nowrap"
+				>ประชาธิปไตย</span
+			> <br class="hidden md:block" /><span class="whitespace-nowrap">ร่วมเฝ้าดู</span><span
+				class="whitespace-nowrap">ความเคลื่อนไหว</span
+			><span class="whitespace-nowrap">รัฐสภา</span>
+		</h1>
+		<p class="relative flex gap-[10px] helper-text-01 text-gray-60">
+			<span>อัปเดตข้อมูล: 18 ส.ค. 2566</span>
+			<!-- TODO: Add link -->
+			<a href="/" class="underline text-[color:inherit]">ที่มาและข้อจำกัดข้อมูล</a>
+		</p>
+	</header>
+	<nav>
+		<menu class="max-w-[1280px] mx-auto flex flex-col md:flex-row">
+			<li class="flex-1">
+				<a
+					href="#politician"
+					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 !no-underline"
+				>
+					<PoliticianIcon class="aspect-square w-6 h-auto md:w-8" />
+					<span class="flex-1 flex flex-col gap-1">
+						<span class="fluid-heading-03">นักการเมือง</span>
+						<span>ส่องประวัติและผลงานของคนที่คุณสนใจ</span>
+					</span>
+					<ArrowDown />
+				</a>
+			</li>
+			<li class="flex-1">
+				<span
+					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8"
+				>
+					<VoteIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
+					<span class="flex-1 flex flex-col gap-1 opacity-30">
+						<span class="fluid-heading-03">การลงมติ</span>
+						<span>ดูผลการโหวต พร้อมคำอธิบายเข้าใจง่าย</span>
+					</span>
+					<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
 				</span>
-				<ArrowDown />
-			</a>
-		</li>
-		<li class="flex-1">
-			<span
-				class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8"
-			>
-				<VoteIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
-				<span class="flex flex-col gap-1 opacity-30">
-					<span class="fluid-heading-03">การลงมติ</span>
-					<span>ดูผลการโหวต พร้อมคำอธิบายเข้าใจง่าย</span>
+			</li>
+			<li class="flex-1">
+				<span
+					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8"
+				>
+					<LawIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
+					<span class="flex-1 flex flex-col gap-1 opacity-30">
+						<span class="fluid-heading-03">การออกกฏหมาย</span>
+						<span>ติดตามร่างกฏหมายที่เกี่ยวข้องกับชีวิตคุณ</span>
+					</span>
+					<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
 				</span>
-				<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
-			</span>
-		</li>
-		<li class="flex-1">
-			<span
-				class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8"
-			>
-				<LawIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
-				<span class="flex flex-col gap-1 opacity-30">
-					<span class="fluid-heading-03">การออกกฏหมาย</span>
-					<span>ติดตามร่างกฏหมายที่เกี่ยวข้องกับชีวิตคุณ</span>
-				</span>
-				<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
-			</span>
-		</li>
-	</menu>
-</nav>
+			</li>
+		</menu>
+	</nav>
+</div>
 <section class="bg-ui-01 text-text-01">
 	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
 		<div id="politician" class="flex flex-col gap-2 items-start md:flex-row">
