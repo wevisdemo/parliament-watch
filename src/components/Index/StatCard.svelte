@@ -91,10 +91,7 @@
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		<p class="flex-[1_1_70px] label-01 text-gray-60">{@html description}</p>
 	{/if}
-	<a
-		href={`/politicians/${politician.firstname} ${politician.lastname}`.replaceAll(' ', '-')}
-		class="flex bg-white text-gray-100 mt-1"
-	>
+	<a href={`/politicians/${politician.id}`} class="flex bg-white text-gray-100 mt-1">
 		<div class="flex flex-col gap-2 p-4 flex-1">
 			<div class="relative mr-auto">
 				<img

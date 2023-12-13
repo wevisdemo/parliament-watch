@@ -6,12 +6,15 @@
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import type { SearchResults } from '$models/search';
 
+	let className = '';
+	export { className as class };
+
 	export let searchResults: SearchResults | null = null;
 </script>
 
 {#if searchResults}
 	<div
-		class="w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)]"
+		class="w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)] {className}"
 		style="box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.30);"
 	>
 		{#if Object.values(searchResults).some((results) => results?.length > 0)}
