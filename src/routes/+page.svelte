@@ -8,7 +8,7 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import type { SearchResults } from '$models/search';
-	import { Button } from 'carbon-components-svelte';
+	import { Button, Search } from 'carbon-components-svelte';
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import { searchIndexes } from '../mocks/data/searchIndexes';
@@ -101,10 +101,11 @@
 		</div>
 		<div class="relative">
 			<SearchInput
-				{searchIndexes}
-				bind:searchResults
+				as={Search}
 				size="lg"
 				placeholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช"
+				{searchIndexes}
+				bind:searchResults
 			/>
 			{#if searchResults}
 				<SearchResult {searchResults} class="w-full absolute left-0" />
