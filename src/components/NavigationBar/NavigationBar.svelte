@@ -38,13 +38,8 @@
 		{
 			label: 'เกี่ยวกับเรา',
 			icon: WeVisIcon,
-			url: null,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'ที่มาของโครงการ', url: '/', type: MenuTypes.link },
-				{ label: 'ข้อมูลในเว็บนี้', url: '/', type: MenuTypes.link },
-				{ label: 'เกี่ยวกับ WeVis', url: '/', type: MenuTypes.link }
-			]
+			url: '/about',
+			type: MenuTypes.both
 		}
 	];
 </script>
