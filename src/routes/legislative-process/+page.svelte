@@ -21,6 +21,40 @@
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
+	const sections = [
+		{
+			menu: 'แนะนำภาพรวม',
+			menuItem: [
+				{ text: 'การออกกฎหมายตามรัฐธรรมนูญ 2560' },
+				{ text: 'กฎหมายบังคับใช้ได้อย่างไร' },
+				{ text: 'กฎหมายในเว็บไซต์นี้' },
+				{ text: 'ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา' },
+				{ text: 'สถานะของกฎหมาย' }
+			]
+		},
+		{
+			menu: 'ขั้นตอนการออกกฎหมายโดยรัฐสภา',
+			menuItem: [{ text: 'ขั้นตอนทั่วไป' }, { text: 'ขั้นตอนพิเศษของกฎหมายบางประเภท' }]
+		},
+		{
+			menu: 'เข้าใจการลงมติของ สส. และ สว.',
+			menuItem: [
+				{ text: 'การลงมติคืออะไร เกิดขึ้นในขั้นตอนไหนบ้าง ?' },
+				{ text: 'วิธีการลงมติ' },
+				{ text: 'ประเภทการลงมติ' },
+				{ text: 'ผลการลงมติ' }
+			]
+		},
+		{
+			menu: 'ส.ส. และ ส.ว. ทำอะไรบ้างในสภา',
+			menuItem: [
+				{ text: 'หน้าที่ของสมาชิกสภาผู้แทนราษฏร (สส.)' },
+				{ text: 'หน้าที่ของสมาชิกวุฒิสภา (สว.)' },
+				{ text: 'หน้าที่ของสภาร่วม (ส.ส. + ส.ว.)' }
+			]
+		}
+	];
+
 	const billStatuses = [
 		{
 			billStatus: BillStatus.InProgress,
@@ -112,7 +146,7 @@
 
 			scroller
 				.setup({
-					step: bodyContainer.querySelectorAll('h2'),
+					step: bodyContainer.querySelectorAll('h2,h1'),
 					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
 					offset: '33px'
 				})
@@ -140,7 +174,7 @@
 			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8 md:top-0 md:sticky"
 		>
 			<div class="py-10 w-full bg-white flex items-center justify-center">
-				<Sidebar {currentNavElementId} />
+				<Sidebar {currentNavElementId} {sections} />
 			</div>
 		</div>
 		<div
