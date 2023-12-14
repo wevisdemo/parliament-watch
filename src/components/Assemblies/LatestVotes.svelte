@@ -20,7 +20,7 @@
 		<span class="fluid-heading-04 ml-[16px]">ผลการลงมติล่าสุด</span>
 	</div>
 	<div class="border-b-[1px] border-solid border-gray-20 w-full" />
-	<div class="grid md:grid-cols-3 grid-cols-1 gap-[8px] mt-[16px] justify-items-center">
+	<div class="flex flex-wrap gap-[8px] mt-[16px] justify-center md:justify-start">
 		{#each votes as vote}
 			<VoteCard {...vote} />
 		{/each}

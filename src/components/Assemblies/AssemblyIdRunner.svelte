@@ -1,51 +1,44 @@
 <script lang="ts">
+	import AngleRightIcon from '$components/icons/AngleRightIcon.svelte';
+
 	export let currentId = '';
 	export let startedYear: number;
 	export let term: number;
 	export let assemblyIds: string[] = [];
 	export let postfix = '';
 
-	const redirectNextAssembly = () => {
+	$: nextUrl = (() => {
 		const current = assemblyIds.findIndex((id) => id === currentId);
-		if (current === assemblyIds.length - 1) return;
+		if (current === assemblyIds.length - 1) return '';
 		const next = assemblyIds[current + 1];
-		if (next) {
-			window.location.href = `/assemblies/${next}${postfix ? `/${postfix}` : ''}`;
-		}
-	};
+		return next ? `/assemblies/${next}${postfix ? `/${postfix}` : ''}` : '';
+	})();
 
-	const redirectPrevAssembly = () => {
+	$: prevUrl = (() => {
 		const current = assemblyIds.findIndex((id) => id === currentId);
-		if (current === 0) return;
+		if (current === 0) return '';
 		const prev = assemblyIds[current - 1];
-		if (prev) {
-			window.location.href = `/assemblies/${prev}${postfix ? `/${postfix}` : ''}`;
-		}
-	};
-
-	const checkIfLastAssembly = () => {
-		const current = assemblyIds.findIndex((id) => id === currentId);
-		return current === assemblyIds.length - 1;
-	};
-
-	const checkIfFirstAssembly = () => {
-		const current = assemblyIds.findIndex((id) => id === currentId);
-		return current === 0;
-	};
+		return prev ? `/assemblies/${prev}${postfix ? `/${postfix}` : ''}` : '';
+	})();
 </script>
 
 <div class="flex items-center md:ml-[16px] ml-[0px]">
-	<button disabled={checkIfFirstAssembly()} on:click={() => redirectPrevAssembly()}>
-		<img
-			src="/icons/angle-right.svg"
-			alt="angle-left"
-			class="rotate-180 w-[20px] mr-[16px] ml-[0px] fill-gray-300"
+	<a
+		class={`${!prevUrl ? 'pointer-events-none' : ''} ${!prevUrl ? 'cursor-none' : ''}`}
+		href={prevUrl}
+	>
+		<AngleRightIcon
+			fill={!prevUrl ? '#16161640' : '#3904E9'}
+			class="rotate-180 w-[20px] mr-[16px] ml-[0px]"
 		/>
-	</button>
+	</a>
 	<h3 class="fluid-heading-03">ชุดที่ {term} | {startedYear}</h3>
-	<button disabled={checkIfLastAssembly()} on:click={() => redirectNextAssembly()}>
-		<img src="/icons/angle-right.svg" alt="angle-right" class="w-[20px] ml-[16px] mr-[0px]" />
-	</button>
+	<a
+		class={`${!nextUrl ? 'pointer-events-none' : ''} ${!nextUrl ? 'cursor-none' : ''}`}
+		href={nextUrl}
+	>
+		<AngleRightIcon fill={!nextUrl ? '#16161640' : '#3904E9'} class="w-[20px] ml-[16px] mr-[0px]" />
+	</a>
 </div>
 
 <style></style>
