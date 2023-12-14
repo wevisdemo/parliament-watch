@@ -49,7 +49,7 @@
 	<h1 class="fluid-heading-05 font-bold">เกี่ยวกับเรา</h1>
 </div>
 <div class="flex flex-col md:flex-row">
-	<div class="p-4 flex-none">
+	<div class="flex-none md:self-start md:sticky md:top-12 p-4">
 		<SideNav
 			class="top-0 w-full max-w-none md:w-[16rem] md:max-w-[16rem] [&>ul]:pt-0 [&>ul]:bg-ui-01 md:[&>ul]:bg-white/0"
 			{sections}
