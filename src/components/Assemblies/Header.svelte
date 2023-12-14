@@ -57,11 +57,14 @@
 				<Download />
 				<span class="heading-01 ml-[4px]">ดาวน์โหลดข้อมูล</span>
 			</div>
-			<!-- TODO:fill link-->
-			<a href="{data.id}/files/members.csv" class="flex items-center mt-[12px]">
+			<a
+				href="/files/download/assemblies/{data.id}-members.csv"
+				class="flex items-center mt-[12px]"
+			>
 				<TableSplit />
 				<span class="helper-text-01 ml-[4px]">รายชื่อสมาชิก</span>
 			</a>
+			<!-- TODO:fill link-->
 			<a href="/" class="flex items-center mt-[12px]">
 				<TableSplit />
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
