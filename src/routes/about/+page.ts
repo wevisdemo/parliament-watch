@@ -3,7 +3,7 @@ interface ContributorResponse {
 	html_url: string;
 }
 
-export async function load() {
+export async function load({ fetch }) {
 	const res = await fetch('https://api.github.com/repos/wevisdemo/parliament-watch/contributors');
 
 	if (!res.ok) {
