@@ -21,21 +21,22 @@
 		});
 	};
 
-	const getNewSummary = () => {
-		if (data.assembly.abbreviation == 'สว.') {
-			return {
-				...data.summary,
-				groupBySex: getSenateGroupWithColor(data.summary.groupBySex),
-				groupByAgeRange: getSenateGroupWithColor(data.summary.groupByAgeRange),
-				groupByEducation: getSenateGroupWithColor(data.summary.groupByEducation)
-			};
-		}
-		return data.summary;
-	};
+	$: newSummary =
+		data.assembly.abbreviation == 'สว.'
+			? {
+					...data.summary,
+					groupBySex: getSenateGroupWithColor(data.summary.groupBySex),
+					groupByAgeRange: getSenateGroupWithColor(data.summary.groupByAgeRange),
+					groupByEducation: getSenateGroupWithColor(data.summary.groupByEducation)
+			  }
+			: data.summary;
 </script>
 
 <div class="md:px-[64px] px-[16px]">
-	<Breadcrumb noTrailingSlash class="[&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap">
+	<Breadcrumb
+		noTrailingSlash
+		class="[&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap my-[8px]"
+	>
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 		<!-- TODO: link this -->
 		<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
@@ -45,7 +46,7 @@
 	</Breadcrumb>
 	<Header data={data.assembly} assemblyIds={data.assemblyIds} />
 	<Summary
-		summary={getNewSummary()}
+		summary={newSummary}
 		houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}
 	/>
 	<MainMembers members={data.mainMembers} assemblyId={data.assembly.id} />

@@ -40,7 +40,7 @@
 				</div>
 				<div class="flex flex-wrap gap-[4px] mt-[8px]">
 					{#each group.parties || [] as party}
-						<div class="flex justify-between w-full w-[160px] mr-[24px]">
+						<div class="flex justify-between w-[152px] md:mr-[24px] mr-[8px]">
 							<div class="flex space-x-[4px] items-center">
 								<div
 									class="w-[8px] h-[8px] rounded-[100%] bg-[var(--color)]"
