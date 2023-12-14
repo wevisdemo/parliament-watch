@@ -1,5 +1,6 @@
 <script lang="ts">
 	import WevisLogo from '$components/About/WevisLogo.svelte';
+	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import SideNav from '$components/LegislativeProcess/Sidebar.svelte';
 	import FacebookIcon from '$components/icons/FacebookIcon.svelte';
 	import GithubIcon from '$components/icons/GithubIcon.svelte';
@@ -282,6 +283,7 @@
 		</section>
 	</div>
 </div>
+<BackToTopButton />
 
 <style lang="postcss">
 	ul.list-disc {
