@@ -14,13 +14,14 @@
 <SideNav isOpen fixed class="relative z-0 {className}">
 	<SideNavItems>
 		{#each sections as section}
-			<SideNavLink href="#{section.menu}" isSelected={currentNavElementId === section.menu}
-				>{section.menu}</SideNavLink
+			<SideNavLink
+				href="#{section.menu.replaceAll(' ', '-')}"
+				isSelected={currentNavElementId === section.menu}>{section.menu}</SideNavLink
 			>
 			{#each section.menuItem as item}
 				<SideNavLink
 					class="!pl-8 !font-normal"
-					href="#{item.text}"
+					href="#{item.text.replaceAll(' ', '-')}"
 					isSelected={currentNavElementId === item.text}>{item.text}</SideNavLink
 				>
 			{/each}
