@@ -10,7 +10,6 @@
 	import { BillProposerType, BillStatus } from '$models/bill';
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import { range } from 'd3';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import { showModalLawProcess, showModalListCoProposer } from '$components/bills/store';
 	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
@@ -30,6 +29,8 @@
 
 	const tooltipText =
 		'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
+
+	const MAX_DISPLAY_COPROPOSER = 8;
 
 	const dateTimeFormat: Intl.DateTimeFormatOptions = {
 		year: '2-digit',
@@ -109,7 +110,7 @@
 				{bill.title}
 			</p>
 			<div class="flex items-center gap-1 font-bold -ml-1">
-				<BillStatusTag isLarge={true} status={bill.status} />
+				<BillStatusTag isLarge status={bill.status} />
 				<b class="text-support-04">ใช้เวลา {getNumberOfDays()} วัน</b>
 			</div>
 		</div>
@@ -170,7 +171,7 @@
 						<BillCategoryTag label={category} />
 					{/each}
 				</div>
-				{#if mergedBills !== undefined && mergedBills.length > 0}
+				{#if mergedBills && mergedBills.length > 0}
 					<div>
 						<div class="flex gap-1 items-center">
 							<DocumentMultiple_02 size={24} color="#2600A3" />
@@ -268,33 +269,33 @@
 						</div>
 						<div class="flex flex-col gap-2 px-5">
 							<p class="label-01 text-text-02 mr-2">เรียงตามตัวอักษร</p>
-							<div class="relative flex flex-col">
-								<table class="w-full">
-									{#each bill.coProposedByPoliticians as politician, i}
-										{#if i < 8}
+							{#if bill.coProposedByPoliticians.length > 0}
+								<div class="relative flex flex-col">
+									<table class="w-full">
+										{#each bill.coProposedByPoliticians.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i}
 											<CoProposer
 												index={i + 1}
 												logo={politician.partyRoles.find((e) => !e.endedAt)?.party.logo}
 												firstname={politician.firstname}
 												lastname={politician.lastname}
 											/>
-										{/if}
-									{/each}
-								</table>
+										{/each}
+									</table>
 
-								{#if bill.coProposedByPoliticians.length > 8}
-									<div
-										class="absolute bottom-0 w-full h-12"
-										style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
-									>
-										<button
-											on:click={() => {
-												$showModalListCoProposer = true;
-											}}
-											class="absolute bottom-0 body-01 text-link-01 underline">ดูทั้งหมด</button
+									{#if bill.coProposedByPoliticians.length > MAX_DISPLAY_COPROPOSER}
+										<div
+											class="absolute bottom-0 w-full h-12"
+											style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
 										>
-									</div>{/if}
-							</div>
+											<button
+												on:click={() => {
+													$showModalListCoProposer = true;
+												}}
+												class="absolute bottom-0 body-01 text-link-01 underline">ดูทั้งหมด</button
+											>
+										</div>{/if}
+								</div>
+							{/if}
 							<ModalListCoProposers coProposedByPoliticians={bill.coProposedByPoliticians} />
 						</div>
 						<div />
@@ -311,7 +312,7 @@
 			<div class="flex flex-col md:flex-row justify-between">
 				<div class="flex items-center gap-1">
 					<b>สถานะ</b>
-					<BillStatusTag isLarge={true} status={bill.status} />
+					<BillStatusTag isLarge status={bill.status} />
 				</div>
 				<div>
 					<button
@@ -329,9 +330,9 @@
 				<ol
 					class="relative ml-2 border border-t-[transparent] border-e-[transparent] border-b-[transparent]"
 				>
-					{#each range(events.length - 1) as i}
+					{#each events.slice(0, events.length - 1) as event}
 						<Progress
-							event={events[i]}
+							{event}
 							billStatus={bill.status}
 							{tooltipText}
 							{relatedVotingResults}
@@ -356,7 +357,3 @@
 		</div>
 	</section>
 </div>
-
-<!-- <div class="whitespace-pre">
-	{JSON.stringify(data, undefined, 2)}
-</div> -->

@@ -1,3 +1,22 @@
+<script lang="ts" context="module">
+	export interface VotingResultSummary {
+		agreed: number;
+		total: number;
+		subResults?: {
+			affiliationName: string;
+			agreed: number;
+			total: number;
+		}[];
+	}
+
+	export interface RelatedVotingResults {
+		[id: number]: {
+			voting: Voting;
+			resultSummary: VotingResultSummary;
+		};
+	}
+</script>
+
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { BillStatus, type Bill } from '$models/bill';
@@ -12,19 +31,13 @@
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
-	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page';
 	import type { Voting } from '$models/voting';
-	import type { VotingResultSummary } from '../../routes/bills/[id]/+page';
+	import type { ComponentProps } from 'svelte';
 
 	export let event: Event;
 	export let billStatus: BillStatus;
 	export let tooltipText: string;
-	export let relatedVotingResults: {
-		[id: number]: {
-			voting: Voting;
-			resultSummary: VotingResultSummary;
-		};
-	};
+	export let relatedVotingResults: RelatedVotingResults;
 	export let mergedIntoBill: Bill | undefined;
 	export let mergedIntoBillLatestEvent: Event | undefined;
 
@@ -79,7 +92,7 @@
 
 	function getVoting(votingResultsId: number | undefined) {
 		if (votingResultsId === undefined) return undefined;
-		let voting: VoteCardProps['voting'] = {
+		let voting: ComponentProps<VoteCard>['voting'] = {
 			id: Number(votingResultsId),
 			date: relatedVotingResults[Number(votingResultsId)].voting.date,
 			title: relatedVotingResults[Number(votingResultsId)].voting.title,

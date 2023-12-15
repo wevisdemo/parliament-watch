@@ -13,7 +13,9 @@
 				class="flex items-center justify-center rounded-full border border-gray-30 overflow-hidden"
 				style="width: 16px; height: 16px;"
 			>
-				<img src={logo ? logo : ''} alt="" />
+				{#if logo}
+					<img src={logo} alt="" />
+				{/if}
 			</div>
 			<p class="underline text-start">{firstname + ' ' + lastname}</p>
 		</div>
