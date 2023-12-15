@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/**
 	 * @event {null} open
 	 * @event {null} close
@@ -16,13 +16,13 @@
 	 * Set the alignment of the tooltip relative to the icon
 	 * @type {"start" | "center" | "end"}
 	 */
-	export let align = 'center';
+	export let align: 'start' | 'center' | 'end' = 'center';
 
 	/**
 	 * Set the direction of the tooltip relative to the icon
 	 * @type {"top" | "bottom"}
 	 */
-	export let direction = 'bottom';
+	export let direction: 'top' | 'bottom' = 'bottom';
 
 	/** Set an id for the tooltip div element */
 	export let id = 'ccs-' + Math.random().toString(36);

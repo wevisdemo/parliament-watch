@@ -5,45 +5,42 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import type { SearchResults } from '$models/search';
+	import { twMerge } from 'tailwind-merge';
 
-	export let searchResults: SearchResults;
-	export let politician = false;
-	export let voting = false;
-	export let bill = false;
-	export let billProposer = false;
+	let className = '';
+	export { className as class };
 
-	let showAll = !(politician || voting || bill || billProposer);
-
-	let hasAnyResult = false;
-	$: hasAnyResult = Object.values(searchResults).some((results) => results.length > 0);
+	export let searchResults: SearchResults | null = null;
 </script>
 
-<div
-	class="w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)]"
-	style="box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.30);"
->
-	{#if hasAnyResult}
-		{#if politician || showAll}
-			<SearchResultGroup heading="นักการเมือง" items={searchResults.politicians}>
-				<PoliticianIcon slot="icon" class="fill-interactive-01" />
-			</SearchResultGroup>
+{#if searchResults}
+	<div
+		class={twMerge('w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)]', className)}
+		style="box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.30);"
+	>
+		{#if Object.values(searchResults).some((results) => results?.length > 0)}
+			{#if searchResults.politicians}
+				<SearchResultGroup heading="นักการเมือง" items={searchResults.politicians}>
+					<PoliticianIcon slot="icon" class="fill-interactive-01" />
+				</SearchResultGroup>
+			{/if}
+			{#if searchResults.votings}
+				<SearchResultGroup heading="การลงมติ" items={searchResults.votings}>
+					<VoteIcon slot="icon" class="fill-interactive-01" />
+				</SearchResultGroup>
+			{/if}
+			{#if searchResults.bills}
+				<SearchResultGroup heading="การออกกฎหมาย" items={searchResults.bills}>
+					<LawIcon slot="icon" class="fill-interactive-01" />
+				</SearchResultGroup>
+			{/if}
+			{#if searchResults.billProposers}
+				<SearchResultGroup heading="ชื่อผู้เสนอร่าง" items={searchResults.billProposers}>
+					<VoteIcon slot="icon" class="fill-interactive-01" />
+				</SearchResultGroup>
+			{/if}
+		{:else}
+			<NoResultItemsFound />
 		{/if}
-		{#if voting || showAll}
-			<SearchResultGroup heading="การลงมติ" items={searchResults.votings}>
-				<VoteIcon slot="icon" class="fill-interactive-01" />
-			</SearchResultGroup>
-		{/if}
-		{#if bill || showAll}
-			<SearchResultGroup heading="การออกกฎหมาย" items={searchResults.bills}>
-				<LawIcon slot="icon" class="fill-interactive-01" />
-			</SearchResultGroup>
-		{/if}
-		{#if billProposer || showAll}
-			<SearchResultGroup heading="ชื่อผู้เสนอร่าง" items={searchResults.billProposers}>
-				<VoteIcon slot="icon" class="fill-interactive-01" />
-			</SearchResultGroup>
-		{/if}
-	{:else}
-		<NoResultItemsFound />
-	{/if}
-</div>
+	</div>
+{/if}

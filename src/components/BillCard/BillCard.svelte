@@ -3,6 +3,7 @@
 
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import type { BillStatus } from '$models/bill';
+	import { twMerge } from 'tailwind-merge';
 
 	interface ProposedBy {
 		avatar: string;
@@ -26,11 +27,13 @@
 </script>
 
 <div
-	class="flex relative p-4 bg-white hover:bg-gray-10 rounded-sm {isLandscape
-		? 'flex-row gap-x-6 max-w-[640px]'
-		: 'flex-col gap-y-4 max-w-[242px] pt-6'} {isFullWidth ? 'w-full max-w-none' : ''}"
+	class={twMerge(
+		'flex relative p-4 bg-white hover:bg-gray-10 rounded-sm',
+		isLandscape ? 'flex-row gap-x-6 max-w-[640px]' : 'flex-col gap-y-4 max-w-[242px] pt-6',
+		isFullWidth ? 'w-full max-w-none' : ''
+	)}
 >
-	<div class="space-y-1 {isLandscape ? 'w-2/3' : 'w-full'}">
+	<div class={twMerge('space-y-1', isLandscape ? 'w-2/3' : 'w-full')}>
 		<a href={billUrl} class="block after:absolute after:content-[''] after:inset-0">
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>

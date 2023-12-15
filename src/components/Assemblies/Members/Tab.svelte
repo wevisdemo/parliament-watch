@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { twMerge } from 'tailwind-merge';
 	import type {
 		AssemblySummary,
 		GroupByTab
@@ -19,9 +20,12 @@
 	<menu class="flex overflow-x-auto">
 		{#each groupByTabs as { label, path, isActive } (path)}
 			<li
-				class="flex body-compact-01 h-12 border-r border-solid border-ui-04 last:border-r-0 {isActive
-					? 'bg-white font-semibold text-gray-100 border-y-2 border-solid border-t-blue-60 border-b-white'
-					: 'bg-ui-03 text-gray-60'}"
+				class={twMerge(
+					'flex body-compact-01 h-12 border-r border-solid border-ui-04 last:border-r-0',
+					isActive
+						? 'bg-white font-semibold text-gray-100 border-y-2 border-solid border-t-blue-60 border-b-white'
+						: 'bg-ui-03 text-gray-60'
+				)}
 			>
 				<a
 					class="flex items-center px-4 text-[inherit] whitespace-nowrap"
