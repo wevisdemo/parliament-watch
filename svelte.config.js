@@ -11,6 +11,15 @@ const config = {
 			'$components/*': './src/components/*',
 			$models: './src/models',
 			'$models/*': './src/models/*'
+		},
+		prerender: {
+			entries: [
+				'*',
+				'/files/search-indexes/politicians.json',
+				'/files/search-indexes/bills.json',
+				'/files/search-indexes/votings.json',
+				'/files/search-indexes/billProposers.json'
+			]
 		}
 	}
 };
