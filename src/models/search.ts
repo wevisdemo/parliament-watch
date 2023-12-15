@@ -1,20 +1,27 @@
 import type { BillStatus } from './bill';
 import type { DefaultVotingResult } from './voting';
 
+export enum SearchIndexCategory {
+	Politicians = 'politicians',
+	Bills = 'bills',
+	Votings = 'votings',
+	BillProposers = 'billProposers'
+}
+
 export interface SearchIndexes {
-	politicians?: {
+	[SearchIndexCategory.Politicians]?: {
 		name: string;
 		description: string;
 	}[];
-	bills?: {
+	[SearchIndexCategory.Bills]?: {
 		name: string;
 		status: BillStatus;
 	}[];
-	votings?: {
+	[SearchIndexCategory.Votings]?: {
 		name: string;
 		result?: DefaultVotingResult;
 	}[];
-	billProposers?: {
+	[SearchIndexCategory.BillProposers]?: {
 		name: string;
 		description: string;
 		proposedBillsCount: number;
