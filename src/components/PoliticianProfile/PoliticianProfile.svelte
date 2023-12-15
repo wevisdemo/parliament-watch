@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Party } from '$models/party';
+	import { twMerge } from 'tailwind-merge';
 
 	export let id: string;
 	export let firstname: string;
@@ -48,12 +49,12 @@
 		{/if}
 	</div>
 	<div class="flex-1">
-		<p class="text-text-01 {titleClass}">{fullname}</p>
+		<p class={twMerge('text-text-01', titleClass)}>{fullname}</p>
 		{#if party}
-			<p class="text-text-02 {subtitleClass}">พรรค{party.name}</p>
+			<p class={twMerge('text-text-02', subtitleClass)}>พรรค{party.name}</p>
 		{/if}
 		{#if role}
-			<p class="text-text-02 {subtitleClass}">{role}</p>
+			<p class={twMerge('text-text-02', subtitleClass)}>{role}</p>
 		{/if}
 	</div>
 </div>

@@ -5,6 +5,7 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import type { SearchResults } from '$models/search';
+	import { twMerge } from 'tailwind-merge';
 
 	let className = '';
 	export { className as class };
@@ -14,7 +15,7 @@
 
 {#if searchResults}
 	<div
-		class="w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)] {className}"
+		class={twMerge('w-[320px] overflow-y-scroll max-h-[calc(100vh-3rem)]', className)}
 		style="box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.30);"
 	>
 		{#if Object.values(searchResults).some((results) => results?.length > 0)}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { DefaultVotingResult } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
+	import { twMerge } from 'tailwind-merge';
 
 	export let result: DefaultVotingResult | string;
 	export let isLarge = false;
@@ -28,4 +29,4 @@
 	export { className as class };
 </script>
 
-<Tag class="{tagColor} {className}" size={isLarge ? 'default' : 'sm'}>{label}</Tag>
+<Tag class={twMerge(tagColor, className)} size={isLarge ? 'default' : 'sm'}>{label}</Tag>
