@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
+	import { twMerge } from 'tailwind-merge';
 
 	export let voteOption: DefaultVoteOption | CustomVoteOption;
 
@@ -41,6 +42,6 @@
 </script>
 
 <Tag
-	class="m-0 whitespace-nowrap {tagColorClass} {className}"
+	class={twMerge('m-0 whitespace-nowrap', tagColorClass, className)}
 	style="--tw-bg-opacity:{tagBgOpacity}">{label}</Tag
 >

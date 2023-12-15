@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
 	import ArrowUpRightIcon from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
+	import { twMerge } from 'tailwind-merge';
 	export let linkMenu: Menu;
 	export let additionalClass = '';
 </script>
@@ -12,7 +13,10 @@
 {/if}
 <a
 	href="/"
-	class="flex items-center w-screen md:w-80 pl-4 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200 {additionalClass}"
+	class={twMerge(
+		'flex items-center w-screen md:w-80 pl-4 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200',
+		additionalClass
+	)}
 >
 	<div class="flex w-4">
 		<svelte:component this={linkMenu.icon} class="text-inverse-link" />

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { BillStatus } from '$models/bill';
 	import { Tag } from 'carbon-components-svelte';
+	import { twMerge } from 'tailwind-merge';
 
 	export let isLarge = false;
 	export let status: BillStatus;
@@ -25,4 +26,4 @@
 	export { className as class };
 </script>
 
-<Tag class="{tagStyle} {className}" size={isLarge ? 'default' : 'sm'}>{status}</Tag>
+<Tag class={twMerge(tagStyle, className)} size={isLarge ? 'default' : 'sm'}>{status}</Tag>

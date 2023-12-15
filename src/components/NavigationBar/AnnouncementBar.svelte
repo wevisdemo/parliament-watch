@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { Announcement } from '$models/announcement';
-	import InformationFilledIcon from 'carbon-icons-svelte/lib/InformationFilled.svelte';
-	import HelpFilledIcon from 'carbon-icons-svelte/lib/HelpFilled.svelte';
-	import WarningAltFilledIcon from 'carbon-icons-svelte/lib/WarningAltFilled.svelte';
 	import CheckmarkFilledIcon from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';
+	import HelpFilledIcon from 'carbon-icons-svelte/lib/HelpFilled.svelte';
+	import InformationFilledIcon from 'carbon-icons-svelte/lib/InformationFilled.svelte';
+	import WarningAltFilledIcon from 'carbon-icons-svelte/lib/WarningAltFilled.svelte';
 
 	import { slide } from 'svelte/transition';
+	import { twMerge } from 'tailwind-merge';
 
 	/** A announcement object.
 	 * - title -- A title of announcement
@@ -93,8 +94,11 @@
 <svelte:window on:scroll={scrollEventHandler} />
 {#if announcement && isShown && isScrollShown}
 	<div
-		class="{topClass} {announcement.bgColor ??
-			'bg-blue-60'} flex items-center fixed h-12 px-4 lg:px-10 w-screen text-white font-normal"
+		class={twMerge(
+			topClass,
+			announcement.bgColor ?? 'bg-blue-60',
+			'flex items-center fixed h-12 px-4 lg:px-10 w-screen text-white font-normal'
+		)}
 		transition:slide={{ duration: 350, axis: 'y' }}
 	>
 		<div class="flex items-center pr-4">

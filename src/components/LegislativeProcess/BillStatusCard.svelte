@@ -1,6 +1,7 @@
 <script lang="ts">
-	import BillStatusTag from '../BillStatusTag/BillStatusTag.svelte';
 	import type { BillStatus } from '$models/bill';
+	import { twMerge } from 'tailwind-merge';
+	import BillStatusTag from '../BillStatusTag/BillStatusTag.svelte';
 
 	export let billStatus: BillStatus;
 	export let billAmount: string;
@@ -14,7 +15,10 @@
 </script>
 
 <div
-	class="relative flex flex-col justify-between min-h-[280px] p-4 rounded-sm text-icon-01 overflow-auto {className}"
+	class={twMerge(
+		'relative flex flex-col justify-between min-h-[280px] p-4 rounded-sm text-icon-01 overflow-auto',
+		className
+	)}
 >
 	<div>
 		<BillStatusTag

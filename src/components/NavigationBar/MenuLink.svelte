@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
+	import { twMerge } from 'tailwind-merge';
 	export let linkMenu: Menu;
 	export let additionalClass = '';
 
@@ -8,7 +9,12 @@
 
 <a
 	href={linkMenu.url}
-	class="flex items-center px-4 text-gray-30 hover:text-gray-10 {hoverClass} decoration-gray-30 no-underline transition-all duration-200 {additionalClass}"
+	class={twMerge(
+		'flex items-center px-4 text-gray-30 hover:text-gray-10',
+		hoverClass,
+		'decoration-gray-30 no-underline transition-all duration-200',
+		additionalClass
+	)}
 >
 	{#if linkMenu.icon}
 		<div class="flex w-4">

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
+	import { twMerge } from 'tailwind-merge';
 	import { _HighlightedReason, type HighlightedPolitician } from '../../routes/+page';
 
 	let className = '';
@@ -85,7 +86,7 @@
 	$: description = DESC_LOOKUP[reason] ?? '';
 </script>
 
-<article class="flex flex-col {className}">
+<article class={twMerge('flex flex-col', className)}>
 	<h4 class="heading-01 text-blue-70 mb-[2px]">{reason}</h4>
 	{#if description}
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
