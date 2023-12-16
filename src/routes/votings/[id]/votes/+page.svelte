@@ -73,10 +73,10 @@
 
 <DataPage
 	breadcrumbList={[
-		{ url: '#1', label: 'หน้าหลัก' },
-		{ url: `#2`, label: 'การลงมติ' },
-		{ url: `#3`, label: voting.title },
-		{ url: `#4`, label: 'ผลการลงมติรายคน' }
+		{ url: '#', label: 'หน้าหลัก' },
+		{ url: `#`, label: 'การลงมติ' },
+		{ url: `#`, label: voting.title },
+		{ url: `#`, label: 'ผลการลงมติรายคน' }
 	]}
 	{comboboxFilterList}
 	{checkboxFilterList}
@@ -87,6 +87,7 @@
 		{ key: 'party', value: 'สังกัดพรรค' },
 		{ key: 'voteOption', value: 'การลงมติ' }
 	]}
+	donwloadSize="lg"
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >

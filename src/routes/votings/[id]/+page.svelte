@@ -10,7 +10,7 @@
 		TextInput,
 		ToggleSkeleton
 	} from 'carbon-components-svelte';
-	import Add from 'carbon-icons-svelte/lib/Add.svelte';
+	import { ArrowRight, Add } from 'carbon-icons-svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
@@ -104,7 +104,7 @@
 				<p class="flex-initial body-01 truncate">{data.relatedBill.nickname}</p>
 			</div>
 			<div class="flex items-center text-01 gap-x-1">
-				<VotingResultTag result={data.voting.result} isLarge />
+				<VotingResultTag result={data.voting.result} />
 				<p class="heading-compact-02">
 					เห็นด้วย {data.results.find((v) => v.voteOption === 'เห็นด้วย')?.total || 0}/<span
 						class="text-gray-60"
@@ -363,13 +363,17 @@
 			{/each}
 		</div>
 		<div class="flex flex-col w-full mt-0 md:mt-10">
-			<p class="hidden md:block text-right label-01">
+			<p class="hidden md:block text-right label-01 text-gray-60">
 				หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ
 			</p>
 			<div id="byPerson" class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
 			<div class="flex">
 				<TextInput size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" bind:value={searchQuery} />
-				<Button>สำรวจแบบละเอียด</Button>
+				<Button class="flex items-center w-[164px] px-[14px] py-[13px]"
+					><a class="text-white body-compact-01" href="/votings/{data.voting.id}/votes"
+						>สำรวจแบบละเอียด</a
+					><ArrowRight /></Button
+				>
 			</div>
 			<div class="flex w-full border-t border-gray-30">
 				<div class="w-[112px] md:w-1/4 heading-compact-01 py-[11px] md:py-[15px] px-4">
