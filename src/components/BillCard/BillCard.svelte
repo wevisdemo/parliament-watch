@@ -14,12 +14,12 @@
 	// see: https://github.com/wevisdemo/parliament-watch/issues/26#issue-1937096920
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 	export let nickname: string;
-	export let title: string | null = null;
-	export let proposedBy: ProposedBy | null = null;
-	export let proposedOn: Date | null = null;
+	export let title: string | undefined = undefined;
+	export let proposedBy: ProposedBy | undefined = undefined;
+	export let proposedOn: Date | undefined = undefined;
 	export let status: BillStatus;
-	export let currentState: string | null = null;
-	export let daySinceProposed: number | null = null;
+	export let currentState: string | undefined = undefined;
+	export let daySinceProposed: number | undefined = undefined;
 	export let billUrl: string;
 	export let isFullWidth = false;
 
