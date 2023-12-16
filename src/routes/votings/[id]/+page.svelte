@@ -16,6 +16,7 @@
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
+	import { onMount } from 'svelte';
 	export let data;
 
 	let open = false;
@@ -23,6 +24,11 @@
 	let selectedMenu = 'summary';
 	let isViewPercent = false;
 	let searchQuery = '';
+
+	interface AnchorElement extends HTMLElement {
+		offsetTop: number;
+		offsetHeight: number;
+	}
 
 	function dateConvertor(date: Date) {
 		const convertedDate = Intl.DateTimeFormat('th', {
@@ -52,6 +58,33 @@
 	function getWidthPercent(voteCount: number, totalVote = 750) {
 		return Math.round((voteCount / totalVote) * 100);
 	}
+
+	function scrollTo(id: string) {
+		selectedMenu = id;
+		const el = document.getElementById(id);
+		if (el) el.scrollIntoView({ behavior: 'smooth' });
+	}
+
+	function onScroll() {
+		const scrollY = window.scrollY;
+		const anchorEls = document.querySelectorAll<AnchorElement>('#summary, #byParty, #byPerson');
+
+		for (const el of anchorEls) {
+			const top = el.offsetTop;
+			const bottom = top + el.offsetHeight;
+
+			if (scrollY >= top && scrollY <= bottom) {
+				selectedMenu = el.id.replace('#', '');
+				break;
+			}
+		}
+	}
+
+	onMount(() => {
+		window.addEventListener('scroll', onScroll, { passive: true });
+
+		return () => window.removeEventListener('scroll', onScroll);
+	});
 </script>
 
 <div class="flex flex-col min-h-screen">
@@ -132,34 +165,36 @@
 	</div>
 	<div class="flex flex-col w-full py-6 px-4 md:px-12 md:py-16">
 		<h1 class="fluid-heading-05 text-center">ผลการลงมติ</h1>
-		<div class="w-full flex items-center gap-x-[1px] mt-4 sticky top-12 bg-white">
+		<div class="w-full flex items-center gap-x-[1px] mt-4 sticky top-0 bg-white z-10">
 			<button
 				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 {selectedMenu ===
 				'summary'
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
-				on:click={() => (selectedMenu = 'summary')}
+				on:click={() => scrollTo('summary')}
 			>
 				สรุป
 			</button>
-			<div
+			<button
 				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
 				'byParty'
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
+				on:click={() => scrollTo('byParty')}
 			>
 				รายสังกัด
-			</div>
-			<div
+			</button>
+			<button
 				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
 				'byPerson'
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
+				on:click={() => scrollTo('byPerson')}
 			>
 				รายคน
-			</div>
+			</button>
 		</div>
-		<h2 class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
+		<h2 id="summary" class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
 		<div class="flex flex-col mt-4">
 			<div class="flex items-center text-teal-50 gap-x-1">
 				<p class="fluid-heading-05 ml-0 md:ml-1">
@@ -216,13 +251,15 @@
 		</Modal>
 		<button
 			class="cursor-pointer helper-text-01 mt-2 text-blue-60 underline text-left w-[260px]"
-			on:click={() => (open = false)}
+			on:click={() => {
+				open = true;
+			}}
 		>
 			งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
 		</button>
 		<div class="flex flex-col w-full mt-20">
 			<div class="flex flex-col md:flex-row items-start md:items-center gap-x-3">
-				<h1 class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
+				<h1 id="byParty" class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
 				<div class="flex items-center">
 					<ToggleSkeleton class="outline-none" on:click={() => (isViewPercent = !isViewPercent)} />
 					<p class="body-compact-01">ดูร้อยละ</p>
@@ -329,7 +366,7 @@
 			<p class="hidden md:block text-right label-01">
 				หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ
 			</p>
-			<div class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
+			<div id="byPerson" class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
 			<div class="flex">
 				<TextInput size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" bind:value={searchQuery} />
 				<Button>สำรวจแบบละเอียด</Button>
