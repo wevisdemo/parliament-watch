@@ -69,38 +69,14 @@
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
-
-	const formatThaiYear = (date: Date | undefined) => {
-		if (!date) return;
-		return date.toLocaleString('th-TH', { year: 'numeric' });
-	};
-
-	function getVoteColor(vote: DefaultVoteOption | CustomVoteOption | string) {
-		switch (vote) {
-			case DefaultVoteOption.Agreed:
-				return 'bg-teal-50';
-			case DefaultVoteOption.Disagreed:
-				return 'bg-red-50 text-white';
-			case DefaultVoteOption.Novote:
-				return 'bg-gray-80 text-white';
-			case DefaultVoteOption.Abstain:
-				return 'bg-gray-50';
-			case DefaultVoteOption.Absent:
-				return 'bg-gray-20';
-			default:
-				return 'bg-purple-70';
-		}
-	}
-
-	console.log(filteredData);
 </script>
 
 <DataPage
 	breadcrumbList={[
-		{ url: '#', label: 'หน้าหลัก' },
-		{ url: `#`, label: 'การลงมติ' },
-		{ url: `#`, label: voting.title },
-		{ url: `#`, label: 'ผลการลงมติรายคน' }
+		{ url: '#1', label: 'หน้าหลัก' },
+		{ url: `#2`, label: 'การลงมติ' },
+		{ url: `#3`, label: voting.title },
+		{ url: `#4`, label: 'ผลการลงมติรายคน' }
 	]}
 	{comboboxFilterList}
 	{checkboxFilterList}
