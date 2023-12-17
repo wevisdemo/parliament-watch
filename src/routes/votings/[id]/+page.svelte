@@ -10,12 +10,12 @@
 		TextInput,
 		ToggleSkeleton
 	} from 'carbon-components-svelte';
-	import { ArrowRight, Add } from 'carbon-icons-svelte';
+	import { ArrowRight, Add, Search } from 'carbon-icons-svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
-	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
+	import { DefaultVoteOption, type CustomVoteOption, DefaultVotingResult } from '$models/voting.js';
 	import { onMount } from 'svelte';
 	export let data;
 
@@ -24,6 +24,7 @@
 	let selectedMenu = 'summary';
 	let isViewPercent = false;
 	let searchQuery = '';
+	let isMobile = false;
 
 	interface AnchorElement extends HTMLElement {
 		offsetTop: number;
@@ -55,6 +56,17 @@
 		}
 	}
 
+	function getBillStatusColor(status: DefaultVotingResult | string) {
+		switch (status) {
+			case DefaultVotingResult.Passed:
+				return 'bg-teal-10';
+			case DefaultVotingResult.Failed:
+				return 'bg-red-10';
+			default:
+				return 'bg-purple-10';
+		}
+	}
+
 	function getWidthPercent(voteCount: number, totalVote = 750) {
 		return Math.round((voteCount / totalVote) * 100);
 	}
@@ -80,8 +92,21 @@
 		}
 	}
 
+	function getDiffDays(targetDate: Date): number {
+		const currentDate = new Date();
+
+		const timeDifference = currentDate.getTime() - targetDate.getTime();
+
+		const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+
+		const roundedDaysDifference = Math.round(daysDifference);
+
+		return roundedDaysDifference;
+	}
+
 	onMount(() => {
 		window.addEventListener('scroll', onScroll, { passive: true });
+		isMobile = !window.matchMedia(`(min-width: 672px)`).matches;
 
 		return () => window.removeEventListener('scroll', onScroll);
 	});
@@ -96,7 +121,11 @@
 		<BreadcrumbItem href="#">การลงมติ</BreadcrumbItem>
 		<BreadcrumbItem>{data.voting.title}</BreadcrumbItem>
 	</Breadcrumb>
-	<div class="flex flex-col gap-y-4 md:gap-y-8 w-full bg-teal-10 px-4 md:px-12 py-8 md:py-16">
+	<div
+		class="flex flex-col gap-y-4 md:gap-y-8 w-full {getBillStatusColor(
+			data.voting.result
+		)} px-4 md:px-12 py-8 md:py-16"
+	>
 		<div class="flex flex-col">
 			<h1 class="fluid-heading-05">{data.voting.title}</h1>
 			<div class="flex items-center text-gray-60 gap-x-1">
@@ -104,7 +133,7 @@
 				<p class="flex-initial body-01 truncate">{data.relatedBill.nickname}</p>
 			</div>
 			<div class="flex items-center text-01 gap-x-1">
-				<VotingResultTag result={data.voting.result} />
+				<VotingResultTag result={data.voting.result} isLarge />
 				<p class="heading-compact-02">
 					เห็นด้วย {data.results.find((v) => v.voteOption === 'เห็นด้วย')?.total || 0}/<span
 						class="text-gray-60"
@@ -136,27 +165,33 @@
 				<div class="w-full my-4 h-[1px] bg-gray-20" />
 				<p class="heading-01">สรุปเนื้อหา</p>
 				<p class="body-01">{data.relatedBill.description}</p>
-				<div class="flex items-center gap-x-1 mt-4">
-					<p class="heading-01">หมวด</p>
-					{#each data.voting.categories as category}
-						<BillCategoryTag isLarge label={category} />
-					{/each}
-				</div>
-				<p class="heading-01 mt-4 mb-1">ดูเส้นทางของร่างกฏหมายนี้</p>
-				<BillCard
-					title={data.relatedBill.title}
-					nickname={data.relatedBill.nickname}
-					proposedOn={data.relatedBill.proposedOn}
-					status={data.relatedBill.status}
-					currentState={data.relatedBill.status}
-					daySinceProposed={100}
-					billUrl={data.relatedBill.title}
-					proposedBy={{
-						avatar: 'https://placehold.co/24x24',
-						name: 'ดวงฤทธิ์ เบ็ญจาธิกุล ชัยรุ่งเรือง',
-						description: 'สส. ชุดที่ 26 (2566) พรรคก้าวไกล'
-					}}
-				/>
+				<!-- TODO: Hide this section when not ร่างพรบ -->
+				{#if true}
+					<div class="flex items-center gap-x-1 mt-4">
+						<p class="heading-01">หมวด</p>
+						{#each data.voting.categories as category}
+							<BillCategoryTag isLarge label={category} />
+						{/each}
+					</div>
+					<p class="heading-01 mt-4 mb-1">ดูเส้นทางของร่างกฏหมายนี้</p>
+					<BillCard
+						class={isMobile ? 'w-full' : 'w-auto'}
+						orientation={isMobile ? 'portrait' : 'landscape'}
+						title={data.relatedBill.title}
+						nickname={data.relatedBill.nickname}
+						proposedOn={data.relatedBill.proposedOn}
+						status={data.relatedBill.status}
+						currentState={data.relatedBill.status}
+						daySinceProposed={getDiffDays(data.relatedBill.proposedOn)}
+						billUrl={data.relatedBill.title}
+						proposedBy={{
+							avatar: data.relatedBill.proposedLedByPolitician?.avatar || '',
+							name: data.relatedBill.proposedLedByPolitician?.id.replace('-', ' ') || '',
+							description:
+								data.relatedBill.proposedLedByPolitician?.assemblyRoles[0].assembly.id || ''
+						}}
+					/>
+				{/if}
 			</div>
 			<div>
 				<DownloadData links={data.voting.files} />
@@ -227,18 +262,18 @@
 				/>
 			{/each}
 		</div>
-		<div class="flex flex-col md:flex-row items-start md:items-center gap-x-2 text-gray-60">
+		<div class="flex flex-col md:flex-row items-start md:items-center gap-x-2">
 			<VotingResultTag result={data.voting.result} isLarge />
-			<p class="heading-01 mt-2 md:mt-0">เงื่อนไข</p>
-			<span class="body-01 flex items-center gap-x-1">
+			<p class="heading-01 mt-2 md:mt-0 text-gray-60">เงื่อนไข</p>
+			<span class="body-01 flex items-center gap-x-1 text-gray-60">
 				<p class="heading-01">1.</p>
 				ได้เสียงเกินกึ่งหนึ่งของสภา
 			</span>
-			<span class="body-01 flex items-center gap-x-1">
+			<span class="body-01 flex items-center gap-x-1 text-gray-60">
 				<p class="heading-01">2.</p>
 				ได้เสียงฝ่ายค้านอย่างน้อย 20%
 			</span>
-			<span class="body-01 flex items-center gap-x-1">
+			<span class="body-01 flex items-center gap-x-1 text-gray-60">
 				<p class="heading-01">3.</p>
 				ได้เสียง สว. อย่างน้อย 1 ใน 3
 			</span>
@@ -270,7 +305,10 @@
 		<div class="flex flex-col md:flex-row w-full mt-4 mb-10 gap-x-8">
 			{#each data.resultsByAffiliation as { affiliationName, resultSummary, byParties }}
 				{@const totalVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
-				<div class="flex flex-col w-full md:w-1/3 border-t border-gray-30 pb-4 md:pb-0">
+				<div
+					class="flex flex-col w-full md:w-1/{data.resultsByAffiliation
+						.length} border-t border-gray-30 pb-4 md:pb-0"
+				>
 					<div class="mt-2 flex items-center gap-x-1">
 						<p class="heading-02">{affiliationName}</p>
 						<p class="body-02 text-gray-60">{totalVote} คน</p>
@@ -368,7 +406,17 @@
 			</p>
 			<div id="byPerson" class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
 			<div class="flex">
-				<TextInput size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" bind:value={searchQuery} />
+				<div class="flex items-center flex-1 bg-gray-10">
+					<div class="bg-gray-10 pl-4 border-b border-gray-50 h-full flex items-center">
+						<Search />
+					</div>
+					<TextInput
+						class="active:outline-0 focus:outline-0"
+						size="xl"
+						placeholder="ค้นด้วยชื่อ-นามสกุล"
+						bind:value={searchQuery}
+					/>
+				</div>
 				<Button class="flex items-center w-[164px] px-[14px] py-[13px]"
 					><a class="text-white body-compact-01" href="/votings/{data.voting.id}/votes"
 						>สำรวจแบบละเอียด</a
