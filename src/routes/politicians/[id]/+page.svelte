@@ -15,6 +15,7 @@
 	import { onMount } from 'svelte';
 	import dayjs from 'dayjs';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 
 	export let data;
 	const { politician, agreedVoting, disagreedVoting, votingAbsentStats } = data;
@@ -62,28 +63,13 @@
 </Breadcrumb>
 <header>
 	<div class="max-w-[1200px] w-full mx-auto px-4 py-8 md:px-16 md:py-12">
-		<div class="relative w-[120px] h-[120px] mb-4">
-			<img
-				class="rounded-full overflow-hidden w-full h-full object-cover"
-				src={politician.avatar}
-				alt="{politician.firstname}-{politician.lastname}"
-				width="120"
-				height="120"
-				loading="lazy"
-				decoding="async"
-			/>
-			{#if currentParty}
-				<img
-					class="absolute right-0 bottom-0 rounded-full overflow-hidden w-[32px] h-auto aspect-square bg-white border border-gray-30 border-solid object-contain"
-					src={currentParty.party.logo}
-					alt={currentParty.party.name}
-					width="32"
-					height="32"
-					loading="lazy"
-					decoding="async"
-				/>
-			{/if}
-		</div>
+		<PoliticianPicture
+			class="mb-4 w-fit"
+			avatar={politician.avatar}
+			size="120"
+			party={currentParty?.party}
+			partySize="32"
+		/>
 		<div class="flex flex-col gap-8 md:flex-row md:gap-16">
 			<div class="flex-1 flex flex-col gap-2">
 				<h1 class="fluid-heading-05">

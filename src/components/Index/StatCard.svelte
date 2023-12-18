@@ -2,6 +2,7 @@
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import { twMerge } from 'tailwind-merge';
 	import { _HighlightedReason, type HighlightedPolitician } from '../../routes/+page';
+	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 
 	let className = '';
 	export { className as class };
@@ -94,30 +95,11 @@
 	{/if}
 	<a href={`/politicians/${politician.id}`} class="flex bg-white text-gray-100 mt-1">
 		<div class="flex flex-col gap-2 p-4 flex-1">
-			<div class="relative mr-auto">
-				<img
-					src={politician.avatar}
-					alt=""
-					class="rounded-full object-cover"
-					width="40"
-					height="40"
-					loading="lazy"
-					decoding="async"
-				/>
-				<div
-					class="w-[16px] h-[16px] absolute bottom-0 right-0 rounded-full border-solid border border-[#C0BFBE] bg-white overflow-hidden p-[2px] flex items-center justify-center"
-				>
-					<img
-						class="object-contain"
-						src={politician.partyRoles[0].party.logo}
-						alt=""
-						width="16"
-						height="16"
-						loading="lazy"
-						decoding="async"
-					/>
-				</div>
-			</div>
+			<PoliticianPicture
+				avatar={politician.avatar}
+				size="40"
+				party={politician.partyRoles[0].party}
+			/>
 			<span class="heading-02 text-gray-100">{politician.firstname} {politician.lastname}</span>
 			<span class="-mt-2 label-01 text-gray-60"
 				>{politician.assemblyRoles[0].role} |
