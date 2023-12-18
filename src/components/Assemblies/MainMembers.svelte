@@ -15,7 +15,7 @@
 		<span class="fluid-heading-04 ml-[16px]">สมาชิกหลัก</span>
 	</div>
 	<div class="border-b-[1px] border-solid border-gray-20 w-full" />
-	<div class="grid md:grid-cols-3 grid-cols-1 justify-items-center gap-[8px] mt-[16px]">
+	<div class="flex flex-wrap gap-[8px] mt-[16px] justify-center md:justify-start">
 		{#each members as member}
 			<div class="w-[288px]">
 				<span class="heading-01">{member.assemblyRole}</span>

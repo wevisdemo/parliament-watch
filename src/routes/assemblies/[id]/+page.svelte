@@ -46,6 +46,7 @@
 	</Breadcrumb>
 	<Header data={data.assembly} assemblyIds={data.assemblyIds} />
 	<Summary
+		assemblyId={data.assembly.id}
 		summary={newSummary}
 		houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}
 	/>

@@ -5,9 +5,11 @@
 
 	export let data: MemberGroup[] = [];
 
-	const getTop5OfGroup = (parties: MemberGroup['parties'] = []): PartySelected[] => {
+	$: memberGroups = data;
+
+	$: getTop5OfGroup = (parties: MemberGroup['parties'] = []): PartySelected[] => {
 		// sort parties by count DESC
-		const sortedParties = parties.sort((a, b) => b.count - a.count);
+		const sortedParties = [...parties].toSorted((a, b) => b.count - a.count);
 		// get top 5 parties
 		const top5Parties = sortedParties.slice(0, 5);
 		// map top5Parties to PartySelected
@@ -22,13 +24,16 @@
 
 <div class="grid">
 	<div class="md:space-y-[24px] space-y-[8px]">
-		{#each data as group}
+		{#each memberGroups as group}
 			<div>
 				<div>
 					<span class="heading-compact-01">{group.name}</span>
 					<span class="body-compact-01 text-gray-60">{group.total} คน</span>
 				</div>
-				<div class="flex space-x-[4px]" style="--width: {getPercentWidth(group.total, data)}%">
+				<div
+					class="flex space-x-[4px]"
+					style="--width: {getPercentWidth(group.total, memberGroups)}%"
+				>
 					{#each getTop5OfGroup(group.parties) as party}
 						<Badge
 							color={party.color}

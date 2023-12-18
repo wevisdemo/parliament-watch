@@ -25,7 +25,7 @@
 	const lowerHouseSeatLines = [58, 54, 51, 49, 46, 43, 40, 37, 35, 32, 29, 26];
 	const upperHouseSeatLines = [39, 36, 33, 30, 28, 25, 22, 20, 17];
 
-	const getLowerHouseTotalPartie = (): PartySeat[] => {
+	$: getLowerHouseTotalPartie = (): PartySeat[] => {
 		const governmentGroup = data.find((group) => group.name === 'ฝ่ายรัฐบาล');
 		const oppositeGovGroup = data.find((group) => group.name === 'ฝ่ายค้าน');
 		const governmentParties = getTotalPartiesFromGroup(governmentGroup);
@@ -37,7 +37,7 @@
 		return [...governmentParties, ...oppositeGovParties];
 	};
 
-	const getUpperHouseTotalPartie = (): PartySeat[] => {
+	$: getUpperHouseTotalPartie = (): PartySeat[] => {
 		return data.map((group) => {
 			return {
 				name: group.name,
@@ -47,24 +47,14 @@
 		});
 	};
 
-	const getSeatParties = (): PartySeat[] => {
-		if (houseLevel === 'lower') {
-			return getLowerHouseTotalPartie();
-		}
-		return getUpperHouseTotalPartie();
-	};
+	$: seatParties = houseLevel === 'lower' ? getLowerHouseTotalPartie() : getUpperHouseTotalPartie();
 
-	const getLineAmounts = (): number[] => {
-		if (houseLevel === 'lower') {
-			return lowerHouseSeatLines;
-		}
-		return upperHouseSeatLines;
-	};
+	$: lineAmounts = houseLevel === 'lower' ? lowerHouseSeatLines : upperHouseSeatLines;
 </script>
 
 <div class="flex md:flex-row flex-col space-y-[16px]">
 	<div class="md:w-[50%]">
-		<SeatChart parties={getSeatParties()} lineAmounts={getLineAmounts()} />
+		<SeatChart parties={seatParties} {lineAmounts} />
 	</div>
 	<div class="md:w-[50%]">
 		{#if houseLevel === 'lower'}

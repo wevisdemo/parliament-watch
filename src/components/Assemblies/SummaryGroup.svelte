@@ -11,15 +11,42 @@
 		getTopOfGroupsPercent,
 		type PartySelected
 	} from './shared';
+	import { onMount } from 'svelte';
 	export let title = '';
-	export let data: MemberGroup[] = [];
+	export let data: {
+		memberGroups: MemberGroup[];
+		assemblyId: string;
+	};
+	$: ({ memberGroups, assemblyId } = data);
 	interface MemberGroup {
 		name: string;
 		total: number;
 		parties?: (Pick<Party, 'name' | 'color'> & { count: number })[];
 	}
+	let url = '';
+	onMount(() => (url = window.location.href));
 
-	const getRenderPartyList = (parties: MemberGroup['parties'] = []): PartySelected[] => {
+	enum GroupByOption {
+		Party = 'party',
+		Province = 'province',
+		AppointmentMethod = 'appointment-method',
+		Sex = 'sex',
+		Age = 'age',
+		Education = 'education'
+		// TODO: Asset is not in phase 1
+		// Assets = 'assets'
+	}
+
+	const groupByMapToEnum = new Map<string, GroupByOption>([
+		['พรรค', GroupByOption.Party],
+		['จังหวัด', GroupByOption.Province],
+		['ที่มา', GroupByOption.AppointmentMethod],
+		['เพศสภาพ', GroupByOption.Sex],
+		['รุ่นอายุ', GroupByOption.Age],
+		['การศึกษา', GroupByOption.Education]
+	]);
+
+	$: getRenderPartyList = (parties: MemberGroup['parties'] = []): PartySelected[] => {
 		// sort parties by count DESC
 		const sortedParties = parties.sort((a, b) => b.count - a.count);
 		// get top 5 parties
@@ -42,15 +69,8 @@
 		return result;
 	};
 
-	const redirectToMemberListWithFilter = (key: string, value: string) => {
-		// append path with /members?{key}={value}
-		const currentHref = window.location.href;
-		const newHref = currentHref.endsWith('/')
-			? // ? currentHref + `members?${key}=${encodeURIComponent(value)}`
-			  // : currentHref + `/members?${key}=${encodeURIComponent(value)}`;
-			  currentHref + `members?${key}=${value}`
-			: currentHref + `/members?${key}=${value}`;
-		window.location.href = newHref;
+	$: getGroupLink = (key: string, value: string) => {
+		return `/assemblies/${data.assemblyId}/members/${groupByMapToEnum.get(key)}?category=${value}`;
 	};
 </script>
 
@@ -58,29 +78,26 @@
 	<p class="fluid-heading-03">{title}</p>
 	<HalfDonutWrapper
 		chartId="summary-{title}"
-		percent={getTopOfGroupsPercent(data)}
-		label={getTopOfGroups(data).name}
+		percent={getTopOfGroupsPercent(memberGroups)}
+		label={getTopOfGroups(memberGroups).name}
 	/>
 	<div class="grid gap-[8px]">
-		{#each data as group}
+		{#each memberGroups as group}
 			<div>
 				<div class="flex">
 					<p class="heading-01">{group.name}</p>
 					{#if group.name !== 'ไม่มีข้อมูล'}
-						<button
-							class="ml-[4px]"
-							on:click={() => redirectToMemberListWithFilter(title, group.name)}
-						>
-							<Information />
-						</button>
+						<a class="ml-[4px]" href={getGroupLink(title, group.name)}>
+							<Information class="text-gray-70" />
+						</a>
 					{/if}
-					<p class="body-compact-01 ml-[4px]">
-						{getRoundedPercent(group.total, getSumOfGroupsTotal(data))}%
+					<p class="body-compact-01 ml-[4px] text-gray-70">
+						{getRoundedPercent(group.total, getSumOfGroupsTotal(memberGroups))}%
 					</p>
 				</div>
 				<div
 					class="flex w-[var(--width)] space-x-[2px]"
-					style="--width: {getPercentWidth(group.total, data)}%;"
+					style="--width: {getPercentWidth(group.total, memberGroups)}%;"
 				>
 					{#each getRenderPartyList(group.parties || []) as party}
 						<Badge color={party.color} title={party.label} subtitle={`${party.count} คน`} />

@@ -16,20 +16,21 @@
 		origin: string;
 	};
 
-	const isActive = data.endedAt === undefined;
-	const startedAtThaiFormat = new Date(data.startedAt).toLocaleDateString('th-TH', {
+	$: isActive = data.endedAt === undefined;
+	$: startedAtThaiFormat = new Date(data.startedAt).toLocaleDateString('th-TH', {
 		day: 'numeric',
 		month: 'short',
 		year: '2-digit'
 	});
-	const endedAtThaiFormat = data.endedAt
+	$: endedAtThaiFormat = data.endedAt
 		? new Date(data.endedAt).toLocaleDateString('th-TH', {
 				day: 'numeric',
 				month: 'short',
 				year: '2-digit'
 		  })
 		: 'ปัจจุบัน';
-	const startedYear = data.startedAt.getFullYear() + 543;
+
+	$: startedYear = data.startedAt.getFullYear() + 543;
 </script>
 
 <div

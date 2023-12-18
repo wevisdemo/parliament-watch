@@ -3,25 +3,16 @@
 	export let color = '#8D8D8D';
 	export let title = '';
 	export let subtitle = '';
-	export let size = 's'; // l and s
+	export let size: 's' | 'l' = 's';
 
-	const getHeight = () => {
-		switch (size) {
-			case 'l':
-				return 'md:h-[16px] h-[8px]';
-			case 's':
-				return 'h-[8px]';
-			default:
-				return 'h-[8px]';
-		}
-	};
+	$: height = size === 'l' ? 'md:h-[16px] h-[8px]' : 'h-[8px]';
 </script>
 
 {#if subtitle === '' && title === ''}
 	<div
-		class={`w-full ${getHeight()} bg-[var(--color)]`}
+		class="w-full {height} bg-[var(--color)]"
 		style="--color:{color};
-  --height:{getHeight()};"
+  --height:{height};"
 		aria-describedby="idTooltipTarget"
 	/>
 	<p class="flex flex-col justify-center items-center">
@@ -31,9 +22,9 @@
 {:else}
 	<Tooltip class="w-full">
 		<div
-			class={`w-full ${getHeight()} bg-[var(--color)]`}
+			class="w-full {height} bg-[var(--color)]"
 			style="--color:{color};
-		--height:{getHeight()};"
+		--height:{height};"
 			aria-describedby="idTooltipTarget"
 		/>
 		<p slot="tooltip" class="flex flex-col justify-center items-center">
