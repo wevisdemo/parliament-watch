@@ -9,7 +9,7 @@
 
 	$: getTop5OfGroup = (parties: MemberGroup['parties'] = []): PartySelected[] => {
 		// sort parties by count DESC
-		const sortedParties = [...parties].toSorted((a, b) => b.count - a.count);
+		const sortedParties = [...parties].slice().sort((a, b) => b.count - a.count);
 		// get top 5 parties
 		const top5Parties = sortedParties.slice(0, 5);
 		// map top5Parties to PartySelected
