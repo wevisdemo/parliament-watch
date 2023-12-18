@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import type { Party } from '$models/party';
 	import { twMerge } from 'tailwind-merge';
 
@@ -22,32 +23,7 @@
 
 <!-- TODO: use id to link to politician page -->
 <div {id} class="p-2 font-sans flex gap-4" class:opacity-50={!isActive}>
-	<div class="{imgClass} relative">
-		<img
-			src={avatar}
-			alt={fullname}
-			class="rounded-full object-cover"
-			width={imgSize}
-			height={imgSize}
-			loading="lazy"
-			decoding="async"
-		/>
-		{#if party}
-			<div
-				class="w-[16px] h-[16px] absolute bottom-0 right-0 rounded-full border-solid border border-[#C0BFBE] bg-white overflow-hidden p-[2px] flex items-center justify-center"
-			>
-				<img
-					class="object-contain"
-					src={party.logo}
-					alt={party.name}
-					width="16"
-					height="16"
-					loading="lazy"
-					decoding="async"
-				/>
-			</div>
-		{/if}
-	</div>
+	<PoliticianPicture class={imgClass} {avatar} size={imgSize} {party} />
 	<div class="flex-1">
 		<p class={twMerge('text-text-01', titleClass)}>{fullname}</p>
 		{#if party}
