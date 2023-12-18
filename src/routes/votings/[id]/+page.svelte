@@ -4,8 +4,6 @@
 		BreadcrumbItem,
 		Button,
 		Modal,
-		Tab,
-		Tabs,
 		Tag,
 		TextInput,
 		ToggleSkeleton
@@ -25,6 +23,8 @@
 	let isViewPercent = false;
 	let searchQuery = '';
 	let isMobile = false;
+
+	$: totalVote = data.results.reduce((acc, vote) => acc + vote.total, 0);
 
 	interface AnchorElement extends HTMLElement {
 		offsetTop: number;
@@ -52,7 +52,11 @@
 			case DefaultVoteOption.Absent:
 				return 'bg-gray-20';
 			default:
-				return 'bg-purple-70';
+				if (typeof vote === 'string') {
+					return 'bg-purple-70';
+				} else {
+					return `bg-purple-70 opacity-${vote.colorIntensity * 100} text-white`;
+				}
 		}
 	}
 
@@ -165,8 +169,7 @@
 				<div class="w-full my-4 h-[1px] bg-gray-20" />
 				<p class="heading-01">สรุปเนื้อหา</p>
 				<p class="body-01">{data.relatedBill.description}</p>
-				<!-- TODO: Hide this section when not ร่างพรบ -->
-				{#if true}
+				{#if data.relatedBill}
 					<div class="flex items-center gap-x-1 mt-4">
 						<p class="heading-01">หมวด</p>
 						{#each data.voting.categories as category}
@@ -231,24 +234,46 @@
 		</div>
 		<h2 id="summary" class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
 		<div class="flex flex-col mt-4">
-			<div class="flex items-center text-teal-50 gap-x-1">
-				<p class="fluid-heading-05 ml-0 md:ml-1">
-					{(
-						((data.results.find((v) => v.voteOption === 'เห็นด้วย')?.total || 0) / 750) *
-						100
-					).toFixed(0)}%
-				</p>
-				<p class="fluid-heading-05">เห็นด้วย</p>
-			</div>
+			{#if data.relatedBill}
+				<div class="flex items-center text-teal-50 gap-x-1">
+					<p class="fluid-heading-05 ml-0 md:ml-1">
+						{(
+							(data.results.reduce(
+								(max, result) => (result.total > max.total ? result : max),
+								data.results[0]
+							).total /
+								totalVote) *
+							100
+						).toFixed(0)}%
+					</p>
+					<p class="fluid-heading-05">เห็นด้วย</p>
+				</div>
+			{:else}
+				<div class="flex items-center text-teal-50 gap-x-1 text-purple-70">
+					<p class="fluid-heading-05 ml-0 md:ml-1">
+						{(
+							(data.results.reduce(
+								(max, result) => (result.total > max.total ? result : max),
+								data.results[0]
+							).total /
+								totalVote) *
+							100
+						).toFixed(0)}%
+					</p>
+					<p class="fluid-heading-05">{data.voting.result}</p>
+				</div>
+			{/if}
 			<div class="mt-3 md:mt-0 flex flex-col md:flex-row items-start md:items-center gap-x-4">
 				<div class="flex items-center gap-x-1">
 					<p class="heading-02">สมาชิกสภา</p>
-					<p class="body-02">750</p>
+					<p class="body-02">{totalVote}</p>
 				</div>
 				{#each data.results as result}
 					<div class="flex items-center gap-x-1">
 						<div class="w-4 h-4 rounded-sm {getVoteColor(result.voteOption)}" />
-						<p class="heading-02">{result.voteOption}</p>
+						<p class="heading-02">
+							{typeof result.voteOption === 'object' ? result.voteOption.label : result.voteOption}
+						</p>
 						<p class="body-02">{result.total}</p>
 					</div>
 				{/each}
@@ -258,7 +283,7 @@
 			{#each data.results as result}
 				<div
 					class="rounded-sm h-full {getVoteColor(result.voteOption)}"
-					style="width: {getWidthPercent(result.total)}%"
+					style="width: {getWidthPercent(result.total, totalVote)}%"
 				/>
 			{/each}
 		</div>
@@ -304,14 +329,20 @@
 		</div>
 		<div class="flex flex-col md:flex-row w-full mt-4 mb-10 gap-x-8">
 			{#each data.resultsByAffiliation as { affiliationName, resultSummary, byParties }}
-				{@const totalVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
+				{@const totalAffVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
+				{@const totalHighestVote = data.relatedBill
+					? resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total || 0
+					: resultSummary.reduce(
+							(max, current) => (current.total > max.total ? current : max),
+							resultSummary[0]
+					  ).total}
 				<div
 					class="flex flex-col w-full md:w-1/{data.resultsByAffiliation
 						.length} border-t border-gray-30 pb-4 md:pb-0"
 				>
 					<div class="mt-2 flex items-center gap-x-1">
 						<p class="heading-02">{affiliationName}</p>
-						<p class="body-02 text-gray-60">{totalVote} คน</p>
+						<p class="body-02 text-gray-60">{totalAffVote} คน</p>
 						<div class="flex md:hidden flex-1" />
 						<Add
 							on:click={() => (selectedTab = affiliationName)}
@@ -321,14 +352,10 @@
 					<div class="mt-1 flex items-center gap-x-1 text-teal-50">
 						<p class="heading-03">
 							{isViewPercent
-								? (
-										((resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total || 0) /
-											totalVote) *
-										100
-								  ).toFixed(0) + '%'
-								: resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total + 'คน'}
+								? ((totalHighestVote / totalAffVote) * 100).toFixed(0) + '%'
+								: totalHighestVote + 'คน'}
 						</p>
-						<p class="heading-03">เห็นด้วย</p>
+						<p class="heading-03">{data.relatedBill ? 'เห็นด้วย' : data.voting.result}</p>
 					</div>
 					<div class="mt-1 flex items-center gap-x-3 text-teal-50">
 						{#each resultSummary as vote}
@@ -342,7 +369,7 @@
 						{#each resultSummary as vote}
 							<div
 								class="rounded-sm h-full {getVoteColor(vote.voteOption)}"
-								style="width: {getWidthPercent(vote.total, totalVote)}%"
+								style="width: {getWidthPercent(vote.total, totalAffVote)}%"
 							/>
 						{/each}
 					</div>
@@ -388,7 +415,7 @@
 											{#each partyDetails.resultSummary as partyVote}
 												<div
 													class="rounded-sm h-full {getVoteColor(partyVote.voteOption)}"
-													style="width: {getWidthPercent(partyVote.total, totalVote)}%"
+													style="width: {getWidthPercent(partyVote.total, totalAffVote)}%"
 												/>
 											{/each}
 										</div>
@@ -453,10 +480,16 @@
 						{voter.party ? voter.party : ''}
 					</div>
 					<div class="hidden md:block w-[112px] md:w-1/4 py-[11px] md:py-[15px] px-4">
-						<Tag class={getVoteColor(voter.voteOption)}>{voter.voteOption}</Tag>
+						<Tag class={getVoteColor(voter.voteOption)}
+							>{typeof voter.voteOption === 'object'
+								? voter.voteOption.label
+								: voter.voteOption}</Tag
+						>
 					</div>
 				</div>
 			{/each}
 		</div>
 	</div>
 </div>
+
+{JSON.stringify(data)}
