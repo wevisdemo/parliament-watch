@@ -54,6 +54,7 @@ export function search(
 	// Normalize query
 	const queries = normalizeSearchQuery(query);
 
+	// TODO - ใส่ URL ให้ครบทุกประเภท
 	return {
 		politicians: searchIndexes.politicians
 			? getScoredAndHighlightedResultItems(queries, searchIndexes.politicians, keepTopN).map(
@@ -61,7 +62,7 @@ export function search(
 						heading: candidate.item.name,
 						headingHighlight: highlight ? candidate.highlightedName : undefined,
 						description: candidate.item.description,
-						url: ''
+						url: '/politicians/' + candidate.item.id
 					})
 			  )
 			: undefined,
