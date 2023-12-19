@@ -31,8 +31,8 @@
 					<span class="body-compact-01 text-gray-60">{group.total} คน</span>
 				</div>
 				<div
-					class="flex space-x-[4px]"
-					style="--width: {getPercentWidth(group.total, memberGroups)}%"
+					class="flex gap-x-[4px] w-[--width]"
+					style="--width:{getPercentWidth(group.total, memberGroups)}%"
 				>
 					{#each getTop5OfGroup(group.parties) as party}
 						<Badge
@@ -40,6 +40,7 @@
 							title={party.label}
 							subtitle={`${party.count} คน`}
 							size="l"
+							style="flex:{party.count} {party.count} 0%"
 						/>
 					{/each}
 				</div>
