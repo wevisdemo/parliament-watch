@@ -66,10 +66,10 @@
 				<span class="helper-text-01 ml-[4px]">รายชื่อสมาชิก</span>
 			</a>
 			<!-- TODO:fill link-->
-			<a href="/" class="flex items-center mt-[12px]">
+			<!-- <a href="/" class="flex items-center mt-[12px]">
 				<TableSplit />
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
-			</a>
+			</a> -->
 		</div>
 		<p class="label-01 text-gray-60">อัพเดทข้อมูล: 20 ส.ค. 2566</p>
 		<a href="/" class="helper-text-01">ที่มาและข้อจำกัดข้อมูล</a>
