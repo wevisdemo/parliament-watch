@@ -45,8 +45,8 @@
 		<div class="row-span-2">
 			<img width="120px" height="34px" src="/images/logo/pw-short-white.png" alt="logo short" />
 		</div>
-		{#each menuList as { label, icon, subs }}
-			<FooterMenuGroup title={label} menuItems={subs}>
+		{#each menuList as { label, icon, subs, url }}
+			<FooterMenuGroup title={label} menuItems={subs} {url}>
 				<svelte:fragment slot="titleIcon">
 					<svelte:component this={icon} class="text-inverse-link" />
 				</svelte:fragment>
@@ -55,7 +55,7 @@
 		<FooterContact />
 	</div>
 	<div class="flex flex-col md:flex-row md:justify-between mt-4">
-		<div>©Parliament Watch 2023</div>
+		<div>&copy; Parliament Watch 2023</div>
 		<div class="text-gray-30">นโยบายความปลอดภัย | Privacy Policy</div>
 	</div>
 </div>
