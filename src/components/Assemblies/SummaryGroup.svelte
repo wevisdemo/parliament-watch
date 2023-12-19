@@ -96,11 +96,16 @@
 					</p>
 				</div>
 				<div
-					class="flex w-[var(--width)] space-x-[2px]"
-					style="--width: {getPercentWidth(group.total, memberGroups)}%;"
+					class="flex w-[--width] gap-x-[2px]"
+					style="--width:{getPercentWidth(group.total, memberGroups)}%;"
 				>
 					{#each getRenderPartyList(group.parties || []) as party}
-						<Badge color={party.color} title={party.label} subtitle={`${party.count} คน`} />
+						<Badge
+							color={party.color}
+							title={party.label}
+							subtitle={`${party.count} คน`}
+							style="flex:{party.count} {party.count} 0%"
+						/>
 					{/each}
 				</div>
 			</div>
