@@ -48,10 +48,12 @@
 				<Download />
 				<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
 			</div>
-			<!-- TODO: add link -->
-			<a href="/" class="flex items-center gap-1 mr-auto helper-text-01">
+			<a
+				href="/files/download/assemblies/{assembly.id}-members.csv"
+				class="flex items-center gap-1 mr-auto helper-text-01"
+			>
 				<TableSplit />
-				<span>ผลการลงมติรายคน</span>
+				<span>รายชื่อสมาชิก</span>
 			</a>
 		</div>
 	</div>
