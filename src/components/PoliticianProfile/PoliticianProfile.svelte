@@ -21,8 +21,11 @@
 	$: subtitleClass = isLarge ? 'leading-[18px]' : 'text-xs leading-[16px]';
 </script>
 
-<!-- TODO: use id to link to politician page -->
-<div {id} class="p-2 font-sans flex gap-4" class:opacity-50={!isActive}>
+<a
+	href="/politicians/{id}"
+	class="p-2 font-sans flex gap-4 hover:underline"
+	class:opacity-50={!isActive}
+>
 	<PoliticianPicture class={imgClass} {avatar} size={imgSize} {party} />
 	<div class="flex-1">
 		<p class={twMerge('text-text-01', titleClass)}>{fullname}</p>
@@ -33,4 +36,4 @@
 			<p class={twMerge('text-text-02', subtitleClass)}>{role}</p>
 		{/if}
 	</div>
-</div>
+</a>

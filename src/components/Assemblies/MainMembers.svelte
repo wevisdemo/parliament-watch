@@ -16,17 +16,17 @@
 	</div>
 	<div class="border-b-[1px] border-solid border-gray-20 w-full" />
 	<div class="flex flex-wrap gap-[8px] mt-[16px] justify-center md:justify-start">
-		{#each members as member}
+		{#each members as { politician, assemblyRole, party, description }}
 			<div class="w-[288px]">
-				<span class="heading-01">{member.assemblyRole}</span>
+				<span class="heading-01">{assemblyRole}</span>
 				<PoliticianProfile
-					id={'politician-' + member.politician.id}
-					firstname={member.politician.firstname}
-					lastname={member.politician.lastname}
-					avatar={member.politician.avatar || ''}
-					party={member.party}
-					role={member.description}
-					isLarge={true}
+					id={politician.id}
+					firstname={politician.firstname}
+					lastname={politician.lastname}
+					avatar={politician.avatar}
+					{party}
+					role={description}
+					isLarge
 				/>
 			</div>
 		{/each}
