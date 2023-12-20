@@ -87,7 +87,7 @@
 		{ key: 'party', value: 'สังกัดพรรค' },
 		{ key: 'voteOption', value: 'การลงมติ' }
 	]}
-	donwloadSize="lg"
+	downloadSize="lg"
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >
