@@ -16,7 +16,7 @@
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 	import type { PoliticianSummaryGroupBy } from './+page.js';
-	import { GroupByOption } from './groupby.js';
+	import { GroupByOption } from '$models/assembly.js';
 
 	export let data;
 	$: ({ groups, groupByTabs, isDataHasSubgroup } = data);

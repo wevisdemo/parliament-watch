@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import { AssemblyName } from '$models/assembly';
+import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { DefaultVotingResult, type Voting } from '$models/voting';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
 import { fetchAssemblyMembers } from './data';
-import { GroupByOption, getMemberGroup } from './members/[groupby]/groupby';
+import { getMemberGroup } from './members/[groupby]/groupby';
 
 export interface Summary {
 	totalMembers: number;

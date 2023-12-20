@@ -1,5 +1,5 @@
 import type { AssemblyMember } from '../../data';
-import type { Assembly } from '$models/assembly';
+import { type Assembly, GroupByOption } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
 
 export interface PoliticianGroup {
@@ -14,27 +14,6 @@ export interface PoliticianSubGroup {
 }
 
 export type PoliticianGroupBy = PoliticianGroup[] | PoliticianSubGroup[];
-
-export enum GroupByOption {
-	Party = 'party',
-	Province = 'province',
-	AppointmentMethod = 'appointment-method',
-	Sex = 'sex',
-	Age = 'age',
-	Education = 'education'
-	// TODO: Asset is not in phase 1
-	// Assets = 'assets'
-}
-
-export const groupByOptionLabelMap = new Map<GroupByOption, string>([
-	[GroupByOption.Party, 'พรรค'],
-	[GroupByOption.Province, 'จังหวัด'],
-	[GroupByOption.AppointmentMethod, 'ที่มา'],
-	[GroupByOption.Sex, 'เพศสภาพ'],
-	[GroupByOption.Age, 'รุ่นอายุ'],
-	[GroupByOption.Education, 'การศึกษา']
-	// [GroupByOption.Assets, 'ทรัพย์สิน']
-]);
 
 export function getMemberGroup(
 	assembly: Assembly,
