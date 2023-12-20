@@ -1,5 +1,3 @@
-import type { ComponentProps } from 'svelte';
-import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 import type { AssemblyMember } from '../../data';
 import type { Assembly } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
@@ -16,10 +14,6 @@ export interface PoliticianSubGroup {
 }
 
 export type PoliticianGroupBy = PoliticianGroup[] | PoliticianSubGroup[];
-
-export interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isLarge'> {
-	candidateType?: 'แบ่งเขต' | 'บัญชีรายชื่อ';
-}
 
 export enum GroupByOption {
 	Party = 'party',
@@ -173,21 +167,4 @@ export function createSubgroupByPartyOrAppointmentMethod(
 					members: membersByParty
 				})
 		  );
-}
-
-export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary {
-	const { id, firstname, lastname, avatar, isActive, partyRole, assemblyRole } = member;
-	return {
-		id,
-		firstname,
-		lastname,
-		avatar,
-		isActive,
-		party: partyRole?.party,
-		role: assemblyRole?.listNumber
-			? `บัญชีรายชื่อลำดับ ${assemblyRole?.listNumber}`
-			: assemblyRole?.province && assemblyRole.districtNumber
-			? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
-			: assemblyRole?.appointmentMethod
-	};
 }
