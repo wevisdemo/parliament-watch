@@ -51,5 +51,5 @@
 		houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}
 	/>
 	<MainMembers members={data.mainMembers} assemblyId={data.assembly.id} />
-	<LatestVotes votes={data.latestVotes} assemblyId={data.assembly.id} />
+	<!-- <LatestVotes votes={data.latestVotes} assemblyId={data.assembly.id} /> -->
 </div>
