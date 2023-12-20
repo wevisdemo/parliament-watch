@@ -100,11 +100,21 @@
 		);
 	};
 
+	let mounted = false;
 	onMount(() => {
-		window.addEventListener('resize', () => redraw());
-		setUpComponentENV();
-		draw();
+		mounted = true;
+		window.addEventListener('resize', redraw);
+
+		return () => {
+			window.removeEventListener('resize', redraw);
+		};
 	});
+
+	$: if (mounted) {
+		parties;
+		lineAmounts;
+		redraw();
+	}
 </script>
 
 <div
