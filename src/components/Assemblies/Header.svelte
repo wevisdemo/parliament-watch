@@ -29,8 +29,6 @@
 				year: '2-digit'
 		  })
 		: 'ปัจจุบัน';
-
-	$: startedYear = data.startedAt.getFullYear() + 543;
 </script>
 
 <div
@@ -39,7 +37,12 @@
 	<div class="w-full max-w-[900px]">
 		<div class="flex md:flex-row flex-col">
 			<h2 class="fluid-heading-05">{data.name}</h2>
-			<AssemblyIdRunner currentId={data.id} {startedYear} term={data.term} {assemblyIds} />
+			<AssemblyIdRunner
+				currentId={data.id}
+				startedYear={data.startedAt}
+				term={data.term}
+				{assemblyIds}
+			/>
 		</div>
 		<div class="flex items-center">
 			<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>

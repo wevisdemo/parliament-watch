@@ -44,7 +44,9 @@ export async function load({ params }) {
 					members: group.members.map(getPoliticianSummary)
 			  }));
 
-		return { groups: transformedGroup, isDataHasSubgroup };
+		const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
+
+		return { groups: transformedGroup, isDataHasSubgroup, assemblyIds };
 	} else {
 		throw error(404);
 	}

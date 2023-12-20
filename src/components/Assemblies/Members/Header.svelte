@@ -6,19 +6,18 @@
 		AssemblySummary,
 		GroupByTab
 	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout';
+	import AssemblyIdRunner from '../AssemblyIdRunner.svelte';
 
 	export let data: {
 		assembly: AssemblySummary;
 		groupByTabs: GroupByTab[];
 	};
+	export let assemblyIds: string[];
 
 	$: ({ assembly } = data);
 
 	export let searchQuery = '';
 	export let mounted = false;
-	$: startedYear = assembly?.startedAt
-		? assembly.startedAt.toLocaleDateString('th-TH', { year: 'numeric' })
-		: null;
 </script>
 
 <Breadcrumb
@@ -36,16 +35,13 @@
 	<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
 		<div class="flex-1 flex items-center flex-wrap gap-x-4">
 			<h1 class="fluid-heading-04" style="text-wrap:balance">รายชื่อ{assembly.name}</h1>
-			<div class="flex items-center gap-4">
-				<!-- TODO: handler buttom next and prev-->
-				<img
-					src="/icons/angle-right.svg"
-					alt="angle-left"
-					class="rotate-180 w-[20px] fill-gray-300"
-				/>
-				<h2 class="fluid-heading-03">ชุดที่ {assembly.term} | {startedYear}</h2>
-				<img src="/icons/angle-right.svg" alt="angle-right" class="w-[20px]" />
-			</div>
+			<AssemblyIdRunner
+				currentId={assembly.id}
+				startedYear={assembly.startedAt}
+				term={assembly.term}
+				{assemblyIds}
+				postfix="members"
+			/>
 		</div>
 		<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end">
 			<div class="flex items-center gap-1">
