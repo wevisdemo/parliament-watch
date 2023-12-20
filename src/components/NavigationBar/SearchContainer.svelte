@@ -58,9 +58,9 @@
 				bind:searchValue
 				on:blur={closeClickHandle}
 				categories={[
-					SearchIndexCategory.Politicians,
-					SearchIndexCategory.Votings,
-					SearchIndexCategory.Bills
+					SearchIndexCategory.Politicians
+					// SearchIndexCategory.Votings,
+					// SearchIndexCategory.Bills
 				]}
 				name="navSearch"
 				type="text"

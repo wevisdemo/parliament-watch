@@ -1,15 +1,8 @@
 import { error } from '@sveltejs/kit';
-import {
-	GroupByOption,
-	getMemberGroup,
-	getPoliticianSummary,
-	type PoliticianSummary,
-	type PoliticianSubGroup,
-	type PoliticianGroup
-} from './groupby.js';
-import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
-import { AssemblyName } from '$models/assembly.js';
-import { fetchAssemblyMembers } from '../../data.js';
+import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from './groupby';
+import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
+import { AssemblyName, GroupByOption } from '$models/assembly';
+import { fetchAssemblyMembers, getPoliticianSummary, type PoliticianSummary } from '../../data';
 
 interface PoliticianSummaryGroup {
 	name: string;
@@ -51,7 +44,9 @@ export async function load({ params }) {
 					members: group.members.map(getPoliticianSummary)
 			  }));
 
-		return { groups: transformedGroup, isDataHasSubgroup };
+		const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
+
+		return { groups: transformedGroup, isDataHasSubgroup, assemblyIds };
 	} else {
 		throw error(404);
 	}

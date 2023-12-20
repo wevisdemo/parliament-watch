@@ -8,7 +8,6 @@
 		{
 			label: 'นักการเมือง',
 			icon: PoliticianIcon,
-			url: null,
 			type: MenuTypes.root,
 			subs: [
 				{
@@ -28,7 +27,6 @@
 		{
 			label: 'การออกกฎหมาย',
 			icon: LawIcon,
-			url: null,
 			type: MenuTypes.root,
 			subs: [
 				{ label: 'กฎหมายในกระบวนการ', url: '/bills/1', type: MenuTypes.link },

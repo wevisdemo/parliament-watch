@@ -6,13 +6,12 @@
 		OverflowMenu,
 		OverflowMenuItem
 	} from 'carbon-components-svelte';
-	import type { FilterOptions } from './+page.js';
 
 	export let data;
 
-	const { assemblyIds, assembly, votes } = data;
+	$: ({ assemblyIds, assembly, votes } = data);
 
-	let categoryFilters = votes.reduce((acc, vote) => {
+	$: categoryFilters = votes.reduce((acc, vote) => {
 		const categorys = vote.categories;
 		categorys.forEach((category) => {
 			if (!acc.includes(category)) {
@@ -22,7 +21,7 @@
 		return acc;
 	}, [] as string[]);
 
-	let filterOptions: FilterOptions = {
+	$: filterOptions = {
 		categories: categoryFilters,
 		result: ['ผ่าน', 'ไม่ผ่าน']
 	};

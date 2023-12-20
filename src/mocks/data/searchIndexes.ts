@@ -5,18 +5,22 @@ import { DefaultVotingResult } from '$models/voting';
 export const searchIndexes: SearchIndexes = {
 	politicians: [
 		{
+			id: 'สุชาติ-ชมกลิ่น',
 			name: 'สุชาติ ชมกลิ่น',
 			description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ'
 		},
 		{
+			id: 'สมคิด-จาตุศรีพิทักษ์',
 			name: 'สมคิด จาตุศรีพิทักษ์',
 			description: 'นายกรัฐมนตรี'
 		},
 		{
+			id: 'สุชาดา-ชาตรี',
 			name: 'สุชาดา ชาตรี',
 			description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ'
 		},
 		{
+			id: 'ภาวัฒน์-พยัคฆบุตร',
 			name: 'ภาวัฒน์ พยัคฆบุตร',
 			description: 'ไทยสร้างไทย'
 		}

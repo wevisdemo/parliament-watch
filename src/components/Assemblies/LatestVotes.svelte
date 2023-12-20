@@ -6,12 +6,6 @@
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	export let votes: VoteCardProps[] = [];
 	export let assemblyId: string;
-
-	const defaultParty: Party = {
-		name: '',
-		color: '',
-		logo: ''
-	};
 </script>
 
 <div class="md:py-[32px] py-[16px]">

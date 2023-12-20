@@ -11,11 +11,12 @@ export async function GET({ params }) {
 			const indexes: SearchIndexes['politicians'] = (await fetchPoliticians())
 				// TODO: Currently, we only show politicians that appears in the assemblies
 				.filter(({ assemblyRoles }) => assemblyRoles.length)
-				.map(({ firstname, lastname, assemblyRoles, partyRoles }) => {
+				.map(({ id, firstname, lastname, assemblyRoles, partyRoles }) => {
 					const currentAssembly = assemblyRoles.find(({ endedAt }) => !endedAt);
 					const currentParty = partyRoles.find(({ endedAt }) => !endedAt);
 
 					return {
+						id,
 						name: `${firstname} ${lastname}`,
 						description: [
 							currentAssembly

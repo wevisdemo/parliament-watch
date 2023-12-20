@@ -1,27 +1,22 @@
 <script lang="ts">
+	import { twMerge } from 'tailwind-merge';
 	import Tooltip from './Tooltip.svelte';
+
 	export let color = '#8D8D8D';
 	export let title = '';
 	export let subtitle = '';
-	export let size = 's'; // l and s
+	export let size: 's' | 'l' = 's';
 
-	const getHeight = () => {
-		switch (size) {
-			case 'l':
-				return 'md:h-[16px] h-[8px]';
-			case 's':
-				return 'h-[8px]';
-			default:
-				return 'h-[8px]';
-		}
-	};
+	let className = '';
+	export { className as class };
+	export let style = '';
 </script>
 
 {#if subtitle === '' && title === ''}
 	<div
-		class={`w-full ${getHeight()} bg-[var(--color)]`}
-		style="--color:{color};
-  --height:{getHeight()};"
+		class={twMerge('w-full h-[8px] bg-[--color]', size === 'l' && 'md:h-[16px]', className)}
+		style:--color={color}
+		{style}
 		aria-describedby="idTooltipTarget"
 	/>
 	<p class="flex flex-col justify-center items-center">
@@ -29,11 +24,10 @@
 		<span class="label-01 text-text-03">{subtitle}</span>
 	</p>
 {:else}
-	<Tooltip class="w-full">
+	<Tooltip class={twMerge('w-full', className)} {style}>
 		<div
-			class={`w-full ${getHeight()} bg-[var(--color)]`}
-			style="--color:{color};
-		--height:{getHeight()};"
+			class={twMerge('w-full h-[8px] bg-[--color]', size === 'l' && 'md:h-[16px]')}
+			style:--color={color}
 			aria-describedby="idTooltipTarget"
 		/>
 		<p slot="tooltip" class="flex flex-col justify-center items-center">

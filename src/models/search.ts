@@ -8,8 +8,10 @@ export enum SearchIndexCategory {
 	BillProposers = 'billProposers'
 }
 
+// TODO - เช็คว่าตัวอื่นต้องใช้อะไรในการ Link ไปหน้านั้นๆ
 export interface SearchIndexes {
 	[SearchIndexCategory.Politicians]?: {
+		id: string;
 		name: string;
 		description: string;
 	}[];

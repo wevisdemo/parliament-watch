@@ -1,30 +1,49 @@
+import { fetchPoliticians } from '$lib/datasheets';
 import type { Politician } from '$models/politician';
 import dayjs from 'dayjs';
+import { movingForwardPolitician } from '../../mocks/data/politician';
 
-export async function getPoliticianWithMostViewLastMonth(
-	politicians: Pick<Politician, 'id' | 'firstname' | 'lastname'>[]
-) {
-	let result = {
-		politicianId: '',
-		views: 0
+export interface PoliticianResult {
+	politician: Politician;
+	value: number;
+}
+
+let wikiResult: PoliticianResult | undefined = undefined;
+
+export async function getPoliticianWithMostViewLastMonth() {
+	if (!wikiResult) {
+		wikiResult = await _getPoliticianWithMostViewLastMonth(await fetchPoliticians());
+	}
+	return wikiResult;
+}
+
+export async function _getPoliticianWithMostViewLastMonth(politicians: Politician[]) {
+	let result: PoliticianResult = {
+		politician: movingForwardPolitician,
+		value: 0
 	};
 
-	for (const { id, firstname, lastname } of politicians) {
-		const res = await fetch(getWikipediaViewEndpoint(firstname, lastname));
+	for (const politician of politicians) {
+		const { firstname, lastname } = politician;
+		try {
+			const res = await fetch(getWikipediaViewEndpoint(firstname, lastname));
 
-		if (res.ok) {
-			const data = await res.json();
+			if (res.ok) {
+				const data = await res.json();
 
-			if (data?.items?.[0]?.views) {
-				const { views } = data.items[0];
+				if (data?.items?.[0]?.views) {
+					const { views } = data.items[0];
 
-				if (views > result.views) {
-					result = {
-						politicianId: id,
-						views
-					};
+					if (views > result.value) {
+						result = {
+							politician: politician,
+							value: views
+						};
+					}
 				}
 			}
+		} catch (_) {
+			/**/
 		}
 	}
 

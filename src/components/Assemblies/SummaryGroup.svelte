@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Party } from '$models/party';
-	import { Information } from 'carbon-icons-svelte';
 	import Badge from './Badge.svelte';
 	import HalfDonutWrapper from './HalfDonutWrapper.svelte';
 	import {
@@ -11,28 +10,34 @@
 		getTopOfGroupsPercent,
 		type PartySelected
 	} from './shared';
-	export let title = '';
-	export let data: MemberGroup[] = [];
+	import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
+
+	const MAX_GROUP_DISPLAY = 5;
+
+	export let groupBy: GroupByOption;
+	export let memberGroups: MemberGroup[];
+	export let assemblyId: string;
+
 	interface MemberGroup {
 		name: string;
 		total: number;
 		parties?: (Pick<Party, 'name' | 'color'> & { count: number })[];
 	}
 
-	const getRenderPartyList = (parties: MemberGroup['parties'] = []): PartySelected[] => {
-		// sort parties by count DESC
-		const sortedParties = parties.sort((a, b) => b.count - a.count);
-		// get top 5 parties
-		const top5Parties = sortedParties.slice(0, 5);
-		// map top5Parties to PartySelected
-		const result = top5Parties.map((party) => ({
-			label: party.name,
-			count: party.count,
-			color: party.color
-		}));
-		// if parties has more than 5 parties, add "อื่นๆ" to result
-		if (parties.length > 5) {
-			const otherCount = parties.slice(5).reduce((acc, party) => acc + party.count, 0);
+	$: getRenderPartyList = (parties: MemberGroup['parties'] = []): PartySelected[] => {
+		const result = [...parties]
+			.sort((a, b) => b.count - a.count)
+			.slice(0, MAX_GROUP_DISPLAY)
+			.map((party) => ({
+				label: party.name,
+				count: party.count,
+				color: party.color
+			}));
+		// if parties has more than MAX_GROUP_DISPLAY parties, add "อื่นๆ" to result
+		if (parties.length > MAX_GROUP_DISPLAY) {
+			const otherCount = parties
+				.slice(MAX_GROUP_DISPLAY)
+				.reduce((acc, party) => acc + party.count, 0);
 			result.push({
 				label: 'อื่นๆ',
 				count: otherCount,
@@ -41,52 +46,43 @@
 		}
 		return result;
 	};
-
-	const redirectToMemberListWithFilter = (key: string, value: string) => {
-		// append path with /members?{key}={value}
-		const currentHref = window.location.href;
-		const newHref = currentHref.endsWith('/')
-			? // ? currentHref + `members?${key}=${encodeURIComponent(value)}`
-			  // : currentHref + `/members?${key}=${encodeURIComponent(value)}`;
-			  currentHref + `members?${key}=${value}`
-			: currentHref + `/members?${key}=${value}`;
-		window.location.href = newHref;
-	};
 </script>
 
-<div class="bg-ui-01 p-[16px] m-auto min-w-[226px] w-full flex flex-col h-full">
-	<p class="fluid-heading-03">{title}</p>
+<a
+	href="/assemblies/{assemblyId}/members/{groupBy}"
+	class="bg-ui-01 hover:bg-ui-03 text-black p-[16px] m-auto min-w-[226px] w-full flex flex-col h-full"
+>
+	<p class="fluid-heading-03">{groupByOptionLabelMap.get(groupBy)}</p>
 	<HalfDonutWrapper
-		chartId="summary-{title}"
-		percent={getTopOfGroupsPercent(data)}
-		label={getTopOfGroups(data).name}
+		chartId="summary-{groupBy}"
+		percent={getTopOfGroupsPercent(memberGroups)}
+		label={getTopOfGroups(memberGroups).name}
 	/>
 	<div class="grid gap-[8px]">
-		{#each data as group}
+		{#each memberGroups as group}
 			<div>
 				<div class="flex">
 					<p class="heading-01">{group.name}</p>
-					{#if group.name !== 'ไม่มีข้อมูล'}
-						<button
-							class="ml-[4px]"
-							on:click={() => redirectToMemberListWithFilter(title, group.name)}
-						>
-							<Information />
-						</button>
-					{/if}
-					<p class="body-compact-01 ml-[4px]">
-						{getRoundedPercent(group.total, getSumOfGroupsTotal(data))}%
+					<!-- TODO: consult tooltips with designer
+					<Information class="text-gray-70" /> -->
+					<p class="body-compact-01 ml-[4px] text-gray-70">
+						{getRoundedPercent(group.total, getSumOfGroupsTotal(memberGroups))}%
 					</p>
 				</div>
 				<div
-					class="flex w-[var(--width)] space-x-[2px]"
-					style="--width: {getPercentWidth(group.total, data)}%;"
+					class="flex w-[--width] gap-x-[2px]"
+					style="--width:{getPercentWidth(group.total, memberGroups)}%;"
 				>
 					{#each getRenderPartyList(group.parties || []) as party}
-						<Badge color={party.color} title={party.label} subtitle={`${party.count} คน`} />
+						<Badge
+							color={party.color}
+							title={party.label}
+							subtitle="{party.count} คน"
+							style="flex:{party.count} {party.count} 0%"
+						/>
 					{/each}
 				</div>
 			</div>
 		{/each}
 	</div>
-</div>
+</a>

@@ -16,20 +16,19 @@
 		origin: string;
 	};
 
-	const isActive = data.endedAt === undefined;
-	const startedAtThaiFormat = new Date(data.startedAt).toLocaleDateString('th-TH', {
+	$: isActive = data.endedAt === undefined;
+	$: startedAtThaiFormat = new Date(data.startedAt).toLocaleDateString('th-TH', {
 		day: 'numeric',
 		month: 'short',
 		year: '2-digit'
 	});
-	const endedAtThaiFormat = data.endedAt
+	$: endedAtThaiFormat = data.endedAt
 		? new Date(data.endedAt).toLocaleDateString('th-TH', {
 				day: 'numeric',
 				month: 'short',
 				year: '2-digit'
 		  })
 		: 'ปัจจุบัน';
-	const startedYear = data.startedAt.getFullYear() + 543;
 </script>
 
 <div
@@ -38,7 +37,12 @@
 	<div class="w-full max-w-[900px]">
 		<div class="flex md:flex-row flex-col">
 			<h2 class="fluid-heading-05">{data.name}</h2>
-			<AssemblyIdRunner currentId={data.id} {startedYear} term={data.term} {assemblyIds} />
+			<AssemblyIdRunner
+				currentId={data.id}
+				startedYear={data.startedAt}
+				term={data.term}
+				{assemblyIds}
+			/>
 		</div>
 		<div class="flex items-center">
 			<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>
@@ -65,10 +69,10 @@
 				<span class="helper-text-01 ml-[4px]">รายชื่อสมาชิก</span>
 			</a>
 			<!-- TODO:fill link-->
-			<a href="/" class="flex items-center mt-[12px]">
+			<!-- <a href="/" class="flex items-center mt-[12px]">
 				<TableSplit />
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
-			</a>
+			</a> -->
 		</div>
 		<p class="label-01 text-gray-60">อัพเดทข้อมูล: 20 ส.ค. 2566</p>
 		<a href="/" class="helper-text-01">ที่มาและข้อจำกัดข้อมูล</a>
