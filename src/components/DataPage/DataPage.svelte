@@ -87,7 +87,7 @@
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
 	export let mounted = false;
-	export let donwloadSize = 'sm';
+	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
 
 	// Reactive
 	let tableCurrentPage = 1;
@@ -166,7 +166,7 @@
 				<slot />
 			</div>
 			<div
-				class="flex flex-col w-full gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end {donwloadSize ===
+				class="flex flex-col w-full gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end {downloadSize ===
 				'lg'
 					? 'md:w-[224px]'
 					: 'md:w-auto'}"
