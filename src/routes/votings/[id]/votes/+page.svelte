@@ -10,9 +10,9 @@
 
 	export let data;
 
-	const { voting, filterOptions, votes } = data;
+	$: ({ voting, filterOptions, votes } = data);
 
-	let comboboxFilterList: ComboboxFilterGroup[] = [
+	$: comboboxFilterList = [
 		{
 			key: 'filterComboboxType',
 			legend: 'พรรคสังกัด ณ วันที่ลงมติ',
@@ -24,7 +24,7 @@
 		}
 	];
 
-	const checkboxFilterList: CheckboxFilterGroup[] = [
+	$: checkboxFilterList = [
 		{
 			key: 'filterPosition',
 			legend: 'ตำแหน่ง',
