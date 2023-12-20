@@ -8,16 +8,9 @@
 
 	let tagColor = 'bg-purple-70 text-text-04';
 	let label = '';
-	let tagText = '';
-	let tagContainer = '';
 
-	$: if (isLarge) {
-		tagText = 'heading-compact-02';
-		tagContainer = 'px-2 py-[5px] rounded-3xl';
-	} else {
-		tagText = 'label-01';
-		tagContainer = 'px-2 py-1 rounded-3xl';
-	}
+	$: tagText = isLarge ? 'heading-compact-02' : 'label-01';
+	$: tagContainer = isLarge ? 'px-2 py-[5px] rounded-3xl' : 'px-2 py-1 rounded-3xl';
 
 	$: switch (result) {
 		case DefaultVotingResult.Passed:
