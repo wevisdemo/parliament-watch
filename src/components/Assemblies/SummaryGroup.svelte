@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Party } from '$models/party';
-	import { Information } from 'carbon-icons-svelte';
 	import Badge from './Badge.svelte';
 	import HalfDonutWrapper from './HalfDonutWrapper.svelte';
 	import {
@@ -11,55 +10,34 @@
 		getTopOfGroupsPercent,
 		type PartySelected
 	} from './shared';
-	import { onMount } from 'svelte';
-	export let title = '';
-	export let data: {
-		memberGroups: MemberGroup[];
-		assemblyId: string;
-	};
-	$: ({ memberGroups, assemblyId } = data);
+	import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
+
+	const MAX_GROUP_DISPLAY = 5;
+
+	export let groupBy: GroupByOption;
+	export let memberGroups: MemberGroup[];
+	export let assemblyId: string;
+
 	interface MemberGroup {
 		name: string;
 		total: number;
 		parties?: (Pick<Party, 'name' | 'color'> & { count: number })[];
 	}
-	let url = '';
-	onMount(() => (url = window.location.href));
-
-	enum GroupByOption {
-		Party = 'party',
-		Province = 'province',
-		AppointmentMethod = 'appointment-method',
-		Sex = 'sex',
-		Age = 'age',
-		Education = 'education'
-		// TODO: Asset is not in phase 1
-		// Assets = 'assets'
-	}
-
-	const groupByMapToEnum = new Map<string, GroupByOption>([
-		['พรรค', GroupByOption.Party],
-		['จังหวัด', GroupByOption.Province],
-		['ที่มา', GroupByOption.AppointmentMethod],
-		['เพศสภาพ', GroupByOption.Sex],
-		['รุ่นอายุ', GroupByOption.Age],
-		['การศึกษา', GroupByOption.Education]
-	]);
 
 	$: getRenderPartyList = (parties: MemberGroup['parties'] = []): PartySelected[] => {
-		// sort parties by count DESC
-		const sortedParties = parties.sort((a, b) => b.count - a.count);
-		// get top 5 parties
-		const top5Parties = sortedParties.slice(0, 5);
-		// map top5Parties to PartySelected
-		const result = top5Parties.map((party) => ({
-			label: party.name,
-			count: party.count,
-			color: party.color
-		}));
-		// if parties has more than 5 parties, add "อื่นๆ" to result
-		if (parties.length > 5) {
-			const otherCount = parties.slice(5).reduce((acc, party) => acc + party.count, 0);
+		const result = [...parties]
+			.sort((a, b) => b.count - a.count)
+			.slice(0, MAX_GROUP_DISPLAY)
+			.map((party) => ({
+				label: party.name,
+				count: party.count,
+				color: party.color
+			}));
+		// if parties has more than MAX_GROUP_DISPLAY parties, add "อื่นๆ" to result
+		if (parties.length > MAX_GROUP_DISPLAY) {
+			const otherCount = parties
+				.slice(MAX_GROUP_DISPLAY)
+				.reduce((acc, party) => acc + party.count, 0);
 			result.push({
 				label: 'อื่นๆ',
 				count: otherCount,
@@ -68,16 +46,15 @@
 		}
 		return result;
 	};
-
-	$: getGroupLink = (key: string, value: string) => {
-		return `/assemblies/${data.assemblyId}/members/${groupByMapToEnum.get(key)}?category=${value}`;
-	};
 </script>
 
-<div class="bg-ui-01 p-[16px] m-auto min-w-[226px] w-full flex flex-col h-full">
-	<p class="fluid-heading-03">{title}</p>
+<a
+	href="/assemblies/{assemblyId}/members/{groupBy}"
+	class="bg-ui-01 hover:bg-ui-03 text-black p-[16px] m-auto min-w-[226px] w-full flex flex-col h-full"
+>
+	<p class="fluid-heading-03">{groupByOptionLabelMap.get(groupBy)}</p>
 	<HalfDonutWrapper
-		chartId="summary-{title}"
+		chartId="summary-{groupBy}"
 		percent={getTopOfGroupsPercent(memberGroups)}
 		label={getTopOfGroups(memberGroups).name}
 	/>
@@ -86,11 +63,8 @@
 			<div>
 				<div class="flex">
 					<p class="heading-01">{group.name}</p>
-					{#if group.name !== 'ไม่มีข้อมูล'}
-						<a class="ml-[4px]" href={getGroupLink(title, group.name)}>
-							<Information class="text-gray-70" />
-						</a>
-					{/if}
+					<!-- TODO: consult tooltips with designer
+					<Information class="text-gray-70" /> -->
 					<p class="body-compact-01 ml-[4px] text-gray-70">
 						{getRoundedPercent(group.total, getSumOfGroupsTotal(memberGroups))}%
 					</p>
@@ -103,7 +77,7 @@
 						<Badge
 							color={party.color}
 							title={party.label}
-							subtitle={`${party.count} คน`}
+							subtitle="{party.count} คน"
 							style="flex:{party.count} {party.count} 0%"
 						/>
 					{/each}
@@ -111,4 +85,4 @@
 			</div>
 		{/each}
 	</div>
-</div>
+</a>
