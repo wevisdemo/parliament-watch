@@ -18,26 +18,30 @@
 				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link }
 			]
 		},
-		{
-			label: 'การลงมติ',
-			icon: VoteIcon,
-			url: '/votings/1',
-			type: MenuTypes.both
-		},
-		{
-			label: 'การออกกฎหมาย',
-			icon: LawIcon,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'กฎหมายในกระบวนการ', url: '/bills/1', type: MenuTypes.link },
-				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
-			]
-		},
+		// {
+		// 	label: 'การลงมติ',
+		// 	icon: VoteIcon,
+		// 	url: '/votings/1',
+		// 	type: MenuTypes.both
+		// },
+		// {
+		// 	label: 'การออกกฎหมาย',
+		// 	icon: LawIcon,
+		// 	type: MenuTypes.root,
+		// 	subs: [
+		// 		{ label: 'กฎหมายในกระบวนการ', url: '/bills/1', type: MenuTypes.link },
+		// 		{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
+		// 	]
+		// },
 		{
 			label: 'เกี่ยวกับเรา',
 			icon: WeVisIcon,
-			url: '/about',
-			type: MenuTypes.both
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'ที่มาของโครงการ', url: '/about#เกี่ยวกับเว็บไซต์นี้', type: MenuTypes.link },
+				{ label: 'ข้อมูลในเว็บนี้', url: '/about#เกี่ยวกับข้อมูลในเว็บไซต์', type: MenuTypes.link },
+				{ label: 'เกี่ยวกับ WeVis', url: '/about#เกี่ยวกับ-WeVis', type: MenuTypes.link }
+			]
 		}
 	];
 </script>

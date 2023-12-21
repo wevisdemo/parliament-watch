@@ -75,6 +75,10 @@
 				</svelte:fragment>
 			</FooterMenuGroup>
 		{/each}
+		<!-- NOTE - This is for justifying the contact in LG size.
+		When the nav links are back to normal, these should be removed -->
+		<div class="hidden lg:block" />
+		<div class="hidden lg:block" />
 		<FooterContact />
 	</div>
 	<div class="flex flex-col md:flex-row md:justify-between mt-4">
