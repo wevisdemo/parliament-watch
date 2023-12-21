@@ -14,7 +14,11 @@ const config = {
 		},
 		prerender: {
 			// TODO: non-released route for internal testing without a public link from any page
-			entries: ['/assemblies/สมาชิกสภาผู้แทนราษฎร-25/votes', '/bills/search']
+			entries: [
+				'/assemblies/สมาชิกสภาผู้แทนราษฎร-25/votes',
+				'/bills/search',
+				'/politicians/พริษฐ์-วัชรสินธุ/votes'
+			]
 		}
 	}
 };

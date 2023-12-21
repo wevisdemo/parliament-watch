@@ -1,31 +1,27 @@
 <script lang="ts">
 	import Share from '$components/Share/Share.svelte';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import General from '$components/icons/GeneralIcon.svelte';
 	import Politician from '$components/icons/PoliticianIcon.svelte';
-	import Vote from '$components/icons/VoteIcon.svelte';
 	import PartyDetail from '$components/politicians/PartyDetail.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import SideNav from '$components/politicians/SideNav.svelte';
-	import { Breadcrumb, BreadcrumbItem, Button, InlineNotification } from 'carbon-components-svelte';
-	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
-	import scrollama from 'scrollama';
-	import { onMount } from 'svelte';
-	import dayjs from 'dayjs';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
+	import dayjs from 'dayjs';
+	import scrollama from 'scrollama';
+	import { onMount } from 'svelte';
 
 	export let data;
-	const { politician, agreedVoting, disagreedVoting, votingAbsentStats } = data;
+	const { politician } = data;
 
 	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
 			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
 			{} as Record<K, T[]>
 		);
-	const safePercent = (n: number, outOf: number) => Math.round((n / (outOf || 1)) * 10000) / 100;
 
 	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
 	const currentParty = politician.partyRoles.find((e) => !e.endedAt);
@@ -120,9 +116,6 @@
 			{currentNavElementIndex}
 			assemblyRolesLength={politician.assemblyRoles.length}
 			{partyCount}
-			agreedVoting={agreedVoting.total}
-			disagreedVoting={disagreedVoting.total}
-			absentTotal={votingAbsentStats.absentVoting}
 		/>
 		<div class="flex-1 flex flex-col gap-6 w-full min-w-0">
 			<Section id="personal" title="ข้อมูลพื้นฐาน">
@@ -245,112 +238,7 @@
 					</div>
 				{/if}
 			</Section>
-			<Section id="votes" title="ประวัติการลงมติ">
-				<Vote slot="icon" size="32" />
-				<InlineNotification
-					slot="header-extension"
-					class="m-0 mt-1 min-w-0"
-					lowContrast
-					kind="info"
-					subtitle="การประเมินพฤติกรรมการลงมติ จะพิจารณาเพียงชื่อมติไม่ได้ ควรศึกษาเนื้อหาของมตินั้นๆ ประกอบด้วย"
-				/>
-				<div class="flex flex-col gap-6">
-					<div class="flex flex-col gap-2">
-						<h3 class="body-02 px-2 py-1 bg-teal-50">
-							5 มติล่าสุด ที่{politician.firstname}<span class="heading-02">เห็นด้วย</span>
-						</h3>
-						<!-- TODO: add links -->
-						<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-							{#each agreedVoting.latest as voting, idx (idx)}
-								<li>
-									<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-										<span class="flex-1 max-w-max underline">{voting.title}</span>
-										<VotingResultTag
-											class="cursor-pointer m-0 whitespace-nowrap"
-											result={voting.result}
-										/>
-									</a>
-								</li>
-							{/each}
-						</ul>
-						<a
-							href="/politicians/{politician.id}/votes?votetype=agreed"
-							class="mr-auto helper-text-01 flex gap-2 items-center"
-							target="_blank"
-							rel="nofollow noopener noreferrer"
-						>
-							<span>ดู {agreedVoting.total} มติที่เห็นด้วย</span>
-							<ArrowRight />
-						</a>
-					</div>
-					<div class="flex flex-col gap-2">
-						<h3 class="body-02 px-2 py-1 bg-red-50 text-white">
-							5 มติล่าสุด ที่{politician.firstname}<span class="heading-02">ไม่เห็นด้วย</span>
-						</h3>
-						<!-- TODO: add links -->
-						<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
-							{#each disagreedVoting.latest as voting, idx (idx)}
-								<li>
-									<a class="flex items-start gap-1 text-black no-underline cursor-pointer" href="/">
-										<span class="flex-1 max-w-max underline">{voting.title}</span>
-										<VotingResultTag
-											class="cursor-pointer m-0 whitespace-nowrap"
-											result={voting.result}
-										/>
-									</a>
-								</li>
-							{/each}
-						</ul>
-						<a
-							href="/politicians/{politician.id}/votes?votetype=disagreed"
-							class="mr-auto helper-text-01 flex gap-2 items-center"
-							target="_blank"
-							rel="nofollow noopener noreferrer"
-						>
-							<span>ดู {disagreedVoting.total} มติที่ไม่เห็นด้วย</span>
-							<ArrowRight />
-						</a>
-					</div>
-					<div class="flex flex-col gap-2">
-						<h3 class="body-02 px-2 py-1 bg-gray-20 heading-02">การลา/ขาดลงมติ</h3>
-						<p class="body-02">
-							{politician.firstname}ลา/ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({safePercent(
-								votingAbsentStats.absentVoting,
-								votingAbsentStats.totalVoting
-							)}%) จากทั้งหมด
-							{votingAbsentStats.totalVoting}
-							มติในฐานข้อมูล ซึ่ง{votingAbsentStats.absentVoting ===
-							votingAbsentStats.averageAbsentVoting
-								? 'เท่ากับ'
-								: votingAbsentStats.absentVoting < votingAbsentStats.averageAbsentVoting
-								? 'น้อยกว่า'
-								: 'มากกว่า'}ค่ากลางของสมาชิกในสภาทั้งหมด (ค่ากลาง = {safePercent(
-								votingAbsentStats.averageAbsentVoting,
-								votingAbsentStats.totalVoting
-							)}%)
-						</p>
-						<p class="label-01 text-gray-60">
-							หมายเหตุ: การขาดลงมติ เกิดจากหลายสาเหตุ เช่น ติดประชุมอื่น ติดภารกิจสำคัญ เจ็บป่วย
-							จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
-						</p>
-						<a
-							href="/politicians/{politician.id}/votes?votetype=absent"
-							class="mr-auto helper-text-01 flex gap-2 items-center"
-							target="_blank"
-							rel="nofollow noopener noreferrer"
-						>
-							<span>ดู {votingAbsentStats.absentVoting} มติที่ขาด</span>
-							<ArrowRight />
-						</a>
-					</div>
-					<Button
-						href="/politicians/{politician.id}/votes"
-						kind="tertiary"
-						icon={ArrowRight}
-						size="small">ดูการลงมติทั้งหมด</Button
-					>
-				</div>
-			</Section>
+			<!-- <PoliticianVoteSummary {data} /> -->
 		</div>
 	</div>
 </div>
