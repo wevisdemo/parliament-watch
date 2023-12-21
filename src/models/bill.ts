@@ -1,4 +1,5 @@
 import type { Assembly } from './assembly';
+import type { Link } from './link';
 import type { Politician } from './politician';
 
 export enum BillStatus {
@@ -35,4 +36,5 @@ export interface Bill {
 	proposedByAssembly?: Assembly;
 	proposedByPeople?: PeopleProposer;
 	enactedOn?: Date;
+	attachment?: Link;
 }
