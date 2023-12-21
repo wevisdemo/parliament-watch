@@ -16,8 +16,12 @@ const config = {
 			// TODO: non-released route for internal testing without a public link from any page
 			entries: [
 				'/assemblies/สมาชิกสภาผู้แทนราษฎร-25/votes',
+				'/bills',
+				'/bills/1',
 				'/bills/search',
-				'/politicians/พริษฐ์-วัชรสินธุ/votes'
+				'/legislative-process',
+				'/politicians/พริษฐ์-วัชรสินธุ/votes',
+				'/votings/1'
 			]
 		}
 	}
