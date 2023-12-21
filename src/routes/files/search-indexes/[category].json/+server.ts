@@ -5,6 +5,8 @@ import { searchIndexes } from '../../../../mocks/data/searchIndexes.js';
 
 export const prerender = true;
 
+export const entries = () => Object.values(SearchIndexCategory).map((category) => ({ category }));
+
 export async function GET({ params }) {
 	switch (params.category) {
 		case SearchIndexCategory.Politicians: {
