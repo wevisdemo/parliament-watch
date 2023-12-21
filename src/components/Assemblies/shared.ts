@@ -1,4 +1,4 @@
-import type { MemberGroup } from '../../routes/assemblies/[id]/+page';
+import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 
 export interface PartySelected {
 	label: string;

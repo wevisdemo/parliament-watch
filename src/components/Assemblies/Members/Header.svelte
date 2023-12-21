@@ -5,7 +5,7 @@
 	import type {
 		AssemblySummary,
 		GroupByTab
-	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout';
+	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout.server';
 	import AssemblyIdRunner from '../AssemblyIdRunner.svelte';
 
 	export let data: {

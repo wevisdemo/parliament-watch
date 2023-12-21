@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MemberGroup } from '../../routes/assemblies/[id]/+page';
+	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 	import LowerHouseSummary from './LowerHouseSummary.svelte';
 	import SeatChart from './SeatChart.svelte';
 	import UpperHouseSummary from './UpperHouseSummary.svelte';

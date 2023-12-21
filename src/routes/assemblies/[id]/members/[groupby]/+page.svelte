@@ -15,7 +15,7 @@
 	import SearchLocate from 'carbon-icons-svelte/lib/SearchLocate.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
-	import type { PoliticianSummaryGroupBy } from './+page.js';
+	import type { PoliticianSummaryGroupBy } from './+page.server.js';
 	import { GroupByOption } from '$models/assembly.js';
 
 	export let data;

@@ -11,7 +11,7 @@
 		AssemblySummary,
 		FilterOptions,
 		VoteSummary
-	} from '../../../routes/assemblies/[id]/votes/+page';
+	} from '../../../routes/assemblies/[id]/votes/+page.server';
 	import VotesHeader from './VotesHeader.svelte';
 
 	export let votes: VoteSummary[] = [];

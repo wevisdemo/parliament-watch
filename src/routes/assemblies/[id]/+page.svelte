@@ -1,10 +1,9 @@
 <script lang="ts">
 	import Header from '$components/Assemblies/Header.svelte';
-	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
 	import MainMembers from '$components/Assemblies/MainMembers.svelte';
 	import Summary from '$components/Assemblies/Summary.svelte';
-	import { Breadcrumb, BreadcrumbItem, OverflowMenu } from 'carbon-components-svelte';
-	import type { MemberGroup } from './+page.js';
+	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
+	import type { MemberGroup } from './+page.server.js';
 	import { getSenateColorByTitle } from '$components/Assemblies/shared.js';
 
 	export let data;

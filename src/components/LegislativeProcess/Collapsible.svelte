@@ -6,7 +6,8 @@
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 
 	import type { ComponentProps } from 'svelte';
-	import type { Legislation } from '../../routes/legislative-process/+page';
+	import type { Legislation } from '../../routes/legislative-process/+page.server';
+
 	export let legislation: Legislation;
 	$: ({ consideredBy, details, endorsedBy, examples, presentedBy, steps, title, stepDescription } =
 		legislation);

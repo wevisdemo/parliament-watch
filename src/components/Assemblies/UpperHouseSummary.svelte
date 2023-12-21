@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MemberGroup } from '../../routes/assemblies/[id]/+page';
+	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 	import Badge from './Badge.svelte';
 	import { getPercentWidth, getSenateColorByTitle } from './shared';
 

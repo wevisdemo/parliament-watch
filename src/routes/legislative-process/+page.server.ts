@@ -55,7 +55,7 @@ export function load() {
 			details: ['เสนอชื่อผู้ที่สมควรดำรงตำแหน่งเป็นนายกฯ', 'ลงมติเลือกนายกฯ']
 		}
 	];
-  
+
 	const senates: DutySection[] = [
 		{
 			heading: 'พิจารณาร่างกฎหมาย (พ.ร.บ.)',
@@ -147,8 +147,8 @@ export function load() {
 			]
 		}
 	];
-  
-  const legislations: Legislation[] = [
+
+	const legislations: Legislation[] = [
 		{
 			title: 'ร่างพระราชบัญญัติ (พรบ.)',
 			details: 'กฎหมายโดยทั่วไปจะถูกตราเป็น พ.ร.บ.',
@@ -280,6 +280,6 @@ export function load() {
 			senates,
 			both
 		},
-    legislations
+		legislations
 	};
 }

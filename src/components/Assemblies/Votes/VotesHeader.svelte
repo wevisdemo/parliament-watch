@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AssemblySummary } from '../../../routes/assemblies/[id]/votes/+page';
+	import type { AssemblySummary } from '../../../routes/assemblies/[id]/votes/+page.server';
 	import AssemblyIdRunner from '$components/Assemblies/AssemblyIdRunner.svelte';
 
 	export let assembly: AssemblySummary;

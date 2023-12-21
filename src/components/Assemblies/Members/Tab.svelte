@@ -3,7 +3,7 @@
 	import type {
 		AssemblySummary,
 		GroupByTab
-	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout';
+	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout.server';
 
 	export let data: {
 		assembly: AssemblySummary;

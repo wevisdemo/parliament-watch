@@ -5,7 +5,7 @@
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
-	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page';
+	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page.server';
 	import { twMerge } from 'tailwind-merge';
 
 	dayjs.extend(buddhistEra);

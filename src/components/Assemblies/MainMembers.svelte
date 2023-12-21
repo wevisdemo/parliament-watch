@@ -1,9 +1,8 @@
 <script lang="ts">
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
-	import type { Party } from '$models/party';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import type { MainMember } from '../../routes/assemblies/[id]/+page';
+	import type { MainMember } from '../../routes/assemblies/[id]/+page.server';
 
 	export let members: MainMember[] = [];
 	export let assemblyId: string;

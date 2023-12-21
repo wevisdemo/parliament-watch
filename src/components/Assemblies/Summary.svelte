@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { GroupByOption } from '$models/assembly';
-	import type { Summary } from '../../routes/assemblies/[id]/+page';
+	import type { Summary } from '../../routes/assemblies/[id]/+page.server';
 	import SummaryGroup from './SummaryGroup.svelte';
 	import SummaryTotal from './SummaryTotal.svelte';
 
