@@ -232,7 +232,7 @@
 					})}
 				</p>
 				<!-- TODO: add link -->
-				<a href="/" class="mr-auto helper-text-01 underline"> ที่มาและข้อจำกัดข้อมูล </a>
+				<!-- <a href="/" class="mr-auto helper-text-01 underline"> ที่มาและข้อจำกัดข้อมูล </a> -->
 				<Share label="แชร์มติ" />
 			</div>
 		</div>

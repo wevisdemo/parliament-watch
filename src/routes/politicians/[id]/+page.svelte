@@ -93,9 +93,15 @@
 			</div>
 			<div class="flex flex-col gap-2">
 				<DownloadData links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
-				<p class="label-01 text-gray-60">อัปเดตข้อมูล: 18 ส.ค. 2566</p>
+				<p class="label-01 text-gray-60">
+					อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+						year: 'numeric',
+						month: 'short',
+						day: 'numeric'
+					})}
+				</p>
 				<!-- TODO: add link -->
-				<a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a>
+				<!-- <a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a> -->
 				<Share label="แชร์ประวัติ" />
 			</div>
 		</div>

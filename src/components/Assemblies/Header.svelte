@@ -74,8 +74,14 @@
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
 			</a> -->
 		</div>
-		<p class="label-01 text-gray-60">อัพเดทข้อมูล: 20 ส.ค. 2566</p>
-		<a href="/" class="helper-text-01">ที่มาและข้อจำกัดข้อมูล</a>
+		<p class="label-01 text-gray-60">
+			อัพเดทข้อมูล: {new Date().toLocaleDateString('th-TH', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric'
+			})}
+		</p>
+		<!-- <a href="/" class="helper-text-01">ที่มาและข้อจำกัดข้อมูล</a> -->
 		<Share label="แชร์" />
 	</div>
 </div>

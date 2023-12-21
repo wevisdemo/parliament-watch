@@ -39,9 +39,15 @@
 			><span class="whitespace-nowrap">รัฐสภา</span>
 		</h1>
 		<p class="relative flex gap-[10px] helper-text-01 text-gray-60">
-			<span>อัปเดตข้อมูล: 18 ส.ค. 2566</span>
+			<span
+				>อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+					year: 'numeric',
+					month: 'short',
+					day: 'numeric'
+				})}</span
+			>
 			<!-- TODO: Add link -->
-			<a href="/" class="underline text-[color:inherit]">ที่มาและข้อจำกัดข้อมูล</a>
+			<!-- <a href="/" class="underline text-[color:inherit]">ที่มาและข้อจำกัดข้อมูล</a> -->
 		</p>
 	</header>
 	<nav>
