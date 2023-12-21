@@ -87,6 +87,7 @@
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
 	export let mounted = false;
+	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
 
 	// Reactive
 	let tableCurrentPage = 1;
@@ -117,9 +118,11 @@
 
 	let comboboxInternal: Record<string, string> = {};
 	let showFilter = true;
+	let isMobile = false;
 	onMount(() => {
 		mounted = true;
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
+		isMobile = !showFilter;
 	});
 
 	let previousFromTop = 0;
@@ -138,18 +141,36 @@
 		noTrailingSlash
 		class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
-		{#each breadcrumbList as breadcrumbItem, idx (breadcrumbItem.url)}
-			<BreadcrumbItem href={breadcrumbItem.url} isCurrentPage={idx === breadcrumbList.length - 1}
-				>{breadcrumbItem.label}</BreadcrumbItem
+		{#if isMobile}
+			<BreadcrumbItem href={breadcrumbList[0].url}>{breadcrumbList[0].label}</BreadcrumbItem>
+			{#if breadcrumbList.length > 2}
+				<BreadcrumbItem>...</BreadcrumbItem>
+			{/if}
+			<BreadcrumbItem
+				href={breadcrumbList[breadcrumbList.length - 1].url}
+				isCurrentPage={breadcrumbList.length === 1}
 			>
-		{/each}
+				{breadcrumbList[breadcrumbList.length - 1].label}
+			</BreadcrumbItem>
+		{:else}
+			{#each breadcrumbList as breadcrumbItem, idx (breadcrumbItem.url)}
+				<BreadcrumbItem href={breadcrumbItem.url} isCurrentPage={idx === breadcrumbList.length - 1}>
+					{breadcrumbItem.label}
+				</BreadcrumbItem>
+			{/each}
+		{/if}
 	</Breadcrumb>
 	<header class="px-4 py-3 bg-ui-01 md:px-16">
 		<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
 			<div class="flex-1">
 				<slot />
 			</div>
-			<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end">
+			<div
+				class="flex flex-col w-full gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end {downloadSize ===
+				'lg'
+					? 'md:w-[224px]'
+					: 'md:w-auto'}"
+			>
 				<div class="flex items-center gap-1">
 					<Download />
 					<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>

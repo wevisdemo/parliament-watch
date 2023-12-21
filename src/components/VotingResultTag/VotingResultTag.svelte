@@ -9,14 +9,17 @@
 	let tagColor = 'bg-purple-70 text-text-04';
 	let label = '';
 
+	$: tagText = isLarge ? 'heading-compact-02' : 'label-01';
+	$: tagContainer = isLarge ? 'px-2 py-[5px] rounded-3xl' : 'px-2 py-1 rounded-3xl';
+
 	$: switch (result) {
 		case DefaultVotingResult.Passed:
 			tagColor = 'bg-teal-30';
-			label = DefaultVotingResult.Passed;
+			label = isLarge ? 'มติผ่าน' : DefaultVotingResult.Passed;
 			break;
 		case DefaultVotingResult.Failed:
 			tagColor = 'bg-red-30';
-			label = DefaultVotingResult.Failed;
+			label = isLarge ? 'มติไม่ผ่าน' : DefaultVotingResult.Failed;
 			break;
 		default:
 			// purple tag and white text
@@ -29,4 +32,4 @@
 	export { className as class };
 </script>
 
-<Tag class={twMerge(tagColor, className)} size={isLarge ? 'default' : 'sm'}>{label}</Tag>
+<div class={twMerge(tagColor, className, tagText, tagContainer)}>{label}</div>

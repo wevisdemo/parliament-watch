@@ -21,7 +21,9 @@
 	export let currentState: string | undefined = undefined;
 	export let daySinceProposed: number | undefined = undefined;
 	export let billUrl: string;
-	export let isFullWidth = false;
+  export let isFullWidth = false;
+	let className = '';
+	export { className as class };
 
 	$: isLandscape = orientation === 'landscape';
 </script>
@@ -30,7 +32,8 @@
 	class={twMerge(
 		'flex relative p-4 bg-white hover:bg-gray-10 rounded-sm',
 		isLandscape ? 'flex-row gap-x-6 max-w-[640px]' : 'flex-col gap-y-4 max-w-[242px] pt-6',
-		isFullWidth ? 'w-full max-w-none' : ''
+		isFullWidth ? 'w-full max-w-none' : '',
+		className
 	)}
 >
 	<div class={twMerge('space-y-1', isLandscape ? 'w-2/3' : 'w-full')}>
