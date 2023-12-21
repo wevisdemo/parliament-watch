@@ -1,6 +1,7 @@
 import type { AssemblyMember } from '../../data';
 import { type Assembly, GroupByOption } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
+import dayjs from 'dayjs';
 
 export interface PoliticianGroup {
 	name: string;
@@ -65,14 +66,13 @@ export function getMemberGroup(
 			return groupMembersBy(members, ({ birthdate }) => {
 				if (!birthdate) return 'ไม่พบข้อมูล';
 
-				const year = birthdate.getFullYear();
-				// https://offer.kasasa.com/exchange/articles/generations/gen-x-gen-y-gen-z
-				if (year < 1946) return 'อื่นๆ';
-				if (year < 1965) return 'Baby Boomers';
-				if (year < 1980) return 'Gen X';
-				if (year < 1996) return 'Gen Y';
-				if (year < 2012) return 'Gen Z';
-				return 'Gen A';
+				const birthDate = dayjs(birthdate);
+				const age = dayjs().diff(birthDate, 'year');
+
+				if (age > 71) return '71 ปีขึ้นไป';
+				if (age > 55) return '56-70 ปี';
+				if (age > 40) return '41-55 ปี';
+				return '25-40 ปี';
 			}).map(([side, membersBySide]) => ({
 				name: side,
 				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
