@@ -23,7 +23,7 @@ export interface Menu {
 		| typeof VoteIcon
 		| typeof WeVisIcon
 		| null;
-	url: string | null;
+	url?: string;
 	type: MenuTypes;
 	subs?: Menu[];
 }

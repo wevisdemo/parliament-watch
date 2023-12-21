@@ -1,6 +1,10 @@
-import { AssemblyName, type Assembly } from '$models/assembly';
+import {
+	AssemblyName,
+	type Assembly,
+	GroupByOption,
+	groupByOptionLabelMap
+} from '$models/assembly';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
-import { GroupByOption, groupByOptionLabelMap } from './groupby.js';
 
 export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 

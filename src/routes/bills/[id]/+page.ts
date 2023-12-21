@@ -97,6 +97,8 @@ export function load({ params }) {
 		};
 	}
 
+	events.reverse();
+
 	return {
 		bill,
 		mergedBills, // Bills that got merged into this bill.

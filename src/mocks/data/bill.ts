@@ -12,7 +12,11 @@ export const inProgressBill: Bill = {
 	categories: ['สิ่งแวดล้อม', 'ขนส่งมวลชน'],
 	proposerType: BillProposerType.Politician,
 	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician, movingForwardPolitician]
+	coProposedByPoliticians: [movingForwardPolitician, movingForwardPolitician],
+	attachment: {
+		label: 'เอกสารเสนอกฏหมาย',
+		url: 'https://www.google.com'
+	}
 };
 
 export const enactedBill: Bill = {
@@ -27,5 +31,9 @@ export const enactedBill: Bill = {
 	proposerType: BillProposerType.Politician,
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician, movingForwardPolitician],
+	attachment: {
+		label: 'เอกสารเสนอกฏหมาย',
+		url: 'https://www.google.com'
+	},
 	enactedOn: new Date('2023-02-01')
 };

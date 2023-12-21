@@ -14,13 +14,14 @@
 	// see: https://github.com/wevisdemo/parliament-watch/issues/26#issue-1937096920
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 	export let nickname: string;
-	export let title: string;
-	export let proposedBy: ProposedBy;
-	export let proposedOn: Date;
+	export let title: string | undefined = undefined;
+	export let proposedBy: ProposedBy | undefined = undefined;
+	export let proposedOn: Date | undefined = undefined;
 	export let status: BillStatus;
-	export let currentState: string | undefined;
-	export let daySinceProposed: number;
+	export let currentState: string | undefined = undefined;
+	export let daySinceProposed: number | undefined = undefined;
 	export let billUrl: string;
+  export let isFullWidth = false;
 	let className = '';
 	export { className as class };
 
@@ -30,7 +31,8 @@
 <div
 	class={twMerge(
 		'flex relative p-4 bg-white hover:bg-gray-10 rounded-sm',
-		isLandscape ? 'flex-row gap-x-6 max-w-[640px]' : 'flex-col gap-y-4 pt-6',
+		isLandscape ? 'flex-row gap-x-6 max-w-[640px]' : 'flex-col gap-y-4 max-w-[242px] pt-6',
+		isFullWidth ? 'w-full max-w-none' : '',
 		className
 	)}
 >
@@ -39,37 +41,48 @@
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
 
-		<p class="text-sm text-text-02"><span class="font-bold mr-1">ชื่อทางการ</span>{title}</p>
+		{#if title}
+			<p class="text-sm text-text-02"><span class="font-bold mr-1">ชื่อทางการ</span>{title}</p>
+		{/if}
 
-		<div>
-			<p class="font-semibold">เสนอโดย</p>
+		{#if proposedBy}
+			<div>
+				<p class="font-semibold">เสนอโดย</p>
 
-			<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
-				<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
-					<img src={proposedBy.avatar} alt={proposedBy.name} class="w-full h-full" loading="lazy" />
-				</figure>
+				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
+						<img
+							src={proposedBy.avatar}
+							alt={proposedBy.name}
+							class="w-full h-full"
+							loading="lazy"
+						/>
+					</figure>
 
-				<p class="text-sm">
-					{proposedBy.name} <span class="text-gray-60">{proposedBy.description}</span>
-				</p>
+					<p class="text-sm">
+						{proposedBy.name} <span class="text-gray-60">{proposedBy.description}</span>
+					</p>
+				</div>
 			</div>
-		</div>
+		{/if}
 	</div>
 
 	<div class={isLandscape ? 'w-1/3' : 'w-full'}>
 		<div class="flex {isLandscape ? 'flex-row gap-x-6' : 'flex-col gap-y-4'}">
 			<div class="grow space-y-2">
-				<div>
-					<p class="text-sm font-semibold">วันที่เสนอ</p>
+				{#if proposedOn}
+					<div>
+						<p class="text-sm font-semibold">วันที่เสนอ</p>
 
-					<p class="text-sm">
-						{proposedOn.toLocaleDateString('th-TH', {
-							day: 'numeric',
-							month: 'short',
-							year: 'numeric'
-						})}
-					</p>
-				</div>
+						<p class="text-sm">
+							{proposedOn.toLocaleDateString('th-TH', {
+								day: 'numeric',
+								month: 'short',
+								year: 'numeric'
+							})}
+						</p>
+					</div>
+				{/if}
 
 				<div>
 					<p class="text-sm font-semibold">สถานะ</p>
@@ -79,10 +92,12 @@
 					{/if}
 				</div>
 
-				<p class="text-sm text-blue-70 font-semibold">ผ่านมาแล้ว {daySinceProposed} วัน</p>
+				{#if daySinceProposed}
+					<p class="text-sm text-blue-70 font-semibold">ผ่านมาแล้ว {daySinceProposed} วัน</p>
+				{/if}
 			</div>
 
-			<ArrowRight class="w-6 h-6 ml-auto text-gray-100" />
+			<ArrowRight class="ml-auto text-gray-100" />
 		</div>
 	</div>
 </div>

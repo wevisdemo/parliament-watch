@@ -1,7 +1,6 @@
 import { redirect } from '@sveltejs/kit';
-import { GroupByOption } from './[groupby]/groupby.js';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
-import { AssemblyName } from '$models/assembly.js';
+import { AssemblyName, GroupByOption } from '$models/assembly.js';
 
 export async function load({ params }) {
 	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);

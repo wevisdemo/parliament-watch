@@ -13,13 +13,8 @@ const config = {
 			'$models/*': './src/models/*'
 		},
 		prerender: {
-			entries: [
-				'*',
-				'/files/search-indexes/politicians.json',
-				'/files/search-indexes/bills.json',
-				'/files/search-indexes/votings.json',
-				'/files/search-indexes/billProposers.json'
-			]
+			// TODO: non-released route for internal testing without a public link from any page
+			entries: ['/assemblies/สมาชิกสภาผู้แทนราษฎร-25/votes', '/bills/search']
 		}
 	}
 };

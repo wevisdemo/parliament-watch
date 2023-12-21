@@ -1,11 +1,19 @@
 <script lang="ts">
 	import AngleRightIcon from '$components/icons/AngleRightIcon.svelte';
+	import dayjs from 'dayjs';
+	import 'dayjs/locale/th';
+	import buddhistEra from 'dayjs/plugin/buddhistEra';
+
+	dayjs.extend(buddhistEra);
+	dayjs.locale('th');
 
 	export let currentId = '';
-	export let startedYear: number;
+	export let startedYear: Date;
 	export let term: number;
 	export let assemblyIds: string[] = [];
 	export let postfix = '';
+
+	$: formattedYear = dayjs(startedYear).format('BBBB');
 
 	$: nextUrl = (() => {
 		const current = assemblyIds.findIndex((id) => id === currentId);
@@ -32,7 +40,7 @@
 			class="rotate-180 w-[20px] mr-[16px] ml-[0px]"
 		/>
 	</a>
-	<h3 class="fluid-heading-03">ชุดที่ {term} | {startedYear}</h3>
+	<h3 class="fluid-heading-03">ชุดที่ {term} | {formattedYear}</h3>
 	<a
 		class={`${!nextUrl ? 'pointer-events-none' : ''} ${!nextUrl ? 'cursor-none' : ''}`}
 		href={nextUrl}

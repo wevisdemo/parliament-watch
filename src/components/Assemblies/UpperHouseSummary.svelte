@@ -17,8 +17,8 @@
 					<span class="body-compact-01 text-gray-60">{group.total} คน</span>
 				</div>
 				<div
-					class="flex space-x-[4px] w-[var(--width)]"
-					style="--width: {getPercentWidth(group.total, memberGroups)}%"
+					class="flex gap-x-[4px] w-[--width]"
+					style="--width:{getPercentWidth(group.total, memberGroups)}%"
 				>
 					<Badge color={getSenateColorByTitle(group.name)} size="l" />
 				</div>

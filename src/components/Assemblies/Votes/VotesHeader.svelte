@@ -4,8 +4,6 @@
 
 	export let assembly: AssemblySummary;
 	export let assemblyIds: string[] = [];
-
-	const startedYear = assembly.startedAt.getFullYear() + 543;
 </script>
 
 <div
@@ -16,7 +14,7 @@
 			<h2 class="fluid-heading-04">{assembly.name}</h2>
 			<AssemblyIdRunner
 				currentId={assembly.id}
-				{startedYear}
+				startedYear={assembly.startedAt}
 				term={assembly.term}
 				{assemblyIds}
 				postfix="votes"
