@@ -62,7 +62,7 @@
 	// Just props
 	export let breadcrumbList: {
 		label: string;
-		url: string;
+		url?: string;
 	}[];
 	export let comboboxFilterList: ComboboxFilterGroup[] = [];
 	export let checkboxFilterList: CheckboxFilterGroup[];
