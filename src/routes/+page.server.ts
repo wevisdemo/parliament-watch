@@ -58,19 +58,19 @@ export async function load() {
 		}
 	];
 
-	const wikipediaPolitician: Omit<HighlightedPolitician, 'reason'> = {
+	let wikipediaPolitician: Omit<HighlightedPolitician, 'reason'> = {
 		politician: movingForwardPolitician,
 		value: 476263
 	};
-	const gunPolitician: Omit<HighlightedPolitician, 'reason'> = {
+	let gunPolitician: Omit<HighlightedPolitician, 'reason'> = {
 		politician: movingForwardPolitician,
 		value: 25
 	};
 
-	// if (building) {
-	// 	wikipediaPolitician = await getPoliticianWithMostViewLastMonth();
-	// 	gunPolitician = (await getMostGun()) ?? gunPolitician;
-	// }
+	if (building) {
+		wikipediaPolitician = await getPoliticianWithMostViewLastMonth();
+		gunPolitician = (await getMostGun()) ?? gunPolitician;
+	}
 
 	const otherSourcesHighlightedPoliticians: HighlightedPolitician[] = [
 		{
