@@ -91,6 +91,10 @@
 	$: innerWidth = 0;
 </script>
 
+<svelte:head>
+	<title>{bill.nickname} - Parliament Watch</title>
+</svelte:head>
+
 <svelte:window bind:innerWidth />
 <Breadcrumb
 	noTrailingSlash

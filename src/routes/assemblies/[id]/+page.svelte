@@ -31,6 +31,10 @@
 			: data.summary;
 </script>
 
+<svelte:head>
+	<title>{data.assembly.name} {data.assembly.term} - Parliament Watch</title>
+</svelte:head>
+
 <div class="md:px-[64px] px-[16px]">
 	<Breadcrumb
 		noTrailingSlash

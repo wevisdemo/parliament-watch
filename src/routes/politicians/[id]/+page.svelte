@@ -52,6 +52,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>{politician.firstname} {politician.lastname} - Parliament Watch</title>
+</svelte:head>
+
 <Breadcrumb
 	noTrailingSlash
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"

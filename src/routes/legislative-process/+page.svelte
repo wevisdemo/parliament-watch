@@ -159,6 +159,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>รัฐออกกฎหมายอย่างไร - Parliament Watch</title>
+</svelte:head>
+
 <div class="flex flex-col w-full">
 	<header class="bg-teal-20">
 		<div class="w-full max-w-[800px] px-10 py-10 md:py-20 mx-auto">
