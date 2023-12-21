@@ -3,6 +3,11 @@
 	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import Footer from '$components/Footer/Footer.svelte';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		document.querySelectorAll('link.lazy').forEach((el) => el.setAttribute('media', 'all'));
+	});
 </script>
 
 <main class="min-h-screen flex flex-col">
