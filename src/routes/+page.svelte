@@ -49,7 +49,7 @@
 			<li class="flex-1">
 				<a
 					href="#politician"
-					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 !no-underline"
+					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 hover:bg-ui-01 !no-underline"
 				>
 					<PoliticianIcon class="aspect-square w-6 h-auto md:w-8" />
 					<span class="flex-1 flex flex-col gap-1">
