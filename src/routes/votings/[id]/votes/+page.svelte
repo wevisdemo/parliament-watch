@@ -73,11 +73,10 @@
 
 <DataPage
 	breadcrumbList={[
-		// TODO: add update missing link
 		{ url: '/', label: 'หน้าหลัก' },
-		{ label: 'การลงมติ' },
+		{ url: `#1`, label: 'การลงมติ' },
 		{ url: `/votings/${voting.id}`, label: voting.title },
-		{ label: 'ผลการลงมติรายคน' }
+		{ url: `#`, label: 'ผลการลงมติรายคน' }
 	]}
 	{comboboxFilterList}
 	{checkboxFilterList}
