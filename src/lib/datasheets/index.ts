@@ -1,14 +1,16 @@
 import { fetchAndParseSheet } from './processor';
 import { createAssemblySchema } from '$models/assembly';
-import { partySchema } from '$models/party';
+import { createPartySchema } from '$models/party';
 import {
 	createAssemblyRoleSchema,
 	createPartyRoleSchema,
 	createPoliticianSchema
 } from '$models/politician';
 import { error } from '@sveltejs/kit';
+import { StaticImageResolver } from './image';
 
-export const fetchParties = () => fetchAndParseSheet('Parties', partySchema);
+export const fetchParties = () =>
+	fetchAndParseSheet('Parties', createPartySchema(new StaticImageResolver('/images/parties')));
 
 export const fetchAssemblies = async () =>
 	fetchAndParseSheet('Assemblies', createAssemblySchema(await fetchParties()));
@@ -22,7 +24,11 @@ export const fetchPartyRoleHistory = async () =>
 export const fetchPoliticians = async () =>
 	fetchAndParseSheet(
 		'Politicians',
-		createPoliticianSchema(await fetchPartyRoleHistory(), await fetchAssemblyRoleHistory())
+		createPoliticianSchema(
+			await fetchPartyRoleHistory(),
+			await fetchAssemblyRoleHistory(),
+			new StaticImageResolver('/images/politicians')
+		)
 	);
 
 export async function fetchFromIdOr404<T extends { id: string }>(

@@ -3,10 +3,12 @@ import type { Assembly } from './assembly';
 import type { Link } from './link';
 import type { Party } from './party';
 import { joinMany, parseMarkdownListToArrayOfItems, safeFind } from '$lib/datasheets/processor';
+import type { StaticImageResolver } from '$lib/datasheets/image';
 
 export const createPoliticianSchema = (
 	partyRoleHistory: PartyRoleHistory[],
-	assemblyRoleHistory: AssemblyRoleHistory[]
+	assemblyRoleHistory: AssemblyRoleHistory[],
+	imageResolver: StaticImageResolver
 ) =>
 	z
 		.object({
@@ -37,8 +39,7 @@ export const createPoliticianSchema = (
 			return {
 				id,
 				...rest,
-				// TODO: add avatar url
-				avatar: `https://placehold.co/128x128?text=politician`,
+				avatar: imageResolver.resolve(`${id}.webp`),
 				isActive: !assemblyRoles[0]?.endedAt,
 				educations: parseMarkdownListToArrayOfItems(educations),
 				previousOccupations: parseMarkdownListToArrayOfItems(previousOccupations),
