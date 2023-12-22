@@ -344,8 +344,8 @@
 							resultSummary[0]
 					  ).total}
 				<div
-					class="flex flex-col w-full md:w-1/{data.resultsByAffiliation
-						.length} border-t border-gray-30 pb-4 md:pb-0"
+					class="flex flex-col w-full border-t border-gray-30 pb-4 md:pb-0"
+					style="--width:{100 / data.resultsByAffiliation.length}%"
 				>
 					<div class="mt-2 flex items-center gap-x-1">
 						<p class="heading-02">{affiliationName}</p>
