@@ -17,9 +17,15 @@
 	import { onMount } from 'svelte';
 	export let data;
 
+	enum Menu {
+		Summary = 'summary',
+		ByParty = 'byParty',
+		ByPerson = 'byPerson'
+	}
+
 	let open = false;
 	let selectedTab = '';
-	let selectedMenu = 'summary';
+	let selectedMenu = Menu.Summary;
 	let isViewPercent = false;
 	let searchQuery = '';
 	let isMobile = false;
@@ -75,21 +81,23 @@
 	}
 
 	function scrollTo(id: string) {
-		selectedMenu = id;
+		selectedMenu = id as Menu;
 		const el = document.getElementById(id);
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	}
 
 	function onScroll() {
 		const scrollY = window.scrollY;
-		const anchorEls = document.querySelectorAll<AnchorElement>('#summary, #byParty, #byPerson');
+		const anchorEls = document.querySelectorAll<AnchorElement>(
+			`#${Menu.Summary}, #${Menu.ByParty}, #${Menu.ByPerson}`
+		);
 
 		for (const el of anchorEls) {
 			const top = el.offsetTop;
 			const bottom = top + el.offsetHeight;
 
 			if (scrollY >= top && scrollY <= bottom) {
-				selectedMenu = el.id.replace('#', '');
+				selectedMenu = el.id.replace('#', '') as Menu;
 				break;
 			}
 		}
@@ -196,7 +204,7 @@
 				{/if}
 			</div>
 			<div>
-				<DownloadData links={data.voting.files} />
+				<!-- <DownloadData links={data.voting.files} /> -->
 			</div>
 		</div>
 	</div>
@@ -205,33 +213,33 @@
 		<div class="w-full flex items-center gap-x-[1px] mt-4 sticky top-0 bg-white z-10">
 			<button
 				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 {selectedMenu ===
-				'summary'
+				Menu.Summary
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
-				on:click={() => scrollTo('summary')}
+				on:click={() => scrollTo(Menu.Summary)}
 			>
 				สรุป
 			</button>
 			<button
 				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
-				'byParty'
+				Menu.ByParty
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
-				on:click={() => scrollTo('byParty')}
+				on:click={() => scrollTo(Menu.ByParty)}
 			>
 				รายสังกัด
 			</button>
 			<button
 				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
-				'byPerson'
+				Menu.ByPerson
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
-				on:click={() => scrollTo('byPerson')}
+				on:click={() => scrollTo(Menu.ByPerson)}
 			>
 				รายคน
 			</button>
 		</div>
-		<h2 id="summary" class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
+		<h2 id={Menu.Summary} class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
 		<div class="flex flex-col mt-4">
 			{#if data.relatedBill}
 				<div class="flex items-center text-teal-50 gap-x-1">
@@ -318,7 +326,7 @@
 		</button>
 		<div class="flex flex-col w-full mt-20">
 			<div class="flex flex-col md:flex-row items-start md:items-center gap-x-3">
-				<h1 id="byParty" class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
+				<h1 id={Menu.ByParty} class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
 				<div class="flex items-center">
 					<ToggleSkeleton class="outline-none" on:click={() => (isViewPercent = !isViewPercent)} />
 					<p class="body-compact-01">ดูร้อยละ</p>
@@ -430,7 +438,9 @@
 			<p class="hidden md:block text-right label-01 text-gray-60">
 				หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ
 			</p>
-			<div id="byPerson" class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">ผลการลงมติรายคน</div>
+			<div id={Menu.ByPerson} class="px-4 pt-4 pb-6 fluid-heading-04 bg-gray-10">
+				ผลการลงมติรายคน
+			</div>
 			<div class="flex">
 				<div class="flex items-center flex-1 bg-gray-10">
 					<div class="bg-gray-10 pl-4 border-b border-gray-50 h-full flex items-center">
