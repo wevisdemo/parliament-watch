@@ -31,12 +31,11 @@
 		offsetHeight: number;
 	}
 
-	function dateConvertor(date: Date) {
-		const convertedDate = Intl.DateTimeFormat('th', {
+	function formatDate(date: Date) {
+		return Intl.DateTimeFormat('th', {
 			dateStyle: 'medium',
 			calendar: 'buddhist'
 		}).format(date);
-		return convertedDate;
 	}
 
 	function getVoteColor(vote: DefaultVoteOption | CustomVoteOption | string) {
@@ -151,7 +150,7 @@
 				<div class="flex justify-between">
 					<div>
 						<p class="heading-01">วันที่</p>
-						<p class="body-01">{dateConvertor(data.voting.date)}</p>
+						<p class="body-01">{formatDate(data.voting.date)}</p>
 					</div>
 					<div>
 						<p class="heading-01">ประเภทการประชุม</p>
