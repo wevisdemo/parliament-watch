@@ -490,5 +490,3 @@
 		</div>
 	</div>
 </div>
-
-{JSON.stringify(data)}
