@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import LawIcon from '$components/icons/LawIcon.svelte';
-	import VoteIcon from '$components/icons/VoteIcon.svelte';
+	// import LawIcon from '$components/icons/LawIcon.svelte';
+	// import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
 	export const menuList: Menu[] = [
@@ -50,22 +50,19 @@
 	import { MenuTypes, type Menu } from '$models/menu';
 
 	import Banner from './Banner.svelte';
-	import MenuPane from './MenuPane.svelte';
 	import MenuList from './MenuList.svelte';
-	import SideMenuButton from './SideMenuButton.svelte';
-	import SideMenuPane from './SideMenuPane.svelte';
-	import SideMenuList from './SideMenuList.svelte';
+	import MenuPane from './MenuPane.svelte';
 	import NavigationPane from './NavigationPane.svelte';
 	import SearchContainer from './SearchContainer.svelte';
-	import SearchResult from '$components/SearchResult/SearchResult.svelte';
-	import type { SearchResults } from '$models/search';
+	import SideMenuButton from './SideMenuButton.svelte';
+	import SideMenuList from './SideMenuList.svelte';
+	import SideMenuPane from './SideMenuPane.svelte';
 
 	let screenSize: number;
 	let previousFromTop = 0;
 	let showHeader = true;
 	let sideNavActive = false;
 	let hideMainMenu = false;
-	let searchResults: SearchResults | null = null;
 
 	$: if (screenSize > 1056) sideNavActive = false;
 
@@ -101,16 +98,12 @@
 					<MenuList {menuList} />
 				</MenuPane>
 			</svelte:fragment>
-			<div slot="trailing" class="absolute right-0">
+			<svelte:fragment slot="trailing">
 				<SearchContainer
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}
-					bind:searchResults
 				/>
-				{#if searchResults !== null}
-					<SearchResult {searchResults} />
-				{/if}
-			</div>
+			</svelte:fragment>
 		</NavigationPane>
 	{/if}
 </header>

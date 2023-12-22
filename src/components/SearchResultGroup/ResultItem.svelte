@@ -7,7 +7,7 @@
 	export let item: SearchResultItem;
 </script>
 
-<a href={item.url}>
+<a href={item.url} data-sveltekit-reload>
 	<div class="px-4 bg-ui-background">
 		<div class="item-inner-container">
 			<div>
