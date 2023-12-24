@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
-	import type {
-		CheckboxFilterGroup,
-		ComboboxFilterGroup,
-		SelectedCheckboxValueType
-	} from '$components/DataPage/DataPage.svelte';
+	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 
 	export let data;
 
 	$: ({ voting, filterOptions, votes } = data);
+
+	$: votesWithFullName = votes.map((vote) => ({
+		...vote,
+		fullname: `${vote.firstname} ${vote.lastname}`
+	}));
 
 	$: comboboxFilterList = [
 		{
@@ -57,7 +58,7 @@
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votes.slice(0, 2).filter((vote) => {
+			: votesWithFullName.slice(0, 2).filter((vote) => {
 					const search = searchQuery.trim();
 					if (search && !vote.id.includes(search)) return;
 					const { filterPosition, filterVoteType } = selectedCheckboxValue;
@@ -83,7 +84,7 @@
 	{checkboxFilterList}
 	{filteredData}
 	tableHeader={[
-		{ key: 'id', value: 'ชื่อ-นามสกุล' },
+		{ key: 'fullname', value: 'ชื่อ-นามสกุล' },
 		{ key: 'position', value: 'ตำแหน่ง' },
 		{ key: 'party', value: 'สังกัดพรรค' },
 		{ key: 'voteOption', value: 'การลงมติ' }
@@ -102,8 +103,8 @@
 		</div>
 	</div>
 	<svelte:fragment slot="table" let:cellKey let:cellValue>
-		{#if cellKey === 'id'}
-			<p class="body-01 underline">{cellValue.replace('-', ' ')}</p>
+		{#if cellKey === 'fullname'}
+			<p class="body-01 underline text-gray-100">{cellValue}</p>
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
 		{:else}
