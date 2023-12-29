@@ -9,6 +9,7 @@ erDiagram
   Politician }|--o| Bill: "can propose"
   Vote }|--|| Voting: "are couted toward"
   Bill ||--o{ Event: "goes through"
+  Bill |o--o{ Bill: "can be merged to"
   Event }o--o| Bill: "can refer to"
   Event }o--o| Voting: "can refer to"
 
@@ -31,6 +32,9 @@ erDiagram
   Role {
     string politicianId FK
     string partyId FK "only for party"
+    string province "only for party"
+    number districtNumber "only for party"
+    number listNumber "only for party"
     string assemblyId FK "only for assembly"
     string role
     Date startedAt
@@ -52,30 +56,40 @@ erDiagram
     Date endedAt
     string origin
     string[] mainRoles
+    string[] governmentParties
+    string[] oppositionParties
   }
 
   Bill {
     number id PK
-    string titile
+    string title
     string nickname
     string description
+    string[] categories
+    string status "inProgress | enacted | rejected | merged"
+    Date proposedOn
+    string proposedBy "politicians | cabinet | people"
     string[] proposedByPoliticianIds FK
+    number proposedByAssemblyId FK
+    PeopleProposer proposedByPeople "{ ledBy: string, signatoryCount: number}"
+    Date enactedOn
+    number mergedToBillId FK "for status merged"
   }
 
   Voting {
     number id PK
     string title
     string description
-    string category
+    string[] categories
     Date date
     string meetingType
     string[] participatedAssembleIds FK
-    VoteOption[] voteOptions "DefaultVotOption | {label: string, color: string}"
+    VoteOption[] voteOptions "DefaultVoteOption | {label: string, color: string}"
     string winningCondition
     string result "passed | failed | string (other result)"
     number relatedBillId FK
     string sourceUrl
-    Link[] files "label: string, url: string"
+    Link[] files "label: string, url: string, mediaType: string"
   }
 
   Vote {
@@ -85,14 +99,17 @@ erDiagram
   }
 
   Event {
-    number billId PK
+    number eventId PK
+    number billId FK
     Date date
-    string type "voted | merged | enforced | other"
+    string type "hearing | mp1 | mp2 | mp3 | senate1 | senate2 | senate3 | royalAssent | enforcement | other"
     string title "for other"
     string description "for other"
-    number votedInVotingId FK "for voted"
-    number mergedIntoBillId FK "for merged"
-    string enforcementDocumentUrl "for enforced"
+    string status "succeed | in-progress | failed"
+    string actionType "voted | merged | enforced"
+    number votedInVotingId FK "for action voted"
+    number mergedIntoBillId FK "for action merged"
+    string enforcementDocumentUrl "for action enforced"
   }
 ```
 

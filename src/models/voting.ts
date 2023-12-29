@@ -4,11 +4,11 @@ export interface Voting {
 	id: number;
 	title: string;
 	description?: string;
-	category: string;
+	categories: string[];
 	date: Date;
 	meetingType: string;
 	participatedAssembleIds: string[];
-	voteOptions: (DefaultVoteOption | string)[];
+	voteOptions: (DefaultVoteOption | CustomVoteOption | string)[];
 	winningCondition: string;
 	result: DefaultVotingResult | string;
 	relatedBillId?: number;
@@ -31,5 +31,5 @@ export enum DefaultVoteOption {
 	Disagreed = 'ไม่เห็นด้วย',
 	Novote = 'งดออกเสียง',
 	Abstain = 'ไม่ลงคะแนน',
-	Absent = 'ลา/ขาดประชุม'
+	Absent = 'ลา/ขาดลงมติ'
 }

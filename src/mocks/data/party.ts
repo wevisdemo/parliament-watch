@@ -12,6 +12,12 @@ export const democratsParty: Party = {
 	color: '#00B2FF'
 };
 
+export const prachachatParty: Party = {
+	name: 'ประชาชาติ',
+	logo: 'https://upload.wikimedia.org/wikipedia/th/thumb/2/21/PRACHACHART_PARTY.jpg/227px-PRACHACHART_PARTY.jpg',
+	color: '#BA810D'
+};
+
 export const pheuThaiParty: Party = {
 	name: 'เพื่อไทย',
 	logo: 'https://ptp.or.th/wp-content/uploads/2020/10/8231956c4eda6eab07b017f4b7614c60.jpg',

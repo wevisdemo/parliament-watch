@@ -1,67 +1,43 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import PoliticianProfile from './PoliticianProfile.svelte';
-	import {
-		movingForwardParty,
-		democratsParty,
-		pheuThaiParty,
-		bhumjaithaiParty
-	} from '../../mocks/data/party';
 	export let Hst: Hst;
 
-	let politicians = [
-		{
-			id: '1',
-			firstname: 'ปิยบุตร',
-			lastname: 'แสงกนกกุล',
-			avatar: 'https://via.placeholder.com/64',
-			party: movingForwardParty,
-			role: 'สส. บัญชีรายชื่อ'
-		},
-		{
-			id: '2',
-			firstname: 'จุรินทร์',
-			lastname: 'ลักษณวิศิษฏ์',
-			avatar: 'https://via.placeholder.com/64',
-			party: democratsParty,
-			role: 'สส. บัญชีรายชื่อ'
-		},
-		{
-			id: '3',
-			firstname: 'เศรษฐา',
-			lastname: 'ทวีสิน',
-			avatar: 'https://via.placeholder.com/64',
-			party: pheuThaiParty,
-			role: 'สส. บัญชีรายชื่อ'
-		},
-		{
-			id: '4',
-			firstname: 'อนุทิน',
-			lastname: 'ชาญวีรกูล',
-			avatar: 'https://via.placeholder.com/64',
-			party: bhumjaithaiParty,
-			role: 'สส. บัญชีรายชื่อ'
-		}
-	];
+	let id = 'ปิยบุตร-แสงกนกกุล';
+	let firstname = 'ปิยบุตร';
+	let lastname = 'แสงกนกกุล';
+	let avatar = 'https://via.placeholder.com/64';
+	let party = {
+		name: 'ก้าวไกล',
+		logo: 'https://www.moveforwardparty.org/wp-content/uploads/2021/03/400px-Move_Forward_Party_Logo.svg.png',
+		color: '#ff7f00'
+	};
+	let role = 'สส. บัญชีรายชื่อ';
 </script>
 
-<Hst.Story title="Politician Profile">
-	<div class="grid grid-cols-2 gap-4">
-		<Hst.Variant title="Small (Default)">
-			{#each politicians as politician}
-				<PoliticianProfile {...politician} />
-			{/each}
-		</Hst.Variant>
-	</div>
-	<div class="grid grid-cols-2 gap-4 mt-5">
-		<Hst.Variant title="Large">
-			{#each politicians as politician}
-				<PoliticianProfile {...politician} isLarge />
-			{/each}
-		</Hst.Variant>
-	</div>
+<Hst.Story title="PoliticianProfile" layout={{ type: 'grid', width: 320 }}>
+	<Hst.Variant title="Default">
+		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} />
+	</Hst.Variant>
+
+	<Hst.Variant title="Party is not given">
+		<PoliticianProfile {id} {firstname} {lastname} {avatar} {role} />
+	</Hst.Variant>
+
+	<Hst.Variant title="isLarge = true">
+		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} isLarge />
+	</Hst.Variant>
+
+	<Hst.Variant title="isActive = false">
+		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} isActive={false} />
+	</Hst.Variant>
 
 	<svelte:fragment slot="controls">
-		<Hst.Json bind:value={politicians} title="politicians" />
+		<Hst.Text bind:value={id} title="id" />
+		<Hst.Text bind:value={firstname} title="firstname" />
+		<Hst.Text bind:value={lastname} title="lastname" />
+		<Hst.Text bind:value={avatar} title="avatar" />
+		<Hst.Json bind:value={party} title="party" />
+		<Hst.Text bind:value={role} title="role" />
 	</svelte:fragment>
 </Hst.Story>

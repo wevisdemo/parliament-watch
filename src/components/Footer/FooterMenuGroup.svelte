@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Link } from '$models/link';
+	import type { Menu } from '$models/menu';
 	import { ArrowUpRight } from 'carbon-icons-svelte';
 
 	export let title: string;
 	export let url: string | undefined = undefined;
-	export let menuItems: Link[] = [];
+	export let menuItems: Menu[] = [];
 </script>
 
 <div>

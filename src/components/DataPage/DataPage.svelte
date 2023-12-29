@@ -62,7 +62,7 @@
 	// Just props
 	export let breadcrumbList: {
 		label: string;
-		url: string;
+		url?: string;
 	}[];
 	export let comboboxFilterList: ComboboxFilterGroup[] = [];
 	export let checkboxFilterList: CheckboxFilterGroup[];
@@ -87,6 +87,7 @@
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
 	export let mounted = false;
+	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
 
 	// Reactive
 	let tableCurrentPage = 1;
@@ -106,36 +107,70 @@
 		}
 	};
 
+	$: checkboxFilterListCount = Object.values(checkboxFilterList).flatMap(
+		({ choices }) => choices
+	).length;
+
 	$: isFilterNotDefault =
-		Object.values(selectedCheckboxValue).flat().length <
-			Object.values(checkboxFilterList).flat().length ||
+		searchQuery ||
+		Object.values(selectedCheckboxValue).flat().length < checkboxFilterListCount ||
 		Object.values(selectedComboboxValue).some((e) => e !== undefined);
 
 	let comboboxInternal: Record<string, string> = {};
 	let showFilter = true;
+	let isMobile = false;
 	onMount(() => {
 		mounted = true;
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
+		isMobile = !showFilter;
 	});
+
+	let previousFromTop = 0;
+	let showHeader = true;
+	function scrollEventHandler() {
+		const currentFromTop = window.scrollY;
+		showHeader = currentFromTop <= previousFromTop;
+		previousFromTop = currentFromTop;
+	}
 </script>
+
+<svelte:window on:scroll|passive={scrollEventHandler} />
 
 <div class="flex flex-col min-h-screen">
 	<Breadcrumb
 		noTrailingSlash
 		class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
-		{#each breadcrumbList as breadcrumbItem, idx (breadcrumbItem.url)}
-			<BreadcrumbItem href={breadcrumbItem.url} isCurrentPage={idx === breadcrumbList.length - 1}
-				>{breadcrumbItem.label}</BreadcrumbItem
+		{#if isMobile}
+			<BreadcrumbItem href={breadcrumbList[0].url}>{breadcrumbList[0].label}</BreadcrumbItem>
+			{#if breadcrumbList.length > 2}
+				<BreadcrumbItem>...</BreadcrumbItem>
+			{/if}
+			<BreadcrumbItem
+				href={breadcrumbList[breadcrumbList.length - 1].url}
+				isCurrentPage={breadcrumbList.length === 1}
 			>
-		{/each}
+				{breadcrumbList[breadcrumbList.length - 1].label}
+			</BreadcrumbItem>
+		{:else}
+			{#each breadcrumbList as breadcrumbItem, idx (breadcrumbItem.url)}
+				<BreadcrumbItem href={breadcrumbItem.url} isCurrentPage={idx === breadcrumbList.length - 1}>
+					{breadcrumbItem.label}
+				</BreadcrumbItem>
+			{/each}
+		{/if}
 	</Breadcrumb>
 	<header class="px-4 py-3 bg-ui-01 md:px-16">
 		<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
 			<div class="flex-1">
 				<slot />
 			</div>
-			<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end">
+			<div
+				class="flex flex-col w-full gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end {downloadSize ===
+				'lg'
+					? 'md:w-[224px]'
+					: 'md:w-auto'}"
+			>
 				<div class="flex items-center gap-1">
 					<Download />
 					<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
@@ -158,12 +193,15 @@
 	</header>
 	<div class="flex-1 flex gap-1 bg-ui-01 w-full">
 		{#if showFilter}
-			<div
-				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-10"
+			<aside
+				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-50 md:z-30"
 				class:md:flex={!mounted}
 				class:hidden={!mounted}
 			>
-				<div class="sticky top-0 flex w-full pl-6">
+				<div
+					class="sticky top-0 md:top-12 flex w-full pl-6 duration-300 z-30 bg-white"
+					class:md:top-12={showHeader}
+				>
 					<Search
 						class="flex-1 {!mounted ? '-mt-6' : ''}"
 						placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
@@ -214,7 +252,7 @@
 						</FormGroup>
 					{/each}
 				</div>
-				<div class="flex gap-[1px] sticky bottom-0 body-compact-01 bg-white">
+				<div class="flex space-x-[-1px] sticky bottom-0 body-compact-01 bg-white">
 					<Button
 						class="flex-[2_2_0%] min-w-0 pr-4"
 						kind="tertiary"
@@ -235,21 +273,7 @@
 						skeleton={!mounted}>ดูที่เลือก</Button
 					>
 				</div>
-			</div>
-		{:else}
-			<div class="fixed left-4 bottom-14 z-20">
-				<Button
-					tooltipAlignment="start"
-					tooltipPosition="top"
-					iconDescription="แสดงตัวเลือก"
-					icon={isFilterNotDefault ? FilterEdit : Filter}
-					kind={isFilterNotDefault ? 'secondary' : 'primary'}
-					on:click={() => {
-						showFilter = true;
-					}}
-					skeleton={!mounted}
-				/>
-			</div>
+			</aside>
 		{/if}
 		<div class="flex-1 flex flex-col bg-white">
 			{#if mounted}
@@ -262,8 +286,15 @@
 						pageSize={tablePageSize}
 						page={tableCurrentPage}
 					>
-						<svelte:fragment slot="cell" let:cell>
-							<slot name="table" cellKey={cell.key} cellValue={cell.value} />
+						<svelte:fragment slot="cell-header" let:header>
+							{#if header.key === 'files'}
+								<span>เอก<br class="md:hidden" />สาร</span>
+							{:else}
+								{header.value}
+							{/if}
+						</svelte:fragment>
+						<svelte:fragment slot="cell" let:cell let:row>
+							<slot name="table" cellKey={cell.key} cellValue={cell.value} {row} />
 						</svelte:fragment>
 					</DataTable>
 				</div>
@@ -275,17 +306,33 @@
 					</div>
 				{/if}
 				<div class="flex-1" />
-				<Pagination
-					class="sticky bottom-0 overflow-x-hidden"
-					pageSize={tablePageSize}
-					bind:page={tableCurrentPage}
-					totalItems={filteredData.length}
-					pageSizeInputDisabled
-					forwardText="หน้าถัดไป"
-					backwardText="หน้าก่อนหน้า"
-					itemRangeText={(min, max, total) => `${min} – ${max} จาก ${total} มติ`}
-					pageRangeText={(_, total) => `จาก ${total} หน้า`}
-				/>
+				<div class="sticky bottom-0">
+					{#if !showFilter}
+						<Button
+							class="m-4"
+							tooltipAlignment="start"
+							tooltipPosition="top"
+							iconDescription="แสดงตัวเลือก"
+							icon={isFilterNotDefault ? FilterEdit : Filter}
+							kind={isFilterNotDefault ? 'secondary' : 'primary'}
+							on:click={() => {
+								showFilter = true;
+							}}
+							skeleton={!mounted}
+						/>
+					{/if}
+					<Pagination
+						class="overflow-x-hidden"
+						pageSize={tablePageSize}
+						bind:page={tableCurrentPage}
+						totalItems={filteredData.length}
+						pageSizeInputDisabled
+						forwardText="หน้าถัดไป"
+						backwardText="หน้าก่อนหน้า"
+						itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} มติ`}
+						pageRangeText={(_, total) => `จาก ${total} หน้า`}
+					/>
+				</div>
 			{:else}
 				<div class="overflow-x-auto overflow-y-hidden">
 					<DataTableSkeleton

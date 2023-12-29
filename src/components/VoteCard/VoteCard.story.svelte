@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { DefaultVotingResult } from '$models/voting';
-	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page';
+	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page.server';
 	import VoteCard from './VoteCard.svelte';
 	import type { Hst } from '@histoire/plugin-svelte';
 

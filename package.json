@@ -16,7 +16,8 @@
 		"story:dev": "histoire dev",
 		"story:build": "HISTOIRE_BASE=/stories/ histoire build",
 		"story:preview": "histoire preview",
-		"gen:component": "hygen component new"
+		"gen:component": "hygen component new",
+		"test": "vitest"
 	},
 	"lint-staged": {
 		"*.md": "doctoc --github --update-only",
@@ -24,16 +25,17 @@
 		"*": "prettier --plugin-search-dir . --write --ignore-unknown"
 	},
 	"dependencies": {
-		"@sveltejs/adapter-static": "^2.0.3",
 		"d3": "^7.8.5",
 		"dayjs": "^1.11.10",
-		"scrollama": "^3.2.0"
+		"keen-slider": "^6.8.6",
+		"scrollama": "^3.2.0",
+		"tailwind-merge": "^2.1.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.7.0",
 		"@commitlint/config-conventional": "^17.7.0",
 		"@histoire/plugin-svelte": "^0.17.0",
-		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/d3": "^7.4.1",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
@@ -59,7 +61,9 @@
 		"tailwindcss": "^3.3.3",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
-		"vite": "^4.4.2"
+		"vite": "^4.4.2",
+		"vitest": "^0.34.6",
+		"zod": "^3.22.4"
 	},
 	"packageManager": "yarn@1.22.19"
 }

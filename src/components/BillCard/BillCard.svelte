@@ -1,0 +1,103 @@
+<script lang="ts">
+	import { ArrowRight } from 'carbon-icons-svelte';
+
+	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
+	import type { BillStatus } from '$models/bill';
+	import { twMerge } from 'tailwind-merge';
+
+	interface ProposedBy {
+		avatar: string;
+		name: string;
+		description: string;
+	}
+
+	// see: https://github.com/wevisdemo/parliament-watch/issues/26#issue-1937096920
+	export let orientation: 'landscape' | 'portrait' = 'landscape';
+	export let nickname: string;
+	export let title: string | undefined = undefined;
+	export let proposedBy: ProposedBy | undefined = undefined;
+	export let proposedOn: Date | undefined = undefined;
+	export let status: BillStatus;
+	export let currentState: string | undefined = undefined;
+	export let daySinceProposed: number | undefined = undefined;
+	export let billUrl: string;
+  export let isFullWidth = false;
+	let className = '';
+	export { className as class };
+
+	$: isLandscape = orientation === 'landscape';
+</script>
+
+<div
+	class={twMerge(
+		'flex relative p-4 bg-white hover:bg-gray-10 rounded-sm',
+		isLandscape ? 'flex-row gap-x-6 max-w-[640px]' : 'flex-col gap-y-4 max-w-[242px] pt-6',
+		isFullWidth ? 'w-full max-w-none' : '',
+		className
+	)}
+>
+	<div class={twMerge('space-y-1', isLandscape ? 'w-2/3' : 'w-full')}>
+		<a href={billUrl} class="block after:absolute after:content-[''] after:inset-0">
+			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
+		</a>
+
+		{#if title}
+			<p class="text-sm text-text-02"><span class="font-bold mr-1">ชื่อทางการ</span>{title}</p>
+		{/if}
+
+		{#if proposedBy}
+			<div>
+				<p class="font-semibold">เสนอโดย</p>
+
+				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
+						<img
+							src={proposedBy.avatar}
+							alt={proposedBy.name}
+							class="w-full h-full"
+							loading="lazy"
+						/>
+					</figure>
+
+					<p class="text-sm">
+						{proposedBy.name} <span class="text-gray-60">{proposedBy.description}</span>
+					</p>
+				</div>
+			</div>
+		{/if}
+	</div>
+
+	<div class={isLandscape ? 'w-1/3' : 'w-full'}>
+		<div class="flex {isLandscape ? 'flex-row gap-x-6' : 'flex-col gap-y-4'}">
+			<div class="grow space-y-2">
+				{#if proposedOn}
+					<div>
+						<p class="text-sm font-semibold">วันที่เสนอ</p>
+
+						<p class="text-sm">
+							{proposedOn.toLocaleDateString('th-TH', {
+								day: 'numeric',
+								month: 'short',
+								year: 'numeric'
+							})}
+						</p>
+					</div>
+				{/if}
+
+				<div>
+					<p class="text-sm font-semibold">สถานะ</p>
+					<BillStatusTag isLarge {status} />
+					{#if currentState}
+						<p class="text-sm font-semibold">{currentState}</p>
+					{/if}
+				</div>
+
+				{#if daySinceProposed}
+					<p class="text-sm text-blue-70 font-semibold">ผ่านมาแล้ว {daySinceProposed} วัน</p>
+				{/if}
+			</div>
+
+			<ArrowRight class="ml-auto text-gray-100" />
+		</div>
+	</div>
+</div>
