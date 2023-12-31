@@ -2,7 +2,7 @@
 	import Header from '$components/Assemblies/Header.svelte';
 	import MainMembers from '$components/Assemblies/MainMembers.svelte';
 	import Summary from '$components/Assemblies/Summary.svelte';
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
+	import { Breadcrumb, BreadcrumbItem, Tab, Tabs } from 'carbon-components-svelte';
 	import type { MemberGroup } from './+page.server.js';
 	import { getSenateColorByTitle } from '$components/Assemblies/shared.js';
 
@@ -29,12 +29,22 @@
 					groupByEducation: getSenateGroupWithColor(data.summary.groupByEducation)
 			  }
 			: data.summary;
+
+	let selector = 'summary';
+
+	const onClickTab = (tab: 'summary' | 'members' | 'latest-votes') => {
+		const el = document.getElementById(tab);
+		selector = tab;
+		if (!el) return;
+		el.scrollIntoView({
+			behavior: 'smooth'
+		});
+	};
 </script>
 
 <svelte:head>
 	<title>{data.assembly.name} {data.assembly.term} - Parliament Watch</title>
 </svelte:head>
-
 <div class="md:px-[64px] px-[16px]">
 	<Breadcrumb
 		noTrailingSlash
@@ -48,11 +58,46 @@
 		>
 	</Breadcrumb>
 	<Header data={data.assembly} assemblyIds={data.assemblyIds} />
-	<Summary
-		assemblyId={data.assembly.id}
-		summary={newSummary}
-		houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}
-	/>
-	<MainMembers members={data.mainMembers} assemblyId={data.assembly.id} />
-	<!-- <LatestVotes votes={data.latestVotes} assemblyId={data.assembly.id} /> -->
+	<div class="flex w-full">
+		<button
+			class="w-full px-[16px] py-[11px] text-[14px] border-b-[2px] border-solid text-left {selector ===
+			'summary'
+				? 'border-blue-60 font-semibold text-black'
+				: 'border-gray-20 text-gray-60'}"
+			on:click={() => onClickTab('summary')}
+		>
+			ภาพรวม
+		</button>
+		<button
+			class="w-full px-[16px] py-[11px] text-[14px] border-b-[2px] border-solid text-left {selector ===
+			'members'
+				? 'border-blue-60 font-semibold text-black'
+				: 'border-gray-20 text-gray-60'}"
+			on:click={() => onClickTab('members')}
+		>
+			สมาชิก
+		</button>
+		<!-- <button
+			class="w-full px-[16px] py-[11px] text-[14px] border-b-[2px] border-solid text-left {selector ===
+			'latest-votes'
+				? 'border-blue-60 font-semibold text-black'
+				: 'border-gray-20 text-gray-60'}"
+			on:click={() => onClickTab('latest-votes')}
+		>
+			การลงมติ
+		</button> -->
+	</div>
+	<section id="summary">
+		<Summary
+			assemblyId={data.assembly.id}
+			summary={newSummary}
+			houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}
+		/>
+	</section>
+	<section id="members">
+		<MainMembers members={data.mainMembers} assemblyId={data.assembly.id} />
+	</section>
+	<!-- <section id="latest-votes">
+		<LatestVotes votes={data.latestVotes} assemblyId={data.assembly.id} />
+	</section> -->
 </div>
