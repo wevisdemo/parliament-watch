@@ -247,7 +247,73 @@ newParties <- full_join(newParties62, newParties66) |>
 newParties
 ```
 
-
 ```{r}
 write_csv(newParties,'out/parties.csv', na = '')
+```
+
+
+# Votings (votelogs)
+
+```{r}
+votings <- read_csv('noco/Votelog_exported_1.csv') |>
+  filter(!is.na(Title))
+
+votings
+```
+
+```{r}
+unique(votings$Meeting)
+unique(votings$IsPassed)
+```
+
+```{r}
+newVoings <- votings |>
+  rename_with(tolower) |>
+  mutate(
+    result = if_else(ispassed == TRUE, 'ผ่าน', if_else(ispassed == FALSE, 'ไม่ผ่าน', 'อื่นๆ')),
+    representativeAssemblyId = if_else(meeting == 'ประชุมวุฒิสภา', NA, 'สมาชิกสภาผู้แทนราษฎร-25'),
+    senateAssemblyId = if_else(meeting == 'ประชุมสภาผู้แทนราษฎร', NA, 'วุฒิสภา-12'),
+  ) |> 
+  rename(
+    date = votedate,
+    description = descriptionth,
+    sourceUrl = reference
+  ) |> 
+  mutate()
+  select(title, date, description, representativeAssemblyId, senateAssemblyId, result, document0title, document0link, document1title, document1link, sourceUrl)
+
+newVoings
+```
+
+```{r}
+write_csv(newVoings,'out/votings.csv', na = '')
+```
+
+
+# Votes (PeopleVotes)
+
+```{r}
+votes <- list.files(path = 'noco', pattern = "PeopleVotes") |>
+  map_df(~read_csv(paste('noco', .x, sep = '/')))
+
+votes
+```
+```{r}
+unique(votes$Status)
+```
+
+```{r}
+newVotes <- votes |>
+  mutate(
+    votingId = gsub(' ', '-', Votelog),
+    politicianId = gsub(' ', '-', Person),
+    voteOption = if_else(Status == 'ไม่ลงคะแนนเสียง', 'ไม่ลงคะแนน', if_else(Status == 'ไม่เข้าร่วมประชุม', 'ลา/ขาดลงมติ', Status))
+  ) |> 
+  select(votingId, politicianId, voteOption)
+
+newVotes
+```
+
+```{r}
+write_csv(newVotes,'out/votes.csv', na = '')
 ```
