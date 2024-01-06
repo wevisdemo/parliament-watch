@@ -2,8 +2,12 @@
 	import { ArrowRight } from 'carbon-icons-svelte';
 
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import type { BillStatus } from '$models/bill';
+	import type { BillStatus, PeopleProposer } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
+	import type { Politician } from '$models/politician';
+	import type { Assembly } from '$models/assembly';
+	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 
 	interface ProposedBy {
 		avatar: string;
@@ -15,13 +19,14 @@
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 	export let nickname: string;
 	export let title: string | undefined = undefined;
-	export let proposedBy: ProposedBy | undefined = undefined;
+	export let proposedBy: ProposedBy | Politician | Assembly | PeopleProposer | undefined =
+		undefined;
 	export let proposedOn: Date | undefined = undefined;
 	export let status: BillStatus;
 	export let currentState: string | undefined = undefined;
 	export let daySinceProposed: number | undefined = undefined;
 	export let billUrl: string;
-  export let isFullWidth = false;
+	export let isFullWidth = false;
 	let className = '';
 	export { className as class };
 
@@ -46,9 +51,9 @@
 		{/if}
 
 		{#if proposedBy}
-			<div>
-				<p class="font-semibold">เสนอโดย</p>
-
+			<p class="font-semibold">เสนอโดย</p>
+			<!-- Handle ProposedBy -->
+			{#if proposedBy.description}
 				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
 					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
 						<img
@@ -63,7 +68,51 @@
 						{proposedBy.name} <span class="text-gray-60">{proposedBy.description}</span>
 					</p>
 				</div>
-			</div>
+				<!-- Handle Politician -->
+			{:else if proposedBy.partyRoles}
+				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
+						<img
+							src={proposedBy.avatar}
+							alt={proposedBy.firstname.concat(' ', proposedBy.lastname)}
+							class="w-full h-full"
+							loading="lazy"
+						/>
+					</figure>
+
+					<div>
+						<p class="text-sm">
+							{proposedBy.firstname.concat(' ', proposedBy.lastname)}
+							<span class="underline">{proposedBy.assemblyRoles[0].assembly.id}</span>
+						</p>
+						<span class="text-sm text-gray-60">{proposedBy.partyRoles[0].party.name}</span>
+					</div>
+				</div>
+				<!-- Handle Assembly -->
+			{:else if proposedBy.name}
+				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
+						<PoliticianIcon class="stroke-white" size={16} />
+					</div>
+
+					<p class="text-sm">
+						{proposedBy.firstname.concat(' ', proposedBy.lastname)}
+						<span class="underline">{proposedBy.origin}</span>
+					</p>
+				</div>
+				<!-- Handle PeopleProposer -->
+			{:else if proposedBy.ledBy}
+				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
+						<PeopleIcon class="stroke-white" size={16} />
+					</div>
+
+					<p class="text-sm">
+						{proposedBy.ledBy}
+						<span class="text-gray-60">์ และประชาชน {proposedBy.origin} คน</span>
+					</p>
+				</div>
+			{/if}
 		{/if}
 	</div>
 

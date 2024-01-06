@@ -194,12 +194,9 @@
 						currentState={data.relatedBill.status}
 						daySinceProposed={getDiffDays(data.relatedBill.proposedOn)}
 						billUrl={data.relatedBill.title}
-						proposedBy={{
-							avatar: data.relatedBill.proposedLedByPolitician?.avatar || '',
-							name: data.relatedBill.proposedLedByPolitician?.id.replace('-', ' ') || '',
-							description:
-								data.relatedBill.proposedLedByPolitician?.assemblyRoles[0].assembly.id || ''
-						}}
+						proposedBy={data.relatedBill.proposedLedByPolitician ||
+							data.relatedBill.proposedByAssembly ||
+							data.relatedBill.proposedByPeople}
 					/>
 				{/if}
 			</div>
