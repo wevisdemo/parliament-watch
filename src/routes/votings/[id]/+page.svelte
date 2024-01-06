@@ -28,7 +28,6 @@
 	let selectedMenu = Menu.Summary;
 	let isViewPercent = false;
 	let searchQuery = '';
-	let isMobile = false;
 
 	$: totalVote = data.results.reduce((acc, vote) => acc + vote.total, 0);
 
@@ -117,7 +116,6 @@
 
 	onMount(() => {
 		window.addEventListener('scroll', onScroll, { passive: true });
-		isMobile = !window.matchMedia(`(min-width: 672px)`).matches;
 
 		return () => window.removeEventListener('scroll', onScroll);
 	});
@@ -185,8 +183,7 @@
 					</div>
 					<p class="heading-01 mt-4 mb-1">ดูเส้นทางของร่างกฏหมายนี้</p>
 					<BillCard
-						class={isMobile ? 'w-full' : 'w-auto'}
-						orientation={isMobile ? 'portrait' : 'landscape'}
+						class={'w-full md:w-auto'}
 						title={data.relatedBill.title}
 						nickname={data.relatedBill.nickname}
 						proposedOn={data.relatedBill.proposedOn}

@@ -36,12 +36,14 @@
 <div
 	class={twMerge(
 		'flex relative p-4 bg-white hover:bg-gray-10 rounded-sm',
-		isLandscape ? 'flex-row gap-x-6 max-w-[640px]' : 'flex-col gap-y-4 max-w-[242px] pt-6',
+		isLandscape
+			? 'flex-col md:flex-row gap-y-4 md:gap-y-0 gap-x-6 max-w-[640px]'
+			: 'flex-col gap-y-4 max-w-[242px] pt-6',
 		isFullWidth ? 'w-full max-w-none' : '',
 		className
 	)}
 >
-	<div class={twMerge('space-y-1', isLandscape ? 'w-2/3' : 'w-full')}>
+	<div class={twMerge('space-y-1', isLandscape ? 'w-full md:w-2/3' : 'w-full')}>
 		<a href={billUrl} class="block after:absolute after:content-[''] after:inset-0">
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
@@ -54,7 +56,7 @@
 			<p class="font-semibold">เสนอโดย</p>
 			<!-- Handle ProposedBy -->
 			{#if proposedBy.description}
-				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
 						<img
 							src={proposedBy.avatar}
@@ -70,7 +72,7 @@
 				</div>
 				<!-- Handle Politician -->
 			{:else if proposedBy.partyRoles}
-				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
 						<img
 							src={proposedBy.avatar}
@@ -90,7 +92,7 @@
 				</div>
 				<!-- Handle Assembly -->
 			{:else if proposedBy.name}
-				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
 						<PoliticianIcon class="stroke-white" size={16} />
 					</div>
@@ -102,7 +104,7 @@
 				</div>
 				<!-- Handle PeopleProposer -->
 			{:else if proposedBy.ledBy}
-				<div class="flex {isLandscape ? 'flex-row gap-x-2' : 'flex-col'}">
+				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
 						<PeopleIcon class="stroke-white" size={16} />
 					</div>
@@ -116,8 +118,12 @@
 		{/if}
 	</div>
 
-	<div class={isLandscape ? 'w-1/3' : 'w-full'}>
-		<div class="flex {isLandscape ? 'flex-row gap-x-6' : 'flex-col gap-y-4'}">
+	<div class={isLandscape ? 'w-full md:w-1/3' : 'w-full'}>
+		<div
+			class="flex {isLandscape
+				? 'flex-col md:flex-row gap-x-6 gap-y-4 md:gap-y-0'
+				: 'flex-col gap-y-4'}"
+		>
 			<div class="grow space-y-2">
 				{#if proposedOn}
 					<div>
