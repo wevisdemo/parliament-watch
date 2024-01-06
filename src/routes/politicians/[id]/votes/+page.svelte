@@ -110,10 +110,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>ประวัติการลงมติ {politician.firstname} {politician.lastname} - Parliament Watch</title>
-</svelte:head>
-
 <DataPage
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },

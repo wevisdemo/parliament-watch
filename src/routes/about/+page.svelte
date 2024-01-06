@@ -46,10 +46,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>เกี่ยวกับเว็บไซต์นี้ - Parliament Watch</title>
-</svelte:head>
-
 <div class="h-[160px] flex items-center justify-center">
 	<h1 class="fluid-heading-05 font-bold">เกี่ยวกับเรา</h1>
 </div>

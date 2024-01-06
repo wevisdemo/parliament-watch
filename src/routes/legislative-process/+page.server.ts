@@ -1,3 +1,5 @@
+import { createSeo } from '../../utils/seo';
+
 export interface DutySection {
 	heading: string;
 	details: string[];
@@ -280,6 +282,9 @@ export function load() {
 			senates,
 			both
 		},
-		legislations
+		legislations,
+		seo: createSeo({
+			title: 'รัฐออกกฎหมายอย่างไร - Parliament Watch'
+		})
 	};
 }

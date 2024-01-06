@@ -13,6 +13,7 @@ import {
 	passedVoting
 } from '../../../../mocks/data/voting.js';
 import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
+import { createSeo } from '../../../../utils/seo.js';
 
 interface VoteSummary
 	extends Pick<
@@ -68,6 +69,9 @@ export async function load({ params }) {
 	return {
 		politician: politicianSummary,
 		filterOptions,
-		votes
+		votes,
+		seo: createSeo({
+			title: `ประวัติการลงมติ ${politicianSummary.firstname} ${politicianSummary.lastname} - Parliament Watch`
+		})
 	};
 }

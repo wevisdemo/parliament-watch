@@ -6,6 +6,7 @@ import { DefaultVotingResult, type Voting } from '$models/voting';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
 import { fetchAssemblyMembers } from './data';
 import { getMemberGroup } from './members/[groupby]/groupby';
+import { createSeo } from '../../../utils/seo';
 
 export interface Summary {
 	totalMembers: number;
@@ -126,6 +127,9 @@ export async function load({ params }) {
 		assembly,
 		summary,
 		mainMembers,
-		latestVotes
+		latestVotes,
+		seo: createSeo({
+			title: `${assembly.name} ${assembly.term} - Parliament Watch`
+		})
 	};
 }

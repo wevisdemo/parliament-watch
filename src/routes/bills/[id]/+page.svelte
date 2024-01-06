@@ -91,11 +91,8 @@
 	$: innerWidth = 0;
 </script>
 
-<svelte:head>
-	<title>{bill.nickname} - Parliament Watch</title>
-</svelte:head>
-
 <svelte:window bind:innerWidth />
+
 <Breadcrumb
 	noTrailingSlash
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
