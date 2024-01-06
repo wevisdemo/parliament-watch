@@ -17,6 +17,7 @@ import {
 	royalAssentEvent
 } from '../../../mocks/data/event.js';
 import { failedVoting, passedVoting } from '../../../mocks/data/voting.js';
+import { createSeo } from '../../../utils/seo.js';
 
 export interface VotingResultSummary {
 	agreed: number;
@@ -105,7 +106,10 @@ export function load({ params }) {
 		events,
 		mergedIntoBill, // The bill that this bill got merged into. (merged event)
 		mergedIntoBillLatestEvent,
-		relatedVotingResults // Info of votings in events
+		relatedVotingResults, // Info of votings in events
+		seo: createSeo({
+			title: `${bill.nickname} - Parliament Watch`
+		})
 	};
 }
 

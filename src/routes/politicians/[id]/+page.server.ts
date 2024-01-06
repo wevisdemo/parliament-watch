@@ -1,6 +1,7 @@
 import type { Voting } from '$models/voting';
 import { failedVoting, passedVoting } from '../../../mocks/data/voting';
 import { fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
+import { createSeo } from '../../../utils/seo';
 
 interface VotingHistory {
 	total: number;
@@ -45,6 +46,9 @@ export async function load({ params }) {
 		agreedVoting,
 		disagreedVoting,
 		votingAbsentStats,
-		totalProposedBill: 6
+		totalProposedBill: 6,
+		seo: createSeo({
+			title: `${politician.firstname} ${politician.lastname} - Parliament Watch`
+		})
 	};
 }

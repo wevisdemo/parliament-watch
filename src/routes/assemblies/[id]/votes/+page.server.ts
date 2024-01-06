@@ -3,6 +3,7 @@ import type { Assembly } from '$models/assembly';
 import { mockCategory, passedVoting } from '../../../../mocks/data/voting.js';
 import { fetchAssemblies } from '$lib/datasheets/index.js';
 import { error } from '@sveltejs/kit';
+import { createSeo } from '../../../../utils/seo.js';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
 
@@ -37,6 +38,9 @@ export async function load({ params }) {
 	return {
 		assemblyIds,
 		assembly,
-		votes
+		votes,
+		seo: createSeo({
+			title: `การลงมติ ${assembly.name} ${assembly.term} - Parliament Watch`
+		})
 	};
 }

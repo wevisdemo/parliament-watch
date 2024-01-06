@@ -3,6 +3,7 @@ import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from '.
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
 import { AssemblyName, GroupByOption } from '$models/assembly';
 import { fetchAssemblyMembers, getPoliticianSummary, type PoliticianSummary } from '../../data';
+import { createSeo } from '../../../../../utils/seo';
 
 interface PoliticianSummaryGroup {
 	name: string;
@@ -46,7 +47,14 @@ export async function load({ params }) {
 
 		const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
 
-		return { groups: transformedGroup, isDataHasSubgroup, assemblyIds };
+		return {
+			groups: transformedGroup,
+			isDataHasSubgroup,
+			assemblyIds,
+			seo: createSeo({
+				title: `สมาชิก ${assembly.name} ${assembly.term} - Parliament Watch`
+			})
+		};
 	} else {
 		throw error(404);
 	}

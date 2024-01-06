@@ -27,10 +27,6 @@
 	};
 </script>
 
-<svelte:head>
-	<title>การลงมติ {data.assembly.name} {data.assembly.term} - Parliament Watch</title>
-</svelte:head>
-
 <div>
 	<div class="px-[16px] py-[8px]">
 		<Breadcrumb noTrailingSlash class="[&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap">
