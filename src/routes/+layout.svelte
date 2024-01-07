@@ -5,13 +5,12 @@
 	import Footer from '$components/Footer/Footer.svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { DEFAULT_SEO } from '../utils/seo';
 
-	$: title =
-		$page.data?.seo?.title ??
-		'Parliament Watch - ขับเคลื่อนประชาธิปไตย ร่วมเฝ้าดูความเคลื่อนไหวรัฐสภา';
-	$: description = $page.data?.seo?.description ?? 'ติดตามกฎหมาย นโยบาย และการทำงานของนักการเมือง';
-	$: url = new URL($page.route.id ?? '/', 'https://parliamentwatch.wevis.info/').href;
-	$: og = $page.data?.seo?.og ?? 'https://parliamentwatch.wevis.info/images/og.png';
+	$: title = $page.data?.seo?.title ?? DEFAULT_SEO.title;
+	$: description = $page.data?.seo?.description ?? DEFAULT_SEO.description;
+	$: url = new URL($page.url.pathname, 'https://parliamentwatch.wevis.info/').href;
+	$: og = $page.data?.seo?.og ?? DEFAULT_SEO.og;
 
 	onMount(() => {
 		document.querySelectorAll('link.lazy').forEach((el) => el.setAttribute('media', 'all'));
