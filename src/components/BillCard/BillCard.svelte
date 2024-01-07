@@ -15,6 +15,13 @@
 		description: string;
 	}
 
+	enum ProposedByType {
+		ProposedBy = 'proposedBy',
+		Politician = 'politician',
+		Assembly = 'assembly',
+		PeopleProposer = 'peopleProposer'
+	}
+
 	// see: https://github.com/wevisdemo/parliament-watch/issues/26#issue-1937096920
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 	export let nickname: string;
@@ -31,6 +38,60 @@
 	export { className as class };
 
 	$: isLandscape = orientation === 'landscape';
+
+	function getProposedByType(proposedBy: ProposedBy | Politician | Assembly | PeopleProposer) {
+		if ('description' in proposedBy) {
+			return ProposedByType.ProposedBy;
+		} else if ('partyRoles' in proposedBy) {
+			return ProposedByType.Politician;
+		} else if ('ledBy' in proposedBy) {
+			return ProposedByType.PeopleProposer;
+		} else {
+			return ProposedByType.Assembly;
+		}
+	}
+
+	function getProposedByTitle(proposedBy: any) {
+		if (getProposedByType(proposedBy) === ProposedByType.ProposedBy) {
+			return proposedBy.name;
+		} else if (getProposedByType(proposedBy) === ProposedByType.Politician) {
+			return proposedBy.firstname.concat(' ', proposedBy.lastname);
+		} else if (getProposedByType(proposedBy) === ProposedByType.PeopleProposer) {
+			return proposedBy.ledBy;
+		} else {
+			return proposedBy.name;
+		}
+	}
+
+	function getProposedBySubTitle(proposedBy: any) {
+		if (getProposedByType(proposedBy) === ProposedByType.ProposedBy) {
+			return proposedBy.description;
+		} else if (getProposedByType(proposedBy) === ProposedByType.Politician) {
+			return proposedBy.assemblyRoles[0].assembly.id;
+		} else if (getProposedByType(proposedBy) === ProposedByType.PeopleProposer) {
+			return 'และประชาชน ' + proposedBy.origin + ' คน';
+		} else {
+			return proposedBy.origin;
+		}
+	}
+
+	function getProposedByImage(proposedBy: any) {
+		if (getProposedByType(proposedBy) === ProposedByType.ProposedBy) {
+			return proposedBy.avatar;
+		} else if (getProposedByType(proposedBy) === ProposedByType.Politician) {
+			return proposedBy.avatar;
+		} else {
+			return '';
+		}
+	}
+
+	function getProposedByParty(proposedBy: any) {
+		if (getProposedByType(proposedBy) === ProposedByType.Politician) {
+			return proposedBy.partyRoles[0].party.name;
+		} else {
+			return '';
+		}
+	}
 </script>
 
 <div
@@ -55,28 +116,29 @@
 		{#if proposedBy}
 			<p class="font-semibold">เสนอโดย</p>
 			<!-- Handle ProposedBy -->
-			{#if proposedBy.description}
+			{#if getProposedByType(proposedBy) === ProposedByType.ProposedBy}
 				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
 						<img
-							src={proposedBy.avatar}
-							alt={proposedBy.name}
+							src={getProposedByImage(proposedBy)}
+							alt={getProposedByTitle(proposedBy)}
 							class="w-full h-full"
 							loading="lazy"
 						/>
 					</figure>
 
 					<p class="text-sm">
-						{proposedBy.name} <span class="text-gray-60">{proposedBy.description}</span>
+						{getProposedByTitle(proposedBy)}
+						<span class="text-gray-60">{getProposedBySubTitle(proposedBy)}</span>
 					</p>
 				</div>
 				<!-- Handle Politician -->
-			{:else if proposedBy.partyRoles}
+			{:else if getProposedByType(proposedBy) === ProposedByType.Politician}
 				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
 						<img
-							src={proposedBy.avatar}
-							alt={proposedBy.firstname.concat(' ', proposedBy.lastname)}
+							src={getProposedByImage(proposedBy)}
+							alt={getProposedByTitle(proposedBy)}
 							class="w-full h-full"
 							loading="lazy"
 						/>
@@ -84,34 +146,34 @@
 
 					<div>
 						<p class="text-sm">
-							{proposedBy.firstname.concat(' ', proposedBy.lastname)}
-							<span class="underline">{proposedBy.assemblyRoles[0].assembly.id}</span>
+							{getProposedByTitle(proposedBy)}
+							<span class="underline">{getProposedBySubTitle(proposedBy)}</span>
 						</p>
-						<span class="text-sm text-gray-60">{proposedBy.partyRoles[0].party.name}</span>
+						<span class="text-sm text-gray-60">{getProposedByParty(proposedBy)}</span>
 					</div>
 				</div>
 				<!-- Handle Assembly -->
-			{:else if proposedBy.name}
+			{:else if getProposedByType(proposedBy) === ProposedByType.Assembly}
 				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
 						<PoliticianIcon class="stroke-white" size={16} />
 					</div>
 
 					<p class="text-sm">
-						{proposedBy.firstname.concat(' ', proposedBy.lastname)}
-						<span class="underline">{proposedBy.origin}</span>
+						{getProposedByTitle(proposedBy)}
+						<span class="underline">{getProposedBySubTitle(proposedBy)}</span>
 					</p>
 				</div>
 				<!-- Handle PeopleProposer -->
-			{:else if proposedBy.ledBy}
+			{:else if getProposedByType(proposedBy) === ProposedByType.PeopleProposer}
 				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
 					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
 						<PeopleIcon class="stroke-white" size={16} />
 					</div>
 
 					<p class="text-sm">
-						{proposedBy.ledBy}
-						<span class="text-gray-60">์ และประชาชน {proposedBy.origin} คน</span>
+						{getProposedByTitle(proposedBy)}
+						<span class="text-gray-60">{getProposedBySubTitle(proposedBy)}</span>
 					</p>
 				</div>
 			{/if}
