@@ -20,7 +20,7 @@ export async function load({ fetch }) {
 	return {
 		developers,
 		seo: createSeo({
-			title: `เกี่ยวกับเว็บไซต์นี้ - Parliament Watch`
+			title: 'เกี่ยวกับเว็บไซต์นี้'
 		})
 	};
 }

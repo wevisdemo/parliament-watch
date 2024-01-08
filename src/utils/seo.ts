@@ -12,7 +12,7 @@ export const DEFAULT_SEO = {
 
 export const createSeo = (data: Partial<Seo>): Seo => {
 	return {
-		title: data.title ?? DEFAULT_SEO.title,
+		title: data.title ? `${data.title} - Parliament Watch` : DEFAULT_SEO.title,
 		description: data.description ?? DEFAULT_SEO.description,
 		og: data.og ?? DEFAULT_SEO.og
 	};

@@ -71,7 +71,7 @@ export async function load({ params }) {
 		filterOptions,
 		votes,
 		seo: createSeo({
-			title: `ประวัติการลงมติ ${politicianSummary.firstname} ${politicianSummary.lastname} - Parliament Watch`
+			title: `ประวัติการลงมติ ${politicianSummary.firstname} ${politicianSummary.lastname}`
 		})
 	};
 }

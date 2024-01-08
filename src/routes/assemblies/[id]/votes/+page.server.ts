@@ -40,7 +40,7 @@ export async function load({ params }) {
 		assembly,
 		votes,
 		seo: createSeo({
-			title: `การลงมติ ${assembly.name} ${assembly.term} - Parliament Watch`
+			title: `การลงมติ ${assembly.name} ${assembly.term}`
 		})
 	};
 }
