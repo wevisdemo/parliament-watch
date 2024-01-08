@@ -68,16 +68,17 @@
 				</a>
 			</li>
 			<li class="flex-1">
-				<span
+				<a
+					href="#votings"
 					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8"
 				>
-					<VoteIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
-					<span class="flex-1 flex flex-col gap-1 opacity-30">
+					<VoteIcon class="aspect-square w-6 h-auto md:w-8" />
+					<span class="flex-1 flex flex-col gap-1">
 						<span class="fluid-heading-03">การลงมติ</span>
 						<span>ดูผลการโหวต พร้อมคำอธิบายเข้าใจง่าย</span>
 					</span>
-					<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
-				</span>
+					<ArrowDown />
+				</a>
 			</li>
 			<li class="flex-1">
 				<span
@@ -94,9 +95,9 @@
 		</menu>
 	</nav>
 </div>
-<section class="bg-ui-01 text-text-01">
+<section id="politician" class="bg-ui-01 text-text-01">
 	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
-		<div id="politician" class="flex flex-col gap-2 items-start md:flex-row">
+		<div class="flex flex-col gap-2 items-start md:flex-row">
 			<div class="flex gap-2 items-center md:flex-1">
 				<PoliticianIcon width="32" height="32" />
 				<h2 class="fluid-heading-05">นักการเมือง</h2>
@@ -171,9 +172,9 @@
 		</ul>
 	</div>
 </section>
-<section class="bg-white text-text-01">
+<section id="votings" class="bg-white text-text-01">
 	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
-		<div id="politician" class="flex flex-col gap-2 items-start md:flex-row">
+		<div class="flex flex-col gap-2 items-start md:flex-row">
 			<div class="flex gap-2 items-center md:flex-1">
 				<VoteIcon width="32" height="32" />
 				<h2 class="fluid-heading-05">การลงมติ</h2>
