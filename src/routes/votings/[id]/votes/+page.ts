@@ -10,14 +10,14 @@ interface FilterOptions {
 type VotingSummary = Pick<Voting, 'id' | 'title'>;
 
 export function load({ params }) {
-	const votingId = Number(params.id);
+	const votingId = params.id;
 
 	const voting: VotingSummary = {
 		id: votingId,
 		title: passedVoting.title
 	};
 
-	const isCandidateVoting = votingId >= 3 && votingId <= 5;
+	const isCandidateVoting = votingId === '3' || votingId === '4' || votingId === '5';
 	const votes = createMockVotes(isCandidateVoting);
 
 	const filterOptions: FilterOptions = {

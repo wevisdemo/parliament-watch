@@ -111,7 +111,7 @@ export async function load({ params }) {
 		])
 		.map<VoteCardProps>((highlightedVoteByGroups, i) => ({
 			voting: {
-				id: i + 1,
+				id: `${i + 1}`,
 				date: new Date(`09/${i + 1}/2023`),
 				title:
 					i % 3 < 2 ? 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)' : 'เลือกนายกรัฐมนตรีไทย คนที่ 29',

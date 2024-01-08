@@ -37,7 +37,7 @@ export interface ResultByAffiliation {
 }
 
 export function load({ params }) {
-	const votingId = Number(params.id);
+	const votingId = params.id;
 
 	/*
 	 * | votingId | Passed?   | Default? | House  | Government Formed? |
@@ -52,12 +52,12 @@ export function load({ params }) {
 	 * | 8           | T         | T        | MP     | F                  |
 	 * | 9           | T         | T        | Senate | T                  |
 	 */
-	const isFailedVoting = votingId === 2;
-	const isCandidateVoting = votingId === 3 || votingId === 4 || votingId === 5;
-	const isFailedCandidateVoting = votingId === 6;
-	const isGovernmentFormed = ![4, 5, 6, 8].includes(votingId);
-	const isOnlyMPs = [7, 8].includes(votingId);
-	const isOnlySenates = votingId === 9;
+	const isFailedVoting = votingId === '2';
+	const isCandidateVoting = votingId === '3' || votingId === '4' || votingId === '5';
+	const isFailedCandidateVoting = votingId === '6';
+	const isGovernmentFormed = !['4', '5', '6', '8'].includes(votingId);
+	const isOnlyMPs = ['7', '8'].includes(votingId);
+	const isOnlySenates = votingId === '9';
 
 	const rawVotes = getRawVoteResults(isCandidateVoting);
 

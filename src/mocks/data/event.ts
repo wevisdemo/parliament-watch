@@ -14,7 +14,7 @@ export const passingMp1Event: Event = {
 	type: EventType.MP1,
 	status: EventStatus.Succeed,
 	actionType: EventActionType.Voted,
-	votedInVotingId: 1
+	votedInVotingId: '1'
 };
 
 export const inProgressMp1Event: Event = {
@@ -49,13 +49,13 @@ export const passingMp3Event: Event = {
 	type: EventType.MP3,
 	status: EventStatus.Succeed,
 	actionType: EventActionType.Voted,
-	votedInVotingId: 1
+	votedInVotingId: '1'
 };
 
 export const failingMp3Event: Event = {
 	...passingMp3Event,
 	status: EventStatus.Failed,
-	votedInVotingId: 2
+	votedInVotingId: '2'
 };
 
 export const passingSenate1Event: Event = {
@@ -64,7 +64,7 @@ export const passingSenate1Event: Event = {
 	type: EventType.Senate1,
 	status: EventStatus.Succeed,
 	actionType: EventActionType.Voted,
-	votedInVotingId: 3
+	votedInVotingId: '3'
 };
 
 export const passingSenate2Event: Event = {
@@ -73,7 +73,7 @@ export const passingSenate2Event: Event = {
 	type: EventType.Senate2,
 	status: EventStatus.Succeed,
 	actionType: EventActionType.Voted,
-	votedInVotingId: 3
+	votedInVotingId: '3'
 };
 
 export const passingSenate3Event: Event = {
@@ -82,7 +82,7 @@ export const passingSenate3Event: Event = {
 	type: EventType.Senate3,
 	status: EventStatus.Succeed,
 	actionType: EventActionType.Voted,
-	votedInVotingId: 3
+	votedInVotingId: '3'
 };
 
 export const royalAssentEvent: Event = {
