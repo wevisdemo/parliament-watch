@@ -14,7 +14,7 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	export let data;
-	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians, latest5Votings } = data);
+	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians, latestVotings } = data);
 
 	let politicianSearchResults: SearchResults | null;
 	let votingSearchResults: SearchResults | null;
@@ -196,9 +196,9 @@
 			{/if}
 		</div>
 		<section>
-			<h3 class="fluid-heading-04 mb-4">5 ผลการลงมติล่าสุด</h3>
+			<h3 class="fluid-heading-04 mb-4">{latestVotings.length} ผลการลงมติล่าสุด</h3>
 			<Carousel options={{ loop: false }}>
-				{#each latest5Votings as { voting, highlightedVoteByGroups }}
+				{#each latestVotings as { voting, highlightedVoteByGroups }}
 					<VoteCard class="keen-slider__slide" {voting} {highlightedVoteByGroups} />
 				{/each}
 			</Carousel>

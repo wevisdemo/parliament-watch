@@ -5,19 +5,19 @@ export const votingSchema = z
 	.object({
 		id: z.string(),
 		title: z.string(),
-		officialTitle: z.string(),
+		officialTitle: z.string().default('รอชื่ออย่างเป็นทางการ'),
 		date: z.date(),
 		description: z.string().optional(),
 		representativeAssemblyId: z.string().optional(),
-		senateAssemblyId: z.string(),
+		senateAssemblyId: z.string().optional(),
 		result: z.string().default('รอตรวจสอบ'),
-		categories: z.string().default(''),
+		categories: z.string().optional(),
 		documents: z.string(),
 		sourceUrl: z.string()
 	})
 	.transform(({ categories, representativeAssemblyId, senateAssemblyId, documents, ...rest }) => ({
 		...rest,
-		categories: categories.split(','),
+		categories: categories?.split(',') || [],
 		meetingType:
 			representativeAssemblyId && senateAssemblyId
 				? 'ประชุมร่วมกันของรัฐสภา'

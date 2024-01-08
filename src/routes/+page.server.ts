@@ -3,10 +3,13 @@ import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import { fetchPoliticians } from '$lib/datasheets/index.js';
 import { safeFind } from '$lib/datasheets/processor.js';
+import { fetchVotings } from '$lib/datasheets/index.js';
 import { getMostGun } from '$lib/ranking/gun.js';
 import { getPoliticianWithMostViewLastMonth } from '$lib/ranking/wikipedia.js';
 import { movingForwardPolitician } from '../mocks/data/politician.js';
 import type { VoteCardProps } from './assemblies/[id]/+page.server.js';
+
+const MAX_LASTEST_VOTE = 5;
 
 enum PoliticialPosition {
 	MP = 'สส.',
@@ -120,36 +123,34 @@ export async function load() {
 			: [])
 	];
 
-	// TODO: ใช้ข้อมูลจริง
-	const latest5Votings: VoteCardProps[] = Array(5).fill({
-		voting: {
-			id: 1,
-			date: new Date(),
-			title: 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)',
-			result: 'ผ่าน'
-		},
-		highlightedVoteByGroups: [
-			{
-				name: 'สส. ฝ่ายรัฐบาล',
-				count: 160,
-				total: 315
-			},
-			{
-				name: 'สส. ฝ่ายค้าน',
-				count: 164,
-				total: 185
-			},
-			{
-				name: 'สว.',
-				count: 200,
-				total: 250
-			}
-		]
-	});
+	const latestVotings: VoteCardProps[] = [...(await fetchVotings())]
+		.sort((a, z) => z.date.getTime() - a.date.getTime())
+		.slice(0, MAX_LASTEST_VOTE)
+		.map((voting) => ({
+			voting,
+			// TODO: aggregate votes data
+			highlightedVoteByGroups: [
+				{
+					name: 'สส. ฝ่ายรัฐบาล',
+					count: 160,
+					total: 315
+				},
+				{
+					name: 'สส. ฝ่ายค้าน',
+					count: 164,
+					total: 185
+				},
+				{
+					name: 'สว.',
+					count: 200,
+					total: 250
+				}
+			]
+		}));
 
 	return {
 		highlightedPoliticians,
 		otherSourcesHighlightedPoliticians,
-		latest5Votings
+		latestVotings
 	};
 }
