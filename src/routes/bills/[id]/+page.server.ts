@@ -108,7 +108,7 @@ export function load({ params }) {
 		mergedIntoBillLatestEvent,
 		relatedVotingResults, // Info of votings in events
 		seo: createSeo({
-			title: `${bill.nickname} - Parliament Watch`
+			title: bill.nickname
 		})
 	};
 }

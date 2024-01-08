@@ -284,7 +284,7 @@ export function load() {
 		},
 		legislations,
 		seo: createSeo({
-			title: 'รัฐออกกฎหมายอย่างไร - Parliament Watch'
+			title: 'รัฐออกกฎหมายอย่างไร'
 		})
 	};
 }

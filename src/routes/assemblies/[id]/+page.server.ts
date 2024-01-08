@@ -129,7 +129,7 @@ export async function load({ params }) {
 		mainMembers,
 		latestVotes,
 		seo: createSeo({
-			title: `${assembly.name} ${assembly.term} - Parliament Watch`
+			title: `${assembly.name} ${assembly.term}`
 		})
 	};
 }

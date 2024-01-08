@@ -52,7 +52,7 @@ export async function load({ params }) {
 			isDataHasSubgroup,
 			assemblyIds,
 			seo: createSeo({
-				title: `สมาชิก ${assembly.name} ${assembly.term} - Parliament Watch`
+				title: `สมาชิก ${assembly.name} ${assembly.term}`
 			})
 		};
 	} else {

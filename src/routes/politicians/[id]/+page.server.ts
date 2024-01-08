@@ -48,7 +48,7 @@ export async function load({ params }) {
 		votingAbsentStats,
 		totalProposedBill: 6,
 		seo: createSeo({
-			title: `${politician.firstname} ${politician.lastname} - Parliament Watch`
+			title: `${politician.firstname} ${politician.lastname}`
 		})
 	};
 }
