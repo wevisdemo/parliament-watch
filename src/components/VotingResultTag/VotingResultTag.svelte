@@ -14,11 +14,11 @@
 
 	$: switch (result) {
 		case DefaultVotingResult.Passed:
-			tagColor = 'bg-teal-30';
+			tagColor = 'bg-teal-30 text-text-01';
 			label = isLarge ? 'มติผ่าน' : DefaultVotingResult.Passed;
 			break;
 		case DefaultVotingResult.Failed:
-			tagColor = 'bg-red-30';
+			tagColor = 'bg-red-30 text-text-01';
 			label = isLarge ? 'มติไม่ผ่าน' : DefaultVotingResult.Failed;
 			break;
 		default:
