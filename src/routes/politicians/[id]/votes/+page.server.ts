@@ -35,7 +35,7 @@ export async function load({ params }) {
 	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
 
 	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
-		id: i,
+		id: i.toString(),
 		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
 		participatedAssembleIds: [i % 2 ? 'สมาชิกสภาผู้แทนราษฎร-25' : 'สมาชิกสภาผู้แทนราษฎร-26'],

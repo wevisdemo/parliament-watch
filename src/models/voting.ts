@@ -1,20 +1,46 @@
+import { z } from 'zod';
 import type { Link } from './link';
 
-export interface Voting {
-	id: number;
-	title: string;
-	description?: string;
-	categories: string[];
-	date: Date;
-	meetingType: string;
-	participatedAssembleIds: string[];
-	voteOptions: (DefaultVoteOption | CustomVoteOption | string)[];
-	winningCondition: string;
-	result: DefaultVotingResult | string;
-	relatedBillId?: number;
-	sourceUrl: string;
-	files: Link[];
-}
+export const votingSchema = z
+	.object({
+		id: z.string(),
+		title: z.string(),
+		officialTitle: z.string(),
+		date: z.date(),
+		description: z.string().optional(),
+		representativeAssemblyId: z.string().optional(),
+		senateAssemblyId: z.string(),
+		result: z.string().default('รอตรวจสอบ'),
+		categories: z.string().default(''),
+		documents: z.string(),
+		sourceUrl: z.string()
+	})
+	.transform(({ categories, representativeAssemblyId, senateAssemblyId, documents, ...rest }) => ({
+		...rest,
+		categories: categories.split(','),
+		meetingType:
+			representativeAssemblyId && senateAssemblyId
+				? 'ประชุมร่วมกันของรัฐสภา'
+				: representativeAssemblyId
+				? 'ประชุมสภาผู้แทนราษฎร'
+				: 'ประชุมวุฒิสภา',
+		participatedAssembleIds: [representativeAssemblyId, senateAssemblyId].filter((id) => !!id),
+		// TODO: Only support default vote option for now
+		voteOptions: [
+			DefaultVoteOption.Agreed,
+			DefaultVoteOption.Disagreed,
+			DefaultVoteOption.Novote,
+			DefaultVoteOption.Abstain,
+			DefaultVoteOption.Absent
+		] as (DefaultVoteOption | CustomVoteOption | string)[],
+		winningCondition: 'รออัพเดต winningCondition',
+		files: documents.split('\n').map<Link>((line) => {
+			const [label, url] = line.split(',').map((value) => value.trim());
+			return { label, url };
+		})
+	}));
+
+export type Voting = z.infer<typeof votingSchema>;
 
 export interface CustomVoteOption {
 	label: string;

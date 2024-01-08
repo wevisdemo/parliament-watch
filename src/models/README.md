@@ -77,7 +77,7 @@ erDiagram
   }
 
   Voting {
-    number id PK
+    string id PK
     string title
     string description
     string[] categories
@@ -95,7 +95,7 @@ erDiagram
   Vote {
     string politicianId FK
     string votingId FK
-    number voteOptionIndex "refer to Voting"
+    string voteOption "refer to Voting"
   }
 
   Event {
@@ -107,7 +107,7 @@ erDiagram
     string description "for other"
     string status "succeed | in-progress | failed"
     string actionType "voted | merged | enforced"
-    number votedInVotingId FK "for action voted"
+    string votedInVotingId FK "for action voted"
     number mergedIntoBillId FK "for action merged"
     string enforcementDocumentUrl "for action enforced"
   }

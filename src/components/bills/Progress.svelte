@@ -10,7 +10,7 @@
 	}
 
 	export interface RelatedVotingResults {
-		[id: number]: {
+		[id: string]: {
 			voting: Voting;
 			resultSummary: VotingResultSummary;
 		};
@@ -90,10 +90,10 @@
 		}
 	};
 
-	function getVoting(votingResultsId: number | undefined) {
+	function getVoting(votingResultsId?: string) {
 		if (votingResultsId === undefined) return undefined;
 		let voting: ComponentProps<VoteCard>['voting'] = {
-			id: Number(votingResultsId),
+			id: votingResultsId,
 			date: relatedVotingResults[Number(votingResultsId)].voting.date,
 			title: relatedVotingResults[Number(votingResultsId)].voting.title,
 			result: relatedVotingResults[Number(votingResultsId)].voting.result
@@ -101,7 +101,7 @@
 		return voting;
 	}
 
-	function getHighlightedVoteByGroups(id: number | undefined, eventType: string) {
+	function getHighlightedVoteByGroups(id: string | undefined, eventType: string) {
 		if (id === undefined) return undefined;
 		let resultSummary = relatedVotingResults[id].resultSummary;
 		if (resultSummary.subResults) {

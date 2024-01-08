@@ -25,7 +25,7 @@ export async function load({ params }) {
 	const assembly: AssemblySummary = { id, name, term, startedAt };
 
 	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
-		id: i,
+		id: i.toString(),
 		title: i % 2 ? title : title + ' ทดสอบ',
 		date,
 		categories: [mockCategory[i % mockCategory.length]],

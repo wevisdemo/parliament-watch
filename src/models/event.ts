@@ -31,7 +31,7 @@ export interface Event {
 	description?: string;
 	status: EventStatus;
 	actionType?: EventActionType;
-	votedInVotingId?: number;
+	votedInVotingId?: string;
 	mergedIntoBillId?: number;
 	enforcementDocumentUrl?: string;
 }
