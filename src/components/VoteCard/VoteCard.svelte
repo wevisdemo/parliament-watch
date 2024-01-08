@@ -41,7 +41,10 @@
 	export let voting: VoteCardProps['voting'] = {} as Voting;
 	export let highlightedVoteByGroups: VoteCardProps['highlightedVoteByGroups'] = [];
 	export let isFullWidth = false;
+	// TODO: link อันนี้ ref จาก id ได้ไหม?
 	export let link = '/';
+	let className = '';
+	export { className as class };
 
 	interface HighlightedVoteSummary {
 		totalCount: number;
@@ -72,7 +75,8 @@
 		'vote-card rounded-sm relative p-4 flex flex-col gap-y-2 w-72 h-64.5 whitespace-break-spaces',
 		theme.bg,
 		theme.hoveredBg,
-		isFullWidth ? 'w-full' : ''
+		isFullWidth ? 'w-full' : '',
+		className
 	)}
 >
 	<p class="body-compact-01 text-text-02">

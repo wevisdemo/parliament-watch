@@ -4,6 +4,7 @@
 	import StatCard from '$components/Index/StatCard.svelte';
 	import SearchInput from '$components/SearchInput/SearchInput.svelte';
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
+	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
@@ -13,9 +14,10 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	export let data;
-	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians } = data);
+	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians, latest5Votings } = data);
 
-	let searchResults: SearchResults | null;
+	let politicianSearchResults: SearchResults | null;
+	let votingSearchResults: SearchResults | null;
 </script>
 
 <div class="md:h-[calc(100lvh-48px)] flex flex-col">
@@ -110,10 +112,10 @@
 				size="lg"
 				placeholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช"
 				categories={[SearchIndexCategory.Politicians]}
-				bind:searchResults
+				bind:searchResults={politicianSearchResults}
 			/>
-			{#if searchResults}
-				<SearchResult {searchResults} class="w-full absolute left-0 z-10" />
+			{#if politicianSearchResults}
+				<SearchResult searchResults={politicianSearchResults} class="w-full absolute left-0 z-10" />
 			{/if}
 		</div>
 		<section>
@@ -132,7 +134,10 @@
 				<span class="absolute w-full h-[1px] bg-text-03 left-0 top-1/2" aria-hidden="true" />
 				<span class="relative text-text-03 bg-ui-01 px-2 z-10">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
 			</h3>
-			<Carousel>
+			<Carousel
+				arrowLeftClass="top-auto bottom-[75px] translate-y-1/2"
+				arrowRightClass="top-auto bottom-[75px] translate-y-1/2"
+			>
 				{#each otherSourcesHighlightedPoliticians as politicianData (politicianData.reason)}
 					<StatCard class="keen-slider__slide" {politicianData} />
 				{/each}
@@ -164,6 +169,43 @@
 				>
 			</li> -->
 		</ul>
+	</div>
+</section>
+<section class="bg-white text-text-01">
+	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
+		<div id="politician" class="flex flex-col gap-2 items-start md:flex-row">
+			<div class="flex gap-2 items-center md:flex-1">
+				<VoteIcon width="32" height="32" />
+				<h2 class="fluid-heading-05">การลงมติ</h2>
+			</div>
+			<p class="md:flex-1 body-01">
+				ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ
+			</p>
+		</div>
+		<div class="relative">
+			<SearchInput
+				as={Search}
+				size="lg"
+				placeholder="ค้นด้วยชื่อมติ เช่น อภิปรายไม่ไว้วางใจ, แก้ รธน."
+				categories={[SearchIndexCategory.Votings]}
+				bind:searchResults={votingSearchResults}
+			/>
+			{#if votingSearchResults}
+				<SearchResult searchResults={votingSearchResults} class="w-full absolute left-0 z-10" />
+			{/if}
+		</div>
+		<section>
+			<h3 class="fluid-heading-04 mb-4">5 ผลการลงมติล่าสุด</h3>
+			<Carousel options={{ loop: false }}>
+				{#each latest5Votings as { voting, highlightedVoteByGroups }}
+					<VoteCard class="keen-slider__slide" {voting} {highlightedVoteByGroups} />
+				{/each}
+			</Carousel>
+		</section>
+		<!-- TODO: รอหน้า votings หลัก -->
+		<!-- <Button href="/votings" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+			ดูมติทั้งหมด
+		</Button> -->
 	</div>
 </section>
 <BackToTopButton />
