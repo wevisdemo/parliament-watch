@@ -15,30 +15,37 @@ export const votingSchema = z
 		documents: z.string(),
 		sourceUrl: z.string()
 	})
-	.transform(({ categories, representativeAssemblyId, senateAssemblyId, documents, ...rest }) => ({
-		...rest,
-		categories: categories?.split(',') || [],
-		meetingType:
-			representativeAssemblyId && senateAssemblyId
-				? 'ประชุมร่วมกันของรัฐสภา'
-				: representativeAssemblyId
-				? 'ประชุมสภาผู้แทนราษฎร'
-				: 'ประชุมวุฒิสภา',
-		participatedAssembleIds: [representativeAssemblyId, senateAssemblyId].filter((id) => !!id),
-		// TODO: Only support default vote option for now
-		voteOptions: [
-			DefaultVoteOption.Agreed,
-			DefaultVoteOption.Disagreed,
-			DefaultVoteOption.Novote,
-			DefaultVoteOption.Abstain,
-			DefaultVoteOption.Absent
-		] as (DefaultVoteOption | CustomVoteOption | string)[],
-		winningCondition: 'รออัพเดต winningCondition',
-		files: documents.split('\n').map<Link>((line) => {
-			const [label, url] = line.split(',').map((value) => value.trim());
-			return { label, url };
-		})
-	}));
+	.transform(({ categories, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => {
+		const participatedAssembleIds = [representativeAssemblyId, senateAssemblyId].filter(
+			(id) => !!id
+		) as string[];
+
+		return {
+			...voting,
+			categories: categories?.split(',') || [],
+			meetingType:
+				representativeAssemblyId && senateAssemblyId
+					? 'ประชุมร่วมกันของรัฐสภา'
+					: representativeAssemblyId
+					? 'ประชุมสภาผู้แทนราษฎร'
+					: 'ประชุมวุฒิสภา',
+			participatedAssembleIds,
+			// TODO: Only support default vote option for now
+			voteOptions: [
+				DefaultVoteOption.Agreed,
+				DefaultVoteOption.Disagreed,
+				DefaultVoteOption.Novote,
+				DefaultVoteOption.Abstain,
+				DefaultVoteOption.Absent
+			] as (DefaultVoteOption | CustomVoteOption | string)[],
+			winningCondition: 'รออัพเดต winningCondition',
+			files: documents.split('\n').map<Link>((line) => {
+				const [label, url] = line.split(',').map((value) => value.trim());
+				return { label, url };
+			}),
+			highlightedVoteByGroups: []
+		};
+	});
 
 export type Voting = z.infer<typeof votingSchema>;
 

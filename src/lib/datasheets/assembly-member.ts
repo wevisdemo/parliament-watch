@@ -3,9 +3,13 @@ import dayjs from 'dayjs';
 import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 import type { Assembly } from '$models/assembly';
 import { fetchPoliticians } from '.';
+import type { Politician } from '$models/politician';
 
 export const fetchAssemblyMembers = async (assembly: Assembly) =>
-	(await fetchPoliticians())
+	getAssemblyMembers(assembly, await fetchPoliticians());
+
+export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]) =>
+	politicians
 		.map(({ assemblyRoles, ...rest }) => ({
 			...rest,
 			assemblyRole: assemblyRoles.find(({ assembly: a }) => a.id === assembly.id)

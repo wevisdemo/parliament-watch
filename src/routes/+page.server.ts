@@ -1,14 +1,14 @@
 import { building } from '$app/environment';
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
-import { fetchPoliticians } from '$lib/datasheets/index.js';
 import { safeFind } from '$lib/datasheets/processor.js';
-import { fetchVotings } from '$lib/datasheets/index.js';
+import { fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { getMostGun } from '$lib/ranking/gun.js';
 import { getPoliticianWithMostViewLastMonth } from '$lib/ranking/wikipedia.js';
 import { movingForwardPolitician } from '../mocks/data/politician.js';
 import type { ComponentProps } from 'svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
 
 const MAX_LASTEST_VOTE = 5;
 
@@ -124,29 +124,15 @@ export async function load() {
 			: [])
 	];
 
+	const votes = await fetchVotes();
+	const politicians = await fetchPoliticians();
+
 	const latestVotings: ComponentProps<VoteCard>[] = [...(await fetchVotings())]
 		.sort((a, z) => z.date.getTime() - a.date.getTime())
 		.slice(0, MAX_LASTEST_VOTE)
 		.map((voting) => ({
 			voting,
-			// TODO: aggregate votes data
-			highlightedVoteByGroups: [
-				{
-					name: 'สส. ฝ่ายรัฐบาล',
-					count: 160,
-					total: 315
-				},
-				{
-					name: 'สส. ฝ่ายค้าน',
-					count: 164,
-					total: 185
-				},
-				{
-					name: 'สว.',
-					count: 200,
-					total: 250
-				}
-			]
+			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 		}));
 
 	return {
