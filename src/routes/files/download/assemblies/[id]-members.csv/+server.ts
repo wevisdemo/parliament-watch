@@ -1,6 +1,6 @@
 import { createCsvFileResponse } from '$lib/csv';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
-import { fetchAssemblyMembers } from '../../../../assemblies/[id]/data';
+import { fetchAssemblyMembers } from '$lib/datasheets/assembly-member';
 
 export const prerender = true;
 

@@ -1,4 +1,4 @@
-import type { AssemblyMember } from '../../data';
+import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 import { type Assembly, GroupByOption, AssemblyPartyGroup } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
 import dayjs from 'dayjs';

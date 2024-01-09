@@ -2,7 +2,7 @@ import type { ComponentProps } from 'svelte';
 import dayjs from 'dayjs';
 import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 import type { Assembly } from '$models/assembly';
-import { fetchPoliticians } from '$lib/datasheets';
+import { fetchPoliticians } from '.';
 
 export const fetchAssemblyMembers = async (assembly: Assembly) =>
 	(await fetchPoliticians())

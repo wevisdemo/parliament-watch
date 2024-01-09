@@ -2,7 +2,11 @@ import { error } from '@sveltejs/kit';
 import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from './groupby';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
 import { AssemblyName, GroupByOption } from '$models/assembly';
-import { fetchAssemblyMembers, getPoliticianSummary, type PoliticianSummary } from '../../data';
+import {
+	fetchAssemblyMembers,
+	getPoliticianSummary,
+	type PoliticianSummary
+} from '$lib/datasheets/assembly-member';
 import { createSeo } from '../../../../../utils/seo';
 
 interface PoliticianSummaryGroup {

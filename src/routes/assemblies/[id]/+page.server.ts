@@ -4,7 +4,7 @@ import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { DefaultVotingResult, type Voting } from '$models/voting';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
-import { fetchAssemblyMembers } from './data';
+import { fetchAssemblyMembers } from '$lib/datasheets/assembly-member';
 import { getMemberGroup } from './members/[groupby]/groupby';
 import { createSeo } from '../../../utils/seo';
 
