@@ -24,7 +24,10 @@ const assemblyStaticInfoMap = {
 	}
 };
 
-export const createAssemblySchema = (parties: Party[]) =>
+export const createAssemblySchema = (
+	parties: Party[],
+	assemblyPartyGroups: z.infer<typeof assemblyPartyGroupSchema>[]
+) =>
 	z
 		.object({
 			id: z.string(),
@@ -32,24 +35,36 @@ export const createAssemblySchema = (parties: Party[]) =>
 			term: z.number(),
 			startedAt: z.date(),
 			endedAt: z.date().optional(),
-			origin: z.string(),
-			governmentParties: z.string().optional(),
-			oppositionParties: z.string().optional()
+			origin: z.string()
 		})
-		.transform(({ name, governmentParties, oppositionParties, ...rest }) => {
-			const findPartiesFromCommaSeperatedName = (text?: string) =>
-				text?.split(',').map((partyName) => safeFind(parties, (p) => p.name === partyName.trim()));
+		.transform((assembly) => {
+			const getPartyGroup = (groupName: AssemblyPartyGroup) =>
+				assemblyPartyGroups
+					.filter(({ assemblyId, group }) => assemblyId === assembly.id && group === groupName)
+					.map(({ partyName }) => safeFind(parties, ({ name }) => name === partyName));
 
 			return {
-				name,
-				...rest,
-				...(assemblyStaticInfoMap[name] as { abbreviation: string; mainRoles: string[] }),
-				governmentParties: findPartiesFromCommaSeperatedName(governmentParties),
-				oppositionParties: findPartiesFromCommaSeperatedName(oppositionParties)
+				...assembly,
+				...(assemblyStaticInfoMap[assembly.name] as { abbreviation: string; mainRoles: string[] }),
+				governmentParties: getPartyGroup(AssemblyPartyGroup.Government),
+				oppositionParties: getPartyGroup(AssemblyPartyGroup.Opposition)
 			};
 		});
 
 export type Assembly = z.infer<ReturnType<typeof createAssemblySchema>>;
+
+export enum AssemblyPartyGroup {
+	Government = 'ฝ่ายรัฐบาล',
+	Opposition = 'ฝ่ายค้าน'
+}
+
+export const assemblyPartyGroupSchema = z
+	.object({
+		assemblyId: z.string(),
+		partyName: z.string(),
+		group: z.nativeEnum(AssemblyPartyGroup)
+	})
+	.transform((d) => d);
 
 export enum GroupByOption {
 	Party = 'party',

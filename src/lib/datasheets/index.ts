@@ -1,5 +1,5 @@
 import { fetchAndParseSheet } from './processor';
-import { createAssemblySchema } from '$models/assembly';
+import { assemblyPartyGroupSchema, createAssemblySchema } from '$models/assembly';
 import { createPartySchema } from '$models/party';
 import {
 	createAssemblyRoleSchema,
@@ -13,8 +13,14 @@ import { votingSchema } from '$models/voting';
 export const fetchParties = () =>
 	fetchAndParseSheet('Parties', createPartySchema(new StaticImageResolver('/images/parties')));
 
+export const fetchAssemblyPartyGroups = () =>
+	fetchAndParseSheet('AssemblyPartyGroups', assemblyPartyGroupSchema);
+
 export const fetchAssemblies = async () =>
-	fetchAndParseSheet('Assemblies', createAssemblySchema(await fetchParties()));
+	fetchAndParseSheet(
+		'Assemblies',
+		createAssemblySchema(await fetchParties(), await fetchAssemblyPartyGroups())
+	);
 
 export const fetchAssemblyRoleHistory = async () =>
 	fetchAndParseSheet('AssemblyRoleHistory', createAssemblyRoleSchema(await fetchAssemblies()));

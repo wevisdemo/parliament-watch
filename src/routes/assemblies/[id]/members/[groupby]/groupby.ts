@@ -1,5 +1,5 @@
 import type { AssemblyMember } from '../../data';
-import { type Assembly, GroupByOption } from '$models/assembly';
+import { type Assembly, GroupByOption, AssemblyPartyGroup } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
 import dayjs from 'dayjs';
 
@@ -26,8 +26,8 @@ export function getMemberGroup(
 		case GroupByOption.Party: {
 			return groupMembersBy(members, ({ partyRole }) =>
 				assembly.oppositionParties?.some((op) => op.name === partyRole?.party.name)
-					? 'ฝ่ายค้าน'
-					: 'ฝ่ายรัฐบาล'
+					? AssemblyPartyGroup.Opposition
+					: AssemblyPartyGroup.Government
 			).map(([side, membersBySide]) => ({
 				name: side,
 				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
