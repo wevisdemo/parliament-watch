@@ -85,7 +85,6 @@ erDiagram
     string meetingType
     string[] participatedAssembleIds FK
     VoteOption[] voteOptions "DefaultVoteOption | {label: string, color: string}"
-    string winningCondition
     string result "passed | failed | string (other result)"
     number relatedBillId FK
     string sourceUrl

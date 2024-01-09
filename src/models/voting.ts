@@ -1,53 +1,52 @@
 import { z } from 'zod';
 import type { Link } from './link';
+import type { Assembly } from './assembly';
+import { safeFind } from '$lib/datasheets/processor';
 
-export const votingSchema = z
-	.object({
-		id: z.string(),
-		title: z.string(),
-		officialTitle: z.string().default('รอชื่ออย่างเป็นทางการ'),
-		date: z.date(),
-		description: z.string().optional(),
-		representativeAssemblyId: z.string().optional(),
-		senateAssemblyId: z.string().optional(),
-		result: z.string().default('รอตรวจสอบ'),
-		categories: z.string().optional(),
-		documents: z.string(),
-		sourceUrl: z.string()
-	})
-	.transform(({ categories, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => {
-		const participatedAssembleIds = [representativeAssemblyId, senateAssemblyId].filter(
-			(id) => !!id
-		) as string[];
+export const createVotingSchema = (assemblies: Assembly[]) =>
+	z
+		.object({
+			id: z.string(),
+			title: z.string(),
+			officialTitle: z.string().default('รอชื่ออย่างเป็นทางการ'),
+			date: z.date(),
+			description: z.string().optional(),
+			representativeAssemblyId: z.string().optional(),
+			senateAssemblyId: z.string().optional(),
+			result: z.string().default('รอตรวจสอบ'),
+			categories: z.string().optional(),
+			documents: z.string(),
+			sourceUrl: z.string()
+		})
+		.transform(
+			({ categories, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => ({
+				...voting,
+				categories: categories?.split(',') || [],
+				meetingType:
+					representativeAssemblyId && senateAssemblyId
+						? 'ประชุมร่วมกันของรัฐสภา'
+						: representativeAssemblyId
+						? 'ประชุมสภาผู้แทนราษฎร'
+						: 'ประชุมวุฒิสภา',
+				participatedAssemblies: [representativeAssemblyId, senateAssemblyId]
+					.filter((id) => !!id)
+					.map<Assembly>((id) => safeFind(assemblies, (a) => a.id === id)),
+				// TODO: Only support default vote option for now
+				voteOptions: [
+					DefaultVoteOption.Agreed,
+					DefaultVoteOption.Disagreed,
+					DefaultVoteOption.Novote,
+					DefaultVoteOption.Abstain,
+					DefaultVoteOption.Absent
+				] as (DefaultVoteOption | CustomVoteOption | string)[],
+				files: documents.split('\n').map<Link>((line) => {
+					const [label, url] = line.split(',').map((value) => value.trim());
+					return { label, url };
+				})
+			})
+		);
 
-		return {
-			...voting,
-			categories: categories?.split(',') || [],
-			meetingType:
-				representativeAssemblyId && senateAssemblyId
-					? 'ประชุมร่วมกันของรัฐสภา'
-					: representativeAssemblyId
-					? 'ประชุมสภาผู้แทนราษฎร'
-					: 'ประชุมวุฒิสภา',
-			participatedAssembleIds,
-			// TODO: Only support default vote option for now
-			voteOptions: [
-				DefaultVoteOption.Agreed,
-				DefaultVoteOption.Disagreed,
-				DefaultVoteOption.Novote,
-				DefaultVoteOption.Abstain,
-				DefaultVoteOption.Absent
-			] as (DefaultVoteOption | CustomVoteOption | string)[],
-			winningCondition: 'รออัพเดต winningCondition',
-			files: documents.split('\n').map<Link>((line) => {
-				const [label, url] = line.split(',').map((value) => value.trim());
-				return { label, url };
-			}),
-			highlightedVoteByGroups: []
-		};
-	});
-
-export type Voting = z.infer<typeof votingSchema>;
+export type Voting = z.infer<ReturnType<typeof createVotingSchema>>;
 
 export interface CustomVoteOption {
 	label: string;

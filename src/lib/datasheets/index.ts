@@ -8,7 +8,7 @@ import {
 } from '$models/politician';
 import { error } from '@sveltejs/kit';
 import { StaticImageResolver } from './image';
-import { votingSchema } from '$models/voting';
+import { createVotingSchema } from '$models/voting';
 import { voteSchema } from '$models/vote';
 
 export const fetchParties = () =>
@@ -41,7 +41,8 @@ export const fetchPoliticians = async () =>
 
 export const fetchVotes = () => fetchAndParseSheet('Votes', voteSchema);
 
-export const fetchVotings = async () => fetchAndParseSheet('Votings', votingSchema);
+export const fetchVotings = async () =>
+	fetchAndParseSheet('Votings', createVotingSchema(await fetchAssemblies()));
 
 export async function fetchFromIdOr404<T extends { id: string }>(
 	fetcher: () => Promise<T[]>,

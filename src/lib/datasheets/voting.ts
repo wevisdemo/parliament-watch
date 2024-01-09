@@ -21,12 +21,16 @@ export function getHighlightedVoteByGroups(
 			let group: keyof typeof counter;
 			const politician = safeFind(politicians, ({ id }) => id === politicianId);
 			const assemblyRole = politician.assemblyRoles.find((ar) =>
-				voting.participatedAssembleIds.includes(ar.assembly.id)
+				voting.participatedAssemblies.some((a) => a.id === ar.assembly.id)
 			);
 
 			if (!assemblyRole) {
 				console.warn(
-					`${politician.id} is not a member of any participated assembles ${voting.participatedAssembleIds} of voting ${voting.id}, but their votes exist`
+					`${
+						politician.id
+					} is not a member of any participated assembles ${voting.participatedAssemblies.map(
+						({ id }) => id
+					)} of voting ${voting.id}, but their votes exist`
 				);
 				return counter;
 			}
@@ -76,7 +80,7 @@ export function getHighlightedVoteByGroups(
 		.filter(({ count }) => count > 0);
 }
 
-function getWinningOption(result: string) {
+export function getWinningOption(result: string) {
 	switch (result) {
 		case DefaultVotingResult.Passed:
 			return DefaultVoteOption.Agreed;
