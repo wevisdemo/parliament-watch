@@ -1,6 +1,6 @@
 import type { Voting } from '$models/voting.js';
 import { createMockVotes } from '../../../../mocks/data/votes.js';
-import { passedVoting } from '../../../../mocks/data/voting';
+import { passedVoting } from '../../../../mocks/data/voting.js';
 
 interface FilterOptions {
 	parties: string[];

@@ -41,12 +41,13 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 		avatar,
 		isActive,
 		party: partyRole?.party,
-		role: !isActive
-			? 'พ้นสภาพก่อนสภาหมดอายุ'
-			: assemblyRole?.listNumber
-			? `บัญชีรายชื่อลำดับ ${assemblyRole?.listNumber}`
-			: assemblyRole?.province && assemblyRole.districtNumber
-			? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
-			: assemblyRole?.appointmentMethod
+		role: !isActive ? 'พ้นสภาพก่อนสภาหมดอายุ' : getAssemblyRoleDescription(assemblyRole)
 	};
 }
+
+export const getAssemblyRoleDescription = (assemblyRole: AssemblyMember['assemblyRole']) =>
+	assemblyRole?.listNumber
+		? `บัญชีรายชื่อ ลำดับ ${assemblyRole?.listNumber}`
+		: assemblyRole?.province && assemblyRole.districtNumber
+		? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
+		: assemblyRole?.appointmentMethod || '-';

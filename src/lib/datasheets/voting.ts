@@ -1,9 +1,21 @@
 import type { HighlightedVoteByGroup } from '$components/VoteCard/VoteCard.svelte';
 import { AssemblyName } from '$models/assembly';
+import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import type { Vote } from '$models/vote';
 import { DefaultVoteOption, DefaultVotingResult, type Voting } from '$models/voting';
 import { safeFind } from './processor';
+
+export interface VoteOptionCounter {
+	[option: string]: number;
+}
+
+interface PartyCounterRecord {
+	[name: string]: {
+		party: Party;
+		resultSummary: VoteOptionCounter;
+	};
+}
 
 export function getHighlightedVoteByGroups(
 	voting: Voting,
@@ -12,13 +24,36 @@ export function getHighlightedVoteByGroups(
 ): HighlightedVoteByGroup[] {
 	const winningOption = getWinningOption(voting.result);
 	const participatedVotes = votes.filter(({ votingId }) => votingId === voting.id);
-	const winningVoters = participatedVotes
-		.filter(({ voteOption }) => voteOption === winningOption)
-		.map(({ politicianId }) => politicianId);
 
-	const highlightedVoteGroups = participatedVotes.reduce(
-		(counter, { politicianId }) => {
+	return groupVoteByAffiliations(voting, participatedVotes, politicians)
+		.map(({ name, resultSummary }) => ({
+			name,
+			count: resultSummary[winningOption],
+			total: Object.values(resultSummary).reduce((total, count) => total + count, 0)
+		}))
+		.filter(({ count }) => count > 0);
+}
+
+export const groupVoteByAffiliations = (
+	voting: Voting,
+	votes: Vote[],
+	politicians: Politician[]
+) => {
+	const initCounterRecord = () =>
+		voting.voteOptions.reduce<VoteOptionCounter>(
+			(obj, option) => ({ ...obj, [typeof option === 'string' ? option : option.label]: 0 }),
+			{}
+		);
+
+	const initVoteOptionRecord = (): {
+		resultSummary: VoteOptionCounter;
+		byParties: PartyCounterRecord;
+	} => ({ resultSummary: initCounterRecord(), byParties: {} });
+
+	const groups = votes.reduce(
+		(counter, { politicianId, voteOption }) => {
 			let group: keyof typeof counter;
+
 			const politician = safeFind(politicians, ({ id }) => id === politicianId);
 			const assemblyRole = politician.assemblyRoles.find((ar) =>
 				voting.participatedAssemblies.some((a) => a.id === ar.assembly.id)
@@ -58,27 +93,34 @@ export function getHighlightedVoteByGroups(
 				)
 					? 'สส. ฝ่ายค้าน'
 					: 'สส. ฝ่ายรัฐบาล';
+
+				if (!counter[group].byParties[partyRole.party.name]) {
+					counter[group].byParties[partyRole.party.name] = {
+						party: partyRole.party,
+						resultSummary: initCounterRecord()
+					};
+				}
+
+				counter[group].byParties[partyRole.party.name].resultSummary[voteOption]++;
 			}
 
-			counter[group].total++;
-
-			if (winningVoters.includes(politician.id)) {
-				counter[group].count++;
-			}
+			counter[group].resultSummary[voteOption]++;
 
 			return counter;
 		},
 		{
-			'สส. ฝ่ายรัฐบาล': { count: 0, total: 0 },
-			'สส. ฝ่ายค้าน': { count: 0, total: 0 },
-			'สว.': { count: 0, total: 0 }
+			'สส. ฝ่ายรัฐบาล': initVoteOptionRecord(),
+			'สส. ฝ่ายค้าน': initVoteOptionRecord(),
+			'สว.': initVoteOptionRecord()
 		}
 	);
 
-	return Object.entries(highlightedVoteGroups)
-		.map(([name, values]) => ({ name, ...values }))
-		.filter(({ count }) => count > 0);
-}
+	return Object.entries(groups).map(([name, { resultSummary, byParties }]) => ({
+		name,
+		resultSummary,
+		byParties: Object.values(byParties)
+	}));
+};
 
 export function getWinningOption(result: string) {
 	switch (result) {
