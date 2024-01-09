@@ -1,9 +1,10 @@
 <script lang="ts">
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page.server';
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	export let votes: VoteCardProps[] = [];
+	import type { ComponentProps } from 'svelte';
+
+	export let votes: ComponentProps<VoteCard>[] = [];
 	export let assemblyId: string;
 </script>
 

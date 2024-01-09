@@ -1,3 +1,13 @@
+<script context="module" lang="ts">
+	export type VoteCardVoting = Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
+
+	export interface HighlightedVoteByGroup {
+		name: string;
+		count: number;
+		total: number;
+	}
+</script>
+
 <script lang="ts">
 	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
 	import { DefaultVotingResult, type Voting } from '$models/voting';
@@ -5,7 +15,6 @@
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
-	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page.server';
 	import { twMerge } from 'tailwind-merge';
 
 	dayjs.extend(buddhistEra);
@@ -38,8 +47,8 @@
 		tagFontColor: 'text-white'
 	};
 
-	export let voting: VoteCardProps['voting'] = {} as Voting;
-	export let highlightedVoteByGroups: VoteCardProps['highlightedVoteByGroups'] = [];
+	export let voting: VoteCardVoting;
+	export let highlightedVoteByGroups: HighlightedVoteByGroup[] = [];
 	export let isFullWidth = false;
 	// TODO: link อันนี้ ref จาก id ได้ไหม?
 	export let link = '/';
@@ -61,7 +70,7 @@
 
 	function reduceHighlightedVoteSummary(
 		{ totalAmount, totalCount }: HighlightedVoteSummary,
-		{ count, total }: VoteCardProps['highlightedVoteByGroups'][number]
+		{ count, total }: HighlightedVoteByGroup
 	): HighlightedVoteSummary {
 		return {
 			totalCount: totalCount + count,

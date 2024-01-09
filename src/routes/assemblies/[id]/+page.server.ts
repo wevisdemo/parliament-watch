@@ -2,11 +2,13 @@ import dayjs from 'dayjs';
 import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
-import { DefaultVotingResult, type Voting } from '$models/voting';
+import { DefaultVotingResult } from '$models/voting';
 import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
 import { fetchAssemblyMembers } from '$lib/datasheets/assembly-member';
 import { getMemberGroup } from './members/[groupby]/groupby';
 import { createSeo } from '../../../utils/seo';
+import type { ComponentProps } from 'svelte';
+import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 
 export interface Summary {
 	totalMembers: number;
@@ -29,15 +31,6 @@ export interface MainMember {
 	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'>;
 	party?: Party;
 	description?: string;
-}
-
-export interface VoteCardProps {
-	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
-	highlightedVoteByGroups: {
-		name: string;
-		count: number;
-		total: number;
-	}[];
 }
 
 export async function load({ params }) {
@@ -103,13 +96,13 @@ export async function load({ params }) {
 		// groupByAssetValue: [],
 	};
 
-	const latestVotes: VoteCardProps[] = new Array(5)
+	const latestVotes: ComponentProps<VoteCard>[] = new Array(5)
 		.fill([
 			{ name: 'สส. ฝ่ายรัฐบาล', count: 160, total: 315 },
 			{ name: 'สส. ฝ่ายค้าน', count: 164, total: 185 },
 			{ name: 'สว.', count: 200, total: 250 }
 		])
-		.map<VoteCardProps>((highlightedVoteByGroups, i) => ({
+		.map<ComponentProps<VoteCard>>((highlightedVoteByGroups, i) => ({
 			voting: {
 				id: `${i + 1}`,
 				date: new Date(`09/${i + 1}/2023`),

@@ -7,7 +7,8 @@ import { fetchVotings } from '$lib/datasheets/index.js';
 import { getMostGun } from '$lib/ranking/gun.js';
 import { getPoliticianWithMostViewLastMonth } from '$lib/ranking/wikipedia.js';
 import { movingForwardPolitician } from '../mocks/data/politician.js';
-import type { VoteCardProps } from './assemblies/[id]/+page.server.js';
+import type { ComponentProps } from 'svelte';
+import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 
 const MAX_LASTEST_VOTE = 5;
 
@@ -123,7 +124,7 @@ export async function load() {
 			: [])
 	];
 
-	const latestVotings: VoteCardProps[] = [...(await fetchVotings())]
+	const latestVotings: ComponentProps<VoteCard>[] = [...(await fetchVotings())]
 		.sort((a, z) => z.date.getTime() - a.date.getTime())
 		.slice(0, MAX_LASTEST_VOTE)
 		.map((voting) => ({
