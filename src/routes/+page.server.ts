@@ -3,7 +3,11 @@ import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import { getMostGun } from '$lib/ranking/gun.js';
 import { getPoliticianWithMostViewLastMonth } from '$lib/ranking/wikipedia.js';
-import { movingForwardPolitician } from '../mocks/data/politician.js';
+import {
+	BANYAT_BANTADTAN,
+	CHUAN_LEEKPAI,
+	movingForwardPolitician
+} from '../mocks/data/politician.js';
 import type { VoteCardProps } from './assemblies/[id]/+page.server.js';
 
 enum PoliticialPosition {
@@ -77,25 +81,25 @@ export async function load() {
 		{
 			reason: HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,
-			politician: movingForwardPolitician,
+			politician: CHUAN_LEEKPAI,
 			position: PoliticialPosition.MP,
 			year: 2512
 		} as LongestServedInPoliticalPositionsPolitician,
 		{
 			reason: HighlightedReason.MostFrequentlyElectedInConstituency,
 			value: 12,
-			politician: movingForwardPolitician
+			politician: BANYAT_BANTADTAN
 		},
 		{
 			reason: HighlightedReason.MostFrequentlyServedAsMinister,
 			value: 5,
-			politician: movingForwardPolitician,
+			politician: CHUAN_LEEKPAI,
 			cabinetTerms: [38, 42, 43, 45, 53]
 		} as MostFrequentlyServedAsMinisterPolitician,
 		{
 			reason: HighlightedReason.MostDiverseServedAsMinister,
 			value: 6,
-			politician: movingForwardPolitician
+			politician: CHUAN_LEEKPAI
 		},
 		{
 			reason: HighlightedReason.MostVisitedInWikipediaLastMonth,

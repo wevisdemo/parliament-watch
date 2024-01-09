@@ -49,3 +49,164 @@ export const movingForwardPolitician: Politician = {
 		}
 	]
 };
+
+// For Release Mocking
+// Update: 09 01 2024
+export const CHUAN_LEEKPAI: Politician = {
+	id: 'ชวน-หลีกภัย',
+	prefix: 'นาย',
+	firstname: 'ชวน',
+	lastname: 'หลีกภัย',
+	sex: 'ชาย',
+	birthdate: new Date('1938-07-28T00:00:00.000Z'),
+	avatar: '\\images\\politicians\\ชวน-หลีกภัย.webp',
+	isActive: true,
+	educations: ['ปริญญาตรี นิติศาสตรบัณฑิต มหาวิทยาลัยธรรมศาสตร์'],
+	previousOccupations: ['สมาชิกสภาผู้แทนราษฎร', 'นายกรัฐมนตรี'],
+	partyRoles: [
+		{
+			role: 'สมาชิก',
+			startedAt: new Date('2019-03-24T00:00:00.000Z'),
+			party: {
+				name: 'ประชาธิปัตย์',
+				color: '#00B2FF',
+				logo: '\\images\\parties\\ประชาธิปัตย์.webp'
+			}
+		}
+	],
+	assemblyRoles: [
+		{
+			role: 'สมาชิก',
+			appointmentMethod: 'บัญชีรายชื่อ',
+			listNumber: 2,
+			startedAt: new Date('2023-05-24T00:00:00.000Z'),
+			assembly: {
+				name: AssemblyName.Representatives,
+				id: 'สมาชิกสภาผู้แทนราษฎร-26',
+				term: 26,
+				startedAt: new Date('2023-05-24T00:00:00.000Z'),
+				origin:
+					'มาจากการเลือกตั้งทั่วไป พ.ศ. 2566 ประกอบด้วยสมาชิก (ส.ส.) 500 คน ตามระบบจัดสรรปันส่วนผสมโดย 400 คนเป็นผู้แทนเขต และอีก 100 คน มาจากระบบบัญชีรายชื่อ',
+				abbreviation: 'สส.',
+				mainRoles: [
+					'ประธานสภาผู้แทนราษฎร',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 1',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 2',
+					'ประธานฝ่ายรัฐบาล',
+					'ผู้นำฝ่ายค้าน'
+				],
+				governmentParties: [],
+				oppositionParties: []
+			}
+		},
+		{
+			role: 'ประธานสภาผู้แทนราษฎร',
+			appointmentMethod: 'บัญชีรายชื่อ',
+			listNumber: 2,
+			startedAt: new Date('2019-03-24T00:00:00.000Z'),
+			endedAt: new Date('2023-03-24T00:00:00.000Z'),
+			assembly: {
+				name: AssemblyName.Representatives,
+				id: 'สมาชิกสภาผู้แทนราษฎร-25',
+				term: 25,
+				startedAt: new Date('2019-03-24T00:00:00.000Z'),
+				endedAt: new Date('2023-03-24T00:00:00.000Z'),
+				origin:
+					'มาจากการเลือกตั้งทั่วไป พ.ศ. 2562 ประกอบด้วยสมาชิก (ส.ส.) 500 คน 350 คนเป็นผู้แทนเขตเลือกตั้งทั้ง 350 เขตตามระบบจัดสรรปันส่วนผสม ซึ่งลดจำนวนลงตามรัฐธรรมนูญแห่งราชอาณาจักรไทย พุทธศักราช 2560 และอีก 150 คนมาจากระบบบัญชีรายชื่อที่ใช้สูตรที่นั่งปรับระดับ (leveling seat)',
+				abbreviation: 'สส.',
+				mainRoles: [
+					'ประธานสภาผู้แทนราษฎร',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 1',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 2',
+					'ประธานฝ่ายรัฐบาล',
+					'ผู้นำฝ่ายค้าน'
+				],
+				governmentParties: [],
+				oppositionParties: []
+			}
+		}
+	],
+	contacts: [
+		{
+			label: 'Facebook',
+			url: 'https://www.facebook.com/ChuanLeekpaiOfficial/'
+		}
+	]
+};
+
+export const BANYAT_BANTADTAN: Politician = {
+	id: 'บัญญัติ-บรรทัดฐาน',
+	prefix: 'นาย',
+	firstname: 'บัญญัติ',
+	lastname: 'บรรทัดฐาน',
+	sex: 'ชาย',
+	birthdate: new Date('1942-05-15T00:00:00.000Z'),
+	avatar: '\\images\\politicians\\บัญญัติ-บรรทัดฐาน.webp',
+	isActive: true,
+	educations: ['ปริญญาตรี นิติศาสตรบัณฑิต มหาวิทยาลัยธรรมศาสตร์'],
+	previousOccupations: ['สมาชิกสภาผู้แทนราษฎร'],
+	partyRoles: [
+		{
+			role: 'สมาชิก',
+			startedAt: new Date('2019-03-24T00:00:00.000Z'),
+			party: {
+				name: 'ประชาธิปัตย์',
+				color: '#00B2FF',
+				logo: '\\images\\parties\\ประชาธิปัตย์.webp'
+			}
+		}
+	],
+	assemblyRoles: [
+		{
+			role: 'สมาชิก',
+			appointmentMethod: 'บัญชีรายชื่อ',
+			listNumber: 3,
+			startedAt: new Date('2023-05-24T00:00:00.000Z'),
+			assembly: {
+				name: AssemblyName.Representatives,
+				id: 'สมาชิกสภาผู้แทนราษฎร-26',
+				term: 26,
+				startedAt: new Date('2023-05-24T00:00:00.000Z'),
+				origin:
+					'มาจากการเลือกตั้งทั่วไป พ.ศ. 2566 ประกอบด้วยสมาชิก (ส.ส.) 500 คน ตามระบบจัดสรรปันส่วนผสมโดย 400 คนเป็นผู้แทนเขต และอีก 100 คน มาจากระบบบัญชีรายชื่อ',
+				abbreviation: 'สส.',
+				mainRoles: [
+					'ประธานสภาผู้แทนราษฎร',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 1',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 2',
+					'ประธานฝ่ายรัฐบาล',
+					'ผู้นำฝ่ายค้าน'
+				],
+				governmentParties: [],
+				oppositionParties: []
+			}
+		},
+		{
+			role: 'สมาชิก',
+			appointmentMethod: 'บัญชีรายชื่อ',
+			listNumber: 3,
+			startedAt: new Date('2019-03-24T00:00:00.000Z'),
+			endedAt: new Date('2023-03-24T00:00:00.000Z'),
+			assembly: {
+				name: AssemblyName.Representatives,
+				id: 'สมาชิกสภาผู้แทนราษฎร-25',
+				term: 25,
+				startedAt: new Date('2019-03-24T00:00:00.000Z'),
+				endedAt: new Date('2023-03-24T00:00:00.000Z'),
+				origin:
+					'มาจากการเลือกตั้งทั่วไป พ.ศ. 2562 ประกอบด้วยสมาชิก (ส.ส.) 500 คน 350 คนเป็นผู้แทนเขตเลือกตั้งทั้ง 350 เขตตามระบบจัดสรรปันส่วนผสม ซึ่งลดจำนวนลงตามรัฐธรรมนูญแห่งราชอาณาจักรไทย พุทธศักราช 2560 และอีก 150 คนมาจากระบบบัญชีรายชื่อที่ใช้สูตรที่นั่งปรับระดับ (leveling seat)',
+				abbreviation: 'สส.',
+				mainRoles: [
+					'ประธานสภาผู้แทนราษฎร',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 1',
+					'รองประธานสภาผู้แทนราษฎร คนที่ 2',
+					'ประธานฝ่ายรัฐบาล',
+					'ผู้นำฝ่ายค้าน'
+				],
+				governmentParties: [],
+				oppositionParties: []
+			}
+		}
+	],
+	contacts: []
+};
