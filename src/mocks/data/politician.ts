@@ -59,7 +59,7 @@ export const CHUAN_LEEKPAI: Politician = {
 	lastname: 'หลีกภัย',
 	sex: 'ชาย',
 	birthdate: new Date('1938-07-28T00:00:00.000Z'),
-	avatar: '\\images\\politicians\\ชวน-หลีกภัย.webp',
+	avatar: '/images/politicians/ชวน-หลีกภัย.webp',
 	isActive: true,
 	educations: ['ปริญญาตรี นิติศาสตรบัณฑิต มหาวิทยาลัยธรรมศาสตร์'],
 	previousOccupations: ['สมาชิกสภาผู้แทนราษฎร', 'นายกรัฐมนตรี'],
@@ -70,7 +70,7 @@ export const CHUAN_LEEKPAI: Politician = {
 			party: {
 				name: 'ประชาธิปัตย์',
 				color: '#00B2FF',
-				logo: '\\images\\parties\\ประชาธิปัตย์.webp'
+				logo: '/images/parties/ประชาธิปัตย์.webp'
 			}
 		}
 	],
@@ -141,7 +141,7 @@ export const BANYAT_BANTADTAN: Politician = {
 	lastname: 'บรรทัดฐาน',
 	sex: 'ชาย',
 	birthdate: new Date('1942-05-15T00:00:00.000Z'),
-	avatar: '\\images\\politicians\\บัญญัติ-บรรทัดฐาน.webp',
+	avatar: '/images/politicians/บัญญัติ-บรรทัดฐาน.webp',
 	isActive: true,
 	educations: ['ปริญญาตรี นิติศาสตรบัณฑิต มหาวิทยาลัยธรรมศาสตร์'],
 	previousOccupations: ['สมาชิกสภาผู้แทนราษฎร'],
@@ -152,7 +152,7 @@ export const BANYAT_BANTADTAN: Politician = {
 			party: {
 				name: 'ประชาธิปัตย์',
 				color: '#00B2FF',
-				logo: '\\images\\parties\\ประชาธิปัตย์.webp'
+				logo: '/images/parties/ประชาธิปัตย์.webp'
 			}
 		}
 	],
