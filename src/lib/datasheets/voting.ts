@@ -159,7 +159,7 @@ export function getVoteResultsByPerson(
 				firstname,
 				lastname,
 				role: `${assemblyMember.assemblyRole?.assembly.abbreviation}${
-					assemblyRole?.listNumber ? ' บัญชีรายชื่อ' : assemblyRole?.province ? ' เขต' : '-'
+					assemblyRole?.listNumber ? ' บัญชีรายชื่อ' : assemblyRole?.province ? ' เขต' : ''
 				}`,
 				party: partyRoles.find(
 					({ startedAt, endedAt }) =>
