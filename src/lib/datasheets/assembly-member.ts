@@ -2,11 +2,7 @@ import type { ComponentProps } from 'svelte';
 import dayjs from 'dayjs';
 import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 import type { Assembly } from '$models/assembly';
-import { fetchPoliticians } from '.';
 import type { Politician } from '$models/politician';
-
-export const fetchAssemblyMembers = async (assembly: Assembly) =>
-	getAssemblyMembers(assembly, await fetchPoliticians());
 
 export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]) =>
 	politicians
@@ -26,7 +22,7 @@ export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]
 			};
 		});
 
-export type AssemblyMember = Awaited<ReturnType<typeof fetchAssemblyMembers>>[number];
+export type AssemblyMember = ReturnType<typeof getAssemblyMembers>[number];
 
 export interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isLarge'> {
 	candidateType?: 'แบ่งเขต' | 'บัญชีรายชื่อ';

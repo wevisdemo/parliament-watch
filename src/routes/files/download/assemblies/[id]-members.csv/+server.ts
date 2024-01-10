@@ -1,12 +1,12 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
-import { fetchAssemblyMembers } from '$lib/datasheets/assembly-member';
+import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
+import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 
 export const prerender = true;
 
 export async function GET({ params }) {
 	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
-	const members = await fetchAssemblyMembers(assembly);
+	const members = getAssemblyMembers(assembly, await fetchPoliticians());
 
 	return createCsvFileResponse(
 		members.map(

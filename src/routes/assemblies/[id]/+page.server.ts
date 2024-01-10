@@ -3,8 +3,8 @@ import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { DefaultVotingResult } from '$models/voting';
-import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
-import { fetchAssemblyMembers } from '$lib/datasheets/assembly-member';
+import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
+import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import { getMemberGroup } from './members/[groupby]/groupby';
 import { createSeo } from '../../../utils/seo';
 import type { ComponentProps } from 'svelte';
@@ -39,7 +39,7 @@ export async function load({ params }) {
 	const { mainRoles, ...assembly } = fullAssembly;
 	const isSenates = assembly.name === AssemblyName.Senates;
 
-	const activeMembers = (await fetchAssemblyMembers(fullAssembly)).filter(
+	const activeMembers = getAssemblyMembers(fullAssembly, await fetchPoliticians()).filter(
 		({ assemblyRole }) =>
 			!assemblyRole?.endedAt ||
 			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
