@@ -1,28 +1,34 @@
-import type { Voting } from '$models/voting.js';
-import { createMockVotes } from '../../../../mocks/data/votes.js';
-import { passedVoting } from '../../../../mocks/data/voting.js';
+import {
+	fetchFromIdOr404,
+	fetchPoliticians,
+	fetchVotes,
+	fetchVotings
+} from '$lib/datasheets/index.js';
+import { getVoteResultsByPerson } from '$lib/datasheets/voting.js';
 
 interface FilterOptions {
 	parties: string[];
-	positions: string[];
+	roles: string[];
 }
 
-type VotingSummary = Pick<Voting, 'id' | 'title'>;
+export async function load({ params }) {
+	const voting = await fetchFromIdOr404(fetchVotings, params.id);
+	const politicians = await fetchPoliticians();
 
-export function load({ params }) {
-	const votingId = params.id;
-
-	const voting: VotingSummary = {
-		id: votingId,
-		title: passedVoting.title
-	};
-
-	const isCandidateVoting = votingId === '3' || votingId === '4' || votingId === '5';
-	const votes = createMockVotes(isCandidateVoting);
+	const votes = getVoteResultsByPerson(
+		voting,
+		(await fetchVotes()).filter(({ votingId }) => votingId === voting.id),
+		politicians
+	).map(({ id, prefix, firstname, lastname, party, ...vote }) => ({
+		id,
+		party: party?.name,
+		politician: { id, prefix, firstname, lastname },
+		...vote
+	}));
 
 	const filterOptions: FilterOptions = {
 		parties: getSortedUniqueValue(votes, 'party'),
-		positions: getSortedUniqueValue(votes, 'position').reverse()
+		roles: getSortedUniqueValue(votes, 'role').reverse()
 	};
 
 	return { voting, filterOptions, votes };
@@ -30,5 +36,5 @@ export function load({ params }) {
 
 const getSortedUniqueValue = (list: { [key: string]: unknown }[], key: string): string[] =>
 	[...new Set(list.map((item) => item[key]).filter((item) => item) as string[])].sort((a, z) =>
-		a.localeCompare(z)
+		a.localeCompare?.(z)
 	);

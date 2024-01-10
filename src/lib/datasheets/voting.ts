@@ -3,7 +3,13 @@ import { AssemblyName } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import type { Vote } from '$models/vote';
-import { DefaultVoteOption, DefaultVotingResult, type Voting } from '$models/voting';
+import {
+	DefaultVoteOption,
+	DefaultVotingResult,
+	type CustomVoteOption,
+	type Voting
+} from '$models/voting';
+import { getAssemblyMembers } from './assembly-member';
 import { safeFind } from './processor';
 
 export interface VoteOptionCounter {
@@ -16,6 +22,12 @@ interface PartyCounterRecord {
 		resultSummary: VoteOptionCounter;
 	};
 }
+
+export type ResultByPerson = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'lastname'> & {
+	role: string;
+	party?: Party;
+	voteOption: DefaultVoteOption | CustomVoteOption | string;
+};
 
 export function getHighlightedVoteByGroups(
 	voting: Voting,
@@ -34,11 +46,7 @@ export function getHighlightedVoteByGroups(
 		.filter(({ count }) => count > 0);
 }
 
-export const groupVoteByAffiliations = (
-	voting: Voting,
-	votes: Vote[],
-	politicians: Politician[]
-) => {
+export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicians: Politician[]) {
 	const initCounterRecord = () =>
 		voting.voteOptions.reduce<VoteOptionCounter>(
 			(obj, option) => ({ ...obj, [typeof option === 'string' ? option : option.label]: 0 }),
@@ -120,7 +128,47 @@ export const groupVoteByAffiliations = (
 		resultSummary,
 		byParties: Object.values(byParties)
 	}));
-};
+}
+
+export function getVoteResultsByPerson(
+	voting: Voting,
+	votes: Vote[],
+	politicians: Politician[]
+): ResultByPerson[] {
+	return votes.reduce<ResultByPerson[]>((list, { politicianId, voteOption }) => {
+		const { id, prefix, firstname, lastname, partyRoles } = safeFind(
+			politicians,
+			(politician) => politician.id === politicianId
+		);
+
+		const assemblyMember = voting.participatedAssemblies
+			.map((assembly) => getAssemblyMembers(assembly, politicians))
+			.flat()
+			.find((member) => member.id === politicianId);
+
+		if (assemblyMember) {
+			const { assemblyRole } = assemblyMember;
+
+			list.push({
+				id,
+				prefix,
+				firstname,
+				lastname,
+				role: `${assemblyMember.assemblyRole?.assembly.abbreviation}${
+					assemblyRole?.listNumber ? ' บัญชีรายชื่อ' : assemblyRole?.province ? ' เขต' : '-'
+				}`,
+				party: partyRoles.find(
+					({ startedAt, endedAt }) =>
+						voting.date.getTime() >= startedAt.getTime() &&
+						(!endedAt || voting.date.getTime() <= endedAt.getTime())
+				)?.party,
+				voteOption
+			});
+		}
+
+		return list;
+	}, []);
+}
 
 export function getWinningOption(result: string) {
 	switch (result) {

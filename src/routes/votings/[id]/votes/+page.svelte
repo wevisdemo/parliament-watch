@@ -8,11 +8,6 @@
 
 	$: ({ voting, filterOptions, votes } = data);
 
-	$: votesWithFullName = votes.map((vote) => ({
-		...vote,
-		fullname: `${vote.firstname} ${vote.lastname}`
-	}));
-
 	$: comboboxFilterList = [
 		{
 			key: 'filterComboboxType',
@@ -29,9 +24,9 @@
 		{
 			key: 'filterPosition',
 			legend: 'ตำแหน่ง',
-			choices: filterOptions.positions.map((position) => ({
-				label: position,
-				value: position
+			choices: filterOptions.roles.map((role) => ({
+				label: role,
+				value: role
 			}))
 		},
 		{
@@ -58,13 +53,13 @@
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votesWithFullName.slice(0, 2).filter((vote) => {
+			: votes.filter((vote) => {
 					const search = searchQuery.trim();
-					if (search && !vote.id.includes(search)) return;
+					if (search && !vote.politician.id.includes(search)) return;
 					const { filterPosition, filterVoteType } = selectedCheckboxValue;
 					return (
 						filterVoteType.includes(generalVoteType(vote.voteOption)) &&
-						filterPosition.includes(vote.position)
+						filterPosition.includes(vote.role)
 					);
 			  });
 
@@ -74,7 +69,6 @@
 
 <DataPage
 	breadcrumbList={[
-		// TODO: add update missing link
 		{ url: '/', label: 'หน้าหลัก' },
 		{ label: 'การลงมติ' },
 		{ url: `/votings/${voting.id}`, label: voting.title },
@@ -84,8 +78,8 @@
 	{checkboxFilterList}
 	{filteredData}
 	tableHeader={[
-		{ key: 'fullname', value: 'ชื่อ-นามสกุล' },
-		{ key: 'position', value: 'ตำแหน่ง' },
+		{ key: 'politician', value: 'ชื่อ-นามสกุล' },
+		{ key: 'role', value: 'ตำแหน่ง' },
 		{ key: 'party', value: 'สังกัดพรรค' },
 		{ key: 'voteOption', value: 'การลงมติ' }
 	]}
@@ -103,8 +97,10 @@
 		</div>
 	</div>
 	<svelte:fragment slot="table" let:cellKey let:cellValue>
-		{#if cellKey === 'fullname'}
-			<p class="body-01 underline text-gray-100">{cellValue}</p>
+		{#if cellKey === 'politician'}
+			<a href="/politicians/{cellValue.id}" class="body-01 underline text-gray-100"
+				>{cellValue.firstname} {cellValue.lastname}</a
+			>
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
 		{:else}

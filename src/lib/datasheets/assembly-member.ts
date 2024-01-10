@@ -41,9 +41,9 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 	};
 }
 
-export const getAssemblyRoleDescription = (assemblyRole: AssemblyMember['assemblyRole']) =>
+const getAssemblyRoleDescription = (assemblyRole: AssemblyMember['assemblyRole']) =>
 	assemblyRole?.listNumber
 		? `บัญชีรายชื่อ ลำดับ ${assemblyRole?.listNumber}`
 		: assemblyRole?.province && assemblyRole.districtNumber
 		? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
-		: assemblyRole?.appointmentMethod || '-';
+		: assemblyRole?.appointmentMethod;
