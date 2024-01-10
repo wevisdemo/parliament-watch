@@ -13,9 +13,11 @@
 	import dayjs from 'dayjs';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
+	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
 
 	export let data;
-	const { politician } = data;
+
+	$: ({ politician, agreedVoting, disagreedVoting, votingAbsentStats } = data);
 
 	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
@@ -23,10 +25,12 @@
 			{} as Record<K, T[]>
 		);
 
-	const parties = groupBy(politician.partyRoles, (role) => role.party.name);
-	const currentParty = politician.partyRoles.find((e) => !e.endedAt);
-	const partyCount = Object.keys(parties).length;
-	const currentRoles = politician.assemblyRoles.filter((e) => !e.endedAt);
+	$: parties = politician?.partyRoles
+		? groupBy(politician.partyRoles, (role) => role.party.name)
+		: [];
+	$: currentParty = politician?.partyRoles.find((e) => !e.endedAt);
+	$: partyCount = Object.keys(parties).length;
+	$: currentRoles = politician?.assemblyRoles.filter((e) => !e.endedAt);
 
 	let currentNavElementIndex = 0;
 	onMount(() => {
@@ -74,7 +78,7 @@
 					{politician.lastname}
 				</h1>
 				<PositionStatus isActive={politician.isActive} />
-				{#if currentRoles.length > 0}
+				{#if currentRoles?.length > 0}
 					<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
 					<ul class="body-01 list-disc ml-8">
 						{#each currentRoles as role, idx (idx)}
@@ -112,6 +116,9 @@
 			{currentNavElementIndex}
 			assemblyRolesLength={politician.assemblyRoles.length}
 			{partyCount}
+			agreedVoting={agreedVoting.total}
+			disagreedVoting={disagreedVoting.total}
+			absentTotal={votingAbsentStats.absentVoting}
 		/>
 		<div class="flex-1 flex flex-col gap-6 w-full min-w-0">
 			<Section id="personal" title="ข้อมูลพื้นฐาน">
@@ -234,7 +241,7 @@
 					</div>
 				{/if}
 			</Section>
-			<!-- <PoliticianVoteSummary {data} /> -->
+			<PoliticianVoteSummary {politician} {agreedVoting} {disagreedVoting} {votingAbsentStats} />
 		</div>
 	</div>
 </div>

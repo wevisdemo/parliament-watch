@@ -5,9 +5,9 @@
 	export let currentNavElementIndex: number;
 	export let assemblyRolesLength: number;
 	export let partyCount: number;
-	// export let agreedVoting: number;
-	// export let disagreedVoting: number;
-	// export let absentTotal: number;
+	export let agreedVoting: number;
+	export let disagreedVoting: number;
+	export let absentTotal: number;
 </script>
 
 <nav
@@ -48,7 +48,7 @@
 				{/if}
 			</a>
 		</li>
-		<!-- <li
+		<li
 			class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[114ms] ease-productive-in-out"
 			data-active={currentNavElementIndex === 2 || null}
 		>
@@ -64,7 +64,7 @@
 					<li>ลา/ขาดลงมติ {absentTotal} มติ</li>
 				</ul>
 			</a>
-		</li> -->
+		</li>
 		<!-- <li
 				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[112ms] ease-productive-in-out"
 				data-active={currentNavElementIndex === 3 || null}
