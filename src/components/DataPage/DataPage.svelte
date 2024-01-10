@@ -153,7 +153,7 @@
 				{breadcrumbList[breadcrumbList.length - 1].label}
 			</BreadcrumbItem>
 		{:else}
-			{#each breadcrumbList as breadcrumbItem, idx (breadcrumbItem.url)}
+			{#each breadcrumbList as breadcrumbItem, idx (breadcrumbItem.label)}
 				<BreadcrumbItem href={breadcrumbItem.url} isCurrentPage={idx === breadcrumbList.length - 1}>
 					{breadcrumbItem.label}
 				</BreadcrumbItem>
