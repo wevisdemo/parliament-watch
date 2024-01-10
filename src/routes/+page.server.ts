@@ -1,13 +1,11 @@
 import { building } from '$app/environment';
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
+import { fetchPoliticians } from '$lib/datasheets/index.js';
+import { safeFind } from '$lib/datasheets/processor.js';
 import { getMostGun } from '$lib/ranking/gun.js';
 import { getPoliticianWithMostViewLastMonth } from '$lib/ranking/wikipedia.js';
-import {
-	BANYAT_BANTADTAN,
-	CHUAN_LEEKPAI,
-	movingForwardPolitician
-} from '../mocks/data/politician.js';
+import { movingForwardPolitician } from '../mocks/data/politician.js';
 import type { VoteCardProps } from './assemblies/[id]/+page.server.js';
 
 enum PoliticialPosition {
@@ -30,6 +28,11 @@ interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPoliticia
 }
 
 export async function load() {
+	const politician = await fetchPoliticians();
+
+	const chuanLeekpai = await safeFind(politician, (p) => p.id === 'ชวน-หลีกภัย');
+	const banyatBantadtan = await safeFind(politician, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
+
 	const highlightedPoliticians: HighlightedPolitician[] = [
 		{
 			reason: HighlightedReason.HighestAssetOwned,
@@ -81,25 +84,25 @@ export async function load() {
 		{
 			reason: HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,
-			politician: CHUAN_LEEKPAI,
+			politician: chuanLeekpai,
 			position: PoliticialPosition.MP,
 			year: 2512
 		} as LongestServedInPoliticalPositionsPolitician,
 		{
 			reason: HighlightedReason.MostFrequentlyElectedInConstituency,
 			value: 12,
-			politician: BANYAT_BANTADTAN
+			politician: banyatBantadtan
 		},
 		{
 			reason: HighlightedReason.MostFrequentlyServedAsMinister,
 			value: 5,
-			politician: CHUAN_LEEKPAI,
+			politician: chuanLeekpai,
 			cabinetTerms: [38, 42, 43, 45, 53]
 		} as MostFrequentlyServedAsMinisterPolitician,
 		{
 			reason: HighlightedReason.MostDiverseServedAsMinister,
 			value: 6,
-			politician: CHUAN_LEEKPAI
+			politician: chuanLeekpai
 		},
 		{
 			reason: HighlightedReason.MostVisitedInWikipediaLastMonth,
