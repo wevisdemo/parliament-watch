@@ -54,10 +54,6 @@
 						filterCategory.some((category) => vote.categories.includes(String(category)))
 					);
 			  });
-
-	const getVoteIdFromIndex = (index: number) => {
-		return votes[index].id;
-	};
 </script>
 
 <DataPage
@@ -85,9 +81,7 @@
 				})}</span
 			>
 		{:else if cellKey === 'title'}
-			<a href="/votings/{getVoteIdFromIndex(row.id)}" class="body-01 text-gray-100 underline"
-				>{cellValue}</a
-			>
+			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline">{cellValue}</a>
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" isLarge result={cellValue} />
 		{:else if cellKey === 'files'}

@@ -12,8 +12,8 @@
 	$: ({ assemblyIds, assembly, votes } = data);
 
 	$: categoryFilters = votes.reduce((acc, vote) => {
-		const categorys = vote.categories;
-		categorys.forEach((category) => {
+		const categories = vote.categories;
+		categories.forEach((category) => {
 			if (!acc.includes(category)) {
 				acc.push(category);
 			}
@@ -34,12 +34,12 @@
 			<!-- TODO: link this -->
 			<BreadcrumbItem class="md:hidden">
 				<OverflowMenu>
-					<OverflowMenuItem href="/" text="รัฐสภา" />
+					<OverflowMenuItem text="รัฐสภา" />
 					<OverflowMenuItem href="/assemblies/{assembly.id}" text={assembly.name} />
 				</OverflowMenu>
 			</BreadcrumbItem>
 
-			<BreadcrumbItem class="hidden md:block" href="/">รัฐสภา</BreadcrumbItem>
+			<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
 			<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
 				>{assembly.name}</BreadcrumbItem
 			>

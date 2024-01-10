@@ -5,6 +5,7 @@
 	import { Breadcrumb, BreadcrumbItem, Tab, Tabs } from 'carbon-components-svelte';
 	import type { MemberGroup } from './+page.server.js';
 	import { getSenateColorByTitle } from '$components/Assemblies/shared.js';
+	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
 
 	export let data;
 
@@ -74,7 +75,7 @@
 		>
 			สมาชิก
 		</button>
-		<!-- <button
+		<button
 			class="w-full px-[16px] py-[11px] text-[14px] border-b-[2px] border-solid text-left {selector ===
 			'latest-votes'
 				? 'border-blue-60 font-semibold text-black'
@@ -82,7 +83,7 @@
 			on:click={() => onClickTab('latest-votes')}
 		>
 			การลงมติ
-		</button> -->
+		</button>
 	</div>
 	<section id="summary">
 		<Summary
@@ -94,7 +95,7 @@
 	<section id="members">
 		<MainMembers members={data.mainMembers} assemblyId={data.assembly.id} />
 	</section>
-	<!-- <section id="latest-votes">
+	<section id="latest-votes">
 		<LatestVotes votes={data.latestVotes} assemblyId={data.assembly.id} />
-	</section> -->
+	</section>
 </div>
