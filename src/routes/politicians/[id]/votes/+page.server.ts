@@ -1,24 +1,14 @@
 import type { Politician } from '$models/politician.js';
-import {
-	DefaultVoteOption,
-	DefaultVotingResult,
-	type CustomVoteOption,
-	type Voting
-} from '$models/voting.js';
+import type { DefaultVoteOption, CustomVoteOption, Voting } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
-import {
-	customVoteOption,
-	defaultVoteOptions,
-	mockCategory,
-	passedVoting
-} from '../../../../mocks/data/voting.js';
-import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
+import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { createSeo } from '../../../../utils/seo.js';
+import { safeFind } from '$lib/datasheets/processor.js';
 
 interface VoteSummary
 	extends Pick<
 		Voting,
-		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssembleIds' | 'categories'
+		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssemblies' | 'categories'
 	> {
 	voteOption: DefaultVoteOption | CustomVoteOption;
 	isVoteAlignWithPartyMajority: boolean;
@@ -34,28 +24,27 @@ type PoliticianSummary = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'lastn
 export async function load({ params }) {
 	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
 
-	const votes: VoteSummary[] = new Array(100).fill(passedVoting).map(({ title, date }, i) => ({
-		id: i.toString(),
-		title: i % 2 ? title : title + ' ทดสอบ',
-		date,
-		participatedAssembleIds: [i % 2 ? 'สมาชิกสภาผู้แทนราษฎร-25' : 'สมาชิกสภาผู้แทนราษฎร-26'],
-		categories: [mockCategory[i % mockCategory.length]],
-		result: i % 3 ? DefaultVotingResult.Passed : DefaultVotingResult.Failed,
-		files: i % 2 ? [{ label: 'some file', url: '/' }] : [],
-		voteOption: [...defaultVoteOptions, ...customVoteOption][
-			i % (defaultVoteOptions.length + customVoteOption.length)
-		],
-		isVoteAlignWithPartyMajority: i % 5 !== 0
-	}));
+	const votings = await fetchVotings();
+	const allVotes = await fetchVotes();
 
-	const uniqueParticipatedAssemblyIds = [
-		...new Set(votes.flatMap(({ participatedAssembleIds }) => participatedAssembleIds))
-	];
+	const votes: VoteSummary[] = allVotes
+		.filter(({ politicianId }) => politicianId === politician.id)
+		.map(({ votingId, voteOption }) => {
+			try {
+				return {
+					...safeFind(votings, (voting) => voting.id === votingId),
+					voteOption: voteOption as DefaultVoteOption,
+					// TODO: calculate isVoteAlignWithPartyMajority
+					isVoteAlignWithPartyMajority: true
+				};
+			} catch (e) {
+				throw `Could not find voting id ${votingId}`;
+			}
+		})
+		.sort((a, z) => z.date.getTime() - a.date.getTime());
 
 	const filterOptions: FilterOptions = {
-		assemblies: (await fetchAssemblies()).filter(({ id }) =>
-			uniqueParticipatedAssemblyIds.includes(id)
-		),
+		assemblies: [...new Set(votes.flatMap(({ participatedAssemblies }) => participatedAssemblies))],
 		categories: [...new Set(votes.flatMap(({ categories }) => categories))]
 	};
 

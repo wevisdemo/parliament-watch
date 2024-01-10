@@ -87,7 +87,7 @@
 						selectedCheckboxValue;
 					return (
 						filterAssembly.some((assemblyId) =>
-							vote.participatedAssembleIds.includes(assemblyId as string)
+							vote.participatedAssemblies.some(({ id }) => id === assemblyId)
 						) &&
 						filterVoteType.includes(generalVoteType(vote.voteOption)) &&
 						filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority) &&
