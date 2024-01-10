@@ -62,57 +62,61 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 		(counter, { politicianId, voteOption }) => {
 			let group: keyof typeof counter;
 
-			const politician = safeFind(politicians, ({ id }) => id === politicianId);
-			const assemblyRole = politician.assemblyRoles.find((ar) =>
-				voting.participatedAssemblies.some((a) => a.id === ar.assembly.id)
-			);
-
-			if (!assemblyRole) {
-				console.warn(
-					`${
-						politician.id
-					} is not a member of any participated assembles ${voting.participatedAssemblies.map(
-						({ id }) => id
-					)} of voting ${voting.id}, but their votes exist`
-				);
-				return counter;
-			}
-
-			if (assemblyRole.assembly.name === AssemblyName.Senates) {
-				group = 'สว.';
-			} else {
-				const partyRole = politician.partyRoles.find(
-					({ startedAt, endedAt }) =>
-						voting.date.getTime() >= startedAt.getTime() &&
-						(!endedAt || voting.date.getTime() <= endedAt.getTime())
+			try {
+				const politician = safeFind(politicians, ({ id }) => id === politicianId);
+				const assemblyRole = politician.assemblyRoles.find((ar) =>
+					voting.participatedAssemblies.some((a) => a.id === ar.assembly.id)
 				);
 
-				if (!partyRole) {
+				if (!assemblyRole) {
 					console.warn(
-						`Could not find ${politician.id} party on the voting day of ${
-							voting.id
-						} (${voting.date.toLocaleDateString()})`
+						`[WARNING] ${
+							politician.id
+						} is not a member of any participated assembles ${voting.participatedAssemblies.map(
+							({ id }) => id
+						)} of voting ${voting.id}, but their votes exist`
 					);
 					return counter;
 				}
 
-				group = assemblyRole.assembly.oppositionParties.some(
-					({ name }) => name === partyRole.party.name
-				)
-					? 'สส. ฝ่ายค้าน'
-					: 'สส. ฝ่ายรัฐบาล';
+				if (assemblyRole.assembly.name === AssemblyName.Senates) {
+					group = 'สว.';
+				} else {
+					const partyRole = politician.partyRoles.find(
+						({ startedAt, endedAt }) =>
+							voting.date.getTime() >= startedAt.getTime() &&
+							(!endedAt || voting.date.getTime() <= endedAt.getTime())
+					);
 
-				if (!counter[group].byParties[partyRole.party.name]) {
-					counter[group].byParties[partyRole.party.name] = {
-						party: partyRole.party,
-						resultSummary: initCounterRecord()
-					};
+					if (!partyRole) {
+						console.warn(
+							`[WARNING] Could not find ${politician.id} party on the voting day of ${
+								voting.id
+							} (${voting.date.toLocaleDateString()})`
+						);
+						return counter;
+					}
+
+					group = assemblyRole.assembly.oppositionParties.some(
+						({ name }) => name === partyRole.party.name
+					)
+						? 'สส. ฝ่ายค้าน'
+						: 'สส. ฝ่ายรัฐบาล';
+
+					if (!counter[group].byParties[partyRole.party.name]) {
+						counter[group].byParties[partyRole.party.name] = {
+							party: partyRole.party,
+							resultSummary: initCounterRecord()
+						};
+					}
+
+					counter[group].byParties[partyRole.party.name].resultSummary[voteOption]++;
 				}
 
-				counter[group].byParties[partyRole.party.name].resultSummary[voteOption]++;
+				counter[group].resultSummary[voteOption]++;
+			} catch (e) {
+				throw `[ERROR] Could not find politican with id ${politicianId}`;
 			}
-
-			counter[group].resultSummary[voteOption]++;
 
 			return counter;
 		},
