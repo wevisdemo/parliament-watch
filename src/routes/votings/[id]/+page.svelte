@@ -123,6 +123,12 @@
 		[DefaultVotingResult.Failed]: 'text-red-50',
 		[DefaultVoteOption.Disagreed]: 'text-red-50'
 	};
+
+	$: voterSearchResult = searchQuery.trim()
+		? resultsByPerson.filter((v) =>
+				(v.firstname + v.lastname).trim().toLowerCase().includes(searchQuery.trim().toLowerCase())
+		  )
+		: resultsByPerson;
 </script>
 
 <div class="flex flex-col min-h-screen">
@@ -478,33 +484,42 @@
 					การลงมติ
 				</div>
 			</div>
-			{#each resultsByPerson.filter((v) => (v.firstname + v.lastname)
-					.trim()
-					.toLowerCase()
-					.includes(searchQuery.trim().toLowerCase())) as voter}
-				<div class="flex w-full border-t border-gray-30">
-					<a
-						href="/politicians/{voter.id}"
-						class="w-[112px] md:w-1/4 body-01 py-[11px] md:py-[15px] px-4"
-					>
-						{voter.firstname}
-						{voter.lastname}
-					</a>
-					<div class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4">
-						{voter.role}
-					</div>
-					<div class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4">
-						{voter.party ? voter.party.name : ''}
-					</div>
-					<div class="hidden md:block w-[112px] md:w-1/4 py-[11px] md:py-[15px] px-4">
-						<Tag class={getVoteColor(voter.voteOption)}
-							>{typeof voter.voteOption === 'object'
-								? voter.voteOption.label
-								: voter.voteOption}</Tag
+			{#if voterSearchResult.length}
+				{#each voterSearchResult as voter (voter.id)}
+					<div class="flex w-full border-t border-gray-30">
+						<a
+							href="/politicians/{voter.id}"
+							class="w-[112px] md:w-1/4 body-01 py-[11px] md:py-[15px] px-4"
 						>
+							{voter.firstname}
+							{voter.lastname}
+						</a>
+						<div
+							class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4"
+						>
+							{voter.role}
+						</div>
+						<div
+							class="w-[112px] md:w-1/4 text-gray-60 body-compact-01 py-[11px] md:py-[15px] px-4"
+						>
+							{voter.party ? voter.party.name : ''}
+						</div>
+						<div class="hidden md:block w-[112px] md:w-1/4 py-[11px] md:py-[15px] px-4">
+							<Tag class={getVoteColor(voter.voteOption)}
+								>{typeof voter.voteOption === 'object'
+									? voter.voteOption.label
+									: voter.voteOption}</Tag
+							>
+						</div>
 					</div>
+				{/each}
+			{:else}
+				<div
+					class="flex w-full border-t border-gray-30 body-compact-01 text-gray-60 py-[11px] md:py-[15px] px-4"
+				>
+					ไม่พบบุคคลที่ค้นหา
 				</div>
-			{/each}
+			{/if}
 		</div>
 	</div>
 </div>
