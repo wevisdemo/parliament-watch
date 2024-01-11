@@ -11,7 +11,7 @@ interface VoteSummary
 		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssemblies' | 'categories'
 	> {
 	voteOption: DefaultVoteOption | CustomVoteOption;
-	isVoteAlignWithPartyMajority: boolean;
+	// isVoteAlignWithPartyMajority: boolean;
 }
 
 interface FilterOptions {
@@ -33,9 +33,9 @@ export async function load({ params }) {
 			try {
 				return {
 					...safeFind(votings, (voting) => voting.id === votingId),
-					voteOption: voteOption as DefaultVoteOption,
+					voteOption: voteOption as DefaultVoteOption
 					// TODO: calculate isVoteAlignWithPartyMajority
-					isVoteAlignWithPartyMajority: true
+					// isVoteAlignWithPartyMajority: true
 				};
 			} catch (e) {
 				throw `Could not find voting id ${votingId}`;
