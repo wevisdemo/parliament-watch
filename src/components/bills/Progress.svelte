@@ -90,7 +90,7 @@
 		}
 	};
 
-	function getVoting(votingResultsId?: string) {
+	$: voting = ((votingResultsId?: string) => {
 		if (votingResultsId === undefined) return undefined;
 		let voting: ComponentProps<VoteCard>['voting'] = {
 			id: votingResultsId,
@@ -99,7 +99,7 @@
 			result: relatedVotingResults[Number(votingResultsId)].voting.result
 		};
 		return voting;
-	}
+	})(event.votedInVotingId);
 
 	function getHighlightedVoteByGroups(id: string | undefined, eventType: string) {
 		if (id === undefined) return undefined;
@@ -149,14 +149,13 @@
 				<p>{eventDescription[event.type].description}</p>
 			</div>
 		</div>
-		{#if event.actionType === EventActionType.Voted && event.votedInVotingId}
+		{#if event.actionType === EventActionType.Voted && voting}
 			<div class="flex flex-col md:basis-2/3">
 				<p class="text-text-02">ผลการลงมติ</p>
 				<VoteCard
 					isFullWidth={true}
-					voting={getVoting(event.votedInVotingId)}
-					highlightedVoteByGroups={getHighlightedVoteByGroups(event.votedInVotingId, event.type)}
-					link={'/votings/' + event.votedInVotingId}
+					{voting}
+					highlightedVoteByGroups={getHighlightedVoteByGroups(voting.id, event.type)}
 				/>
 			</div>
 		{:else if event.actionType === EventActionType.Enforced}

@@ -1,3 +1,4 @@
+import { fetchVotings } from '$lib/datasheets/index.js';
 import { BillStatus, type Bill } from '$models/bill.js';
 import type { Event } from '$models/event.js';
 import type { Voting } from '$models/voting.js';
@@ -16,7 +17,6 @@ import {
 	passingSenate3Event,
 	royalAssentEvent
 } from '../../../mocks/data/event.js';
-import { failedVoting, passedVoting } from '../../../mocks/data/voting.js';
 import { createSeo } from '../../../utils/seo.js';
 
 export interface VotingResultSummary {
@@ -29,7 +29,7 @@ export interface VotingResultSummary {
 	}[];
 }
 
-export function load({ params }) {
+export async function load({ params }) {
 	/*
 	 * | billId | Status      |
 	 * | ------ | ----------- |
@@ -54,6 +54,8 @@ export function load({ params }) {
 		};
 	} = {};
 
+	const votings = await fetchVotings();
+
 	if (billId === 1) {
 		bill.status = BillStatus.InProgress;
 		mergedBills = [
@@ -62,7 +64,7 @@ export function load({ params }) {
 		];
 		events = [hearingEvent, passingMp1Event, inProgressMp2Event];
 		relatedVotingResults = {
-			1: { voting: passedVoting, resultSummary: fakeMpPassedVotingResultSummary }
+			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary }
 		};
 	} else if (billId === 2) {
 		bill.status = BillStatus.Enacted;
@@ -78,15 +80,15 @@ export function load({ params }) {
 			enforcementEvent
 		];
 		relatedVotingResults = {
-			1: { voting: passedVoting, resultSummary: fakeMpPassedVotingResultSummary },
-			3: { voting: passedVoting, resultSummary: fakeSenatePassedVotingResultSummary }
+			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
+			3: { voting: votings[0], resultSummary: fakeSenatePassedVotingResultSummary }
 		};
 	} else if (billId === 3) {
 		bill.status = BillStatus.Rejected;
 		events = [hearingEvent, passingMp1Event, passingMp2Event, failingMp3Event];
 		relatedVotingResults = {
-			1: { voting: passedVoting, resultSummary: fakeMpPassedVotingResultSummary },
-			2: { voting: failedVoting, resultSummary: fakeMpFailedVotingResultSummary }
+			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
+			2: { voting: votings[1], resultSummary: fakeMpFailedVotingResultSummary }
 		};
 	} else if (billId === 4) {
 		bill.status = BillStatus.Merged;
@@ -94,7 +96,7 @@ export function load({ params }) {
 		mergedIntoBill = inProgressBill;
 		mergedIntoBillLatestEvent = { ...inProgressMp2Event, billId: inProgressBill.id };
 		relatedVotingResults = {
-			1: { voting: passedVoting, resultSummary: fakeMpPassedVotingResultSummary }
+			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary }
 		};
 	}
 
