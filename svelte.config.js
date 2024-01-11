@@ -20,8 +20,7 @@ const config = {
 				'/bills/1',
 				'/bills/search',
 				'/legislative-process',
-				'/politicians/พริษฐ์-วัชรสินธุ/votes',
-				'/votings/1'
+				'/politicians/พริษฐ์-วัชรสินธุ/votes'
 			]
 		}
 	}

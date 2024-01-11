@@ -32,7 +32,6 @@
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import type { Voting } from '$models/voting';
-	import type { ComponentProps } from 'svelte';
 
 	export let event: Event;
 	export let billStatus: BillStatus;
@@ -90,39 +89,33 @@
 		}
 	};
 
-	$: voting = ((votingResultsId?: string) => {
-		if (votingResultsId === undefined) return undefined;
-		let voting: ComponentProps<VoteCard>['voting'] = {
-			id: votingResultsId,
-			date: relatedVotingResults[Number(votingResultsId)].voting.date,
-			title: relatedVotingResults[Number(votingResultsId)].voting.title,
-			result: relatedVotingResults[Number(votingResultsId)].voting.result
-		};
-		return voting;
-	})(event.votedInVotingId);
+	$: voting = event.votedInVotingId
+		? relatedVotingResults[event.votedInVotingId].voting
+		: undefined;
 
-	function getHighlightedVoteByGroups(id: string | undefined, eventType: string) {
-		if (id === undefined) return undefined;
-		let resultSummary = relatedVotingResults[id].resultSummary;
+	$: highlightedVoteByGroups = (() => {
+		if (!event.votedInVotingId) return undefined;
+
+		const resultSummary = relatedVotingResults[event.votedInVotingId].resultSummary;
+
 		if (resultSummary.subResults) {
-			return resultSummary.subResults.map((subResult) => {
-				return {
-					name: subResult.affiliationName,
-					count: Number(subResult.agreed),
-					total: Number(subResult.total)
-				};
-			});
-		} else if (eventType.includes('senate')) {
+			return resultSummary.subResults.map((subResult) => ({
+				name: subResult.affiliationName,
+				count: subResult.agreed,
+				total: subResult.total
+			}));
+		} else if (event.type.includes('senate')) {
 			return [
 				{
 					name: 'สว.',
-					count: Number(resultSummary.agreed),
-					total: Number(resultSummary.total)
+					count: resultSummary.agreed,
+					total: resultSummary.total
 				}
 			];
 		}
+
 		return undefined;
-	}
+	})();
 </script>
 
 <li class="mb-10 ms-4 -mt-1">
@@ -152,11 +145,7 @@
 		{#if event.actionType === EventActionType.Voted && voting}
 			<div class="flex flex-col md:basis-2/3">
 				<p class="text-text-02">ผลการลงมติ</p>
-				<VoteCard
-					isFullWidth={true}
-					{voting}
-					highlightedVoteByGroups={getHighlightedVoteByGroups(voting.id, event.type)}
-				/>
+				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
 			</div>
 		{:else if event.actionType === EventActionType.Enforced}
 			<div class="w-full pt-5 md:basis-2/3">

@@ -1,7 +1,7 @@
+import type { RelatedVotingResults } from '$components/bills/Progress.svelte';
 import { fetchVotings } from '$lib/datasheets/index.js';
 import { BillStatus, type Bill } from '$models/bill.js';
 import type { Event } from '$models/event.js';
-import type { Voting } from '$models/voting.js';
 import { inProgressBill, enactedBill } from '../../../mocks/data/bill.js';
 import {
 	enforcementEvent,
@@ -47,12 +47,7 @@ export async function load({ params }) {
 	let events: Event[] = [];
 	let mergedIntoBill: Bill | undefined;
 	let mergedIntoBillLatestEvent: Event | undefined;
-	let relatedVotingResults: {
-		[id: number]: {
-			voting: Voting;
-			resultSummary: VotingResultSummary;
-		};
-	} = {};
+	let relatedVotingResults: RelatedVotingResults = {};
 
 	const votings = await fetchVotings();
 
@@ -80,15 +75,15 @@ export async function load({ params }) {
 			enforcementEvent
 		];
 		relatedVotingResults = {
-			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
-			3: { voting: votings[0], resultSummary: fakeSenatePassedVotingResultSummary }
+			'1': { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
+			'3': { voting: votings[0], resultSummary: fakeSenatePassedVotingResultSummary }
 		};
 	} else if (billId === 3) {
 		bill.status = BillStatus.Rejected;
 		events = [hearingEvent, passingMp1Event, passingMp2Event, failingMp3Event];
 		relatedVotingResults = {
-			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
-			2: { voting: votings[1], resultSummary: fakeMpFailedVotingResultSummary }
+			'1': { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
+			'2': { voting: votings[1], resultSummary: fakeMpFailedVotingResultSummary }
 		};
 	} else if (billId === 4) {
 		bill.status = BillStatus.Merged;
@@ -96,7 +91,7 @@ export async function load({ params }) {
 		mergedIntoBill = inProgressBill;
 		mergedIntoBillLatestEvent = { ...inProgressMp2Event, billId: inProgressBill.id };
 		relatedVotingResults = {
-			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary }
+			'1': { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary }
 		};
 	}
 
