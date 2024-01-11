@@ -20,7 +20,7 @@
 
 	export let data;
 
-	$: ({ voting, relatedBill, results, resultsByAffiliation, resultsByPerson } = data);
+	$: ({ voting, results, resultsByAffiliation, resultsByPerson } = data);
 
 	$: winningOption = getWinningOption(voting.result);
 
@@ -116,6 +116,13 @@
 
 		return () => window.removeEventListener('scroll', onScroll);
 	});
+
+	const resultColorLookup: Record<string, string | undefined> = {
+		[DefaultVotingResult.Passed]: 'text-teal-50',
+		[DefaultVoteOption.Agreed]: 'text-teal-50',
+		[DefaultVotingResult.Failed]: 'text-red-50',
+		[DefaultVoteOption.Disagreed]: 'text-red-50'
+	};
 </script>
 
 <div class="flex flex-col min-h-screen">
@@ -246,33 +253,16 @@
 		</div>
 		<h2 id={Menu.Summary} class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
 		<div class="flex flex-col mt-4">
-			{#if relatedBill}
-				<div class="flex items-center text-teal-50 gap-x-1">
-					<span class="fluid-heading-05 ml-0 md:ml-1">
-						{(
-							(results.reduce(
-								(max, result) => (result.total > max.total ? result : max),
-								results[0]
-							).total /
-								resultsByPerson.length) *
+			<div class="flex items-center gap-x-1 {resultColorLookup[voting.result] ?? 'text-purple-70'}">
+				<span class="fluid-heading-05 ml-0 md:ml-1">
+					{Math.round(
+						(results.reduce((max, result) => (result.total > max.total ? result : max), results[0])
+							.total /
+							resultsByPerson.length) *
 							100
-						).toFixed(0)}% เห็นด้วย
-					</span>
-				</div>
-			{:else}
-				<div class="flex items-center gap-x-1 text-purple-70">
-					<span class="fluid-heading-05 ml-0 md:ml-1">
-						{(
-							(results.reduce(
-								(max, result) => (result.total > max.total ? result : max),
-								results[0]
-							).total /
-								resultsByPerson.length) *
-							100
-						).toFixed(0)}% {voting.result}
-					</span>
-				</div>
-			{/if}
+					)}% {getWinningOption(voting.result)}
+				</span>
+			</div>
 			<div
 				class="mt-3 md:mt-0 flex flex-col md:flex-row items-start md:items-center gap-x-4 flex-wrap"
 			>
@@ -335,7 +325,7 @@
 				<div class="flex items-center">
 					<Toggle
 						class="outline-none"
-						on:click={() => (isViewPercent = !isViewPercent)}
+						bind:toggled={isViewPercent}
 						hideLabel
 						labelA="ดูร้อยละ"
 						labelB="ดูร้อยละ"
@@ -347,12 +337,10 @@
 		<div class="flex flex-col md:flex-row w-full mt-4 mb-10 gap-x-8">
 			{#each resultsByAffiliation as { affiliationName, resultSummary, byParties }}
 				{@const totalAffVote = resultSummary.reduce((acc, vote) => acc + vote.total, 0)}
-				{@const totalHighestVote = relatedBill
-					? resultSummary.find((vote) => vote.voteOption === 'เห็นด้วย')?.total || 0
-					: resultSummary.reduce(
-							(max, current) => (current.total > max.total ? current : max),
-							resultSummary[0]
-					  ).total}
+				{@const highestVote = resultSummary.reduce(
+					(max, current) => (current.total > max.total ? current : max),
+					resultSummary[0]
+				)}
 				<div
 					class="flex flex-col w-full border-t border-gray-30 pb-4 md:pb-0"
 					style="--width:{100 / resultsByAffiliation.length}%"
@@ -369,15 +357,19 @@
 							<Add />
 						</button>
 					</div>
-					<div class="mt-1 flex items-center gap-x-1 text-teal-50">
+					<div
+						class="mt-1 flex items-center gap-x-1 {resultColorLookup[
+							highestVote.voteOption.toString()
+						] ?? 'text-purple-70'}"
+					>
 						<p class="heading-03">
 							{isViewPercent
-								? ((totalHighestVote / totalAffVote) * 100).toFixed(0) + '%'
-								: totalHighestVote + ' คน'}
+								? Math.round((highestVote.total / totalAffVote) * 100) + '%'
+								: highestVote.total + ' คน'}
 						</p>
-						<p class="heading-03">{relatedBill ? 'เห็นด้วย' : voting.result}</p>
+						<p class="heading-03">{highestVote.voteOption}</p>
 					</div>
-					<div class="mt-1 flex items-center gap-x-3 text-teal-50">
+					<div class="mt-1 flex items-center gap-x-3">
 						{#each resultSummary as vote}
 							<div class="flex items-center gap-x-1">
 								<div class="w-1 h-3 {getVoteColor(vote.voteOption)}" />
@@ -422,13 +414,15 @@
 												{totalPartyVote} คน
 											</p>
 										</div>
-										<div class="mt-1 flex items-center gap-x-3 text-teal-50">
+										<div class="mt-1 flex items-center gap-x-3">
 											{#each partyDetails.resultSummary as partyVote}
 												<div class="flex items-center gap-x-1">
 													<div class="w-1 h-3 {getVoteColor(partyVote.voteOption)}" />
 													<p class="label-01">
 														{isViewPercent
-															? ((partyVote.total / totalPartyVote) * 100).toFixed(2) + '%'
+															? ((partyVote.total / totalPartyVote) * 100).toLocaleString('th-TH', {
+																	maximumFractionDigits: 2
+															  }) + '%'
 															: partyVote.total}
 													</p>
 												</div>
