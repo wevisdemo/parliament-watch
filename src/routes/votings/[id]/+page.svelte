@@ -2,6 +2,7 @@
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import Share from '$components/Share/Share.svelte';
+	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { getWinningOption } from '$lib/datasheets/voting.js';
 	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting.js';
@@ -10,11 +11,11 @@
 		BreadcrumbItem,
 		Button,
 		Modal,
+		Search,
 		Tag,
-		TextInput,
 		Toggle
 	} from 'carbon-components-svelte';
-	import { Add, ArrowRight, Search } from 'carbon-icons-svelte';
+	import { Add, ArrowRight } from 'carbon-icons-svelte';
 	import { onMount } from 'svelte';
 
 	export let data;
@@ -85,10 +86,6 @@
 			default:
 				return 'bg-purple-10';
 		}
-	}
-
-	function getWidthPercent(voteCount: number, totalVotes: number) {
-		return Math.round((voteCount / totalVotes) * 100);
 	}
 
 	function scrollTo(id: string) {
@@ -251,7 +248,7 @@
 		<div class="flex flex-col mt-4">
 			{#if relatedBill}
 				<div class="flex items-center text-teal-50 gap-x-1">
-					<p class="fluid-heading-05 ml-0 md:ml-1">
+					<span class="fluid-heading-05 ml-0 md:ml-1">
 						{(
 							(results.reduce(
 								(max, result) => (result.total > max.total ? result : max),
@@ -259,13 +256,12 @@
 							).total /
 								resultsByPerson.length) *
 							100
-						).toFixed(0)}%
-					</p>
-					<p class="fluid-heading-05">เห็นด้วย</p>
+						).toFixed(0)}% เห็นด้วย
+					</span>
 				</div>
 			{:else}
 				<div class="flex items-center gap-x-1 text-purple-70">
-					<p class="fluid-heading-05 ml-0 md:ml-1">
+					<span class="fluid-heading-05 ml-0 md:ml-1">
 						{(
 							(results.reduce(
 								(max, result) => (result.total > max.total ? result : max),
@@ -273,9 +269,8 @@
 							).total /
 								resultsByPerson.length) *
 							100
-						).toFixed(0)}%
-					</p>
-					<p class="fluid-heading-05">{voting.result}</p>
+						).toFixed(0)}% {voting.result}
+					</span>
 				</div>
 			{/if}
 			<div
@@ -298,27 +293,27 @@
 		</div>
 		<div class="flex w-full h-[50px] my-2">
 			{#each results as result}
-				<div
-					class="rounded-sm h-full {getVoteColor(result.voteOption)}"
-					style="width: {getWidthPercent(result.total, resultsByPerson.length)}%"
-				/>
+				{@const resultLen = resultsByPerson.length}
+				{#if result.total}
+					<VoteChartTooltip
+						value={result.total}
+						total={resultLen}
+						color={getVoteColor(result.voteOption)}
+					/>
+				{/if}
 			{/each}
 		</div>
-		<div class="flex flex-col md:flex-row items-start md:items-center gap-x-2">
+		<div class="flex flex-col md:flex-row items-start md:items-baseline gap-1 md:gap-2">
 			<VotingResultTag result={voting.result} isLarge />
 			<p class="heading-01 mt-2 md:mt-0 text-gray-60">เงื่อนไข</p>
-			<span class="body-01 flex items-center gap-x-1 text-gray-60">
-				<p class="heading-01">1.</p>
-				ได้เสียงเกินกึ่งหนึ่งของสภา
-			</span>
-			<span class="body-01 flex items-center gap-x-1 text-gray-60">
-				<p class="heading-01">2.</p>
-				ได้เสียงฝ่ายค้านอย่างน้อย 20%
-			</span>
-			<span class="body-01 flex items-center gap-x-1 text-gray-60">
-				<p class="heading-01">3.</p>
-				ได้เสียง สว. อย่างน้อย 1 ใน 3
-			</span>
+			<!-- TODO: this has to be reactive somehow -->
+			<ol
+				class="body-01 flex flex-col md:flex-row gap-1 md:gap-2 text-gray-60 marker:font-bold list-decimal list-inside"
+			>
+				<li>ได้เสียงเกินกึ่งหนึ่งของสภา</li>
+				<li>ได้เสียงฝ่ายค้านอย่างน้อย 20%</li>
+				<li>ได้เสียง สว. อย่างน้อย 1 ใน 3</li>
+			</ol>
 		</div>
 		<Modal passiveModal bind:open modalHeading="งดออกเสียง vs. ไม่ลงคะแนน" on:open on:close>
 			<p class="body-01">
@@ -345,7 +340,6 @@
 						labelA="ดูร้อยละ"
 						labelB="ดูร้อยละ"
 					/>
-					<!-- <p class="body-compact-01">ดูร้อยละ</p> -->
 				</div>
 			</div>
 			<p class="label-01 mt-1">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
@@ -393,10 +387,13 @@
 					</div>
 					<div class="flex w-full h-[30px] mt-1">
 						{#each resultSummary as vote}
-							<div
-								class="rounded-sm h-full {getVoteColor(vote.voteOption)}"
-								style="width: {getWidthPercent(vote.total, totalAffVote)}%"
-							/>
+							{#if vote.total}
+								<VoteChartTooltip
+									value={vote.total}
+									total={totalAffVote}
+									color={getVoteColor(vote.voteOption)}
+								/>
+							{/if}
 						{/each}
 					</div>
 					{#if byParties}
@@ -439,10 +436,13 @@
 										</div>
 										<div class="flex w-full h-[20px] mt-1">
 											{#each partyDetails.resultSummary as partyVote}
-												<div
-													class="rounded-sm h-full {getVoteColor(partyVote.voteOption)}"
-													style="width: {getWidthPercent(partyVote.total, totalAffVote)}%"
-												/>
+												{#if partyVote.total}
+													<VoteChartTooltip
+														value={partyVote.total}
+														total={totalAffVote}
+														color={getVoteColor(partyVote.voteOption)}
+													/>
+												{/if}
 											{/each}
 										</div>
 									</div>
@@ -462,15 +462,7 @@
 			</div>
 			<div class="flex">
 				<div class="flex items-center flex-1 bg-gray-10">
-					<div class="bg-gray-10 pl-4 border-b border-gray-50 h-full flex items-center">
-						<Search />
-					</div>
-					<TextInput
-						class="active:outline-0 focus:outline-0"
-						size="xl"
-						placeholder="ค้นด้วยชื่อ-นามสกุล"
-						bind:value={searchQuery}
-					/>
+					<Search size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" bind:value={searchQuery} />
 				</div>
 				<Button class="flex items-center w-[164px] px-[14px] py-[13px]"
 					><a class="text-white body-compact-01" href="/votings/{voting.id}/votes"
