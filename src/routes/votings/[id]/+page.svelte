@@ -1,4 +1,10 @@
 <script lang="ts">
+	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
+	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import Share from '$components/Share/Share.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
+	import { getWinningOption } from '$lib/datasheets/voting.js';
+	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting.js';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -6,15 +12,10 @@
 		Modal,
 		Tag,
 		TextInput,
-		ToggleSkeleton
+		Toggle
 	} from 'carbon-components-svelte';
-	import { ArrowRight, Add, Search } from 'carbon-icons-svelte';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
-	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
-	import { DefaultVoteOption, type CustomVoteOption, DefaultVotingResult } from '$models/voting.js';
+	import { Add, ArrowRight, Search } from 'carbon-icons-svelte';
 	import { onMount } from 'svelte';
-	import { getWinningOption } from '$lib/datasheets/voting.js';
-	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 
 	export let data;
 
@@ -29,10 +30,18 @@
 	}
 
 	let open = false;
-	let selectedTab = '';
+	let selectedTab: string[] = [];
 	let selectedMenu = Menu.Summary;
 	let isViewPercent = false;
 	let searchQuery = '';
+
+	const toggleSelectedTab = (name: string) => {
+		if (selectedTab.includes(name)) {
+			selectedTab = selectedTab.filter((tab) => tab !== name);
+		} else {
+			selectedTab = [...selectedTab, name];
+		}
+	};
 
 	interface AnchorElement extends HTMLElement {
 		offsetTop: number;
@@ -190,14 +199,26 @@
 					/>
 				{/if} -->
 			</div>
-			<div>
+			<div class="flex flex-col gap-2">
 				<DownloadData links={voting.files} />
+				<p class="label-01 text-gray-60">
+					อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+						year: 'numeric',
+						month: 'short',
+						day: 'numeric'
+					})}
+				</p>
+				<!-- TODO: add link -->
+				<!-- <a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a> -->
+				<Share label="แชร์มติ" />
 			</div>
 		</div>
 	</div>
 	<div class="flex flex-col w-full py-6 px-4 md:px-12 md:py-16">
 		<h1 class="fluid-heading-05 text-center">ผลการลงมติ</h1>
-		<div class="w-full flex items-center gap-x-[1px] mt-4 sticky top-0 bg-white z-10">
+		<div
+			class="w-full flex items-center gap-x-[1px] mt-4 sticky top-0 bg-white z-10 voting-jumpnav"
+		>
 			<button
 				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 {selectedMenu ===
 				Menu.Summary
@@ -208,7 +229,7 @@
 				สรุป
 			</button>
 			<button
-				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
+				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 {selectedMenu ===
 				Menu.ByParty
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
@@ -217,7 +238,7 @@
 				รายสังกัด
 			</button>
 			<button
-				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 text-gray-60 {selectedMenu ===
+				class="flex items-center justify-center w-1/3 px-4 py-[11px] border-b-[2px] cursor-pointer body-compact-01 {selectedMenu ===
 				Menu.ByPerson
 					? 'text-gray-100 font-bold border-blue-60'
 					: 'text-gray-60 border-gray-30'}"
@@ -257,7 +278,9 @@
 					<p class="fluid-heading-05">{voting.result}</p>
 				</div>
 			{/if}
-			<div class="mt-3 md:mt-0 flex flex-col md:flex-row items-start md:items-center gap-x-4">
+			<div
+				class="mt-3 md:mt-0 flex flex-col md:flex-row items-start md:items-center gap-x-4 flex-wrap"
+			>
 				<div class="flex items-center gap-x-1">
 					<p class="heading-02">สมาชิกสภา</p>
 					<p class="body-02">{resultsByPerson.length}</p>
@@ -315,11 +338,17 @@
 			<div class="flex flex-col md:flex-row items-start md:items-center gap-x-3">
 				<h1 id={Menu.ByParty} class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
 				<div class="flex items-center">
-					<ToggleSkeleton class="outline-none" on:click={() => (isViewPercent = !isViewPercent)} />
-					<p class="body-compact-01">ดูร้อยละ</p>
+					<Toggle
+						class="outline-none"
+						on:click={() => (isViewPercent = !isViewPercent)}
+						hideLabel
+						labelA="ดูร้อยละ"
+						labelB="ดูร้อยละ"
+					/>
+					<!-- <p class="body-compact-01">ดูร้อยละ</p> -->
 				</div>
 			</div>
-			<p class="label-01">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
+			<p class="label-01 mt-1">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
 		</div>
 		<div class="flex flex-col md:flex-row w-full mt-4 mb-10 gap-x-8">
 			{#each resultsByAffiliation as { affiliationName, resultSummary, byParties }}
@@ -338,16 +367,19 @@
 						<p class="heading-02">{affiliationName}</p>
 						<p class="body-02 text-gray-60">{totalAffVote} คน</p>
 						<div class="flex md:hidden flex-1" />
-						<Add
-							on:click={() => (selectedTab = affiliationName)}
+						<button
+							type="button"
 							class="justify-self-start self-start flex md:hidden"
-						/>
+							on:click={() => toggleSelectedTab(affiliationName)}
+						>
+							<Add />
+						</button>
 					</div>
 					<div class="mt-1 flex items-center gap-x-1 text-teal-50">
 						<p class="heading-03">
 							{isViewPercent
 								? ((totalHighestVote / totalAffVote) * 100).toFixed(0) + '%'
-								: totalHighestVote + 'คน'}
+								: totalHighestVote + ' คน'}
 						</p>
 						<p class="heading-03">{relatedBill ? 'เห็นด้วย' : voting.result}</p>
 					</div>
@@ -369,7 +401,7 @@
 					</div>
 					{#if byParties}
 						<div
-							class="{selectedTab === affiliationName
+							class="{selectedTab.includes(affiliationName)
 								? 'flex'
 								: 'hidden'} md:flex flex-col w-full mt-4 gap-y-4"
 						>
@@ -490,3 +522,14 @@
 		</div>
 	</div>
 </div>
+
+<style lang="postcss">
+	.voting-jumpnav {
+		@apply transition-[top];
+		will-change: top;
+	}
+
+	:global(html.navbar-shown) .voting-jumpnav {
+		top: 48px;
+	}
+</style>
