@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import md5 from 'md5';
 
 export const voteSchema = z
 	.object({
@@ -6,6 +7,9 @@ export const voteSchema = z
 		votingId: z.string(),
 		voteOption: z.string()
 	})
-	.transform((vote) => vote);
+	.transform(({ votingId, ...votes }) => ({
+		votingId: md5(votingId),
+		...votes
+	}));
 
 export type Vote = z.infer<typeof voteSchema>;

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Link } from './link';
 import type { Assembly } from './assembly';
 import { safeFind } from '$lib/datasheets/processor';
-
+import md5 from 'md5';
 export const createVotingSchema = (assemblies: Assembly[]) =>
 	z
 		.object({
@@ -19,8 +19,8 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 			sourceUrl: z.string()
 		})
 		.transform(
-			({ categories, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => ({
-				...voting,
+			({ id, categories, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => ({
+				id: md5(id),
 				categories: categories?.split(',') || [],
 				meetingType:
 					representativeAssemblyId && senateAssemblyId
@@ -29,8 +29,8 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 						? 'ประชุมสภาผู้แทนราษฎร'
 						: 'ประชุมวุฒิสภา',
 				participatedAssemblies: [representativeAssemblyId, senateAssemblyId]
-					.filter((id) => !!id)
-					.map<Assembly>((id) => safeFind(assemblies, (a) => a.id === id)),
+					.filter((assemblyId) => !!assemblyId)
+					.map<Assembly>((assemblyId) => safeFind(assemblies, (a) => a.id === assemblyId)),
 				// TODO: Only support default vote option for now
 				voteOptions: [
 					DefaultVoteOption.Agreed,
@@ -42,7 +42,8 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 				files: documents.split('\n').map<Link>((line) => {
 					const [label, url] = line.split(',').map((value) => value.trim());
 					return { label, url };
-				})
+				}),
+				...voting
 			})
 		);
 

@@ -74,7 +74,7 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 							politician.id
 						} is not a member of any participated assembles ${voting.participatedAssemblies.map(
 							({ id }) => id
-						)} of voting ${voting.id}, but their votes exist`
+						)} of voting "${voting.title}", but their votes exist`
 					);
 					return counter;
 				}
@@ -90,9 +90,9 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 
 					if (!partyRole) {
 						console.warn(
-							`[WARNING] Could not find ${politician.id} party on the voting day of ${
-								voting.id
-							} (${voting.date.toLocaleDateString()})`
+							`[WARNING] Could not find ${politician.id} party on the voting day of "${
+								voting.title
+							}" (${voting.date.toLocaleDateString()})`
 						);
 						return counter;
 					}
