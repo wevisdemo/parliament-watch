@@ -25,6 +25,7 @@
 		"*": "prettier --plugin-search-dir . --write --ignore-unknown"
 	},
 	"dependencies": {
+		"@wevisdemo/ui": "^7.0.2",
 		"d3": "^7.8.5",
 		"dayjs": "^1.11.10",
 		"keen-slider": "^6.8.6",

@@ -1,10 +1,11 @@
 <script>
-	import '../styles/index.css';
+	import { page } from '$app/stores';
+	import Footer from '$components/Footer/Footer.svelte';
+	import CookieConsent from '$components/Index/CookieConsent.svelte';
 	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
 	import { InlineNotification } from 'carbon-components-svelte';
-	import Footer from '$components/Footer/Footer.svelte';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import '../styles/index.css';
 	import { DEFAULT_SEO } from '../utils/seo';
 
 	$: title = $page.data?.seo?.title
@@ -35,6 +36,8 @@
 	<meta name="twitter:description" content={description} />
 	<meta name="twitter:image" content={og} />
 </svelte:head>
+
+<CookieConsent />
 
 <main class="min-h-screen flex flex-col">
 	<NavigationBar />
