@@ -34,6 +34,8 @@
 </script>
 
 <script lang="ts">
+	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import type { Link } from '$models/link';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -47,11 +49,9 @@
 		PaginationSkeleton,
 		Search
 	} from 'carbon-components-svelte';
-	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
-	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import { onMount } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
@@ -88,6 +88,7 @@
 	);
 	export let mounted = false;
 	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
+	export let downloadLinks: Link[] = [];
 
 	// Reactive
 	let tableCurrentPage = 1;
@@ -165,31 +166,18 @@
 			<div class="flex-1">
 				<slot />
 			</div>
-			<div
-				class="flex flex-col w-full gap-2 border border-solid border-ui-03 rounded-sm p-3 md:self-end {downloadSize ===
-				'lg'
-					? 'md:w-[224px]'
-					: 'md:w-auto'}"
-			>
-				<div class="flex items-center gap-1">
-					<Download />
-					<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
-				</div>
-				<!-- TODO: add link -->
-				<a href="/" class="flex items-center gap-1 mr-auto helper-text-01">
-					<TableSplit />
-					<span>ผลการลงมติรายคน</span>
-				</a>
+			<div class="p-3 {downloadSize === 'lg' ? 'md:w-[224px]' : 'md:w-auto'}">
+				<DownloadData links={downloadLinks} />
 			</div>
+			<Search
+				class="md:hidden {!mounted ? '-mt-4' : ''}"
+				searchClass="md:hidden mt-2"
+				placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+				light
+				bind:value={searchQuery}
+				skeleton={!mounted}
+			/>
 		</div>
-		<Search
-			class="md:hidden {!mounted ? '-mt-4' : ''}"
-			searchClass="md:hidden mt-2"
-			placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
-			light
-			bind:value={searchQuery}
-			skeleton={!mounted}
-		/>
 	</header>
 	<div class="flex-1 flex gap-1 bg-ui-01 w-full">
 		{#if showFilter}
