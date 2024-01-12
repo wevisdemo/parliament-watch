@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import Footer from '$components/Footer/Footer.svelte';
 	import CookieConsent from '$components/Index/CookieConsent.svelte';
@@ -6,14 +6,20 @@
 	import { InlineNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import '../styles/index.css';
-	import { DEFAULT_SEO } from '../utils/seo';
+	import { DEFAULT_SEO, PROD_URL } from '../utils/seo';
 
 	$: title = $page.data?.seo?.title
 		? `${$page.data?.seo?.title} - Parliament Watch`
 		: DEFAULT_SEO.title;
 	$: description = $page.data?.seo?.description ?? DEFAULT_SEO.description;
-	$: url = new URL($page.url.pathname, 'https://parliamentwatch.wevis.info/').href;
+	$: url = new URL($page.url.pathname, PROD_URL).href;
 	$: og = $page.data?.seo?.og ?? DEFAULT_SEO.og;
+
+	let isProd: undefined | boolean = undefined;
+
+	onMount(() => {
+		isProd = window.location.href.startsWith(PROD_URL);
+	});
 
 	onMount(() => {
 		document.querySelectorAll('link.lazy').forEach((el) => el.setAttribute('media', 'all'));
@@ -37,8 +43,6 @@
 	<meta name="twitter:image" content={og} />
 </svelte:head>
 
-<CookieConsent />
-
 <main class="min-h-screen flex flex-col">
 	<NavigationBar />
 	<div class="flex-1">
@@ -47,10 +51,16 @@
 	<Footer />
 </main>
 
-<InlineNotification
-	class="fixed z-50 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
-	lowContrast
-	kind="warning-alt"
-	title="คำเตือน:"
-	subtitle="เว็บไซต์นี้อยู่ระหว่างการพัฒนา ข้อมูลทั้งหมดบนเว็บไซต์ถูกสมมุติขึ้นเป็นการชั่วคราวเท่านั้น ไม่สามารถใช้อ้างอิงได้ในทุกกรณี"
-/>
+{#if isProd !== undefined}
+	{#if isProd}
+		<CookieConsent />
+	{:else}
+		<InlineNotification
+			class="fixed z-50 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
+			lowContrast
+			kind="warning-alt"
+			title="คำเตือน:"
+			subtitle="เว็บไซต์นี้อยู่ระหว่างการพัฒนา ข้อมูลทั้งหมดบนเว็บไซต์ถูกสมมุติขึ้นเป็นการชั่วคราวเท่านั้น ไม่สามารถใช้อ้างอิงได้ในทุกกรณี"
+		/>
+	{/if}
+{/if}
