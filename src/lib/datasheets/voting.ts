@@ -88,29 +88,30 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 							(!endedAt || voting.date.getTime() <= endedAt.getTime())
 					);
 
-					if (!partyRole) {
+					if (partyRole) {
+						group = assemblyRole.assembly.oppositionParties.some(
+							({ name }) => name === partyRole.party.name
+						)
+							? 'สส. ฝ่ายค้าน'
+							: 'สส. ฝ่ายรัฐบาล';
+
+						if (!counter[group].byParties[partyRole.party.name]) {
+							counter[group].byParties[partyRole.party.name] = {
+								party: partyRole.party,
+								resultSummary: initCounterRecord()
+							};
+						}
+
+						counter[group].byParties[partyRole.party.name].resultSummary[voteOption]++;
+					} else {
+						group = 'สส. ไม่สังกัดพรรค';
+
 						console.warn(
 							`[WARNING] Could not find ${politician.id} party on the voting day of "${
 								voting.title
 							}" (${voting.date.toLocaleDateString()})`
 						);
-						return counter;
 					}
-
-					group = assemblyRole.assembly.oppositionParties.some(
-						({ name }) => name === partyRole.party.name
-					)
-						? 'สส. ฝ่ายค้าน'
-						: 'สส. ฝ่ายรัฐบาล';
-
-					if (!counter[group].byParties[partyRole.party.name]) {
-						counter[group].byParties[partyRole.party.name] = {
-							party: partyRole.party,
-							resultSummary: initCounterRecord()
-						};
-					}
-
-					counter[group].byParties[partyRole.party.name].resultSummary[voteOption]++;
 				}
 
 				counter[group].resultSummary[voteOption]++;
@@ -123,6 +124,7 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 		{
 			'สส. ฝ่ายรัฐบาล': initVoteOptionRecord(),
 			'สส. ฝ่ายค้าน': initVoteOptionRecord(),
+			'สส. ไม่สังกัดพรรค': initVoteOptionRecord(),
 			'สว.': initVoteOptionRecord()
 		}
 	);
