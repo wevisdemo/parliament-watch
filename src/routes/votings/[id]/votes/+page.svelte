@@ -84,6 +84,9 @@
 		{ key: 'voteOption', value: 'การลงมติ' }
 	]}
 	downloadSize="lg"
+	downloadLinks={[
+		{ label: 'ผลการลงมติรายคน', url: `/files/download/votings/voting-${voting.id}.csv` }
+	]}
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >
@@ -104,7 +107,7 @@
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
 		{:else}
-			<p class="text-gray-60 body-compact-01">{cellValue}</p>
+			<p class="text-gray-60 body-compact-01">{cellValue || '-'}</p>
 		{/if}
 	</svelte:fragment>
 </DataPage>

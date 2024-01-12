@@ -138,7 +138,10 @@
 		{ key: 'titleColumn', value: 'ชื่อมติ' },
 		{ key: 'voteOption', value: 'การลงมติ' },
 		{ key: 'result', value: 'ผลลัพธ์' },
-		{ key: 'files', value: 'เอก สาร' }
+		{ key: 'files', value: 'เอกสาร' }
+	]}
+	downloadLinks={[
+		{ label: 'ผลการลงมติรายคน', url: `/files/download/politicians/${politician.id}-votes.csv` }
 	]}
 	bind:searchQuery
 	bind:selectedCheckboxValue

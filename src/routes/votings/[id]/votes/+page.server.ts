@@ -19,10 +19,10 @@ export async function load({ params }) {
 		voting,
 		(await fetchVotes()).filter(({ votingId }) => votingId === voting.id),
 		politicians
-	).map(({ id, prefix, firstname, lastname, party, ...vote }) => ({
+	).map(({ id, firstname, lastname, party, ...vote }) => ({
 		id,
 		party: party?.name,
-		politician: { id, prefix, firstname, lastname },
+		politician: { id, firstname, lastname },
 		...vote
 	}));
 
