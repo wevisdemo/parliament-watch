@@ -9,6 +9,8 @@ import { movingForwardPolitician } from '../mocks/data/politician.js';
 import type { ComponentProps } from 'svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
+import dayjs from 'dayjs';
+import { DefaultVoteOption } from '$models/voting.js';
 
 const MAX_LASTEST_VOTE = 5;
 
@@ -32,41 +34,59 @@ interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPoliticia
 }
 
 export async function load() {
-	const politician = await fetchPoliticians();
-
-	const chuanLeekpai = await safeFind(politician, (p) => p.id === 'ชวน-หลีกภัย');
-	const banyatBantadtan = await safeFind(politician, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
+	const politicians = await fetchPoliticians();
+	const votes = await fetchVotes();
 
 	const highlightedPoliticians: HighlightedPolitician[] = [
-		{
-			reason: HighlightedReason.HighestAssetOwned,
-			value: 95787230000,
-			politician: movingForwardPolitician
-		},
-		{
-			reason: HighlightedReason.HighestDebtOwned,
-			value: 1862770000,
-			politician: movingForwardPolitician
-		},
+		// TODO: Not release assets and debts yet
+		// {
+		// 	reason: HighlightedReason.HighestAssetOwned,
+		// 	value: 95787230000,
+		// 	politician: movingForwardPolitician
+		// },
+		// {
+		// 	reason: HighlightedReason.HighestDebtOwned,
+		// 	value: 1862770000,
+		// 	politician: movingForwardPolitician
+		// },
 		{
 			reason: HighlightedReason.HighestPartySwitching,
-			value: 12,
-			politician: movingForwardPolitician
+			...politicians
+				.map((politician) => ({
+					politician,
+					value: new Set(politician.partyRoles.map(({ party }) => party.name)).size
+				}))
+				.sort((a, z) => z.value - a.value)[0]
 		},
 		{
 			reason: HighlightedReason.HighestAbsentRate,
-			value: 0.98,
-			politician: movingForwardPolitician
+			...politicians
+				.map((politician) => {
+					const theirVotes = votes.filter(({ politicianId }) => politicianId === politician.id);
+
+					return {
+						politician,
+						value:
+							theirVotes.filter(({ voteOption }) => voteOption === DefaultVoteOption.Absent)
+								.length / theirVotes.length
+					};
+				})
+				.sort((a, z) => z.value - a.value)[0]
 		},
-		{
-			reason: HighlightedReason.HighestBillProposed,
-			value: 87,
-			politician: movingForwardPolitician
-		},
+		// TODO: Not release bills yet
+		// {
+		// 	reason: HighlightedReason.HighestBillProposed,
+		// 	value: 87,
+		// 	politician: movingForwardPolitician
+		// },
 		{
 			reason: HighlightedReason.Youngest,
-			value: 25,
-			politician: movingForwardPolitician
+			...politicians
+				.map((politician) => ({
+					politician,
+					value: politician.birthdate ? dayjs().diff(politician.birthdate, 'years') : 999
+				}))
+				.sort((a, z) => a.value - z.value)[0]
 		}
 	];
 
@@ -83,6 +103,9 @@ export async function load() {
 		wikipediaPolitician = await getPoliticianWithMostViewLastMonth();
 		gunPolitician = (await getMostGun()) ?? gunPolitician;
 	}
+
+	const chuanLeekpai = safeFind(politicians, (p) => p.id === 'ชวน-หลีกภัย');
+	const banyatBantadtan = safeFind(politicians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
 
 	const otherSourcesHighlightedPoliticians: HighlightedPolitician[] = [
 		{
@@ -113,19 +136,12 @@ export async function load() {
 			...wikipediaPolitician,
 			updatedAt: new Date()
 		} as MostVisitedInWikipediaLastMonthPolitician,
-		...(gunPolitician
-			? [
-					{
-						reason: HighlightedReason.MostGunOwned,
-						politician: gunPolitician.politician,
-						value: gunPolitician.value
-					}
-			  ]
-			: [])
+		{
+			reason: HighlightedReason.MostGunOwned,
+			politician: gunPolitician.politician,
+			value: gunPolitician.value
+		}
 	];
-
-	const votes = await fetchVotes();
-	const politicians = await fetchPoliticians();
 
 	const latestVotings: ComponentProps<VoteCard>[] = [...(await fetchVotings())]
 		.sort((a, z) => z.date.getTime() - a.date.getTime())
