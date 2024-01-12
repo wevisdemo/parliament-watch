@@ -79,30 +79,37 @@ export const searchIndexes: SearchIndexes = {
 	],
 	votings: [
 		{
+			id: '1',
 			name: 'ร่าง พ.ร.บ. สุราก้าวหน้า (วาระที่ 1)',
 			result: DefaultVotingResult.Failed
 		},
 		{
+			id: '2',
 			name: 'ร่าง พ.ร.บ. แรงงานสัมพันธ์',
 			result: DefaultVotingResult.Passed
 		},
 		{
+			id: '3',
 			name: 'ร่าง พ.ร.บ. ภาษีที่ดินและสิ่งปลูกสร้าง (วาระที่ 1)',
 			result: DefaultVotingResult.Passed
 		},
 		{
+			id: '4',
 			name: 'ร่าง พ.ร.บ. ส่งเสริมการพัฒนาเศรษฐกิจดิจิทัล (วาระที่ 2)',
 			result: DefaultVotingResult.Failed
 		},
 		{
+			id: '5',
 			name: 'ร่าง พ.ร.บ. คุ้มครองผู้บริโภค (วาระที่ 3)',
 			result: DefaultVotingResult.Passed
 		},
 		{
+			id: '6',
 			name: 'ร่าง พ.ร.บ. คุ้มครองสิทธิส่วนบุคคล (วาระที่ 2)',
 			result: DefaultVotingResult.Failed
 		},
 		{
+			id: '7',
 			name: 'ร่าง พ.ร.บ. สมรสเท่าเทียม (วาระที่ 3)',
 			result: DefaultVotingResult.Failed
 		}
