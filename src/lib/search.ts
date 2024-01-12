@@ -67,32 +67,30 @@ export function search(
 			  )
 			: undefined,
 		bills: searchIndexes.bills
-			? getScoredAndHighlightedResultItems(queries, searchIndexes.bills, keepTopN).map(
-					(candidate) => ({
-						heading: candidate.item.name,
-						headingHighlight: highlight ? candidate.highlightedName : undefined,
-						billStatus: candidate.item.status,
-						url: ''
-					})
-			  )
+			? getScoredAndHighlightedResultItems(queries, searchIndexes.bills, keepTopN).map((bill) => ({
+					heading: bill.item.name,
+					headingHighlight: highlight ? bill.highlightedName : undefined,
+					billStatus: bill.item.status,
+					url: ''
+			  }))
 			: undefined,
 		votings: searchIndexes.votings
 			? getScoredAndHighlightedResultItems(queries, searchIndexes.votings, keepTopN).map(
-					(candidate) => ({
-						heading: candidate.item.name,
-						headingHighlight: highlight ? candidate.highlightedName : undefined,
-						voteResult: candidate.item.result,
-						url: ''
+					(voting) => ({
+						heading: voting.item.name,
+						headingHighlight: highlight ? voting.highlightedName : undefined,
+						voteResult: voting.item.result,
+						url: '/votings/' + voting.item.id
 					})
 			  )
 			: undefined,
 		billProposers: searchIndexes.billProposers
 			? getScoredAndHighlightedResultItems(queries, searchIndexes.billProposers, keepTopN).map(
-					(candidate) => ({
-						heading: candidate.item.name,
-						headingHighlight: highlight ? candidate.highlightedName : undefined,
-						description: candidate.item.description,
-						proposedBillsCount: candidate.item.proposedBillsCount,
+					(proposer) => ({
+						heading: proposer.item.name,
+						headingHighlight: highlight ? proposer.highlightedName : undefined,
+						description: proposer.item.description,
+						proposedBillsCount: proposer.item.proposedBillsCount,
 						url: ''
 					})
 			  )
