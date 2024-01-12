@@ -12,7 +12,7 @@
 			subs: [
 				{
 					label: 'สภาผู้แทนราษฎร',
-					url: '/assemblies/สมาชิกสภาผู้แทนราษฎร-25',
+					url: '/assemblies/สมาชิกสภาผู้แทนราษฎร-26',
 					type: MenuTypes.link
 				},
 				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link }

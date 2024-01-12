@@ -147,7 +147,7 @@
 		<ul class="flex flex-col gap-[6px]">
 			<li>
 				<Button
-					href="/assemblies/สมาชิกสภาผู้แทนราษฎร-25"
+					href="/assemblies/สมาชิกสภาผู้แทนราษฎร-26"
 					kind="secondary"
 					icon={ArrowRight}
 					class="w-full max-w-none"
