@@ -147,11 +147,13 @@
 	>
 		<div class="flex flex-col">
 			<h1 class="fluid-heading-05">{voting.title}</h1>
-			<div class="flex items-center text-gray-60 gap-x-1">
-				<p class="flex-none heading-01">ชื่อทางการ</p>
-				<p class="flex-initial body-01 truncate">{voting.officialTitle}</p>
-			</div>
-			<div class="flex items-center text-01 gap-x-1">
+			{#if voting.officialTitle}
+				<div class="flex items-center text-gray-60 gap-x-1">
+					<p class="flex-none heading-01">ชื่อทางการ</p>
+					<p class="flex-initial body-01 truncate">{voting.officialTitle}</p>
+				</div>
+			{/if}
+			<div class="flex items-center text-01 gap-x-1 mt-2">
 				<VotingResultTag result={voting.result} isLarge />
 				<p class="heading-compact-02">
 					{winningOption}

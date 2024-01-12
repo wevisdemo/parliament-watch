@@ -8,7 +8,7 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 		.object({
 			id: z.string(),
 			title: z.string(),
-			officialTitle: z.string().default('รอชื่ออย่างเป็นทางการ'),
+			officialTitle: z.string().optional(),
 			date: z.date(),
 			description: z.string().optional(),
 			representativeAssemblyId: z.string().optional(),
