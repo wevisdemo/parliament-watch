@@ -125,6 +125,7 @@
 <DataPage
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
+		{ label: 'นักการเมือง' },
 		{
 			url: `/politicians/${politician.id}`,
 			label: `${politician.firstname} ${politician.lastname}`

@@ -49,10 +49,9 @@
 		class="[&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap my-[8px]"
 	>
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-		<!-- TODO: link this -->
 		<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block" href="/assemblies/{data.assembly.id}"
-			>{data.assembly.name}</BreadcrumbItem
+			>{data.assembly.name} ชุดที่ {data.assembly.term}</BreadcrumbItem
 		>
 	</Breadcrumb>
 	<Header data={data.assembly} assemblyIds={data.assemblyIds} />

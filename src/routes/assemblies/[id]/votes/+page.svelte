@@ -31,17 +31,9 @@
 	<div class="px-[16px] py-[8px]">
 		<Breadcrumb noTrailingSlash class="[&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap">
 			<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-			<!-- TODO: link this -->
-			<BreadcrumbItem class="md:hidden">
-				<OverflowMenu>
-					<OverflowMenuItem text="รัฐสภา" />
-					<OverflowMenuItem href="/assemblies/{assembly.id}" text={assembly.name} />
-				</OverflowMenu>
-			</BreadcrumbItem>
-
-			<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
-			<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
-				>{assembly.name}</BreadcrumbItem
+			<BreadcrumbItem>รัฐสภา</BreadcrumbItem>
+			<BreadcrumbItem href="/assemblies/{assembly.id}"
+				>{assembly.name} ชุดที่ {assembly.term}</BreadcrumbItem
 			>
 			<BreadcrumbItem href="/assemblies/{assembly.id}/votes" isCurrentPage
 				>ประวัติการลงมติ</BreadcrumbItem

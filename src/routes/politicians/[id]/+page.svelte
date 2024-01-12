@@ -57,6 +57,7 @@
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
+	<BreadcrumbItem>นักการเมือง</BreadcrumbItem>
 	<BreadcrumbItem href="/politicians/{politician.id}" isCurrentPage
 		>{politician.firstname} {politician.lastname}</BreadcrumbItem
 	>

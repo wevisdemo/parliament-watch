@@ -136,8 +136,8 @@
 		noTrailingSlash
 		class="w-full px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex text-ellipsis overflow-hidden truncate"
 	>
-		<BreadcrumbItem href="#">หน้าแรก</BreadcrumbItem>
-		<BreadcrumbItem href="#">การลงมติ</BreadcrumbItem>
+		<BreadcrumbItem href="/">หน้าแรก</BreadcrumbItem>
+		<BreadcrumbItem>การลงมติ</BreadcrumbItem>
 		<BreadcrumbItem>{voting.title}</BreadcrumbItem>
 	</Breadcrumb>
 	<div
