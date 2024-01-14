@@ -155,12 +155,12 @@
 			{/if}
 			<div class="flex items-center text-01 gap-x-1 mt-2">
 				<VotingResultTag result={voting.result} isLarge />
-				<p class="heading-compact-02">
-					{winningOption}
-					{resultsByPerson.filter((v) => v.voteOption === winningOption).length}/<span
-						class="text-gray-60">{resultsByPerson.length}</span
-					>
-				</p>
+				<span class="body-02 text-gray-60"
+					><span class="heading-compact-02 text-text-01"
+						>{winningOption}
+						{resultsByPerson.filter((v) => v.voteOption === winningOption).length}</span
+					>/{resultsByPerson.length}</span
+				>
 			</div>
 		</div>
 		<div class="flex flex-col gap-y-4 md:gap-y-0 md:flex-row md:gap-x-16">
@@ -353,51 +353,57 @@
 					class="flex flex-col w-full border-t border-gray-30 pb-4 md:pb-0"
 					style="--width:{100 / resultsByAffiliation.length}%"
 				>
-					<div class="mt-2 flex items-center gap-x-1">
-						<p class="heading-02">{affiliationName}</p>
-						<p class="body-02 text-gray-60">{totalAffVote} คน</p>
-						<div class="flex md:hidden flex-1" />
-						<button
-							type="button"
-							class="justify-self-start self-start flex md:hidden"
-							on:click={() => toggleSelectedTab(affiliationName)}
-						>
-							<Add />
-						</button>
-					</div>
 					<div
-						class="mt-1 flex items-center gap-x-1 {resultColorLookup[
-							highestVote.voteOption.toString()
-						] ?? 'text-purple-70'}"
+						class="flex flex-col w-full md:cursor-default"
+						on:click={() => toggleSelectedTab(affiliationName)}
+						on:keypress={(e) => {
+							if (e.code === 'Enter' || e.code === 'Space') toggleSelectedTab(affiliationName);
+						}}
+						tabindex="0"
+						aria-expanded={selectedTab.includes(affiliationName)}
+						aria-controls={'aff-' + affiliationName.replace(/\s/g, '-')}
+						role="button"
 					>
-						<p class="heading-03">
-							{isViewPercent
-								? Math.round((highestVote.total / totalAffVote) * 100) + '%'
-								: highestVote.total + ' คน'}
-						</p>
-						<p class="heading-03">{highestVote.voteOption}</p>
-					</div>
-					<div class="mt-1 flex items-center gap-x-3">
-						{#each resultSummary as vote}
-							<div class="flex items-center gap-x-1">
-								<div class="w-1 h-3 {getVoteColor(vote.voteOption)}" />
-								<p class="label-01">{vote.total}</p>
-							</div>
-						{/each}
-					</div>
-					<div class="flex w-full h-[30px] mt-1">
-						{#each resultSummary as vote}
-							{#if vote.total}
-								<VoteChartTooltip
-									value={vote.total}
-									total={totalAffVote}
-									color={getVoteColor(vote.voteOption)}
-								/>
-							{/if}
-						{/each}
+						<div class="mt-2 flex items-center gap-x-1">
+							<p class="heading-02">{affiliationName}</p>
+							<p class="body-02 text-gray-60">{totalAffVote} คน</p>
+							<Add class="justify-self-start self-start flex md:hidden ml-auto" />
+						</div>
+						<div
+							class="mt-1 flex items-center gap-x-1 {resultColorLookup[
+								highestVote.voteOption.toString()
+							] ?? 'text-purple-70'}"
+						>
+							<p class="heading-03">
+								{isViewPercent
+									? Math.round((highestVote.total / totalAffVote) * 100) + '%'
+									: highestVote.total + ' คน'}
+							</p>
+							<p class="heading-03">{highestVote.voteOption}</p>
+						</div>
+						<div class="mt-1 flex items-center gap-x-3">
+							{#each resultSummary as vote}
+								<div class="flex items-center gap-x-1">
+									<div class="w-1 h-3 {getVoteColor(vote.voteOption)}" />
+									<p class="label-01">{vote.total}</p>
+								</div>
+							{/each}
+						</div>
+						<div class="flex w-full h-[30px] mt-1">
+							{#each resultSummary as vote}
+								{#if vote.total}
+									<VoteChartTooltip
+										value={vote.total}
+										total={totalAffVote}
+										color={getVoteColor(vote.voteOption)}
+									/>
+								{/if}
+							{/each}
+						</div>
 					</div>
 					{#if byParties}
 						<div
+							id={'aff-' + affiliationName.replace(/\s/g, '-')}
 							class="{selectedTab.includes(affiliationName)
 								? 'flex'
 								: 'hidden'} md:flex flex-col w-full mt-4 gap-y-4"
