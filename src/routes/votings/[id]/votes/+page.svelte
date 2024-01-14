@@ -74,6 +74,7 @@
 		{ url: `/votings/${voting.id}`, label: voting.title },
 		{ label: 'ผลการลงมติรายคน' }
 	]}
+	searchPlaceholder="ชื่อ-นามสกุล"
 	{comboboxFilterList}
 	{checkboxFilterList}
 	{filteredData}

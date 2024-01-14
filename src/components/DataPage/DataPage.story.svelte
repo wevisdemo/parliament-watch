@@ -22,6 +22,7 @@
 		{ url: '/', label: 'หน้าหลัก' },
 		{ url: '/votelog', label: 'ประวัติการลงมติ' }
 	];
+	let searchPlaceholder = 'ชื่อ-นามสกุล';
 	let comboboxFilterList: ComboboxFilterGroup[] = [
 		{
 			key: 'filterComboboxType',
@@ -79,6 +80,7 @@
 	<div class="font-sans body-02 bg-white">
 		<DataPage
 			{breadcrumbList}
+			{searchPlaceholder}
 			{comboboxFilterList}
 			{checkboxFilterList}
 			{filteredData}
@@ -109,6 +111,7 @@
 		<Hst.Json bind:value={data} title="(Const) Data" />
 		<hr />
 		<Hst.Json bind:value={breadcrumbList} title="(Prop) Breadcrumb List" />
+		<Hst.Text bind:value={searchPlaceholder} title="(Prop) Search Placeholder" />
 		<Hst.Json bind:value={checkboxFilterList} title="(Prop) Filter List" />
 		<Hst.Json bind:value={tableHeader} title="(Prop) Table Header" />
 		<Hst.Number bind:value={tablePageSize} title="(Prop) Table Page Size" />

@@ -64,6 +64,7 @@
 		label: string;
 		url?: string;
 	}[];
+	export let searchPlaceholder = 'ชื่อมติ หรือ คำที่เกี่ยวข้อง';
 	export let comboboxFilterList: ComboboxFilterGroup[] = [];
 	export let checkboxFilterList: CheckboxFilterGroup[];
 	// Optimization Tips:
@@ -172,7 +173,7 @@
 			<Search
 				class="md:hidden {!mounted ? '-mt-4' : ''}"
 				searchClass="md:hidden mt-2"
-				placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+				placeholder={searchPlaceholder}
 				light
 				bind:value={searchQuery}
 				skeleton={!mounted}
@@ -192,7 +193,7 @@
 				>
 					<Search
 						class="flex-1 {!mounted ? '-mt-6' : ''}"
-						placeholder="ชื่อมติ หรือ คำที่เกี่ยวข้อง"
+						placeholder={searchPlaceholder}
 						light
 						bind:value={searchQuery}
 						skeleton={!mounted}

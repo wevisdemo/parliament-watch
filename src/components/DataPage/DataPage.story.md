@@ -47,14 +47,15 @@ export type SelectedComboboxValueType = Record<
 
 ## Props
 
-| Props                | Type                                | Meaning                                           |
-| -------------------- | ----------------------------------- | ------------------------------------------------- |
-| `breadcrumbList`     | `{ label: string; url: string }[]`  | ข้อมูล Breadcrumb                                 |
-| `comboboxFilterList` | `ComboboxFilterGroup[] = []`        | ข้อมูล Filter ประเภท Combobox ว่าจะต้องมีอะไรบ้าง |
-| `checkboxFilterList` | `CheckboxFilterGroup[]`             | ข้อมูล Filter ประเภท Checkbox ว่าจะต้องมีอะไรบ้าง |
-| `filteredData`       | `{ id: any; [key: string]: any }[]` | ข้อมูลใส่ตารางที่ผ่านการ filter มาจากด้านนอกแล้ว  |
-| `tableHeader`        | `{ key: string; value: string }[]`  | ข้อมูลหัวตาราง                                    |
-| `tablePageSize`      | `number = 10`                       | จำนวนข้อมูลต่อหน้า                                |
+| Props                | Type                                      | Meaning                                           |
+| -------------------- | ----------------------------------------- | ------------------------------------------------- |
+| `breadcrumbList`     | `{ label: string; url: string }[]`        | ข้อมูล Breadcrumb                                 |
+| `searchPlaceholder`  | `string = 'ชื่อมติ หรือ คำที่เกี่ยวข้อง'` | Placeholder ในช่อง Search                         |
+| `comboboxFilterList` | `ComboboxFilterGroup[] = []`              | ข้อมูล Filter ประเภท Combobox ว่าจะต้องมีอะไรบ้าง |
+| `checkboxFilterList` | `CheckboxFilterGroup[]`                   | ข้อมูล Filter ประเภท Checkbox ว่าจะต้องมีอะไรบ้าง |
+| `filteredData`       | `{ id: any; [key: string]: any }[]`       | ข้อมูลใส่ตารางที่ผ่านการ filter มาจากด้านนอกแล้ว  |
+| `tableHeader`        | `{ key: string; value: string }[]`        | ข้อมูลหัวตาราง                                    |
+| `tablePageSize`      | `number = 10`                             | จำนวนข้อมูลต่อหน้า                                |
 
 ## Reactive Props
 
