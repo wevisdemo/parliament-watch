@@ -3,6 +3,7 @@
 	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import { page } from '$app/stores';
 
 	export let data;
 
@@ -65,6 +66,9 @@
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
+
+	$: currentPath = $page.url.toString().replace(/\/+$/, '');
+	$: parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
 </script>
 
 <DataPage
@@ -94,9 +98,11 @@
 	<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
 		<div class="flex-1">
 			<p class="heading-01">ผลการลงมติรายคน</p>
-			<h1 class="fluid-heading-03">
-				{data.voting.title}
-			</h1>
+			<a href={parentPath} class="text-[color:inherit] hover:text-blue-70">
+				<h1 class="fluid-heading-03">
+					{data.voting.title}
+				</h1>
+			</a>
 			<p class="label-01 text-gray-60">หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ</p>
 		</div>
 	</div>
