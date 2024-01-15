@@ -98,11 +98,11 @@
 	<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
 		<div class="flex-1">
 			<p class="heading-01">ผลการลงมติรายคน</p>
-			<a href={parentPath} class="text-[color:inherit] hover:text-blue-70">
-				<h1 class="fluid-heading-03">
+			<h1 class="fluid-heading-03">
+				<a href="/votings/{voting.id}" class="no-underline text-text-01 hover:text-blue-70">
 					{data.voting.title}
-				</h1>
-			</a>
+				</a>
+			</h1>
 			<p class="label-01 text-gray-60">หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ</p>
 		</div>
 	</div>
