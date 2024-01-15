@@ -171,18 +171,20 @@
 				class="text-text-01 hover:underline hover:text-interactive-01"
 				href="/votings/{cellValue.id}">{cellValue.title}</a
 			>
-		{:else if cellKey === 'result'}
-			<VotingResultTag class="m-0 whitespace-nowrap" isLarge result={cellValue} />
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
+		{:else if cellKey === 'result'}
+			<VotingResultTag class="m-0 whitespace-nowrap w-fit" result={cellValue} />
 		{:else if cellKey === 'files'}
 			{@const files = cellValue}
 			{#if files.length > 0}
-				{#each files as file (file)}
-					<a href={file.url} download title={file.label}
-						><DocumentPdf /><span class="sr-only">{file.label}</span></a
-					>
-				{/each}
+				<div class="flex flex-wrap gap-2">
+					{#each files as file (file)}
+						<a href={file.url} download title={file.label}
+							><DocumentPdf /><span class="sr-only">{file.label}</span></a
+						>
+					{/each}
+				</div>
 			{:else}
 				-
 			{/if}
