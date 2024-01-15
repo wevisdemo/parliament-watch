@@ -507,7 +507,7 @@
 					</div>
 				</div>
 				{#if voterSearchResult.length}
-					{#each voterSearchResult as voter (voter.id)}
+					{#each voterSearchResult as voter}
 						<div class="flex w-full border-t border-gray-30">
 							<a
 								href="/politicians/{voter.id}"
