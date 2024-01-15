@@ -7,6 +7,7 @@ import {
 	groupVoteByAffiliations,
 	type VoteOptionCounter
 } from '$lib/datasheets/voting.js';
+import { createSeo } from '../../../utils/seo.js';
 
 export type Results = VoteOptionResult[];
 
@@ -62,7 +63,10 @@ export async function load({ params }) {
 		relatedBill,
 		results,
 		resultsByAffiliation,
-		resultsByPerson
+		resultsByPerson,
+		seo: createSeo({
+			title: 'การลงมติ ' + voting.title
+		})
 	};
 }
 

@@ -5,6 +5,7 @@ import {
 	fetchVotings
 } from '$lib/datasheets/index.js';
 import { getVoteResultsByPerson } from '$lib/datasheets/voting.js';
+import { createSeo } from '../../../../utils/seo';
 
 interface FilterOptions {
 	parties: string[];
@@ -31,7 +32,14 @@ export async function load({ params }) {
 		roles: getSortedUniqueValue(votes, 'role').reverse()
 	};
 
-	return { voting, filterOptions, votes };
+	return {
+		voting,
+		filterOptions,
+		votes,
+		seo: createSeo({
+			title: 'ผลการลงมติรายคน ' + voting.title
+		})
+	};
 }
 
 const getSortedUniqueValue = (list: { [key: string]: unknown }[], key: string): string[] =>
