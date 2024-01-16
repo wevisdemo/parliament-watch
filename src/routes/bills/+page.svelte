@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
+	import Carousel from '$components/Index/Carousel.svelte';
+	import LawStatusCard from '$components/LawStatusCard/LawStatusCard.svelte';
 
 	export let data;
 </script>
@@ -28,13 +30,18 @@
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
 </section>
 <div class="bg-ui-01">
-	<section class="flex flex-col gap-2 px-4 py-6 max-w-[1280px] mx-auto">
+	<section class="flex flex-col gap-3 px-4 py-6 max-w-[1280px] mx-auto">
 		<header class="flex flex-col items-start justify-between flex-wrap md:flex-row">
 			<h2 class="fluid-heading-03">สำรวจตามสถานะ</h2>
 			<button type="button" class="helper-text-01 text-blue-60 underline text-right"
 				>มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?</button
 			>
 		</header>
+		<Carousel options={{ loop: false, slides: { perView: 'auto', spacing: 12 }, breakpoints: {} }}>
+			{#each data.byStatus as bill}
+				<LawStatusCard totalCount={data.totalCount} {bill} />
+			{/each}
+		</Carousel>
 	</section>
 </div>
 
