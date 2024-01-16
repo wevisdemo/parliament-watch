@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
-	import LawIcom from '../../components/icons/LawIcon.svelte';
 	import Carousel from '$components/Index/Carousel.svelte';
 	import LawStatusCard from '$components/LawStatusCard/LawStatusCard.svelte';
+	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
+	import LawIcom from '../../components/icons/LawIcon.svelte';
 
 	export let data;
 </script>
@@ -37,7 +37,20 @@
 				>มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?</button
 			>
 		</header>
-		<Carousel options={{ loop: false, slides: { perView: 'auto', spacing: 12 }, breakpoints: {} }}>
+		<Carousel
+			options={{
+				loop: false,
+				slides: { perView: 'auto', spacing: 12 },
+				breakpoints: {
+					'(min-width: 1200px)': {
+						slides: {
+							perView: 4,
+							spacing: 12
+						}
+					}
+				}
+			}}
+		>
 			{#each data.byStatus as bill}
 				<LawStatusCard totalCount={data.totalCount} {bill} />
 			{/each}
@@ -50,6 +63,27 @@
 		</header>
 		<Carousel options={{ loop: false, slides: { perView: 'auto', spacing: 12 }, breakpoints: {} }}>
 			{#each data.byCategory as bill}
+				<LawStatusCard totalCount={data.totalCount} {bill} />
+			{/each}
+		</Carousel>
+	</section>
+	<section class="flex flex-col gap-3 px-4 py-6 max-w-[1280px] mx-auto">
+		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
+		<Carousel
+			options={{
+				loop: false,
+				slides: { perView: 'auto', spacing: 12 },
+				breakpoints: {
+					'(min-width: 900px)': {
+						slides: {
+							perView: 3,
+							spacing: 12
+						}
+					}
+				}
+			}}
+		>
+			{#each data.byProposerType as bill}
 				<LawStatusCard totalCount={data.totalCount} {bill} />
 			{/each}
 		</Carousel>
