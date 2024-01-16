@@ -36,6 +36,7 @@
 		"@commitlint/cli": "^17.7.0",
 		"@commitlint/config-conventional": "^17.7.0",
 		"@histoire/plugin-svelte": "^0.17.0",
+		"@melt-ui/svelte": "^0.70.0",
 		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/d3": "^7.4.1",
