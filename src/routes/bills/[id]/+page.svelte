@@ -11,7 +11,7 @@
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
-	import { showModalLawProcess, showModalListCoProposer } from '$components/bills/store';
+	import { showModalListCoProposer } from '$components/bills/store';
 	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
 	import CoProposer from '$components/bills/CoProposer.svelte';
 	import type { Politician } from '$models/politician.js';
@@ -316,14 +316,6 @@
 					<BillStatusTag isLarge status={bill.status} />
 				</div>
 				<div>
-					<button
-						class="helper-text-01 text-link-01 underline"
-						on:click={() => {
-							$showModalLawProcess = true;
-						}}
-					>
-						มีขั้นตอนอะไรบ้างกว่าจะผ่านกฎหมายสำเร็จ?
-					</button>
 					<ModalLawProcess />
 				</div>
 			</div>

@@ -2,6 +2,8 @@
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import Carousel from '$components/Index/Carousel.svelte';
 	import LawStatusCard from '$components/LawStatusCard/LawStatusCard.svelte';
+	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
+	import { showModalLawProcess } from '$components/bills/store';
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
@@ -35,9 +37,7 @@
 	<section class="flex flex-col gap-3 px-4 py-6 max-w-[1280px] mx-auto">
 		<header class="flex flex-col items-start justify-between flex-wrap md:flex-row">
 			<h2 class="fluid-heading-03">สำรวจตามสถานะ</h2>
-			<button type="button" class="helper-text-01 text-blue-60 underline text-right"
-				>มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?</button
-			>
+			<ModalLawProcess class="text-right" />
 		</header>
 		<Carousel
 			options={{
