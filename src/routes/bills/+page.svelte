@@ -1,7 +1,9 @@
 <script lang="ts">
+	import BillCard from '$components/BillCard/BillCard.svelte';
 	import Carousel from '$components/Index/Carousel.svelte';
 	import LawStatusCard from '$components/LawStatusCard/LawStatusCard.svelte';
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
 
 	export let data;
@@ -89,8 +91,40 @@
 		</Carousel>
 	</section>
 </div>
-
-<details>
-	<summary>Data</summary>
-	<pre>{JSON.stringify(data, undefined, 2)}</pre>
-</details>
+<div class="bg-teal-80">
+	<section class="flex flex-col gap-3 px-4 py-10 max-w-[1280px] mx-auto">
+		<h2 class="fluid-heading-03 text-white">5 ฉบับล่าสุดที่ได้ออกเป็นกฏหมาย</h2>
+		<Carousel
+			options={{
+				loop: false,
+				slides: { perView: 'auto', spacing: 12 },
+				breakpoints: {
+					'(min-width: 1300px)': {
+						slides: {
+							perView: 5,
+							spacing: 12
+						}
+					}
+				}
+			}}
+		>
+			{#each data.latestEnactedBills as bill}
+				<BillCard
+					class="keen-slider__slide"
+					orientation="portrait"
+					{...bill}
+					billUrl="/bills/{bill.id}"
+				/>
+			{/each}
+		</Carousel>
+	</section>
+</div>
+<div class="pt-6 pb-20 px-4">
+	<a
+		href="#a"
+		class="flex items-end justify-between gap-4 max-w-[1280px] w-full mx-auto fluid-heading-04 p-4 bg-blue-60 hover:bg-blue-70 focus:bg-blue-70 text-white"
+	>
+		<span>ดูร่างกฎหมายทั้งหมดในสภา</span>
+		<ArrowRight />
+	</a>
+</div>
