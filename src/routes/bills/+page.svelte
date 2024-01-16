@@ -43,6 +43,17 @@
 			{/each}
 		</Carousel>
 	</section>
+	<section class="flex flex-col gap-3 px-4 py-6 max-w-[1280px] mx-auto">
+		<header>
+			<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
+			<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
+		</header>
+		<Carousel options={{ loop: false, slides: { perView: 'auto', spacing: 12 }, breakpoints: {} }}>
+			{#each data.byCategory as bill}
+				<LawStatusCard totalCount={data.totalCount} {bill} />
+			{/each}
+		</Carousel>
+	</section>
 </div>
 
 <details>
