@@ -1,28 +1,8 @@
-import type { Assembly } from '$models/assembly';
-import { BillStatus, type Bill, BillProposerType } from '$models/bill';
 import { fetchAssemblies } from '$lib/datasheets';
+import type { Assembly } from '$models/assembly';
+import { BillProposerType, BillStatus, type Bill } from '$models/bill';
 import { enactedBill } from '../../mocks/data/bill';
-
-export interface BillsByStatus {
-	status: BillStatus;
-	samples: Pick<Bill, 'id' | 'nickname'>[];
-	count: number;
-}
-
-export interface BillsByCategory {
-	category: string;
-	samples: Pick<Bill, 'id' | 'nickname'>[];
-	count: number;
-}
-
-export interface BillsByProposerType {
-	proposerType: BillProposerType;
-	samples: Pick<Bill, 'id' | 'nickname'>[];
-	count: number;
-	countByStatus: {
-		[status in BillStatus]: number;
-	};
-}
+import type { BillsByCategory, BillsByProposerType, BillsByStatus } from './+page';
 
 export async function load() {
 	const totalCount = 900;

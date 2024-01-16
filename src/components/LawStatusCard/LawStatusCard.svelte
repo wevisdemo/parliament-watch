@@ -8,7 +8,7 @@
 		BillsByCategory,
 		BillsByProposerType,
 		BillsByStatus
-	} from '../../routes/bills/+page.server';
+	} from '../../routes/bills/+page';
 
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;
