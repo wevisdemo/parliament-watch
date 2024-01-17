@@ -10,6 +10,7 @@ interface FilterOptions {
 	status: BillStatus[];
 	categories: string[];
 	billProposerType: BillProposerType[];
+	proposerNames: string[];
 }
 
 interface BillSummary
@@ -39,13 +40,6 @@ export async function load() {
 		({ name }) => name === AssemblyName.Representatives
 	);
 
-	const filterOptions: FilterOptions = {
-		mpAssemblies,
-		status: billStatuses,
-		categories: mockCategories,
-		billProposerType: billProposerTypes
-	};
-
 	const bills: BillSummary[] = new Array(100).fill({}).map((_, i) => ({
 		id: i,
 		title: enactedBill.title,
@@ -56,6 +50,24 @@ export async function load() {
 		categories: [mockCategories[i % mockCategories.length]],
 		...getProposerProperties(i)
 	}));
+
+	const proposerNames = [
+		...new Set(
+			bills
+				.filter((bill) => bill.proposedLedByPeopleName || bill.proposedLedByPoliticianName)
+				.map(
+					(bill) => bill.proposedLedByPeopleName || bill.proposedLedByPoliticianName
+				) as string[] /* either of pplName or polName will be present, so it will be a `string` */
+		)
+	];
+
+	const filterOptions: FilterOptions = {
+		mpAssemblies,
+		status: billStatuses,
+		categories: mockCategories,
+		billProposerType: billProposerTypes,
+		proposerNames
+	};
 
 	return {
 		filterOptions,
