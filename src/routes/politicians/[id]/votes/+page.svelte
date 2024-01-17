@@ -174,7 +174,7 @@
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
 		{:else if cellKey === 'result'}
-			<VotingResultTag class="m-0 whitespace-nowrap w-fit" result={cellValue} />
+			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
 		{:else if cellKey === 'files'}
 			{@const files = cellValue}
 			{#if files.length > 0}

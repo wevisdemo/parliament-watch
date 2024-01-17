@@ -32,4 +32,4 @@
 	export { className as class };
 </script>
 
-<div class={twMerge(tagColor, className, tagText, tagContainer)}>{label}</div>
+<div class={twMerge('w-fit', tagColor, className, tagText, tagContainer)}>{label}</div>
