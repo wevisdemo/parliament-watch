@@ -1,4 +1,4 @@
-import type { BillStatus, Bill, BillProposerType } from '$models/bill';
+import type { Bill, BillProposerType, BillStatus } from '$models/bill';
 
 export interface BillsByStatus {
 	status: BillStatus;

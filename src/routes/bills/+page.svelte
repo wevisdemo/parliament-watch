@@ -137,7 +137,7 @@
 </div>
 <div class="pt-6 pb-20 px-4">
 	<a
-		href="#a"
+		href="/bills/explore"
 		class="flex items-end justify-between gap-4 max-w-[1280px] w-full mx-auto fluid-heading-04 p-4 bg-blue-60 hover:bg-blue-70 focus:bg-blue-70 text-white"
 	>
 		<span>ดูร่างกฎหมายทั้งหมดในสภา</span>
