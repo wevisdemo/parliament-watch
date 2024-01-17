@@ -27,7 +27,7 @@
 	<h1 class="fluid-heading-05 text-balance">สำรวจร่างกฎหมายในสภา</h1>
 	<div class="flex flex-wrap items-baseline justify-center gap-2 label-01">
 		<span class="text-text-02"
-			>อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', { dateStyle: 'medium' })}</span
+			>อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', { dateStyle: 'medium' })}</span
 		>
 		<a href="#a" class="underline">ที่มาและข้อจำกัดข้อมูล</a>
 	</div>
