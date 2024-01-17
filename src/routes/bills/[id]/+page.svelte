@@ -226,7 +226,7 @@
 					<DownloadData links={[{ label: bill.attachment.label, url: bill.attachment.url }]} />
 				{/if}
 				<p class="label-01 text-text-02">
-					อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 						year: 'numeric',
 						month: 'short',
 						day: 'numeric'

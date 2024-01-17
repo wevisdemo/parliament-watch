@@ -95,7 +95,7 @@
 			<div class="flex flex-col gap-2">
 				<DownloadData links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
 				<p class="label-01 text-gray-60">
-					อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 						year: 'numeric',
 						month: 'short',
 						day: 'numeric'
@@ -200,7 +200,7 @@
 			<Section id="politics" title="ประวัติทางการเมือง">
 				<Politician slot="icon" size="32" />
 				<p slot="header-extension" class="label-01 text-gray-60">
-					หมายเหตุ: ข้อมูลย้อนหลังถึงปี 2562
+					หมายเหตุ : ข้อมูลย้อนหลังถึงปี 2562
 				</p>
 				{#if politician.assemblyRoles.length > 0}
 					<div>

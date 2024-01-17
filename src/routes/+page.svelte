@@ -42,7 +42,7 @@
 		</h1>
 		<p class="relative flex gap-[10px] helper-text-01 text-gray-60">
 			<span
-				>อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+				>อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 					year: 'numeric',
 					month: 'short',
 					day: 'numeric'

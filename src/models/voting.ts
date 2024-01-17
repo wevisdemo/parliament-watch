@@ -64,5 +64,5 @@ export enum DefaultVoteOption {
 	Disagreed = 'ไม่เห็นด้วย',
 	Novote = 'งดออกเสียง',
 	Abstain = 'ไม่ลงคะแนน',
-	Absent = 'ลา/ขาดลงมติ'
+	Absent = 'ลา / ขาดลงมติ'
 }

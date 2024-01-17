@@ -61,7 +61,7 @@
 				<ul class="label-01 text-white/60">
 					<li>เห็นด้วย {agreedVoting} มติ</li>
 					<li>ไม่เห็นด้วย {disagreedVoting} มติ</li>
-					<li>ลา/ขาดลงมติ {absentTotal} มติ</li>
+					<li>ลา / ขาดลงมติ {absentTotal} มติ</li>
 				</ul>
 			</a>
 		</li>

@@ -47,7 +47,7 @@
 		<div class="flex items-center">
 			<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>
 			<p class="body-01 ml-[8px]">
-				{startedAtThaiFormat}{data.endedAt ? `- ${endedAtThaiFormat}` : ''}
+				{startedAtThaiFormat}{data.endedAt ? ` - ${endedAtThaiFormat}` : ''}
 			</p>
 		</div>
 		<div class="md:mt-[32px] mt-[16px]">
@@ -75,7 +75,7 @@
 			</a> -->
 		</div>
 		<p class="label-01 text-gray-60">
-			อัพเดทข้อมูล: {new Date().toLocaleDateString('th-TH', {
+			อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 				year: 'numeric',
 				month: 'short',
 				day: 'numeric'

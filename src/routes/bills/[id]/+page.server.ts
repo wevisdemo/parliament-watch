@@ -115,12 +115,12 @@ const fakeMpPassedVotingResultSummary: VotingResultSummary = {
 	total: 500,
 	subResults: [
 		{
-			affiliationName: 'ส.ส. ฝ่ายรัฐบาล',
+			affiliationName: 'สส.ฝ่ายรัฐบาล',
 			agreed: 310,
 			total: 310
 		},
 		{
-			affiliationName: 'ส.ส. ฝ่ายค้าน',
+			affiliationName: 'สส.ฝ่ายค้าน',
 			agreed: 14,
 			total: 190
 		}
@@ -132,12 +132,12 @@ const fakeMpFailedVotingResultSummary: VotingResultSummary = {
 	total: 500,
 	subResults: [
 		{
-			affiliationName: 'ส.ส. ฝ่ายรัฐบาล',
+			affiliationName: 'สส.ฝ่ายรัฐบาล',
 			agreed: 0,
 			total: 310
 		},
 		{
-			affiliationName: 'ส.ส. ฝ่ายค้าน',
+			affiliationName: 'สส.ฝ่ายค้าน',
 			agreed: 130,
 			total: 190
 		}

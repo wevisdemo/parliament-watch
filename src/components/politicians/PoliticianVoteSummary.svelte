@@ -98,9 +98,9 @@
 			</a>
 		</div>
 		<div class="flex flex-col gap-2">
-			<h3 class="body-02 px-2 py-1 bg-gray-20 heading-02">การลา/ขาดลงมติ</h3>
+			<h3 class="body-02 px-2 py-1 bg-gray-20 heading-02">การลา / ขาดลงมติ</h3>
 			<p class="body-02">
-				{politician.firstname}ลา/ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({absentPercentage}%)
+				{politician.firstname}ลา / ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({absentPercentage}%)
 				จากทั้งหมด
 				{votingAbsentStats.totalVoting}
 				มติในฐานข้อมูล ซึ่ง{absentPercentage === votingAbsentStats.averageAbsentVoting
@@ -112,7 +112,7 @@
 				)}%)
 			</p>
 			<p class="label-01 text-gray-60">
-				หมายเหตุ: การขาดลงมติ เกิดจากหลายสาเหตุ เช่น ติดประชุมอื่น ติดภารกิจสำคัญ เจ็บป่วย
+				หมายเหตุ : การขาดลงมติ เกิดจากหลายสาเหตุ เช่น ติดประชุมอื่น ติดภารกิจสำคัญ เจ็บป่วย
 				จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
 			</p>
 			<a

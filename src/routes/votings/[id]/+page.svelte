@@ -216,7 +216,7 @@
 			<div class="flex flex-col gap-2">
 				<DownloadData links={voting.files} />
 				<p class="label-01 text-gray-60">
-					อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 						year: 'numeric',
 						month: 'short',
 						day: 'numeric'
@@ -319,7 +319,7 @@
 				>
 					<li>ได้เสียงเกินกึ่งหนึ่งของสภา</li>
 					<li>ได้เสียงฝ่ายค้านอย่างน้อย 20%</li>
-					<li>ได้เสียง สว. อย่างน้อย 1 ใน 3</li>
+					<li>ได้เสียง สว.อย่างน้อย 1 ใน 3</li>
 				</ol>
 			</div>
 			<Modal passiveModal bind:open modalHeading="งดออกเสียง vs. ไม่ลงคะแนน" on:open on:close>

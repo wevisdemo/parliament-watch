@@ -6,16 +6,16 @@
 
 	export let Hst: Hst;
 
-	let nickname = 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
-	let title = 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
+	let nickname = 'ร่าง พรบ.กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
+	let title = 'ร่าง พรบ.กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
 	let proposedBy = {
 		avatar: 'https://placehold.co/24x24',
 		name: 'ดวงฤทธิ์ เบ็ญจาธิกุล ชัยรุ่งเรือง',
-		description: 'สส. ชุดที่ 26 (2566) พรรคก้าวไกล'
+		description: 'สส.ชุดที่ 26 (2566) พรรคก้าวไกล'
 	};
 	let proposedOn = new Date('July 13, 2023');
 	let status = BillStatus.InProgress;
-	let currentState = 'สส. พิจารณา วาระ 2';
+	let currentState = 'สส.พิจารณา วาระ 2';
 	let daySinceProposed = 210;
 	let billUrl = '#';
 </script>

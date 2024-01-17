@@ -98,7 +98,7 @@
 	// Description Lookup
 	const DESC_LOOKUP: Record<string, string | undefined> = {
 		[HighlightedReason.LongestServedInPoliticalPositions]:
-			'พิจารณาจากปีที่นักการเมืองในฐานข้อมูลนี้ ได้รับตำแหน่ง สส./สว./ครม. เป็นครั้งแรก',
+			'พิจารณาจากปีที่นักการเมืองในฐานข้อมูลนี้ ได้รับตำแหน่ง สส. / สว. / ครม.เป็นครั้งแรก',
 		[HighlightedReason.MostFrequentlyElectedInConstituency]:
 			'พิจารณาจากจำนวนครั้งที่นักการเมืองในฐานข้อมูลนี้ ได้รับเลือกตั้งในระบบเขตทั้งหมด โดยใช้ผลการเลือกตั้งย้อนหลังตั้งแต่ปี 2535',
 		[HighlightedReason.MostFrequentlyServedAsMinister]:

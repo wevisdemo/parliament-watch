@@ -9,25 +9,25 @@
 	const passedVoting: VoteCardVoting = {
 		id: '1',
 		date: new Date('2023-08-31T17:00:00.000Z'),
-		title: 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)',
+		title: 'ร่าง พรบ.สุราก้าวหน้า (ส่งไป ครม.)',
 		result: DefaultVotingResult.Passed
 	};
 
 	const failedVoting: VoteCardVoting = {
 		id: '2',
 		date: new Date('2023-09-01T17:00:00.000Z'),
-		title: 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)',
+		title: 'ร่าง พรบ.สุราก้าวหน้า (ส่งไป ครม.)',
 		result: DefaultVotingResult.Failed
 	};
 
 	const passedHighlightedVoteByGroups: HighlightedVoteByGroup[] = [
 		{
-			name: 'สส. ฝ่ายรัฐบาล',
+			name: 'สส.ฝ่ายรัฐบาล',
 			count: 160,
 			total: 315
 		},
 		{
-			name: 'สส. ฝ่ายค้าน',
+			name: 'สส.ฝ่ายค้าน',
 			count: 164,
 			total: 185
 		},
@@ -40,12 +40,12 @@
 
 	const failedHighlightedVoteByGroups: HighlightedVoteByGroup[] = [
 		{
-			name: 'สส. ฝ่ายรัฐบาล',
+			name: 'สส.ฝ่ายรัฐบาล',
 			count: 16,
 			total: 315
 		},
 		{
-			name: 'สส. ฝ่ายค้าน',
+			name: 'สส.ฝ่ายค้าน',
 			count: 4,
 			total: 185
 		},

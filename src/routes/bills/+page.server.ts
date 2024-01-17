@@ -27,9 +27,9 @@ export interface BillsByProposerType {
 export async function load() {
 	const totalCount = 900;
 	const samepleBills = [
-		{ id: 1, nickname: 'ร่าง พ.ร.บ. สุราก้าวหน้า' },
-		{ id: 2, nickname: 'ร่าง พ.ร.บ. การจัดสรรที่ดิน' },
-		{ id: 3, nickname: 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม' }
+		{ id: 1, nickname: 'ร่าง พรบ.สุราก้าวหน้า' },
+		{ id: 2, nickname: 'ร่าง พรบ.การจัดสรรที่ดิน' },
+		{ id: 3, nickname: 'ร่าง พรบ.กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม' }
 	];
 	const byStatus: BillsByStatus[] = Object.values(BillStatus).map((status) => {
 		return {

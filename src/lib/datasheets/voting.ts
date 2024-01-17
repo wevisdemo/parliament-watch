@@ -92,8 +92,8 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 						group = assemblyRole.assembly.oppositionParties.some(
 							({ name }) => name === partyRole.party.name
 						)
-							? 'สส. ฝ่ายค้าน'
-							: 'สส. ฝ่ายรัฐบาล';
+							? 'สส.ฝ่ายค้าน'
+							: 'สส.ฝ่ายรัฐบาล';
 
 						if (!counter[group].byParties[partyRole.party.name]) {
 							counter[group].byParties[partyRole.party.name] = {
@@ -104,7 +104,7 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 
 						counter[group].byParties[partyRole.party.name].resultSummary[voteOption]++;
 					} else {
-						group = 'สส. ไม่สังกัดพรรค';
+						group = 'สส.ไม่สังกัดพรรค';
 
 						console.warn(
 							`[WARNING] Could not find ${politician.id} party on the voting day of "${
@@ -122,9 +122,9 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 			return counter;
 		},
 		{
-			'สส. ฝ่ายรัฐบาล': initVoteOptionRecord(),
-			'สส. ฝ่ายค้าน': initVoteOptionRecord(),
-			'สส. ไม่สังกัดพรรค': initVoteOptionRecord(),
+			'สส.ฝ่ายรัฐบาล': initVoteOptionRecord(),
+			'สส.ฝ่ายค้าน': initVoteOptionRecord(),
+			'สส.ไม่สังกัดพรรค': initVoteOptionRecord(),
 			'สว.': initVoteOptionRecord()
 		}
 	);
