@@ -3,7 +3,6 @@
 	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { page } from '$app/stores';
 
 	export let data;
 
@@ -66,9 +65,6 @@
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
-
-	$: currentPath = $page.url.toString().replace(/\/+$/, '');
-	$: parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
 </script>
 
 <DataPage
