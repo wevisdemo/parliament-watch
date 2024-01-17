@@ -29,6 +29,14 @@
 
 	$: headerStyle = 'status' in bill ? HEADER_STYLE[bill.status] : 'border';
 	$: barStyle = 'status' in bill ? BAR_STYLE[bill.status] : 'bg-ui-04';
+
+	let billParams: [string, string];
+	$: billParams =
+		'status' in bill
+			? ['status', bill.status]
+			: 'category' in bill
+			? ['category', bill.category]
+			: ['proposertype', bill.proposerType];
 </script>
 
 <article class="keen-slider__slide max-w-[288px] min-w-[288px] bg-white body-01">
@@ -119,7 +127,9 @@
 				<li><a href="/bills/{sample.id}" class="text-gray-100 underline">{sample.nickname}</a></li>
 			{/each}
 		</ul>
-		<a href="#a" class="flex items-center gap-1 helper-text-01 text-link-01 underline"
+		<a
+			href="/bills/explore?{billParams[0]}={encodeURIComponent(billParams[1])}"
+			class="flex items-center gap-1 helper-text-01 text-link-01 underline"
 			><span>ดูทั้งหมด</span><ArrowRight /></a
 		>
 	</div>

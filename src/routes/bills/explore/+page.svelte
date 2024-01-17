@@ -119,22 +119,22 @@
 					}));
 
 	onMount(() => {
-		switch ($page.url.searchParams.get('status')) {
-			case BillStatus.InProgress:
-				selectedCheckboxValue.filterStatus = [BillStatus.InProgress];
-				break;
-			case BillStatus.Enacted:
-				selectedCheckboxValue.filterStatus = [BillStatus.Enacted];
-				break;
-			case BillStatus.Rejected:
-				selectedCheckboxValue.filterStatus = [BillStatus.Rejected];
-				break;
-			case BillStatus.Merged:
-				selectedCheckboxValue.filterStatus = [BillStatus.Merged];
-				break;
+		const status = $page.url.searchParams.get('status');
+		if (status && (filterOptions.status as string[]).includes(status)) {
+			selectedCheckboxValue.filterStatus = [status];
 		}
 
-		const proposerNameParam = $page.url.searchParams.get('proposer');
+		const category = $page.url.searchParams.get('category');
+		if (category && filterOptions.categories.includes(category)) {
+			selectedCheckboxValue.filterCategory = [category];
+		}
+
+		const proposerType = $page.url.searchParams.get('proposertype');
+		if (proposerType && (filterOptions.billProposerType as string[]).includes(proposerType)) {
+			selectedCheckboxValue.filterProposerType = [proposerType];
+		}
+
+		const proposerNameParam = $page.url.searchParams.get('proposername');
 		if (proposerNameParam) {
 			cmpDataPage.setCombobox('filterProposerName', proposerNameParam.replace(/-/g, ' '));
 		}
