@@ -86,7 +86,7 @@ export function getMemberGroup(
 				if (educations.some((e) => e.includes('ปริญญาโท'))) return 'ปริญญาโท';
 				if (educations.some((e) => e.includes('ปริญญาตรี'))) return 'ปริญญาตรี';
 				if (educations.some((e) => e.includes('ทหาร'))) return 'สถาบันทหาร';
-				return 'ตำกว่าปริญญาโท';
+				return 'ต่ำกว่าปริญญาตรี';
 			}).map(([side, membersBySide]) => ({
 				name: side,
 				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
