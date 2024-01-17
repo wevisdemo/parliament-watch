@@ -198,7 +198,7 @@
 					</p>
 					<br />
 					<p class="body-02">
-						<strong>การกำหนดลำดับชั้นระหว่างกฎหมายประเภทต่าง ๆ</strong> มีขึ้นเพื่อให้กฎหมายแม่บท อย่าง
+						<strong>การกำหนดลำดับชั้นระหว่างกฎหมายประเภทต่างๆ</strong> มีขึ้นเพื่อให้กฎหมายแม่บท อย่าง
 						‘รัฐธรรมนูญ’ เป็นตัวกำกับกฎหมายที่อยู่ในลำดับชั้นรองลงมา เช่น พระราชบัญญัติ ซึ่งต้องห้ามขัดหรือแย้งต่อกฎหมายสูงสุดอย่างรัฐธรรมนูญ
 						การพิจารณาบังคับใช้กฎหมายที่อยู่ในลำดับชั้นที่รองลงมาจึงมีกระบวนการบังคับใช้ที่ซับซ้อนน้อยกว่าการแก้ไขหรือการออกกฎหมายตัวแม่บทอย่างการแก้ไขบทบัญญัติในรัฐธรรมนูญ
 					</p>
@@ -326,8 +326,8 @@
 					</p>
 					<div class="flex w-full justify-center items-center pt-4">
 						<img
-							src="images/legislative-process/general-process.png"
-							alt="general-process-process"
+							src="images/legislative-process/general-process.webp"
+							alt=""
 							class="max-w-[440px]"
 						/>
 					</div>
@@ -548,8 +548,8 @@
 						</p>
 						<img
 							class="my-4 mx-auto w-full max-w-[440px]"
-							src="images/legislative-process/organic-law-bill-consideration.png"
-							alt="Organic law bill consideration"
+							src="images/legislative-process/organic-law-bill-consideration.webp"
+							alt=""
 						/>
 						<ol class="list-decimal list-outside ml-6">
 							<li class="mb-2">
@@ -582,8 +582,8 @@
 						</p>
 						<img
 							class="my-4 mx-auto w-full max-w-[440px]"
-							src="images/legislative-process/amendment-of-constitutional-provisions.png"
-							alt="Amendment of constitutional provisions"
+							src="images/legislative-process/amendment-of-constitutional-provisions.webp"
+							alt=""
 						/>
 						<ol class="list-decimal list-outside gap-2 ml-6">
 							<li class="mb-2">
@@ -626,6 +626,30 @@
 								>ว่าร่างแก้ไขรัฐธรรมนูญนั้น เป็นเรื่องเกี่ยวกับการเปลี่ยนแปลงการปกครองหรือไม่
 								หรือเป็นเรื่องที่ต้องทำประชามติก่อนหรือไม่ โดยศาลรัฐธรรมนูญต้องพิจารณาให้เสร็จภายใน
 								30 วันนับจากวันที่ได้รับเรื่อง โดยในระหว่างนี้ นายกฯ จะนำร่างฯ ขึ้นทูลเกล้าฯ ไม่ได้
+							</li>
+						</ol>
+					</div>
+					<div class="mt-10 body-02">
+						<h3 class="fluid-heading-03 mb-6">การพิจารณาร่าง พรบ.งบประมาณประจำปี</h3>
+						<p>
+							ขั้นตอนในการพิจารณาร่าง พรบ.งบประมาณประจำปี จะแตกต่างจากการออก
+							พรบ.ทั่วไปในขั้นตอนการพิจารณาของ สว.โดยมีรายละเอียดดังนี้
+						</p>
+						<img
+							class="my-4 mx-auto w-full max-w-[440px]"
+							src="images/legislative-process/yearly.webp"
+							alt=""
+						/>
+						<ol class="list-decimal list-outside gap-2 ml-6">
+							<li class="mb-2">
+								เมื่อ สส.มีมติรับหลักการแห่งร่าง พรบ.งบประมาณฯ ให้
+								สว.ตั้งคณะกรรมาธิการวิสามัญขึ้นคณะหนึ่งเพื่อพิจารณาศึกษาร่าง พรบ.งบประมาณฯ
+								ควบคู่กับการพิจารณาของ
+								สส.และรายงานผลการพิจารณาพร้อมข้อสังเกตและข้อเสนอแนะต่อประธานวุฒิสภา
+							</li>
+							<li class="mb-2">
+								สว.ต้องพิจารณาให้ความเห็นชอบหรือไม่ให้ความเห็นชอบร่าง พรบ.งบประมาณภายใน 20 วัน
+								นับตั้งแต่วันที่ร่าง พรบ.มาถึงวุฒิสภา โดยจะแก้ไขเพิ่มเติมใดๆ มิได้
 							</li>
 						</ol>
 					</div>

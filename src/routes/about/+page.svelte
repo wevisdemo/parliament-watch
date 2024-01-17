@@ -203,7 +203,7 @@
 					href="https://punchup.world/"
 					target="_blank"
 					rel="nofollow noopener noreferrer">Punch Up</a
-				> ซึ่งเป็นสตูดิโอผลิตงาน Data Storytelling ที่สื่อสารเรื่องราวด้วยชุดข้อมูลในประเด็นต่าง ๆ ที่นอกเหนือไปจากประเด็นทางการเมือง
+				> ซึ่งเป็นสตูดิโอผลิตงาน Data Storytelling ที่สื่อสารเรื่องราวด้วยชุดข้อมูลในประเด็นต่างๆ ที่นอกเหนือไปจากประเด็นทางการเมือง
 			</p>
 			<h3 id="What-We-Do" class="fluid-heading-03 mt-2">What We Do</h3>
 			<p>
