@@ -1,18 +1,23 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import type {
 		SelectedCheckboxValueType,
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
+	import { BillStatus } from '$models/bill.js';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
-
-	export let data;
+	import { onMount } from 'svelte';
 
 	const formatThaiYear = (date: Date | undefined) => {
 		if (!date) return;
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};
+
+	let cmpDataPage: DataPage;
+
+	export let data;
 
 	$: ({ filterOptions, bills } = data);
 
@@ -26,7 +31,7 @@
 
 	$: comboboxFilterList = [
 		{
-			key: 'filterName',
+			key: 'filterProposerName',
 			legend: 'ชื่อผู้เสนอ',
 			placeholder: 'เลือกชื่อผู้เสนอ',
 			choices: proposerNames.map((name) => ({
@@ -64,7 +69,7 @@
 			}))
 		},
 		{
-			key: 'filterProposer',
+			key: 'filterProposerType',
 			legend: 'ประเภทผู้เสนอ',
 			choices: filterOptions.billProposerType.map((proposer) => ({
 				label: proposer,
@@ -85,9 +90,9 @@
 			: bills
 					.filter((bill) => {
 						if (
-							'filterName' in selectedComboboxValue &&
+							'filterProposerName' in selectedComboboxValue &&
 							![bill.proposedLedByPeopleName, bill.proposedLedByPoliticianName].includes(
-								selectedComboboxValue.filterName as string | undefined
+								selectedComboboxValue.filterProposerName as string | undefined
 							)
 						)
 							return;
@@ -95,14 +100,14 @@
 						const search = searchQuery.trim();
 						if (search && !bill.title.includes(search)) return;
 
-						const { filterEra, filterStatus, filterCategory, filterProposer } =
+						const { filterEra, filterStatus, filterCategory, filterProposerType } =
 							selectedCheckboxValue;
 
 						return (
 							filterEra.includes(bill.purposedAtMpAssemblyId) &&
 							filterStatus.includes(bill.status) &&
 							filterCategory.some((category) => bill.categories.includes(category as string)) &&
-							filterProposer.includes(bill.proposerType)
+							filterProposerType.includes(bill.proposerType)
 						);
 					})
 					.map((bill) => ({
@@ -112,9 +117,32 @@
 							title: bill.title
 						}
 					}));
+
+	onMount(() => {
+		switch ($page.url.searchParams.get('status')) {
+			case BillStatus.InProgress:
+				selectedCheckboxValue.filterStatus = [BillStatus.InProgress];
+				break;
+			case BillStatus.Enacted:
+				selectedCheckboxValue.filterStatus = [BillStatus.Enacted];
+				break;
+			case BillStatus.Rejected:
+				selectedCheckboxValue.filterStatus = [BillStatus.Rejected];
+				break;
+			case BillStatus.Merged:
+				selectedCheckboxValue.filterStatus = [BillStatus.Merged];
+				break;
+		}
+
+		const proposerNameParam = $page.url.searchParams.get('proposer');
+		if (proposerNameParam) {
+			cmpDataPage.setCombobox('filterProposerName', proposerNameParam.replace(/-/g, ' '));
+		}
+	});
 </script>
 
 <DataPage
+	bind:this={cmpDataPage}
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ url: '/bills', label: 'สำรวจร่างกฎหมายในสภา' },

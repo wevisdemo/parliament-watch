@@ -52,7 +52,7 @@
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -134,6 +134,18 @@
 		showHeader = currentFromTop <= previousFromTop;
 		previousFromTop = currentFromTop;
 	}
+
+	let renderCombobox = true;
+	export const setCombobox = (key: string, value: string) => {
+		comboboxInternal[key] = value;
+
+		// Force combobox to evaluate internal value
+		// When combobox rerendered, `select` event will auto fire
+		renderCombobox = false;
+		tick().then(() => {
+			renderCombobox = true;
+		});
+	};
 </script>
 
 <svelte:window on:scroll|passive={scrollEventHandler} />
@@ -219,8 +231,8 @@
 								on:select={(e) => (selectedComboboxValue[optionGroup.key] = e.detail.selectedId)}
 								on:clear={() => (selectedComboboxValue[optionGroup.key] = undefined)}
 								items={optionGroup.choices}
-								disabled={!mounted}
-								bind:selectedId={comboboxInternal[optionGroup.key]}
+								disabled={!mounted || !renderCombobox}
+								selectedId={comboboxInternal[optionGroup.key]}
 								{shouldFilterItem}
 							/>
 						</div>
