@@ -21,20 +21,12 @@
 
 	$: ({ filterOptions, bills } = data);
 
-	$: proposerNames = [
-		...new Set(
-			bills
-				.filter((bill) => bill.proposedLedByPeopleName || bill.proposedLedByPoliticianName)
-				.map((bill) => bill.proposedLedByPeopleName || bill.proposedLedByPoliticianName)
-		)
-	] as string[];
-
 	$: comboboxFilterList = [
 		{
 			key: 'filterProposerName',
 			legend: 'ชื่อผู้เสนอ',
 			placeholder: 'เลือกชื่อผู้เสนอ',
-			choices: proposerNames.map((name) => ({
+			choices: filterOptions.proposerNames.map((name) => ({
 				id: name,
 				text: name
 			}))
