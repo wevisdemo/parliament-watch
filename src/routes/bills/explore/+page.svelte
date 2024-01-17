@@ -6,7 +6,6 @@
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
-	import { BillStatus } from '$models/bill.js';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
 
