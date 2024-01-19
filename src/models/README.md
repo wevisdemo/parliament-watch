@@ -86,6 +86,7 @@ erDiagram
     string[] participatedAssembleIds FK
     VoteOption[] voteOptions "DefaultVoteOption | {label: string, color: string}"
     string result "passed | failed | string (other result)"
+    string winningCondition
     number relatedBillId FK
     string sourceUrl
     Link[] files "label: string, url: string, mediaType: string"

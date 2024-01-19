@@ -312,15 +312,10 @@
 			</div>
 			<div class="flex flex-col md:flex-row items-start md:items-baseline gap-1 md:gap-2">
 				<VotingResultTag result={voting.result} isLarge />
-				<p class="heading-01 mt-2 md:mt-0 text-gray-60">เงื่อนไข</p>
-				<!-- TODO: this has to be reactive somehow -->
-				<ol
-					class="body-01 flex flex-col md:flex-row gap-1 md:gap-2 text-gray-60 marker:font-bold list-decimal list-inside"
-				>
-					<li>ได้เสียงเกินกึ่งหนึ่งของสภา</li>
-					<li>ได้เสียงฝ่ายค้านอย่างน้อย 20%</li>
-					<li>ได้เสียง สว.อย่างน้อย 1 ใน 3</li>
-				</ol>
+				{#if voting.winningCondition}
+					<p class="heading-01 mt-2 md:mt-0 text-gray-60">เงื่อนไข</p>
+					<p class="body-01 text-gray-60">{voting.winningCondition}</p>
+				{/if}
 			</div>
 			<Modal passiveModal bind:open modalHeading="งดออกเสียง vs. ไม่ลงคะแนน" on:open on:close>
 				<p class="body-01">
@@ -329,7 +324,7 @@
 				</p>
 			</Modal>
 			<button
-				class="cursor-pointer helper-text-01 mt-2 text-blue-60 underline text-left w-[260px]"
+				class="cursor-pointer helper-text-01 mt-2 text-blue-60 underline text-left self-start"
 				on:click={() => {
 					open = true;
 				}}

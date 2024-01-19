@@ -3,6 +3,7 @@ import type { Link } from './link';
 import type { Assembly } from './assembly';
 import { safeFind } from '$lib/datasheets/processor';
 import md5 from 'md5';
+
 export const createVotingSchema = (assemblies: Assembly[]) =>
 	z
 		.object({
@@ -14,6 +15,7 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 			representativeAssemblyId: z.string().optional(),
 			senateAssemblyId: z.string().optional(),
 			result: z.string().default('รอตรวจสอบ'),
+			winningCondition: z.string().optional(),
 			categories: z.string().optional(),
 			documents: z.string(),
 			sourceUrl: z.string()
