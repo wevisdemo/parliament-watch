@@ -8,8 +8,8 @@
 	menuList;
 </script>
 
-<div class="grid grid-cols-1 gap-4 bg-white py-8 px-6 md:px-12 lg:px-16 text-sm">
-	<p>
+<div class="flex flex-col items-center gap-4 bg-white py-8 px-6 md:px-12 lg:px-16 text-sm">
+	<p class="max-w-[1200px]">
 		เว็บไซต์นี้สร้างโดย
 		<a
 			href="https://wevis.info/"
@@ -39,7 +39,7 @@
 		> ซึ่งนำมาใช้เป็นต้นทุนในการรวมรวมข้อมูล ออกแบบ พัฒนาเว็บไซต์ ประสานงาน บริหารจัดการ ตลอดจนการจัด
 		Meetup เพื่อดำเนินโครงการ
 	</p>
-	<div>
+	<div class="max-w-[1200px]">
 		<div class="font-semibold">ข้อตกลงในการใช้งาน (Terms of Use)</div>
 		<div>
 			ทางทีมมีความตั้งใจที่พัฒนาทุกโปรเจกต์ให้เป็น Open Source และเปิดข้อมูลเป็น Open Data ภายใต้<a
