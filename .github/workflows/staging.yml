@@ -48,6 +48,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          projectName: parliament-watch
           directory: ./
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
