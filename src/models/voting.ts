@@ -23,7 +23,7 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 		.transform(
 			({ id, categories, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => ({
 				id: md5(id),
-				categories: categories?.split(',') || [],
+				categories: categories?.split(',').map((category) => category.trim()) || [],
 				meetingType:
 					representativeAssemblyId && senateAssemblyId
 						? 'ประชุมร่วมกันของรัฐสภา'
