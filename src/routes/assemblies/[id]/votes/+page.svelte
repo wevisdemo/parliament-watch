@@ -1,30 +1,10 @@
 <script lang="ts">
 	import VotesMain from '$components/Assemblies/Votes/VotesMain.svelte';
-	import {
-		Breadcrumb,
-		BreadcrumbItem,
-		OverflowMenu,
-		OverflowMenuItem
-	} from 'carbon-components-svelte';
+	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 
 	export let data;
 
-	$: ({ assemblyIds, assembly, votes } = data);
-
-	$: categoryFilters = votes.reduce((acc, vote) => {
-		const categories = vote.categories;
-		categories.forEach((category) => {
-			if (!acc.includes(category)) {
-				acc.push(category);
-			}
-		});
-		return acc;
-	}, [] as string[]);
-
-	$: filterOptions = {
-		categories: categoryFilters,
-		result: ['ผ่าน', 'ไม่ผ่าน']
-	};
+	$: ({ assemblyIds, assembly, votes, filterOptions } = data);
 </script>
 
 <div>

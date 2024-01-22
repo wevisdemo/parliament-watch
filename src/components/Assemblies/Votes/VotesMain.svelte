@@ -23,7 +23,7 @@
 		{
 			key: 'filterResult',
 			legend: 'ผลลัพท์',
-			choices: [DefaultVotingResult.Passed, DefaultVotingResult.Failed].map((result) => ({
+			choices: filterOptions.result.map((result) => ({
 				label: result,
 				value: result
 			}))
@@ -90,11 +90,13 @@
 		{:else if cellKey === 'files'}
 			{@const files = cellValue}
 			{#if files.length > 0}
-				{#each files as file (file)}
-					<a href={file.url} download title={file.label}
-						><DocumentPdf /><span class="sr-only">{file.label}</span></a
-					>
-				{/each}
+				<div class="flex flex-wrap gap-2">
+					{#each files as file (file)}
+						<a href={file.url} download title={file.label}
+							><DocumentPdf /><span class="sr-only">{file.label}</span></a
+						>
+					{/each}
+				</div>
 			{:else}
 				-
 			{/if}

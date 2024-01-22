@@ -1,21 +1,17 @@
 import type { Politician } from '$models/politician.js';
-import {
-	DefaultVoteOption,
-	type CustomVoteOption,
-	type Voting,
-	defaultVoteOptions
-} from '$models/voting.js';
+import { DefaultVoteOption, type Voting, CATEGORY_NOT_SPECIFIED } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { createSeo } from '../../../../utils/seo.js';
 import { safeFind } from '$lib/datasheets/processor.js';
+import { getSortedUniqueCategories, getSortedUniqueVoteOptions } from '$lib/datasheets/voting.js';
 
 interface VoteSummary
 	extends Pick<
 		Voting,
 		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssemblies' | 'categories'
 	> {
-	voteOption: DefaultVoteOption | CustomVoteOption;
+	voteOption: string;
 	// isVoteAlignWithPartyMajority: boolean;
 }
 
@@ -41,7 +37,7 @@ export async function load({ params }) {
 
 				return {
 					...voting,
-					categories: voting.categories.length > 0 ? voting.categories : ['ไม่ระบุ'],
+					categories: voting.categories.length > 0 ? voting.categories : [CATEGORY_NOT_SPECIFIED],
 					voteOption: voteOption as DefaultVoteOption
 					// TODO: calculate isVoteAlignWithPartyMajority
 					// isVoteAlignWithPartyMajority: true
@@ -54,17 +50,8 @@ export async function load({ params }) {
 
 	const filterOptions: FilterOptions = {
 		assemblies: [...new Set(votes.flatMap(({ participatedAssemblies }) => participatedAssemblies))],
-		categories: [...new Set(votes.flatMap(({ categories }) => categories))],
-		voteOptions: [
-			...defaultVoteOptions,
-			...new Set(
-				votes
-					.flatMap(({ voteOption }) =>
-						typeof voteOption === 'string' ? voteOption : voteOption.label
-					)
-					.filter((voteOption) => !defaultVoteOptions.includes(voteOption))
-			)
-		]
+		categories: getSortedUniqueCategories(votes),
+		voteOptions: getSortedUniqueVoteOptions(votes)
 	};
 
 	const politicianSummary: PoliticianSummary = (({ id, prefix, firstname, lastname }) => ({

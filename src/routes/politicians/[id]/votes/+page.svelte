@@ -87,7 +87,7 @@
 							filterAssembly.some((assemblyId) =>
 								vote.participatedAssemblies.some(({ id }) => id === assemblyId)
 							) &&
-							filterVoteType.includes(generalVoteType(vote.voteOption)) &&
+							filterVoteType.includes(vote.voteOption) &&
 							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority) &&
 							filterCatg.some((category) => vote.categories.includes(String(category)))
 						);

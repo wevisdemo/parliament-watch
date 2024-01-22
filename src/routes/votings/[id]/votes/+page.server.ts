@@ -4,8 +4,7 @@ import {
 	fetchVotes,
 	fetchVotings
 } from '$lib/datasheets/index.js';
-import { getVoteResultsByPerson } from '$lib/datasheets/voting.js';
-import { defaultVoteOptions } from '$models/voting';
+import { getSortedUniqueVoteOptions, getVoteResultsByPerson } from '$lib/datasheets/voting.js';
 import { createSeo } from '../../../../utils/seo';
 
 interface FilterOptions {
@@ -32,16 +31,7 @@ export async function load({ params }) {
 	const filterOptions: FilterOptions = {
 		parties: getSortedUniqueValue(votes, 'party'),
 		roles: getSortedUniqueValue(votes, 'role').reverse(),
-		voteOptions: [
-			...defaultVoteOptions,
-			...new Set(
-				votes
-					.flatMap(({ voteOption }) =>
-						typeof voteOption === 'string' ? voteOption : voteOption.label
-					)
-					.filter((voteOption) => !defaultVoteOptions.includes(voteOption))
-			)
-		]
+		voteOptions: getSortedUniqueVoteOptions(votes)
 	};
 
 	return {

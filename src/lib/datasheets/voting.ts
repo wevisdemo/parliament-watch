@@ -7,7 +7,9 @@ import {
 	DefaultVoteOption,
 	DefaultVotingResult,
 	type CustomVoteOption,
-	type Voting
+	type Voting,
+	CATEGORY_NOT_SPECIFIED,
+	defaultVoteOptions
 } from '$models/voting';
 import { getAssemblyMembers } from './assembly-member';
 import { safeFind } from './processor';
@@ -185,4 +187,27 @@ export function getWinningOption(result: string) {
 		default:
 			return result;
 	}
+}
+
+export function getSortedUniqueCategories(list: Pick<Voting, 'categories'>[]) {
+	const uniqueCategories = [...new Set(list.flatMap(({ categories }) => categories))];
+
+	return uniqueCategories.includes(CATEGORY_NOT_SPECIFIED)
+		? [...uniqueCategories.filter((cat) => cat !== CATEGORY_NOT_SPECIFIED), CATEGORY_NOT_SPECIFIED]
+		: uniqueCategories;
+}
+
+export function getSortedUniqueVoteOptions(
+	list: { voteOption: DefaultVoteOption | CustomVoteOption | string }[]
+) {
+	return [
+		...defaultVoteOptions,
+		...new Set(
+			list
+				.flatMap(({ voteOption }) =>
+					typeof voteOption === 'string' ? voteOption : voteOption.label
+				)
+				.filter((voteOption) => !defaultVoteOptions.includes(voteOption))
+		)
+	];
 }

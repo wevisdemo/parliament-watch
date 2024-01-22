@@ -69,6 +69,8 @@ export enum DefaultVoteOption {
 	Absent = 'ลา / ขาดลงมติ'
 }
 
+export const CATEGORY_NOT_SPECIFIED = 'ไม่ระบุ';
+
 export const defaultVoteOptions: string[] = [
 	DefaultVoteOption.Agreed,
 	DefaultVoteOption.Disagreed,

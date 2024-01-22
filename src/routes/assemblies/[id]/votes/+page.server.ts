@@ -1,7 +1,8 @@
-import type { Voting } from '$models/voting.js';
+import { CATEGORY_NOT_SPECIFIED, DefaultVotingResult, type Voting } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
 import { fetchAssemblies, fetchFromIdOr404, fetchVotings } from '$lib/datasheets/index.js';
 import { createSeo } from '../../../../utils/seo.js';
+import { getSortedUniqueCategories } from '$lib/datasheets/voting.js';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
 
@@ -25,15 +26,21 @@ export async function load({ params }) {
 		.sort((a, z) => z.date.getTime() - a.date.getTime())
 		.map(({ categories, ...vote }) => ({
 			...vote,
-			categories: categories.length > 0 ? categories : ['ไม่ระบุ']
+			categories: categories.length > 0 ? categories : [CATEGORY_NOT_SPECIFIED]
 		}));
 
 	const assemblyIds: string[] = (await fetchAssemblies()).map((item) => item.id);
+
+	const filterOptions: FilterOptions = {
+		categories: getSortedUniqueCategories(votes),
+		result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed]
+	};
 
 	return {
 		assemblyIds,
 		assembly,
 		votes,
+		filterOptions,
 		seo: createSeo({
 			title: `การลงมติ ${assembly.name} ${assembly.term}`
 		})
