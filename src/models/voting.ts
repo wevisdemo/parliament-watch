@@ -68,3 +68,11 @@ export enum DefaultVoteOption {
 	Abstain = 'ไม่ลงคะแนน',
 	Absent = 'ลา / ขาดลงมติ'
 }
+
+export const defaultVoteOptions: string[] = [
+	DefaultVoteOption.Agreed,
+	DefaultVoteOption.Disagreed,
+	DefaultVoteOption.Novote,
+	DefaultVoteOption.Abstain,
+	DefaultVoteOption.Absent
+];

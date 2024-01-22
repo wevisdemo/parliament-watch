@@ -1,5 +1,10 @@
 import type { Politician } from '$models/politician.js';
-import type { DefaultVoteOption, CustomVoteOption, Voting } from '$models/voting.js';
+import {
+	DefaultVoteOption,
+	type CustomVoteOption,
+	type Voting,
+	defaultVoteOptions
+} from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { createSeo } from '../../../../utils/seo.js';
@@ -17,6 +22,7 @@ interface VoteSummary
 interface FilterOptions {
 	assemblies: Assembly[];
 	categories: string[];
+	voteOptions: string[];
 }
 
 type PoliticianSummary = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'lastname'>;
@@ -48,7 +54,17 @@ export async function load({ params }) {
 
 	const filterOptions: FilterOptions = {
 		assemblies: [...new Set(votes.flatMap(({ participatedAssemblies }) => participatedAssemblies))],
-		categories: [...new Set(votes.flatMap(({ categories }) => categories))]
+		categories: [...new Set(votes.flatMap(({ categories }) => categories))],
+		voteOptions: [
+			...defaultVoteOptions,
+			...new Set(
+				votes
+					.flatMap(({ voteOption }) =>
+						typeof voteOption === 'string' ? voteOption : voteOption.label
+					)
+					.filter((voteOption) => !defaultVoteOptions.includes(voteOption))
+			)
+		]
 	};
 
 	const politicianSummary: PoliticianSummary = (({ id, prefix, firstname, lastname }) => ({

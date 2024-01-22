@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
+	import type { DefaultVoteOption, CustomVoteOption } from '$models/voting.js';
 	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
@@ -32,14 +32,7 @@
 		{
 			key: 'filterVoteType',
 			legend: 'ประเภทการลงมติ',
-			choices: [
-				DefaultVoteOption.Agreed,
-				DefaultVoteOption.Disagreed,
-				DefaultVoteOption.Novote,
-				DefaultVoteOption.Abstain,
-				DefaultVoteOption.Absent,
-				'อื่นๆ'
-			].map((type) => ({
+			choices: filterOptions.voteOptions.map((type) => ({
 				label: type,
 				value: type
 			}))

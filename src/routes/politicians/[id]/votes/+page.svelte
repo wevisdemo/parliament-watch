@@ -37,14 +37,7 @@
 		{
 			key: 'filterVoteType',
 			legend: 'ประเภทการลงมติ',
-			choices: [
-				DefaultVoteOption.Agreed,
-				DefaultVoteOption.Disagreed,
-				DefaultVoteOption.Novote,
-				DefaultVoteOption.Abstain,
-				DefaultVoteOption.Absent,
-				'อื่นๆ'
-			].map((type) => ({
+			choices: filterOptions.voteOptions.map((type) => ({
 				label: type,
 				value: type
 			}))
