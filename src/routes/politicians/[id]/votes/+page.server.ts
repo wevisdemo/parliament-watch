@@ -31,8 +31,11 @@ export async function load({ params }) {
 		.filter(({ politicianId }) => politicianId === politician.id)
 		.map(({ votingId, voteOption }) => {
 			try {
+				const voting = safeFind(votings, ({ id }) => id === votingId);
+
 				return {
-					...safeFind(votings, (voting) => voting.id === votingId),
+					...voting,
+					categories: voting.categories.length > 0 ? voting.categories : ['ไม่ระบุ'],
 					voteOption: voteOption as DefaultVoteOption
 					// TODO: calculate isVoteAlignWithPartyMajority
 					// isVoteAlignWithPartyMajority: true
