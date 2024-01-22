@@ -64,7 +64,10 @@
 		{ key: 'date', value: 'วันที่' },
 		{ key: 'title', value: 'ชื่อมติ' },
 		{ key: 'result', value: 'ผลลัพท์' },
-		{ key: 'files', value: 'เอก สาร' }
+		{ key: 'files', value: 'เอกสาร' }
+	]}
+	downloadLinks={[
+		{ label: 'ประวัติการลงมติ', url: `/files/download/assemblies/${assembly.id}-votings.csv` }
 	]}
 	bind:searchQuery
 	bind:selectedCheckboxValue

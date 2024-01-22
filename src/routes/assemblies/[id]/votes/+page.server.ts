@@ -1,7 +1,6 @@
 import type { Voting } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
-import { fetchAssemblies, fetchVotings } from '$lib/datasheets/index.js';
-import { error } from '@sveltejs/kit';
+import { fetchAssemblies, fetchFromIdOr404, fetchVotings } from '$lib/datasheets/index.js';
 import { createSeo } from '../../../../utils/seo.js';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
@@ -14,11 +13,7 @@ export interface FilterOptions {
 export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
 
 export async function load({ params }) {
-	const fullAssembly = (await fetchAssemblies()).find(({ id }) => id === params.id);
-
-	if (!fullAssembly) {
-		throw error(404, `Assembly ${params.id} not found`);
-	}
+	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 
 	const { id, name, term, startedAt } = fullAssembly;
 	const assembly: AssemblySummary = { id, name, term, startedAt };
