@@ -144,32 +144,29 @@
 				{/each}
 			</Carousel>
 		</section>
-		<ul class="flex flex-col gap-[6px]">
-			<li>
-				<Button
-					href="/assemblies/สมาชิกสภาผู้แทนราษฎร-26"
-					kind="secondary"
-					icon={ArrowRight}
-					class="w-full max-w-none"
-				>
-					สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
-				</Button>
-			</li>
-			<li>
-				<Button
-					href="/assemblies/วุฒิสภา-12"
-					kind="secondary"
-					icon={ArrowRight}
-					class="w-full max-w-none">สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
-				>
-			</li>
+		<div class="flex flex-col gap-[6px]">
+			<Button
+				href="/assemblies/สมาชิกสภาผู้แทนราษฎร-26"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
+				สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
+			</Button>
+
+			<Button
+				href="/assemblies/วุฒิสภา-12"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none">สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
+			>
 			<!-- TODO: cabinet is not released in the 1st phase  -->
 			<!-- <li>
 				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
 					>คณะรัฐมนตรี (ครม.) ทั้งหมด</Button
 				>
 			</li> -->
-		</ul>
+		</div>
 	</div>
 </section>
 <section id="votings" class="bg-white text-text-01">
@@ -203,10 +200,24 @@
 				{/each}
 			</Carousel>
 		</section>
-		<!-- TODO: รอหน้า votings หลัก -->
-		<!-- <Button href="/votings" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
-			ดูมติทั้งหมด
-		</Button> -->
+		<div class="flex flex-col gap-[6px]">
+			<Button
+				href="/assemblies/สภาผู้แทนราษฎร-26/votes"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
+				ดูการลงมติทั้งหมดของสมาชิกสภาผู้แทนราษฎร ชุดที่ 26
+			</Button>
+			<Button
+				href="/assemblies/วุฒิสภา-12/votes"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
+				ดูการลงมติทั้งหมดของสมาชิกวุฒิสภา ชุดที่ 12
+			</Button>
+		</div>
 	</div>
 </section>
 <BackToTopButton />
