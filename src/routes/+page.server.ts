@@ -36,6 +36,15 @@ interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPoliticia
 export async function load() {
 	const politicians = await fetchPoliticians();
 	const votes = await fetchVotes();
+	const votings = await fetchVotings();
+
+	const activePoliticians = politicians.filter(({ isActive }) => isActive);
+
+	const votesInActiveAssemblies = votes.filter(({ votingId }) =>
+		votings
+			.find(({ id }) => id === votingId)
+			?.participatedAssemblies.some(({ endedAt }) => endedAt === undefined)
+	);
 
 	const highlightedPoliticians: HighlightedPolitician[] = [
 		// TODO: Not release assets and debts yet
@@ -51,7 +60,7 @@ export async function load() {
 		// },
 		{
 			reason: HighlightedReason.HighestPartySwitching,
-			...politicians
+			...activePoliticians
 				.map((politician) => ({
 					politician,
 					value: new Set(politician.partyRoles.map(({ party }) => party.name)).size
@@ -60,9 +69,11 @@ export async function load() {
 		},
 		{
 			reason: HighlightedReason.HighestAbsentRate,
-			...politicians
+			...activePoliticians
 				.map((politician) => {
-					const theirVotes = votes.filter(({ politicianId }) => politicianId === politician.id);
+					const theirVotes = votesInActiveAssemblies.filter(
+						({ politicianId }) => politicianId === politician.id
+					);
 
 					return {
 						politician,
@@ -81,7 +92,7 @@ export async function load() {
 		// },
 		{
 			reason: HighlightedReason.Youngest,
-			...politicians
+			...activePoliticians
 				.map((politician) => ({
 					politician,
 					value: politician.birthdate ? dayjs().diff(politician.birthdate, 'years') : 999
@@ -101,11 +112,11 @@ export async function load() {
 
 	if (building) {
 		wikipediaPolitician = await getPoliticianWithMostViewLastMonth();
-		gunPolitician = (await getMostGun()) ?? gunPolitician;
+		gunPolitician = await getMostGun();
 	}
 
-	const chuanLeekpai = safeFind(politicians, (p) => p.id === 'ชวน-หลีกภัย');
-	const banyatBantadtan = safeFind(politicians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
+	const chuanLeekpai = safeFind(activePoliticians, (p) => p.id === 'ชวน-หลีกภัย');
+	const banyatBantadtan = safeFind(activePoliticians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
 
 	const otherSourcesHighlightedPoliticians: HighlightedPolitician[] = [
 		{

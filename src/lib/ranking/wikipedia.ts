@@ -12,7 +12,9 @@ let wikiResult: PoliticianResult | undefined = undefined;
 
 export async function getPoliticianWithMostViewLastMonth() {
 	if (!wikiResult) {
-		wikiResult = await _getPoliticianWithMostViewLastMonth(await fetchPoliticians());
+		const activePoliticians = (await fetchPoliticians()).filter(({ isActive }) => isActive);
+
+		wikiResult = await _getPoliticianWithMostViewLastMonth(activePoliticians);
 	}
 	return wikiResult;
 }
@@ -25,25 +27,21 @@ export async function _getPoliticianWithMostViewLastMonth(politicians: Politicia
 
 	for (const politician of politicians) {
 		const { firstname, lastname } = politician;
-		try {
-			const res = await fetch(getWikipediaViewEndpoint(firstname, lastname));
+		const res = await fetch(getWikipediaViewEndpoint(firstname, lastname));
 
-			if (res.ok) {
-				const data = await res.json();
+		if (res.ok) {
+			const data = await res.json();
 
-				if (data?.items?.[0]?.views) {
-					const { views } = data.items[0];
+			if (data?.items?.[0]?.views) {
+				const { views } = data.items[0];
 
-					if (views > result.value) {
-						result = {
-							politician: politician,
-							value: views
-						};
-					}
+				if (views > result.value) {
+					result = {
+						politician: politician,
+						value: views
+					};
 				}
 			}
-		} catch (_) {
-			/**/
 		}
 	}
 

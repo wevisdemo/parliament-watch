@@ -39,12 +39,18 @@
 	let formattedValue: string;
 	let unit: string;
 
+	const POSTFIX_LOOKUP: Record<string, string | undefined> = {
+		[HighlightedReason.HighestPartySwitching]: '(ข้อมูลย้อนหลังถึงปี 2562)'
+	};
+
+	$: postfix = POSTFIX_LOOKUP[reason] ?? '';
+
 	// Unit Lookup
 	const UNIT_LOOKUP: Record<string, string | undefined> = {
 		[HighlightedReason.HighestAssetOwned]: 'ล้านบาท',
 		[HighlightedReason.HighestDebtOwned]: 'ล้านบาท',
 		[HighlightedReason.HighestPartySwitching]: 'พรรค',
-		[HighlightedReason.HighestAbsentRate]: 'ของมติทั้งหมด',
+		[HighlightedReason.HighestAbsentRate]: 'ของมติทั้งหมดในสมัยล่าสุด',
 		[HighlightedReason.HighestBillProposed]: 'ร่างกฎหมาย',
 		[HighlightedReason.Youngest]: 'ปี',
 		[HighlightedReason.MostFrequentlyElectedInConstituency]: 'สมัย',
@@ -114,7 +120,9 @@
 </script>
 
 <article class={twMerge('flex flex-col', className)}>
-	<h4 class="heading-01 text-blue-70 mb-[2px]">{reason}</h4>
+	<h4 class="heading-01 text-blue-70 mb-[2px]">
+		{reason} <span class="font-normal">{postfix}</span>
+	</h4>
 	{#if description}
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		<p class="flex-[1_1_70px] label-01 text-gray-60">{@html description}</p>

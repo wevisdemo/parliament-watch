@@ -68,9 +68,10 @@ export const getMostGun = async () => {
 		});
 
 	// Match politician data
-	const politicianList = await fetchPoliticians();
+	const activePoliticians = (await fetchPoliticians()).filter(({ isActive }) => isActive);
+
 	for (const { firstname: gFirst, lastname: gLast, value } of sortedGunOwner) {
-		const searchResult = politicianList.find(
+		const searchResult = activePoliticians.find(
 			({ firstname: pFirst, lastname: pLast }) => pFirst === gFirst && pLast === gLast
 		);
 		if (searchResult) {
@@ -81,6 +82,8 @@ export const getMostGun = async () => {
 			break;
 		}
 	}
+
+	if (!gunResult) throw 'Could not find politician with most gun';
 
 	return gunResult;
 };
