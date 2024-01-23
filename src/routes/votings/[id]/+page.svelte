@@ -59,7 +59,7 @@
 	function getVoteColor(vote: DefaultVoteOption | CustomVoteOption | string) {
 		switch (vote) {
 			case DefaultVoteOption.Agreed:
-				return 'bg-teal-50';
+				return 'bg-teal-40';
 			case DefaultVoteOption.Disagreed:
 				return 'bg-red-50 text-white';
 			case DefaultVoteOption.Novote:

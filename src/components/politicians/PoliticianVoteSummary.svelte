@@ -33,7 +33,7 @@
 	/>
 	<div class="flex flex-col gap-6">
 		<div class="flex flex-col gap-2">
-			<h3 class="body-02 px-2 py-1 bg-teal-50">
+			<h3 class="body-02 px-2 py-1 bg-teal-40">
 				{agreedVoting.latest.length} มติล่าสุด ที่{politician.firstname}<span class="heading-02"
 					>เห็นด้วย</span
 				>

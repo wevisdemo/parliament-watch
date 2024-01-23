@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { DefaultVotingResult } from '$models/voting';
-	import { Tag } from 'carbon-components-svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	export let result: DefaultVotingResult | string;
