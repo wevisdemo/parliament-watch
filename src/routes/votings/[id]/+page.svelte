@@ -178,16 +178,18 @@
 					</div>
 					<div>
 						<p class="heading-01">องค์ประชุม</p>
-						<p class="body-01">
+						<ul class="body-01">
 							{#each voting.participatedAssemblies as { id, name, term }}
-								<a href="/assemblies/{id}">{name} {term}</a>
+								<li><a href="/assemblies/{id}">{name} {term}</a></li>
 							{/each}
-						</p>
+						</ul>
 					</div>
 				</div>
 				<div class="w-full my-4 h-[1px] bg-gray-20" />
-				<p class="heading-01">สรุปเนื้อหา</p>
-				<p class="body-01">{voting.description}</p>
+				{#if voting.description}
+					<p class="heading-01">สรุปเนื้อหา</p>
+					<p class="body-01">{voting.description}</p>
+				{/if}
 				{#if voting.categories.length > 0}
 					<div class="flex items-center gap-x-1 mt-4">
 						<p class="heading-01">หมวด</p>
