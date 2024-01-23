@@ -21,7 +21,7 @@ export const movingForwardPolitician: Politician = {
 		{
 			role: 'สมาชิกแบบบัญชีรายชื่อ',
 			assembly: {
-				id: 'สมาชิกสภาผู้แทนราษฎร-26',
+				id: 'สภาผู้แทนราษฎร-26',
 				name: AssemblyName.Representatives,
 				abbreviation: 'สส.',
 				term: 26,

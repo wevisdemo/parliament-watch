@@ -12,7 +12,7 @@
 			subs: [
 				{
 					label: 'สภาผู้แทนราษฎร',
-					url: '/assemblies/สมาชิกสภาผู้แทนราษฎร-26',
+					url: '/assemblies/สภาผู้แทนราษฎร-26',
 					type: MenuTypes.link
 				},
 				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link }
@@ -21,7 +21,7 @@
 		{
 			label: 'การลงมติ',
 			icon: VoteIcon,
-			url: '/assemblies/สมาชิกสภาผู้แทนราษฎร-26/votes',
+			url: '/assemblies/สภาผู้แทนราษฎร-26/votes',
 			type: MenuTypes.both
 		},
 		// {

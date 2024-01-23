@@ -146,7 +146,7 @@
 		</section>
 		<div class="flex flex-col gap-[6px]">
 			<Button
-				href="/assemblies/สมาชิกสภาผู้แทนราษฎร-26"
+				href="/assemblies/สภาผู้แทนราษฎร-26"
 				kind="secondary"
 				icon={ArrowRight}
 				class="w-full max-w-none"

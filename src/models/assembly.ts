@@ -3,7 +3,7 @@ import { safeFind } from '$lib/datasheets/processor';
 import type { Party } from './party';
 
 export enum AssemblyName {
-	Representatives = 'สมาชิกสภาผู้แทนราษฎร',
+	Representatives = 'สภาผู้แทนราษฎร',
 	Senates = 'วุฒิสภา'
 }
 

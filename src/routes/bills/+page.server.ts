@@ -73,7 +73,7 @@ export async function load() {
 			...enactedBill,
 			proposerType: BillProposerType.Cabinet,
 			proposedByAssembly: (await fetchAssemblies()).find(
-				({ id }) => id === 'สมาชิกสภาผู้แทนราษฎร-26'
+				({ id }) => id === 'สภาผู้แทนราษฎร-26'
 			) as Assembly,
 			proposedLedByPolitician: undefined,
 			coProposedByPoliticians: undefined
