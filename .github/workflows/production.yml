@@ -1,9 +1,6 @@
 name: Copy Staging to Production
 on:
   workflow_dispatch:
-concurrency:
-  group: production
-  cancel-in-progress: true
 jobs:
   deploy-to-production:
     runs-on: ubuntu-latest
