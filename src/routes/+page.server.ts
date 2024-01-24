@@ -1,10 +1,7 @@
-import { building } from '$app/environment';
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { getMostGun } from '$lib/ranking/gun.js';
-import { getPoliticianWithMostViewLastMonth } from '$lib/ranking/wikipedia.js';
 import { movingForwardPolitician } from '../mocks/data/politician.js';
 import type { ComponentProps } from 'svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
@@ -101,19 +98,14 @@ export async function load() {
 		}
 	];
 
-	let wikipediaPolitician: Omit<HighlightedPolitician, 'reason'> = {
+	const wikipediaPolitician: Omit<HighlightedPolitician, 'reason'> = {
 		politician: movingForwardPolitician,
 		value: 476263
 	};
-	let gunPolitician: Omit<HighlightedPolitician, 'reason'> = {
+	const gunPolitician: Omit<HighlightedPolitician, 'reason'> = {
 		politician: movingForwardPolitician,
 		value: 25
 	};
-
-	if (building) {
-		wikipediaPolitician = await getPoliticianWithMostViewLastMonth();
-		gunPolitician = await getMostGun();
-	}
 
 	const chuanLeekpai = safeFind(activePoliticians, (p) => p.id === 'ชวน-หลีกภัย');
 	const banyatBantadtan = safeFind(activePoliticians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');

@@ -1,7 +1,6 @@
-import { fetchPoliticians } from '$lib/datasheets';
 import type { Politician } from '$models/politician';
 import dayjs from 'dayjs';
-import { movingForwardPolitician } from '../../mocks/data/politician';
+import { movingForwardPolitician } from '../../src/mocks/data/politician';
 
 export interface PoliticianResult {
 	politician: Politician;
@@ -10,11 +9,9 @@ export interface PoliticianResult {
 
 let wikiResult: PoliticianResult | undefined = undefined;
 
-export async function getPoliticianWithMostViewLastMonth() {
+export async function getPoliticianWithMostViewLastMonth(politicians: Politician[]) {
 	if (!wikiResult) {
-		const activePoliticians = (await fetchPoliticians()).filter(({ isActive }) => isActive);
-
-		wikiResult = await _getPoliticianWithMostViewLastMonth(activePoliticians);
+		wikiResult = await _getPoliticianWithMostViewLastMonth(politicians);
 	}
 	return wikiResult;
 }

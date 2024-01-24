@@ -1,0 +1,3 @@
+import { writePoliticianRankingFile } from '.';
+
+writePoliticianRankingFile();

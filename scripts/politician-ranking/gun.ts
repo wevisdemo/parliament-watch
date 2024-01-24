@@ -1,4 +1,3 @@
-import { fetchPoliticians } from '$lib/datasheets';
 import type { Politician } from '$models/politician';
 
 let gunResult:
@@ -8,7 +7,7 @@ let gunResult:
 	  }
 	| undefined;
 
-export const getMostGun = async () => {
+export const getPoliticianWithMostGun = async (politicians: Politician[]) => {
 	if (gunResult) return gunResult;
 
 	// Get latest files
@@ -68,10 +67,8 @@ export const getMostGun = async () => {
 		});
 
 	// Match politician data
-	const activePoliticians = (await fetchPoliticians()).filter(({ isActive }) => isActive);
-
 	for (const { firstname: gFirst, lastname: gLast, value } of sortedGunOwner) {
-		const searchResult = activePoliticians.find(
+		const searchResult = politicians.find(
 			({ firstname: pFirst, lastname: pLast }) => pFirst === gFirst && pLast === gLast
 		);
 		if (searchResult) {
