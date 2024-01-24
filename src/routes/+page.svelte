@@ -112,8 +112,8 @@
 				>
 					<LawIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
 					<span class="flex-1 flex flex-col gap-1 opacity-30">
-						<span class="fluid-heading-03">การออกกฏหมาย</span>
-						<span>ติดตามร่างกฏหมายที่เกี่ยวข้องกับชีวิตคุณ</span>
+						<span class="fluid-heading-03">การออกกฎหมาย</span>
+						<span>ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ</span>
 					</span>
 					<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
 				</span>

@@ -14,7 +14,7 @@
 	>
 		<div class="bg-white rounded-sm m-auto" style="max-width: 378px; max-height: 618px;">
 			<div class="p-5 flex justify-between gap-5">
-				<b class="heading-03 text-start">ขั้นตอนการผ่านกฏหมาย</b>
+				<b class="heading-03 text-start">ขั้นตอนการผ่านกฎหมาย</b>
 				<button on:click={() => ($showModalLawProcess = false)}><CloseLarge /></button>
 			</div>
 			<LawProcess />

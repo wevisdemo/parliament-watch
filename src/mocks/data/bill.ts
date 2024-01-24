@@ -14,7 +14,7 @@ export const inProgressBill: Bill = {
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician, movingForwardPolitician],
 	attachment: {
-		label: 'เอกสารเสนอกฏหมาย',
+		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'
 	}
 };
@@ -32,7 +32,7 @@ export const enactedBill: Bill = {
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician, movingForwardPolitician],
 	attachment: {
-		label: 'เอกสารเสนอกฏหมาย',
+		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'
 	},
 	enactedOn: new Date('2023-02-01')

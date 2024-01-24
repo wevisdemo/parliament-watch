@@ -19,7 +19,7 @@
 			style="max-width: 650px; max-height:394px;"
 		>
 			<div class="p-4 flex justify-between items-start gap-5">
-				<h1 class="heading-03 text-start">รายชื่อผู้ร่วมเสนอกฏหมาย</h1>
+				<h1 class="heading-03 text-start">รายชื่อผู้ร่วมเสนอกฎหมาย</h1>
 				<button on:click={() => ($showModalListCoProposer = false)}><CloseLarge /></button>
 			</div>
 			<div class="flex flex-col">

@@ -71,7 +71,7 @@
 			>
 				<a href="#bill" class="block p-4 text-white no-underline">
 					<div class="flex justify-between">
-						<span>ประวัติการเสนอกฏหมาย</span>
+						<span>ประวัติการเสนอกฎหมาย</span>
 						<ArrowDown class="md:hidden" />
 						<ArrowRight class="hidden md:group-data-[active]:block" />
 					</div>
