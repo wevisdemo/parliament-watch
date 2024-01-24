@@ -12,7 +12,7 @@
 	</div>
 {/if}
 <a
-	href="/"
+	href={linkMenu.url}
 	class={twMerge(
 		'flex items-center w-screen md:w-80 pl-4 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200',
 		additionalClass

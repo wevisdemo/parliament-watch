@@ -1,7 +1,6 @@
-import { fetchPoliticians } from '$lib/datasheets/index.js';
+import { fetchPoliticians, fetchVotings } from '$lib/datasheets/index.js';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';
 import { error } from '@sveltejs/kit';
-import { searchIndexes } from '../../../../mocks/data/searchIndexes.js';
 
 export const prerender = true;
 
@@ -29,21 +28,32 @@ export async function GET({ params }) {
 							.filter((text) => text)
 							.join(' | ')
 					};
-				});
+				})
+				.sort((a, z) => a.id.localeCompare(z.id));
 
 			return createJSONFileResponse(indexes);
 		}
 
 		case SearchIndexCategory.Bills: {
-			return createJSONFileResponse(searchIndexes.bills);
+			// TODO: Not release bill yet
+			return createJSONFileResponse([]);
 		}
 
 		case SearchIndexCategory.BillProposers: {
-			return createJSONFileResponse(searchIndexes.billProposers);
+			// TODO: Not release bill yet
+			return createJSONFileResponse([]);
 		}
 
 		case SearchIndexCategory.Votings: {
-			return createJSONFileResponse(searchIndexes.votings);
+			const indexes: SearchIndexes['votings'] = (await fetchVotings())
+				.map(({ id, title, result }) => ({
+					id,
+					name: title,
+					result: result
+				}))
+				.sort((a, z) => a.id.localeCompare(z.id));
+
+			return createJSONFileResponse(indexes);
 		}
 
 		default:

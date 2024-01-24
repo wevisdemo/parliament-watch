@@ -1,3 +1,5 @@
+import { createSeo } from '../../utils/seo.js';
+
 interface ContributorResponse {
 	login: string;
 	html_url: string;
@@ -16,6 +18,9 @@ export async function load({ fetch }) {
 	}));
 
 	return {
-		developers
+		developers,
+		seo: createSeo({
+			title: 'เกี่ยวกับเว็บไซต์นี้'
+		})
 	};
 }

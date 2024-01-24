@@ -1,0 +1,26 @@
+name: Update politician ranking
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'
+jobs:
+  update-ranking:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install
+      - name: Test
+        run: yarn test
+      - name: Fetch politician ranking data
+        run: yarn update:politician-ranking
+      - name: Deploy to Github Page
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: out
+          commit-message: 'feat: update external politican ranking data'

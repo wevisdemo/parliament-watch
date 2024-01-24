@@ -12,7 +12,7 @@
 		logo: 'https://www.moveforwardparty.org/wp-content/uploads/2021/03/400px-Move_Forward_Party_Logo.svg.png',
 		color: '#ff7f00'
 	};
-	let role = 'สส. บัญชีรายชื่อ';
+	let role = 'สส.บัญชีรายชื่อ';
 </script>
 
 <Hst.Story title="PoliticianProfile" layout={{ type: 'grid', width: 320 }}>

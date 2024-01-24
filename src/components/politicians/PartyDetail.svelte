@@ -25,7 +25,7 @@
 			: 'ปัจจุบัน'})</span
 	>
 	<span class="block label-01">
-		ตำแหน่ง:
+		ตำแหน่ง :
 		{#each data as role, idx (idx)}
 			<span>
 				{role.role}

@@ -2,6 +2,7 @@
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
+	import { DocumentBlank } from 'carbon-icons-svelte';
 	import type { Link } from '$models/link';
 
 	export let links: Link[];
@@ -12,18 +13,16 @@
 		<Download />
 		<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
 	</div>
-	<!-- TODO: add link -->
 	{#each links as link (link.url)}
-		{#if link.url.includes('.pdf')}
-			<a href={link.url} class="flex items-center gap-1 mr-auto helper-text-01">
+		<a href={link.url} class="flex items-center gap-1 mr-auto helper-text-01">
+			{#if link.url.includes('.pdf')}
 				<DocumentPdf />
-				<span>{link.label}</span>
-			</a>
-		{:else}
-			<a href={link.url} class="flex items-center gap-1 mr-auto helper-text-01">
+			{:else if link.url.includes('.csv')}
 				<TableSplit />
-				<span>{link.label}</span>
-			</a>
-		{/if}
+			{:else}
+				<DocumentBlank />
+			{/if}
+			<span>{link.label}</span>
+		</a>
 	{/each}
 </div>

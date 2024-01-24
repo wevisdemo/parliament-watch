@@ -1,5 +1,5 @@
-import type { AssemblyMember } from '../../data';
-import { type Assembly, GroupByOption } from '$models/assembly';
+import type { AssemblyMember } from '$lib/datasheets/assembly-member';
+import { type Assembly, GroupByOption, AssemblyPartyGroup } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
 import dayjs from 'dayjs';
 
@@ -26,8 +26,8 @@ export function getMemberGroup(
 		case GroupByOption.Party: {
 			return groupMembersBy(members, ({ partyRole }) =>
 				assembly.oppositionParties?.some((op) => op.name === partyRole?.party.name)
-					? 'ฝ่ายค้าน'
-					: 'ฝ่ายรัฐบาล'
+					? AssemblyPartyGroup.Opposition
+					: AssemblyPartyGroup.Government
 			).map(([side, membersBySide]) => ({
 				name: side,
 				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
@@ -86,7 +86,7 @@ export function getMemberGroup(
 				if (educations.some((e) => e.includes('ปริญญาโท'))) return 'ปริญญาโท';
 				if (educations.some((e) => e.includes('ปริญญาตรี'))) return 'ปริญญาตรี';
 				if (educations.some((e) => e.includes('ทหาร'))) return 'สถาบันทหาร';
-				return 'ตำกว่าปริญญาโท';
+				return 'ต่ำกว่าปริญญาตรี';
 			}).map(([side, membersBySide]) => ({
 				name: side,
 				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)

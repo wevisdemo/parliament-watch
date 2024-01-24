@@ -1,8 +1,13 @@
 import { error } from '@sveltejs/kit';
 import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from './groupby';
-import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
+import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
 import { AssemblyName, GroupByOption } from '$models/assembly';
-import { fetchAssemblyMembers, getPoliticianSummary, type PoliticianSummary } from '../../data';
+import {
+	getAssemblyMembers,
+	getPoliticianSummary,
+	type PoliticianSummary
+} from '$lib/datasheets/assembly-member';
+import { createSeo } from '../../../../../utils/seo';
 
 interface PoliticianSummaryGroup {
 	name: string;
@@ -23,7 +28,7 @@ const checkIsDataHasSubGroup = (
 
 export async function load({ params }) {
 	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
-	const members = await fetchAssemblyMembers(assembly);
+	const members = getAssemblyMembers(assembly, await fetchPoliticians());
 	const isSenates = assembly.name === AssemblyName.Senates;
 
 	if (Object.values(GroupByOption).includes(params.groupby as GroupByOption)) {
@@ -46,7 +51,14 @@ export async function load({ params }) {
 
 		const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
 
-		return { groups: transformedGroup, isDataHasSubgroup, assemblyIds };
+		return {
+			groups: transformedGroup,
+			isDataHasSubgroup,
+			assemblyIds,
+			seo: createSeo({
+				title: `สมาชิก ${assembly.name} ${assembly.term}`
+			})
+		};
 	} else {
 		throw error(404);
 	}

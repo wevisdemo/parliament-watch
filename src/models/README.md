@@ -77,7 +77,7 @@ erDiagram
   }
 
   Voting {
-    number id PK
+    string id PK
     string title
     string description
     string[] categories
@@ -85,8 +85,8 @@ erDiagram
     string meetingType
     string[] participatedAssembleIds FK
     VoteOption[] voteOptions "DefaultVoteOption | {label: string, color: string}"
-    string winningCondition
     string result "passed | failed | string (other result)"
+    string winningCondition
     number relatedBillId FK
     string sourceUrl
     Link[] files "label: string, url: string, mediaType: string"
@@ -95,7 +95,7 @@ erDiagram
   Vote {
     string politicianId FK
     string votingId FK
-    number voteOptionIndex "refer to Voting"
+    string voteOption "refer to Voting"
   }
 
   Event {
@@ -107,7 +107,7 @@ erDiagram
     string description "for other"
     string status "succeed | in-progress | failed"
     string actionType "voted | merged | enforced"
-    number votedInVotingId FK "for action voted"
+    string votedInVotingId FK "for action voted"
     number mergedIntoBillId FK "for action merged"
     string enforcementDocumentUrl "for action enforced"
   }
@@ -117,7 +117,7 @@ erDiagram
 - **Role** = ตำแหน่ง
 - **Party** = พรรค
 - **Assembly** = กลุ่มคน เช่น สส. สว. ครม.
-- **Bill** = ข้อเสนอกฏหมาย
-- **Event** = เหตุการต่างๆ ระหว่างการเสนอกฏหมาย
+- **Bill** = ข้อเสนอกฎหมาย
+- **Event** = เหตุการต่างๆ ระหว่างการเสนอกฎหมาย
 - **Voting** = การลงมติ
 - **Vote** = การลงคะแนน

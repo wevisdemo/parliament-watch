@@ -1,11 +1,20 @@
+<script context="module" lang="ts">
+	export type VoteCardVoting = Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
+
+	export interface HighlightedVoteByGroup {
+		name: string;
+		count: number;
+		total: number;
+	}
+</script>
+
 <script lang="ts">
 	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
-	import { DefaultVotingResult, type Voting } from '$models/voting';
+	import { DefaultVoteOption, DefaultVotingResult, type Voting } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
-	import type { VoteCardProps } from '../../routes/assemblies/[id]/+page.server';
 	import { twMerge } from 'tailwind-merge';
 
 	dayjs.extend(buddhistEra);
@@ -38,10 +47,12 @@
 		tagFontColor: 'text-white'
 	};
 
-	export let voting: VoteCardProps['voting'] = {} as Voting;
-	export let highlightedVoteByGroups: VoteCardProps['highlightedVoteByGroups'] = [];
+	export let voting: VoteCardVoting;
+	export let highlightedVoteByGroups: HighlightedVoteByGroup[] = [];
 	export let isFullWidth = false;
-	export let link = '/';
+
+	let className = '';
+	export { className as class };
 
 	interface HighlightedVoteSummary {
 		totalCount: number;
@@ -58,7 +69,7 @@
 
 	function reduceHighlightedVoteSummary(
 		{ totalAmount, totalCount }: HighlightedVoteSummary,
-		{ count, total }: VoteCardProps['highlightedVoteByGroups'][number]
+		{ count, total }: HighlightedVoteByGroup
 	): HighlightedVoteSummary {
 		return {
 			totalCount: totalCount + count,
@@ -67,25 +78,31 @@
 	}
 </script>
 
-<div
+<a
+	href="/votings/{voting.id}"
 	class={twMerge(
 		'vote-card rounded-sm relative p-4 flex flex-col gap-y-2 w-72 h-64.5 whitespace-break-spaces',
 		theme.bg,
 		theme.hoveredBg,
-		isFullWidth ? 'w-full' : ''
+		isFullWidth ? 'w-full' : '',
+		className
 	)}
 >
 	<p class="body-compact-01 text-text-02">
 		{dayjs(voting.date).format('D MMM BB')}
 	</p>
-	<a class="vote-card--url after:inset no-underline after:absolute w-56" href={link}>
-		<h3 class="fluid-heading-03 text-text-01">{voting.title}</h3>
-	</a>
+	<h3 class="fluid-heading-03 text-text-01">{voting.title}</h3>
 	<section class="vote-card__result flex flex-col gap-y-2 w-56">
 		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} w-fit m-0`}>{voting.result}</Tag>
 		<div class="flex flex-col gap-x-1">
 			<div class="flex items-center justify-between">
-				<p class="text-text-01 heading-01">{isCandidate ? 'ได้รับคะแนนเสียง' : 'เห็นด้วย'}</p>
+				<p class="text-text-01 heading-01">
+					{isCandidate
+						? 'ได้รับคะแนนเสียง'
+						: voting.result === DefaultVotingResult.Passed
+						? DefaultVoteOption.Agreed
+						: DefaultVoteOption.Disagreed}
+				</p>
 				<p>
 					<span class="mr-[2px] text-text-primary heading-01">{totalCount}</span>
 					<span class="text-text-02 body-01">/{totalAmount}</span>
@@ -105,7 +122,7 @@
 		</div>
 	</section>
 	<DirectionStraightRight class="ml-auto" />
-</div>
+</a>
 
 <style lang="scss">
 	.vote-card {

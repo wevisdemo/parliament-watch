@@ -20,8 +20,9 @@ export interface SearchIndexes {
 		status: BillStatus;
 	}[];
 	[SearchIndexCategory.Votings]?: {
+		id: string;
 		name: string;
-		result?: DefaultVotingResult;
+		result?: string;
 	}[];
 	[SearchIndexCategory.BillProposers]?: {
 		name: string;
@@ -51,7 +52,7 @@ interface BillSearchResultItem extends BaseSearchResultItem {
 
 interface VotingSearchResultItem extends BaseSearchResultItem {
 	billStatus?: never;
-	voteResult?: DefaultVotingResult;
+	voteResult?: string;
 	proposedBillsCount?: never;
 }
 

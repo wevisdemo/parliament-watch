@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	// import LawIcon from '$components/icons/LawIcon.svelte';
-	// import VoteIcon from '$components/icons/VoteIcon.svelte';
+	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
 	export const menuList: Menu[] = [
@@ -12,18 +12,18 @@
 			subs: [
 				{
 					label: 'สภาผู้แทนราษฎร',
-					url: '/assemblies/สมาชิกสภาผู้แทนราษฎร-25',
+					url: '/assemblies/สภาผู้แทนราษฎร-26',
 					type: MenuTypes.link
 				},
 				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link }
 			]
 		},
-		// {
-		// 	label: 'การลงมติ',
-		// 	icon: VoteIcon,
-		// 	url: '/votings/1',
-		// 	type: MenuTypes.both
-		// },
+		{
+			label: 'การลงมติ',
+			icon: VoteIcon,
+			url: '/assemblies/สภาผู้แทนราษฎร-26/votes',
+			type: MenuTypes.both
+		},
 		// {
 		// 	label: 'การออกกฎหมาย',
 		// 	icon: LawIcon,

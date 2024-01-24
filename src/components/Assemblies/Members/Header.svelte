@@ -25,7 +25,10 @@
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies/{assembly.id}">{assembly.name} {assembly.term}</BreadcrumbItem>
+	<BreadcrumbItem>รัฐสภา</BreadcrumbItem>
+	<BreadcrumbItem href="/assemblies/{assembly.id}"
+		>{assembly.name} ชุดที่ {assembly.term}</BreadcrumbItem
+	>
 	<BreadcrumbItem href="/assemblies/{assembly.id}/members" isCurrentPage
 		>รายชื่อสมาชิก</BreadcrumbItem
 	>

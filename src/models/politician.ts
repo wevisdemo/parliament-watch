@@ -40,7 +40,10 @@ export const createPoliticianSchema = (
 				id,
 				...rest,
 				avatar: imageResolver.resolve(`${id}.webp`),
-				isActive: !assemblyRoles[0]?.endedAt,
+				isActive:
+					assemblyRoles.length > 0 &&
+					!assemblyRoles[0].endedAt &&
+					!assemblyRoles[0].assembly.endedAt,
 				educations: parseMarkdownListToArrayOfItems(educations),
 				previousOccupations: parseMarkdownListToArrayOfItems(previousOccupations),
 				partyRoles,

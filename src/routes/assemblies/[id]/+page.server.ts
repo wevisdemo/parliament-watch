@@ -2,10 +2,21 @@ import dayjs from 'dayjs';
 import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
-import { DefaultVotingResult, type Voting } from '$models/voting';
-import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets';
-import { fetchAssemblyMembers } from './data';
+import {
+	fetchAssemblies,
+	fetchFromIdOr404,
+	fetchPoliticians,
+	fetchVotes,
+	fetchVotings
+} from '$lib/datasheets';
+import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import { getMemberGroup } from './members/[groupby]/groupby';
+import { createSeo } from '../../../utils/seo';
+import type { ComponentProps } from 'svelte';
+import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
+
+const MAX_LASTEST_VOTE = 5;
 
 export interface Summary {
 	totalMembers: number;
@@ -30,22 +41,15 @@ export interface MainMember {
 	description?: string;
 }
 
-export interface VoteCardProps {
-	voting: Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
-	highlightedVoteByGroups: {
-		name: string;
-		count: number;
-		total: number;
-	}[];
-}
-
 export async function load({ params }) {
 	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 
 	const { mainRoles, ...assembly } = fullAssembly;
 	const isSenates = assembly.name === AssemblyName.Senates;
 
-	const activeMembers = (await fetchAssemblyMembers(fullAssembly)).filter(
+	const politicians = await fetchPoliticians();
+
+	const activeMembers = getAssemblyMembers(fullAssembly, politicians).filter(
 		({ assemblyRole }) =>
 			!assemblyRole?.endedAt ||
 			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
@@ -102,21 +106,17 @@ export async function load({ params }) {
 		// groupByAssetValue: [],
 	};
 
-	const latestVotes: VoteCardProps[] = new Array(5)
-		.fill([
-			{ name: 'สส. ฝ่ายรัฐบาล', count: 160, total: 315 },
-			{ name: 'สส. ฝ่ายค้าน', count: 164, total: 185 },
-			{ name: 'สว.', count: 200, total: 250 }
-		])
-		.map<VoteCardProps>((highlightedVoteByGroups, i) => ({
-			voting: {
-				id: i + 1,
-				date: new Date(`09/${i + 1}/2023`),
-				title:
-					i % 3 < 2 ? 'ร่าง พ.ร.บ. สุราก้าวหน้า (ส่งไป ครม.)' : 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-				result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed, 'ชื่อแคนดิเดต'][i % 3]
-			},
-			highlightedVoteByGroups
+	const votes = await fetchVotes();
+
+	const latestVotes: ComponentProps<VoteCard>[] = (await fetchVotings())
+		.filter(({ participatedAssemblies }) =>
+			participatedAssemblies.some(({ id }) => assembly.id === id)
+		)
+		.sort((a, z) => z.date.getTime() - a.date.getTime())
+		.slice(0, MAX_LASTEST_VOTE)
+		.map((voting) => ({
+			voting,
+			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 		}));
 
 	const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
@@ -126,6 +126,9 @@ export async function load({ params }) {
 		assembly,
 		summary,
 		mainMembers,
-		latestVotes
+		latestVotes,
+		seo: createSeo({
+			title: `${assembly.name} ${assembly.term}`
+		})
 	};
 }

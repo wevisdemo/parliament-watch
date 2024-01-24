@@ -103,10 +103,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>สมาชิก {data.assembly.name} {data.assembly.term} - Parliament Watch</title>
-</svelte:head>
-
 <Header {data} bind:searchQuery {mounted} {assemblyIds} />
 <Tab {data} />
 <div class="relative flex">

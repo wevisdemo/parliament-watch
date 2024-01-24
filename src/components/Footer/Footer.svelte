@@ -8,8 +8,8 @@
 	menuList;
 </script>
 
-<div class="grid grid-cols-1 gap-4 bg-white py-8 px-6 md:px-12 lg:px-16 text-sm">
-	<p>
+<div class="flex flex-col items-center gap-4 bg-white py-8 px-6 md:px-12 lg:px-16 text-sm">
+	<p class="max-w-[1200px]">
 		เว็บไซต์นี้สร้างโดย
 		<a
 			href="https://wevis.info/"
@@ -39,18 +39,8 @@
 		> ซึ่งนำมาใช้เป็นต้นทุนในการรวมรวมข้อมูล ออกแบบ พัฒนาเว็บไซต์ ประสานงาน บริหารจัดการ ตลอดจนการจัด
 		Meetup เพื่อดำเนินโครงการ
 	</p>
-	<div>
-		<div class="font-semibold">ความถูกต้องและการอ้างอิงข้อมูลในเว็บไซต์</div>
-		<div>
-			(พารากราฟสั้นๆ อธิบายประเด็นต่อไปนี้) ข้อมูลในเว็บไซต์นี้เรารวบรวมจาก…
-			โดยได้รวบรวมและอัปเดทข้อมูลเมื่อ(หรือทุกๆ)…ข้อมูลอาจมีความคลาดเคลื่อน
-			ซึ่งเป็นไปได้ว่าเกิดจาก…หากคุณต้องการนำข้อมูลไปใช้ในงานของคุณเราแนะนำให้คุณ….หรือหากมีข้อสงสัยว่าข้อมูลไม่ถูกต้อง
-			กรุณาติดต่อ …. WeVis ซึ่งเป็น… เริ่มสร้างเว็บไซต์นี้โดยมีจุดประสงค์เพื่อ…
-			และได้รับการสนันบสนุนจาก….
-		</div>
-	</div>
-	<div>
-		<div class="font-semibold">Open Source License</div>
+	<div class="max-w-[1200px]">
+		<div class="font-semibold">ข้อตกลงในการใช้งาน (Terms of Use)</div>
 		<div>
 			ทางทีมมีความตั้งใจที่พัฒนาทุกโปรเจกต์ให้เป็น Open Source และเปิดข้อมูลเป็น Open Data ภายใต้<a
 				href="https://wevis.info/terms-of-use/"

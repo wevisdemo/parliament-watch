@@ -9,7 +9,7 @@
 
 	const resultItems: SearchResultItem[] = [
 		{ heading: 'สุชาติ ชมกลิ่น', description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ', url: '' },
-		{ heading: 'ร่าง พ.ร.บ.สุขาภิบาล', billStatus: BillStatus.InProgress, url: '' },
+		{ heading: 'ร่าง พรบ.สุขาภิบาล', billStatus: BillStatus.InProgress, url: '' },
 		{
 			heading: 'อภิปรายไม่ไว้วางใจ พลเอก ประวิตร วงษ์สุวรรณ (ก.พ. 65)',
 			voteResult: DefaultVotingResult.Passed,

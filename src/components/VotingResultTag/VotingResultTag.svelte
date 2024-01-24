@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { DefaultVotingResult } from '$models/voting';
-	import { Tag } from 'carbon-components-svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	export let result: DefaultVotingResult | string;
@@ -14,11 +13,11 @@
 
 	$: switch (result) {
 		case DefaultVotingResult.Passed:
-			tagColor = 'bg-teal-30';
+			tagColor = 'bg-teal-30 text-text-01';
 			label = isLarge ? 'มติผ่าน' : DefaultVotingResult.Passed;
 			break;
 		case DefaultVotingResult.Failed:
-			tagColor = 'bg-red-30';
+			tagColor = 'bg-red-30 text-text-01';
 			label = isLarge ? 'มติไม่ผ่าน' : DefaultVotingResult.Failed;
 			break;
 		default:
@@ -32,4 +31,4 @@
 	export { className as class };
 </script>
 
-<div class={twMerge(tagColor, className, tagText, tagContainer)}>{label}</div>
+<div class={twMerge('w-fit', tagColor, className, tagText, tagContainer)}>{label}</div>

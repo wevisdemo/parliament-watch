@@ -1,21 +1,49 @@
 <script lang="ts">
+	import { Button, InlineLoading, Search } from 'carbon-components-svelte';
+	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import Carousel from '$components/Index/Carousel.svelte';
-	import StatCard from '$components/Index/StatCard.svelte';
+	import StatCard, {
+		HighlightedReason,
+		type HighlightedPolitician
+	} from '$components/Index/StatCard.svelte';
 	import SearchInput from '$components/SearchInput/SearchInput.svelte';
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
+	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import { SearchIndexCategory, type SearchResults } from '$models/search';
-	import { Button, Search } from 'carbon-components-svelte';
-	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
-	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import { fetchExternalPoliticianRanking } from '../lib/politician-ranking/index.js';
+
+	interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPolitician {
+		updatedAt: Date;
+	}
 
 	export let data;
-	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians } = data);
+	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians, latestVotings } = data);
 
-	let searchResults: SearchResults | null;
+	let politicianSearchResults: SearchResults | null;
+	let votingSearchResults: SearchResults | null;
+	let externalHighlightedPoliticians: HighlightedPolitician[] = [];
+
+	async function getExternalHighlightedPoliticians(): Promise<HighlightedPolitician[]> {
+		const { politicianWithMostWikipediaVisit, politicianWithMostGun, updatedAt } =
+			await fetchExternalPoliticianRanking();
+
+		return [
+			{
+				reason: HighlightedReason.MostVisitedInWikipediaLastMonth,
+				...politicianWithMostWikipediaVisit,
+				updatedAt
+			} as MostVisitedInWikipediaLastMonthPolitician,
+			{
+				reason: HighlightedReason.MostGunOwned,
+				...politicianWithMostGun
+			}
+		];
+	}
 </script>
 
 <div class="md:h-[calc(100lvh-48px)] flex flex-col">
@@ -40,7 +68,7 @@
 		</h1>
 		<p class="relative flex gap-[10px] helper-text-01 text-gray-60">
 			<span
-				>อัปเดตข้อมูล: {new Date().toLocaleDateString('th-TH', {
+				>อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 					year: 'numeric',
 					month: 'short',
 					day: 'numeric'
@@ -66,16 +94,17 @@
 				</a>
 			</li>
 			<li class="flex-1">
-				<span
-					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8"
+				<a
+					href="#votings"
+					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 hover:bg-ui-01 !no-underline"
 				>
-					<VoteIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
-					<span class="flex-1 flex flex-col gap-1 opacity-30">
+					<VoteIcon class="aspect-square w-6 h-auto md:w-8" />
+					<span class="flex-1 flex flex-col gap-1">
 						<span class="fluid-heading-03">การลงมติ</span>
 						<span>ดูผลการโหวต พร้อมคำอธิบายเข้าใจง่าย</span>
 					</span>
-					<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
-				</span>
+					<ArrowDown />
+				</a>
 			</li>
 			<li class="flex-1">
 				<span
@@ -83,8 +112,8 @@
 				>
 					<LawIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
 					<span class="flex-1 flex flex-col gap-1 opacity-30">
-						<span class="fluid-heading-03">การออกกฏหมาย</span>
-						<span>ติดตามร่างกฏหมายที่เกี่ยวข้องกับชีวิตคุณ</span>
+						<span class="fluid-heading-03">การออกกฎหมาย</span>
+						<span>ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ</span>
 					</span>
 					<span class="label-01 whitespace-nowrap">เร็วๆ นี้..</span>
 				</span>
@@ -92,9 +121,9 @@
 		</menu>
 	</nav>
 </div>
-<section class="bg-ui-01 text-text-01">
+<section id="politician" class="bg-ui-01 text-text-01">
 	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
-		<div id="politician" class="flex flex-col gap-2 items-start md:flex-row">
+		<div class="flex flex-col gap-2 items-start md:flex-row">
 			<div class="flex gap-2 items-center md:flex-1">
 				<PoliticianIcon width="32" height="32" />
 				<h2 class="fluid-heading-05">นักการเมือง</h2>
@@ -110,14 +139,14 @@
 				size="lg"
 				placeholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช"
 				categories={[SearchIndexCategory.Politicians]}
-				bind:searchResults
+				bind:searchResults={politicianSearchResults}
 			/>
-			{#if searchResults}
-				<SearchResult {searchResults} class="w-full absolute left-0 z-10" />
+			{#if politicianSearchResults}
+				<SearchResult searchResults={politicianSearchResults} class="w-full absolute left-0 z-10" />
 			{/if}
 		</div>
 		<section>
-			<h3 class="fluid-heading-04">นักการเมืองที่น่าสนใจ</h3>
+			<h3 class="fluid-heading-04">นักการเมืองชุดล่าสุดที่น่าสนใจ</h3>
 			<p class="label-01 text-gray-60 mb-6">
 				หมายเหตุ : ในกรณีที่มีมากกว่า 1 คน จะเลือกจากลำดับตัวอักษรในชื่อ
 			</p>
@@ -132,38 +161,93 @@
 				<span class="absolute w-full h-[1px] bg-text-03 left-0 top-1/2" aria-hidden="true" />
 				<span class="relative text-text-03 bg-ui-01 px-2 z-10">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
 			</h3>
-			<Carousel>
-				{#each otherSourcesHighlightedPoliticians as politicianData (politicianData.reason)}
-					<StatCard class="keen-slider__slide" {politicianData} />
-				{/each}
-			</Carousel>
+			{#await getExternalHighlightedPoliticians()}
+				<InlineLoading class="flex justify-center items-center p-12" />
+			{:then externalHighlightedPoliticians}
+				<Carousel
+					arrowLeftClass="top-auto bottom-[75px] translate-y-1/2"
+					arrowRightClass="top-auto bottom-[75px] translate-y-1/2"
+				>
+					{#each [...otherSourcesHighlightedPoliticians, ...externalHighlightedPoliticians] as politicianData (politicianData.reason)}
+						<StatCard class="keen-slider__slide" {politicianData} />
+					{/each}
+				</Carousel>
+			{/await}
 		</section>
-		<ul class="flex flex-col gap-[6px]">
-			<li>
-				<Button
-					href="/assemblies/สมาชิกสภาผู้แทนราษฎร-25"
-					kind="secondary"
-					icon={ArrowRight}
-					class="w-full max-w-none"
-				>
-					สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
-				</Button>
-			</li>
-			<li>
-				<Button
-					href="/assemblies/วุฒิสภา-12"
-					kind="secondary"
-					icon={ArrowRight}
-					class="w-full max-w-none">สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
-				>
-			</li>
+		<div class="flex flex-col gap-[6px]">
+			<Button
+				href="/assemblies/สภาผู้แทนราษฎร-26"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
+				สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
+			</Button>
+
+			<Button
+				href="/assemblies/วุฒิสภา-12"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none">สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
+			>
 			<!-- TODO: cabinet is not released in the 1st phase  -->
 			<!-- <li>
 				<Button href="/" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
 					>คณะรัฐมนตรี (ครม.) ทั้งหมด</Button
 				>
 			</li> -->
-		</ul>
+		</div>
+	</div>
+</section>
+<section id="votings" class="bg-white text-text-01">
+	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
+		<div class="flex flex-col gap-2 items-start md:flex-row">
+			<div class="flex gap-2 items-center md:flex-1">
+				<VoteIcon width="32" height="32" />
+				<h2 class="fluid-heading-05">การลงมติ</h2>
+			</div>
+			<p class="md:flex-1 body-01">
+				ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ
+			</p>
+		</div>
+		<div class="relative">
+			<SearchInput
+				as={Search}
+				size="lg"
+				placeholder="ค้นด้วยชื่อมติ เช่น อภิปรายไม่ไว้วางใจ, แก้ รธน."
+				categories={[SearchIndexCategory.Votings]}
+				bind:searchResults={votingSearchResults}
+			/>
+			{#if votingSearchResults}
+				<SearchResult searchResults={votingSearchResults} class="w-full absolute left-0 z-10" />
+			{/if}
+		</div>
+		<section>
+			<h3 class="fluid-heading-04 mb-4">{latestVotings.length} ผลการลงมติล่าสุด</h3>
+			<Carousel options={{ loop: false }}>
+				{#each latestVotings as { voting, highlightedVoteByGroups }}
+					<VoteCard class="keen-slider__slide" {voting} {highlightedVoteByGroups} />
+				{/each}
+			</Carousel>
+		</section>
+		<div class="flex flex-col gap-[6px]">
+			<Button
+				href="/assemblies/สภาผู้แทนราษฎร-26/votes"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
+				ดูการลงมติทั้งหมดของสมาชิกสภาผู้แทนราษฎร ชุดที่ 26
+			</Button>
+			<Button
+				href="/assemblies/วุฒิสภา-12/votes"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
+				ดูการลงมติทั้งหมดของสมาชิกวุฒิสภา ชุดที่ 12
+			</Button>
+		</div>
 	</div>
 </section>
 <BackToTopButton />

@@ -10,7 +10,7 @@
 	}
 
 	export interface RelatedVotingResults {
-		[id: number]: {
+		[id: string]: {
 			voting: Voting;
 			resultSummary: VotingResultSummary;
 		};
@@ -32,7 +32,6 @@
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import type { Voting } from '$models/voting';
-	import type { ComponentProps } from 'svelte';
 
 	export let event: Event;
 	export let billStatus: BillStatus;
@@ -53,27 +52,27 @@
 			description: ''
 		},
 		mp1: {
-			title: 'สส. พิจารณา วาระ 1',
+			title: 'สส.พิจารณา วาระ 1',
 			description: 'รับหลักการและตั้งกรรมาธิการ'
 		},
 		mp2: {
-			title: 'สส. พิจารณา วาระ 2',
-			description: 'ขั้นกรรมาธิการ และ สส. ลงมติรับรายมาตรา'
+			title: 'สส.พิจารณา วาระ 2',
+			description: 'ขั้นกรรมาธิการ และ สส.ลงมติรับรายมาตรา'
 		},
 		mp3: {
-			title: 'สส. พิจารณา วาระ 3',
+			title: 'สส.พิจารณา วาระ 3',
 			description: 'ขั้นลงมติเห็นชอบ'
 		},
 		senate1: {
-			title: 'สว. พิจารณา วาระ 1',
+			title: 'สว.พิจารณา วาระ 1',
 			description: 'รับหลักการและตั้งกรรมาธิการ'
 		},
 		senate2: {
-			title: 'สว. พิจารณา วาระ 2',
-			description: 'ขั้นกรรมาธิการ และ สส. ลงมติรับรายมาตรา'
+			title: 'สว.พิจารณา วาระ 2',
+			description: 'ขั้นกรรมาธิการ และ สส.ลงมติรับรายมาตรา'
 		},
 		senate3: {
-			title: 'สว. พิจารณา วาระ 3',
+			title: 'สว.พิจารณา วาระ 3',
 			description: 'ขั้นลงมติเห็นชอบ'
 		},
 		royalAssent: {
@@ -90,39 +89,33 @@
 		}
 	};
 
-	function getVoting(votingResultsId: number | undefined) {
-		if (votingResultsId === undefined) return undefined;
-		let voting: ComponentProps<VoteCard>['voting'] = {
-			id: Number(votingResultsId),
-			date: relatedVotingResults[Number(votingResultsId)].voting.date,
-			title: relatedVotingResults[Number(votingResultsId)].voting.title,
-			result: relatedVotingResults[Number(votingResultsId)].voting.result
-		};
-		return voting;
-	}
+	$: voting = event.votedInVotingId
+		? relatedVotingResults[event.votedInVotingId].voting
+		: undefined;
 
-	function getHighlightedVoteByGroups(id: number | undefined, eventType: string) {
-		if (id === undefined) return undefined;
-		let resultSummary = relatedVotingResults[id].resultSummary;
+	$: highlightedVoteByGroups = (() => {
+		if (!event.votedInVotingId) return undefined;
+
+		const resultSummary = relatedVotingResults[event.votedInVotingId].resultSummary;
+
 		if (resultSummary.subResults) {
-			return resultSummary.subResults.map((subResult) => {
-				return {
-					name: subResult.affiliationName,
-					count: Number(subResult.agreed),
-					total: Number(subResult.total)
-				};
-			});
-		} else if (eventType.includes('senate')) {
+			return resultSummary.subResults.map((subResult) => ({
+				name: subResult.affiliationName,
+				count: subResult.agreed,
+				total: subResult.total
+			}));
+		} else if (event.type.includes('senate')) {
 			return [
 				{
 					name: 'สว.',
-					count: Number(resultSummary.agreed),
-					total: Number(resultSummary.total)
+					count: resultSummary.agreed,
+					total: resultSummary.total
 				}
 			];
 		}
+
 		return undefined;
-	}
+	})();
 </script>
 
 <li class="mb-10 ms-4 -mt-1">
@@ -149,15 +142,10 @@
 				<p>{eventDescription[event.type].description}</p>
 			</div>
 		</div>
-		{#if event.actionType === EventActionType.Voted && event.votedInVotingId}
+		{#if event.actionType === EventActionType.Voted && voting}
 			<div class="flex flex-col md:basis-2/3">
 				<p class="text-text-02">ผลการลงมติ</p>
-				<VoteCard
-					isFullWidth={true}
-					voting={getVoting(event.votedInVotingId)}
-					highlightedVoteByGroups={getHighlightedVoteByGroups(event.votedInVotingId, event.type)}
-					link={'/votings/' + event.votedInVotingId}
-				/>
+				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
 			</div>
 		{:else if event.actionType === EventActionType.Enforced}
 			<div class="w-full pt-5 md:basis-2/3">

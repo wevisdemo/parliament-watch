@@ -1,8 +1,10 @@
 # 👀 Parliament Watch
 
+![Parliament Watch](https://parliamentwatch.wevis.info/images/sapasathan.svg)
+
 Citizens are watching
 
-> **HACKTOBERFEST 2023** 🎉 - get a free limited-edition sticker on approved PR [read more](https://www.facebook.com/wevisdemo/posts/pfbid0nhDdBgYsDqmfTN3mf3TQLQ1zPDcksUi7HM6zSysGCynu3m69GnxPBs7LRmuybw8Xl)
+> Thank you for every contibutors who participated in the **HACKTOBERFEST 2023** 🎉
 
 **Table of Content**
 
@@ -41,9 +43,8 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 | Name                  | URL                                |
 | --------------------- | ---------------------------------- |
-| Branch Preview        | Provided by Cloudflare Pages       |
+| Production            | https://parliamentwatch.wevis.info |
 | Staging (main branch) | https://parliament-watch.pages.dev |
-| Production            | -                                  |
 
 ## 🍱 Tech Stack
 
@@ -67,7 +68,8 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 ### Deployment pipeline
 
-- [Cloudflare Pages](https://pages.cloudflare.com) will automatically deploy staging (main branch) and per branch preview.
+- **Staging**: Each push will trigger the [Github Actions Workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy on [Cloudflare Pages](https://pages.cloudflare.com). Can also be triggered manually.
+- **Production**: The [Github Actions Workflow](.github/workflows/staging.yml) can only be manually triggered to download the latest build artifact and upload to our server through SSH.
 
 ## 🪄 Useful Commands
 
@@ -152,14 +154,18 @@ Data is pre-process server-side during the build step as following
 flowchart TD
     A[Google Sheets] -->|d3 fetch: fetch and parse| B(JS objects)
     B --> |Zod: validate and transform| C(Type-safe objects)
-    C --> |imported by| D(Svelte's routes)
-    D --> |Svelte SSR| E(dev website)
-    D --> |Svelte SSG| F(prod website)
+    C --> |used in| D(Svelte's routes)
+    D --> |Svelte SSR/SSG| E(dev/prod website)
+    C --> |used in| G(Scheduled GitHub Action)
+    F(External data source) --> |fetched by| G
+    G --> |build| H(JSON on GitHub Page)
+    H --> |fetched by| E(GitHub Page)
 ```
 
 - Original data is avaiable at our public [Google Sheets](https://docs.google.com/spreadsheets/d/1SbX2kgAGsslbhGuB-EI_YdSAnIt3reU1_OEtWmDVOVk/edit?usp=sharing)
 - [lib/datasheets](src/lib/datasheets/index.ts) provides fetch functions for each tables wrapping [d3-fetch](https://d3js.org/d3-fetch#csv) and [Zod](https://zod.dev)'s validation.
 - Zod's schema for each data table are defined in [src/models](src/models) which also contains ER Diagram and other TypeScript's interfaces.
+- Some data, such as politician ranking from external source, will be updated periodically through [scheduled Github Action](.github/workflows/update-ranking.yml) to reduce unnessesary build-time. The output JSON data is [served through Github Pages](https://wevisdemo.github.io/parliament-watch/politician-ranking.json) and can be fetch from the client-side.
 
 ## 🤝 Contributing Guideline
 

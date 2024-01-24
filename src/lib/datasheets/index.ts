@@ -1,5 +1,5 @@
 import { fetchAndParseSheet } from './processor';
-import { createAssemblySchema } from '$models/assembly';
+import { assemblyPartyGroupSchema, createAssemblySchema } from '$models/assembly';
 import { createPartySchema } from '$models/party';
 import {
 	createAssemblyRoleSchema,
@@ -8,12 +8,20 @@ import {
 } from '$models/politician';
 import { error } from '@sveltejs/kit';
 import { StaticImageResolver } from './image';
+import { createVotingSchema } from '$models/voting';
+import { voteSchema } from '$models/vote';
 
 export const fetchParties = () =>
 	fetchAndParseSheet('Parties', createPartySchema(new StaticImageResolver('/images/parties')));
 
+export const fetchAssemblyPartyGroups = () =>
+	fetchAndParseSheet('AssemblyPartyGroups', assemblyPartyGroupSchema);
+
 export const fetchAssemblies = async () =>
-	fetchAndParseSheet('Assemblies', createAssemblySchema(await fetchParties()));
+	fetchAndParseSheet(
+		'Assemblies',
+		createAssemblySchema(await fetchParties(), await fetchAssemblyPartyGroups())
+	);
 
 export const fetchAssemblyRoleHistory = async () =>
 	fetchAndParseSheet('AssemblyRoleHistory', createAssemblyRoleSchema(await fetchAssemblies()));
@@ -30,6 +38,11 @@ export const fetchPoliticians = async () =>
 			new StaticImageResolver('/images/politicians')
 		)
 	);
+
+export const fetchVotes = () => fetchAndParseSheet('Votes', voteSchema);
+
+export const fetchVotings = async () =>
+	fetchAndParseSheet('Votings', createVotingSchema(await fetchAssemblies()));
 
 export async function fetchFromIdOr404<T extends { id: string }>(
 	fetcher: () => Promise<T[]>,

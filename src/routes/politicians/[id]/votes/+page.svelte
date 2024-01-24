@@ -37,32 +37,25 @@
 		{
 			key: 'filterVoteType',
 			legend: 'ประเภทการลงมติ',
-			choices: [
-				DefaultVoteOption.Agreed,
-				DefaultVoteOption.Disagreed,
-				DefaultVoteOption.Novote,
-				DefaultVoteOption.Abstain,
-				DefaultVoteOption.Absent,
-				'อื่นๆ'
-			].map((type) => ({
+			choices: filterOptions.voteOptions.map((type) => ({
 				label: type,
 				value: type
 			}))
 		},
-		{
-			key: 'filterVoteDirection',
-			legend: 'เงื่อนไขพิเศษ',
-			choices: [
-				{
-					label: 'ลงมติต่างจากเสียงส่วนใหญ่ในพรรค',
-					value: false
-				},
-				{
-					label: 'ลงมติเหมือนเสียงส่วนใหญ่ในพรรค',
-					value: true
-				}
-			]
-		},
+		// {
+		// 	key: 'filterVoteDirection',
+		// 	legend: 'เงื่อนไขพิเศษ',
+		// 	choices: [
+		// 		{
+		// 			label: 'ลงมติต่างจากเสียงส่วนใหญ่ในพรรค',
+		// 			value: false
+		// 		},
+		// 		{
+		// 			label: 'ลงมติเหมือนเสียงส่วนใหญ่ในพรรค',
+		// 			value: true
+		// 		}
+		// 	]
+		// },
 		{
 			key: 'filterCatg',
 			legend: 'หมวดมติ (1 มติ มีได้มากกว่า 1 หมวด)',
@@ -80,20 +73,32 @@
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votes.filter((vote) => {
-					const search = searchQuery.trim();
-					if (search && !vote.title.includes(search)) return;
-					const { filterAssembly, filterVoteType, filterVoteDirection, filterCatg } =
-						selectedCheckboxValue;
-					return (
-						filterAssembly.some((assemblyId) =>
-							vote.participatedAssembleIds.includes(assemblyId as string)
-						) &&
-						filterVoteType.includes(generalVoteType(vote.voteOption)) &&
-						filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority) &&
-						filterCatg.some((category) => vote.categories.includes(String(category)))
-					);
-			  });
+			: votes
+					.filter((vote) => {
+						const search = searchQuery.trim();
+						if (search && !vote.title.includes(search)) return;
+						const {
+							filterAssembly,
+							filterVoteType,
+							filterCatg
+						} = //filterVoteDirection
+							selectedCheckboxValue;
+						return (
+							filterAssembly.some((assemblyId) =>
+								vote.participatedAssemblies.some(({ id }) => id === assemblyId)
+							) &&
+							filterVoteType.includes(vote.voteOption) &&
+							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority) &&
+							filterCatg.some((category) => vote.categories.includes(String(category)))
+						);
+					})
+					.map((vote) => ({
+						titleColumn: {
+							id: vote.id,
+							title: vote.title
+						},
+						...vote
+					}));
 
 	onMount(() => {
 		switch ($page.url.searchParams.get('votetype')) {
@@ -110,13 +115,10 @@
 	});
 </script>
 
-<svelte:head>
-	<title>ประวัติการลงมติ {politician.firstname} {politician.lastname} - Parliament Watch</title>
-</svelte:head>
-
 <DataPage
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
+		{ label: 'นักการเมือง' },
 		{
 			url: `/politicians/${politician.id}`,
 			label: `${politician.firstname} ${politician.lastname}`
@@ -127,17 +129,20 @@
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
-		{ key: 'title', value: 'ชื่อมติ' },
+		{ key: 'titleColumn', value: 'ชื่อมติ' },
 		{ key: 'voteOption', value: 'การลงมติ' },
 		{ key: 'result', value: 'ผลลัพธ์' },
-		{ key: 'files', value: 'เอก สาร' }
+		{ key: 'files', value: 'เอกสาร' }
+	]}
+	downloadLinks={[
+		{ label: 'ผลการลงมติรายคน', url: `/files/download/politicians/${politician.id}-votes.csv` }
 	]}
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<h1 class="fluid-heading-03 mb-1">
-		<a class="no-underline text-black hover:text-blue-70" href="/politicians/{politician.id}"
+		<a class="no-underline text-text-01 hover:text-blue-70" href="/politicians/{politician.id}"
 			>{politician.prefix} {politician.firstname} {politician.lastname}</a
 		>
 	</h1>
@@ -154,21 +159,25 @@
 				month: 'short',
 				year: '2-digit'
 			})}
-		{:else if cellKey === 'title'}
-			<!-- TODO: Add link -->
-			<a class="text-text-01 hover:underline hover:text-interactive-01" href="/">{cellValue}</a>
-		{:else if cellKey === 'result'}
-			<VotingResultTag class="m-0 whitespace-nowrap" isLarge result={cellValue} />
+		{:else if cellKey === 'titleColumn'}
+			<a
+				class="text-text-01 hover:underline hover:text-interactive-01"
+				href="/votings/{cellValue.id}">{cellValue.title}</a
+			>
 		{:else if cellKey === 'voteOption'}
 			<VotingOptionTag voteOption={cellValue} />
+		{:else if cellKey === 'result'}
+			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
 		{:else if cellKey === 'files'}
 			{@const files = cellValue}
 			{#if files.length > 0}
-				{#each files as file (file)}
-					<a href={file.url} download title={file.label}
-						><DocumentPdf /><span class="sr-only">{file.label}</span></a
-					>
-				{/each}
+				<div class="flex flex-wrap gap-2">
+					{#each files as file (file)}
+						<a href={file.url} download title={file.label}
+							><DocumentPdf /><span class="sr-only">{file.label}</span></a
+						>
+					{/each}
+				</div>
 			{:else}
 				-
 			{/if}
