@@ -2,7 +2,6 @@ import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { movingForwardPolitician } from '../mocks/data/politician.js';
 import type { ComponentProps } from 'svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
@@ -24,10 +23,6 @@ interface LongestServedInPoliticalPositionsPolitician extends HighlightedPolitic
 
 interface MostFrequentlyServedAsMinisterPolitician extends HighlightedPolitician {
 	cabinetTerms: number[];
-}
-
-interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPolitician {
-	updatedAt: Date;
 }
 
 export async function load() {
@@ -98,15 +93,6 @@ export async function load() {
 		}
 	];
 
-	const wikipediaPolitician: Omit<HighlightedPolitician, 'reason'> = {
-		politician: movingForwardPolitician,
-		value: 476263
-	};
-	const gunPolitician: Omit<HighlightedPolitician, 'reason'> = {
-		politician: movingForwardPolitician,
-		value: 25
-	};
-
 	const chuanLeekpai = safeFind(activePoliticians, (p) => p.id === 'ชวน-หลีกภัย');
 	const banyatBantadtan = safeFind(activePoliticians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
 
@@ -133,16 +119,6 @@ export async function load() {
 			reason: HighlightedReason.MostDiverseServedAsMinister,
 			value: 6,
 			politician: chuanLeekpai
-		},
-		{
-			reason: HighlightedReason.MostVisitedInWikipediaLastMonth,
-			...wikipediaPolitician,
-			updatedAt: new Date()
-		} as MostVisitedInWikipediaLastMonthPolitician,
-		{
-			reason: HighlightedReason.MostGunOwned,
-			politician: gunPolitician.politician,
-			value: gunPolitician.value
 		}
 	];
 

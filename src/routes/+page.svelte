@@ -1,7 +1,13 @@
 <script lang="ts">
+	import { Button, InlineLoading, Search } from 'carbon-components-svelte';
+	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import Carousel from '$components/Index/Carousel.svelte';
-	import StatCard from '$components/Index/StatCard.svelte';
+	import StatCard, {
+		HighlightedReason,
+		type HighlightedPolitician
+	} from '$components/Index/StatCard.svelte';
 	import SearchInput from '$components/SearchInput/SearchInput.svelte';
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
@@ -9,15 +15,35 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import { SearchIndexCategory, type SearchResults } from '$models/search';
-	import { Button, Search } from 'carbon-components-svelte';
-	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
-	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import { fetchExternalPoliticianRanking } from '../lib/politician-ranking/index.js';
+
+	interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPolitician {
+		updatedAt: Date;
+	}
 
 	export let data;
 	$: ({ highlightedPoliticians, otherSourcesHighlightedPoliticians, latestVotings } = data);
 
 	let politicianSearchResults: SearchResults | null;
 	let votingSearchResults: SearchResults | null;
+	let externalHighlightedPoliticians: HighlightedPolitician[] = [];
+
+	async function getExternalHighlightedPoliticians(): Promise<HighlightedPolitician[]> {
+		const { politicianWithMostWikipediaVisit, politicianWithMostGun, updatedAt } =
+			await fetchExternalPoliticianRanking();
+
+		return [
+			{
+				reason: HighlightedReason.MostVisitedInWikipediaLastMonth,
+				...politicianWithMostWikipediaVisit,
+				updatedAt
+			} as MostVisitedInWikipediaLastMonthPolitician,
+			{
+				reason: HighlightedReason.MostGunOwned,
+				...politicianWithMostGun
+			}
+		];
+	}
 </script>
 
 <div class="md:h-[calc(100lvh-48px)] flex flex-col">
@@ -135,14 +161,18 @@
 				<span class="absolute w-full h-[1px] bg-text-03 left-0 top-1/2" aria-hidden="true" />
 				<span class="relative text-text-03 bg-ui-01 px-2 z-10">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
 			</h3>
-			<Carousel
-				arrowLeftClass="top-auto bottom-[75px] translate-y-1/2"
-				arrowRightClass="top-auto bottom-[75px] translate-y-1/2"
-			>
-				{#each otherSourcesHighlightedPoliticians as politicianData (politicianData.reason)}
-					<StatCard class="keen-slider__slide" {politicianData} />
-				{/each}
-			</Carousel>
+			{#await getExternalHighlightedPoliticians()}
+				<InlineLoading class="flex justify-center items-center p-12" />
+			{:then externalHighlightedPoliticians}
+				<Carousel
+					arrowLeftClass="top-auto bottom-[75px] translate-y-1/2"
+					arrowRightClass="top-auto bottom-[75px] translate-y-1/2"
+				>
+					{#each [...otherSourcesHighlightedPoliticians, ...externalHighlightedPoliticians] as politicianData (politicianData.reason)}
+						<StatCard class="keen-slider__slide" {politicianData} />
+					{/each}
+				</Carousel>
+			{/await}
 		</section>
 		<div class="flex flex-col gap-[6px]">
 			<Button

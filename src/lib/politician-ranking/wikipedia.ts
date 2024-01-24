@@ -1,6 +1,6 @@
 import type { Politician } from '$models/politician';
 import dayjs from 'dayjs';
-import { movingForwardPolitician } from '../../src/mocks/data/politician';
+import { movingForwardPolitician } from '../../mocks/data/politician';
 
 export interface PoliticianResult {
 	politician: Politician;

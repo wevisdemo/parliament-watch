@@ -18,7 +18,7 @@
 		"story:preview": "histoire preview",
 		"gen:component": "hygen component new",
 		"test": "vitest",
-		"update:politician-ranking": "tsx scripts/politician-ranking/run-update-job.ts"
+		"update:politician-ranking": "tsx src/lib/politician-ranking/run-update-job.ts"
 	},
 	"lint-staged": {
 		"*.md": "doctoc --github --update-only",

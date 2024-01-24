@@ -1,18 +1,11 @@
-import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { getPoliticianWithMostViewLastMonth } from './wikipedia';
 import { getPoliticianWithMostGun } from './gun';
 import { fetchPoliticians } from '$lib/datasheets';
+import { OUT_FILE, type ExternalPoliticianRanking } from '.';
 
 const OUT_DIR = './out';
-const OUT_FILE = 'politician-ranking.json';
-
-export interface RankingFile {
-	politicianWithMostWikipediaVisit: Omit<HighlightedPolitician, 'reason'>;
-	politicianWithMostGun: Omit<HighlightedPolitician, 'reason'>;
-	updatedAt: Date;
-}
 
 export async function writePoliticianRankingFile() {
 	console.info('Fetching politicians...');
@@ -26,7 +19,7 @@ export async function writePoliticianRankingFile() {
 	console.info('Fetching gun ownership...');
 	const politicianWithMostGun = await getPoliticianWithMostGun(activePoliticians);
 
-	const rankingFile: RankingFile = {
+	const rankingFile: ExternalPoliticianRanking = {
 		politicianWithMostWikipediaVisit,
 		politicianWithMostGun,
 		updatedAt: new Date()
