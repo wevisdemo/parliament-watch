@@ -1,5 +1,3 @@
-import type { Party } from '$models/party';
-import type { DefaultVoteOption, CustomVoteOption } from '$models/voting';
 import type { Bill } from '$models/bill';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import {
@@ -8,25 +6,7 @@ import {
 	type VoteOptionCounter
 } from '$lib/datasheets/voting.js';
 import { createSeo } from '../../../utils/seo.js';
-
-export type Results = VoteOptionResult[];
-
-export interface VoteOptionResult {
-	voteOption: DefaultVoteOption | CustomVoteOption | string;
-	total: number;
-}
-
-export type ResultsByAffiliation = ResultByAffiliation[];
-export type ResultsByParty = {
-	party: Party;
-	resultSummary: Results;
-};
-
-export interface ResultByAffiliation {
-	affiliationName: string;
-	resultSummary: Results;
-	byParties?: ResultsByParty[];
-}
+import type { ResultsByAffiliation } from './+page.js';
 
 export async function load({ params }) {
 	const voting = await fetchFromIdOr404(fetchVotings, params.id);
