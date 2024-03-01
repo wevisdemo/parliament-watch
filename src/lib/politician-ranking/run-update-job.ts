@@ -7,7 +7,7 @@ import { OUT_FILE, type ExternalPoliticianRanking } from '.';
 
 const OUT_DIR = './out';
 
-export async function writePoliticianRankingFile() {
+async function writePoliticianRankingFile() {
 	console.info('Fetching politicians...');
 	const activePoliticians = (await fetchPoliticians()).filter(({ isActive }) => isActive);
 
@@ -29,3 +29,5 @@ export async function writePoliticianRankingFile() {
 
 	writeFileSync(join(OUT_DIR, OUT_FILE), JSON.stringify(rankingFile));
 }
+
+writePoliticianRankingFile();
