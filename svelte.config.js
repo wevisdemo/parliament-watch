@@ -14,7 +14,7 @@ const config = {
 		},
 		prerender: {
 			// TODO: non-released route for internal testing without a public link from any page
-			entries: ['/bills', '/bills/1', '/bills/search', '/legislative-process']
+			entries: ['/bills', '/bills/1', '/bills/explore', '/legislative-process']
 		}
 	}
 };
