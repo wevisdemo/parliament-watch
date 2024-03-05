@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	// import LawIcon from '$components/icons/LawIcon.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
@@ -24,15 +24,15 @@
 			url: '/assemblies/สภาผู้แทนราษฎร-26/votes',
 			type: MenuTypes.both
 		},
-		// {
-		// 	label: 'การออกกฎหมาย',
-		// 	icon: LawIcon,
-		// 	type: MenuTypes.root,
-		// 	subs: [
-		// 		{ label: 'กฎหมายในกระบวนการ', url: '/bills/1', type: MenuTypes.link },
-		// 		{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
-		// 	]
-		// },
+		{
+			label: 'การเสนอกฎหมาย',
+			icon: LawIcon,
+			type: MenuTypes.root,
+			subs: [
+				{ label: 'สำรวจร่างกฎหมายในสภา', url: '/bills', type: MenuTypes.link },
+				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
+			]
+		},
 		{
 			label: 'เกี่ยวกับเรา',
 			icon: WeVisIcon,

@@ -137,7 +137,7 @@
 	bind:this={cmpDataPage}
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
-		{ url: '/bills', label: 'สำรวจร่างกฎหมายในสภา' },
+		{ url: '/bills', label: 'ร่างกฎหมายในสภา' },
 		{ url: `/bills/explore`, label: 'สำรวจแบบละเอียด' }
 	]}
 	searchPlaceholder="ชื่อร่างกฎหมาย"

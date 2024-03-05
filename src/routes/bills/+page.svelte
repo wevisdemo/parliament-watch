@@ -20,7 +20,7 @@
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem href="/bills" isCurrentPage>สำรวจร่างกฎหมายในสภา</BreadcrumbItem>
+	<BreadcrumbItem href="/bills" isCurrentPage>ร่างกฎหมายในสภา</BreadcrumbItem>
 </Breadcrumb>
 <header class="flex flex-col items-center text-center gap-2 px-4 py-10">
 	<LawIcom width="36" height="36" />

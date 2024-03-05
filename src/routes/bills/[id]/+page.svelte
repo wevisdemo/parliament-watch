@@ -95,7 +95,7 @@
 	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem href="/bills">การเสนอกฎหมาย</BreadcrumbItem>
+	<BreadcrumbItem href="/bills">ร่างกฎหมายในสภา</BreadcrumbItem>
 	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage>{bill.nickname}</BreadcrumbItem>
 </Breadcrumb>
 
