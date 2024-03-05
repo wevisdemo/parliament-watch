@@ -29,7 +29,8 @@
 		<span class="text-text-02"
 			>อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', { dateStyle: 'medium' })}</span
 		>
-		<a href="#a" class="underline">ที่มาและข้อจำกัดข้อมูล</a>
+		<!-- TODO: Add link -->
+		<!-- <a href="/" class="underline">ที่มาและข้อจำกัดข้อมูล</a> -->
 	</div>
 </header>
 <section class="flex flex-col gap-2 px-4 py-6 max-w-[1280px] mx-auto">
