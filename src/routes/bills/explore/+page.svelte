@@ -132,6 +132,7 @@
 	});
 </script>
 
+<!-- TODO: Add downloadLinks -->
 <DataPage
 	bind:this={cmpDataPage}
 	breadcrumbList={[
@@ -150,7 +151,7 @@
 		{ key: 'files', value: 'เอกสาร' }
 	]}
 	downloadSize="lg"
-	downloadLinks={[{ label: 'ร่างกฎหมายในสภา', url: `/files/download/bills/bills.csv` }]}
+	downloadLinks={[{ label: 'ร่างกฎหมายในสภา', url: `/` }]}
 	bind:searchQuery
 	bind:selectedComboboxValue
 	bind:selectedCheckboxValue

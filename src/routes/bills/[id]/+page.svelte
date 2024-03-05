@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let data;
+	import dayjs from 'dayjs';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import { DocumentMultiple_02, Information } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
@@ -17,6 +17,8 @@
 	import type { Politician } from '$models/politician.js';
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import Progress from '$components/bills/Progress.svelte';
+
+	export let data;
 
 	const {
 		bill,
@@ -37,14 +39,16 @@
 		month: 'short',
 		day: 'numeric'
 	};
-	const proposedOn = bill.proposedOn.toLocaleDateString('th-TH', dateTimeFormat);
+
+	$: proposedOn = bill.proposedOn.toLocaleDateString('th-TH', dateTimeFormat);
 
 	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
 		arr.reduce(
 			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
 			{} as Record<K, T[]>
 		);
-	const partiescoProposed = bill.coProposedByPoliticians
+
+	$: partiescoProposed = bill.coProposedByPoliticians
 		? groupBy(
 				bill.coProposedByPoliticians,
 				(politician) => politician.partyRoles.find((e) => !e.endedAt)!.party.name
@@ -77,17 +81,10 @@
 		return '';
 	}
 
-	const lastestEvent = events.reduce((a, b) => {
-		return new Date(a.date) > new Date(b.date) ? a : b;
-	});
+	$: dayElapsed = dayjs(
+		bill.status === BillStatus.InProgress ? new Date() : events[events.length - 1].date
+	).diff(bill.proposedOn, 'days');
 
-	function getNumberOfDays() {
-		const start = bill.proposedOn;
-		const end = bill.status === BillStatus.InProgress ? new Date() : new Date(lastestEvent.date);
-		const timeDifference = Math.abs(end.getTime() - start.getTime());
-		const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-		return daysDifference;
-	}
 	$: innerWidth = 0;
 </script>
 
@@ -112,7 +109,7 @@
 			</p>
 			<div class="flex items-center gap-1 font-bold -ml-1">
 				<BillStatusTag isLarge status={bill.status} />
-				<b class="text-support-04">ใช้เวลา {getNumberOfDays()} วัน</b>
+				<b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b>
 			</div>
 		</div>
 		<div class="flex flex-col gap-8 mt-7 md:flex-row md:gap-16">
@@ -306,47 +303,49 @@
 		</section>
 	{/if}
 
-	<section title="legal path" class="px-4 py-8 md:px-16 md:py-12">
-		<div class="flex flex-col gap-5">
-			<h1 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h1>
-			<hr class="border-gray-30" />
-			<div class="flex flex-col md:flex-row justify-between">
-				<div class="flex items-center gap-1">
-					<b>สถานะ</b>
-					<BillStatusTag isLarge status={bill.status} />
+	{#if events.length > 0}
+		<section title="legal path" class="px-4 py-8 md:px-16 md:py-12">
+			<div class="flex flex-col gap-5">
+				<h1 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h1>
+				<hr class="border-gray-30" />
+				<div class="flex flex-col md:flex-row justify-between">
+					<div class="flex items-center gap-1">
+						<b>สถานะ</b>
+						<BillStatusTag isLarge status={bill.status} />
+					</div>
+					<div>
+						<ModalLawProcess />
+					</div>
 				</div>
-				<div>
-					<ModalLawProcess />
-				</div>
-			</div>
-			<div title="timeline">
-				<ol
-					class="relative ml-2 border border-t-[transparent] border-e-[transparent] border-b-[transparent]"
-				>
-					{#each events.slice(0, events.length - 1) as event}
-						<Progress
-							{event}
-							billStatus={bill.status}
-							{tooltipText}
-							{relatedVotingResults}
-							{mergedIntoBill}
-							{mergedIntoBillLatestEvent}
-						/>
-					{/each}
-				</ol>
-				<div>
-					<ol class="relative ml-2">
-						<Progress
-							event={events[events.length - 1]}
-							billStatus={bill.status}
-							{tooltipText}
-							{relatedVotingResults}
-							{mergedIntoBill}
-							{mergedIntoBillLatestEvent}
-						/>
+				<div title="timeline">
+					<ol
+						class="relative ml-2 border border-t-[transparent] border-e-[transparent] border-b-[transparent]"
+					>
+						{#each events.slice(0, events.length - 1) as event}
+							<Progress
+								{event}
+								billStatus={bill.status}
+								{tooltipText}
+								{relatedVotingResults}
+								{mergedIntoBill}
+								{mergedIntoBillLatestEvent}
+							/>
+						{/each}
 					</ol>
+					<div>
+						<ol class="relative ml-2">
+							<Progress
+								event={events[events.length - 1]}
+								billStatus={bill.status}
+								{tooltipText}
+								{relatedVotingResults}
+								{mergedIntoBill}
+								{mergedIntoBillLatestEvent}
+							/>
+						</ol>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	{/if}
 </div>
