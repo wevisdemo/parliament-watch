@@ -60,6 +60,6 @@ export async function load({ params }) {
 			})
 		};
 	} else {
-		throw error(404);
+		error(404);
 	}
 }

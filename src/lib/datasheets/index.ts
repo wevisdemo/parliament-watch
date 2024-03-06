@@ -51,7 +51,7 @@ export async function fetchFromIdOr404<T extends { id: string }>(
 	const data = (await fetcher()).find((item) => item.id === id);
 
 	if (!data) {
-		throw error(404, { message: `id ${id} was not found with ${fetcher.name}` });
+		error(404, { message: `id ${id} was not found with ${fetcher.name}` });
 	}
 
 	return data;
