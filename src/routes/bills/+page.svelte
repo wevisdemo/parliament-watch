@@ -17,15 +17,15 @@
 
 <Breadcrumb
 	noTrailingSlash
-	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+	class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/bills" isCurrentPage>ร่างกฎหมายในสภา</BreadcrumbItem>
 </Breadcrumb>
-<header class="flex flex-col items-center text-center gap-2 px-4 py-10">
+<header class="flex flex-col items-center gap-2 px-4 py-10 text-center">
 	<LawIcom width="36" height="36" />
 	<h1 class="fluid-heading-05 text-balance">สำรวจร่างกฎหมายในสภา</h1>
-	<div class="flex flex-wrap items-baseline justify-center gap-2 label-01">
+	<div class="label-01 flex flex-wrap items-baseline justify-center gap-2">
 		<span class="text-text-02"
 			>อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', { dateStyle: 'medium' })}</span
 		>
@@ -33,7 +33,7 @@
 		<!-- <a href="/" class="underline">ที่มาและข้อจำกัดข้อมูล</a> -->
 	</div>
 </header>
-<section class="flex flex-col gap-2 px-4 py-6 max-w-[1280px] mx-auto">
+<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
 	<h2 class="fluid-heading-03">ค้นด้วยชื่อ</h2>
 	<div class="relative">
 		<SearchInput
@@ -45,14 +45,14 @@
 		/>
 		{#if searchResults}
 			<!-- TODO: Link Bills to Explore Page -->
-			<SearchResult {searchResults} class="w-full absolute left-0 z-10" />
+			<SearchResult {searchResults} class="absolute left-0 z-10 w-full" />
 		{/if}
 	</div>
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
 </section>
 <div class="bg-ui-01">
-	<section class="flex flex-col gap-3 px-4 py-6 max-w-[1280px] mx-auto">
-		<header class="flex flex-col items-start justify-between flex-wrap md:flex-row">
+	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+		<header class="flex flex-col flex-wrap items-start justify-between md:flex-row">
 			<h2 class="fluid-heading-03">สำรวจตามสถานะ</h2>
 			<ModalLawProcess class="text-right" />
 		</header>
@@ -75,7 +75,7 @@
 			{/each}
 		</Carousel>
 	</section>
-	<section class="flex flex-col gap-3 px-4 py-6 max-w-[1280px] mx-auto">
+	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<header>
 			<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
 			<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
@@ -86,7 +86,7 @@
 			{/each}
 		</Carousel>
 	</section>
-	<section class="flex flex-col gap-3 px-4 py-6 max-w-[1280px] mx-auto">
+	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
 		<Carousel
 			options={{
@@ -109,7 +109,7 @@
 	</section>
 </div>
 <div class="bg-teal-80">
-	<section class="flex flex-col gap-3 px-4 py-10 max-w-[1280px] mx-auto">
+	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-10">
 		<h2 class="fluid-heading-03 text-white">5 ฉบับล่าสุดที่ได้ออกเป็นกฏหมาย</h2>
 		<Carousel
 			options={{
@@ -136,10 +136,10 @@
 		</Carousel>
 	</section>
 </div>
-<div class="pt-6 pb-20 px-4">
+<div class="px-4 pb-20 pt-6">
 	<a
 		href="/bills/explore"
-		class="flex items-end justify-between gap-4 max-w-[1280px] w-full mx-auto fluid-heading-04 p-4 bg-blue-60 hover:bg-blue-70 focus:bg-blue-70 text-white"
+		class="fluid-heading-04 mx-auto flex w-full max-w-[1280px] items-end justify-between gap-4 bg-blue-60 p-4 text-white hover:bg-blue-70 focus:bg-blue-70"
 	>
 		<span>ดูร่างกฎหมายทั้งหมดในสภา</span>
 		<ArrowRight />

@@ -23,7 +23,7 @@
 
 <a
 	href="/politicians/{id}"
-	class="p-2 font-sans flex gap-4 hover:underline"
+	class="flex gap-4 p-2 font-sans hover:underline"
 	class:opacity-50={!isActive}
 >
 	<PoliticianPicture class={imgClass} {avatar} size={imgSize} {party} />

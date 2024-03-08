@@ -28,7 +28,7 @@
 					groupBySex: getSenateGroupWithColor(data.summary.groupBySex),
 					groupByAgeRange: getSenateGroupWithColor(data.summary.groupByAgeRange),
 					groupByEducation: getSenateGroupWithColor(data.summary.groupByEducation)
-			  }
+				}
 			: data.summary;
 
 	let selector = 'summary';
@@ -43,10 +43,10 @@
 	};
 </script>
 
-<div class="md:px-[64px] px-[16px]">
+<div class="px-[16px] md:px-[64px]">
 	<Breadcrumb
 		noTrailingSlash
-		class="[&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap my-[8px]"
+		class="my-[8px] [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
@@ -57,7 +57,7 @@
 	<Header data={data.assembly} assemblyIds={data.assemblyIds} />
 	<div class="flex w-full">
 		<button
-			class="w-full px-[16px] py-[11px] text-[14px] border-b-[2px] border-solid text-left {selector ===
+			class="w-full border-b-[2px] border-solid px-[16px] py-[11px] text-left text-[14px] {selector ===
 			'summary'
 				? 'border-blue-60 font-semibold text-black'
 				: 'border-gray-20 text-gray-60'}"
@@ -66,7 +66,7 @@
 			ภาพรวม
 		</button>
 		<button
-			class="w-full px-[16px] py-[11px] text-[14px] border-b-[2px] border-solid text-left {selector ===
+			class="w-full border-b-[2px] border-solid px-[16px] py-[11px] text-left text-[14px] {selector ===
 			'members'
 				? 'border-blue-60 font-semibold text-black'
 				: 'border-gray-20 text-gray-60'}"
@@ -75,7 +75,7 @@
 			สมาชิก
 		</button>
 		<button
-			class="w-full px-[16px] py-[11px] text-[14px] border-b-[2px] border-solid text-left {selector ===
+			class="w-full border-b-[2px] border-solid px-[16px] py-[11px] text-left text-[14px] {selector ===
 			'latest-votes'
 				? 'border-blue-60 font-semibold text-black'
 				: 'border-gray-20 text-gray-60'}"

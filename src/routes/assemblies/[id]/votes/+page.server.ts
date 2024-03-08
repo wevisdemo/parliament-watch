@@ -1,8 +1,8 @@
-import { CATEGORY_NOT_SPECIFIED, DefaultVotingResult, type Voting } from '$models/voting.js';
-import type { Assembly } from '$models/assembly';
 import { fetchAssemblies, fetchFromIdOr404, fetchVotings } from '$lib/datasheets/index.js';
-import { createSeo } from '$lib/seo.js';
 import { getSortedUniqueCategories } from '$lib/datasheets/voting.js';
+import { createSeo } from '$lib/seo.js';
+import type { Assembly } from '$models/assembly';
+import { CATEGORY_NOT_SPECIFIED, DefaultVotingResult, type Voting } from '$models/voting.js';
 
 export type VoteSummary = Pick<Voting, 'id' | 'title' | 'result' | 'date' | 'files' | 'categories'>;
 

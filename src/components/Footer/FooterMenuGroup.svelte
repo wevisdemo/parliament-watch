@@ -9,23 +9,23 @@
 
 <div>
 	{#if url}
-		<a href={url} class="text-gray-30 hover:text-gray-10 no-underline">
-			<div class="flex flex-row items-center font-semibold text-base mb-2">
+		<a href={url} class="text-gray-30 no-underline hover:text-gray-10">
+			<div class="mb-2 flex flex-row items-center text-base font-semibold">
 				<slot name="titleIcon" />
 				<span class="ml-3 mr-2">{title}</span>
 				<ArrowUpRight size={16} />
 			</div>
 		</a>
 	{:else}
-		<div class="flex flex-row items-center font-semibold text-base mb-2">
+		<div class="mb-2 flex flex-row items-center text-base font-semibold">
 			<slot name="titleIcon" />
 			<span class="ml-3">{title}</span>
 		</div>
 	{/if}
 	<div class="flex flex-col">
 		{#each menuItems as menuItem}
-			<a href={menuItem.url} class="text-gray-30 hover:text-gray-10 no-underline">
-				<div class="flex flex-row items-center h-6 w-min">
+			<a href={menuItem.url} class="text-gray-30 no-underline hover:text-gray-10">
+				<div class="flex h-6 w-min flex-row items-center">
 					<span class="mr-2 whitespace-nowrap">{menuItem.label}</span>
 					<ArrowUpRight size={16} />
 				</div>

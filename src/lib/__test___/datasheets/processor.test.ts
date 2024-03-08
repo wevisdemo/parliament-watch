@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
 import {
 	joinMany,
 	parseMarkdownListToArrayOfItems,
 	removeNullProperties,
 	safeFind
 } from '../../datasheets/processor';
+import { describe, expect, it } from 'vitest';
 
 describe('removeNullProperties', () => {
 	it('should remove null property from the object', () => {

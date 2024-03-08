@@ -1,5 +1,6 @@
 import type { RelatedVotingResults } from '$components/bills/Progress.svelte';
 import { fetchVotings } from '$lib/datasheets/index.js';
+import { createSeo } from '$lib/seo.js';
 import { BillStatus, type Bill } from '$models/bill.js';
 import type { Event } from '$models/event.js';
 import { inProgressBill, enactedBill } from '../../../mocks/data/bill.js';
@@ -17,7 +18,6 @@ import {
 	passingSenate3Event,
 	royalAssentEvent
 } from '../../../mocks/data/event.js';
-import { createSeo } from '$lib/seo.js';
 
 export interface VotingResultSummary {
 	agreed: number;

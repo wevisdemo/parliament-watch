@@ -1,6 +1,6 @@
-import { z } from 'zod';
 import { safeFind } from '$lib/datasheets/processor';
 import type { Party } from './party';
+import { z } from 'zod';
 
 export enum AssemblyName {
 	Representatives = 'สภาผู้แทนราษฎร',

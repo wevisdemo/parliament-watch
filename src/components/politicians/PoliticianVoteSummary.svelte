@@ -33,22 +33,22 @@
 	/>
 	<div class="flex flex-col gap-6">
 		<div class="flex flex-col gap-2">
-			<h3 class="body-02 px-2 py-1 bg-teal-40">
+			<h3 class="body-02 bg-teal-40 px-2 py-1">
 				{agreedVoting.latest.length} มติล่าสุด ที่{politician.firstname}<span class="heading-02"
 					>เห็นด้วย</span
 				>
 			</h3>
 			<!-- TODO: add links -->
-			<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
+			<ul class="body-01 ml-8 flex list-disc flex-col gap-2">
 				{#each agreedVoting.latest as voting, idx (idx)}
 					<li>
 						<a
-							class="flex items-start gap-1 text-black no-underline cursor-pointer"
+							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="flex-1 max-w-max underline">{voting.title}</span>
+							<span class="max-w-max flex-1 underline">{voting.title}</span>
 							<VotingResultTag
-								class="cursor-pointer m-0 whitespace-nowrap"
+								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}
 							/>
 						</a>
@@ -57,7 +57,7 @@
 			</ul>
 			<a
 				href="/politicians/{politician.id}/votes?votetype=agreed"
-				class="mr-auto helper-text-01 flex gap-2 items-center"
+				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
 			>
@@ -66,21 +66,21 @@
 			</a>
 		</div>
 		<div class="flex flex-col gap-2">
-			<h3 class="body-02 px-2 py-1 bg-red-50 text-white">
+			<h3 class="body-02 bg-red-50 px-2 py-1 text-white">
 				{disagreedVoting.latest.length} มติล่าสุด ที่{politician.firstname}<span class="heading-02"
 					>ไม่เห็นด้วย</span
 				>
 			</h3>
-			<ul class="flex flex-col gap-2 body-01 list-disc ml-8">
+			<ul class="body-01 ml-8 flex list-disc flex-col gap-2">
 				{#each disagreedVoting.latest as voting, idx (idx)}
 					<li>
 						<a
-							class="flex items-start gap-1 text-black no-underline cursor-pointer"
+							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="flex-1 max-w-max underline">{voting.title}</span>
+							<span class="max-w-max flex-1 underline">{voting.title}</span>
 							<VotingResultTag
-								class="cursor-pointer m-0 whitespace-nowrap"
+								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}
 							/>
 						</a>
@@ -89,7 +89,7 @@
 			</ul>
 			<a
 				href="/politicians/{politician.id}/votes?votetype=disagreed"
-				class="mr-auto helper-text-01 flex gap-2 items-center"
+				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
 			>
@@ -98,7 +98,7 @@
 			</a>
 		</div>
 		<div class="flex flex-col gap-2">
-			<h3 class="body-02 px-2 py-1 bg-gray-20 heading-02">การลา / ขาดลงมติ</h3>
+			<h3 class="body-02 heading-02 bg-gray-20 px-2 py-1">การลา / ขาดลงมติ</h3>
 			<p class="body-02">
 				{politician.firstname}ลา / ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({absentPercentage}%)
 				จากทั้งหมด
@@ -106,8 +106,8 @@
 				มติในฐานข้อมูล ซึ่ง{absentPercentage === votingAbsentStats.averageAbsentVoting
 					? 'เท่ากับ'
 					: absentPercentage < votingAbsentStats.averageAbsentVoting
-					? 'น้อยกว่า'
-					: 'มากกว่า'}ค่ากลางของสมาชิกในสภาทั้งหมด (ค่ากลาง = {votingAbsentStats.averageAbsentVoting.toPrecision(
+						? 'น้อยกว่า'
+						: 'มากกว่า'}ค่ากลางของสมาชิกในสภาทั้งหมด (ค่ากลาง = {votingAbsentStats.averageAbsentVoting.toPrecision(
 					3
 				)}%)
 			</p>
@@ -117,7 +117,7 @@
 			</p>
 			<a
 				href="/politicians/{politician.id}/votes?votetype=absent"
-				class="mr-auto helper-text-01 flex gap-2 items-center"
+				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
 			>

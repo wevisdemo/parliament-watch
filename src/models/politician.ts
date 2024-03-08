@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import type { StaticImageResolver } from '$lib/datasheets/image';
+import { joinMany, parseMarkdownListToArrayOfItems, safeFind } from '$lib/datasheets/processor';
 import type { Assembly } from './assembly';
 import type { Link } from './link';
 import type { Party } from './party';
-import { joinMany, parseMarkdownListToArrayOfItems, safeFind } from '$lib/datasheets/processor';
-import type { StaticImageResolver } from '$lib/datasheets/image';
+import { z } from 'zod';
 
 export const createPoliticianSchema = (
 	partyRoleHistory: PartyRoleHistory[],

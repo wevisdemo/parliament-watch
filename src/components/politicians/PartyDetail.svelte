@@ -16,15 +16,15 @@
 			? new Date(partyFrom).toLocaleDateString('th-TH', {
 					month: 'short',
 					year: '2-digit'
-			  })
+				})
 			: 'ปัจจุบัน'} - {partyTo
 			? new Date(partyTo).toLocaleDateString('th-TH', {
 					month: 'short',
 					year: '2-digit'
-			  })
+				})
 			: 'ปัจจุบัน'})</span
 	>
-	<span class="block label-01">
+	<span class="label-01 block">
 		ตำแหน่ง :
 		{#each data as role, idx (idx)}
 			<span>
@@ -37,7 +37,7 @@
 						? new Date(role.endedAt).toLocaleDateString('th-TH', {
 								month: 'short',
 								year: '2-digit'
-						  })
+							})
 						: 'ปัจจุบัน'})</span
 				>{idx !== data.length - 1 ? ',' : ''}
 			</span>

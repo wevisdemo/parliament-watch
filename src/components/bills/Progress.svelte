@@ -118,7 +118,7 @@
 	})();
 </script>
 
-<li class="mb-10 ms-4 -mt-1">
+<li class="-mt-1 mb-10 ms-4">
 	{#if event.status === EventStatus.Succeed || billStatus === BillStatus.Merged}
 		<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
 	{:else if event.status === EventStatus.InProgress}
@@ -127,7 +127,7 @@
 		<Misuse size={24} class="absolute -start-3 bg-ui-background" color="#981B00" />
 	{/if}
 	<div class="flex flex-col md:flex-row">
-		<div class="flex flex-col ml-1 md:basis-1/3 md:pr-6">
+		<div class="ml-1 flex flex-col md:basis-1/3 md:pr-6">
 			{#if !(event.status === EventStatus.InProgress && billStatus === BillStatus.InProgress)}
 				<p>
 					{event.date.toLocaleDateString('th-TH', dateTimeFormat)}
@@ -151,7 +151,7 @@
 			<div class="w-full pt-5 md:basis-2/3">
 				<RoyalGazette />
 				<Button
-					class="mt-1 ml-0.5"
+					class="ml-0.5 mt-1"
 					href={event.enforcementDocumentUrl}
 					target="_blank"
 					kind="tertiary"
@@ -163,7 +163,7 @@
 			<div class="flex flex-col gap-2 md:basis-2/3">
 				<DocumentMultiple_02 size={24} color="#2600A3" />
 				<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
-				<div class="w-full border border-gray-20 rounded-sm">
+				<div class="w-full rounded-sm border border-gray-20">
 					<BillCard
 						orientation="portrait"
 						nickname={mergedIntoBill.nickname}

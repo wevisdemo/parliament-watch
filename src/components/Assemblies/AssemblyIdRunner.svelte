@@ -30,14 +30,14 @@
 	})();
 </script>
 
-<div class="flex items-center md:ml-[16px] ml-[0px]">
+<div class="ml-[0px] flex items-center md:ml-[16px]">
 	<a
 		class={`${!prevUrl ? 'pointer-events-none' : ''} ${!prevUrl ? 'cursor-none' : ''}`}
 		href={prevUrl}
 	>
 		<AngleRightIcon
 			fill={!prevUrl ? '#16161640' : '#3904E9'}
-			class="rotate-180 w-[20px] mr-[16px] ml-[0px]"
+			class="ml-[0px] mr-[16px] w-[20px] rotate-180"
 		/>
 	</a>
 	<h3 class="fluid-heading-03">ชุดที่ {term} | {formattedYear}</h3>
@@ -45,7 +45,7 @@
 		class={`${!nextUrl ? 'pointer-events-none' : ''} ${!nextUrl ? 'cursor-none' : ''}`}
 		href={nextUrl}
 	>
-		<AngleRightIcon fill={!nextUrl ? '#16161640' : '#3904E9'} class="w-[20px] ml-[16px] mr-[0px]" />
+		<AngleRightIcon fill={!nextUrl ? '#16161640' : '#3904E9'} class="ml-[16px] mr-[0px] w-[20px]" />
 	</a>
 </div>
 

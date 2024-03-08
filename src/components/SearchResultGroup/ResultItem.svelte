@@ -8,7 +8,7 @@
 </script>
 
 <a href={item.url} data-sveltekit-reload>
-	<div class="px-4 bg-ui-background">
+	<div class="bg-ui-background px-4">
 		<div class="item-inner-container">
 			<div>
 				{#if item.headingHighlight}

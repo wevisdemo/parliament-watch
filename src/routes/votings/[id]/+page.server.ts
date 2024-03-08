@@ -1,4 +1,3 @@
-import type { Bill } from '$models/bill';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import {
 	getVoteResultsByPerson,
@@ -6,6 +5,7 @@ import {
 	type VoteOptionCounter
 } from '$lib/datasheets/voting.js';
 import { createSeo } from '$lib/seo.js';
+import type { Bill } from '$models/bill';
 import type { ResultsByAffiliation } from './+page.js';
 
 export async function load({ params }) {

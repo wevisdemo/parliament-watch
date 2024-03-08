@@ -1,4 +1,3 @@
-import { fetchAndParseSheet } from './processor';
 import { assemblyPartyGroupSchema, createAssemblySchema } from '$models/assembly';
 import { createPartySchema } from '$models/party';
 import {
@@ -6,10 +5,11 @@ import {
 	createPartyRoleSchema,
 	createPoliticianSchema
 } from '$models/politician';
-import { error } from '@sveltejs/kit';
-import { StaticImageResolver } from './image';
-import { createVotingSchema } from '$models/voting';
 import { voteSchema } from '$models/vote';
+import { createVotingSchema } from '$models/voting';
+import { StaticImageResolver } from './image';
+import { fetchAndParseSheet } from './processor';
+import { error } from '@sveltejs/kit';
 
 export const fetchParties = () =>
 	fetchAndParseSheet('Parties', createPartySchema(new StaticImageResolver('/images/parties')));

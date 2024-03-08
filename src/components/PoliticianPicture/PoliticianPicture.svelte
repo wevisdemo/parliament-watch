@@ -16,7 +16,7 @@
 	<img
 		src={avatar}
 		alt=""
-		class={twMerge('rounded-full aspect-square object-cover overflow-hidden', avatarClass)}
+		class={twMerge('aspect-square overflow-hidden rounded-full object-cover', avatarClass)}
 		width={size}
 		height={size}
 		loading="lazy"
@@ -25,7 +25,7 @@
 	{#if party}
 		<img
 			class={twMerge(
-				'absolute bottom-0 right-0 border border-[#C0BFBE] border-solid rounded-full bg-white aspect-square object-contain overflow-hidden',
+				'absolute bottom-0 right-0 aspect-square overflow-hidden rounded-full border border-solid border-[#C0BFBE] bg-white object-contain',
 				partyClass
 			)}
 			src={party.logo}

@@ -46,21 +46,21 @@
 	});
 </script>
 
-<div class="h-[160px] flex items-center justify-center">
+<div class="flex h-[160px] items-center justify-center">
 	<h1 class="fluid-heading-05 font-bold">เกี่ยวกับเรา</h1>
 </div>
 <div class="flex flex-col md:flex-row">
-	<div class="flex-none md:self-start md:sticky md:top-12 p-4">
+	<div class="flex-none p-4 md:sticky md:top-12 md:self-start">
 		<SideNav
-			class="top-0 w-full max-w-none md:w-[16rem] md:max-w-[16rem] [&>ul]:pt-0 [&>ul]:bg-ui-01 md:[&>ul]:bg-white/0"
+			class="top-0 w-full max-w-none md:w-[16rem] md:max-w-[16rem] [&>ul]:bg-ui-01 [&>ul]:pt-0 md:[&>ul]:bg-white/0"
 			{sections}
 			{currentNavElementId}
 		/>
 	</div>
-	<div bind:this={contentContainer} class="flex-1 px-4 body-02 md:px-16">
+	<div bind:this={contentContainer} class="body-02 flex-1 px-4 md:px-16">
 		<section class="flex flex-col gap-2 py-6 md:pb-9">
 			<h2 id="เกี่ยวกับเว็บไซต์นี้" class="fluid-heading-04">เกี่ยวกับเว็บไซต์นี้</h2>
-			<hr class="border-t border-t-solid border-t-ui-03 my-2" role="none" />
+			<hr class="border-t-solid my-2 border-t border-t-ui-03" role="none" />
 			<p>
 				การเลือกตั้งเป็นกลไกสำคัญในการขับเคลื่อนประชาธิปไตย และ ‘ผู้แทน’ ที่มาจากกลไกการเลือกตั้ง
 				(หรือการแต่งตั้ง) จำเป็นต้องทำหน้าที่อย่างเต็มที่เพื่อประชาชน
@@ -123,7 +123,7 @@
 				</ul>
 			</div>
 			<div class="mt-2">
-				<strong class="block mb-1">หมายเหตุ</strong>
+				<strong class="mb-1 block">หมายเหตุ</strong>
 				<p>
 					โครงการนี้ <a
 						href="https://wevis.info/"
@@ -149,7 +149,7 @@
 					Meetup เพื่อดำเนินโครงการ
 				</p>
 			</div>
-			<div class="flex gap-2 flex-wrap mt-2">
+			<div class="mt-2 flex flex-wrap gap-2">
 				<Button href="https://wevis.info/downloads">ดาวน์โหลดข้อมูล</Button>
 				<Button kind="tertiary" href="https://airtable.com/shryu4errnlj1LWsM"
 					>เสนอแนะเพิ่มเติม</Button
@@ -158,7 +158,7 @@
 		</section>
 		<section class="flex flex-col gap-2 py-6 md:py-9">
 			<h2 id="เกี่ยวกับข้อมูลในเว็บไซต์" class="fluid-heading-04">เกี่ยวกับข้อมูลในเว็บไซต์</h2>
-			<hr class="border-t border-t-solid border-t-ui-03 my-2" role="none" />
+			<hr class="border-t-solid my-2 border-t border-t-ui-03" role="none" />
 			<h3 id="นโยบายการนำข้อมูลไปใช้ต่อ" class="fluid-heading-03 mt-2">
 				นโยบายการนำข้อมูลไปใช้ต่อ
 			</h3>
@@ -176,7 +176,7 @@
 		</section>
 		<section class="flex flex-col gap-2 py-6 md:py-9">
 			<h2 id="เกี่ยวกับ-WeVis" class="fluid-heading-04">เกี่ยวกับ WeVis</h2>
-			<hr class="border-t border-t-solid border-t-ui-03 my-2" role="none" />
+			<hr class="border-t-solid my-2 border-t border-t-ui-03" role="none" />
 			<WevisLogo />
 			<h3 id="Who-We-Are" class="fluid-heading-03 mt-2">Who We Are</h3>
 			<p>
@@ -233,8 +233,8 @@
 				หรือมีข้อสงสัยอยากสอบถาม ได้ทาง feedback form หรือ GithHub repository ข้างล่างนี้
 				และสามารถติดตามผลงานของ WeVis ได้ทุกช่องทาง Social Media
 			</p>
-			<div class="flex flex-wrap items-center gap-2 mt-2">
-				<Button class="max-w-max w-full" href="https://bit.ly/wevisfeedback"
+			<div class="mt-2 flex flex-wrap items-center gap-2">
+				<Button class="w-full max-w-max" href="https://bit.ly/wevisfeedback"
 					>พบข้อผิดพลาดหรือมีไอเดีย? บอกเราเลย</Button
 				>
 				<ul class="flex items-center gap-2">

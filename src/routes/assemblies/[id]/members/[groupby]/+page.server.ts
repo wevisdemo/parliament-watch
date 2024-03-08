@@ -1,13 +1,13 @@
-import { error } from '@sveltejs/kit';
-import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from './groupby';
 import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
-import { AssemblyName, GroupByOption } from '$models/assembly';
 import {
 	getAssemblyMembers,
 	getPoliticianSummary,
 	type PoliticianSummary
 } from '$lib/datasheets/assembly-member';
 import { createSeo } from '$lib/seo';
+import { AssemblyName, GroupByOption } from '$models/assembly';
+import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from './groupby';
+import { error } from '@sveltejs/kit';
 
 interface PoliticianSummaryGroup {
 	name: string;
@@ -43,11 +43,11 @@ export async function load({ params }) {
 						name: subGroup.name,
 						members: subGroup.members.map(getPoliticianSummary)
 					}))
-			  }))
+				}))
 			: (groups as PoliticianGroup[]).map(({ name, ...group }) => ({
 					name,
 					members: group.members.map(getPoliticianSummary)
-			  }));
+				}));
 
 		const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
 

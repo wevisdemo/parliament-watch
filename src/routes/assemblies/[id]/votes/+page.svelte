@@ -43,7 +43,7 @@
 						filterResult.includes(vote.result) &&
 						filterCategory.some((category) => vote.categories.includes(String(category)))
 					);
-			  });
+				});
 </script>
 
 <DataPage

@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
 import { normalizeSearchQuery, calculateScore, highlightText } from '../search';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('normalizeSearchQuery', () => {
 	it('should add spaces around numbers', () => {

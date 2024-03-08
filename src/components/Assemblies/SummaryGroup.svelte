@@ -50,7 +50,7 @@
 
 <a
 	href="/assemblies/{assemblyId}/members/{groupBy}"
-	class="bg-ui-01 hover:bg-ui-03 text-black p-[16px] m-auto min-w-[226px] w-full flex flex-col h-full"
+	class="m-auto flex h-full w-full min-w-[226px] flex-col bg-ui-01 p-[16px] text-black hover:bg-ui-03"
 >
 	<p class="fluid-heading-03">{groupByOptionLabelMap.get(groupBy)}</p>
 	<HalfDonutWrapper

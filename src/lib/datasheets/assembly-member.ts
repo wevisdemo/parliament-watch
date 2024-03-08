@@ -1,8 +1,8 @@
-import type { ComponentProps } from 'svelte';
-import dayjs from 'dayjs';
 import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 import type { Assembly } from '$models/assembly';
 import type { Politician } from '$models/politician';
+import dayjs from 'dayjs';
+import type { ComponentProps } from 'svelte';
 
 export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]) =>
 	politicians
@@ -45,5 +45,5 @@ const getAssemblyRoleDescription = (assemblyRole: AssemblyMember['assemblyRole']
 	assemblyRole?.listNumber
 		? `บัญชีรายชื่อ ลำดับ ${assemblyRole?.listNumber}`
 		: assemblyRole?.province && assemblyRole.districtNumber
-		? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
-		: assemblyRole?.appointmentMethod;
+			? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
+			: assemblyRole?.appointmentMethod;

@@ -1,7 +1,4 @@
-import dayjs from 'dayjs';
-import { AssemblyName, GroupByOption } from '$models/assembly';
-import type { Party } from '$models/party';
-import type { Politician } from '$models/politician';
+import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import {
 	fetchAssemblies,
 	fetchFromIdOr404,
@@ -10,11 +7,14 @@ import {
 	fetchVotings
 } from '$lib/datasheets';
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
-import { getMemberGroup } from './members/[groupby]/groupby';
-import { createSeo } from '$lib/seo';
-import type { ComponentProps } from 'svelte';
-import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
+import { createSeo } from '$lib/seo';
+import { AssemblyName, GroupByOption } from '$models/assembly';
+import type { Party } from '$models/party';
+import type { Politician } from '$models/politician';
+import { getMemberGroup } from './members/[groupby]/groupby';
+import dayjs from 'dayjs';
+import type { ComponentProps } from 'svelte';
 
 const MAX_LASTEST_VOTE = 5;
 
@@ -89,10 +89,10 @@ export async function load({ params }) {
 							count: party.members.length
 						})),
 						total: group.subgroups.reduce((sum, subGroup) => sum + subGroup.members.length, 0)
-				  }
+					}
 				: {
 						total: group.members.length
-				  })
+					})
 		}));
 
 	const summary: Summary = {

@@ -35,5 +35,5 @@
 </script>
 
 <Hst.Story title="Table">
-	<div class="font-sans body-02"><ComparisonTable {proposerComparisonTableData} /></div>
+	<div class="body-02 font-sans"><ComparisonTable {proposerComparisonTableData} /></div>
 </Hst.Story>

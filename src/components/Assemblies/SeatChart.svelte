@@ -119,12 +119,12 @@
 
 <div
 	bind:this={component}
-	class="w-full md:max-w-[448px] max-w-[calc(100vw-32px)] h-full relative flex justify-center items-center m-auto"
+	class="relative m-auto flex h-full w-full max-w-[calc(100vw-32px)] items-center justify-center md:max-w-[448px]"
 >
 	<svg
 		id="half-circle-chart"
 		width={(outterRadius + circleDiameter) * 2}
 		height={outterRadius + circleDiameter * 2}
-		class="transition-[height] ease-in-out duration-500"
+		class="transition-[height] duration-500 ease-in-out"
 	/>
 </div>

@@ -156,7 +156,7 @@
 	bind:selectedComboboxValue
 	bind:selectedCheckboxValue
 >
-	<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
+	<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 		<div class="flex-1">
 			<h1 class="fluid-heading-03">สำรวจร่างกฎหมายในสภา</h1>
 			<p class="body-01">สำรวจแบบละเอียด</p>
@@ -164,7 +164,7 @@
 	</div>
 	<svelte:fragment slot="table" let:cellKey let:cellValue>
 		{#if cellKey === 'proposedOn'}
-			<span class="text-gray-60 body-compact-01"
+			<span class="body-compact-01 text-gray-60"
 				>{new Date(cellValue).toLocaleString('th-TH', {
 					day: 'numeric',
 					month: 'short',

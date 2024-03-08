@@ -35,17 +35,17 @@
 			{...$content}
 			use:content
 			class="fixed left-1/2 top-1/2 z-40 max-h-[620px] w-full
-			max-w-[380px] bg-white rounded-sm"
+			max-w-[380px] rounded-sm bg-white"
 			style="transform:translate(-50%,-50%)"
 			transition:fly={{ y: -24, duration: 240, easing: entranceExpressive }}
 		>
-			<div class="p-4 flex items-start justify-between gap-4">
+			<div class="flex items-start justify-between gap-4 p-4">
 				<h2 {...$title} use:title class="heading-03">ขั้นตอนการผ่านกฏหมาย</h2>
 				<button {...$close} use:close><Close width="20" height="20" /></button>
 			</div>
 			<!-- TODO: write descriptive alt text -->
 			<img
-				class="max-w-[330px] w-full h-auto mx-auto"
+				class="mx-auto h-auto w-full max-w-[330px]"
 				src="/images/bills/lawprocess.svg"
 				alt=""
 				width="330"
@@ -54,7 +54,7 @@
 				decoding="async"
 			/>
 			<div class="flex">
-				<a href="/legislative-process" class="flex items-center gap-2 text-link-01 px-4 pt-4 pb-8">
+				<a href="/legislative-process" class="flex items-center gap-2 px-4 pb-8 pt-4 text-link-01">
 					<span class="body-compact-01">อ่านรายละเอียดเพิ่มเติม</span>
 					<ArrowRight />
 				</a>

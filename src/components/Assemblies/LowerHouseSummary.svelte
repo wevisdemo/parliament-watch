@@ -23,7 +23,7 @@
 </script>
 
 <div class="grid">
-	<div class="md:space-y-[24px] space-y-[8px]">
+	<div class="space-y-[8px] md:space-y-[24px]">
 		{#each memberGroups as group}
 			<div>
 				<div>
@@ -31,7 +31,7 @@
 					<span class="body-compact-01 text-gray-60">{group.total} คน</span>
 				</div>
 				<div
-					class="flex gap-x-[4px] w-[--width]"
+					class="flex w-[--width] gap-x-[4px]"
 					style="--width:{getPercentWidth(group.total, memberGroups)}%"
 				>
 					{#each getTop5OfGroup(group.parties) as party}
@@ -44,12 +44,12 @@
 						/>
 					{/each}
 				</div>
-				<div class="flex flex-wrap gap-[4px] mt-[8px]">
+				<div class="mt-[8px] flex flex-wrap gap-[4px]">
 					{#each group.parties || [] as party}
-						<div class="flex justify-between w-[152px] md:mr-[24px] mr-[8px]">
-							<div class="flex space-x-[4px] items-center">
+						<div class="mr-[8px] flex w-[152px] justify-between md:mr-[24px]">
+							<div class="flex items-center space-x-[4px]">
 								<div
-									class="w-[8px] h-[8px] rounded-[100%] bg-[var(--color)]"
+									class="h-[8px] w-[8px] rounded-[100%] bg-[var(--color)]"
 									style="--color: {party.color}"
 								/>
 								<span class="label-01">{party.name}</span>

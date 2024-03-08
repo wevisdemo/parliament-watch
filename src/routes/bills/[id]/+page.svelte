@@ -52,7 +52,7 @@
 		? groupBy(
 				bill.coProposedByPoliticians,
 				(politician) => politician.partyRoles.find((e) => !e.endedAt)!.party.name
-		  )
+			)
 		: null;
 
 	function getCurrentParty(politician: Politician) {
@@ -92,14 +92,14 @@
 
 <Breadcrumb
 	noTrailingSlash
-	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+	class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/bills">ร่างกฎหมายในสภา</BreadcrumbItem>
 	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage>{bill.nickname}</BreadcrumbItem>
 </Breadcrumb>
 
-<div class="flex flex-col max-w-[1200px] mx-auto w-full">
+<div class="mx-auto flex w-full max-w-[1200px] flex-col">
 	<section class="px-4 py-8 md:px-16 md:py-12">
 		<div class="flex flex-col gap-1">
 			<h1 class="fluid-heading-05 text-text-primary">{bill.nickname}</h1>
@@ -107,13 +107,13 @@
 				<b>ชื่อทางการ</b>
 				{bill.title}
 			</p>
-			<div class="flex items-center gap-1 font-bold -ml-1">
+			<div class="-ml-1 flex items-center gap-1 font-bold">
 				<BillStatusTag isLarge status={bill.status} />
 				<b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b>
 			</div>
 		</div>
-		<div class="flex flex-col gap-8 mt-7 md:flex-row md:gap-16">
-			<div class="flex-1 flex flex-col gap-5">
+		<div class="mt-7 flex flex-col gap-8 md:flex-row md:gap-16">
+			<div class="flex flex-1 flex-col gap-5">
 				<div class="flex gap-4">
 					<div>
 						<b>วันที่เสนอ</b>
@@ -122,13 +122,13 @@
 					<div>
 						<b>เสนอโดย</b>
 						{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician}
-							<div class="flex flex-col md:flex-row gap-1">
+							<div class="flex flex-col gap-1 md:flex-row">
 								<img
 									src={bill.proposedLedByPolitician.avatar}
 									alt={bill.proposedLedByPolitician.firstname +
 										' ' +
 										bill.proposedLedByPolitician.lastname}
-									class="w-6 h-6 rounded-full object-cover bg-cool-gray-50"
+									class="h-6 w-6 rounded-full bg-cool-gray-50 object-cover"
 								/>
 								<div>
 									<div class="flex flex-wrap gap-1">
@@ -171,12 +171,12 @@
 				</div>
 				{#if mergedBills && mergedBills.length > 0}
 					<div>
-						<div class="flex gap-1 items-center">
+						<div class="flex items-center gap-1">
 							<DocumentMultiple_02 size={24} color="#2600A3" />
 							<span>
 								<b>ร่างกฎหมาย {mergedBills.length} ฉบับ ที่ถูกนำมารวมกับร่างนี้</b>
 								<Tooltip
-									class="absolute mt-0.5 ml-1"
+									class="absolute ml-1 mt-0.5"
 									{tooltipText}
 									direction="top"
 									align={innerWidth <= 500 ? (innerWidth <= 366 ? 'center' : 'end') : 'center'}
@@ -258,7 +258,7 @@
 							<b class="handing-02 text-text-primary">ผู้ร่วมเสนอ</b>
 							{bill.coProposedByPoliticians.length} คน
 						</p>
-						<div class="flex flex-col flex-wrap md:flex-row gap-3 px-3">
+						<div class="flex flex-col flex-wrap gap-3 px-3 md:flex-row">
 							{#if partiescoProposed}
 								{#each Object.entries(partiescoProposed) as [party, politicians] (party)}
 									<CoPartyProposer {party} {politicians} />
@@ -266,7 +266,7 @@
 							{/if}
 						</div>
 						<div class="flex flex-col gap-2 px-5">
-							<p class="label-01 text-text-02 mr-2">เรียงตามตัวอักษร</p>
+							<p class="label-01 mr-2 text-text-02">เรียงตามตัวอักษร</p>
 							{#if bill.coProposedByPoliticians.length > 0}
 								<div class="relative flex flex-col">
 									<table class="w-full">
@@ -282,14 +282,14 @@
 
 									{#if bill.coProposedByPoliticians.length > MAX_DISPLAY_COPROPOSER}
 										<div
-											class="absolute bottom-0 w-full h-12"
+											class="absolute bottom-0 h-12 w-full"
 											style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
 										>
 											<button
 												on:click={() => {
 													$showModalListCoProposer = true;
 												}}
-												class="absolute bottom-0 body-01 text-link-01 underline">ดูทั้งหมด</button
+												class="body-01 absolute bottom-0 text-link-01 underline">ดูทั้งหมด</button
 											>
 										</div>{/if}
 								</div>
@@ -308,7 +308,7 @@
 			<div class="flex flex-col gap-5">
 				<h1 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h1>
 				<hr class="border-gray-30" />
-				<div class="flex flex-col md:flex-row justify-between">
+				<div class="flex flex-col justify-between md:flex-row">
 					<div class="flex items-center gap-1">
 						<b>สถานะ</b>
 						<BillStatusTag isLarge status={bill.status} />
@@ -319,7 +319,7 @@
 				</div>
 				<div title="timeline">
 					<ol
-						class="relative ml-2 border border-t-[transparent] border-e-[transparent] border-b-[transparent]"
+						class="relative ml-2 border border-b-[transparent] border-e-[transparent] border-t-[transparent]"
 					>
 						{#each events.slice(0, events.length - 1) as event}
 							<Progress

@@ -7,7 +7,7 @@
 </script>
 
 <Hst.Story title="DownloadData">
-	<div class="font-sans body-02">
+	<div class="body-02 font-sans">
 		<DownloadData {links} />
 	</div>
 

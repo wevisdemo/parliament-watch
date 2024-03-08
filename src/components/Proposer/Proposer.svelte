@@ -55,18 +55,18 @@
 	})();
 </script>
 
-<div class="flex flex-col sm:flex-row justify-start items-start">
-	<div class="w-6 h-6 mb-1">
+<div class="flex flex-col items-start justify-start sm:flex-row">
+	<div class="mb-1 h-6 w-6">
 		{#if partyPolitician}
 			<img
-				class="w-full h-full rounded-full object-cover"
+				class="h-full w-full rounded-full object-cover"
 				loading="lazy"
 				decoding="async"
 				alt="{partyPolitician.politician.firstname} {partyPolitician.politician.lastname}"
 				src={partyPolitician.politician.avatar}
 			/>
 		{:else}
-			<div class="flex items-center justify-center w-full h-full rounded-full bg-black">
+			<div class="flex h-full w-full items-center justify-center rounded-full bg-black">
 				{#if assembly}
 					<PoliticianIcon class="text-white" />
 				{:else if common}
@@ -75,7 +75,7 @@
 			</div>
 		{/if}
 	</div>
-	<p class="body-01 sm:ml-1 break-words">
+	<p class="body-01 break-words sm:ml-1">
 		<span class="text-text-01">{proposerName} {proposerTerm}</span>
 		<br class="sm:hidden" />
 		{#if common?.description}

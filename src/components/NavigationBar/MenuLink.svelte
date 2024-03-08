@@ -12,7 +12,7 @@
 	class={twMerge(
 		'flex items-center px-4 text-gray-30 hover:text-gray-10',
 		hoverClass,
-		'decoration-gray-30 no-underline transition-all duration-200',
+		'no-underline decoration-gray-30 transition-all duration-200',
 		additionalClass
 	)}
 >
@@ -21,5 +21,5 @@
 			<svelte:component this={linkMenu.icon} class="text-inverse-link" />
 		</div>
 	{/if}
-	<p class="p-3 whitespace-nowrap">{linkMenu.label}</p>
+	<p class="whitespace-nowrap p-3">{linkMenu.label}</p>
 </a>

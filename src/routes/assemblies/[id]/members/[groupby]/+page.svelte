@@ -63,7 +63,7 @@
 							);
 						})
 					};
-			  }) as PoliticianSummaryGroupBy);
+				}) as PoliticianSummaryGroupBy);
 
 	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
 		(name ? `${group.name}-${name}` : group.name).replaceAll(' ', '-');
@@ -108,9 +108,9 @@
 <div class="relative flex">
 	{#if showFilter}
 		<aside
-			class="member-aside flex flex-col gap-4 px-6 bg-white fixed left-0 right-0 top-0 bottom-0 z-40 md:sticky md:top-[80px] md:w-[250px] md:h-[calc(100dvh-80px)] md:flex-none md:z-0"
+			class="member-aside fixed bottom-0 left-0 right-0 top-0 z-40 flex flex-col gap-4 bg-white px-6 md:sticky md:top-[80px] md:z-0 md:h-[calc(100dvh-80px)] md:w-[250px] md:flex-none"
 		>
-			<div class="flex -mr-6 md:mr-0">
+			<div class="-mr-6 flex md:mr-0">
 				<Search
 					class="flex-1 {!mounted ? '-mt-6' : ''}"
 					placeholder="ค้นหาชื่อบุคคล"
@@ -118,7 +118,7 @@
 					bind:value={searchQuery}
 					skeleton={!mounted}
 				/>
-				<div class="md:hidden flex">
+				<div class="flex md:hidden">
 					<Button
 						kind="ghost"
 						icon={Minimize}
@@ -168,10 +168,10 @@
 									</span>
 									<ul class="flex flex-col">
 										{#each group.subgroups as { name, members, icon } (name)}
-											<li class="border-b border-b-solid border-b-gray-30 last:border-none">
+											<li class="border-b-solid border-b border-b-gray-30 last:border-none">
 												<a
 													href="#{getSubgroupHeadingId(group, name)}"
-													class="flex items-center gap-2 body-01 text-gray-100 py-2 px-4 hover:bg-ui-03"
+													class="body-01 flex items-center gap-2 px-4 py-2 text-gray-100 hover:bg-ui-03"
 													class:font-semibold={currentCategory ===
 														getSubgroupHeadingId(group, name)}
 													on:click={() => {
@@ -184,7 +184,7 @@
 															alt=""
 															width="16"
 															height="16"
-															class="aspect-square object-cover border border-solid border-gray-30 rounded-full bg-white"
+															class="aspect-square rounded-full border border-solid border-gray-30 bg-white object-cover"
 														/>
 													{/if}
 													<span class="mr-auto">
@@ -204,11 +204,11 @@
 						{#each filteredGroup as group (group.name)}
 							{#if !('subgroups' in group)}
 								<li
-									class="border-b border-b-solid border-b-gray-30 first:border-t first:border-t-solid first:border-t-gray-30"
+									class="border-b-solid first:border-t-solid border-b border-b-gray-30 first:border-t first:border-t-gray-30"
 								>
 									<a
 										href="#{getSubgroupHeadingId(group)}"
-										class="flex items-center gap-2 body-01 text-gray-100 py-2 px-4 hover:bg-ui-03"
+										class="body-01 flex items-center gap-2 px-4 py-2 text-gray-100 hover:bg-ui-03"
 										class:font-semibold={currentCategory === getSubgroupHeadingId(group)}
 										on:click={() => {
 											isMobile && (showFilter = false);
@@ -220,7 +220,7 @@
 												alt=""
 												width="16"
 												height="16"
-												class="aspect-square object-cover border border-solid border-gray-30 rounded-full bg-white"
+												class="aspect-square rounded-full border border-solid border-gray-30 bg-white object-cover"
 											/>
 										{/if}
 										<span class="mr-auto">
@@ -236,16 +236,16 @@
 			</div>
 		</aside>
 	{/if}
-	<section bind:this={memberListSectionRef} class="flex-1 p-4 text-gray-100 flex flex-col gap-4">
+	<section bind:this={memberListSectionRef} class="flex flex-1 flex-col gap-4 p-4 text-gray-100">
 		{#each filteredGroup as group (group.name)}
 			{#if 'subgroups' in group}
 				<div>
-					<h2 class="py-[6px] text-gray-60 fluid-heading-04">{group.name}</h2>
+					<h2 class="fluid-heading-04 py-[6px] text-gray-60">{group.name}</h2>
 					{#each group.subgroups as { name: subGroupName, members } (subGroupName)}
 						<article class="member-subcategory">
 							<h3
 								id={getSubgroupHeadingId(group, subGroupName)}
-								class="flex items-baseline gap-2 p-4 mb-2 border-b border-solid border-b-gray-30 heading-compact-02 font-semibold"
+								class="heading-compact-02 mb-2 flex items-baseline gap-2 border-b border-solid border-b-gray-30 p-4 font-semibold"
 							>
 								{subGroupName}
 								<span class="body-01 text-gray-60"
@@ -267,7 +267,7 @@
 				<div class="member-subcategory">
 					<h2
 						id={getSubgroupHeadingId(group)}
-						class="flex items-baseline gap-2 p-4 mb-2 border-b border-solid border-b-gray-30 heading-compact-02 font-semibold"
+						class="heading-compact-02 mb-2 flex items-baseline gap-2 border-b border-solid border-b-gray-30 p-4 font-semibold"
 					>
 						{group.name}
 						<span class="body-01 text-gray-60"
@@ -287,7 +287,7 @@
 		{/each}
 	</section>
 </div>
-<div class="flex-none sticky bottom-0 md:hidden">
+<div class="sticky bottom-0 flex-none md:hidden">
 	{#if !showFilter}
 		<Button
 			class="m-4"

@@ -150,10 +150,10 @@
 
 <svelte:window on:scroll|passive={scrollEventHandler} />
 
-<div class="flex flex-col min-h-screen">
+<div class="flex min-h-screen flex-col">
 	<Breadcrumb
 		noTrailingSlash
-		class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+		class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
 		{#if isMobile}
 			<BreadcrumbItem href={breadcrumbList[0].url}>{breadcrumbList[0].label}</BreadcrumbItem>
@@ -174,8 +174,8 @@
 			{/each}
 		{/if}
 	</Breadcrumb>
-	<header class="px-4 py-3 bg-ui-01 md:px-16">
-		<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
+	<header class="bg-ui-01 px-4 py-3 md:px-16">
+		<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 			<div class="flex-1">
 				<slot />
 			</div>
@@ -192,15 +192,15 @@
 			/>
 		</div>
 	</header>
-	<div class="flex-1 flex gap-1 bg-ui-01 w-full">
+	<div class="flex w-full flex-1 gap-1 bg-ui-01">
 		{#if showFilter}
 			<aside
-				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-50 md:z-30"
+				class="fixed top-0 z-50 flex h-screen w-full flex-[0_0_250px] flex-col overscroll-none bg-white md:sticky md:z-30 md:h-auto md:max-h-screen md:w-[250px]"
 				class:md:flex={!mounted}
 				class:hidden={!mounted}
 			>
 				<div
-					class="sticky top-0 md:top-12 flex w-full pl-6 duration-300 z-30 bg-white"
+					class="sticky top-0 z-30 flex w-full bg-white pl-6 duration-300 md:top-12"
 					class:md:top-12={showHeader}
 				>
 					<Search
@@ -222,7 +222,7 @@
 						skeleton={!mounted}
 					/>
 				</div>
-				<div class="flex-[1_1_auto] h-0 overflow-y-scroll py-4 px-6">
+				<div class="h-0 flex-[1_1_auto] overflow-y-scroll px-6 py-4">
 					{#each comboboxFilterList as optionGroup (optionGroup.key)}
 						<div class="mb-8">
 							<ComboBox
@@ -253,21 +253,21 @@
 						</FormGroup>
 					{/each}
 				</div>
-				<div class="flex space-x-[-1px] sticky bottom-0 body-compact-01 bg-white">
+				<div class="body-compact-01 sticky bottom-0 flex space-x-[-1px] bg-white">
 					<Button
-						class="flex-[2_2_0%] min-w-0 pr-4"
+						class="min-w-0 flex-[2_2_0%] pr-4"
 						kind="tertiary"
 						on:click={() => filterTickAll(false)}
 						skeleton={!mounted}>ล้างตัวเลือก</Button
 					>
 					<Button
-						class="flex-[2_2_0%] min-w-0 pr-4"
+						class="min-w-0 flex-[2_2_0%] pr-4"
 						kind={'tertiary' || 'secondary'}
 						on:click={() => filterTickAll()}
 						skeleton={!mounted}>เลือกทั้งหมด</Button
 					>
 					<Button
-						class="flex-1 min-w-0 pr-4 md:hidden"
+						class="min-w-0 flex-1 pr-4 md:hidden"
 						on:click={() => {
 							showFilter = false;
 						}}
@@ -276,11 +276,11 @@
 				</div>
 			</aside>
 		{/if}
-		<div class="flex-1 flex flex-col bg-white">
+		<div class="flex flex-1 flex-col bg-white">
 			{#if mounted}
 				<div class="overflow-x-auto overflow-y-hidden">
 					<DataTable
-						class="pt-0 w-0 min-w-full"
+						class="w-0 min-w-full pt-0"
 						size="tall"
 						headers={tableHeader}
 						rows={filteredData}
@@ -301,7 +301,7 @@
 				</div>
 				{#if filteredData.length === 0}
 					<div
-						class="h-10 body-compact-01 text-gray-60 px-4 flex items-center border-solid border-b border-b-ui-03"
+						class="body-compact-01 flex h-10 items-center border-b border-solid border-b-ui-03 px-4 text-gray-60"
 					>
 						ไม่พบข้อมูลที่ค้นหา
 					</div>
@@ -337,7 +337,7 @@
 			{:else}
 				<div class="overflow-x-auto overflow-y-hidden">
 					<DataTableSkeleton
-						class="pt-0 w-0 min-w-full"
+						class="w-0 min-w-full pt-0"
 						size="tall"
 						headers={tableHeader}
 						rows={10}

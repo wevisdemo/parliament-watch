@@ -1,6 +1,6 @@
+import rawProvince from './provinces.csv?raw';
 import { csvParse, autoType } from 'd3';
 import { z } from 'zod';
-import rawProvince from './provinces.csv?raw';
 
 const provinceSchema = z.array(
 	z.object({

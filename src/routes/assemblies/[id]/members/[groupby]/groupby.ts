@@ -1,6 +1,6 @@
 import type { AssemblyMember } from '$lib/datasheets/assembly-member';
-import { type Assembly, GroupByOption, AssemblyPartyGroup } from '$models/assembly';
 import { provinceRegionMap } from '$lib/thai-province';
+import { type Assembly, GroupByOption, AssemblyPartyGroup } from '$models/assembly';
 import dayjs from 'dayjs';
 
 export interface PoliticianGroup {
@@ -138,12 +138,12 @@ export function createSubgroupByPartyOrAppointmentMethod(
 					name: method,
 					members: membersByRole
 				})
-		  )
+			)
 		: groupMembersBy(members, ({ partyRole }) => partyRole?.party).map(
 				([party, membersByParty]) => ({
 					name: party.name,
 					icon: party.logo,
 					members: membersByParty
 				})
-		  );
+			);
 }

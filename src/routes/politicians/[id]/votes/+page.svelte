@@ -142,7 +142,7 @@
 >
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<h1 class="fluid-heading-03 mb-1">
-		<a class="no-underline text-text-01 hover:text-blue-70" href="/politicians/{politician.id}"
+		<a class="text-text-01 no-underline hover:text-blue-70" href="/politicians/{politician.id}"
 			>{politician.prefix} {politician.firstname} {politician.lastname}</a
 		>
 	</h1>
@@ -161,7 +161,7 @@
 			})}
 		{:else if cellKey === 'titleColumn'}
 			<a
-				class="text-text-01 hover:underline hover:text-interactive-01"
+				class="text-text-01 hover:text-interactive-01 hover:underline"
 				href="/votings/{cellValue.id}">{cellValue.title}</a
 			>
 		{:else if cellKey === 'voteOption'}

@@ -46,12 +46,12 @@
 	}
 </script>
 
-<div class="md:h-[calc(100lvh-48px)] flex flex-col">
+<div class="flex flex-col md:h-[calc(100lvh-48px)]">
 	<header
-		class="h-[400px] md:h-auto md:flex-1 bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] flex items-center justify-center flex-col gap-[10px] px-4 overflow-hidden relative"
+		class="relative flex h-[400px] flex-col items-center justify-center gap-[10px] overflow-hidden bg-gradient-to-t from-[#CCEEFF] to-[#FDFEFF] px-4 md:h-auto md:flex-1"
 	>
 		<img
-			class="absolute w-full max-w-[1280px] h-auto bottom-0 left-1/2 -translate-x-1/2"
+			class="absolute bottom-0 left-1/2 h-auto w-full max-w-[1280px] -translate-x-1/2"
 			src="/images/sapasathan.svg"
 			alt=""
 			width="634"
@@ -59,14 +59,14 @@
 			loading="eager"
 			decoding="async"
 		/>
-		<h1 class="relative fluid-display-01 max-w-[1280px] text-center" style="text-wrap:balance">
+		<h1 class="fluid-display-01 relative max-w-[1280px] text-center" style="text-wrap:balance">
 			<span class="whitespace-nowrap">ขับเคลื่อน</span><span class="whitespace-nowrap"
 				>ประชาธิปไตย</span
 			> <br class="hidden md:block" /><span class="whitespace-nowrap">ร่วมเฝ้าดู</span><span
 				class="whitespace-nowrap">ความเคลื่อนไหว</span
 			><span class="whitespace-nowrap">รัฐสภา</span>
 		</h1>
-		<p class="relative flex gap-[10px] helper-text-01 text-gray-60">
+		<p class="helper-text-01 relative flex gap-[10px] text-gray-60">
 			<span
 				>อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 					year: 'numeric',
@@ -79,14 +79,14 @@
 		</p>
 	</header>
 	<nav>
-		<menu class="max-w-[1280px] mx-auto flex flex-col md:flex-row">
+		<menu class="mx-auto flex max-w-[1280px] flex-col md:flex-row">
 			<li class="flex-1">
 				<a
 					href="#politician"
-					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 hover:bg-ui-01 !no-underline"
+					class="body-01 flex items-start gap-3 bg-white p-4 text-[color:inherit] !no-underline hover:bg-ui-01 md:flex-col md:items-center md:gap-1 md:p-8 md:text-center"
 				>
-					<PoliticianIcon class="aspect-square w-6 h-auto md:w-8" />
-					<span class="flex-1 flex flex-col gap-1">
+					<PoliticianIcon class="aspect-square h-auto w-6 md:w-8" />
+					<span class="flex flex-1 flex-col gap-1">
 						<span class="fluid-heading-03">นักการเมือง</span>
 						<span>ส่องประวัติและผลงานของคนที่คุณสนใจ</span>
 					</span>
@@ -96,10 +96,10 @@
 			<li class="flex-1">
 				<a
 					href="#votings"
-					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8 hover:bg-ui-01 !no-underline"
+					class="body-01 flex items-start gap-3 bg-white p-4 text-[color:inherit] !no-underline hover:bg-ui-01 md:flex-col md:items-center md:gap-1 md:p-8 md:text-center"
 				>
-					<VoteIcon class="aspect-square w-6 h-auto md:w-8" />
-					<span class="flex-1 flex flex-col gap-1">
+					<VoteIcon class="aspect-square h-auto w-6 md:w-8" />
+					<span class="flex flex-1 flex-col gap-1">
 						<span class="fluid-heading-03">การลงมติ</span>
 						<span>ดูผลการโหวต พร้อมคำอธิบายเข้าใจง่าย</span>
 					</span>
@@ -108,10 +108,10 @@
 			</li>
 			<li class="flex-1">
 				<span
-					class="flex gap-3 items-start p-4 bg-white body-01 text-[color:inherit] md:gap-1 md:flex-col md:items-center md:text-center md:p-8"
+					class="body-01 flex items-start gap-3 bg-white p-4 text-[color:inherit] md:flex-col md:items-center md:gap-1 md:p-8 md:text-center"
 				>
-					<LawIcon class="aspect-square w-6 h-auto md:w-8 opacity-30" />
-					<span class="flex-1 flex flex-col gap-1 opacity-30">
+					<LawIcon class="aspect-square h-auto w-6 opacity-30 md:w-8" />
+					<span class="flex flex-1 flex-col gap-1 opacity-30">
 						<span class="fluid-heading-03">การออกกฎหมาย</span>
 						<span>ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ</span>
 					</span>
@@ -122,13 +122,13 @@
 	</nav>
 </div>
 <section id="politician" class="bg-ui-01 text-text-01">
-	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
-		<div class="flex flex-col gap-2 items-start md:flex-row">
-			<div class="flex gap-2 items-center md:flex-1">
+	<div class="mx-auto flex max-w-[1280px] flex-col gap-6 px-4 py-[72px]">
+		<div class="flex flex-col items-start gap-2 md:flex-row">
+			<div class="flex items-center gap-2 md:flex-1">
 				<PoliticianIcon width="32" height="32" />
 				<h2 class="fluid-heading-05">นักการเมือง</h2>
 			</div>
-			<p class="md:flex-1 body-01">
+			<p class="body-01 md:flex-1">
 				รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
 				ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา
 			</p>
@@ -142,12 +142,12 @@
 				bind:searchResults={politicianSearchResults}
 			/>
 			{#if politicianSearchResults}
-				<SearchResult searchResults={politicianSearchResults} class="w-full absolute left-0 z-10" />
+				<SearchResult searchResults={politicianSearchResults} class="absolute left-0 z-10 w-full" />
 			{/if}
 		</div>
 		<section>
 			<h3 class="fluid-heading-04">นักการเมืองชุดล่าสุดที่น่าสนใจ</h3>
-			<p class="label-01 text-gray-60 mb-6">
+			<p class="label-01 mb-6 text-gray-60">
 				หมายเหตุ : ในกรณีที่มีมากกว่า 1 คน จะเลือกจากลำดับตัวอักษรในชื่อ
 			</p>
 			<div class="grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -157,12 +157,12 @@
 			</div>
 		</section>
 		<section>
-			<h3 class="heading-01 text-center mb-6 relative">
-				<span class="absolute w-full h-[1px] bg-text-03 left-0 top-1/2" aria-hidden="true" />
-				<span class="relative text-text-03 bg-ui-01 px-2 z-10">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
+			<h3 class="heading-01 relative mb-6 text-center">
+				<span class="absolute left-0 top-1/2 h-[1px] w-full bg-text-03" aria-hidden="true" />
+				<span class="relative z-10 bg-ui-01 px-2 text-text-03">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
 			</h3>
 			{#await getExternalHighlightedPoliticians()}
-				<InlineLoading class="flex justify-center items-center p-12" />
+				<InlineLoading class="flex items-center justify-center p-12" />
 			{:then externalHighlightedPoliticians}
 				<Carousel
 					arrowLeftClass="top-auto bottom-[75px] translate-y-1/2"
@@ -200,13 +200,13 @@
 	</div>
 </section>
 <section id="votings" class="bg-white text-text-01">
-	<div class="max-w-[1280px] mx-auto px-4 py-[72px] flex flex-col gap-6">
-		<div class="flex flex-col gap-2 items-start md:flex-row">
-			<div class="flex gap-2 items-center md:flex-1">
+	<div class="mx-auto flex max-w-[1280px] flex-col gap-6 px-4 py-[72px]">
+		<div class="flex flex-col items-start gap-2 md:flex-row">
+			<div class="flex items-center gap-2 md:flex-1">
 				<VoteIcon width="32" height="32" />
 				<h2 class="fluid-heading-05">การลงมติ</h2>
 			</div>
-			<p class="md:flex-1 body-01">
+			<p class="body-01 md:flex-1">
 				ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ
 			</p>
 		</div>
@@ -219,7 +219,7 @@
 				bind:searchResults={votingSearchResults}
 			/>
 			{#if votingSearchResults}
-				<SearchResult searchResults={votingSearchResults} class="w-full absolute left-0 z-10" />
+				<SearchResult searchResults={votingSearchResults} class="absolute left-0 z-10 w-full" />
 			{/if}
 		</div>
 		<section>

@@ -96,33 +96,33 @@
 
 <div
 	class={twMerge(
-		'flex relative p-4 bg-white hover:bg-gray-10 rounded-sm',
+		'relative flex rounded-sm bg-white p-4 hover:bg-gray-10',
 		isLandscape
-			? 'flex-col md:flex-row gap-y-4 md:gap-y-0 gap-x-6 max-w-[640px]'
-			: 'flex-col gap-y-4 max-w-[242px] pt-6',
+			? 'max-w-[640px] flex-col gap-x-6 gap-y-4 md:flex-row md:gap-y-0'
+			: 'max-w-[242px] flex-col gap-y-4 pt-6',
 		isFullWidth ? 'w-full max-w-none' : '',
 		className
 	)}
 >
 	<div class={twMerge('space-y-1', isLandscape ? 'w-full md:w-2/3' : 'w-full')}>
-		<a href={billUrl} class="block after:absolute after:content-[''] after:inset-0">
+		<a href={billUrl} class="block after:absolute after:inset-0 after:content-['']">
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
 
 		{#if title}
-			<p class="text-sm text-text-02"><span class="font-bold mr-1">ชื่อทางการ</span>{title}</p>
+			<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
 		{/if}
 
 		{#if proposedBy}
 			<p class="font-semibold">เสนอโดย</p>
 			<!-- Handle ProposedBy -->
 			{#if getProposedByType(proposedBy) === ProposedByType.ProposedBy}
-				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
-					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
+				<div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+					<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
 						<img
 							src={getProposedByImage(proposedBy)}
 							alt={getProposedByTitle(proposedBy)}
-							class="w-full h-full"
+							class="h-full w-full"
 							loading="lazy"
 						/>
 					</figure>
@@ -134,12 +134,12 @@
 				</div>
 				<!-- Handle Politician -->
 			{:else if getProposedByType(proposedBy) === ProposedByType.Politician}
-				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
-					<figure class="shrink-0 w-6 h-6 rounded-full bg-gray-20 overflow-hidden">
+				<div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+					<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
 						<img
 							src={getProposedByImage(proposedBy)}
 							alt={getProposedByTitle(proposedBy)}
-							class="w-full h-full"
+							class="h-full w-full"
 							loading="lazy"
 						/>
 					</figure>
@@ -154,8 +154,8 @@
 				</div>
 				<!-- Handle Assembly -->
 			{:else if getProposedByType(proposedBy) === ProposedByType.Assembly}
-				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
-					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
+				<div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+					<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 						<PoliticianIcon class="stroke-white" size={16} />
 					</div>
 
@@ -166,8 +166,8 @@
 				</div>
 				<!-- Handle PeopleProposer -->
 			{:else if getProposedByType(proposedBy) === ProposedByType.PeopleProposer}
-				<div class="flex {isLandscape ? 'flex-col md:flex-row gap-x-2' : 'flex-col'}">
-					<div class="bg-black w-6 h-6 rounded-full flex items-center justify-center">
+				<div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+					<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 						<PeopleIcon class="stroke-white" size={16} />
 					</div>
 
@@ -183,7 +183,7 @@
 	<div class={isLandscape ? 'w-full md:w-1/3' : 'w-full'}>
 		<div
 			class="flex {isLandscape
-				? 'flex-col md:flex-row gap-x-6 gap-y-4 md:gap-y-0'
+				? 'flex-col gap-x-6 gap-y-4 md:flex-row md:gap-y-0'
 				: 'flex-col gap-y-4'}"
 		>
 			<div class="grow space-y-2">
@@ -210,7 +210,7 @@
 				</div>
 
 				{#if daySinceProposed}
-					<p class="text-sm text-blue-70 font-semibold">ผ่านมาแล้ว {daySinceProposed} วัน</p>
+					<p class="text-sm font-semibold text-blue-70">ผ่านมาแล้ว {daySinceProposed} วัน</p>
 				{/if}
 			</div>
 

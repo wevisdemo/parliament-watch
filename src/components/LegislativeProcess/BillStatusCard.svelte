@@ -16,23 +16,23 @@
 
 <div
 	class={twMerge(
-		'relative flex flex-col justify-between min-h-[280px] p-4 rounded-sm text-icon-01 overflow-auto',
+		'relative flex min-h-[280px] flex-col justify-between overflow-auto rounded-sm p-4 text-icon-01',
 		className
 	)}
 >
 	<div>
 		<BillStatusTag
-			class="body-02 font-semibold px-2 m-0 w-fit"
+			class="body-02 m-0 w-fit px-2 font-semibold"
 			isLarge={true}
 			status={billStatus}
 		/>
 		<div
-			class="font-semibold text-sm my-2
+			class="my-2 text-sm font-semibold
 		"
 		>
 			จำนวน {billAmount} ฉบับ
 		</div>
-		<div class="font-normal text-sm">
+		<div class="text-sm font-normal">
 			{descriptionTitle}
 			<ul class="px-4">
 				{#each descriptionList as list}
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 
-	<div class="self-start left-0">
+	<div class="left-0 self-start">
 		<a href={learnMoreUrl} class="text-xs font-normal text-blue-60 underline">{learnMoreLabel}</a>
 	</div>
 </div>

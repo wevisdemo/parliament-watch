@@ -36,9 +36,9 @@
 	});
 </script>
 
-<div class="flex flex-col w-full border-t border-gray-30 pb-4 md:pb-0">
+<div class="flex w-full flex-col border-t border-gray-30 pb-4 md:pb-0">
 	<div
-		class="flex flex-col w-full md:cursor-default"
+		class="flex w-full flex-col md:cursor-default"
 		on:click={toggleExpanding}
 		on:keypress={(e) => {
 			if (e.code === 'Enter' || e.code === 'Space') toggleExpanding();
@@ -55,7 +55,7 @@
 					>{/if}
 			</p>
 			<p class="body-02 text-gray-60">{totalAffVote} คน</p>
-			<Add class="justify-self-start self-start flex md:hidden ml-auto" />
+			<Add class="ml-auto flex self-start justify-self-start md:hidden" />
 		</div>
 		<div
 			class="mt-1 flex items-center gap-x-1 {resultColorLookup[highestVote.voteOption.toString()] ??
@@ -71,12 +71,12 @@
 		<div class="mt-1 flex items-center gap-x-3">
 			{#each resultSummary as vote}
 				<div class="flex items-center gap-x-1">
-					<div class="w-1 h-3 {getVoteColor(vote.voteOption)}" />
+					<div class="h-3 w-1 {getVoteColor(vote.voteOption)}" />
 					<p class="label-01">{vote.total}</p>
 				</div>
 			{/each}
 		</div>
-		<div class="flex h-[30px] mt-1" style:width={affiliationPercent}>
+		<div class="mt-1 flex h-[30px]" style:width={affiliationPercent}>
 			{#each resultSummary as vote}
 				{#if vote.total}
 					<VoteChartTooltip
@@ -93,7 +93,7 @@
 			id={'aff-' + affiliationName.replace(/\s/g, '-')}
 			class="{selectedTab.includes(affiliationName)
 				? 'flex'
-				: 'hidden'} md:flex flex-col w-full mt-4 gap-y-4"
+				: 'hidden'} mt-4 w-full flex-col gap-y-4 md:flex"
 		>
 			{#each byParties as partyDetails}
 				{@const totalPartyVote = partyDetails.resultSummary.reduce(
@@ -102,13 +102,13 @@
 				)}
 				<div class="flex items-start gap-x-1">
 					<img
-						class="rounded-full border border-gray-30 w-8 h-8"
+						class="h-8 w-8 rounded-full border border-gray-30"
 						src={partyDetails.party.logo}
 						alt={partyDetails.party.name}
 						loading="lazy"
 						decoding="async"
 					/>
-					<div class="flex justify-start items-start flex-col w-full">
+					<div class="flex w-full flex-col items-start justify-start">
 						<div class="flex items-center gap-x-1">
 							<p class="heading-02">{partyDetails.party.name}</p>
 							<p class="body-02 text-gray-60">
@@ -118,18 +118,18 @@
 						<div class="mt-1 flex items-center gap-x-3">
 							{#each partyDetails.resultSummary as partyVote}
 								<div class="flex items-center gap-x-1">
-									<div class="w-1 h-3 {getVoteColor(partyVote.voteOption)}" />
+									<div class="h-3 w-1 {getVoteColor(partyVote.voteOption)}" />
 									<p class="label-01">
 										{isViewPercent
 											? ((partyVote.total / totalPartyVote) * 100).toLocaleString('th-TH', {
 													maximumFractionDigits: 2
-											  }) + '%'
+												}) + '%'
 											: partyVote.total}
 									</p>
 								</div>
 							{/each}
 						</div>
-						<div class="flex w-full h-[20px] mt-1">
+						<div class="mt-1 flex h-[20px] w-full">
 							{#each partyDetails.resultSummary as partyVote}
 								{#if partyVote.total}
 									<VoteChartTooltip

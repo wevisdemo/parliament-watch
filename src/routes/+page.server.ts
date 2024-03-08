@@ -1,12 +1,12 @@
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
-import { safeFind } from '$lib/datasheets/processor.js';
-import { fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import type { ComponentProps } from 'svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
+import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
-import dayjs from 'dayjs';
 import { DefaultVoteOption } from '$models/voting.js';
+import dayjs from 'dayjs';
+import type { ComponentProps } from 'svelte';
 
 const MAX_LASTEST_VOTE = 5;
 

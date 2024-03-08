@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import type { StaticImageResolver } from '$lib/datasheets/image';
+import { z } from 'zod';
 
 const DEFAULT_PARTY_COLOR = '#F4F4F4';
 

@@ -11,18 +11,18 @@
 
 {#if isActive}
 	<aside
-		class="fixed top-0 left-0 h-full pt-12 text-white bg-gray-90 z-40 w-screen md:w-80 opacity-100 transition-all duration-200 overflow-hidden overflow-y-auto"
+		class="fixed left-0 top-0 z-40 h-full w-screen overflow-hidden overflow-y-auto bg-gray-90 pt-12 text-white opacity-100 transition-all duration-200 md:w-80"
 		transition:slide={{ duration: 350, axis: 'x' }}
 	>
-		<div class="pt-2 pr-2">
+		<div class="pr-2 pt-2">
 			<slot />
 		</div>
 	</aside>
 
 	<div
-		class="fixed top-0 left-0 h-screen backdrop-brightness-125 bg-white/50 w-full overflow-hidden z-0"
+		class="fixed left-0 top-0 z-0 h-screen w-full overflow-hidden bg-white/50 backdrop-brightness-125"
 		class:hidden={!isActive}
 	>
-		<button class="h-screen w-screen bg-white/0 border-0 cursor-default" on:click={backdropClick} />
+		<button class="h-screen w-screen cursor-default border-0 bg-white/0" on:click={backdropClick} />
 	</div>
 {/if}

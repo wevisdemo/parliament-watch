@@ -83,7 +83,7 @@
 
 <svelte:window bind:innerWidth={screenSize} on:scroll={scrollEventHandler} />
 
-<header class="w-full h-12 z-50">
+<header class="z-50 h-12 w-full">
 	{#if showHeader}
 		<NavigationPane>
 			<svelte:fragment slot="leading">

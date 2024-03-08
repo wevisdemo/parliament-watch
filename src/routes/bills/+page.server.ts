@@ -1,8 +1,8 @@
 import { fetchAssemblies } from '$lib/datasheets';
+import { createSeo } from '$lib/seo';
 import type { Assembly } from '$models/assembly';
 import { BillProposerType, BillStatus, type Bill } from '$models/bill';
 import { enactedBill } from '../../mocks/data/bill';
-import { createSeo } from '$lib/seo';
 import type { BillsByCategory, BillsByProposerType, BillsByStatus } from './+page';
 
 export async function load() {

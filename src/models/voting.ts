@@ -1,8 +1,8 @@
-import { z } from 'zod';
-import type { Link } from './link';
-import type { Assembly } from './assembly';
 import { safeFind } from '$lib/datasheets/processor';
+import type { Assembly } from './assembly';
+import type { Link } from './link';
 import md5 from 'md5';
+import { z } from 'zod';
 
 export const createVotingSchema = (assemblies: Assembly[]) =>
 	z
@@ -28,8 +28,8 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 					representativeAssemblyId && senateAssemblyId
 						? 'ประชุมร่วมกันของรัฐสภา'
 						: representativeAssemblyId
-						? 'ประชุมสภาผู้แทนราษฎร'
-						: 'ประชุมวุฒิสภา',
+							? 'ประชุมสภาผู้แทนราษฎร'
+							: 'ประชุมวุฒิสภา',
 				participatedAssemblies: [representativeAssemblyId, senateAssemblyId]
 					.filter((assemblyId) => !!assemblyId)
 					.map<Assembly>((assemblyId) => safeFind(assemblies, (a) => a.id === assemblyId)),

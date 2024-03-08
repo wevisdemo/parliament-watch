@@ -8,13 +8,13 @@
 	export let links: Link[];
 </script>
 
-<div class="flex flex-col gap-2 border border-solid border-ui-03 rounded-sm p-3">
+<div class="flex flex-col gap-2 rounded-sm border border-solid border-ui-03 p-3">
 	<div class="flex items-center gap-1">
 		<Download />
 		<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
 	</div>
 	{#each links as link (link.url)}
-		<a href={link.url} class="flex items-center gap-1 mr-auto helper-text-01">
+		<a href={link.url} class="helper-text-01 mr-auto flex items-center gap-1">
 			{#if link.url.includes('.pdf')}
 				<DocumentPdf />
 			{:else if link.url.includes('.csv')}

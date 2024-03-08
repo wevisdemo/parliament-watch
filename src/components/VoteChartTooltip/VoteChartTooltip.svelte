@@ -22,7 +22,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
-	class="bx--tooltip--definition bx--tooltip--a11y rounded-sm h-full {color}"
+	class="bx--tooltip--definition bx--tooltip--a11y h-full rounded-sm {color}"
 	style="width:{getWidthPercent(value, total)}%"
 	on:mouseenter={show}
 	on:mouseleave={hide}
@@ -30,7 +30,7 @@
 	<button
 		type="button"
 		aria-describedby={id}
-		class="!rounded-sm !border-none w-full bx--tooltip--a11y bx--tooltip__trigger bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-center"
+		class="bx--tooltip--a11y bx--tooltip__trigger bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-center w-full !rounded-sm !border-none"
 		class:bx--tooltip--hidden={!open}
 		class:bx--tooltip--visible={open}
 		on:focus={show}

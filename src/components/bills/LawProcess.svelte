@@ -1,5 +1,5 @@
 <section>
-	<div class="flex flex-col w-full svg-container">
+	<div class="svg-container flex w-full flex-col">
 		<div class="px-3">
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 333 428"
 				><path
