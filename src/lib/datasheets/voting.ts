@@ -1,4 +1,5 @@
 import type { HighlightedVoteByGroup } from '$components/VoteCard/VoteCard.svelte';
+import { logger } from '$lib/logger';
 import { AssemblyName } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
@@ -71,13 +72,14 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 				);
 
 				if (!assemblyRole) {
-					console.warn(
-						`[WARNING] ${
-							politician.id
-						} is not a member of any participated assembles ${voting.participatedAssemblies.map(
-							({ id }) => id
-						)} of voting "${voting.title}", but their votes exist`
+					logger.warn(
+						{
+							votingTitle: voting.title,
+							participatedAssemblies: voting.participatedAssemblies.map(({ id }) => id)
+						},
+						'politician is not a member of any participated assembles but their vote exist'
 					);
+
 					return counter;
 				}
 
@@ -108,17 +110,20 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 					} else {
 						group = 'สส.ไม่สังกัดพรรค';
 
-						console.warn(
-							`[WARNING] Could not find ${politician.id} party on the voting day of "${
-								voting.title
-							}" (${voting.date.toLocaleDateString()})`
+						logger.warn(
+							{
+								politicianId: politician.id,
+								votingTitle: voting.title,
+								votingDate: voting.date.toLocaleDateString()
+							},
+							'Could not find politician party on the voting day'
 						);
 					}
 				}
 
 				counter[group].resultSummary[voteOption]++;
 			} catch (e) {
-				throw `[ERROR] Could not find politican with id ${politicianId}`;
+				logger.error({ politicianId }, 'Could not find politican');
 			}
 
 			return counter;
