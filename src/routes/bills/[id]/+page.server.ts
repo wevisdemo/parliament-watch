@@ -1,9 +1,9 @@
 import type { RelatedVotingResults } from '$components/bills/Progress.svelte';
-import { fetchVotings } from '$lib/datasheets/index.js';
-import { createSeo } from '$lib/seo.js';
-import { BillStatus, type Bill } from '$models/bill.js';
-import type { Event } from '$models/event.js';
-import { inProgressBill, enactedBill } from '../../../mocks/data/bill.js';
+import { fetchVotings } from '$lib/datasheets/index';
+import { createSeo } from '$lib/seo';
+import { BillStatus, type Bill } from '$models/bill';
+import type { BillEvent } from '$models/bill-event';
+import { inProgressBill, enactedBill } from '../../../mocks/data/bill';
 import {
 	enforcementEvent,
 	failingMp3Event,
@@ -17,7 +17,7 @@ import {
 	passingSenate2Event,
 	passingSenate3Event,
 	royalAssentEvent
-} from '../../../mocks/data/event.js';
+} from '../../../mocks/data/event';
 
 export interface VotingResultSummary {
 	agreed: number;
@@ -44,9 +44,9 @@ export async function load({ params }) {
 
 	let mergedBills: Bill[] | undefined;
 
-	let events: Event[] = [];
+	let events: BillEvent[] = [];
 	let mergedIntoBill: Bill | undefined;
-	let mergedIntoBillLatestEvent: Event | undefined;
+	let mergedIntoBillLatestEvent: BillEvent | undefined;
 	let relatedVotingResults: RelatedVotingResults = {};
 
 	const votings = await fetchVotings();

@@ -324,7 +324,6 @@
 						{#each events.slice(0, events.length - 1) as event}
 							<Progress
 								{event}
-								billStatus={bill.status}
 								{tooltipText}
 								{relatedVotingResults}
 								{mergedIntoBill}
@@ -336,7 +335,6 @@
 						<ol class="relative ml-2">
 							<Progress
 								event={events[events.length - 1]}
-								billStatus={bill.status}
 								{tooltipText}
 								{relatedVotingResults}
 								{mergedIntoBill}

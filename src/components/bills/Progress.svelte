@@ -19,8 +19,8 @@
 
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	import { BillStatus, type Bill } from '$models/bill';
-	import { EventStatus, type Event, EventActionType } from '$models/event';
+	import { type Bill } from '$models/bill';
+	import { type BillEvent, BillEventActionType } from '$models/bill-event';
 	import {
 		ArrowRight,
 		CheckmarkFilled,
@@ -33,12 +33,11 @@
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import type { Voting } from '$models/voting';
 
-	export let event: Event;
-	export let billStatus: BillStatus;
+	export let event: BillEvent;
 	export let tooltipText: string;
 	export let relatedVotingResults: RelatedVotingResults;
 	export let mergedIntoBill: Bill | undefined;
-	export let mergedIntoBillLatestEvent: Event | undefined;
+	export let mergedIntoBillLatestEvent: BillEvent | undefined;
 
 	const dateTimeFormat: Intl.DateTimeFormatOptions = {
 		year: '2-digit',
@@ -119,35 +118,24 @@
 </script>
 
 <li class="-mt-1 mb-10 ms-4">
-	{#if event.status === EventStatus.Succeed || billStatus === BillStatus.Merged}
-		<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
-	{:else if event.status === EventStatus.InProgress}
-		<CircleDash size={24} class="absolute -start-3 bg-ui-background" color="#8D8D8D" />
-	{:else if event.status === EventStatus.Failed}
-		<Misuse size={24} class="absolute -start-3 bg-ui-background" color="#981B00" />
-	{/if}
+	<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
+
 	<div class="flex flex-col md:flex-row">
 		<div class="ml-1 flex flex-col md:basis-1/3 md:pr-6">
-			{#if !(event.status === EventStatus.InProgress && billStatus === BillStatus.InProgress)}
-				<p>
-					{event.date.toLocaleDateString('th-TH', dateTimeFormat)}
-				</p>
-			{/if}
-			<div
-				class={event.status === EventStatus.InProgress && billStatus === BillStatus.InProgress
-					? 'text-text-02'
-					: 'text-text-primary'}
-			>
+			<p>
+				{event.date.toLocaleDateString('th-TH', dateTimeFormat)}
+			</p>
+			<div>
 				<b>{eventDescription[event.type].title}</b>
 				<p>{eventDescription[event.type].description}</p>
 			</div>
 		</div>
-		{#if event.actionType === EventActionType.Voted && voting}
+		{#if event.actionType === BillEventActionType.Voted && voting}
 			<div class="flex flex-col md:basis-2/3">
 				<p class="text-text-02">ผลการลงมติ</p>
 				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
 			</div>
-		{:else if event.actionType === EventActionType.Enforced}
+		{:else if event.actionType === BillEventActionType.Enforced}
 			<div class="w-full pt-5 md:basis-2/3">
 				<RoyalGazette />
 				<Button
@@ -159,7 +147,7 @@
 					size="small">ดูประกาศราชกิจจา</Button
 				>
 			</div>
-		{:else if event.actionType === EventActionType.Merged && mergedIntoBill}
+		{:else if event.actionType === BillEventActionType.Merged && mergedIntoBill}
 			<div class="flex flex-col gap-2 md:basis-2/3">
 				<DocumentMultiple_02 size={24} color="#2600A3" />
 				<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>

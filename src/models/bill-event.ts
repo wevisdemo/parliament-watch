@@ -1,4 +1,4 @@
-export enum EventType {
+export enum BillEventType {
 	Hearing = 'hearing',
 	MP1 = 'mp1',
 	MP2 = 'mp2',
@@ -11,26 +11,19 @@ export enum EventType {
 	Other = 'other'
 }
 
-export enum EventStatus {
-	Succeed = 'succeed',
-	InProgress = 'in-progress',
-	Failed = 'failed'
-}
-
-export enum EventActionType {
+export enum BillEventActionType {
 	Voted = 'voted',
 	Merged = 'merged',
 	Enforced = 'enforced'
 }
 
-export interface Event {
+export interface BillEvent {
 	billId: number;
 	date: Date;
-	type: EventType;
+	type: BillEventType;
 	title?: string;
 	description?: string;
-	status: EventStatus;
-	actionType?: EventActionType;
+	actionType?: BillEventActionType;
 	votedInVotingId?: string;
 	mergedIntoBillId?: number;
 	enforcementDocumentUrl?: string;

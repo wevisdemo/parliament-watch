@@ -98,14 +98,13 @@ erDiagram
     string voteOption "refer to Voting"
   }
 
-  Event {
+  BillEvent {
     number eventId PK
     number billId FK
     Date date
     string type "hearing | mp1 | mp2 | mp3 | senate1 | senate2 | senate3 | royalAssent | enforcement | other"
     string title "for other"
     string description "for other"
-    string status "succeed | in-progress | failed"
     string actionType "voted | merged | enforced"
     string votedInVotingId FK "for action voted"
     number mergedIntoBillId FK "for action merged"
