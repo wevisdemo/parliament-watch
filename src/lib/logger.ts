@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import pino from 'pino';
 
 enum LogTarget {
@@ -14,6 +15,8 @@ export const logger = pino({
 });
 
 function getSelectedTransport(): pino.TransportTargetOptions[] {
+	if (browser) return [];
+
 	switch (process.env.LOG_TARGET) {
 		case LogTarget.Stdout:
 			return [
