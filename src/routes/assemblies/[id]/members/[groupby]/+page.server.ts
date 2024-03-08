@@ -7,7 +7,7 @@ import {
 	getPoliticianSummary,
 	type PoliticianSummary
 } from '$lib/datasheets/assembly-member';
-import { createSeo } from '../../../../../utils/seo';
+import { createSeo } from '$lib/seo';
 
 interface PoliticianSummaryGroup {
 	name: string;

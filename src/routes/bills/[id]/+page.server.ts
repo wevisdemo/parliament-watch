@@ -17,7 +17,7 @@ import {
 	passingSenate3Event,
 	royalAssentEvent
 } from '../../../mocks/data/event.js';
-import { createSeo } from '../../../utils/seo.js';
+import { createSeo } from '$lib/seo.js';
 
 export interface VotingResultSummary {
 	agreed: number;

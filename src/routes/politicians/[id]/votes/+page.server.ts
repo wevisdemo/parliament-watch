@@ -2,7 +2,7 @@ import type { Politician } from '$models/politician.js';
 import { DefaultVoteOption, type Voting, CATEGORY_NOT_SPECIFIED } from '$models/voting.js';
 import type { Assembly } from '$models/assembly';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { createSeo } from '../../../../utils/seo.js';
+import { createSeo } from '$lib/seo.js';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { getSortedUniqueCategories, getSortedUniqueVoteOptions } from '$lib/datasheets/voting.js';
 

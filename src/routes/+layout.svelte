@@ -6,7 +6,7 @@
 	import { InlineNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import '../styles/index.css';
-	import { DEFAULT_SEO, PROD_URL } from '../utils/seo';
+	import { DEFAULT_SEO, PROD_URL } from '$lib/seo';
 
 	$: title = $page.data?.seo?.title
 		? `${$page.data?.seo?.title} - Parliament Watch`

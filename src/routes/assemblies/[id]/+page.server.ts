@@ -11,7 +11,7 @@ import {
 } from '$lib/datasheets';
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import { getMemberGroup } from './members/[groupby]/groupby';
-import { createSeo } from '../../../utils/seo';
+import { createSeo } from '$lib/seo';
 import type { ComponentProps } from 'svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';

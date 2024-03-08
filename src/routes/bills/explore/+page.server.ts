@@ -3,7 +3,7 @@ import { AssemblyName, type Assembly } from '$models/assembly';
 import { BillProposerType, BillStatus, type Bill } from '$models/bill';
 import { enactedBill } from '../../../mocks/data/bill';
 import { movingForwardPolitician } from '../../../mocks/data/politician';
-import { createSeo } from '../../../utils/seo';
+import { createSeo } from '$lib/seo';
 
 interface FilterOptions {
 	mpAssemblies: Assembly[];

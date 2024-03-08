@@ -5,7 +5,7 @@ import {
 	groupVoteByAffiliations,
 	type VoteOptionCounter
 } from '$lib/datasheets/voting.js';
-import { createSeo } from '../../../utils/seo.js';
+import { createSeo } from '$lib/seo.js';
 import type { ResultsByAffiliation } from './+page.js';
 
 export async function load({ params }) {

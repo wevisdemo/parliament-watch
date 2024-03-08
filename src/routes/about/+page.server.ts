@@ -1,4 +1,4 @@
-import { createSeo } from '../../utils/seo.js';
+import { createSeo } from '$lib/seo.js';
 
 interface ContributorResponse {
 	login: string;

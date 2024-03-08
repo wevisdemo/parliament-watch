@@ -4,7 +4,7 @@
 	import Close from 'carbon-icons-svelte/lib/Close.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { twMerge } from 'tailwind-merge';
-	import { entranceExpressive } from '../../utils/easing';
+	import { entranceExpressive } from '$lib/easing';
 
 	let className = '';
 	export { className as class };

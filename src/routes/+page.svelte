@@ -15,7 +15,7 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import { SearchIndexCategory, type SearchResults } from '$models/search';
-	import { fetchExternalPoliticianRanking } from '../lib/politician-ranking/index.js';
+	import { fetchExternalPoliticianRanking } from '$lib/politician-ranking/index.js';
 
 	interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPolitician {
 		updatedAt: Date;

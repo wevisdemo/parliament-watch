@@ -1,6 +1,6 @@
 import { DefaultVoteOption, type Voting } from '$models/voting';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { createSeo } from '../../../utils/seo';
+import { createSeo } from '$lib/seo';
 import { safeFind } from '$lib/datasheets/processor';
 import type { Vote } from '$models/vote';
 
