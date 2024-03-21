@@ -1,4 +1,5 @@
 import { assemblyPartyGroupSchema, createAssemblySchema } from '$models/assembly';
+import { createBillSchema } from '$models/bill';
 import { createPartySchema } from '$models/party';
 import {
 	createAssemblyRoleSchema,
@@ -43,6 +44,9 @@ export const fetchVotes = () => fetchAndParseSheet('Votes', voteSchema);
 
 export const fetchVotings = async () =>
 	fetchAndParseSheet('Votings', createVotingSchema(await fetchAssemblies()));
+
+export const fetchBills = async () =>
+	fetchAndParseSheet('Bills', createBillSchema(await fetchPoliticians(), await fetchAssemblies()));
 
 export async function fetchFromIdOr404<T extends { id: string }>(
 	fetcher: () => Promise<T[]>,
