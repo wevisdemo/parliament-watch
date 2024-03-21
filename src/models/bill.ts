@@ -30,7 +30,8 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 			id: z.string(),
 			acceptanceNumber: z.string(),
 			title: z.string(),
-			nickname: z.string().optional(),
+			// TODO: No nickname in sheet yet
+			nickname: z.string().default('no nickname'),
 			description: z.string().optional(),
 			status: z.nativeEnum(BillStatus),
 			categories: z.string().optional(),

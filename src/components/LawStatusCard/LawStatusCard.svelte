@@ -8,7 +8,7 @@
 		BillsByCategory,
 		BillsByProposerType,
 		BillsByStatus
-	} from '../../routes/bills/+page';
+	} from '../../routes/bills/+page.server';
 
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;
@@ -65,46 +65,21 @@
 		</p>
 		{#if 'proposerType' in bill}
 			<ul>
-				<li class="mb-2">
-					<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
-						<span class="heading-01">{bill.countByStatus.กำลังดำเนินการ}</span>
-						<span class="label-01">{BillStatus.InProgress}</span>
-					</span>
-					<div
-						class="h-1 bg-yellow-20"
-						style:width={(bill.countByStatus.กำลังดำเนินการ / bill.count) * 100 + '%'}
-					/>
-				</li>
-				<li class="mb-2">
-					<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
-						<span class="heading-01">{bill.countByStatus.ออกเป็นกฎหมาย}</span>
-						<span class="label-01">{BillStatus.Enacted}</span>
-					</span>
-					<div
-						class="h-1 bg-teal-80"
-						style:width={(bill.countByStatus.ออกเป็นกฎหมาย / bill.count) * 100 + '%'}
-					/>
-				</li>
-				<li class="mb-2">
-					<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
-						<span class="heading-01">{bill.countByStatus.ตกไป}</span>
-						<span class="label-01">{BillStatus.Rejected}</span>
-					</span>
-					<div
-						class="h-1 bg-red-80"
-						style:width={(bill.countByStatus.ตกไป / bill.count) * 100 + '%'}
-					/>
-				</li>
-				<li>
-					<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
-						<span class="heading-01">{bill.countByStatus.ถูกรวมร่าง}</span>
-						<span class="label-01">{BillStatus.Merged}</span>
-					</span>
-					<div
-						class="h-1 bg-purple-80"
-						style:width={(bill.countByStatus.ถูกรวมร่าง / bill.count) * 100 + '%'}
-					/>
-				</li>
+				{#each [BillStatus.InProgress, BillStatus.Enacted, BillStatus.Rejected, BillStatus.Merged] as status}
+					{@const relatedBillCount = bill.countByStatus[status] || 0}
+					{#if relatedBillCount > 0}
+						<li class="mb-2">
+							<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
+								<span class="heading-01">{relatedBillCount}</span>
+								<span class="label-01">{status}</span>
+							</span>
+							<div
+								class="h-1 {BAR_STYLE[status]}"
+								style:width="{bill.count ? (relatedBillCount / bill.count) * 100 : 0}%"
+							/>
+						</li>
+					{/if}
+				{/each}
 			</ul>
 		{:else}
 			<p class="label-01 mb-[2px] text-gray-60">
@@ -116,23 +91,27 @@
 				<span>ของทั้งหมดที่เข้าสภา</span>
 			</p>
 			<div class="h-2 bg-ui-01">
-				<div class="h-full {barStyle}" style:width={(bill.count / totalCount) * 100 + '%'} />
+				<div class="h-full {barStyle}" style:width="{(bill.count / totalCount) * 100}%" />
 			</div>
 		{/if}
 	</header>
-	<div class="card-body body-01 bg-ui-01 p-6 pt-3">
-		<span class="mb-1 block text-text-03">เช่น</span>
-		<ul class="body-compact-01 mb-3 ml-[2.1ch] flex list-outside list-disc flex-col gap-1">
-			{#each bill.samples as sample}
-				<li><a href="/bills/{sample.id}" class="text-gray-100 underline">{sample.nickname}</a></li>
-			{/each}
-		</ul>
-		<a
-			href="/bills/explore?{billParams[0]}={encodeURIComponent(billParams[1])}"
-			class="helper-text-01 flex items-center gap-1 text-link-01 underline"
-			><span>ดูทั้งหมด</span><ArrowRight /></a
-		>
-	</div>
+	{#if bill.count > 0}
+		<div class="card-body body-01 bg-ui-01 p-6 pt-3">
+			<span class="mb-1 block text-text-03">เช่น</span>
+			<ul class="body-compact-01 mb-3 ml-[2.1ch] flex list-outside list-disc flex-col gap-1">
+				{#each bill.samples as sample}
+					<li>
+						<a href="/bills/{sample.id}" class="text-gray-100 underline">{sample.nickname}</a>
+					</li>
+				{/each}
+			</ul>
+			<a
+				href="/bills/explore?{billParams[0]}={encodeURIComponent(billParams[1])}"
+				class="helper-text-01 flex items-center gap-1 text-link-01 underline"
+				><span>ดูทั้งหมด</span><ArrowRight /></a
+			>
+		</div>
+	{/if}
 </article>
 
 <style>

@@ -10,6 +10,8 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
 
+	const MAX_ENACTED_BILL_PER_VIEW = 5;
+
 	export let data;
 
 	let searchResults: SearchResults | null;
@@ -63,7 +65,7 @@
 				breakpoints: {
 					'(min-width: 1200px)': {
 						slides: {
-							perView: 4,
+							perView: data.byStatus.length,
 							spacing: 12
 						}
 					}
@@ -95,7 +97,7 @@
 				breakpoints: {
 					'(min-width: 900px)': {
 						slides: {
-							perView: 3,
+							perView: data.byProposerType.length,
 							spacing: 12
 						}
 					}
@@ -110,7 +112,9 @@
 </div>
 <div class="bg-teal-80">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-10">
-		<h2 class="fluid-heading-03 text-white">5 ฉบับล่าสุดที่ได้ออกเป็นกฏหมาย</h2>
+		<h2 class="fluid-heading-03 text-white">
+			{data.latestEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฏหมาย
+		</h2>
 		<Carousel
 			options={{
 				loop: false,
@@ -118,7 +122,7 @@
 				breakpoints: {
 					'(min-width: 1300px)': {
 						slides: {
-							perView: 5,
+							perView: MAX_ENACTED_BILL_PER_VIEW,
 							spacing: 12
 						}
 					}
