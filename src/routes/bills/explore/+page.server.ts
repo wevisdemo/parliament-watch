@@ -1,9 +1,8 @@
-import { fetchAssemblies } from '$lib/datasheets';
+import { fetchAssemblies, fetchBills } from '$lib/datasheets';
 import { createSeo } from '$lib/seo';
 import { AssemblyName, type Assembly } from '$models/assembly';
 import { BillProposerType, BillStatus, type Bill } from '$models/bill';
-import { enactedBill } from '../../../mocks/data/bill';
-import { movingForwardPolitician } from '../../../mocks/data/politician';
+import dayjs from 'dayjs';
 
 interface FilterOptions {
 	mpAssemblies: Assembly[];
@@ -26,30 +25,34 @@ interface BillSummary
 		| 'proposedLedByPolitician'
 		| 'proposedByPeople'
 	> {
-	purposedAtMpAssemblyId: string;
+	purposedAtMpAssemblyId?: string;
 	proposedLedByPoliticianName?: string;
 	proposedLedByPeopleName?: string;
 }
 
 export async function load() {
 	const billStatuses = Object.values(BillStatus);
-	const mockCategories = ['ขนส่งสาธารณะ', 'เศรษฐกิจ', 'แก้รัฐธรรมนูญ', 'วัฒนธรรม', 'เกษตรกรรม'];
 	const billProposerTypes = Object.values(BillProposerType);
 
 	const mpAssemblies = (await fetchAssemblies()).filter(
 		({ name }) => name === AssemblyName.Representatives
 	);
 
-	const bills: BillSummary[] = new Array(100).fill({}).map((_, i) => ({
-		id: i,
-		title: enactedBill.title,
-		nickname: enactedBill.nickname,
-		proposedOn: enactedBill.proposedOn,
-		purposedAtMpAssemblyId: mpAssemblies[i % mpAssemblies.length].id,
-		status: billStatuses[i % billStatuses.length],
-		categories: [mockCategories[i % mockCategories.length]],
-		...getProposerProperties(i)
-	}));
+	const bills: BillSummary[] = (await fetchBills()).map((bill) => {
+		const proposedDate = dayjs(bill.proposedOn);
+
+		return {
+			...bill,
+			purposedAtMpAssemblyId: mpAssemblies.find(
+				({ startedAt, endedAt }) =>
+					proposedDate.isAfter(startedAt) && (!endedAt || proposedDate.isBefore(endedAt))
+			)?.id,
+			proposedLedByPoliticianName: bill.proposedLedByPolitician
+				? `${bill.proposedLedByPolitician.firstname} ${bill.proposedLedByPolitician.lastname}`
+				: undefined,
+			proposedLedByPeopleName: bill.proposedByPeople?.ledBy
+		};
+	});
 
 	const proposerNames = [
 		...new Set(
@@ -59,12 +62,16 @@ export async function load() {
 					(bill) => bill.proposedLedByPeopleName || bill.proposedLedByPoliticianName
 				) as string[] /* either of pplName or polName will be present, so it will be a `string` */
 		)
-	];
+	].sort((a, z) => a.localeCompare(z));
+
+	const categories = [...new Set(bills.flatMap((bill) => bill.categories))].sort((a, z) =>
+		a.localeCompare(z)
+	);
 
 	const filterOptions: FilterOptions = {
 		mpAssemblies,
 		status: billStatuses,
-		categories: mockCategories,
+		categories,
 		billProposerType: billProposerTypes,
 		proposerNames
 	};
@@ -76,28 +83,4 @@ export async function load() {
 			title: 'สำรวจร่างกฎหมายในสภาแบบละเอียด'
 		})
 	};
-}
-
-function getProposerProperties(
-	i: number
-): Pick<BillSummary, 'proposerType' | 'proposedLedByPoliticianName' | 'proposedLedByPeopleName'> {
-	const billProposerTypes = Object.values(BillProposerType);
-
-	switch (billProposerTypes[i % billProposerTypes.length]) {
-		case BillProposerType.Politician:
-			return {
-				proposerType: BillProposerType.Politician,
-				proposedLedByPoliticianName:
-					movingForwardPolitician.firstname + ' ' + movingForwardPolitician.lastname
-			};
-		case BillProposerType.Cabinet:
-			return {
-				proposerType: BillProposerType.Cabinet
-			};
-		case BillProposerType.People:
-			return {
-				proposerType: BillProposerType.People,
-				proposedLedByPeopleName: 'ยิ่งชีพ อัชฌานนท์'
-			};
-	}
 }

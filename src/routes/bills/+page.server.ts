@@ -47,18 +47,19 @@ export async function load() {
 		})
 		.filter(({ count }) => count > 0);
 
-	// TODO: no category data in sheets yet
 	const byCategory: BillsByCategory[] = [
-		'ขนส่งสาธารณะ',
-		'เศรษฐกิจ',
-		'แก้รัฐธรรมนูญ',
-		'วัฒนธรรม',
-		'เกษตรกรรม'
-	].map((category) => ({
-		category,
-		samples: bills.slice(0, BILL_SAMPLE_LIMIT),
-		count: Math.round(bills.length / 5)
-	}));
+		...rollup(
+			bills.flatMap(({ categories, ...rest }) =>
+				categories.map((category) => ({ category, ...rest }))
+			),
+			(group) => ({
+				category: group[0].category,
+				samples: group.slice(0, BILL_SAMPLE_LIMIT),
+				count: group.length
+			}),
+			(bill) => bill.category
+		).values()
+	].sort((a, z) => z.count - a.count);
 
 	const byProposerType: BillsByProposerType[] = Object.values(BillProposerType)
 		.map((proposerType) => {

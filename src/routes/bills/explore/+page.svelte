@@ -73,7 +73,6 @@
 	let selectedComboboxValue: SelectedComboboxValueType;
 	let selectedCheckboxValue: SelectedCheckboxValueType;
 
-	// NOTE: Recheck conditions again when data is ready
 	$: filteredData =
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
@@ -95,6 +94,7 @@
 							selectedCheckboxValue;
 
 						return (
+							bill.purposedAtMpAssemblyId &&
 							filterEra.includes(bill.purposedAtMpAssemblyId) &&
 							filterStatus.includes(bill.status) &&
 							filterCategory.some((category) => bill.categories.includes(category as string)) &&

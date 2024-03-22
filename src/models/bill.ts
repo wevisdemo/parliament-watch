@@ -56,39 +56,37 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 				proposedLedByPeople,
 				peopleSignatureCount,
 				...rest
-			}) => {
-				const proposerType: BillProposerType = proposedLedByPoliticianId
+			}) => ({
+				...rest,
+				categories: categories?.split(',').map((c) => c.trim()) || [ // TODO: Mock category while datasheet is not ready
+					['ขนส่งสาธารณะ', 'เศรษฐกิจ', 'แก้รัฐธรรมนูญ', 'วัฒนธรรม', 'เกษตรกรรม'][
+						Math.floor(Math.random() * 5)
+					]
+				],
+				attachment:
+					attachmentName && attachmentUrl
+						? ({ label: attachmentName, url: attachmentUrl } as Link)
+						: undefined,
+				proposerType: proposedLedByPoliticianId
 					? BillProposerType.Politician
 					: proposedByAssemblyId
 						? BillProposerType.Cabinet
-						: BillProposerType.People;
-
-				return {
-					...rest,
-					categories: categories?.split(',').map((c) => c.trim()) || [],
-					...(attachmentName && attachmentUrl
-						? { attachment: { label: attachmentName, url: attachmentUrl } as Link }
-						: {}),
-					proposerType,
-					...(proposerType === BillProposerType.Politician
-						? {
-								proposedLedByPolitician: politicians.find(
-									({ id }) => id === proposedLedByPoliticianId
-								),
-								coProposedByPoliticians: coProposedByPoliticians
-									?.split(',')
-									.map((name) => name.trim())
-							}
-						: proposerType === BillProposerType.Cabinet
-							? {
-									proposedByAssembly: safeFind(assemblies, ({ id }) => id === proposedByAssemblyId)
-								}
-							: ({
-									ledBy: proposedLedByPeople,
-									signatoryCount: peopleSignatureCount
-								} as PeopleProposer))
-				};
-			}
+						: BillProposerType.People,
+				proposedLedByPolitician: proposedLedByPoliticianId
+					? politicians.find(({ id }) => id === proposedLedByPoliticianId)
+					: undefined,
+				coProposedByPoliticians: coProposedByPoliticians?.split(',').map((name) => name.trim()),
+				proposedByAssembly: proposedByAssemblyId
+					? safeFind(assemblies, ({ id }) => id === proposedByAssemblyId)
+					: undefined,
+				proposedByPeople:
+					proposedLedByPeople && peopleSignatureCount
+						? ({
+								ledBy: proposedLedByPeople,
+								signatoryCount: peopleSignatureCount
+							} as PeopleProposer)
+						: undefined
+			})
 		);
 
 export type Bill = z.infer<ReturnType<typeof createBillSchema>>;
