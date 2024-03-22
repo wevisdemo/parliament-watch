@@ -2,6 +2,7 @@ import { safeFind } from '$lib/datasheets/processor';
 import type { Assembly } from './assembly';
 import type { Link } from './link';
 import type { Politician } from './politician';
+import md5 from 'md5';
 import { z } from 'zod';
 
 export enum BillStatus {
@@ -47,6 +48,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 		})
 		.transform(
 			({
+				id,
 				categories,
 				attachmentName,
 				attachmentUrl,
@@ -57,8 +59,9 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 				peopleSignatureCount,
 				...rest
 			}) => ({
-				...rest,
-				categories: categories?.split(',').map((c) => c.trim()) || [ // TODO: Mock category while datasheet is not ready
+				id: md5(id),
+				categories: categories?.split(',').map((c) => c.trim()) || [
+					// TODO: Mock category while datasheet is not ready
 					['ขนส่งสาธารณะ', 'เศรษฐกิจ', 'แก้รัฐธรรมนูญ', 'วัฒนธรรม', 'เกษตรกรรม'][
 						Math.floor(Math.random() * 5)
 					]
@@ -73,11 +76,15 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 						? BillProposerType.Cabinet
 						: BillProposerType.People,
 				proposedLedByPolitician: proposedLedByPoliticianId
-					? politicians.find(({ id }) => id === proposedLedByPoliticianId)
+					? politicians.find((politician) => politician.id === proposedLedByPoliticianId)
 					: undefined,
-				coProposedByPoliticians: coProposedByPoliticians?.split(',').map((name) => name.trim()),
+				coProposedByPoliticians: coProposedByPoliticians?.split(',').map((text) => {
+					const name = text.trim();
+					const expectedId = name.replaceAll(' ', '-');
+					return politicians.find((politician) => politician.id === expectedId) || name;
+				}),
 				proposedByAssembly: proposedByAssemblyId
-					? safeFind(assemblies, ({ id }) => id === proposedByAssemblyId)
+					? safeFind(assemblies, (assembly) => assembly.id === proposedByAssemblyId)
 					: undefined,
 				proposedByPeople:
 					proposedLedByPeople && peopleSignatureCount
@@ -85,7 +92,8 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 								ledBy: proposedLedByPeople,
 								signatoryCount: peopleSignatureCount
 							} as PeopleProposer)
-						: undefined
+						: undefined,
+				...rest
 			})
 		);
 

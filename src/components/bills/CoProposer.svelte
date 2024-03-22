@@ -1,8 +1,13 @@
 <script lang="ts">
+	import type { Politician } from '$models/politician';
+
 	export let index: number;
-	export let firstname: string;
-	export let lastname: string;
-	export let logo: string | undefined;
+	export let politician: Politician | string;
+
+	$: party =
+		typeof politician === 'object'
+			? politician.partyRoles.find((e) => !e.endedAt)?.party
+			: undefined;
 </script>
 
 <tr>
@@ -13,11 +18,15 @@
 				class="flex items-center justify-center overflow-hidden rounded-full border border-gray-30"
 				style="width: 16px; height: 16px;"
 			>
-				{#if logo}
-					<img src={logo} alt="" />
-				{/if}
+				<img src={party?.logo || '/images/politicians/_placeholder.webp'} alt="" />
 			</div>
-			<p class="text-start underline">{firstname + ' ' + lastname}</p>
+			{#if typeof politician === 'object'}
+				<a class="underline" href="/policitians/{politician.id}"
+					>{politician.firstname} {politician.lastname}</a
+				>
+			{:else}
+				<p>{politician}</p>
+			{/if}
 		</div>
 	</td>
 </tr>

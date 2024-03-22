@@ -18,6 +18,8 @@
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import Progress from '$components/bills/Progress.svelte';
 
+	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
+
 	export let data;
 
 	const {
@@ -48,10 +50,11 @@
 			{} as Record<K, T[]>
 		);
 
-	$: partiescoProposed = bill.coProposedByPoliticians
-		? groupBy(
-				bill.coProposedByPoliticians,
-				(politician) => politician.partyRoles.find((e) => !e.endedAt)!.party.name
+	$: partiesCoProposed = bill.coProposedByPoliticians
+		? groupBy(bill.coProposedByPoliticians, (politician) =>
+				typeof politician === 'string'
+					? NO_PARTY_FOUND_LABEL
+					: politician.partyRoles.find((e) => !e.endedAt)!.party.name
 			)
 		: null;
 
@@ -82,7 +85,9 @@
 	}
 
 	$: dayElapsed = dayjs(
-		bill.status === BillStatus.InProgress ? new Date() : events[events.length - 1].date
+		bill.status === BillStatus.InProgress
+			? new Date()
+			: events[events.length - 1]?.date || new Date()
 	).diff(bill.proposedOn, 'days');
 
 	$: innerWidth = 0;
@@ -259,9 +264,9 @@
 							{bill.coProposedByPoliticians.length} คน
 						</p>
 						<div class="flex flex-col flex-wrap gap-3 px-3 md:flex-row">
-							{#if partiescoProposed}
-								{#each Object.entries(partiescoProposed) as [party, politicians] (party)}
-									<CoPartyProposer {party} {politicians} />
+							{#if partiesCoProposed}
+								{#each Object.entries(partiesCoProposed) as [name, politicians] (name)}
+									<CoPartyProposer {name} {politicians} />
 								{/each}
 							{/if}
 						</div>
@@ -271,12 +276,7 @@
 								<div class="relative flex flex-col">
 									<table class="w-full">
 										{#each bill.coProposedByPoliticians.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i}
-											<CoProposer
-												index={i + 1}
-												logo={politician.partyRoles.find((e) => !e.endedAt)?.party.logo}
-												firstname={politician.firstname}
-												lastname={politician.lastname}
-											/>
+											<CoProposer index={i + 1} {politician} />
 										{/each}
 									</table>
 

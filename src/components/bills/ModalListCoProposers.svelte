@@ -4,7 +4,7 @@
 	import CloseLarge from 'carbon-icons-svelte/lib/CloseLarge.svelte';
 	import CoProposer from './CoProposer.svelte';
 
-	export let coProposedByPoliticians: Politician[];
+	export let coProposedByPoliticians: (Politician | string)[];
 </script>
 
 {#if $showModalListCoProposer}
@@ -31,12 +31,7 @@
 				<div class="flex flex-col pb-5 pl-8 pr-5">
 					<table class="w-full">
 						{#each coProposedByPoliticians as politician, i}
-							<CoProposer
-								index={i + 1}
-								logo={politician.partyRoles.find((e) => !e.endedAt)?.party.logo}
-								firstname={politician.firstname}
-								lastname={politician.lastname}
-							/>
+							<CoProposer index={i + 1} {politician} />
 						{/each}
 					</table>
 				</div>
