@@ -17,26 +17,25 @@ export const logger = pino({
 function getSelectedTransport(): pino.TransportTargetOptions[] {
 	if (browser) return [];
 
-	switch (process.env.LOG_TARGET) {
-		case LogTarget.Stdout:
-			return [
-				{
-					target: 'pino-pretty',
-					options: {
-						colorize: true
-					}
+	if (import.meta.env.DEV || process.env.LOG_TARGET === LogTarget.Stdout) {
+		return [
+			{
+				target: 'pino-pretty',
+				options: {
+					colorize: true
 				}
-			];
-
-		case LogTarget.File:
-			return [
-				{
-					target: 'pino/file',
-					options: { destination: LOG_FILE, append: false }
-				}
-			];
-
-		default:
-			return [];
+			}
+		];
 	}
+
+	if (process.env.LOG_TARGET === LogTarget.File) {
+		return [
+			{
+				target: 'pino/file',
+				options: { destination: LOG_FILE, append: false }
+			}
+		];
+	}
+
+	return [];
 }
