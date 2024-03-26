@@ -30,6 +30,12 @@
 				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
 		)}
 
+		{@const matchedPartyRoles = partyRoles.find(
+			({ startedAt, endedAt }) =>
+				bill.proposedOn.getTime() >= startedAt.getTime() &&
+				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
+		)}
+
 		<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
 			<img src={avatar} alt="{firstname} {lastname}" class="h-full w-full" loading="lazy" />
 		</figure>
@@ -46,7 +52,9 @@
 					</a>
 				{/if}
 			</p>
-			<span class="text-sm text-gray-60">พรรค{partyRoles[0].party.name}</span>
+			{#if matchedPartyRoles}
+				<span class="text-sm text-gray-60">พรรค{matchedPartyRoles.party.name}</span>
+			{/if}
 		</div>
 	{:else if bill.proposedByAssembly}
 		{@const { id, name, term, startedAt } = bill.proposedByAssembly}

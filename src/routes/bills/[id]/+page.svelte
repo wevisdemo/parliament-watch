@@ -208,6 +208,21 @@
 	</section>
 
 	{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician && bill.coProposedByPoliticians}
+		{@const { id, firstname, lastname, avatar, assemblyRoles, partyRoles } =
+			bill.proposedLedByPolitician}
+
+		{@const matchedAssemblyRole = assemblyRoles.find(
+			({ startedAt, endedAt }) =>
+				bill.proposedOn.getTime() >= startedAt.getTime() &&
+				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
+		)}
+
+		{@const matchedPartyRoles = partyRoles.find(
+			({ startedAt, endedAt }) =>
+				bill.proposedOn.getTime() >= startedAt.getTime() &&
+				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
+		)}
+
 		<section title="List of legal proponents" class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
 				<h1 class="fluid-heading-04 text-text-primary">รายชื่อผู้เสนอกฎหมาย</h1>
@@ -216,12 +231,12 @@
 					<div class="flex flex-col gap-3 md:w-1/3">
 						<b class="handing-02 text-text-primary">ผู้เสนอ</b>
 						<PoliticianProfile
-							id={bill.proposedLedByPolitician.id}
-							firstname={bill.proposedLedByPolitician.firstname}
-							lastname={bill.proposedLedByPolitician.lastname}
-							avatar={bill.proposedLedByPolitician.avatar}
-							party={bill.proposedLedByPolitician.partyRoles.find((e) => !e.endedAt)?.party}
-							role={bill.proposedLedByPolitician.assemblyRoles.find((e) => !e.endedAt)?.role + ''}
+							{id}
+							{firstname}
+							{lastname}
+							{avatar}
+							party={matchedPartyRoles?.party}
+							role={matchedAssemblyRole?.role}
 						/>
 					</div>
 					<div class="flex flex-col gap-3 md:w-full">
