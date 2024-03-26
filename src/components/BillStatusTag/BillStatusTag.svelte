@@ -26,4 +26,6 @@
 	export { className as class };
 </script>
 
-<Tag class={twMerge(tagStyle, className)} size={isLarge ? 'default' : 'sm'}>{status}</Tag>
+<Tag class={twMerge('whitespace-nowrap', tagStyle, className)} size={isLarge ? 'default' : 'sm'}
+	>{status}</Tag
+>
