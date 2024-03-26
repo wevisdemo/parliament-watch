@@ -30,8 +30,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 			id: z.string(),
 			acceptanceNumber: z.string(),
 			title: z.string(),
-			// TODO: No nickname in sheet yet
-			nickname: z.string().trim().default('no nickname'),
+			nickname: z.string().trim().optional(),
 			description: z.string().optional(),
 			status: z.nativeEnum(BillStatus),
 			categories: z.string().optional(),
@@ -48,6 +47,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 		.transform(
 			({
 				id,
+				nickname,
 				categories,
 				attachmentName,
 				attachmentUrl,
@@ -59,6 +59,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 				...rest
 			}) => ({
 				id: md5(id),
+				nickname: nickname || rest.title.replace('ร่างพระราชบัญญัติ', ''),
 				categories: categories?.split(',').map((c) => c.trim()) || [
 					// TODO: Mock category while datasheet is not ready
 					['ขนส่งสาธารณะ', 'เศรษฐกิจ', 'แก้รัฐธรรมนูญ', 'วัฒนธรรม', 'เกษตรกรรม'][
