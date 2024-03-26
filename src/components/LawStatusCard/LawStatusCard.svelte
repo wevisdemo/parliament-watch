@@ -39,8 +39,8 @@
 				: ['proposertype', bill.proposerType];
 </script>
 
-<article class="keen-slider__slide body-01 min-w-[288px] max-w-[288px] bg-white">
-	<header class="p-6">
+<article class="keen-slider__slide body-01 flex min-w-[288px] max-w-[288px] flex-col bg-white">
+	<header class="flex-1 p-6">
 		{#if 'proposerType' in bill}
 			<div class="mb-3 flex items-center gap-1">
 				<div class="h-6 w-6 rounded-full bg-black p-1 text-white">
