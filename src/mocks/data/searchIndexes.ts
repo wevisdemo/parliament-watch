@@ -27,30 +27,37 @@ export const searchIndexes: SearchIndexes = {
 	],
 	bills: [
 		{
+			id: '1',
 			name: 'ร่าง พรบ.สุราก้าวหน้า',
 			status: BillStatus.Rejected
 		},
 		{
+			id: '2',
 			name: 'ร่าง พรบ.งบประมาณรายจ่ายประจําปี 2566',
 			status: BillStatus.InProgress
 		},
 		{
+			id: '3',
 			name: 'ร่าง พรบ.สมรสเท่าเทียม',
 			status: BillStatus.InProgress
 		},
 		{
+			id: '4',
 			name: 'ร่าง พรบ.แก้กฎหมายค้ามนุษย์',
 			status: BillStatus.Enacted
 		},
 		{
+			id: '5',
 			name: 'ร่าง พรบ.ควบคุมการครอบครองอาวุธปืน',
 			status: BillStatus.Rejected
 		},
 		{
+			id: '6',
 			name: 'ร่าง พรบ.คุ้มครองข้อมูลส่วนบุคคล',
 			status: BillStatus.InProgress
 		},
 		{
+			id: '7',
 			name: 'ร่าง พรบ.คุ้มครองสิทธิผู้บริโภค',
 			status: BillStatus.Enacted
 		}
