@@ -126,41 +126,7 @@
 					</div>
 					<div>
 						<b>เสนอโดย</b>
-						{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician}
-							<div class="flex flex-col gap-1 md:flex-row">
-								<img
-									src={bill.proposedLedByPolitician.avatar}
-									alt={bill.proposedLedByPolitician.firstname +
-										' ' +
-										bill.proposedLedByPolitician.lastname}
-									class="h-6 w-6 rounded-full bg-cool-gray-50 object-cover"
-								/>
-								<div>
-									<div class="flex flex-wrap gap-1">
-										<p>
-											{bill.proposedLedByPolitician.firstname}
-											{bill.proposedLedByPolitician.lastname}
-										</p>
-										<u>
-											{getCurrentRoles(bill.proposedLedByPolitician)}
-										</u>
-									</div>
-
-									<p class="text-text-02">
-										{getCurrentParty(bill.proposedLedByPolitician)}
-									</p>
-								</div>
-							</div>
-						{:else if bill.proposerType === BillProposerType.Cabinet}
-							<Proposer assembly={bill.proposedByAssembly} />
-						{:else if bill.proposerType === BillProposerType.People && bill.proposedByPeople !== undefined}
-							<Proposer
-								common={{
-									name: bill.proposedByPeople.ledBy,
-									description: 'และประชาชน ' + bill.proposedByPeople.signatoryCount + ' คน'
-								}}
-							/>
-						{/if}
+						<Proposer {bill} />
 					</div>
 				</div>
 				<hr class="border-gray-30" />

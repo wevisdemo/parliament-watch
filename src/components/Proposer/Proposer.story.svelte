@@ -2,7 +2,9 @@
 	import type { Hst } from '@histoire/plugin-svelte';
 	import Proposer from './Proposer.svelte';
 	import { AssemblyName, type Assembly } from '$models/assembly';
-	import { movingForwardPolitician } from '../../mocks/data/politician';
+	import { BillProposerType } from '$models/bill';
+	import { inProgressBill } from '../../mocks/data/bill';
+	import type { ComponentProps } from 'svelte';
 
 	const rep26: Assembly = {
 		id: 'สภาผู้แทนราษฎร-26',
@@ -23,32 +25,42 @@
 		oppositionParties: []
 	};
 
+	let orientation: ComponentProps<Proposer>['orientation'] = 'landscape';
+
 	export let Hst: Hst;
 </script>
 
 <Hst.Story title="Proposer" layout={{ type: 'grid', width: 400 }}>
 	<Hst.Variant title="Politician">
+		<Proposer {orientation} bill={inProgressBill} />
+	</Hst.Variant>
+	<Hst.Variant title="Cabinet">
 		<Proposer
-			partyPolitician={{
-				politician: movingForwardPolitician,
-				assembly: rep26,
-				party: {
-					name: 'ก้าวไกล',
-					logo: 'https://www.moveforwardparty.org/wp-content/uploads/2021/03/400px-Move_Forward_Party_Logo.svg.png',
-					color: '#ff7f00'
+			{orientation}
+			bill={{
+				...inProgressBill,
+				proposerType: BillProposerType.Cabinet,
+				proposedLedByPolitician: undefined,
+				proposedByAssembly: rep26
+			}}
+		/>
+	</Hst.Variant>
+	<Hst.Variant title="People">
+		<Proposer
+			{orientation}
+			bill={{
+				...inProgressBill,
+				proposerType: BillProposerType.People,
+				proposedLedByPolitician: undefined,
+				proposedByPeople: {
+					ledBy: 'นายยิ่งชีพ',
+					signatoryCount: 150000
 				}
 			}}
 		/>
 	</Hst.Variant>
-	<Hst.Variant title="Assembly">
-		<Proposer assembly={rep26} />
-	</Hst.Variant>
-	<Hst.Variant title="Others">
-		<Proposer
-			common={{
-				name: 'นายยิ่งชีพ อัชชานนท์',
-				description: 'และประชาชน 200,000 คน'
-			}}
-		/>
-	</Hst.Variant>
+
+	<svelte:fragment slot="controls">
+		<Hst.Select bind:value={orientation} title="orientation:" options={['landscape', 'portrait']} />
+	</svelte:fragment>
 </Hst.Story>

@@ -15,7 +15,8 @@ export enum BillStatus {
 export enum BillProposerType {
 	Politician = 'สมาชิกรัฐสภา',
 	Cabinet = 'คณะรัฐมนตรี',
-	People = 'ประชาชน'
+	People = 'ประชาชน',
+	Unknown = 'ไม่พบข้อมูล'
 }
 
 export interface PeopleProposer {
@@ -32,7 +33,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 			acceptanceNumber: z.string(),
 			title: z.string(),
 			// TODO: No nickname in sheet yet
-			nickname: z.string().default('no nickname'),
+			nickname: z.string().trim().default('no nickname'),
 			description: z.string().optional(),
 			status: z.nativeEnum(BillStatus),
 			categories: z.string().optional(),
@@ -74,7 +75,9 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 					? BillProposerType.Politician
 					: proposedByAssemblyId
 						? BillProposerType.Cabinet
-						: BillProposerType.People,
+						: proposedLedByPeople
+							? BillProposerType.People
+							: BillProposerType.Unknown,
 				proposedLedByPolitician: proposedLedByPoliticianId
 					? politicians.find((politician) => politician.id === proposedLedByPoliticianId)
 					: undefined,
@@ -86,13 +89,12 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 				proposedByAssembly: proposedByAssemblyId
 					? safeFind(assemblies, (assembly) => assembly.id === proposedByAssemblyId)
 					: undefined,
-				proposedByPeople:
-					proposedLedByPeople && peopleSignatureCount
-						? ({
-								ledBy: proposedLedByPeople,
-								signatoryCount: peopleSignatureCount
-							} as PeopleProposer)
-						: undefined,
+				proposedByPeople: proposedLedByPeople
+					? ({
+							ledBy: proposedLedByPeople,
+							signatoryCount: peopleSignatureCount
+						} as PeopleProposer)
+					: undefined,
 				...rest
 			})
 		);

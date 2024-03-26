@@ -21,13 +21,7 @@
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { type Bill } from '$models/bill';
 	import { type BillEvent, BillEventActionType } from '$models/bill-event';
-	import {
-		ArrowRight,
-		CheckmarkFilled,
-		CircleDash,
-		DocumentMultiple_02,
-		Misuse
-	} from 'carbon-icons-svelte';
+	import { ArrowRight, CheckmarkFilled, DocumentMultiple_02 } from 'carbon-icons-svelte';
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
@@ -154,9 +148,7 @@
 				<div class="w-full rounded-sm border border-gray-20">
 					<BillCard
 						orientation="portrait"
-						nickname={mergedIntoBill.nickname}
-						status={mergedIntoBill.status}
-						billUrl="/bills/{mergedIntoBill.id}"
+						bill={mergedIntoBill}
 						isFullWidth={true}
 						currentState={mergedIntoBillLatestEvent
 							? eventDescription[mergedIntoBillLatestEvent.type].title

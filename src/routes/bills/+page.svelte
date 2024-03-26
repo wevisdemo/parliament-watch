@@ -130,12 +130,7 @@
 			}}
 		>
 			{#each data.latestEnactedBills as bill}
-				<BillCard
-					class="keen-slider__slide min-w-72"
-					orientation="portrait"
-					{...bill}
-					billUrl="/bills/{bill.id}"
-				/>
+				<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {bill} />
 			{/each}
 		</Carousel>
 	</section>

@@ -1,9 +1,7 @@
 <script lang="ts">
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import type { Assembly } from '$models/assembly';
-	import type { Party } from '$models/party';
-	import type { Politician } from '$models/politician';
+	import type { Bill } from '$models/bill';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
@@ -11,78 +9,68 @@
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-	type CommonProposer = {
-		name: string;
-		description?: string;
-	};
+	export let bill: Bill;
+	export let orientation: 'landscape' | 'portrait' = 'landscape';
 
-	type PartyPolitician = {
-		politician: Politician;
-		assembly: Assembly;
-		party: Party;
-	};
+	$: isLandscape = orientation === 'landscape';
 
-	export let partyPolitician: PartyPolitician | undefined = undefined;
-	export let assembly: Assembly | undefined = undefined;
-	export let common: CommonProposer | undefined = undefined;
-
-	$: proposerName = (() => {
-		if (partyPolitician) {
-			const { politician } = partyPolitician;
-			return [politician.prefix ?? '', politician.firstname, politician.lastname].join(' ');
-		} else if (assembly) {
-			return assembly.name;
-		} else if (common) {
-			return common.name;
-		}
-
-		return '';
-	})();
-
-	const getAssemblyTermText = (assembly: Assembly) =>
-		`ชุดที่ ${assembly.term} (${dayjs(assembly.startedAt).format('BBBB')})`;
-
-	$: proposerTerm = (() => {
-		if (partyPolitician?.assembly) {
-			return `${partyPolitician.assembly.abbreviation} ${getAssemblyTermText(
-				partyPolitician.assembly
-			)}`;
-		} else if (assembly) {
-			return getAssemblyTermText(assembly);
-		}
-
-		return '';
-	})();
+	function getBudistYear(date: Date) {
+		return dayjs(date).format('BBBB');
+	}
 </script>
 
-<div class="flex flex-col items-start justify-start sm:flex-row">
-	<div class="mb-1 h-6 w-6">
-		{#if partyPolitician}
-			<img
-				class="h-full w-full rounded-full object-cover"
-				loading="lazy"
-				decoding="async"
-				alt="{partyPolitician.politician.firstname} {partyPolitician.politician.lastname}"
-				src={partyPolitician.politician.avatar}
-			/>
-		{:else}
-			<div class="flex h-full w-full items-center justify-center rounded-full bg-black">
-				{#if assembly}
-					<PoliticianIcon class="text-white" />
-				{:else if common}
-					<PeopleIcon class="text-white" />
+<div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+	{#if bill.proposedLedByPolitician}
+		{@const { id, firstname, lastname, avatar, assemblyRoles, partyRoles } =
+			bill.proposedLedByPolitician}
+
+		{@const matchedAssemblyRole = assemblyRoles.find(
+			({ startedAt, endedAt }) =>
+				bill.proposedOn.getTime() >= startedAt.getTime() &&
+				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
+		)}
+
+		<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
+			<img src={avatar} alt="{firstname} {lastname}" class="h-full w-full" loading="lazy" />
+		</figure>
+		<div>
+			<p class="text-sm">
+				<a href="/politicians/{id}" class="text-black">
+					{firstname}
+					{lastname}
+				</a>
+				{#if matchedAssemblyRole}
+					{@const { assembly } = matchedAssemblyRole}
+					<a href="/assemblies/{assembly.id}" class="text-black underline">
+						{assembly.abbreviation} ชุดที่ {assembly.term} ({getBudistYear(assembly.startedAt)})
+					</a>
 				{/if}
-			</div>
-		{/if}
-	</div>
-	<p class="body-01 break-words sm:ml-1">
-		<span class="text-text-01">{proposerName} {proposerTerm}</span>
-		<br class="sm:hidden" />
-		{#if common?.description}
-			<span class="text-text-02">{common.description}</span>
-		{/if}
-		{#if partyPolitician?.party.name}
-			<span class="text-text-02">พรรค{partyPolitician?.party.name}</span>
-		{/if}
-	</p>
+			</p>
+			<span class="text-sm text-gray-60">พรรค{partyRoles[0].party.name}</span>
+		</div>
+	{:else if bill.proposedByAssembly}
+		{@const { id, name, term, startedAt } = bill.proposedByAssembly}
+
+		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
+			<PoliticianIcon class="stroke-white" size={16} />
+		</div>
+		<a href="/assemblies/{id}" class="text-sm text-black">
+			{name}
+			<span class="underline">ชุดที่ {term} ({getBudistYear(startedAt)})</span>
+		</a>
+	{:else if bill.proposedByPeople}
+		{@const { ledBy, signatoryCount } = bill.proposedByPeople}
+
+		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
+			<PeopleIcon class="stroke-white" size={16} />
+		</div>
+		<p class="text-sm text-black">
+			{ledBy}
+			{#if signatoryCount}
+				<span class="text-gray-60">และประชาชน {signatoryCount} คน</span>
+			{/if}
+		</p>
+	{:else}
+		<p class="text-sm text-gray-60">ไม่พบข้อมูล</p>
+	{/if}
 </div>
