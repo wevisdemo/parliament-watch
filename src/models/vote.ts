@@ -3,9 +3,9 @@ import { z } from 'zod';
 
 export const voteSchema = z
 	.object({
-		politicianId: z.string(),
-		votingId: z.string(),
-		voteOption: z.string()
+		politicianId: z.string().trim(),
+		votingId: z.string().trim(),
+		voteOption: z.string().trim()
 	})
 	.transform(({ votingId, ...votes }) => ({
 		votingId: md5(votingId),

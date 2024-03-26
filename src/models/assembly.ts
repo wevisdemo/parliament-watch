@@ -30,12 +30,12 @@ export const createAssemblySchema = (
 ) =>
 	z
 		.object({
-			id: z.string(),
+			id: z.string().trim(),
 			name: z.nativeEnum(AssemblyName),
 			term: z.number(),
 			startedAt: z.date(),
 			endedAt: z.date().optional(),
-			origin: z.string()
+			origin: z.string().trim()
 		})
 		.transform((assembly) => {
 			const getPartyGroup = (groupName: AssemblyPartyGroup) =>
@@ -60,8 +60,8 @@ export enum AssemblyPartyGroup {
 
 export const assemblyPartyGroupSchema = z
 	.object({
-		assemblyId: z.string(),
-		partyName: z.string(),
+		assemblyId: z.string().trim(),
+		partyName: z.string().trim(),
 		group: z.nativeEnum(AssemblyPartyGroup)
 	})
 	.transform((d) => d);

@@ -12,18 +12,18 @@ export const createPoliticianSchema = (
 ) =>
 	z
 		.object({
-			id: z.string(),
-			prefix: z.string().optional(),
-			firstname: z.string(),
-			lastname: z.string(),
-			sex: z.string(),
+			id: z.string().trim(),
+			prefix: z.string().trim().optional(),
+			firstname: z.string().trim(),
+			lastname: z.string().trim(),
+			sex: z.string().trim(),
 			birthdate: z.date().optional(),
-			educations: z.string().default(''),
-			previousOccupations: z.string().default(''),
+			educations: z.string().trim().default(''),
+			previousOccupations: z.string().trim().default(''),
 			assetValue: z.number().optional(),
 			debtValue: z.number().optional(),
-			facebook: z.string().optional(),
-			x: z.string().optional()
+			facebook: z.string().trim().optional(),
+			x: z.string().trim().optional()
 		})
 		.transform(({ id, educations, previousOccupations, facebook, x, ...rest }) => {
 			const contacts: Link[] = [];
@@ -55,11 +55,11 @@ export const createPoliticianSchema = (
 export const createAssemblyRoleSchema = (assemblies: Assembly[]) =>
 	z
 		.object({
-			politicianId: z.string(),
-			assemblyId: z.string(),
-			role: z.string().default('สมาชิก'),
-			appointmentMethod: z.string().optional(),
-			province: z.string().optional(),
+			politicianId: z.string().trim(),
+			assemblyId: z.string().trim(),
+			role: z.string().trim().default('สมาชิก'),
+			appointmentMethod: z.string().trim().optional(),
+			province: z.string().trim().optional(),
 			districtNumber: z.number().optional(),
 			listNumber: z.number().optional(),
 			startedAt: z.date(),
@@ -73,9 +73,9 @@ export const createAssemblyRoleSchema = (assemblies: Assembly[]) =>
 export const createPartyRoleSchema = (parties: Party[]) =>
 	z
 		.object({
-			politicianId: z.string(),
-			partyName: z.string(),
-			role: z.string().default('สมาชิก'),
+			politicianId: z.string().trim(),
+			partyName: z.string().trim(),
+			role: z.string().trim().default('สมาชิก'),
 			// TODO: add mock default startedAt while the data table is not filled up completely
 			startedAt: z.date().default(new Date('2019-01-01')),
 			endedAt: z.date().optional()

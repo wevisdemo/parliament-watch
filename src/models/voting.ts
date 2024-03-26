@@ -7,18 +7,18 @@ import { z } from 'zod';
 export const createVotingSchema = (assemblies: Assembly[]) =>
 	z
 		.object({
-			id: z.string(),
-			title: z.string(),
-			officialTitle: z.string().optional(),
+			id: z.string().trim(),
+			title: z.string().trim(),
+			officialTitle: z.string().trim().optional(),
 			date: z.date(),
-			description: z.string().optional(),
-			representativeAssemblyId: z.string().optional(),
-			senateAssemblyId: z.string().optional(),
-			result: z.string().default('รอตรวจสอบ'),
-			winningCondition: z.string().optional(),
-			categories: z.string().optional(),
-			documents: z.string(),
-			sourceUrl: z.string()
+			description: z.string().trim().optional(),
+			representativeAssemblyId: z.string().trim().optional(),
+			senateAssemblyId: z.string().trim().optional(),
+			result: z.string().trim().default('รอตรวจสอบ'),
+			winningCondition: z.string().trim().optional(),
+			categories: z.string().trim().optional(),
+			documents: z.string().trim(),
+			sourceUrl: z.string().trim()
 		})
 		.transform(
 			({ id, categories, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => ({

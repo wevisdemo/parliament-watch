@@ -4,8 +4,8 @@ import { z } from 'zod';
 
 const provinceSchema = z.array(
 	z.object({
-		ProvinceNameThai: z.string(),
-		Region_RDPB: z.string()
+		ProvinceNameThai: z.string().trim(),
+		Region_RDPB: z.string().trim()
 	})
 );
 

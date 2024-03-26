@@ -27,22 +27,22 @@ export interface PeopleProposer {
 export const createBillSchema = (politicians: Politician[], assemblies: Assembly[]) =>
 	z
 		.object({
-			id: z.string(),
-			acceptanceNumber: z.string(),
-			title: z.string(),
-			nickname: z.string().trim().optional(),
-			description: z.string().optional(),
+			id: z.string().trim(),
+			acceptanceNumber: z.string().trim(),
+			title: z.string().trim(),
+			nickname: z.string().trim().trim().optional(),
+			description: z.string().trim().optional(),
 			status: z.nativeEnum(BillStatus),
-			categories: z.string().optional(),
+			categories: z.string().trim().optional(),
 			proposedOn: z.date(),
-			attachmentName: z.string().optional(),
-			attachmentUrl: z.string().optional(),
-			proposedLedByPoliticianId: z.string().optional(),
-			coProposedByPoliticians: z.string().optional(),
-			proposedByAssemblyId: z.string().optional(),
-			proposedLedByPeople: z.string().optional(),
+			attachmentName: z.string().trim().optional(),
+			attachmentUrl: z.string().trim().optional(),
+			proposedLedByPoliticianId: z.string().trim().optional(),
+			coProposedByPoliticians: z.string().trim().optional(),
+			proposedByAssemblyId: z.string().trim().optional(),
+			proposedLedByPeople: z.string().trim().optional(),
 			peopleSignatureCount: z.number().optional(),
-			lisUrl: z.string()
+			lisUrl: z.string().trim()
 		})
 		.transform(
 			({
