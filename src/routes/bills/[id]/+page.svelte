@@ -132,7 +132,7 @@
 				<hr class="border-gray-30" />
 				<div>
 					<b>สรุปเนื้อหา</b>
-					<p>{bill.description}</p>
+					<p class="whitespace-pre-wrap">{bill.description}</p>
 				</div>
 				<div class="flex gap-2">
 					<b>หมวด</b>
