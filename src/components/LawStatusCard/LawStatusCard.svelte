@@ -4,6 +4,7 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import { BillProposerType, BillStatus } from '$models/bill';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import DocumentUnknown from 'carbon-icons-svelte/lib/DocumentUnknown.svelte';
 	import type {
 		BillsByCategory,
 		BillsByProposerType,
@@ -48,8 +49,10 @@
 						<GeneralIcon />
 					{:else if bill.proposerType === BillProposerType.People}
 						<PeopleIcon />
-					{:else}
+					{:else if bill.proposerType === BillProposerType.Assembly}
 						<PoliticianIcon />
+					{:else}
+						<DocumentUnknown />
 					{/if}
 				</div>
 				<h3 class="heading-02">{bill.proposerType}</h3>
