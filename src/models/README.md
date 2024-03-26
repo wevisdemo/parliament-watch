@@ -68,7 +68,7 @@ erDiagram
     string[] categories
     string status "inProgress | enacted | rejected | merged"
     Date proposedOn
-    string proposedBy "politicians | cabinet | people"
+    string proposedBy "politician | assembly | people"
     string[] proposedByPoliticianIds FK
     number proposedByAssemblyId FK
     PeopleProposer proposedByPeople "{ ledBy: string, signatoryCount: number}"

@@ -14,7 +14,7 @@ export enum BillStatus {
 
 export enum BillProposerType {
 	Politician = 'สมาชิกรัฐสภา',
-	Cabinet = 'คณะรัฐมนตรี',
+	Assembly = 'คณะรัฐมนตรี',
 	People = 'ประชาชน',
 	Unknown = 'ไม่พบข้อมูล'
 }
@@ -23,8 +23,6 @@ export interface PeopleProposer {
 	ledBy: string;
 	signatoryCount: number;
 }
-
-export type CabinetId = number;
 
 export const createBillSchema = (politicians: Politician[], assemblies: Assembly[]) =>
 	z
@@ -74,7 +72,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 				proposerType: proposedLedByPoliticianId
 					? BillProposerType.Politician
 					: proposedByAssemblyId
-						? BillProposerType.Cabinet
+						? BillProposerType.Assembly
 						: proposedLedByPeople
 							? BillProposerType.People
 							: BillProposerType.Unknown,

@@ -171,7 +171,7 @@
 												getCurrentRoles(mergedBill.proposedLedByPolitician) +
 												' ' +
 												getCurrentParty(mergedBill.proposedLedByPolitician)}
-										{:else if mergedBill.proposerType === BillProposerType.Cabinet && mergedBill.proposedByAssembly}
+										{:else if mergedBill.proposerType === BillProposerType.Assembly && mergedBill.proposedByAssembly}
 											{mergedBill.proposedByAssembly.abbreviation
 												? mergedBill.proposedByAssembly.name
 												: mergedBill.proposedByAssembly.abbreviation} ชุดที่

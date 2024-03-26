@@ -39,7 +39,7 @@
 			{orientation}
 			bill={{
 				...inProgressBill,
-				proposerType: BillProposerType.Cabinet,
+				proposerType: BillProposerType.Assembly,
 				proposedLedByPolitician: undefined,
 				proposedByAssembly: rep26
 			}}
