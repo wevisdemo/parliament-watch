@@ -3,10 +3,15 @@
 
 	export let index: number;
 	export let politician: Politician | string;
+	export let billProposedOn: Date;
 
 	$: party =
 		typeof politician === 'object'
-			? politician.partyRoles.find((e) => !e.endedAt)?.party
+			? politician.partyRoles?.find(
+					({ startedAt, endedAt }) =>
+						billProposedOn.getTime() >= startedAt.getTime() &&
+						(!endedAt || billProposedOn.getTime() <= endedAt.getTime())
+				)?.party
 			: undefined;
 </script>
 
@@ -21,7 +26,7 @@
 				<img src={party?.logo || '/images/politicians/_placeholder.webp'} alt="" />
 			</div>
 			{#if typeof politician === 'object'}
-				<a class="underline" href="/policitians/{politician.id}"
+				<a class="text-black underline" href="/policitians/{politician.id}"
 					>{politician.firstname} {politician.lastname}</a
 				>
 			{:else}

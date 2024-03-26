@@ -81,9 +81,11 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 					? politicians.find((politician) => politician.id === proposedLedByPoliticianId)
 					: undefined,
 				coProposedByPoliticians: coProposedByPoliticians?.split(',').map((text) => {
-					const name = text.trim();
-					const expectedId = name.replaceAll(' ', '-');
-					return politicians.find((politician) => politician.id === expectedId) || name;
+					const corpus = text.split(' ').filter((word) => word);
+					const expectedId = corpus.join('-');
+					return (
+						politicians.find((politician) => expectedId.includes(politician.id)) || corpus.join(' ')
+					);
 				}),
 				proposedByAssembly: proposedByAssemblyId
 					? safeFind(assemblies, (assembly) => assembly.id === proposedByAssemblyId)

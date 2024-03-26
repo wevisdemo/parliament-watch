@@ -5,6 +5,7 @@
 	import CoProposer from './CoProposer.svelte';
 
 	export let coProposedByPoliticians: (Politician | string)[];
+	export let billProposedOn: Date;
 </script>
 
 {#if $showModalListCoProposer}
@@ -31,7 +32,7 @@
 				<div class="flex flex-col pb-5 pl-8 pr-5">
 					<table class="w-full">
 						{#each coProposedByPoliticians as politician, i}
-							<CoProposer index={i + 1} {politician} />
+							<CoProposer index={i + 1} {politician} {billProposedOn} />
 						{/each}
 					</table>
 				</div>

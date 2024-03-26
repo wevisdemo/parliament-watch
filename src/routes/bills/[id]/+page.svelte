@@ -17,6 +17,7 @@
 	import type { Politician } from '$models/politician.js';
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import Progress from '$components/bills/Progress.svelte';
+	import type { Party } from '$models/party.js';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
@@ -54,20 +55,24 @@
 		? groupBy(bill.coProposedByPoliticians, (politician) =>
 				typeof politician === 'string'
 					? NO_PARTY_FOUND_LABEL
-					: politician.partyRoles.find((e) => !e.endedAt)!.party.name
+					: getMatchedParty(politician)?.name || NO_PARTY_FOUND_LABEL
 			)
 		: null;
 
-	function getCurrentParty(politician: Politician) {
-		let partyRole = politician.partyRoles.find((e) => !e.endedAt);
-		if (partyRole) {
-			return 'พรรค' + partyRole.party.name;
-		}
-		return '';
-	}
+	$: getMatchedParty = (politician: Politician): Party | undefined =>
+		politician.partyRoles?.find(
+			({ startedAt, endedAt }) =>
+				bill.proposedOn.getTime() >= startedAt.getTime() &&
+				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
+		)?.party;
 
-	function getCurrentRoles(politician: Politician) {
-		let assemblyRole = politician.assemblyRoles.find((e) => !e.endedAt);
+	$: getCurrentRoles = (politician: Politician) => {
+		let assemblyRole = politician.assemblyRoles.find(
+			({ startedAt, endedAt }) =>
+				bill.proposedOn.getTime() >= startedAt.getTime() &&
+				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
+		);
+
 		if (assemblyRole) {
 			let year = new Date(
 				assemblyRole.assembly.startedAt.toLocaleDateString('th-TH')
@@ -82,7 +87,7 @@
 			);
 		}
 		return '';
-	}
+	};
 
 	$: dayElapsed = dayjs(
 		bill.status === BillStatus.InProgress
@@ -164,13 +169,16 @@
 									<span class="text-text-02"
 										>โดย
 										{#if mergedBill.proposerType === BillProposerType.Politician && mergedBill.proposedLedByPolitician}
+											{@const matchedParty = getMatchedParty(mergedBill.proposedLedByPolitician)}
 											{mergedBill.proposedLedByPolitician.firstname +
-												' ' +
-												mergedBill.proposedLedByPolitician.lastname +
-												' ' +
-												getCurrentRoles(mergedBill.proposedLedByPolitician) +
-												' ' +
-												getCurrentParty(mergedBill.proposedLedByPolitician)}
+											' ' +
+											mergedBill.proposedLedByPolitician.lastname +
+											' ' +
+											getCurrentRoles(mergedBill.proposedLedByPolitician) +
+											' ' +
+											matchedParty
+												? `พรรค${matchedParty?.name}`
+												: ''}
 										{:else if mergedBill.proposerType === BillProposerType.Assembly && mergedBill.proposedByAssembly}
 											{mergedBill.proposedByAssembly.abbreviation
 												? mergedBill.proposedByAssembly.name
@@ -223,7 +231,7 @@
 				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
 		)}
 
-		<section title="List of legal proponents" class="px-4 py-8 md:px-16 md:py-12">
+		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
 				<h1 class="fluid-heading-04 text-text-primary">รายชื่อผู้เสนอกฎหมาย</h1>
 				<hr class="border-gray-30" />
@@ -257,7 +265,7 @@
 								<div class="relative flex flex-col">
 									<table class="w-full">
 										{#each bill.coProposedByPoliticians.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i}
-											<CoProposer index={i + 1} {politician} />
+											<CoProposer index={i + 1} {politician} billProposedOn={bill.proposedOn} />
 										{/each}
 									</table>
 
@@ -275,7 +283,10 @@
 										</div>{/if}
 								</div>
 							{/if}
-							<ModalListCoProposers coProposedByPoliticians={bill.coProposedByPoliticians} />
+							<ModalListCoProposers
+								coProposedByPoliticians={bill.coProposedByPoliticians}
+								billProposedOn={bill.proposedOn}
+							/>
 						</div>
 						<div />
 					</div>
