@@ -71,7 +71,7 @@ export function search(
 					heading: bill.item.name,
 					headingHighlight: highlight ? bill.highlightedName : undefined,
 					billStatus: bill.item.status,
-					url: ''
+					url: '/bills/' + bill.item.id
 				}))
 			: undefined,
 		votings: searchIndexes.votings
@@ -91,7 +91,8 @@ export function search(
 						headingHighlight: highlight ? proposer.highlightedName : undefined,
 						description: proposer.item.description,
 						proposedBillsCount: proposer.item.proposedBillsCount,
-						url: ''
+						// TODO: filter explore page from query param
+						url: '/bills/explore'
 					})
 				)
 			: undefined

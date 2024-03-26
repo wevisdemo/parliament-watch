@@ -1,5 +1,4 @@
 import type { BillStatus } from './bill';
-import type { DefaultVotingResult } from './voting';
 
 export enum SearchIndexCategory {
 	Politicians = 'politicians',
@@ -16,6 +15,7 @@ export interface SearchIndexes {
 		description: string;
 	}[];
 	[SearchIndexCategory.Bills]?: {
+		id: string;
 		name: string;
 		status: BillStatus;
 	}[];

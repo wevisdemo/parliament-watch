@@ -63,8 +63,8 @@
 					bind:searchValue
 					categories={[
 						SearchIndexCategory.Politicians,
-						SearchIndexCategory.Votings
-						// SearchIndexCategory.Bills
+						SearchIndexCategory.Votings,
+						SearchIndexCategory.Bills
 					]}
 					name="navSearch"
 					type="text"
