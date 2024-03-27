@@ -13,8 +13,6 @@ export async function GET({ params }) {
 	switch (params.category) {
 		case SearchIndexCategory.Politicians: {
 			const indexes: SearchIndexes['politicians'] = (await fetchPoliticians())
-				// TODO: Currently, we only show politicians that belong to any assemblies we have
-				.filter(({ assemblyRoles }) => assemblyRoles.length)
 				.map(({ id, firstname, lastname, assemblyRoles, partyRoles }) => {
 					const currentAssembly = assemblyRoles.find(({ endedAt }) => !endedAt);
 					const currentParty = partyRoles.find(({ endedAt }) => !endedAt);

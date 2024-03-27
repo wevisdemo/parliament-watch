@@ -26,7 +26,7 @@
 				<img src={party?.logo || '/images/politicians/_placeholder.webp'} alt="" />
 			</div>
 			{#if typeof politician === 'object'}
-				<a class="text-black underline" href="/policitians/{politician.id}"
+				<a class="text-black underline" href="/politicians/{politician.id}"
 					>{politician.firstname} {politician.lastname}</a
 				>
 			{:else}

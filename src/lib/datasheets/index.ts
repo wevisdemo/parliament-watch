@@ -31,14 +31,17 @@ export const fetchPartyRoleHistory = async () =>
 	fetchAndParseSheet('PartyRoleHistory', createPartyRoleSchema(await fetchParties()));
 
 export const fetchPoliticians = async () =>
-	fetchAndParseSheet(
-		'Politicians',
-		createPoliticianSchema(
-			await fetchPartyRoleHistory(),
-			await fetchAssemblyRoleHistory(),
-			new StaticImageResolver('/images/politicians')
+	(
+		await fetchAndParseSheet(
+			'Politicians',
+			createPoliticianSchema(
+				await fetchPartyRoleHistory(),
+				await fetchAssemblyRoleHistory(),
+				new StaticImageResolver('/images/politicians')
+			)
 		)
-	);
+	) // TODO: Currently, we only show politicians that belong to any assemblies we have
+		.filter(({ assemblyRoles }) => assemblyRoles.length);
 
 export const fetchVotes = () => fetchAndParseSheet('Votes', voteSchema);
 
