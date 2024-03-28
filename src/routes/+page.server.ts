@@ -1,7 +1,7 @@
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import { fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
+import { fetchBills, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
 import { DefaultVoteOption } from '$models/voting.js';
@@ -29,6 +29,7 @@ export async function load() {
 	const politicians = await fetchPoliticians();
 	const votes = await fetchVotes();
 	const votings = await fetchVotings();
+	const bills = await fetchBills();
 
 	const activePoliticians = politicians.filter(({ isActive }) => isActive);
 
@@ -76,12 +77,15 @@ export async function load() {
 				})
 				.sort((a, z) => z.value - a.value)[0]
 		},
-		// TODO: Not release bills yet
-		// {
-		// 	reason: HighlightedReason.HighestBillProposed,
-		// 	value: 87,
-		// 	politician: movingForwardPolitician
-		// },
+		{
+			reason: HighlightedReason.HighestBillProposed,
+			...activePoliticians
+				.map((politician) => ({
+					politician,
+					value: bills.filter((bill) => bill.proposedLedByPolitician?.id === politician.id).length
+				}))
+				.sort((a, z) => z.value - a.value)[0]
+		},
 		{
 			reason: HighlightedReason.Youngest,
 			...activePoliticians
