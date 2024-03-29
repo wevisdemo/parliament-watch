@@ -103,7 +103,7 @@
 </ContentSection>
 
 <ContentSection
-	id="voting"
+	id="bill"
 	title=""
 	description=""
 	icon={LawIcon}
