@@ -91,8 +91,7 @@ export function search(
 						headingHighlight: highlight ? proposer.highlightedName : undefined,
 						description: proposer.item.description,
 						proposedBillsCount: proposer.item.proposedBillsCount,
-						// TODO: filter explore page from query param
-						url: '/bills/explore'
+						url: '/bills/explore?proposername=' + proposer.item.name
 					})
 				)
 			: undefined

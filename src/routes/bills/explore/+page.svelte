@@ -127,7 +127,7 @@
 
 		const proposerNameParam = $page.url.searchParams.get('proposername');
 		if (proposerNameParam) {
-			cmpDataPage.setCombobox('filterProposerName', proposerNameParam.replace(/-/g, ' '));
+			cmpDataPage.setCombobox('filterProposerName', proposerNameParam);
 		}
 	});
 </script>
