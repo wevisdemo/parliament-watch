@@ -3,7 +3,7 @@
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
+	import { DefaultVoteOption } from '$models/voting.js';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
@@ -14,9 +14,6 @@
 
 	export let data;
 	const { politician, filterOptions, votes } = data;
-
-	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption) =>
-		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
 
 	const formatThaiYear = (date: Date | undefined) => {
 		if (!date) return;
@@ -42,6 +39,7 @@
 				value: type
 			}))
 		},
+		// TODO: not implemented vote direction yet
 		// {
 		// 	key: 'filterVoteDirection',
 		// 	legend: 'เงื่อนไขพิเศษ',
