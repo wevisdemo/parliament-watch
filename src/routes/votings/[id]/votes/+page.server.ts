@@ -39,7 +39,7 @@ export async function load({ params }) {
 		filterOptions,
 		votes,
 		seo: createSeo({
-			title: 'ผลการลงมติรายคน ' + voting.title
+			title: 'ผลการลงมติรายคน ' + voting.nickname
 		})
 	};
 }

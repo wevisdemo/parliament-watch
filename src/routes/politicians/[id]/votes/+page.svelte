@@ -74,7 +74,7 @@
 			: votes
 					.filter((vote) => {
 						const search = searchQuery.trim();
-						if (search && !vote.title.includes(search)) return;
+						if (search && !vote.nickname.includes(search)) return;
 						const {
 							filterAssembly,
 							filterVoteType,
@@ -93,7 +93,7 @@
 					.map((vote) => ({
 						titleColumn: {
 							id: vote.id,
-							title: vote.title
+							title: vote.nickname
 						},
 						...vote
 					}));

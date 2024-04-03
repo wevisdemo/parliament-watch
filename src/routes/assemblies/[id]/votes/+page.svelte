@@ -37,7 +37,7 @@
 			? []
 			: votes.filter((vote) => {
 					const search = searchQuery.trim();
-					if (search && !vote.title.includes(search)) return;
+					if (search && !vote.nickname.includes(search)) return;
 					const { filterResult, filterCategory } = selectedCheckboxValue;
 					return (
 						filterResult.includes(vote.result) &&

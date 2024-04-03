@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	export type VoteCardVoting = Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
+	export type VoteCardVoting = Pick<Voting, 'id' | 'nickname' | 'date' | 'result'>;
 
 	export interface HighlightedVoteByGroup {
 		name: string;
@@ -91,7 +91,7 @@
 	<p class="body-compact-01 text-text-02">
 		{dayjs(voting.date).format('D MMM BB')}
 	</p>
-	<h3 class="fluid-heading-03 text-text-01">{voting.title}</h3>
+	<h3 class="fluid-heading-03 text-text-01">{voting.nickname}</h3>
 	<section class="vote-card__result flex w-56 flex-col gap-y-2">
 		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} m-0 w-fit`}>{voting.result}</Tag>
 		<div class="flex flex-col gap-x-1">

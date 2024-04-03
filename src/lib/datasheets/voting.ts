@@ -74,7 +74,7 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 				if (!assemblyRole) {
 					logger.warn(
 						{
-							votingTitle: voting.title,
+							votingNickname: voting.nickname,
 							participatedAssemblies: voting.participatedAssemblies.map(({ id }) => id)
 						},
 						'politician is not a member of any participated assembles but their vote exist'
@@ -113,7 +113,7 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 						logger.warn(
 							{
 								politicianId: politician.id,
-								votingTitle: voting.title,
+								votingNickname: voting.nickname,
 								votingDate: voting.date.toLocaleDateString()
 							},
 							'Could not find politician party on the voting day'

@@ -13,10 +13,10 @@ export async function GET({ params }) {
 		votes
 			.filter(({ politicianId }) => politicianId === politician.id)
 			.map(({ votingId, voteOption }) => {
-				const { title, result, date } = safeFind(votings, (voting) => voting.id === votingId);
+				const { nickname, result, date } = safeFind(votings, (voting) => voting.id === votingId);
 				return {
 					date,
-					title,
+					nickname,
 					result,
 					voteOption
 				};

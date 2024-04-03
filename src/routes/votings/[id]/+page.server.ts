@@ -45,7 +45,7 @@ export async function load({ params }) {
 		resultsByAffiliation,
 		resultsByPerson,
 		seo: createSeo({
-			title: 'การลงมติ ' + voting.title
+			title: 'การลงมติ ' + voting.nickname
 		})
 	};
 }

@@ -88,9 +88,9 @@ export async function GET({ params }) {
 
 		case SearchIndexCategory.Votings: {
 			const indexes: SearchIndexes['votings'] = (await fetchVotings())
-				.map(({ id, title, result }) => ({
+				.map(({ id, nickname, result }) => ({
 					id,
-					name: title,
+					name: nickname,
 					result: result
 				}))
 				.sort((a, z) => a.id.localeCompare(z.id));

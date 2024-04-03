@@ -132,7 +132,7 @@
 	>
 		<BreadcrumbItem href="/">หน้าแรก</BreadcrumbItem>
 		<BreadcrumbItem>การลงมติ</BreadcrumbItem>
-		<BreadcrumbItem>{voting.title}</BreadcrumbItem>
+		<BreadcrumbItem>{voting.nickname}</BreadcrumbItem>
 	</Breadcrumb>
 	<header
 		class="flex w-full flex-col gap-y-4 md:gap-y-8 {getBillStatusColor(
@@ -140,11 +140,11 @@
 		)} px-4 py-8 md:px-12 md:py-16"
 	>
 		<div class="mx-auto flex w-full max-w-[1280px] flex-col">
-			<h1 class="fluid-heading-05">{voting.title}</h1>
-			{#if voting.officialTitle}
+			<h1 class="fluid-heading-05">{voting.nickname}</h1>
+			{#if voting.title}
 				<div class="flex items-center gap-x-1 text-gray-60">
 					<p class="heading-01 flex-none">ชื่อทางการ</p>
-					<p class="body-01 flex-initial truncate">{voting.officialTitle}</p>
+					<p class="body-01 flex-initial truncate">{voting.title}</p>
 				</div>
 			{/if}
 			<div class="text-01 mt-2 flex items-center gap-x-1">

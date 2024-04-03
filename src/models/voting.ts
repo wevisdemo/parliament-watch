@@ -8,8 +8,8 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 	z
 		.object({
 			id: z.string().trim(),
-			title: z.string().trim(),
-			officialTitle: z.string().trim().optional(),
+			nickname: z.string().trim(),
+			title: z.string().trim().optional(),
 			date: z.date(),
 			description: z.string().trim().optional(),
 			representativeAssemblyId: z.string().trim().optional(),

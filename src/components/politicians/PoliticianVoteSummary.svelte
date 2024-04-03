@@ -9,7 +9,6 @@
 		VotingAbsentStats,
 		VotingHistory
 	} from '../../routes/politicians/[id]/+page.server';
-	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 
 	export let politician: Politician;
 	export let agreedVoting: VotingHistory;
@@ -21,7 +20,6 @@
 	$: absentPercentage = safePercent(votingAbsentStats.absentVoting, votingAbsentStats.totalVoting);
 </script>
 
-<!-- TODO - Correctly Refactor Later -->
 <Section id="votes" title="ประวัติการลงมติ">
 	<Vote slot="icon" size="32" />
 	<InlineNotification
@@ -46,7 +44,7 @@
 							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="max-w-max flex-1 underline">{voting.title}</span>
+							<span class="max-w-max flex-1 underline">{voting.nickname}</span>
 							<VotingResultTag
 								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}
@@ -78,7 +76,7 @@
 							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="max-w-max flex-1 underline">{voting.title}</span>
+							<span class="max-w-max flex-1 underline">{voting.nickname}</span>
 							<VotingResultTag
 								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}

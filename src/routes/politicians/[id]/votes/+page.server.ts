@@ -9,7 +9,7 @@ import { DefaultVoteOption, type Voting, CATEGORY_NOT_SPECIFIED } from '$models/
 interface VoteSummary
 	extends Pick<
 		Voting,
-		'id' | 'title' | 'result' | 'date' | 'files' | 'participatedAssemblies' | 'categories'
+		'id' | 'nickname' | 'result' | 'date' | 'files' | 'participatedAssemblies' | 'categories'
 	> {
 	voteOption: string;
 	// isVoteAlignWithPartyMajority: boolean;

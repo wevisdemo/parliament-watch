@@ -6,7 +6,7 @@ import { DefaultVoteOption, type Voting } from '$models/voting';
 
 const MAX_LASTEST_VOTE = 5;
 
-type VotingSummary = Pick<Voting, 'id' | 'title' | 'result'>;
+type VotingSummary = Pick<Voting, 'id' | 'nickname' | 'result'>;
 
 export interface VotingHistory {
 	total: number;
@@ -29,9 +29,12 @@ export async function load({ params }) {
 		.filter(({ politicianId }) => politicianId === politician.id)
 		.map(({ votingId, voteOption }) => {
 			try {
-				const { id, title, result, date } = safeFind(votings, (voting) => voting.id === votingId);
+				const { id, nickname, result, date } = safeFind(
+					votings,
+					(voting) => voting.id === votingId
+				);
 
-				return { id, title, result, date, voteOption };
+				return { id, nickname, result, date, voteOption };
 			} catch (e) {
 				throw `Could not find voting id ${votingId}`;
 			}
