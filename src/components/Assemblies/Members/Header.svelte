@@ -6,13 +6,13 @@
 		AssemblySummary,
 		GroupByTab
 	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout.server';
-	import AssemblyIdRunner from '../AssemblyIdRunner.svelte';
+	import AssemblyIdRunner, { type AvailableAssembly } from '../AssemblyIdRunner.svelte';
 
 	export let data: {
 		assembly: AssemblySummary;
 		groupByTabs: GroupByTab[];
 	};
-	export let assemblyIds: string[];
+	export let availableAssemblies: AvailableAssembly[];
 
 	$: ({ assembly } = data);
 
@@ -39,10 +39,10 @@
 		<div class="flex flex-1 flex-wrap items-center gap-x-4">
 			<h1 class="fluid-heading-04" style="text-wrap:balance">รายชื่อ{assembly.name}</h1>
 			<AssemblyIdRunner
-				currentId={assembly.id}
-				startedYear={assembly.startedAt}
+				name={assembly.name}
 				term={assembly.term}
-				{assemblyIds}
+				startedYear={assembly.startedAt}
+				{availableAssemblies}
 				postfix="members"
 			/>
 		</div>

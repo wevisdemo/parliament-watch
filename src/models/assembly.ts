@@ -4,7 +4,8 @@ import { z } from 'zod';
 
 export enum AssemblyName {
 	Representatives = 'สภาผู้แทนราษฎร',
-	Senates = 'วุฒิสภา'
+	Senates = 'วุฒิสภา',
+	Cabinet = 'คณะรัฐมนตรี'
 }
 
 const assemblyStaticInfoMap = {
@@ -21,6 +22,11 @@ const assemblyStaticInfoMap = {
 	[AssemblyName.Senates]: {
 		abbreviation: 'สว.',
 		mainRoles: ['ประธานวุฒิสภา']
+	},
+	[AssemblyName.Cabinet]: {
+		abbreviation: 'ครม.',
+		// TODO: No cabinet member data yet
+		mainRoles: []
 	}
 };
 
@@ -35,7 +41,7 @@ export const createAssemblySchema = (
 			term: z.number(),
 			startedAt: z.date(),
 			endedAt: z.date().optional(),
-			origin: z.string().trim()
+			origin: z.string().trim().optional()
 		})
 		.transform((assembly) => {
 			const getPartyGroup = (groupName: AssemblyPartyGroup) =>

@@ -2,12 +2,15 @@
 	import Header from '$components/Assemblies/Header.svelte';
 	import MainMembers from '$components/Assemblies/MainMembers.svelte';
 	import Summary from '$components/Assemblies/Summary.svelte';
-	import { Breadcrumb, BreadcrumbItem, Tab, Tabs } from 'carbon-components-svelte';
+	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import type { MemberGroup } from './+page.server.js';
 	import { getSenateColorByTitle } from '$components/Assemblies/shared.js';
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
+	import { AssemblyName } from '$models/assembly.js';
 
 	export let data;
+
+	$: ({ availableAssemblies, assembly, summary, mainMembers, latestVotes, seo } = data);
 
 	const getSenateGroupWithColor = (memberGroup: MemberGroup[]): MemberGroup[] => {
 		return memberGroup.map((group) => {
@@ -22,14 +25,14 @@
 	};
 
 	$: newSummary =
-		data.assembly.abbreviation == 'สว.'
+		assembly.abbreviation == 'สว.'
 			? {
-					...data.summary,
-					groupBySex: getSenateGroupWithColor(data.summary.groupBySex),
-					groupByAgeRange: getSenateGroupWithColor(data.summary.groupByAgeRange),
-					groupByEducation: getSenateGroupWithColor(data.summary.groupByEducation)
+					...summary,
+					groupBySex: getSenateGroupWithColor(summary.groupBySex),
+					groupByAgeRange: getSenateGroupWithColor(summary.groupByAgeRange),
+					groupByEducation: getSenateGroupWithColor(summary.groupByEducation)
 				}
-			: data.summary;
+			: summary;
 
 	let selector = 'summary';
 
@@ -50,11 +53,11 @@
 	>
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
-		<BreadcrumbItem class="hidden md:block" href="/assemblies/{data.assembly.id}"
-			>{data.assembly.name} ชุดที่ {data.assembly.term}</BreadcrumbItem
+		<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
+			>{assembly.name} ชุดที่ {assembly.term}</BreadcrumbItem
 		>
 	</Breadcrumb>
-	<Header data={data.assembly} assemblyIds={data.assemblyIds} />
+	<Header {assembly} {availableAssemblies} />
 	<div class="flex w-full">
 		<button
 			class="w-full border-b-[2px] border-solid px-[16px] py-[11px] text-left text-[14px] {selector ===
@@ -86,15 +89,15 @@
 	</div>
 	<section id="summary">
 		<Summary
-			assemblyId={data.assembly.id}
+			assemblyId={assembly.id}
 			summary={newSummary}
-			houseLevel={data.assembly.abbreviation === 'สส.' ? 'lower' : 'upper'}
+			houseLevel={assembly.name === AssemblyName.Representatives ? 'lower' : 'upper'}
 		/>
 	</section>
 	<section id="members">
-		<MainMembers members={data.mainMembers} assemblyId={data.assembly.id} />
+		<MainMembers members={mainMembers} assemblyId={assembly.id} />
 	</section>
 	<section id="latest-votes">
-		<LatestVotes votes={data.latestVotes} assemblyId={data.assembly.id} />
+		<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
 	</section>
 </div>

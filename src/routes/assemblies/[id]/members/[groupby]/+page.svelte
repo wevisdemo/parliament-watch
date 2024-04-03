@@ -19,7 +19,7 @@
 	import { GroupByOption } from '$models/assembly.js';
 
 	export let data;
-	$: ({ groups, groupByTabs, isDataHasSubgroup, assemblyIds } = data);
+	$: ({ groups, groupByTabs, isDataHasSubgroup, availableAssemblies } = data);
 	$: currentPath = groupByTabs.find(({ isActive }) => isActive)?.path ?? '';
 
 	let showFilter = true;
@@ -103,7 +103,7 @@
 	});
 </script>
 
-<Header {data} bind:searchQuery {mounted} {assemblyIds} />
+<Header {data} bind:searchQuery {mounted} {availableAssemblies} />
 <Tab {data} />
 <div class="relative flex">
 	{#if showFilter}

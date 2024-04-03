@@ -7,7 +7,7 @@
 
 	export let data;
 
-	$: ({ assemblyIds, assembly, votes, filterOptions } = data);
+	$: ({ availableAssemblies, assembly, votes, filterOptions } = data);
 
 	$: checkboxFilterList = [
 		{
@@ -67,7 +67,7 @@
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >
-	<VotesHeader {assembly} {assemblyIds} />
+	<VotesHeader {assembly} {availableAssemblies} />
 
 	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
 		{#if cellKey === 'date'}

@@ -1,3 +1,4 @@
+import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
 import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
 import {
 	getAssemblyMembers,
@@ -49,12 +50,18 @@ export async function load({ params }) {
 					members: group.members.map(getPoliticianSummary)
 				}));
 
-		const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
+		const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
+			({ id, name, term }) => ({
+				id,
+				name,
+				term
+			})
+		);
 
 		return {
 			groups: transformedGroup,
 			isDataHasSubgroup,
-			assemblyIds,
+			availableAssemblies,
 			seo: createSeo({
 				title: `สมาชิก ${assembly.name} ${assembly.term}`
 			})

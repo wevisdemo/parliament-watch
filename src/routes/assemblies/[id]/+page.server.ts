@@ -1,3 +1,4 @@
+import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import {
 	fetchAssemblies,
@@ -119,10 +120,16 @@ export async function load({ params }) {
 			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 		}));
 
-	const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
+	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
+		({ id, name, term }) => ({
+			id,
+			name,
+			term
+		})
+	);
 
 	return {
-		assemblyIds,
+		availableAssemblies,
 		assembly,
 		summary,
 		mainMembers,

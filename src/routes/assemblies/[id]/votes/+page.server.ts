@@ -1,3 +1,4 @@
+import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
 import { fetchAssemblies, fetchFromIdOr404, fetchVotings } from '$lib/datasheets/index.js';
 import { getSortedUniqueCategories } from '$lib/datasheets/voting.js';
 import { createSeo } from '$lib/seo.js';
@@ -32,7 +33,11 @@ export async function load({ params }) {
 			categories: categories.length > 0 ? categories : [CATEGORY_NOT_SPECIFIED]
 		}));
 
-	const assemblyIds: string[] = (await fetchAssemblies()).map((item) => item.id);
+	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map((a) => ({
+		id: a.id,
+		name: a.name,
+		term: a.term
+	}));
 
 	const filterOptions: FilterOptions = {
 		categories: getSortedUniqueCategories(votes),
@@ -40,7 +45,7 @@ export async function load({ params }) {
 	};
 
 	return {
-		assemblyIds,
+		availableAssemblies,
 		assembly,
 		votes,
 		filterOptions,
