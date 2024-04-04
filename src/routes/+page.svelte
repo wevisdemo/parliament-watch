@@ -9,6 +9,7 @@
 	import BillContent from '$components/Index/BillContent.svelte';
 	import ContentSection from '$components/Index/ContentSection.svelte';
 	import { SearchIndexCategory } from '$models/search.js';
+	import { ArrowRight } from 'carbon-icons-svelte';
 
 	export let data;
 
@@ -16,8 +17,7 @@
 		highlightedPoliticians,
 		otherSourcesHighlightedPoliticians,
 		latestVotings,
-		billsByStatus,
-		billsByCategory
+		billByCategoryAndStatus
 	} = data);
 </script>
 
@@ -120,6 +120,7 @@
 			>รัฐออกกฏหมายอย่างไร? <ArrowRight class="ml-1" /></a
 		></span
 	>
+	<BillContent {billByCategoryAndStatus} />
 </ContentSection>
 
 <BackToTopButton />

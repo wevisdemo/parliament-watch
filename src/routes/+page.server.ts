@@ -1,19 +1,21 @@
+import {
+	ALL_CATEGORY_KEY,
+	type BillByCategoryAndStatus,
+	type BillCategoryWithStatus
+} from '$components/Index/BillContent.svelte';
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { fetchBills, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
-import { BillStatus } from '$models/bill';
 import { DefaultVoteOption } from '$models/voting.js';
-import type { BillsByCategory, BillsByStatus } from './bills/+page.server';
 import { rollup } from 'd3-array';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LASTEST_VOTE = 5;
 const MAX_BILL_BY_STATUS = 3;
-const MAX_BILL_BY_CATEGORY = 5;
 
 enum PoliticialPosition {
 	MP = 'สส.',
@@ -139,36 +141,40 @@ export async function load() {
 			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 		}));
 
-	const billsByStatus: BillsByStatus[] = Object.values(BillStatus)
-		.map((status) => {
-			const relatedBills = bills.filter((bill) => bill.status === status);
-			return {
-				status,
-				samples: relatedBills.slice(0, MAX_BILL_BY_STATUS),
-				count: relatedBills.length
-			};
-		})
-		.filter(({ count }) => count > 0);
+	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(
+		bills.flatMap(({ categories, ...rest }) =>
+			categories.map((category) => ({ category, categories, ...rest }))
+		),
+		(billsByCategory): BillCategoryWithStatus => ({
+			count: billsByCategory.length,
+			billsByStatus: rollup(
+				billsByCategory,
+				(billsByStatus) => ({
+					samples: billsByStatus.slice(0, MAX_BILL_BY_STATUS),
+					count: billsByStatus.length
+				}),
+				(bill) => bill.status
+			)
+		}),
+		(bill) => bill.category
+	);
 
-	const billsByCategory: BillsByCategory[] = [
-		...rollup(
-			bills.flatMap(({ categories, ...rest }) =>
-				categories.map((category) => ({ category, ...rest }))
-			),
-			(group) => ({
-				category: group[0].category,
-				samples: group.slice(0, MAX_BILL_BY_CATEGORY),
-				count: group.length
+	billByCategoryAndStatus.set(ALL_CATEGORY_KEY, {
+		count: bills.length,
+		billsByStatus: rollup(
+			bills,
+			(billsByStatus) => ({
+				samples: billsByStatus.slice(0, MAX_BILL_BY_STATUS),
+				count: billsByStatus.length
 			}),
-			(bill) => bill.category
-		).values()
-	].sort((a, z) => z.count - a.count);
+			(bill) => bill.status
+		)
+	});
 
 	return {
 		highlightedPoliticians,
 		otherSourcesHighlightedPoliticians,
 		latestVotings,
-		billsByStatus,
-		billsByCategory
+		billByCategoryAndStatus
 	};
 }
