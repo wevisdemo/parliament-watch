@@ -35,41 +35,39 @@
 		<Proposer {bill} />
 	</div>
 
-	<div class={isLandscape ? 'w-full md:w-1/3' : 'w-full'}>
-		<div
-			class="flex {isLandscape
-				? 'flex-col gap-x-6 gap-y-4 md:flex-row md:gap-y-0'
-				: 'flex-col gap-y-4'}"
-		>
-			<div class="grow space-y-2">
-				{#if bill.proposedOn}
-					<div>
-						<p class="text-sm font-semibold">วันที่เสนอ</p>
-
-						<p class="text-sm">
-							{bill.proposedOn.toLocaleDateString('th-TH', {
-								day: 'numeric',
-								month: 'short',
-								year: 'numeric'
-							})}
-						</p>
-					</div>
-				{/if}
-
+	<div
+		class="flex w-full flex-1 {isLandscape
+			? 'flex-col gap-x-6 gap-y-4 md:w-1/3 md:flex-row md:gap-y-0'
+			: 'flex-col gap-y-4'}"
+	>
+		<div class="grow space-y-2">
+			{#if bill.proposedOn}
 				<div>
-					<p class="text-sm font-semibold">สถานะ</p>
-					<BillStatusTag isLarge status={bill.status} />
-					{#if currentState}
-						<p class="text-sm font-semibold">{currentState}</p>
-					{/if}
-				</div>
+					<p class="text-sm font-semibold">วันที่เสนอ</p>
 
-				{#if daySinceProposed}
-					<p class="text-sm font-semibold text-blue-70">ผ่านมาแล้ว {daySinceProposed} วัน</p>
+					<p class="text-sm">
+						{bill.proposedOn.toLocaleDateString('th-TH', {
+							day: 'numeric',
+							month: 'short',
+							year: 'numeric'
+						})}
+					</p>
+				</div>
+			{/if}
+
+			<div>
+				<p class="text-sm font-semibold">สถานะ</p>
+				<BillStatusTag isLarge status={bill.status} />
+				{#if currentState}
+					<p class="text-sm font-semibold">{currentState}</p>
 				{/if}
 			</div>
 
-			<ArrowRight class="ml-auto text-gray-100" />
+			{#if daySinceProposed}
+				<p class="text-sm font-semibold text-blue-70">ผ่านมาแล้ว {daySinceProposed} วัน</p>
+			{/if}
 		</div>
+
+		<ArrowRight class="ml-auto text-gray-100" />
 	</div>
 </div>

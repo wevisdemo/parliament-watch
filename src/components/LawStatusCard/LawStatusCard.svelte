@@ -41,7 +41,7 @@
 </script>
 
 <article class="keen-slider__slide body-01 flex min-w-[288px] max-w-[288px] flex-col bg-white">
-	<header class="flex-1 p-6">
+	<header class="p-6">
 		{#if 'proposerType' in bill}
 			<div class="mb-3 flex items-center gap-1">
 				<div class="h-6 w-6 rounded-full bg-black p-1 text-white">
@@ -99,7 +99,7 @@
 		{/if}
 	</header>
 	{#if bill.count > 0}
-		<div class="card-body body-01 bg-ui-01 p-6 pt-3">
+		<div class="card-body body-01 flex-1 bg-ui-01 p-6 pt-3">
 			<span class="mb-1 block text-text-03">เช่น</span>
 			<ul class="body-compact-01 mb-3 ml-[2.1ch] flex list-outside list-disc flex-col gap-1">
 				{#each bill.samples as sample}
