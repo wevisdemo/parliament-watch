@@ -7,7 +7,6 @@
 
 	export let id: string;
 	export let title: string;
-	export let description: string;
 	export let icon: ComponentType;
 	export let searchPlaceholder: string;
 	export let seachCategories: SearchIndexCategory[];
@@ -24,9 +23,9 @@
 				<svelte:component this={icon} width="32" height="32" />
 				<h2 class="fluid-heading-05">{title}</h2>
 			</div>
-			<p class="body-01 md:flex-1">
-				{description}
-			</p>
+			<div class="body-01 md:flex-1">
+				<slot name="description" />
+			</div>
 		</div>
 		<div class="relative">
 			<SearchInput

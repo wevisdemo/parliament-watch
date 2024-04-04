@@ -80,38 +80,46 @@
 <ContentSection
 	id="politician"
 	title="นักการเมือง"
-	description="รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
-ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา"
 	icon={PoliticianIcon}
 	searchPlaceholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช"
 	seachCategories={[SearchIndexCategory.Politicians]}
 	class="bg-ui-01"
 >
+	<span slot="description"
+		>รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
+		ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา</span
+	>
 	<PoliticianContent {highlightedPoliticians} {otherSourcesHighlightedPoliticians} />
 </ContentSection>
 
 <ContentSection
 	id="voting"
 	title="การลงมติ"
-	description="ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ"
 	icon={VoteIcon}
 	searchPlaceholder="ค้นด้วยชื่อมติ เช่น อภิปรายไม่ไว้วางใจ, แก้ รธน."
 	seachCategories={[SearchIndexCategory.Votings]}
 	class="bg-white"
 >
+	<span slot="description"
+		>ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ</span
+	>
 	<VotingContent {latestVotings} />
 </ContentSection>
 
 <ContentSection
 	id="bill"
-	title=""
-	description=""
+	title="การออกกฏหมาย"
 	icon={LawIcon}
-	searchPlaceholder=""
+	searchPlaceholder="ค้นด้วยชื่อมติ เช่น อภิปรายไม่ไว้วางใจ, แก้ รธน."
 	seachCategories={[SearchIndexCategory.Bills]}
 	class="bg-ui-01"
 >
-	<BillContent {billsByStatus} {billsByCategory} />
+	<span slot="description"
+		>ติดตามร่างกฏหมายที่เกี่ยวข้องกับชีวิตคุณ สำเร็จ หรือติดค้างอยู่ที่ขั้นตอนไหน<br />
+		<a href="/legislative-process" class="mt-1 flex"
+			>รัฐออกกฏหมายอย่างไร? <ArrowRight class="ml-1" /></a
+		></span
+	>
 </ContentSection>
 
 <BackToTopButton />
