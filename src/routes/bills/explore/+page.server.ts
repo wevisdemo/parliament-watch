@@ -31,9 +31,6 @@ interface BillSummary
 }
 
 export async function load() {
-	const billStatuses = Object.values(BillStatus);
-	const billProposerTypes = Object.values(BillProposerType);
-
 	const mpAssemblies = (await fetchAssemblies()).filter(
 		({ name }) => name === AssemblyName.Representatives
 	);
@@ -53,6 +50,14 @@ export async function load() {
 			proposedLedByPeopleName: bill.proposedByPeople?.ledBy
 		};
 	});
+
+	const billStatuses = Object.values(BillStatus).filter((status) =>
+		bills.some((bill) => bill.status === status)
+	);
+
+	const billProposerTypes = Object.values(BillProposerType).filter((proposerType) =>
+		bills.some((bill) => bill.proposerType === proposerType)
+	);
 
 	const proposerNames = [
 		...new Set(

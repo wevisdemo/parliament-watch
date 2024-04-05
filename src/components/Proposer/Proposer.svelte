@@ -1,6 +1,8 @@
 <script lang="ts">
+	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import { AssemblyName } from '$models/assembly';
 	import type { Bill } from '$models/bill';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
@@ -58,14 +60,23 @@
 		</div>
 	{:else if bill.proposedByAssembly}
 		{@const { id, name, term, startedAt } = bill.proposedByAssembly}
+		{@const isCabinet = name === AssemblyName.Cabinet}
 
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
-			<PoliticianIcon class="stroke-white" size={16} />
+			<svelte:component
+				this={isCabinet ? GeneralIcon : PoliticianIcon}
+				class="stroke-white"
+				size={16}
+			/>
 		</div>
-		<a href="/assemblies/{id}" class="text-sm text-black">
+		<svelte:element
+			this={isCabinet ? 'p' : 'a'}
+			href={isCabinet ? undefined : `/assemblies/${id}`}
+			class="text-sm text-black"
+		>
 			{name}
 			<span class="underline">ชุดที่ {term} ({getBudistYear(startedAt)})</span>
-		</a>
+		</svelte:element>
 	{:else if bill.proposedByPeople}
 		{@const { ledBy, signatoryCount } = bill.proposedByPeople}
 
