@@ -19,7 +19,7 @@ export enum BillEventActionType {
 	Enforced = 'enforced'
 }
 
-const eventTypeTitleDescription = {
+export const eventTypeTitleDescription = {
 	hearing: {
 		title: 'รับฟังความเห็น',
 		description: ''
@@ -65,7 +65,7 @@ export const billEventSchema = z
 		type: z.nativeEnum(BillEventType),
 		title: z.string().optional(),
 		description: z.string().optional(),
-		actionType: z.nativeEnum(BillEventActionType),
+		actionType: z.nativeEnum(BillEventActionType).optional(),
 		votedInVotingId: z.string().optional(),
 		mergedIntoBillId: z.string().optional(),
 		enforcementDocumentUrl: z.string().optional()
@@ -75,7 +75,7 @@ export const billEventSchema = z
 		date: new Date(date),
 		title: title ?? eventTypeTitleDescription[rest.type].title,
 		description: description ?? eventTypeTitleDescription[rest.type].description,
-		mergedIntoBillId: mergedIntoBillId && md5(mergedIntoBillId),
+		...(mergedIntoBillId ? { mergedIntoBillId: md5(mergedIntoBillId) } : {}),
 		...rest
 	}));
 
