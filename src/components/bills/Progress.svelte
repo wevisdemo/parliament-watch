@@ -29,7 +29,7 @@
 
 	export let event: BillEvent;
 	export let tooltipText: string;
-	export let relatedVotingResults: RelatedVotingResults;
+	export let relatedVotingResults: RelatedVotingResults | undefined;
 	export let mergedIntoBill: Bill | undefined;
 	export let mergedIntoBillLatestEvent: BillEvent | undefined;
 
@@ -39,65 +39,22 @@
 		day: 'numeric'
 	};
 
-	const eventDescription = {
-		hearing: {
-			title: 'รับฟังความเห็น',
-			description: ''
-		},
-		mp1: {
-			title: 'สส.พิจารณา วาระ 1',
-			description: 'รับหลักการและตั้งกรรมาธิการ'
-		},
-		mp2: {
-			title: 'สส.พิจารณา วาระ 2',
-			description: 'ขั้นกรรมาธิการ และ สส.ลงมติรับรายมาตรา'
-		},
-		mp3: {
-			title: 'สส.พิจารณา วาระ 3',
-			description: 'ขั้นลงมติเห็นชอบ'
-		},
-		senate1: {
-			title: 'สว.พิจารณา วาระ 1',
-			description: 'รับหลักการและตั้งกรรมาธิการ'
-		},
-		senate2: {
-			title: 'สว.พิจารณา วาระ 2',
-			description: 'ขั้นกรรมาธิการ และ สส.ลงมติรับรายมาตรา'
-		},
-		senate3: {
-			title: 'สว.พิจารณา วาระ 3',
-			description: 'ขั้นลงมติเห็นชอบ'
-		},
-		royalAssent: {
-			title: 'พระมหากษัตริย์ลงปรมาภิไธย',
-			description: ''
-		},
-		enforcement: {
-			title: 'ออกเป็นกฎหมาย',
-			description: ''
-		},
-		other: {
-			title: 'รับฟังความเห็น',
-			description: ''
-		}
-	};
-
 	$: voting = event.votedInVotingId
-		? relatedVotingResults[event.votedInVotingId].voting
+		? relatedVotingResults?.[event.votedInVotingId]?.voting
 		: undefined;
 
 	$: highlightedVoteByGroups = (() => {
 		if (!event.votedInVotingId) return undefined;
 
-		const resultSummary = relatedVotingResults[event.votedInVotingId].resultSummary;
+		const resultSummary = relatedVotingResults?.[event.votedInVotingId]?.resultSummary;
 
-		if (resultSummary.subResults) {
-			return resultSummary.subResults.map((subResult) => ({
+		if (resultSummary?.subResults) {
+			return resultSummary?.subResults.map((subResult) => ({
 				name: subResult.affiliationName,
 				count: subResult.agreed,
 				total: subResult.total
 			}));
-		} else if (event.type.includes('senate')) {
+		} else if (resultSummary && event.type.includes('senate')) {
 			return [
 				{
 					name: 'สว.',
@@ -120,11 +77,11 @@
 				{event.date.toLocaleDateString('th-TH', dateTimeFormat)}
 			</p>
 			<div>
-				<b>{eventDescription[event.type].title}</b>
-				<p>{eventDescription[event.type].description}</p>
+				<b>{event.title}</b>
+				<p>{event.description}</p>
 			</div>
 		</div>
-		{#if event.actionType === BillEventActionType.Voted && voting}
+		{#if voting && highlightedVoteByGroups}
 			<div class="flex flex-col md:basis-2/3">
 				<p class="text-text-02">ผลการลงมติ</p>
 				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
@@ -150,9 +107,7 @@
 						orientation="portrait"
 						bill={mergedIntoBill}
 						isFullWidth={true}
-						currentState={mergedIntoBillLatestEvent
-							? eventDescription[mergedIntoBillLatestEvent.type].title
-							: ''}
+						currentState={mergedIntoBillLatestEvent ? event.title : ''}
 					/>
 				</div>
 				<div class="text-text-02">
