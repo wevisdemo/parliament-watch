@@ -13,12 +13,11 @@ export async function GET({ params }) {
 		.sort((a, z) => z.date.getTime() - a.date.getTime());
 
 	return createCsvFileResponse(
-		votes.map(({ date, nickname, title, result, categories }) => ({
+		votes.map(({ date, nickname, title, result }) => ({
 			date,
 			nickname,
 			title,
-			result,
-			categories
+			result
 		}))
 	);
 }

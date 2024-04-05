@@ -38,7 +38,7 @@
 				label: type,
 				value: type
 			}))
-		},
+		}
 		// TODO: not implemented vote direction yet
 		// {
 		// 	key: 'filterVoteDirection',
@@ -54,14 +54,6 @@
 		// 		}
 		// 	]
 		// },
-		{
-			key: 'filterCatg',
-			legend: 'หมวดมติ (1 มติ มีได้มากกว่า 1 หมวด)',
-			choices: filterOptions.categories.map((catg) => ({
-				label: catg,
-				value: catg
-			}))
-		}
 	];
 
 	let searchQuery = '';
@@ -84,10 +76,8 @@
 						return (
 							filterAssembly.some((assemblyId) =>
 								vote.participatedAssemblies.some(({ id }) => id === assemblyId)
-							) &&
-							filterVoteType.includes(vote.voteOption) &&
-							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority) &&
-							filterCatg.some((category) => vote.categories.includes(String(category)))
+							) && filterVoteType.includes(vote.voteOption)
+							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority)
 						);
 					})
 					.map((vote) => ({

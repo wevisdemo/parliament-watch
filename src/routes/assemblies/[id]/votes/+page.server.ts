@@ -1,17 +1,12 @@
 import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
 import { fetchAssemblies, fetchFromIdOr404, fetchVotings } from '$lib/datasheets/index.js';
-import { getSortedUniqueCategories } from '$lib/datasheets/voting.js';
 import { createSeo } from '$lib/seo.js';
 import type { Assembly } from '$models/assembly';
-import { CATEGORY_NOT_SPECIFIED, DefaultVotingResult, type Voting } from '$models/voting.js';
+import { DefaultVotingResult, type Voting } from '$models/voting.js';
 
-export type VoteSummary = Pick<
-	Voting,
-	'id' | 'nickname' | 'result' | 'date' | 'files' | 'categories'
->;
+export type VoteSummary = Pick<Voting, 'id' | 'nickname' | 'result' | 'date' | 'files'>;
 
 export interface FilterOptions {
-	categories: string[];
 	result: string[];
 }
 
@@ -27,11 +22,7 @@ export async function load({ params }) {
 		.filter(({ participatedAssemblies }) =>
 			participatedAssemblies.some((pa) => assembly.id === pa.id)
 		)
-		.sort((a, z) => z.date.getTime() - a.date.getTime())
-		.map(({ categories, ...vote }) => ({
-			...vote,
-			categories: categories.length > 0 ? categories : [CATEGORY_NOT_SPECIFIED]
-		}));
+		.sort((a, z) => z.date.getTime() - a.date.getTime());
 
 	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map((a) => ({
 		id: a.id,
@@ -40,7 +31,6 @@ export async function load({ params }) {
 	}));
 
 	const filterOptions: FilterOptions = {
-		categories: getSortedUniqueCategories(votes),
 		result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed]
 	};
 

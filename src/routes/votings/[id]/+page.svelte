@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 
 	import AffiliationsResult from '$components/AffiliationResult/AffiliationsResult.svelte';
-	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import DownloadData from '$components/DownloadData/DownloadData.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
@@ -183,14 +182,6 @@
 				{#if voting.description}
 					<p class="heading-01">สรุปเนื้อหา</p>
 					<p class="body-01">{voting.description}</p>
-				{/if}
-				{#if voting.categories.length > 0}
-					<div class="mt-4 flex items-center gap-x-1">
-						<p class="heading-01">หมวด</p>
-						{#each voting.categories as category}
-							<BillCategoryTag isLarge label={category} />
-						{/each}
-					</div>
 				{/if}
 				<!-- {#if relatedBill}
 					<p class="heading-01 mt-4 mb-1">ดูเส้นทางของร่างกฎหมายนี้</p>

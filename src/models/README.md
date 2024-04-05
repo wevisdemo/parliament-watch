@@ -79,8 +79,8 @@ erDiagram
   Voting {
     string id PK
     string title
+    string nickname
     string description
-    string[] categories
     Date date
     string meetingType
     string[] participatedAssembleIds FK

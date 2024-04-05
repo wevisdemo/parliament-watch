@@ -17,14 +17,6 @@
 				label: result,
 				value: result
 			}))
-		},
-		{
-			key: 'filterCategory',
-			legend: 'หมวดมติ',
-			choices: filterOptions.categories.map((type) => ({
-				label: type,
-				value: type
-			}))
 		}
 	];
 
@@ -38,11 +30,8 @@
 			: votes.filter((vote) => {
 					const search = searchQuery.trim();
 					if (search && !vote.nickname.includes(search)) return;
-					const { filterResult, filterCategory } = selectedCheckboxValue;
-					return (
-						filterResult.includes(vote.result) &&
-						filterCategory.some((category) => vote.categories.includes(String(category)))
-					);
+					const { filterResult } = selectedCheckboxValue;
+					return filterResult.includes(vote.result);
 				});
 </script>
 

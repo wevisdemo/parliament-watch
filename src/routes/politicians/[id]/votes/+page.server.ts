@@ -1,23 +1,19 @@
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
-import { getSortedUniqueCategories, getSortedUniqueVoteOptions } from '$lib/datasheets/voting.js';
+import { getSortedUniqueVoteOptions } from '$lib/datasheets/voting.js';
 import { createSeo } from '$lib/seo.js';
 import type { Assembly } from '$models/assembly';
 import type { Politician } from '$models/politician.js';
-import { DefaultVoteOption, type Voting, CATEGORY_NOT_SPECIFIED } from '$models/voting.js';
+import { DefaultVoteOption, type Voting } from '$models/voting.js';
 
 interface VoteSummary
-	extends Pick<
-		Voting,
-		'id' | 'nickname' | 'result' | 'date' | 'files' | 'participatedAssemblies' | 'categories'
-	> {
+	extends Pick<Voting, 'id' | 'nickname' | 'result' | 'date' | 'files' | 'participatedAssemblies'> {
 	voteOption: string;
 	// isVoteAlignWithPartyMajority: boolean;
 }
 
 interface FilterOptions {
 	assemblies: Assembly[];
-	categories: string[];
 	voteOptions: string[];
 }
 
@@ -37,7 +33,6 @@ export async function load({ params }) {
 
 				return {
 					...voting,
-					categories: voting.categories.length > 0 ? voting.categories : [CATEGORY_NOT_SPECIFIED],
 					voteOption: voteOption as DefaultVoteOption
 					// TODO: calculate isVoteAlignWithPartyMajority
 					// isVoteAlignWithPartyMajority: true
@@ -50,7 +45,6 @@ export async function load({ params }) {
 
 	const filterOptions: FilterOptions = {
 		assemblies: [...new Set(votes.flatMap(({ participatedAssemblies }) => participatedAssemblies))],
-		categories: getSortedUniqueCategories(votes),
 		voteOptions: getSortedUniqueVoteOptions(votes)
 	};
 

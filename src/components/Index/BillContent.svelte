@@ -23,7 +23,6 @@
 	import { ArrowRight, Close } from 'carbon-icons-svelte';
 	import Carousel from './Carousel.svelte';
 	import { Button } from 'carbon-components-svelte';
-	import { space } from 'postcss/lib/list';
 
 	const MAX_ENACTED_BILL_PER_VIEW = 5;
 	const billStatusList = Object.values(BillStatus);
