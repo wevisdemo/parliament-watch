@@ -60,12 +60,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 			}) => ({
 				id: md5(id),
 				nickname: nickname || rest.title.replace('ร่างพระราชบัญญัติ', 'ร่าง พ.ร.บ.'),
-				categories: categories?.split(',').map((c) => c.trim()) || [
-					// TODO: Mock category while datasheet is not ready
-					['ขนส่งสาธารณะ', 'เศรษฐกิจ', 'แก้รัฐธรรมนูญ', 'วัฒนธรรม', 'เกษตรกรรม'][
-						Math.floor(Math.random() * 5)
-					]
-				],
+				categories: categories?.split(',').map((c) => c.trim()) || [],
 				attachment:
 					attachmentName && attachmentUrl
 						? ({ label: attachmentName, url: attachmentUrl } as Link)
