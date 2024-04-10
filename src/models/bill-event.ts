@@ -20,39 +20,39 @@ export enum BillEventActionType {
 }
 
 export const eventTypeTitleDescription = {
-	hearing: {
+	[BillEventType.Hearing]: {
 		title: 'รับฟังความเห็น',
 		description: ''
 	},
-	mp1: {
+	[BillEventType.MP1]: {
 		title: 'สส.พิจารณา วาระ 1',
 		description: 'รับหลักการและตั้งกรรมาธิการ'
 	},
-	mp2: {
+	[BillEventType.MP2]: {
 		title: 'สส.พิจารณา วาระ 2',
 		description: 'ขั้นกรรมาธิการ และ สส.ลงมติรับรายมาตรา'
 	},
-	mp3: {
+	[BillEventType.MP3]: {
 		title: 'สส.พิจารณา วาระ 3',
 		description: 'ขั้นลงมติเห็นชอบ'
 	},
-	senate1: {
+	[BillEventType.Senate1]: {
 		title: 'สว.พิจารณา วาระ 1',
 		description: 'รับหลักการและตั้งกรรมาธิการ'
 	},
-	senate2: {
+	[BillEventType.Senate2]: {
 		title: 'สว.พิจารณา วาระ 2',
 		description: 'ขั้นกรรมาธิการ และ สส.ลงมติรับรายมาตรา'
 	},
-	senate3: {
+	[BillEventType.Senate3]: {
 		title: 'สว.พิจารณา วาระ 3',
 		description: 'ขั้นลงมติเห็นชอบ'
 	},
-	enforcement: {
+	[BillEventType.Enforcement]: {
 		title: 'ออกเป็นกฎหมาย',
 		description: ''
 	},
-	other: {
+	[BillEventType.Other]: {
 		title: 'รับฟังความเห็น',
 		description: ''
 	}
@@ -70,13 +70,16 @@ export const billEventSchema = z
 		mergedIntoBillId: z.string().optional(),
 		enforcementDocumentUrl: z.string().optional()
 	})
-	.transform(({ billId, date, title, description, mergedIntoBillId, ...rest }) => ({
-		billId: md5(billId),
-		date: new Date(date),
-		title: title ?? eventTypeTitleDescription[rest.type].title,
-		description: description ?? eventTypeTitleDescription[rest.type].description,
-		...(mergedIntoBillId ? { mergedIntoBillId: md5(mergedIntoBillId) } : {}),
-		...rest
-	}));
+	.transform(
+		({ billId, date, title, description, mergedIntoBillId, votedInVotingId, ...rest }) => ({
+			billId: md5(billId),
+			date: new Date(date),
+			title: title ?? eventTypeTitleDescription[rest.type].title,
+			description: description ?? eventTypeTitleDescription[rest.type].description,
+			...(mergedIntoBillId ? { mergedIntoBillId: md5(mergedIntoBillId) } : {}),
+			...(votedInVotingId ? { votedInVotingId: md5(votedInVotingId) } : {}),
+			...rest
+		})
+	);
 
 export type BillEvent = z.infer<typeof billEventSchema>;
