@@ -95,25 +95,27 @@
 	<section class="vote-card__result flex w-56 flex-col gap-y-2">
 		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} m-0 w-fit`}>{voting.result}</Tag>
 		<div class="flex flex-col gap-x-1">
-			<div class="flex items-center justify-between">
-				<p class="heading-01 text-text-01">
-					{isCandidate
-						? 'ได้รับคะแนนเสียง'
-						: voting.result === DefaultVotingResult.Passed
-							? DefaultVoteOption.Agreed
-							: DefaultVoteOption.Disagreed}
-				</p>
-				<p>
-					<span class="heading-01 mr-[2px] text-text-primary">{totalCount}</span>
-					<span class="body-01 text-text-02">/{totalAmount}</span>
-				</p>
-			</div>
+			{#if totalAmount > 0}
+				<div class="flex items-center justify-between">
+					<p class="heading-01 text-text-01">
+						{isCandidate
+							? 'ได้รับคะแนนเสียง'
+							: voting.result === DefaultVotingResult.Passed
+								? DefaultVoteOption.Agreed
+								: DefaultVoteOption.Disagreed}
+					</p>
+					<p>
+						<span class="heading-01 text-text-primary">{totalCount}</span>
+						<span class="body-01 text-text-02">/{totalAmount}</span>
+					</p>
+				</div>
+			{/if}
 			<ul class="vote-card__result--list">
 				{#each highlightedVoteByGroups as voteByGroup (voteByGroup.name)}
 					<li class="vote-card__result--item flex flex-row justify-between align-middle">
 						<p class="body-01 text-text-01">{voteByGroup.name}</p>
 						<p class="body-01">
-							<span class="mr-[2px] text-text-primary">{voteByGroup.count}</span>
+							<span class="text-text-primary">{voteByGroup.count}</span>
 							<span class="text-text-02">/{voteByGroup.total}</span>
 						</p>
 					</li>
