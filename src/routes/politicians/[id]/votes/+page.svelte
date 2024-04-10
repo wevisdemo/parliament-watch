@@ -161,7 +161,7 @@
 			{#if files.length > 0}
 				<div class="flex flex-wrap gap-2">
 					{#each files as file (file)}
-						<a href={file.url} download title={file.label}
+						<a href={file.url} target="_blank" rel="noopener noreferrer" title={file.label}
 							><DocumentPdf /><span class="sr-only">{file.label}</span></a
 						>
 					{/each}

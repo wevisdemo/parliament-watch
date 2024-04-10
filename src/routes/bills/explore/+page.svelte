@@ -147,7 +147,7 @@
 		{ key: 'proposedOn', value: 'วันที่เสนอ' },
 		{ key: 'titleColumn', value: 'ชื่อร่าง' },
 		{ key: 'status', value: 'สถานะ' },
-		{ key: 'files', value: 'เอกสาร' }
+		{ key: 'attachment', value: 'เอกสาร' }
 	]}
 	downloadSize="lg"
 	downloadLinks={[{ label: 'ร่างกฎหมายในสภา', url: '/files/download/bills.csv' }]}
@@ -176,8 +176,8 @@
 			>
 		{:else if cellKey === 'status'}
 			<BillStatusTag status={cellValue} isLarge />
-		{:else}
-			<a href="#{cellValue}">
+		{:else if cellValue}
+			<a href={cellValue.url} title={cellValue.label} target="_blank" rel="noopener noreferrer">
 				<DocumentPdf />
 			</a>
 		{/if}

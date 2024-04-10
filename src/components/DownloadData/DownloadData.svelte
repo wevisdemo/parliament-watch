@@ -14,7 +14,12 @@
 		<h2 class="heading-01">ดาวน์โหลดข้อมูล</h2>
 	</div>
 	{#each links as link (link.url)}
-		<a href={link.url} class="helper-text-01 mr-auto flex items-center gap-1">
+		<a
+			href={link.url}
+			class="helper-text-01 mr-auto flex items-center gap-1"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
 			{#if link.url.includes('.pdf')}
 				<DocumentPdf />
 			{:else if link.url.includes('.csv')}
