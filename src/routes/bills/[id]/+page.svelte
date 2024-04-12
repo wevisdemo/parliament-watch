@@ -92,10 +92,10 @@
 	$: dayElapsed = dayjs(
 		bill.status === BillStatus.InProgress
 			? new Date()
-			: events[events.length - 1]?.date || new Date()
+			: events.find(({ date }) => date)?.date || new Date()
 	).diff(bill.proposedOn, 'days');
 
-	$: innerWidth = 0;
+	let innerWidth = 0;
 </script>
 
 <svelte:window bind:innerWidth />
