@@ -139,13 +139,15 @@
 					<b>สรุปเนื้อหา</b>
 					<p class="whitespace-pre-wrap">{bill.description}</p>
 				</div>
-				<div class="flex gap-2">
-					<b>หมวด</b>
-					{#each bill.categories as category}
-						<BillCategoryTag label={category} />
-					{/each}
-				</div>
-				{#if mergedBills && mergedBills.length > 0}
+				{#if bill.categories.length > 0}
+					<div class="flex gap-2">
+						<b>หมวด</b>
+						{#each bill.categories as category}
+							<BillCategoryTag label={category} />
+						{/each}
+					</div>
+				{/if}
+				{#if mergedBills?.length > 0}
 					<div>
 						<div class="flex items-center gap-1">
 							<DocumentMultiple_02 size={24} color="#2600A3" />
