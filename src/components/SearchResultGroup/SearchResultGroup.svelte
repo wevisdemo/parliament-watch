@@ -12,7 +12,7 @@
 		<span class="text-xs text-gray-90">{heading}</span>
 	</div>
 	{#if items}
-		{#each items as item}
+		{#each items as item (item.url)}
 			<ResultItem {item} />
 		{/each}
 	{/if}
