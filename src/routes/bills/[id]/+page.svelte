@@ -1,7 +1,7 @@
 <script lang="ts">
 	import dayjs from 'dayjs';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { DocumentMultiple_02, Information } from 'carbon-icons-svelte';
+	import { DocumentMultiple_02, Information, Link, OpenPanelTop } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import Tooltip from '$components/Assemblies/Tooltip.svelte';
@@ -201,7 +201,14 @@
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
 				{#if bill.attachment}
-					<DownloadData links={[{ label: bill.attachment.label, url: bill.attachment.url }]} />
+					<DownloadData
+						title="ลิงก์ที่เกี่ยวข้อง"
+						icon={Link}
+						links={[
+							{ label: bill.attachment.label, url: bill.attachment.url },
+							{ label: 'เว็บไซต์แหล่งข้อมูลต้นทาง', url: bill.lisUrl, icon: OpenPanelTop }
+						]}
+					/>
 				{/if}
 				<p class="label-01 text-text-02">
 					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {

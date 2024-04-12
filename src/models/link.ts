@@ -1,5 +1,7 @@
+import type { ComponentType } from 'svelte';
+
 export interface Link {
 	label: string;
 	url: string;
-	mediaType?: string;
+	icon?: ComponentType;
 }
