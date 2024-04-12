@@ -38,22 +38,22 @@ export const eventTypeTitleDescription = {
 	},
 	[BillEventType.Senate1]: {
 		title: 'สว.พิจารณา วาระ 1',
-		description: 'รับหลักการและตั้งกรรมาธิการ'
+		description: 'รับร่าง พ.ร.บ. ไว้พิจารณา'
 	},
 	[BillEventType.Senate2]: {
 		title: 'สว.พิจารณา วาระ 2',
-		description: 'ขั้นกรรมาธิการ และ สส.ลงมติรับรายมาตรา'
+		description: 'อยู่ระหว่างการพิจารณา'
 	},
 	[BillEventType.Senate3]: {
 		title: 'สว.พิจารณา วาระ 3',
-		description: 'ขั้นลงมติเห็นชอบ'
+		description: 'พิจารณาให้ความเห็นชอบ'
 	},
 	[BillEventType.Enforcement]: {
 		title: 'ออกเป็นกฎหมาย',
 		description: ''
 	},
 	[BillEventType.Other]: {
-		title: 'อื่นๆ',
+		title: 'หมายเหตุ',
 		description: ''
 	}
 };
