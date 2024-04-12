@@ -72,7 +72,7 @@
 	<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
 
 	<div class="flex flex-col md:flex-row">
-		<div class="ml-1 flex flex-col md:basis-1/3 md:pr-6">
+		<div class="ml-1 flex w-full max-w-md flex-col md:pr-6">
 			{#if event.date}
 				<p>
 					{event.date.toLocaleDateString('th-TH', dateTimeFormat)}
@@ -84,12 +84,12 @@
 			</div>
 		</div>
 		{#if voting && highlightedVoteByGroups}
-			<div class="flex flex-col md:basis-2/3">
+			<div class="flex flex-1 flex-col">
 				<p class="text-text-02">ผลการลงมติ</p>
 				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
 			</div>
 		{:else if event.enforcementDocumentUrl}
-			<div class="w-full pt-5 md:basis-2/3">
+			<div class="flex-1 pt-5">
 				<RoyalGazette />
 				<Button
 					class="ml-0.5 mt-1"
@@ -101,7 +101,7 @@
 				>
 			</div>
 		{:else if mergedIntoBill}
-			<div class="flex flex-col gap-2 md:basis-2/3">
+			<div class="flex flex-1 flex-col gap-2">
 				<DocumentMultiple_02 size={24} color="#2600A3" />
 				<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
 				<div class="w-full rounded-sm border border-gray-20">

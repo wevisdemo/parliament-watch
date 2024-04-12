@@ -305,7 +305,7 @@
 	{/if}
 
 	{#if events.length > 0}
-		<section title="legal path" class="px-4 py-8 md:px-16 md:py-12">
+		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
 				<h1 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h1>
 				<hr class="border-gray-30" />
@@ -318,7 +318,7 @@
 						<ModalLawProcess />
 					</div>
 				</div>
-				<div title="timeline">
+				<div>
 					<ol
 						class="relative ml-2 border border-b-[transparent] border-e-[transparent] border-t-[transparent]"
 					>
