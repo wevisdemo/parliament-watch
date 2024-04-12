@@ -53,7 +53,7 @@ export const eventTypeTitleDescription = {
 		description: ''
 	},
 	[BillEventType.Other]: {
-		title: 'รับฟังความเห็น',
+		title: 'อื่นๆ',
 		description: ''
 	}
 };
@@ -61,7 +61,7 @@ export const eventTypeTitleDescription = {
 export const billEventSchema = z
 	.object({
 		billId: z.string(),
-		date: z.string(),
+		date: z.string().optional(),
 		type: z.nativeEnum(BillEventType),
 		title: z.string().optional(),
 		description: z.string().optional(),
@@ -73,7 +73,7 @@ export const billEventSchema = z
 	.transform(
 		({ billId, date, title, description, mergedIntoBillId, votedInVotingId, ...rest }) => ({
 			billId: md5(billId),
-			date: new Date(date),
+			date: date ? new Date(date) : undefined,
 			title: title ?? eventTypeTitleDescription[rest.type].title,
 			description: description ?? eventTypeTitleDescription[rest.type].description,
 			...(mergedIntoBillId ? { mergedIntoBillId: md5(mergedIntoBillId) } : {}),

@@ -20,7 +20,7 @@
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { type Bill } from '$models/bill';
-	import { type BillEvent, BillEventActionType } from '$models/bill-event';
+	import { type BillEvent, BillEventActionType, BillEventType } from '$models/bill-event';
 	import { ArrowRight, CheckmarkFilled, DocumentMultiple_02 } from 'carbon-icons-svelte';
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
@@ -73,9 +73,11 @@
 
 	<div class="flex flex-col md:flex-row">
 		<div class="ml-1 flex flex-col md:basis-1/3 md:pr-6">
-			<p>
-				{event.date.toLocaleDateString('th-TH', dateTimeFormat)}
-			</p>
+			{#if event.date}
+				<p>
+					{event.date.toLocaleDateString('th-TH', dateTimeFormat)}
+				</p>
+			{/if}
 			<div>
 				<b>{event.title}</b>
 				<p>{event.description}</p>
@@ -86,7 +88,7 @@
 				<p class="text-text-02">ผลการลงมติ</p>
 				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
 			</div>
-		{:else if event.actionType === BillEventActionType.Enforced}
+		{:else if event.enforcementDocumentUrl}
 			<div class="w-full pt-5 md:basis-2/3">
 				<RoyalGazette />
 				<Button
@@ -98,7 +100,7 @@
 					size="small">ดูประกาศราชกิจจา</Button
 				>
 			</div>
-		{:else if event.actionType === BillEventActionType.Merged && mergedIntoBill}
+		{:else if mergedIntoBill}
 			<div class="flex flex-col gap-2 md:basis-2/3">
 				<DocumentMultiple_02 size={24} color="#2600A3" />
 				<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>

@@ -15,9 +15,7 @@ import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
 
 export async function load({ params }) {
 	const bill = await fetchFromIdOr404(fetchBills, params.id);
-	const events = (await fetchBillEvents())
-		.filter(({ billId }) => billId === bill.id)
-		.sort((a, z) => z.date.getTime() - a.date.getTime());
+	const events = (await fetchBillEvents()).filter(({ billId }) => billId === bill.id).reverse();
 
 	const votings = await fetchVotings();
 	const votes = await fetchVotes();
