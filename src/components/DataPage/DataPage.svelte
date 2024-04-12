@@ -34,7 +34,7 @@
 </script>
 
 <script lang="ts">
-	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import type { Link } from '$models/link';
 	import {
 		Breadcrumb,
@@ -180,7 +180,7 @@
 				<slot />
 			</div>
 			<div class="p-3 {downloadSize === 'lg' ? 'md:w-[224px]' : 'md:w-auto'}">
-				<DownloadData links={downloadLinks} />
+				<LinkTable links={downloadLinks} />
 			</div>
 			<Search
 				class="md:hidden {!mounted ? '-mt-4' : ''}"

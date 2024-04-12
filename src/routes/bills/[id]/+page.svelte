@@ -6,7 +6,7 @@
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import Tooltip from '$components/Assemblies/Tooltip.svelte';
 	import Share from '$components/Share/Share.svelte';
-	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import { BillProposerType, BillStatus } from '$models/bill';
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
@@ -201,7 +201,7 @@
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
 				{#if bill.attachment}
-					<DownloadData
+					<LinkTable
 						title="ลิงก์ที่เกี่ยวข้อง"
 						icon={Link}
 						links={[

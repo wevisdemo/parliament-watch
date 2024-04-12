@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import AffiliationsResult from '$components/AffiliationResult/AffiliationsResult.svelte';
-	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
@@ -194,7 +194,7 @@
 				{/if} -->
 			</div>
 			<div class="flex flex-col gap-2">
-				<DownloadData links={voting.files} />
+				<LinkTable links={voting.files} />
 				<p class="label-01 text-gray-60">
 					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 						year: 'numeric',

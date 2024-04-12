@@ -8,7 +8,7 @@
 	import SideNav from '$components/politicians/SideNav.svelte';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
-	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import dayjs from 'dayjs';
 	import scrollama from 'scrollama';
@@ -93,7 +93,7 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2">
-				<DownloadData links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
+				<LinkTable links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
 				<p class="label-01 text-gray-60">
 					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
 						year: 'numeric',
