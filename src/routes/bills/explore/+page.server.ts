@@ -4,6 +4,8 @@ import { AssemblyName, type Assembly } from '$models/assembly';
 import { BillProposerType, BillStatus, type Bill } from '$models/bill';
 import dayjs from 'dayjs';
 
+const OTHER_CATEGORY_KEY = 'อื่นๆ';
+
 interface FilterOptions {
 	mpAssemblies: Assembly[];
 	status: BillStatus[];
@@ -40,6 +42,7 @@ export async function load() {
 
 		return {
 			...bill,
+			categories: bill.categories.length > 0 ? bill.categories : [OTHER_CATEGORY_KEY],
 			purposedAtMpAssemblyId: mpAssemblies.find(
 				({ startedAt, endedAt }) =>
 					proposedDate.isAfter(startedAt) && (!endedAt || proposedDate.isBefore(endedAt))
@@ -72,6 +75,11 @@ export async function load() {
 	const categories = [...new Set(bills.flatMap((bill) => bill.categories))].sort((a, z) =>
 		a.localeCompare(z)
 	);
+
+	if (categories.includes(OTHER_CATEGORY_KEY)) {
+		categories.splice(categories.indexOf(OTHER_CATEGORY_KEY), 1);
+		categories.push(OTHER_CATEGORY_KEY);
+	}
 
 	const filterOptions: FilterOptions = {
 		mpAssemblies,
