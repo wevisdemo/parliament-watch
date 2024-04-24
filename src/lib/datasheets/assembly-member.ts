@@ -37,7 +37,12 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 		avatar,
 		isActive,
 		party: partyRole?.party,
-		role: !isActive ? 'พ้นสภาพก่อนสภาหมดอายุ' : getAssemblyRoleDescription(assemblyRole)
+		role: !isActive ? 'พ้นสภาพก่อนสภาหมดอายุ' : getAssemblyRoleDescription(assemblyRole),
+		candidateType: assemblyRole?.listNumber
+			? 'บัญชีรายชื่อ'
+			: assemblyRole?.province && assemblyRole.districtNumber
+				? 'แบ่งเขต'
+				: undefined
 	};
 }
 

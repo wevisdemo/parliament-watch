@@ -256,7 +256,7 @@
 								class="grid gap-y-2"
 								style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"
 							>
-								{#each members as member, idx (member.id + idx)}
+								{#each members as { candidateType, ...member }, idx (member.id + idx)}
 									<PoliticianProfile {...member} />
 								{/each}
 							</div>
