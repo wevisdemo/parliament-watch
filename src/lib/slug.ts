@@ -9,6 +9,8 @@ export const slugify = (text: string): string =>
 		.replaceAll(')', '')
 		.replaceAll('.', '')
 		.replaceAll('/', '')
+		.replaceAll('"', '')
+		.replaceAll(`'`, '')
 		.replaceAll(' ', SEPERATOR)
 		.replaceAll('_', SEPERATOR)
 		.slice(0, MAX_LENGTH);
