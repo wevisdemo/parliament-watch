@@ -49,9 +49,15 @@
 				</a>
 				{#if matchedAssemblyRole}
 					{@const { assembly } = matchedAssemblyRole}
-					<a href="/assemblies/{assembly.id}" class="text-black underline">
+					<!-- TODO: cabinet is not released yet -->
+					{@const isCabinet = assembly.name === AssemblyName.Cabinet}
+					<svelte:element
+						this={isCabinet ? 'p' : 'a'}
+						href={isCabinet ? undefined : `/assemblies/${assembly.id}`}
+						class="text-sm text-black {isCabinet ? '' : 'underline'}"
+					>
 						{assembly.abbreviation} ชุดที่ {assembly.term} ({getBudistYear(assembly.startedAt)})
-					</a>
+					</svelte:element>
 				{/if}
 			</p>
 			{#if matchedPartyRoles}
@@ -60,8 +66,8 @@
 		</div>
 	{:else if bill.proposedByAssembly}
 		{@const { id, name, term, startedAt } = bill.proposedByAssembly}
+		<!-- TODO: cabinet is not released yet -->
 		{@const isCabinet = name === AssemblyName.Cabinet}
-
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 			<svelte:component
 				this={isCabinet ? GeneralIcon : PoliticianIcon}
