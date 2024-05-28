@@ -15,7 +15,7 @@
 	export let data;
 	const { politician, filterOptions, votes } = data;
 
-	const formatThaiYear = (date: Date | undefined) => {
+	const formatThaiYear = (date: Date | null) => {
 		if (!date) return;
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};

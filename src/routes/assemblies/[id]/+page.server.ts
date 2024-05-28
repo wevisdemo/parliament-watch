@@ -39,7 +39,7 @@ export interface MainMember {
 	assemblyRole: string;
 	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'>;
 	party?: Party;
-	description?: string;
+	description: string | null;
 }
 
 export async function load({ params }) {
@@ -74,7 +74,7 @@ export async function load({ params }) {
 					avatar
 				},
 				party: partyRole?.party,
-				description: assemblyRole?.appointmentMethod
+				description: assemblyRole?.appointmentMethod || null
 			}
 		];
 	}, [] as MainMember[]);

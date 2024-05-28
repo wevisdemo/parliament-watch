@@ -9,11 +9,11 @@
 	export let assembly: {
 		id: string;
 		name: string;
-		abbreviation?: string;
+		abbreviation: string | null;
 		term: number;
 		startedAt: Date;
-		endedAt?: Date;
-		origin?: string;
+		endedAt: Date | null;
+		origin: string | null;
 	};
 
 	$: isActive = assembly.endedAt === undefined;

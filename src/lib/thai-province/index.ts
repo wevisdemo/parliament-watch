@@ -1,15 +1,12 @@
 import rawProvince from './provinces.csv?raw';
-import { csvParse, autoType } from 'd3';
-import { z } from 'zod';
+import { Table, Column, parseCSVFromString } from 'sheethuahua';
 
-const provinceSchema = z.array(
-	z.object({
-		ProvinceNameThai: z.string().trim(),
-		Region_RDPB: z.string().trim()
-	})
-);
+const provinceTable = Table({
+	ProvinceNameThai: Column.String(),
+	Region_RDPB: Column.String()
+});
 
-const provinces = provinceSchema.parse(csvParse(rawProvince, autoType));
+const provinces = await parseCSVFromString(rawProvince, provinceTable);
 
 export const provinceRegionMap = new Map<string, string>(
 	provinces.map(({ ProvinceNameThai, Region_RDPB }) => [

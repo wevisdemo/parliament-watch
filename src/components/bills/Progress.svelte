@@ -20,7 +20,7 @@
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { type Bill } from '$models/bill';
-	import { type BillEvent, BillEventActionType, BillEventType } from '$models/bill-event';
+	import { type BillEvent } from '$models/bill-event';
 	import { ArrowRight, CheckmarkFilled, DocumentMultiple_02 } from 'carbon-icons-svelte';
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';

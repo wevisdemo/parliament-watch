@@ -10,7 +10,7 @@ export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]
 			...rest,
 			assemblyRole: assemblyRoles.find(({ assembly: a }) => a.id === assembly.id)
 		}))
-		.filter(({ assemblyRole }) => assemblyRole !== undefined)
+		.filter(({ assemblyRole }) => assemblyRole)
 		.map(({ partyRoles, ...rest }) => {
 			const partyRole = partyRoles
 				.filter(({ startedAt }) => !assembly.endedAt || dayjs(startedAt).isBefore(assembly.endedAt))

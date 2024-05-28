@@ -8,7 +8,7 @@
 	export let lastname: string;
 	export let avatar: string;
 	export let party: Pick<Party, 'logo' | 'name'> | undefined = undefined;
-	export let role: string | undefined = undefined;
+	export let role: string | null = null;
 	export let isLarge = false;
 	export let isActive = true;
 

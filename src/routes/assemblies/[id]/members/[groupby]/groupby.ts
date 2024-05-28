@@ -3,6 +3,8 @@ import { provinceRegionMap } from '$lib/thai-province';
 import { type Assembly, GroupByOption, AssemblyPartyGroup } from '$models/assembly';
 import dayjs from 'dayjs';
 
+const UNKNOWN_LABEL = 'ไม่พบข้อมูล';
+
 export interface PoliticianGroup {
 	name: string;
 	icon?: string;
@@ -40,12 +42,12 @@ export function getMemberGroup(
 				({ assemblyRole }) =>
 					assemblyRole?.province && provinceRegionMap.get(assemblyRole?.province)
 			).map(([region, membersByRegion]) => ({
-				name: region,
+				name: region || UNKNOWN_LABEL,
 				subgroups: groupMembersBy(
 					membersByRegion,
 					({ assemblyRole }) => assemblyRole?.province
 				).map(([province, membersByProvince]) => ({
-					name: province,
+					name: province || UNKNOWN_LABEL,
 					members: membersByProvince
 				}))
 			}));
@@ -64,7 +66,7 @@ export function getMemberGroup(
 
 		case GroupByOption.Age: {
 			return groupMembersBy(members, ({ birthdate }) => {
-				if (!birthdate) return 'ไม่พบข้อมูล';
+				if (!birthdate) return UNKNOWN_LABEL;
 
 				const birthDate = dayjs(birthdate);
 				const age = dayjs().diff(birthDate, 'year');
@@ -81,7 +83,7 @@ export function getMemberGroup(
 
 		case GroupByOption.Education: {
 			return groupMembersBy(members, ({ educations }) => {
-				if (!educations.length) return 'ไม่พบข้อมูล';
+				if (!educations.length) return UNKNOWN_LABEL;
 				if (educations.some((e) => e.includes('ปริญญาเอก'))) return 'ปริญญาเอก';
 				if (educations.some((e) => e.includes('ปริญญาโท'))) return 'ปริญญาโท';
 				if (educations.some((e) => e.includes('ปริญญาตรี'))) return 'ปริญญาตรี';
@@ -135,7 +137,7 @@ export function createSubgroupByPartyOrAppointmentMethod(
 	return isSenates
 		? groupMembersBy(members, ({ assemblyRole }) => assemblyRole?.appointmentMethod).map(
 				([method, membersByRole]) => ({
-					name: method,
+					name: method || UNKNOWN_LABEL,
 					members: membersByRole
 				})
 			)

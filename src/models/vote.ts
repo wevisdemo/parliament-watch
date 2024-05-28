@@ -1,15 +1,15 @@
 import { slugify } from '$lib/slug';
-import { z } from 'zod';
+import { Table, Column, type RowType } from 'sheethuahua';
 
-export const voteSchema = z
-	.object({
-		politicianId: z.string().trim(),
-		votingId: z.string().trim(),
-		voteOption: z.string().trim()
-	})
-	.transform(({ votingId, ...votes }) => ({
-		votingId: slugify(votingId),
-		...votes
-	}));
+export const voteTable = Table('Votes', {
+	politicianId: Column.String(),
+	votingId: Column.String(),
+	voteOption: Column.String()
+});
 
-export type Vote = z.infer<typeof voteSchema>;
+export const transformVote = ({ votingId, ...votes }: RowType<typeof voteTable>) => ({
+	votingId: slugify(votingId),
+	...votes
+});
+
+export type Vote = ReturnType<typeof transformVote>;

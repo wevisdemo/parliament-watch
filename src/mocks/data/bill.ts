@@ -14,8 +14,8 @@ export const inProgressBill: Bill = {
 	proposerType: BillProposerType.Politician,
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
-	proposedByAssembly: undefined,
-	proposedByPeople: undefined,
+	proposedByAssembly: null,
+	proposedByPeople: null,
 	attachment: {
 		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'
@@ -36,8 +36,8 @@ export const enactedBill: Bill = {
 	proposerType: BillProposerType.Politician,
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
-	proposedByAssembly: undefined,
-	proposedByPeople: undefined,
+	proposedByAssembly: null,
+	proposedByPeople: null,
 	attachment: {
 		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'

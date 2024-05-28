@@ -10,7 +10,11 @@ export const hearingEvent: BillEvent = {
 	date: new Date('2023-09-12'),
 	title: 'รับฟังความเห็น',
 	description: '',
-	type: BillEventType.Other
+	type: BillEventType.Other,
+	actionType: null,
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null,
+	votedInVotingId: null
 };
 
 export const passingMp1Event: BillEvent = {
@@ -19,20 +23,26 @@ export const passingMp1Event: BillEvent = {
 	type: BillEventType.MP1,
 	actionType: BillEventActionType.Voted,
 	votedInVotingId: '1',
-	...eventTypeTitleDescription[BillEventType.MP1]
+	...eventTypeTitleDescription[BillEventType.MP1],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
 export const inProgressMp1Event: BillEvent = {
 	...passingMp1Event,
-	actionType: undefined,
-	votedInVotingId: undefined
+	actionType: null,
+	votedInVotingId: null
 };
 
 export const passingMp2Event: BillEvent = {
 	billId: '1',
 	date: new Date('2023-10-12'),
 	type: BillEventType.MP2,
-	...eventTypeTitleDescription[BillEventType.MP2]
+	...eventTypeTitleDescription[BillEventType.MP2],
+	actionType: null,
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null,
+	votedInVotingId: null
 };
 
 export const inProgressMp2Event: BillEvent = {
@@ -51,7 +61,9 @@ export const passingMp3Event: BillEvent = {
 	type: BillEventType.MP3,
 	actionType: BillEventActionType.Voted,
 	votedInVotingId: '1',
-	...eventTypeTitleDescription[BillEventType.MP3]
+	...eventTypeTitleDescription[BillEventType.MP3],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
 export const failingMp3Event: BillEvent = {
@@ -65,7 +77,9 @@ export const passingSenate1Event: BillEvent = {
 	type: BillEventType.Senate1,
 	actionType: BillEventActionType.Voted,
 	votedInVotingId: '3',
-	...eventTypeTitleDescription[BillEventType.Senate1]
+	...eventTypeTitleDescription[BillEventType.Senate1],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
 export const passingSenate2Event: BillEvent = {
@@ -74,7 +88,9 @@ export const passingSenate2Event: BillEvent = {
 	type: BillEventType.Senate2,
 	actionType: BillEventActionType.Voted,
 	votedInVotingId: '3',
-	...eventTypeTitleDescription[BillEventType.Senate2]
+	...eventTypeTitleDescription[BillEventType.Senate2],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
 export const passingSenate3Event: BillEvent = {
@@ -83,7 +99,9 @@ export const passingSenate3Event: BillEvent = {
 	type: BillEventType.Senate3,
 	actionType: BillEventActionType.Voted,
 	votedInVotingId: '3',
-	...eventTypeTitleDescription[BillEventType.Senate3]
+	...eventTypeTitleDescription[BillEventType.Senate3],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
 export const enforcementEvent: BillEvent = {
@@ -92,5 +110,7 @@ export const enforcementEvent: BillEvent = {
 	type: BillEventType.Enforcement,
 	actionType: BillEventActionType.Enforced,
 	enforcementDocumentUrl: 'https://google.com',
-	...eventTypeTitleDescription[BillEventType.Enforcement]
+	...eventTypeTitleDescription[BillEventType.Enforcement],
+	mergedIntoBillId: null,
+	votedInVotingId: null
 };

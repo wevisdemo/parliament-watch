@@ -9,7 +9,7 @@
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
 
-	const formatThaiYear = (date: Date | undefined) => {
+	const formatThaiYear = (date: Date | null) => {
 		if (!date) return;
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};
