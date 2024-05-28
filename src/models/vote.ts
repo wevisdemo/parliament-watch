@@ -1,4 +1,4 @@
-import md5 from 'md5';
+import { slugify } from '$lib/slug';
 import { z } from 'zod';
 
 export const voteSchema = z
@@ -8,7 +8,7 @@ export const voteSchema = z
 		voteOption: z.string().trim()
 	})
 	.transform(({ votingId, ...votes }) => ({
-		votingId: md5(votingId),
+		votingId: slugify(votingId),
 		...votes
 	}));
 

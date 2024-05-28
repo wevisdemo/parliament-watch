@@ -1,7 +1,7 @@
 import { safeFind } from '$lib/datasheets/processor';
+import { slugify } from '$lib/slug';
 import type { Assembly } from './assembly';
 import type { Link } from './link';
-import md5 from 'md5';
 import { z } from 'zod';
 
 export const createVotingSchema = (assemblies: Assembly[]) =>
@@ -20,7 +20,7 @@ export const createVotingSchema = (assemblies: Assembly[]) =>
 			sourceUrl: z.string().trim()
 		})
 		.transform(({ id, representativeAssemblyId, senateAssemblyId, documents, ...voting }) => ({
-			id: md5(id),
+			id: slugify(id),
 			meetingType:
 				representativeAssemblyId && senateAssemblyId
 					? 'ประชุมร่วมกันของรัฐสภา'

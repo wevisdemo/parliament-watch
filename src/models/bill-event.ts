@@ -1,4 +1,4 @@
-import md5 from 'md5';
+import { slugify } from '$lib/slug';
 import { z } from 'zod';
 
 export enum BillEventType {
@@ -61,7 +61,7 @@ export const eventTypeTitleDescription = {
 export const billEventSchema = z
 	.object({
 		billId: z.string(),
-		date: z.string().optional(),
+		date: z.date().optional(),
 		type: z.nativeEnum(BillEventType),
 		title: z.string().optional(),
 		description: z.string().optional(),
@@ -70,16 +70,13 @@ export const billEventSchema = z
 		mergedIntoBillId: z.string().optional(),
 		enforcementDocumentUrl: z.string().optional()
 	})
-	.transform(
-		({ billId, date, title, description, mergedIntoBillId, votedInVotingId, ...rest }) => ({
-			billId: md5(billId),
-			date: date ? new Date(date) : undefined,
-			title: title ?? eventTypeTitleDescription[rest.type].title,
-			description: description ?? eventTypeTitleDescription[rest.type].description,
-			...(mergedIntoBillId ? { mergedIntoBillId: md5(mergedIntoBillId) } : {}),
-			...(votedInVotingId ? { votedInVotingId: md5(votedInVotingId) } : {}),
-			...rest
-		})
-	);
+	.transform(({ billId, title, description, mergedIntoBillId, votedInVotingId, ...rest }) => ({
+		billId: slugify(billId),
+		title: title ?? eventTypeTitleDescription[rest.type].title,
+		description: description ?? eventTypeTitleDescription[rest.type].description,
+		...(mergedIntoBillId ? { mergedIntoBillId: slugify(mergedIntoBillId) } : {}),
+		...(votedInVotingId ? { votedInVotingId: slugify(votedInVotingId) } : {}),
+		...rest
+	}));
 
 export type BillEvent = z.infer<typeof billEventSchema>;

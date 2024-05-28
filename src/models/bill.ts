@@ -1,8 +1,8 @@
 import { safeFind } from '$lib/datasheets/processor';
+import { slugify } from '$lib/slug';
 import type { Assembly } from './assembly';
 import type { Link } from './link';
 import type { Politician } from './politician';
-import md5 from 'md5';
 import { z } from 'zod';
 
 export enum BillStatus {
@@ -58,7 +58,7 @@ export const createBillSchema = (politicians: Politician[], assemblies: Assembly
 				peopleSignatureCount,
 				...rest
 			}) => ({
-				id: md5(id),
+				id: slugify(id),
 				nickname: nickname || rest.title.replace('ร่างพระราชบัญญัติ', 'ร่าง พ.ร.บ.'),
 				categories: categories?.split(',').map((c) => c.trim()) || [],
 				attachment:
