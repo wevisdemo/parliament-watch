@@ -10,8 +10,6 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
 
-	const MAX_ENACTED_BILL_PER_VIEW = 5;
-
 	export let data;
 
 	let searchResults: SearchResults | null;
@@ -60,19 +58,17 @@
 		</header>
 		<Carousel
 			options={{
-				loop: false,
-				slides: { perView: 'auto', spacing: 12 },
 				breakpoints: {
-					'(min-width: 1200px)': {
+					'(min-width: 672px)': {
 						slides: {
-							perView: data.byStatus.length,
+							perView: 3,
 							spacing: 12
 						}
 					}
 				}
 			}}
 		>
-			{#each data.byStatus as bill}
+			{#each data.byStatus as bill (bill.status)}
 				<LawStatusCard totalCount={data.totalCount} {bill} />
 			{/each}
 		</Carousel>
@@ -82,7 +78,7 @@
 			<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
 			<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
 		</header>
-		<Carousel options={{ loop: false, slides: { perView: 'auto', spacing: 12 }, breakpoints: {} }}>
+		<Carousel>
 			{#each data.byCategory as bill}
 				<LawStatusCard totalCount={data.totalCount} {bill} />
 			{/each}
@@ -90,21 +86,8 @@
 	</section>
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
-		<Carousel
-			options={{
-				loop: false,
-				slides: { perView: 'auto', spacing: 12 },
-				breakpoints: {
-					'(min-width: 900px)': {
-						slides: {
-							perView: data.byProposerType.length,
-							spacing: 12
-						}
-					}
-				}
-			}}
-		>
-			{#each data.byProposerType as bill}
+		<Carousel>
+			{#each data.byProposerType as bill (bill.proposerType)}
 				<LawStatusCard totalCount={data.totalCount} {bill} />
 			{/each}
 		</Carousel>
@@ -115,21 +98,8 @@
 		<h2 class="fluid-heading-03 text-white">
 			{data.latestEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฏหมาย
 		</h2>
-		<Carousel
-			options={{
-				loop: false,
-				slides: { perView: 'auto', spacing: 12 },
-				breakpoints: {
-					'(min-width: 1300px)': {
-						slides: {
-							perView: MAX_ENACTED_BILL_PER_VIEW,
-							spacing: 12
-						}
-					}
-				}
-			}}
-		>
-			{#each data.latestEnactedBills as bill}
+		<Carousel>
+			{#each data.latestEnactedBills as bill (bill.id)}
 				<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {bill} />
 			{/each}
 		</Carousel>

@@ -10,7 +10,7 @@
 
 <div>
 	<h3 class="fluid-heading-04 mb-4">{latestVotings.length} ผลการลงมติล่าสุด</h3>
-	<Carousel options={{ loop: false }}>
+	<Carousel>
 		{#each latestVotings as { voting, highlightedVoteByGroups } (voting.id)}
 			<VoteCard class="keen-slider__slide" {voting} {highlightedVoteByGroups} />
 		{/each}

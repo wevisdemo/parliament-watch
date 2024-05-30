@@ -25,9 +25,6 @@
 	import Carousel from './Carousel.svelte';
 	import { Button } from 'carbon-components-svelte';
 
-	const MAX_ENACTED_BILL_PER_VIEW = 3.25;
-	const MAX_BILL_STATUS_PER_VIEW = 3;
-
 	const billStatusList = Object.values(BillStatus);
 
 	export let billByCategoryAndStatus: BillByCategoryAndStatus;
@@ -76,12 +73,10 @@
 	{#key selectedCategory}
 		<Carousel
 			options={{
-				loop: false,
-				slides: { perView: 'auto', spacing: 12 },
 				breakpoints: {
-					'(min-width: 1200px)': {
+					'(min-width: 672px)': {
 						slides: {
-							perView: MAX_BILL_STATUS_PER_VIEW,
+							perView: 3,
 							spacing: 12
 						}
 					}
@@ -114,20 +109,7 @@
 		</div>
 
 		{#key selectedCategory}
-			<Carousel
-				options={{
-					loop: false,
-					slides: { perView: 'auto', spacing: 12 },
-					breakpoints: {
-						'(min-width: 1300px)': {
-							slides: {
-								perView: MAX_ENACTED_BILL_PER_VIEW,
-								spacing: 12
-							}
-						}
-					}
-				}}
-			>
+			<Carousel>
 				{#each lastestEnactedBills as bill (bill.id)}
 					<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {bill} />
 				{/each}
