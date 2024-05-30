@@ -3,6 +3,7 @@
 	import { Download, TableSplit } from 'carbon-icons-svelte';
 	import Share from '$components/Share/Share.svelte';
 	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 
 	export let availableAssemblies: AvailableAssembly[] = [];
 
@@ -76,14 +77,7 @@
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
 			</a> -->
 		</div>
-		<p class="label-01 text-gray-60">
-			อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
-				year: 'numeric',
-				month: 'short',
-				day: 'numeric'
-			})}
-		</p>
-		<!-- <a href="/" class="helper-text-01">ที่มาและข้อจำกัดข้อมูล</a> -->
+		<DataPeriodRemark />
 		<Share label="แชร์" />
 	</div>
 </div>

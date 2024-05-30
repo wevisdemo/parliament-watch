@@ -9,6 +9,7 @@
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 
 	export let data;
 
@@ -25,13 +26,7 @@
 <header class="flex flex-col items-center gap-2 px-4 py-10 text-center">
 	<LawIcom width="36" height="36" />
 	<h1 class="fluid-heading-05 text-balance">สำรวจร่างกฎหมายในสภา</h1>
-	<div class="label-01 flex flex-wrap items-baseline justify-center gap-2">
-		<span class="text-text-02"
-			>อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', { dateStyle: 'medium' })}</span
-		>
-		<!-- TODO: Add link -->
-		<!-- <a href="/" class="underline">ที่มาและข้อจำกัดข้อมูล</a> -->
-	</div>
+	<DataPeriodRemark withStartDate />
 </header>
 <section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
 	<h2 class="fluid-heading-03">ค้นด้วยชื่อ</h2>

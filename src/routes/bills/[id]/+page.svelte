@@ -18,6 +18,7 @@
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import Progress from '$components/bills/Progress.svelte';
 	import type { Party } from '$models/party.js';
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
@@ -210,15 +211,7 @@
 						]}
 					/>
 				{/if}
-				<p class="label-01 text-text-02">
-					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric'
-					})}
-				</p>
-				<!-- TODO: add link -->
-				<!-- <a href="/" class="mr-auto helper-text-01 underline"> ที่มาและข้อจำกัดข้อมูล </a> -->
+				<DataPeriodRemark />
 				<Share label="แชร์มติ" />
 			</div>
 		</div>

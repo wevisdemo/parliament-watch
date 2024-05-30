@@ -4,6 +4,7 @@
 	import AffiliationsResult from '$components/AffiliationResult/AffiliationsResult.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import {
@@ -195,15 +196,7 @@
 			</div>
 			<div class="flex flex-col gap-2">
 				<LinkTable links={voting.files} />
-				<p class="label-01 text-gray-60">
-					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric'
-					})}
-				</p>
-				<!-- TODO: add link -->
-				<!-- <a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a> -->
+				<DataPeriodRemark />
 				<Share label="แชร์มติ" />
 			</div>
 		</div>

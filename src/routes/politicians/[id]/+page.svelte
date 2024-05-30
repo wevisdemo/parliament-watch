@@ -14,6 +14,7 @@
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 
 	export let data;
 
@@ -94,15 +95,7 @@
 			</div>
 			<div class="flex flex-col gap-2">
 				<LinkTable links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
-				<p class="label-01 text-gray-60">
-					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric'
-					})}
-				</p>
-				<!-- TODO: add link -->
-				<!-- <a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a> -->
+				<DataPeriodRemark />
 				<Share label="แชร์ประวัติ" />
 			</div>
 		</div>

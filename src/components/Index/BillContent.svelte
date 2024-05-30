@@ -54,7 +54,7 @@
 			?.samples.sort((a, z) => z.proposedOn.getTime() - a.proposedOn.getTime()) || []}
 
 	<div class="flex flex-col gap-2 md:flex-row">
-		<h3 class="fluid-heading-04">เลือกดู</h3>
+		<h3 class="fluid-heading-04 text-nowrap">เลือกดู</h3>
 		<div class="flex flex-row flex-wrap items-center gap-1">
 			{#each categories as category}
 				<button
