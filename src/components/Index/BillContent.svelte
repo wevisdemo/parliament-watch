@@ -2,6 +2,7 @@
 	import { BillStatus, type Bill } from '$models/bill';
 
 	export const ALL_CATEGORY_KEY = 'ทุกหมวด';
+	export const MAX_BILL_BY_STATUS = 3;
 
 	export interface BillCategoryWithStatus {
 		count: number;
@@ -24,7 +25,9 @@
 	import Carousel from './Carousel.svelte';
 	import { Button } from 'carbon-components-svelte';
 
-	const MAX_ENACTED_BILL_PER_VIEW = 5;
+	const MAX_ENACTED_BILL_PER_VIEW = 3.25;
+	const MAX_BILL_STATUS_PER_VIEW = 3;
+
 	const billStatusList = Object.values(BillStatus);
 
 	export let billByCategoryAndStatus: BillByCategoryAndStatus;
@@ -42,11 +45,16 @@
 
 {#if billsBySelectedCategory}
 	{@const billsByStatus = [...billsBySelectedCategory.billsByStatus.entries()]
-		.map(([status, bill]) => ({ status, ...bill }))
+		.map(([status, bill]) => ({
+			status,
+			...bill,
+			samples: bill.samples.slice(0, MAX_BILL_BY_STATUS)
+		}))
 		.sort((a, z) => billStatusList.indexOf(a.status) - billStatusList.indexOf(z.status))}
-	{@const lastestBills = [...billsBySelectedCategory.billsByStatus.values()]
-		.flatMap(({ samples }) => samples)
-		.sort((a, z) => z.proposedOn.getTime() - a.proposedOn.getTime())}
+	{@const lastestEnactedBills =
+		billsBySelectedCategory.billsByStatus
+			.get(BillStatus.Enacted)
+			?.samples.sort((a, z) => z.proposedOn.getTime() - a.proposedOn.getTime()) || []}
 
 	<div class="flex flex-col gap-2 md:flex-row">
 		<h3 class="fluid-heading-04">เลือกดู</h3>
@@ -65,31 +73,33 @@
 		</div>
 	</div>
 
-	<Carousel
-		options={{
-			loop: false,
-			slides: { perView: 'auto', spacing: 12 },
-			breakpoints: {
-				'(min-width: 1200px)': {
-					slides: {
-						perView: billsByStatus.length,
-						spacing: 12
+	{#key selectedCategory}
+		<Carousel
+			options={{
+				loop: false,
+				slides: { perView: 'auto', spacing: 12 },
+				breakpoints: {
+					'(min-width: 1200px)': {
+						slides: {
+							perView: MAX_BILL_STATUS_PER_VIEW,
+							spacing: 12
+						}
 					}
 				}
-			}
-		}}
-	>
-		{#each billsByStatus as bill}
-			<LawStatusCard
-				totalCount={billByCategoryAndStatus.get(ALL_CATEGORY_KEY)?.count || 0}
-				{bill}
-			/>
-		{/each}
-	</Carousel>
+			}}
+		>
+			{#each billsByStatus as bill (bill.status)}
+				<LawStatusCard
+					totalCount={billByCategoryAndStatus.get(ALL_CATEGORY_KEY)?.count || 0}
+					{bill}
+				/>
+			{/each}
+		</Carousel>
+	{/key}
 
 	<div class="flex flex-col space-y-4">
 		<div class="flex flex-row flex-wrap items-center gap-1">
-			<h3 class="heading-02">{lastestBills.length} ฉบับล่าสุดที่ได้บังคับใช้</h3>
+			<h3 class="heading-02">{lastestEnactedBills.length} ฉบับล่าสุดที่ได้บังคับใช้</h3>
 			{#if selectedCategory !== ALL_CATEGORY_KEY}
 				<span class="body-02">ในหมวด</span>
 				<div
@@ -103,24 +113,26 @@
 			{/if}
 		</div>
 
-		<Carousel
-			options={{
-				loop: false,
-				slides: { perView: 'auto', spacing: 12 },
-				breakpoints: {
-					'(min-width: 1300px)': {
-						slides: {
-							perView: MAX_ENACTED_BILL_PER_VIEW,
-							spacing: 12
+		{#key selectedCategory}
+			<Carousel
+				options={{
+					loop: false,
+					slides: { perView: 'auto', spacing: 12 },
+					breakpoints: {
+						'(min-width: 1300px)': {
+							slides: {
+								perView: MAX_ENACTED_BILL_PER_VIEW,
+								spacing: 12
+							}
 						}
 					}
-				}
-			}}
-		>
-			{#each lastestBills as bill}
-				<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {bill} />
-			{/each}
-		</Carousel>
+				}}
+			>
+				{#each lastestEnactedBills as bill (bill.id)}
+					<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {bill} />
+				{/each}
+			</Carousel>
+		{/key}
 	</div>
 
 	<Button href="/bills" kind="secondary" icon={ArrowRight} class="w-full max-w-none">

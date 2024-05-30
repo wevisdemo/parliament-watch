@@ -1,5 +1,6 @@
 import {
 	ALL_CATEGORY_KEY,
+	MAX_BILL_BY_STATUS,
 	type BillByCategoryAndStatus,
 	type BillCategoryWithStatus
 } from '$components/Index/BillContent.svelte';
@@ -9,13 +10,14 @@ import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { fetchBills, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
+import { BillStatus } from '$models/bill';
 import { DefaultVoteOption } from '$models/voting.js';
 import { rollup } from 'd3-array';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LASTEST_VOTE = 5;
-const MAX_BILL_BY_STATUS = 3;
+const MAX_ENACTED_BILL = 10;
 
 enum PoliticialPosition {
 	MP = 'สส.',
@@ -150,7 +152,10 @@ export async function load() {
 			billsByStatus: rollup(
 				billsByCategory,
 				(billsByStatus) => ({
-					samples: billsByStatus.slice(0, MAX_BILL_BY_STATUS),
+					samples: billsByStatus.slice(
+						0,
+						billsByStatus[0].status === BillStatus.Enacted ? MAX_ENACTED_BILL : MAX_BILL_BY_STATUS
+					),
 					count: billsByStatus.length
 				}),
 				(bill) => bill.status
@@ -164,7 +169,10 @@ export async function load() {
 		billsByStatus: rollup(
 			bills,
 			(billsByStatus) => ({
-				samples: billsByStatus.slice(0, MAX_BILL_BY_STATUS),
+				samples: billsByStatus.slice(
+					0,
+					billsByStatus[0].status === BillStatus.Enacted ? MAX_ENACTED_BILL : MAX_BILL_BY_STATUS
+				),
 				count: billsByStatus.length
 			}),
 			(bill) => bill.status
