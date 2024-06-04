@@ -10,12 +10,20 @@ import {
 import { groupVoteByAffiliations } from '$lib/datasheets/voting';
 import { createSeo } from '$lib/seo';
 import type { Bill } from '$models/bill';
-import type { BillEvent } from '$models/bill-event';
+import { BillEventType, type BillEvent } from '$models/bill-event';
 import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
+
+const expectedEventOrder = Object.values(BillEventType).reverse();
 
 export async function load({ params }) {
 	const bill = await fetchFromIdOr404(fetchBills, params.id);
-	const events = (await fetchBillEvents()).filter(({ billId }) => billId === bill.id).reverse();
+	const events = (await fetchBillEvents())
+		.filter(({ billId }) => billId === bill.id)
+		.sort((a, z) =>
+			a.date && z.date
+				? z.date.getTime() - a.date.getTime()
+				: expectedEventOrder.indexOf(a.type) - expectedEventOrder.indexOf(z.type)
+		);
 
 	const votings = await fetchVotings();
 	const votes = await fetchVotes();
