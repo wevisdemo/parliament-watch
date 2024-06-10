@@ -1,13 +1,14 @@
+import type { CheckboxFilterChoice } from '$components/DataPage/DataPage.svelte';
 import { fetchAssemblies, fetchBills } from '$lib/datasheets';
 import { createSeo } from '$lib/seo';
-import { AssemblyName, type Assembly } from '$models/assembly';
+import { AssemblyName } from '$models/assembly';
 import { BillProposerType, BillStatus, type Bill } from '$models/bill';
 import dayjs from 'dayjs';
 
 const OTHER_CATEGORY_KEY = 'อื่นๆ';
 
 interface FilterOptions {
-	mpAssemblies: Assembly[];
+	mpAssemblies: CheckboxFilterChoice[];
 	status: BillStatus[];
 	categories: string[];
 	billProposerType: BillProposerType[];
@@ -27,13 +28,13 @@ interface BillSummary
 		| 'proposedLedByPolitician'
 		| 'proposedByPeople'
 	> {
-	purposedAtMpAssemblyId?: string;
+	purposedAtMpAssemblyId: string;
 	proposedLedByPoliticianName?: string;
 	proposedLedByPeopleName?: string;
 }
 
 export async function load() {
-	const mpAssemblies = (await fetchAssemblies()).filter(
+	const assemblies = (await fetchAssemblies()).filter(
 		({ name }) => name === AssemblyName.Representatives
 	);
 
@@ -43,10 +44,11 @@ export async function load() {
 		return {
 			...bill,
 			categories: bill.categories.length > 0 ? bill.categories : [OTHER_CATEGORY_KEY],
-			purposedAtMpAssemblyId: mpAssemblies.find(
-				({ startedAt, endedAt }) =>
-					proposedDate.isAfter(startedAt) && (!endedAt || proposedDate.isBefore(endedAt))
-			)?.id,
+			purposedAtMpAssemblyId:
+				assemblies.find(
+					({ startedAt, endedAt }) =>
+						proposedDate.isAfter(startedAt) && (!endedAt || proposedDate.isBefore(endedAt))
+				)?.id || OTHER_CATEGORY_KEY,
 			proposedLedByPoliticianName: bill.proposedLedByPolitician
 				? `${bill.proposedLedByPolitician.firstname} ${bill.proposedLedByPolitician.lastname}`
 				: undefined,
@@ -81,6 +83,23 @@ export async function load() {
 		categories.push(OTHER_CATEGORY_KEY);
 	}
 
+	const mpAssemblies: CheckboxFilterChoice[] = assemblies
+		.filter(({ id }) => bills.some((bill) => bill.purposedAtMpAssemblyId === id))
+		.sort((a, z) => z.startedAt.getTime() - a.startedAt.getTime())
+		.map((assembly) => ({
+			label: `${assembly.name}ชุดที่ ${assembly.term} (${formatThaiYear(assembly.startedAt)} - ${
+				formatThaiYear(assembly?.endedAt) ?? 'ปัจจุบัน'
+			})`,
+			value: assembly.id
+		}));
+
+	if (bills.some((bill) => bill.purposedAtMpAssemblyId === OTHER_CATEGORY_KEY)) {
+		mpAssemblies.push({
+			label: 'สภาผู้แทนราษฎรชุดอื่นๆ (ก่อนชุดที่ 25)',
+			value: OTHER_CATEGORY_KEY
+		});
+	}
+
 	const filterOptions: FilterOptions = {
 		mpAssemblies,
 		status: billStatuses,
@@ -96,4 +115,9 @@ export async function load() {
 			title: 'สำรวจร่างกฎหมายในสภาแบบละเอียด'
 		})
 	};
+}
+
+function formatThaiYear(date: Date | null) {
+	if (!date) return;
+	return date.toLocaleString('th-TH', { year: 'numeric' });
 }

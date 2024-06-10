@@ -9,11 +9,6 @@
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
 
-	const formatThaiYear = (date: Date | null) => {
-		if (!date) return;
-		return date.toLocaleString('th-TH', { year: 'numeric' });
-	};
-
 	let cmpDataPage: DataPage;
 
 	export let data;
@@ -36,12 +31,7 @@
 		{
 			key: 'filterEra',
 			legend: 'สมัยที่เสนอ',
-			choices: filterOptions.mpAssemblies.map((assembly) => ({
-				label: `${assembly.name}ชุดที่ ${assembly.term} (${formatThaiYear(assembly.startedAt)} - ${
-					formatThaiYear(assembly?.endedAt) ?? 'ปัจจุบัน'
-				})`,
-				value: assembly.id
-			}))
+			choices: filterOptions.mpAssemblies
 		},
 		{
 			key: 'filterStatus',
