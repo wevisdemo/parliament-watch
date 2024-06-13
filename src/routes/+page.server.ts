@@ -45,7 +45,7 @@ export async function load() {
 	const votesInActiveAssemblies = votes.filter(({ votingId }) =>
 		votings
 			.find(({ id }) => id === votingId)
-			?.participatedAssemblies.some(({ endedAt }) => endedAt === undefined)
+			?.participatedAssemblies.some(({ endedAt }) => !endedAt)
 	);
 
 	const highlightedPoliticians: HighlightedPolitician[] = [
@@ -80,8 +80,10 @@ export async function load() {
 					return {
 						politician,
 						value:
-							theirVotes.filter(({ voteOption }) => voteOption === DefaultVoteOption.Absent)
-								.length / theirVotes.length
+							theirVotes.length > 0
+								? theirVotes.filter(({ voteOption }) => voteOption === DefaultVoteOption.Absent)
+										.length / theirVotes.length
+								: 0
 					};
 				})
 				.sort((a, z) => z.value - a.value)[0]
