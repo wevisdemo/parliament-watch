@@ -71,11 +71,8 @@
 	let memberListSectionRef: HTMLElement;
 
 	let isMobile = false;
-	let mounted = false;
 	let currentCategory = '';
 	onMount(() => {
-		mounted = true;
-
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		isMobile = !showFilter;
 		if (showFilter) {
@@ -103,7 +100,7 @@
 	});
 </script>
 
-<Header {data} bind:searchQuery {mounted} {availableAssemblies} />
+<Header {data} bind:searchQuery {availableAssemblies} />
 <Tab {data} />
 <div class="relative flex">
 	{#if showFilter}
@@ -111,13 +108,7 @@
 			class="member-aside fixed bottom-0 left-0 right-0 top-0 z-40 flex flex-col gap-4 bg-white px-6 md:sticky md:top-[80px] md:z-0 md:h-[calc(100dvh-80px)] md:w-[250px] md:flex-none"
 		>
 			<div class="-mr-6 flex md:mr-0">
-				<Search
-					class="flex-1 {!mounted ? '-mt-6' : ''}"
-					placeholder="ค้นหาชื่อบุคคล"
-					light
-					bind:value={searchQuery}
-					skeleton={!mounted}
-				/>
+				<Search class="flex-1" placeholder="ค้นหาชื่อบุคคล" light bind:value={searchQuery} />
 				<div class="flex md:hidden">
 					<Button
 						kind="ghost"
@@ -128,31 +119,20 @@
 						on:click={() => {
 							showFilter = false;
 						}}
-						skeleton={!mounted}
 					/>
 				</div>
 			</div>
 			{#if currentPath === GroupByOption.Party}
 				<FormGroup legendText="ประเภท" noMargin>
 					<div class="flex items-center justify-between overflow-hidden">
-						<Checkbox
-							labelText="แบ่งเขต"
-							class="!m-0"
-							bind:checked={isByDistrict}
-							skeleton={!mounted}
-						/>
-						<Checkbox
-							labelText="บัญชีรายชื่อ"
-							class="!m-0"
-							bind:checked={isByPartylist}
-							skeleton={!mounted}
-						/>
+						<Checkbox labelText="แบ่งเขต" class="!m-0" bind:checked={isByDistrict} />
+						<Checkbox labelText="บัญชีรายชื่อ" class="!m-0" bind:checked={isByPartylist} />
 					</div>
 				</FormGroup>
 			{/if}
 			<div class="overflow-y-auto">
 				{#if isDataHasSubgroup}
-					<Accordion class="accordion-content-full" skeleton={!mounted}>
+					<Accordion class="accordion-content-full">
 						{#each filteredGroup as group (group.name)}
 							{#if 'subgroups' in group}
 								<AccordionItem open={currentPath === GroupByOption.Party}>
@@ -299,7 +279,6 @@
 			on:click={() => {
 				showFilter = true;
 			}}
-			skeleton={!mounted}
 		/>
 	{/if}
 </div>

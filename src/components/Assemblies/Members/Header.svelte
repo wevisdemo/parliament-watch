@@ -17,7 +17,6 @@
 	$: ({ assembly } = data);
 
 	export let searchQuery = '';
-	export let mounted = false;
 </script>
 
 <Breadcrumb
@@ -61,11 +60,10 @@
 		</div>
 	</div>
 	<Search
-		class="md:hidden {!mounted ? '-mt-4' : ''}"
+		class="md:hidden"
 		searchClass="md:hidden mt-2"
 		placeholder="ค้นหาชื่อบุคคล"
 		light
 		bind:value={searchQuery}
-		skeleton={!mounted}
 	/>
 </header>

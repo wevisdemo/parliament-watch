@@ -100,21 +100,15 @@
 		);
 	};
 
-	let mounted = false;
 	onMount(() => {
-		mounted = true;
+		redraw();
+
 		window.addEventListener('resize', redraw);
 
 		return () => {
 			window.removeEventListener('resize', redraw);
 		};
 	});
-
-	$: if (mounted) {
-		parties;
-		lineAmounts;
-		redraw();
-	}
 </script>
 
 <div
