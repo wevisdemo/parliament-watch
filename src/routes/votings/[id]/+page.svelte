@@ -125,7 +125,7 @@
 		: resultsByPerson;
 </script>
 
-<div class="flex min-h-screen flex-col">
+<div class="flex flex-col">
 	<Breadcrumb
 		noTrailingSlash
 		class="body-compact-01 w-full overflow-hidden truncate text-ellipsis px-4 py-2 [&>.bx--breadcrumb]:flex"
@@ -149,12 +149,14 @@
 			{/if}
 			<div class="text-01 mt-2 flex items-center gap-x-1">
 				<VotingResultTag result={voting.result} isLarge />
-				<span class="body-02 text-gray-60"
-					><span class="heading-compact-02 text-text-01"
-						>{winningOption}
-						{resultsByPerson.filter((v) => v.voteOption === winningOption).length}</span
-					>/{resultsByPerson.length}</span
-				>
+				{#if resultsByPerson.length > 0}
+					<span class="body-02 text-gray-60"
+						><span class="heading-compact-02 text-text-01"
+							>{winningOption}
+							{resultsByPerson.filter((v) => v.voteOption === winningOption).length}</span
+						>/{resultsByPerson.length}</span
+					>
+				{/if}
 			</div>
 		</div>
 		<div
@@ -204,199 +206,203 @@
 	<div class="px-4 py-6 md:px-12 md:py-16">
 		<div class="mx-auto flex w-full max-w-[1280px] flex-col">
 			<h1 class="fluid-heading-05 text-center">ผลการลงมติ</h1>
-			<div
-				class="voting-jumpnav sticky top-0 z-10 mt-4 flex w-full items-center gap-x-[1px] bg-white"
-			>
-				<button
-					class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
-					Menu.Summary
-						? 'border-blue-60 font-bold text-gray-100'
-						: 'border-gray-30 text-gray-60'}"
-					on:click={() => scrollTo(Menu.Summary)}
-				>
-					สรุป
-				</button>
-				<button
-					class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
-					Menu.ByParty
-						? 'border-blue-60 font-bold text-gray-100'
-						: 'border-gray-30 text-gray-60'}"
-					on:click={() => scrollTo(Menu.ByParty)}
-				>
-					รายสังกัด
-				</button>
-				<button
-					class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
-					Menu.ByPerson
-						? 'border-blue-60 font-bold text-gray-100'
-						: 'border-gray-30 text-gray-60'}"
-					on:click={() => scrollTo(Menu.ByPerson)}
-				>
-					รายคน
-				</button>
-			</div>
-			<h2 id={Menu.Summary} class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
-			<div class="mt-4 flex flex-col">
+			{#if resultsByPerson.length === 0}
+				<div class="body-compact-01 my-3 text-center text-gray-60 md:my-8">ไม่พบข้อมูล</div>
+			{:else}
 				<div
-					class="flex items-center gap-x-1 {resultColorLookup[voting.result] ?? 'text-purple-70'}"
+					class="voting-jumpnav sticky top-0 z-10 mt-4 flex w-full items-center gap-x-[1px] bg-white"
 				>
-					<span class="fluid-heading-05 ml-0 md:ml-1">
-						{Math.round(
-							(results.reduce(
-								(max, result) => (result.total > max.total ? result : max),
-								results[0]
-							).total /
-								resultsByPerson.length) *
-								100
-						)}% {getWinningOption(voting.result)}
-					</span>
+					<button
+						class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
+						Menu.Summary
+							? 'border-blue-60 font-bold text-gray-100'
+							: 'border-gray-30 text-gray-60'}"
+						on:click={() => scrollTo(Menu.Summary)}
+					>
+						สรุป
+					</button>
+					<button
+						class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
+						Menu.ByParty
+							? 'border-blue-60 font-bold text-gray-100'
+							: 'border-gray-30 text-gray-60'}"
+						on:click={() => scrollTo(Menu.ByParty)}
+					>
+						รายสังกัด
+					</button>
+					<button
+						class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
+						Menu.ByPerson
+							? 'border-blue-60 font-bold text-gray-100'
+							: 'border-gray-30 text-gray-60'}"
+						on:click={() => scrollTo(Menu.ByPerson)}
+					>
+						รายคน
+					</button>
 				</div>
-				<div
-					class="mt-3 flex flex-col flex-wrap items-start gap-x-4 md:mt-0 md:flex-row md:items-center"
-				>
-					<div class="flex items-center gap-x-1">
-						<p class="heading-02">สมาชิกสภา</p>
-						<p class="body-02">{resultsByPerson.length}</p>
+				<h2 id={Menu.Summary} class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
+				<div class="mt-4 flex flex-col">
+					<div
+						class="flex items-center gap-x-1 {resultColorLookup[voting.result] ?? 'text-purple-70'}"
+					>
+						<span class="fluid-heading-05 ml-0 md:ml-1">
+							{Math.round(
+								(results.reduce(
+									(max, result) => (result.total > max.total ? result : max),
+									results[0]
+								).total /
+									resultsByPerson.length) *
+									100
+							)}% {getWinningOption(voting.result)}
+						</span>
 					</div>
-					{#each results as result}
+					<div
+						class="mt-3 flex flex-col flex-wrap items-start gap-x-4 md:mt-0 md:flex-row md:items-center"
+					>
 						<div class="flex items-center gap-x-1">
-							<div class="h-4 w-4 rounded-sm {getVoteColor(result.voteOption)}" />
-							<p class="heading-02">
-								{typeof result.voteOption === 'object'
-									? result.voteOption.label
-									: result.voteOption}
-							</p>
-							<p class="body-02">{result.total}</p>
+							<p class="heading-02">สมาชิกสภา</p>
+							<p class="body-02">{resultsByPerson.length}</p>
 						</div>
+						{#each results as result}
+							<div class="flex items-center gap-x-1">
+								<div class="h-4 w-4 rounded-sm {getVoteColor(result.voteOption)}" />
+								<p class="heading-02">
+									{typeof result.voteOption === 'object'
+										? result.voteOption.label
+										: result.voteOption}
+								</p>
+								<p class="body-02">{result.total}</p>
+							</div>
+						{/each}
+					</div>
+				</div>
+				<div class="my-2 flex h-[50px] w-full">
+					{#each results as result}
+						{@const resultLen = resultsByPerson.length}
+						{#if result.total}
+							<VoteChartTooltip
+								value={result.total}
+								total={resultLen}
+								color={getVoteColor(result.voteOption)}
+							/>
+						{/if}
 					{/each}
 				</div>
-			</div>
-			<div class="my-2 flex h-[50px] w-full">
-				{#each results as result}
-					{@const resultLen = resultsByPerson.length}
-					{#if result.total}
-						<VoteChartTooltip
-							value={result.total}
-							total={resultLen}
-							color={getVoteColor(result.voteOption)}
-						/>
+				<div class="flex flex-col items-start gap-1 md:flex-row md:items-baseline md:gap-2">
+					<VotingResultTag result={voting.result} isLarge />
+					{#if voting.winningCondition}
+						<p class="heading-01 mt-2 text-gray-60 md:mt-0">เงื่อนไข</p>
+						<p class="body-01 text-gray-60">{voting.winningCondition}</p>
 					{/if}
-				{/each}
-			</div>
-			<div class="flex flex-col items-start gap-1 md:flex-row md:items-baseline md:gap-2">
-				<VotingResultTag result={voting.result} isLarge />
-				{#if voting.winningCondition}
-					<p class="heading-01 mt-2 text-gray-60 md:mt-0">เงื่อนไข</p>
-					<p class="body-01 text-gray-60">{voting.winningCondition}</p>
-				{/if}
-			</div>
-			<Modal passiveModal bind:open modalHeading="งดออกเสียง vs. ไม่ลงคะแนน" on:open on:close>
-				<p class="body-01">
-					งดออกเสียง เกิดจากการเสียบบัตรยืนยันตัวตน และลงคะแนนว่า “งดออกเสียง” <br />
-					ไม่ลงคะแนน เกิดจากการเสียบบัตรยืนยันตัวตนแล้ว แต่ไม่กดลงคะแนน
-				</p>
-			</Modal>
-			<button
-				class="helper-text-01 mt-2 cursor-pointer self-start text-left text-blue-60 underline"
-				on:click={() => {
-					open = true;
-				}}
-			>
-				งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
-			</button>
-			<div class="mt-20 flex w-full flex-col">
-				<div class="flex flex-col items-start gap-x-3 md:flex-row md:items-center">
-					<h1 id={Menu.ByParty} class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
-					<div class="flex items-center">
-						<Toggle
-							class="outline-none"
-							bind:toggled={isViewPercent}
-							hideLabel
-							labelA="ดูร้อยละ"
-							labelB="ดูร้อยละ"
-						/>
-					</div>
 				</div>
-				<p class="label-01 mt-1">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
-			</div>
-			<div class="mb-10 mt-4 flex w-full flex-col gap-x-8 md:flex-row">
-				<AffiliationsResult
-					{resultsByAffiliation}
-					{isViewPercent}
-					{resultColorLookup}
-					{getVoteColor}
-				/>
-			</div>
-			<div class="mt-0 flex w-full flex-col md:mt-10">
-				<p class="label-01 hidden text-right text-gray-60 md:block">
-					หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ
-				</p>
-				<div id={Menu.ByPerson} class="fluid-heading-04 bg-gray-10 px-4 pb-6 pt-4">
-					ผลการลงมติรายคน
-				</div>
-				<div class="flex">
-					<div class="flex flex-1 items-center bg-gray-10">
-						<Search size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" bind:value={searchQuery} />
-					</div>
-					<Button class="flex w-[164px] items-center px-[14px] py-[13px]"
-						><a class="body-compact-01 text-white" href="/votings/{voting.id}/votes"
-							>สำรวจแบบละเอียด</a
-						><ArrowRight /></Button
-					>
-				</div>
-				<div class="flex w-full border-t border-gray-30">
-					<div class="heading-compact-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
-						ชื่อ-นามสกุล
-					</div>
-					<div class="heading-compact-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
-						ตำแหน่ง
-					</div>
-					<div class="heading-compact-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
-						สังกัดพรรค
-					</div>
-					<div
-						class="heading-compact-01 hidden w-[112px] px-4 py-[11px] md:block md:w-1/4 md:py-[15px]"
-					>
-						การลงมติ
-					</div>
-				</div>
-				{#if voterSearchResult.length}
-					{#each voterSearchResult as voter}
-						<div class="flex w-full border-t border-gray-30">
-							<a
-								href="/politicians/{voter.id}"
-								class="body-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]"
-							>
-								{voter.firstname}
-								{voter.lastname}
-							</a>
-							<div
-								class="body-compact-01 w-[112px] px-4 py-[11px] text-gray-60 md:w-1/4 md:py-[15px]"
-							>
-								{voter.role}
-							</div>
-							<div
-								class="body-compact-01 w-[112px] px-4 py-[11px] text-gray-60 md:w-1/4 md:py-[15px]"
-							>
-								{voter.party ? voter.party.name : ''}
-							</div>
-							<div class="hidden w-[112px] px-4 py-[11px] md:block md:w-1/4 md:py-[15px]">
-								<Tag class={getVoteColor(voter.voteOption)}
-									>{typeof voter.voteOption === 'object'
-										? voter.voteOption.label
-										: voter.voteOption}</Tag
-								>
-							</div>
+				<Modal passiveModal bind:open modalHeading="งดออกเสียง vs. ไม่ลงคะแนน" on:open on:close>
+					<p class="body-01">
+						งดออกเสียง เกิดจากการเสียบบัตรยืนยันตัวตน และลงคะแนนว่า “งดออกเสียง” <br />
+						ไม่ลงคะแนน เกิดจากการเสียบบัตรยืนยันตัวตนแล้ว แต่ไม่กดลงคะแนน
+					</p>
+				</Modal>
+				<button
+					class="helper-text-01 mt-2 cursor-pointer self-start text-left text-blue-60 underline"
+					on:click={() => {
+						open = true;
+					}}
+				>
+					งดออกเสียง และ ไม่ลงคะแนน ต่างกันอย่างไร?
+				</button>
+				<div class="mt-20 flex w-full flex-col">
+					<div class="flex flex-col items-start gap-x-3 md:flex-row md:items-center">
+						<h1 id={Menu.ByParty} class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
+						<div class="flex items-center">
+							<Toggle
+								class="outline-none"
+								bind:toggled={isViewPercent}
+								hideLabel
+								labelA="ดูร้อยละ"
+								labelB="ดูร้อยละ"
+							/>
 						</div>
-					{/each}
-				{:else}
-					<div
-						class="body-compact-01 flex w-full border-t border-gray-30 px-4 py-[11px] text-gray-60 md:py-[15px]"
-					>
-						ไม่พบบุคคลที่ค้นหา
 					</div>
-				{/if}
-			</div>
+					<p class="label-01 mt-1">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
+				</div>
+				<div class="mb-10 mt-4 flex w-full flex-col gap-x-8 md:flex-row">
+					<AffiliationsResult
+						{resultsByAffiliation}
+						{isViewPercent}
+						{resultColorLookup}
+						{getVoteColor}
+					/>
+				</div>
+				<div class="mt-0 flex w-full flex-col md:mt-10">
+					<p class="label-01 hidden text-right text-gray-60 md:block">
+						หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ
+					</p>
+					<div id={Menu.ByPerson} class="fluid-heading-04 bg-gray-10 px-4 pb-6 pt-4">
+						ผลการลงมติรายคน
+					</div>
+					<div class="flex">
+						<div class="flex flex-1 items-center bg-gray-10">
+							<Search size="xl" placeholder="ค้นด้วยชื่อ-นามสกุล" bind:value={searchQuery} />
+						</div>
+						<Button class="flex w-[164px] items-center px-[14px] py-[13px]"
+							><a class="body-compact-01 text-white" href="/votings/{voting.id}/votes"
+								>สำรวจแบบละเอียด</a
+							><ArrowRight /></Button
+						>
+					</div>
+					<div class="flex w-full border-t border-gray-30">
+						<div class="heading-compact-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
+							ชื่อ-นามสกุล
+						</div>
+						<div class="heading-compact-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
+							ตำแหน่ง
+						</div>
+						<div class="heading-compact-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
+							สังกัดพรรค
+						</div>
+						<div
+							class="heading-compact-01 hidden w-[112px] px-4 py-[11px] md:block md:w-1/4 md:py-[15px]"
+						>
+							การลงมติ
+						</div>
+					</div>
+					{#if voterSearchResult.length}
+						{#each voterSearchResult as voter}
+							<div class="flex w-full border-t border-gray-30">
+								<a
+									href="/politicians/{voter.id}"
+									class="body-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]"
+								>
+									{voter.firstname}
+									{voter.lastname}
+								</a>
+								<div
+									class="body-compact-01 w-[112px] px-4 py-[11px] text-gray-60 md:w-1/4 md:py-[15px]"
+								>
+									{voter.role}
+								</div>
+								<div
+									class="body-compact-01 w-[112px] px-4 py-[11px] text-gray-60 md:w-1/4 md:py-[15px]"
+								>
+									{voter.party ? voter.party.name : ''}
+								</div>
+								<div class="hidden w-[112px] px-4 py-[11px] md:block md:w-1/4 md:py-[15px]">
+									<Tag class={getVoteColor(voter.voteOption)}
+										>{typeof voter.voteOption === 'object'
+											? voter.voteOption.label
+											: voter.voteOption}</Tag
+									>
+								</div>
+							</div>
+						{/each}
+					{:else}
+						<div
+							class="body-compact-01 flex w-full border-t border-gray-30 px-4 py-[11px] text-gray-60 md:py-[15px]"
+						>
+							ไม่พบบุคคลที่ค้นหา
+						</div>
+					{/if}
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>
