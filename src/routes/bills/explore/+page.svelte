@@ -78,7 +78,7 @@
 							return;
 
 						const search = searchQuery.trim();
-						if (search && !bill.title.includes(search)) return;
+						if (search && !bill.title.includes(search) && !bill.nickname.includes(search)) return;
 
 						const { filterEra, filterStatus, filterCategory, filterProposerType } =
 							selectedCheckboxValue;
