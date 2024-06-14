@@ -19,6 +19,10 @@ export interface VotingAbsentStats {
 	averageAbsentVoting: number;
 }
 
+export async function entries() {
+	return (await fetchPoliticians()).map(({ id }) => ({ id }));
+}
+
 export async function load({ params }) {
 	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
 

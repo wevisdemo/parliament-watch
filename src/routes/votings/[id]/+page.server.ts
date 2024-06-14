@@ -8,6 +8,10 @@ import { createSeo } from '$lib/seo.js';
 import type { Bill } from '$models/bill';
 import type { ResultsByAffiliation } from './+page.js';
 
+export async function entries() {
+	return (await fetchVotings()).map(({ id }) => ({ id }));
+}
+
 export async function load({ params }) {
 	const voting = await fetchFromIdOr404(fetchVotings, params.id);
 	const votes = (await fetchVotes()).filter(({ votingId }) => votingId === voting.id);

@@ -13,6 +13,10 @@ import type { Bill } from '$models/bill';
 import { BillEventType, type BillEvent } from '$models/bill-event';
 import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
 
+export async function entries() {
+	return (await fetchBills()).map(({ id }) => ({ id }));
+}
+
 const expectedEventOrder = Object.values(BillEventType).reverse();
 
 export async function load({ params }) {
