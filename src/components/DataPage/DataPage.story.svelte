@@ -60,7 +60,6 @@
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
 	let selectedComboboxValue: SelectedComboboxValueType;
-	let mounted: boolean;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||
@@ -89,7 +88,6 @@
 			bind:searchQuery
 			bind:selectedCheckboxValue
 			bind:selectedComboboxValue
-			bind:mounted
 		>
 			<h1 class="fluid-heading-03">ประวัติการลงมติ</h1>
 			<svelte:fragment slot="table" let:cellKey let:cellValue>
@@ -121,11 +119,6 @@
 			<strong class="mb-2 block">Selected Filter?</strong>
 			<pre class="border border-solid border-gray-50 p-2"><code
 					>{JSON.stringify(selectedCheckboxValue, null, 2)}</code
-				></pre>
-		</section>
-		<section class="mb-2 border border-solid border-white p-2">
-			<strong class="mb-2 block">Is Component Mounted?</strong>
-			<pre class="border border-solid border-gray-50 p-2"><code>{mounted?.toString() ?? ''}</code
 				></pre>
 		</section>
 	</svelte:fragment>
