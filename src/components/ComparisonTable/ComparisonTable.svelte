@@ -8,7 +8,7 @@
 			<thead class="bg-gray-20">
 				<tr class="h-12 border-b-2">
 					{#each Object.keys(proposerComparisonTableData[0]) as columnHeading}
-						<th class="text-01 font-semibold px-4 p-4">{columnHeading}</th>
+						<th class="text-01 p-4 px-4 font-semibold">{columnHeading}</th>
 					{/each}
 				</tr>
 			</thead>
@@ -31,7 +31,7 @@
 	}
 	tbody {
 		tr:not(:last-child) {
-			@apply border-b border-gray-20 border-solid;
+			@apply border-b border-solid border-gray-20;
 		}
 	}
 </style>

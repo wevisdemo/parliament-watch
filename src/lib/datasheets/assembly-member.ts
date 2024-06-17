@@ -1,8 +1,8 @@
-import type { ComponentProps } from 'svelte';
-import dayjs from 'dayjs';
 import type PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 import type { Assembly } from '$models/assembly';
 import type { Politician } from '$models/politician';
+import dayjs from 'dayjs';
+import type { ComponentProps } from 'svelte';
 
 export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]) =>
 	politicians
@@ -10,7 +10,7 @@ export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]
 			...rest,
 			assemblyRole: assemblyRoles.find(({ assembly: a }) => a.id === assembly.id)
 		}))
-		.filter(({ assemblyRole }) => assemblyRole !== undefined)
+		.filter(({ assemblyRole }) => assemblyRole)
 		.map(({ partyRoles, ...rest }) => {
 			const partyRole = partyRoles
 				.filter(({ startedAt }) => !assembly.endedAt || dayjs(startedAt).isBefore(assembly.endedAt))
@@ -37,7 +37,12 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 		avatar,
 		isActive,
 		party: partyRole?.party,
-		role: !isActive ? 'พ้นสภาพก่อนสภาหมดอายุ' : getAssemblyRoleDescription(assemblyRole)
+		role: !isActive ? 'พ้นสภาพก่อนสภาหมดอายุ' : getAssemblyRoleDescription(assemblyRole),
+		candidateType: assemblyRole?.listNumber
+			? 'บัญชีรายชื่อ'
+			: assemblyRole?.province && assemblyRole.districtNumber
+				? 'แบ่งเขต'
+				: undefined
 	};
 }
 
@@ -45,5 +50,5 @@ const getAssemblyRoleDescription = (assemblyRole: AssemblyMember['assemblyRole']
 	assemblyRole?.listNumber
 		? `บัญชีรายชื่อ ลำดับ ${assemblyRole?.listNumber}`
 		: assemblyRole?.province && assemblyRole.districtNumber
-		? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
-		: assemblyRole?.appointmentMethod;
+			? `${assemblyRole?.province} เขต ${assemblyRole.districtNumber}`
+			: assemblyRole?.appointmentMethod;

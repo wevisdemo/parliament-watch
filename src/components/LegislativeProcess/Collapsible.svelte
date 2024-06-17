@@ -29,9 +29,9 @@
 
 <Tile
 	on:click={toggle}
-	class="bg-teal-10 border border-solid border-gray-30 p-0 hover:cursor-pointer"
+	class="border border-solid border-gray-30 bg-teal-10 p-0 hover:cursor-pointer"
 >
-	<div class="p-5 flex flex-col gap-y-4">
+	<div class="flex flex-col gap-y-4 p-5">
 		<h3 class="fluid-heading-03 mb-2">{title}</h3>
 		<div class="flex flex-col gap-2">
 			<p>{details}</p>
@@ -39,7 +39,7 @@
 				<strong class="mr-1 shrink-0 text-sm">เสนอโดย</strong>
 				{#each presentedBy as presenter}
 					<div
-						class="flex flex-row items-baseline after:content-['/'] last:after:content-none after:ml-1"
+						class="flex flex-row items-baseline after:ml-1 after:content-['/'] last:after:content-none"
 					>
 						<Tag {...tagProps}>{presenter}</Tag>
 					</div>
@@ -63,7 +63,7 @@
 		<div
 			class="grid transition-[grid-template-rows] {isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}"
 		>
-			<div class="flex flex-col overflow-hidden gap-y-4">
+			<div class="flex flex-col gap-y-4 overflow-hidden">
 				<div>
 					<h4 class="font-semibold leading-loose">ขั้นตอน</h4>
 					{#if stepDescription}
@@ -75,9 +75,9 @@
 					{#each steps as step}
 						<div class="flex flex-row items-center gap-1">
 							<CheckmarkFilled size={24} class="fill-green-70" />
-							<hr class="w-3 width border-[1px]" />
+							<hr class="width w-3 border-[1px]" />
 							<Tag
-								class="bg-text-primary text-ui-background font-semibold w-[364px] justify-start my-0"
+								class="my-0 w-[364px] justify-start bg-text-primary font-semibold text-ui-background"
 							>
 								{step}
 							</Tag>
@@ -103,9 +103,9 @@
 
 	<button
 		on:click={toggle}
-		class="w-full bg-[transparent] h-12 focus:outline-interactive-01 focus:outline-2 focus:-outline-offset-2"
+		class="h-12 w-full bg-[transparent] focus:outline-2 focus:-outline-offset-2 focus:outline-interactive-01"
 	>
-		<div class=" ml-auto my-auto w-12">
+		<div class=" my-auto ml-auto w-12">
 			<ChevronDown class="m-auto h-full {isOpen ? 'rotate-180' : ''}" />
 		</div>
 	</button>

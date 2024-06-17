@@ -1,10 +1,11 @@
-import { z } from 'zod';
 import { safeFind } from '$lib/datasheets/processor';
 import type { Party } from './party';
+import { Table, Column, type RowType } from 'sheethuahua';
 
 export enum AssemblyName {
 	Representatives = 'สภาผู้แทนราษฎร',
-	Senates = 'วุฒิสภา'
+	Senates = 'วุฒิสภา',
+	Cabinet = 'คณะรัฐมนตรี'
 }
 
 const assemblyStaticInfoMap = {
@@ -21,50 +22,53 @@ const assemblyStaticInfoMap = {
 	[AssemblyName.Senates]: {
 		abbreviation: 'สว.',
 		mainRoles: ['ประธานวุฒิสภา']
+	},
+	[AssemblyName.Cabinet]: {
+		abbreviation: 'ครม.',
+		// TODO: No cabinet member data yet
+		mainRoles: []
 	}
 };
 
-export const createAssemblySchema = (
+export const assemblyTable = Table('Assemblies', {
+	id: Column.String(),
+	name: Column.OneOf(Object.values(AssemblyName)),
+	term: Column.Number(),
+	startedAt: Column.Date(),
+	endedAt: Column.OptionalDate(),
+	origin: Column.OptionalString()
+});
+
+export function transformAssembly(
+	assembly: RowType<typeof assemblyTable>,
 	parties: Party[],
-	assemblyPartyGroups: z.infer<typeof assemblyPartyGroupSchema>[]
-) =>
-	z
-		.object({
-			id: z.string(),
-			name: z.nativeEnum(AssemblyName),
-			term: z.number(),
-			startedAt: z.date(),
-			endedAt: z.date().optional(),
-			origin: z.string()
-		})
-		.transform((assembly) => {
-			const getPartyGroup = (groupName: AssemblyPartyGroup) =>
-				assemblyPartyGroups
-					.filter(({ assemblyId, group }) => assemblyId === assembly.id && group === groupName)
-					.map(({ partyName }) => safeFind(parties, ({ name }) => name === partyName));
+	assemblyPartyGroups: RowType<typeof assemblyPartyGroupTable>[]
+) {
+	const getPartyGroup = (groupName: AssemblyPartyGroup) =>
+		assemblyPartyGroups
+			.filter(({ assemblyId, group }) => assemblyId === assembly.id && group === groupName)
+			.map(({ partyName }) => safeFind(parties, ({ name }) => name === partyName));
 
-			return {
-				...assembly,
-				...(assemblyStaticInfoMap[assembly.name] as { abbreviation: string; mainRoles: string[] }),
-				governmentParties: getPartyGroup(AssemblyPartyGroup.Government),
-				oppositionParties: getPartyGroup(AssemblyPartyGroup.Opposition)
-			};
-		});
+	return {
+		...assembly,
+		...(assemblyStaticInfoMap[assembly.name] as { abbreviation: string; mainRoles: string[] }),
+		governmentParties: getPartyGroup(AssemblyPartyGroup.Government),
+		oppositionParties: getPartyGroup(AssemblyPartyGroup.Opposition)
+	};
+}
 
-export type Assembly = z.infer<ReturnType<typeof createAssemblySchema>>;
+export type Assembly = ReturnType<typeof transformAssembly>;
 
 export enum AssemblyPartyGroup {
 	Government = 'ฝ่ายรัฐบาล',
 	Opposition = 'ฝ่ายค้าน'
 }
 
-export const assemblyPartyGroupSchema = z
-	.object({
-		assemblyId: z.string(),
-		partyName: z.string(),
-		group: z.nativeEnum(AssemblyPartyGroup)
-	})
-	.transform((d) => d);
+export const assemblyPartyGroupTable = Table('AssemblyPartyGroups', {
+	assemblyId: Column.String(),
+	partyName: Column.String(),
+	group: Column.OneOf(Object.values(AssemblyPartyGroup))
+});
 
 export enum GroupByOption {
 	Party = 'party',

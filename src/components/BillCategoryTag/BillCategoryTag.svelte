@@ -11,7 +11,7 @@
 
 <Tag
 	class={twMerge(
-		'text-text-10 border-solid bg-white/0 border-[1px] m-0 whitespace-nowrap',
+		'text-text-10 m-0 whitespace-nowrap border-[1px] border-solid bg-white/0',
 		isLarge ? 'font-semibold' : 'font-small',
 		className
 	)}

@@ -10,7 +10,7 @@
 	}
 
 	.member-aside {
-		@apply transition-[top,_height] will-change-[top,_height] duration-[350ms];
+		@apply transition-[top,_height] duration-[350ms] will-change-[top,_height];
 	}
 
 	html.navbar-shown .member-aside {

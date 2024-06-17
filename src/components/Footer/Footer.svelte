@@ -8,17 +8,17 @@
 	menuList;
 </script>
 
-<div class="flex flex-col items-center gap-4 bg-white py-8 px-6 md:px-12 lg:px-16 text-sm">
+<div class="flex flex-col items-center gap-4 bg-white px-6 py-8 text-sm md:px-12 lg:px-16">
 	<p class="max-w-[1200px]">
 		เว็บไซต์นี้สร้างโดย
 		<a
 			href="https://wevis.info/"
 			target="_blank"
 			rel="nofollow noopener noreferrer"
-			class="flex flex-row items-end mb-2"
+			class="mb-2 flex flex-row items-end"
 		>
 			<WeVisText width="79px" height="24px" viewBox="0 0 79 24" class="text-black" />
-			<ArrowUpRight class="text-black ml-2" size={16} />
+			<ArrowUpRight class="ml-2 text-black" size={16} />
 		</a>
 		กลุ่มเทคโนโลยีภาคประชาชน (Civic Technology) ที่ขับเคลื่อนสังคมผ่านเทคโนโลยีและข้อมูลเปิด (Open Data)
 		ภารกิจของเราคือการทำให้ประชาธิปไตยไทยเปิดเผย โปรงใส และมีส่วนรวมได้ เราจึงตั้งใจพัฒนาโปรเจกต์ Parliament
@@ -51,9 +51,9 @@
 		</div>
 	</div>
 </div>
-<div class="bg-black py-8 px-6 md:px-12 lg:px-16 text-white">
+<div class="bg-black px-6 py-8 text-white md:px-12 lg:px-16">
 	<div
-		class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 md:gap-y-4 lg:gap-x-6 gap-y-4 pb-4 border-solid border-0 border-b border-ui-04 text-gray-30"
+		class="grid grid-cols-1 gap-y-4 border-0 border-b border-solid border-ui-04 pb-4 text-gray-30 md:grid-cols-4 md:gap-y-4 lg:grid-cols-6 lg:gap-x-6"
 	>
 		<div class="row-span-2">
 			<img width="120px" height="34px" src="/images/logo/pw-short-white.png" alt="logo short" />
@@ -71,7 +71,7 @@
 		<div class="hidden lg:block" />
 		<FooterContact />
 	</div>
-	<div class="flex flex-col md:flex-row md:justify-between mt-4">
+	<div class="mt-4 flex flex-col md:flex-row md:justify-between">
 		<div>&copy; Parliament Watch 2023</div>
 		<!-- <div class="text-gray-30">นโยบายความปลอดภัย | Privacy Policy</div> -->
 	</div>

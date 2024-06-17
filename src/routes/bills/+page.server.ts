@@ -1,23 +1,28 @@
-import type { Assembly } from '$models/assembly';
-import { BillStatus, type Bill, BillProposerType } from '$models/bill';
-import { fetchAssemblies } from '$lib/datasheets';
-import { enactedBill } from '../../mocks/data/bill';
+import { fetchBills } from '$lib/datasheets';
+import { createSeo } from '$lib/seo';
+import { BillProposerType, BillStatus, type Bill } from '$models/bill';
+import { rollup } from 'd3';
+
+const BILL_SAMPLE_LIMIT = 3;
+const LATEST_ENACTED_BILL_LIMIT = 10;
+
+type BillSample = Pick<Bill, 'id' | 'nickname'>;
 
 export interface BillsByStatus {
 	status: BillStatus;
-	samples: Pick<Bill, 'id' | 'nickname'>[];
+	samples: BillSample[];
 	count: number;
 }
 
 export interface BillsByCategory {
 	category: string;
-	samples: Pick<Bill, 'id' | 'nickname'>[];
+	samples: BillSample[];
 	count: number;
 }
 
 export interface BillsByProposerType {
 	proposerType: BillProposerType;
-	samples: Pick<Bill, 'id' | 'nickname'>[];
+	samples: BillSample[];
 	count: number;
 	countByStatus: {
 		[status in BillStatus]: number;
@@ -25,79 +30,68 @@ export interface BillsByProposerType {
 }
 
 export async function load() {
-	const totalCount = 900;
-	const samepleBills = [
-		{ id: 1, nickname: 'ร่าง พรบ.สุราก้าวหน้า' },
-		{ id: 2, nickname: 'ร่าง พรบ.การจัดสรรที่ดิน' },
-		{ id: 3, nickname: 'ร่าง พรบ.กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม' }
-	];
-	const byStatus: BillsByStatus[] = Object.values(BillStatus).map((status) => {
-		return {
-			status,
-			samples: samepleBills,
-			count: 225
-		};
-	});
+	const bills = (await fetchBills()).sort(
+		(a, z) => z.proposedOn.getTime() - a.proposedOn.getTime()
+	);
+
+	const totalCount = bills.length;
+
+	const byStatus: BillsByStatus[] = Object.values(BillStatus)
+		.map((status) => {
+			const relatedBills = bills.filter((bill) => bill.status === status);
+			return {
+				status,
+				samples: relatedBills.slice(0, BILL_SAMPLE_LIMIT),
+				count: relatedBills.length
+			};
+		})
+		.filter(({ count }) => count > 0);
+
 	const byCategory: BillsByCategory[] = [
-		'ขนส่งสาธารณะ',
-		'เศรษฐกิจ',
-		'แก้รัฐธรรมนูญ',
-		'วัฒนธรรม',
-		'เกษตรกรรม'
-	].map((category) => {
-		return {
-			category,
-			samples: samepleBills,
-			count: 180
-		};
-	});
-	const byProposerType: BillsByProposerType[] = Object.values(BillProposerType).map(
-		(proposerType) => {
+		...rollup(
+			bills.flatMap(({ categories, ...rest }) =>
+				categories.map((category) => ({ category, ...rest }))
+			),
+			(group) => ({
+				category: group[0].category,
+				samples: group.slice(0, BILL_SAMPLE_LIMIT),
+				count: group.length
+			}),
+			(bill) => bill.category
+		).values()
+	].sort((a, z) => z.count - a.count);
+
+	const byProposerType: BillsByProposerType[] = Object.values(BillProposerType)
+		.map((proposerType) => {
+			const relatedBills = bills.filter((bill) => bill.proposerType === proposerType);
+			const statusGroup = rollup(
+				relatedBills,
+				(group) => group.length,
+				(bill) => bill.status
+			);
+
 			return {
 				proposerType,
-				samples: samepleBills,
-				count: 300,
-				countByStatus: {
-					[BillStatus.InProgress]: 100,
-					[BillStatus.Enacted]: 95,
-					[BillStatus.Rejected]: 45,
-					[BillStatus.Merged]: 60
-				}
+				samples: relatedBills.slice(0, BILL_SAMPLE_LIMIT),
+				count: relatedBills.length,
+				countByStatus: Object.fromEntries(statusGroup) as BillsByProposerType['countByStatus']
 			};
-		}
-	);
-	const latestEnactedBills: Bill[] = [
-		enactedBill,
-		{
-			// Cabinet-proposed
-			...enactedBill,
-			proposerType: BillProposerType.Cabinet,
-			proposedByAssembly: (await fetchAssemblies()).find(
-				({ id }) => id === 'สภาผู้แทนราษฎร-26'
-			) as Assembly,
-			proposedLedByPolitician: undefined,
-			coProposedByPoliticians: undefined
-		},
-		{
-			// People-proposed
-			...enactedBill,
-			proposerType: BillProposerType.People,
-			proposedByPeople: {
-				ledBy: 'จีรนุช เปรมชัยพร',
-				signatoryCount: 205700
-			},
-			proposedLedByPolitician: undefined,
-			coProposedByPoliticians: undefined
-		},
-		enactedBill,
-		enactedBill
-	];
+		})
+		.filter(({ count }) => count > 0);
+
+	// TODO: use bill events
+	const latestEnactedBills: Bill[] = bills
+		.filter(({ status }) => status === BillStatus.Enacted)
+		.slice(0, LATEST_ENACTED_BILL_LIMIT);
 
 	return {
 		totalCount,
 		byStatus,
 		byCategory,
 		byProposerType,
-		latestEnactedBills
+		latestEnactedBills,
+		seo: createSeo({
+			title: 'สำรวจร่างกฎหมายในสภา'
+		})
 	};
 }

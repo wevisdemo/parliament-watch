@@ -18,7 +18,7 @@
 			{/if}
 		</li>
 		{#if menu.type === 'root' || menu.type === 'both'}
-			<hr class="border-0 border-b p-0 m-0 border-gray-30/20 z-40" />
+			<hr class="z-40 m-0 border-0 border-b border-gray-30/20 p-0" />
 		{/if}
 	{/each}
 </ul>

@@ -14,7 +14,7 @@
 				<svelte:component this={menu.icon} class="text-inverse-link" />
 			{/if}
 		</div>
-		<p class="text-gray-10 p-3 whitespace-nowrap">{menu.label}</p>
+		<p class="whitespace-nowrap p-3 text-gray-10">{menu.label}</p>
 	</div>
 	<slot />
 </div>

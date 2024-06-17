@@ -3,7 +3,7 @@
 	import WvCookieConsent, {
 		type CookieConsentProps
 	} from '@wevisdemo/ui/svelte/cookie-consent.svelte';
-	import { initClarity } from '../../utils/clarity';
+	import { initClarity } from '$lib/clarity';
 
 	const onAccept: CookieConsentProps['onAccept'] = (option) => {
 		if (option['Performance']) {

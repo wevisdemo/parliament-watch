@@ -8,7 +8,7 @@
 	export let lastname: string;
 	export let avatar: string;
 	export let party: Pick<Party, 'logo' | 'name'> | undefined = undefined;
-	export let role: string | undefined = undefined;
+	export let role: string | null = null;
 	export let isLarge = false;
 	export let isActive = true;
 
@@ -23,7 +23,7 @@
 
 <a
 	href="/politicians/{id}"
-	class="p-2 font-sans flex gap-4 hover:underline"
+	class="flex gap-4 p-2 font-sans hover:underline"
 	class:opacity-50={!isActive}
 >
 	<PoliticianPicture class={imgClass} {avatar} size={imgSize} {party} />

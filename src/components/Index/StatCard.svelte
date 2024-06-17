@@ -120,22 +120,22 @@
 </script>
 
 <article class={twMerge('flex flex-col', className)}>
-	<h4 class="heading-01 text-blue-70 mb-[2px]">
+	<h4 class="heading-01 mb-[2px] text-blue-70">
 		{reason} <span class="font-normal">{postfix}</span>
 	</h4>
 	{#if description}
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		<p class="flex-[1_1_70px] label-01 text-gray-60">{@html description}</p>
+		<p class="label-01 flex-[1_1_70px] text-gray-60">{@html description}</p>
 	{/if}
-	<a href={`/politicians/${politician.id}`} class="flex bg-white text-gray-100 mt-1 hover:bg-ui-01">
-		<div class="flex flex-col gap-2 p-4 flex-1">
+	<a href={`/politicians/${politician.id}`} class="mt-1 flex bg-white text-gray-100 hover:bg-ui-01">
+		<div class="flex flex-1 flex-col gap-2 p-4">
 			<PoliticianPicture
 				avatar={politician.avatar}
 				size="40"
 				party={politician.partyRoles[0]?.party}
 			/>
 			<span class="heading-02 text-gray-100">{politician.firstname} {politician.lastname}</span>
-			<span class="-mt-2 label-01 text-gray-60">
+			<span class="label-01 -mt-2 text-gray-60">
 				{#if politician.assemblyRoles[0]}
 					<span>{politician.assemblyRoles[0].role}</span>
 				{/if}

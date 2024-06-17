@@ -1,12 +1,16 @@
-import type { Bill } from '$models/bill';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
 import {
 	getVoteResultsByPerson,
 	groupVoteByAffiliations,
 	type VoteOptionCounter
 } from '$lib/datasheets/voting.js';
-import { createSeo } from '../../../utils/seo.js';
+import { createSeo } from '$lib/seo.js';
+import type { Bill } from '$models/bill';
 import type { ResultsByAffiliation } from './+page.js';
+
+export async function entries() {
+	return (await fetchVotings()).map(({ id }) => ({ id }));
+}
 
 export async function load({ params }) {
 	const voting = await fetchFromIdOr404(fetchVotings, params.id);
@@ -45,7 +49,7 @@ export async function load({ params }) {
 		resultsByAffiliation,
 		resultsByPerson,
 		seo: createSeo({
-			title: 'การลงมติ ' + voting.title
+			title: 'การลงมติ ' + voting.nickname
 		})
 	};
 }

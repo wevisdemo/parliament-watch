@@ -1,43 +1,64 @@
 <script lang="ts">
-	import LawProcess from '$components/bills/LawProcess.svelte';
-	import { showModalLawProcess } from '$components/bills/store';
-	import CloseLarge from 'carbon-icons-svelte/lib/CloseLarge.svelte';
+	import { createDialog } from '@melt-ui/svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import Close from 'carbon-icons-svelte/lib/Close.svelte';
+	import { fade, fly } from 'svelte/transition';
+	import { twMerge } from 'tailwind-merge';
+	import { entranceExpressive } from '$lib/easing';
+
+	let className = '';
+	export { className as class };
+
+	const {
+		elements: { trigger, portalled, overlay, content, title, close },
+		states: { open }
+	} = createDialog();
 </script>
 
-{#if $showModalLawProcess}
-	<button
-		on:click|self={() => {
-			$showModalLawProcess = false;
-		}}
-		class="model cursor-default px-5 py-20"
-	>
-		<div class="bg-white rounded-sm m-auto" style="max-width: 378px; max-height: 618px;">
-			<div class="p-5 flex justify-between gap-5">
-				<b class="heading-03 text-start">ขั้นตอนการผ่านกฎหมาย</b>
-				<button on:click={() => ($showModalLawProcess = false)}><CloseLarge /></button>
+<button
+	class={twMerge('helper-text-01 text-link-01 underline', className)}
+	{...$trigger}
+	use:trigger
+>
+	มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?
+</button>
+
+<div {...$portalled} use:portalled>
+	{#if $open}
+		<div
+			{...$overlay}
+			use:overlay
+			class="fixed inset-0 z-40 bg-black/60"
+			transition:fade={{ duration: 240, easing: entranceExpressive }}
+		/>
+		<div
+			{...$content}
+			use:content
+			class="fixed left-1/2 top-1/2 z-40 max-h-[620px] w-full
+			max-w-[380px] rounded-sm bg-white"
+			style="transform:translate(-50%,-50%)"
+			transition:fly={{ y: -24, duration: 240, easing: entranceExpressive }}
+		>
+			<div class="flex items-start justify-between gap-4 p-4">
+				<h2 {...$title} use:title class="heading-03">ขั้นตอนการผ่านกฏหมาย</h2>
+				<button {...$close} use:close><Close width="20" height="20" /></button>
 			</div>
-			<LawProcess />
-			<div class="px-5 pt-5 pb-10 flex items-start">
-				<a href="/legislative-process" class="flex gap-3">
-					<p class="body-compact-01 text-start text-link-01">อ่านรายละเอียดเพิ่มเติม</p>
-					<ArrowRight color="#3904E9" />
+			<!-- TODO: write descriptive alt text -->
+			<img
+				class="mx-auto h-auto w-full max-w-[330px]"
+				src="/images/bills/lawprocess.svg"
+				alt=""
+				width="330"
+				height="478"
+				loading="lazy"
+				decoding="async"
+			/>
+			<div class="flex">
+				<a href="/legislative-process" class="flex items-center gap-2 px-4 pb-8 pt-4 text-link-01">
+					<span class="body-compact-01">อ่านรายละเอียดเพิ่มเติม</span>
+					<ArrowRight />
 				</a>
 			</div>
 		</div>
-	</button>
-{/if}
-
-<style>
-	.model {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		overflow-x: hidden;
-		overflow-y: auto;
-		background-color: rgba(0, 0, 0, 0.6);
-		z-index: 40;
-	}
-</style>
+	{/if}
+</div>

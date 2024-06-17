@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	export type VoteCardVoting = Pick<Voting, 'id' | 'title' | 'date' | 'result'>;
+	export type VoteCardVoting = Pick<Voting, 'id' | 'nickname' | 'date' | 'result'>;
 
 	export interface HighlightedVoteByGroup {
 		name: string;
@@ -81,7 +81,7 @@
 <a
 	href="/votings/{voting.id}"
 	class={twMerge(
-		'vote-card rounded-sm relative p-4 flex flex-col gap-y-2 w-72 h-64.5 whitespace-break-spaces',
+		'vote-card h-64.5 relative flex w-72 flex-col gap-y-2 whitespace-break-spaces rounded-sm p-4',
 		theme.bg,
 		theme.hoveredBg,
 		isFullWidth ? 'w-full' : '',
@@ -91,29 +91,31 @@
 	<p class="body-compact-01 text-text-02">
 		{dayjs(voting.date).format('D MMM BB')}
 	</p>
-	<h3 class="fluid-heading-03 text-text-01">{voting.title}</h3>
-	<section class="vote-card__result flex flex-col gap-y-2 w-56">
-		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} w-fit m-0`}>{voting.result}</Tag>
+	<h3 class="fluid-heading-03 text-text-01">{voting.nickname}</h3>
+	<section class="vote-card__result flex w-56 flex-col gap-y-2">
+		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} m-0 w-fit`}>{voting.result}</Tag>
 		<div class="flex flex-col gap-x-1">
-			<div class="flex items-center justify-between">
-				<p class="text-text-01 heading-01">
-					{isCandidate
-						? 'ได้รับคะแนนเสียง'
-						: voting.result === DefaultVotingResult.Passed
-						? DefaultVoteOption.Agreed
-						: DefaultVoteOption.Disagreed}
-				</p>
-				<p>
-					<span class="mr-[2px] text-text-primary heading-01">{totalCount}</span>
-					<span class="text-text-02 body-01">/{totalAmount}</span>
-				</p>
-			</div>
+			{#if totalAmount > 0}
+				<div class="flex items-center justify-between">
+					<p class="heading-01 text-text-01">
+						{isCandidate
+							? 'ได้รับคะแนนเสียง'
+							: voting.result === DefaultVotingResult.Passed
+								? DefaultVoteOption.Agreed
+								: DefaultVoteOption.Disagreed}
+					</p>
+					<p>
+						<span class="heading-01 text-text-primary">{totalCount}</span>
+						<span class="body-01 text-text-02">/{totalAmount}</span>
+					</p>
+				</div>
+			{/if}
 			<ul class="vote-card__result--list">
 				{#each highlightedVoteByGroups as voteByGroup (voteByGroup.name)}
-					<li class="vote-card__result--item flex flex-row align-middle justify-between">
-						<p class="text-text-01 body-01">{voteByGroup.name}</p>
+					<li class="vote-card__result--item flex flex-row justify-between align-middle">
+						<p class="body-01 text-text-01">{voteByGroup.name}</p>
 						<p class="body-01">
-							<span class="text-text-primary mr-[2px]">{voteByGroup.count}</span>
+							<span class="text-text-primary">{voteByGroup.count}</span>
 							<span class="text-text-02">/{voteByGroup.total}</span>
 						</p>
 					</li>

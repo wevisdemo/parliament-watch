@@ -5,6 +5,7 @@ import { movingForwardParty } from './party';
 export const movingForwardPolitician: Politician = {
 	id: 'พริษฐ์-วัชรสินธุ',
 	avatar: 'https://via.placeholder.com/64',
+	prefix: null,
 	firstname: 'พริษฐ์',
 	lastname: 'วัชรสินธุ',
 	isActive: true,
@@ -14,8 +15,6 @@ export const movingForwardPolitician: Politician = {
 		'ปริญญาตรี สาขา ปรัชญา การเมือง เศรษฐศาสตร์ (เกียรตินิยมอันดับ 1 เหรียญทอง) - University of Oxford (2011-15)'
 	],
 	previousOccupations: ['CEO - StartDee', 'Management Consultant - McKinsey & Company'],
-	assetValue: 10000000,
-	debtValue: 10000000,
 	contacts: [],
 	assemblyRoles: [
 		{
@@ -26,6 +25,7 @@ export const movingForwardPolitician: Politician = {
 				abbreviation: 'สส.',
 				term: 26,
 				startedAt: new Date('01/01/2023'),
+				endedAt: null,
 				origin:
 					'มาจากการเลือกตั้งทั่วไป พ.ศ. 2566 ประกอบด้วยสมาชิก (สส.) 500 คน ตามระบบจัดสรรปันส่วนผสมโดย 400 คนเป็นผู้แทนเขต และอีก 100 คน มาจากระบบบัญชีรายชื่อ',
 				mainRoles: [
@@ -38,14 +38,20 @@ export const movingForwardPolitician: Politician = {
 				governmentParties: [],
 				oppositionParties: []
 			},
-			startedAt: new Date('2023-01-01')
+			startedAt: new Date('2023-01-01'),
+			endedAt: null,
+			appointmentMethod: null,
+			province: null,
+			districtNumber: null,
+			listNumber: null
 		}
 	],
 	partyRoles: [
 		{
 			party: movingForwardParty,
 			role: 'Policy Campaign Manager',
-			startedAt: new Date('01/01/2022')
+			startedAt: new Date('01/01/2022'),
+			endedAt: null
 		}
 	]
 };

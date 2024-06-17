@@ -7,7 +7,7 @@
 
 	export let data;
 
-	$: ({ assemblyIds, assembly, votes, filterOptions } = data);
+	$: ({ availableAssemblies, assembly, votes, filterOptions } = data);
 
 	$: checkboxFilterList = [
 		{
@@ -16,14 +16,6 @@
 			choices: filterOptions.result.map((result) => ({
 				label: result,
 				value: result
-			}))
-		},
-		{
-			key: 'filterCategory',
-			legend: 'หมวดมติ',
-			choices: filterOptions.categories.map((type) => ({
-				label: type,
-				value: type
 			}))
 		}
 	];
@@ -37,13 +29,10 @@
 			? []
 			: votes.filter((vote) => {
 					const search = searchQuery.trim();
-					if (search && !vote.title.includes(search)) return;
-					const { filterResult, filterCategory } = selectedCheckboxValue;
-					return (
-						filterResult.includes(vote.result) &&
-						filterCategory.some((category) => vote.categories.includes(String(category)))
-					);
-			  });
+					if (search && !vote.nickname.includes(search)) return;
+					const { filterResult } = selectedCheckboxValue;
+					return filterResult.includes(vote.result);
+				});
 </script>
 
 <DataPage
@@ -67,7 +56,7 @@
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >
-	<VotesHeader {assembly} {assemblyIds} />
+	<VotesHeader {assembly} {availableAssemblies} />
 
 	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
 		{#if cellKey === 'date'}
@@ -87,7 +76,7 @@
 			{#if files.length > 0}
 				<div class="flex flex-wrap gap-2">
 					{#each files as file (file)}
-						<a href={file.url} download title={file.label}
+						<a href={file.url} title={file.label} target="_blank" rel="noopener noreferrer"
 							><DocumentPdf /><span class="sr-only">{file.label}</span></a
 						>
 					{/each}

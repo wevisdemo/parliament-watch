@@ -1,150 +1,81 @@
 import type { RelatedVotingResults } from '$components/bills/Progress.svelte';
-import { fetchVotings } from '$lib/datasheets/index.js';
-import { BillStatus, type Bill } from '$models/bill.js';
-import type { Event } from '$models/event.js';
-import { inProgressBill, enactedBill } from '../../../mocks/data/bill.js';
 import {
-	enforcementEvent,
-	failingMp3Event,
-	hearingEvent,
-	inProgressMp2Event,
-	passingMergedMp2Event,
-	passingMp1Event,
-	passingMp2Event,
-	passingMp3Event,
-	passingSenate1Event,
-	passingSenate2Event,
-	passingSenate3Event,
-	royalAssentEvent
-} from '../../../mocks/data/event.js';
-import { createSeo } from '../../../utils/seo.js';
+	fetchFromIdOr404,
+	fetchBills,
+	fetchBillEvents,
+	fetchVotings,
+	fetchVotes,
+	fetchPoliticians
+} from '$lib/datasheets';
+import { groupVoteByAffiliations } from '$lib/datasheets/voting';
+import { createSeo } from '$lib/seo';
+import type { Bill } from '$models/bill';
+import { BillEventType, type BillEvent } from '$models/bill-event';
+import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
 
-export interface VotingResultSummary {
-	agreed: number;
-	total: number;
-	subResults?: {
-		affiliationName: string;
-		agreed: number;
-		total: number;
-	}[];
+export async function entries() {
+	return (await fetchBills()).map(({ id }) => ({ id }));
 }
 
+const expectedEventOrder = Object.values(BillEventType).reverse();
+
 export async function load({ params }) {
-	/*
-	 * | billId | Status      |
-	 * | ------ | ----------- |
-	 * | 1      | InProgress  |
-	 * | 2      | Success     |
-	 * | 3      | Rejected    |
-	 * | 4      | Merged      |
-	 */
-	const billId = Number(params.id);
-	const bill = enactedBill;
-	bill.id = billId;
-
-	let mergedBills: Bill[] | undefined;
-
-	let events: Event[] = [];
-	let mergedIntoBill: Bill | undefined;
-	let mergedIntoBillLatestEvent: Event | undefined;
-	let relatedVotingResults: RelatedVotingResults = {};
+	const bill = await fetchFromIdOr404(fetchBills, params.id);
+	const events = (await fetchBillEvents())
+		.filter(({ billId }) => billId === bill.id)
+		.sort((a, z) =>
+			a.date && z.date
+				? z.date.getTime() - a.date.getTime()
+				: expectedEventOrder.indexOf(a.type) - expectedEventOrder.indexOf(z.type)
+		);
 
 	const votings = await fetchVotings();
+	const votes = await fetchVotes();
+	const politicians = await fetchPoliticians();
 
-	if (billId === 1) {
-		bill.status = BillStatus.InProgress;
-		mergedBills = [
-			{ ...enactedBill, status: BillStatus.Merged },
-			{ ...enactedBill, status: BillStatus.Merged }
-		];
-		events = [hearingEvent, passingMp1Event, inProgressMp2Event];
-		relatedVotingResults = {
-			1: { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary }
-		};
-	} else if (billId === 2) {
-		bill.status = BillStatus.Enacted;
-		events = [
-			hearingEvent,
-			passingMp1Event,
-			passingMp2Event,
-			passingMp3Event,
-			passingSenate1Event,
-			passingSenate2Event,
-			passingSenate3Event,
-			royalAssentEvent,
-			enforcementEvent
-		];
-		relatedVotingResults = {
-			'1': { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
-			'3': { voting: votings[0], resultSummary: fakeSenatePassedVotingResultSummary }
-		};
-	} else if (billId === 3) {
-		bill.status = BillStatus.Rejected;
-		events = [hearingEvent, passingMp1Event, passingMp2Event, failingMp3Event];
-		relatedVotingResults = {
-			'1': { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary },
-			'2': { voting: votings[1], resultSummary: fakeMpFailedVotingResultSummary }
-		};
-	} else if (billId === 4) {
-		bill.status = BillStatus.Merged;
-		events = [hearingEvent, passingMp1Event, passingMergedMp2Event];
-		mergedIntoBill = inProgressBill;
-		mergedIntoBillLatestEvent = { ...inProgressMp2Event, billId: inProgressBill.id };
-		relatedVotingResults = {
-			'1': { voting: votings[0], resultSummary: fakeMpPassedVotingResultSummary }
-		};
-	}
+	const relatedVotingResults = events.reduce<RelatedVotingResults>((obj, { votedInVotingId }) => {
+		if (votedInVotingId) {
+			const voting = votings.find(({ id }) => id === votedInVotingId);
 
-	events.reverse();
+			if (voting) {
+				const corespondedVotes = votes.filter(({ votingId }) => votingId === voting.id);
+				const highlightedVoteOption =
+					voting.result === DefaultVotingResult.Passed
+						? DefaultVoteOption.Agreed
+						: DefaultVoteOption.Disagreed;
+
+				obj[votedInVotingId] = {
+					voting,
+					resultSummary: {
+						total: corespondedVotes.length,
+						agreed: corespondedVotes.filter(
+							({ voteOption }) => voteOption === highlightedVoteOption
+						).length,
+						subResults: groupVoteByAffiliations(voting, corespondedVotes, politicians)
+							.map(({ name, resultSummary }) => ({
+								affiliationName: name,
+								agreed: resultSummary[highlightedVoteOption] ?? 0,
+								total: Object.values(resultSummary).reduce((sum, count) => sum + count, 0)
+							}))
+							.filter(({ total }) => total > 0)
+					}
+				};
+			}
+		}
+
+		return obj;
+	}, {});
 
 	return {
 		bill,
-		mergedBills, // Bills that got merged into this bill.
+		// TODO: merged bill data is not ready yet
+		mergedBills: [] as Bill[], // Bills that got merged into this bill.
 		events,
-		mergedIntoBill, // The bill that this bill got merged into. (merged event)
-		mergedIntoBillLatestEvent,
-		relatedVotingResults, // Info of votings in events
+		mergedIntoBill: undefined as Bill | undefined, // The bill that this bill got merged into. (merged event)
+		mergedIntoBillLatestEvent: undefined as BillEvent | undefined,
+		relatedVotingResults,
 		seo: createSeo({
 			title: bill.nickname
 		})
 	};
 }
-
-const fakeMpPassedVotingResultSummary: VotingResultSummary = {
-	agreed: 324,
-	total: 500,
-	subResults: [
-		{
-			affiliationName: 'สส.ฝ่ายรัฐบาล',
-			agreed: 310,
-			total: 310
-		},
-		{
-			affiliationName: 'สส.ฝ่ายค้าน',
-			agreed: 14,
-			total: 190
-		}
-	]
-};
-
-const fakeMpFailedVotingResultSummary: VotingResultSummary = {
-	agreed: 130,
-	total: 500,
-	subResults: [
-		{
-			affiliationName: 'สส.ฝ่ายรัฐบาล',
-			agreed: 0,
-			total: 310
-		},
-		{
-			affiliationName: 'สส.ฝ่ายค้าน',
-			agreed: 130,
-			total: 190
-		}
-	]
-};
-
-const fakeSenatePassedVotingResultSummary: VotingResultSummary = {
-	agreed: 200,
-	total: 250
-};

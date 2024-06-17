@@ -1,13 +1,14 @@
-import { error } from '@sveltejs/kit';
-import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from './groupby';
+import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
 import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
-import { AssemblyName, GroupByOption } from '$models/assembly';
 import {
 	getAssemblyMembers,
 	getPoliticianSummary,
 	type PoliticianSummary
 } from '$lib/datasheets/assembly-member';
-import { createSeo } from '../../../../../utils/seo';
+import { createSeo } from '$lib/seo';
+import { AssemblyName, GroupByOption } from '$models/assembly';
+import { getMemberGroup, type PoliticianSubGroup, type PoliticianGroup } from './groupby';
+import { error } from '@sveltejs/kit';
 
 interface PoliticianSummaryGroup {
 	name: string;
@@ -43,23 +44,29 @@ export async function load({ params }) {
 						name: subGroup.name,
 						members: subGroup.members.map(getPoliticianSummary)
 					}))
-			  }))
+				}))
 			: (groups as PoliticianGroup[]).map(({ name, ...group }) => ({
 					name,
 					members: group.members.map(getPoliticianSummary)
-			  }));
+				}));
 
-		const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
+		const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
+			({ id, name, term }) => ({
+				id,
+				name,
+				term
+			})
+		);
 
 		return {
 			groups: transformedGroup,
 			isDataHasSubgroup,
-			assemblyIds,
+			availableAssemblies,
 			seo: createSeo({
 				title: `สมาชิก ${assembly.name} ${assembly.term}`
 			})
 		};
 	} else {
-		throw error(404);
+		error(404);
 	}
 }

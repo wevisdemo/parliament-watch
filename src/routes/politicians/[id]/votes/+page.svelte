@@ -3,7 +3,7 @@
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting.js';
+	import { DefaultVoteOption } from '$models/voting.js';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
@@ -15,10 +15,7 @@
 	export let data;
 	const { politician, filterOptions, votes } = data;
 
-	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption) =>
-		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
-
-	const formatThaiYear = (date: Date | undefined) => {
+	const formatThaiYear = (date: Date | null) => {
 		if (!date) return;
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};
@@ -41,7 +38,8 @@
 				label: type,
 				value: type
 			}))
-		},
+		}
+		// TODO: not implemented vote direction yet
 		// {
 		// 	key: 'filterVoteDirection',
 		// 	legend: 'เงื่อนไขพิเศษ',
@@ -56,14 +54,6 @@
 		// 		}
 		// 	]
 		// },
-		{
-			key: 'filterCatg',
-			legend: 'หมวดมติ (1 มติ มีได้มากกว่า 1 หมวด)',
-			choices: filterOptions.categories.map((catg) => ({
-				label: catg,
-				value: catg
-			}))
-		}
 	];
 
 	let searchQuery = '';
@@ -76,7 +66,7 @@
 			: votes
 					.filter((vote) => {
 						const search = searchQuery.trim();
-						if (search && !vote.title.includes(search)) return;
+						if (search && !vote.nickname.includes(search)) return;
 						const {
 							filterAssembly,
 							filterVoteType,
@@ -86,16 +76,14 @@
 						return (
 							filterAssembly.some((assemblyId) =>
 								vote.participatedAssemblies.some(({ id }) => id === assemblyId)
-							) &&
-							filterVoteType.includes(vote.voteOption) &&
-							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority) &&
-							filterCatg.some((category) => vote.categories.includes(String(category)))
+							) && filterVoteType.includes(vote.voteOption)
+							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority)
 						);
 					})
 					.map((vote) => ({
 						titleColumn: {
 							id: vote.id,
-							title: vote.title
+							title: vote.nickname
 						},
 						...vote
 					}));
@@ -142,7 +130,7 @@
 >
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<h1 class="fluid-heading-03 mb-1">
-		<a class="no-underline text-text-01 hover:text-blue-70" href="/politicians/{politician.id}"
+		<a class="text-text-01 no-underline hover:text-blue-70" href="/politicians/{politician.id}"
 			>{politician.prefix} {politician.firstname} {politician.lastname}</a
 		>
 	</h1>
@@ -161,7 +149,7 @@
 			})}
 		{:else if cellKey === 'titleColumn'}
 			<a
-				class="text-text-01 hover:underline hover:text-interactive-01"
+				class="text-text-01 hover:text-interactive-01 hover:underline"
 				href="/votings/{cellValue.id}">{cellValue.title}</a
 			>
 		{:else if cellKey === 'voteOption'}
@@ -173,7 +161,7 @@
 			{#if files.length > 0}
 				<div class="flex flex-wrap gap-2">
 					{#each files as file (file)}
-						<a href={file.url} download title={file.label}
+						<a href={file.url} target="_blank" rel="noopener noreferrer" title={file.label}
 							><DocumentPdf /><span class="sr-only">{file.label}</span></a
 						>
 					{/each}

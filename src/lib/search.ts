@@ -64,15 +64,15 @@ export function search(
 						description: candidate.item.description,
 						url: '/politicians/' + candidate.item.id
 					})
-			  )
+				)
 			: undefined,
 		bills: searchIndexes.bills
 			? getScoredAndHighlightedResultItems(queries, searchIndexes.bills, keepTopN).map((bill) => ({
 					heading: bill.item.name,
 					headingHighlight: highlight ? bill.highlightedName : undefined,
 					billStatus: bill.item.status,
-					url: ''
-			  }))
+					url: '/bills/' + bill.item.id
+				}))
 			: undefined,
 		votings: searchIndexes.votings
 			? getScoredAndHighlightedResultItems(queries, searchIndexes.votings, keepTopN).map(
@@ -82,7 +82,7 @@ export function search(
 						voteResult: voting.item.result,
 						url: '/votings/' + voting.item.id
 					})
-			  )
+				)
 			: undefined,
 		billProposers: searchIndexes.billProposers
 			? getScoredAndHighlightedResultItems(queries, searchIndexes.billProposers, keepTopN).map(
@@ -91,9 +91,9 @@ export function search(
 						headingHighlight: highlight ? proposer.highlightedName : undefined,
 						description: proposer.item.description,
 						proposedBillsCount: proposer.item.proposedBillsCount,
-						url: ''
+						url: '/bills/explore?proposername=' + proposer.item.name
 					})
-			  )
+				)
 			: undefined
 	};
 }

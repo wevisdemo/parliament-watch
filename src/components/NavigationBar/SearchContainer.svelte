@@ -45,7 +45,7 @@
 		<button
 			type="button"
 			form="top-search-input"
-			class="grid place-content-center bg-white/0 border-0 text-white cursor-pointer w-12 h-12"
+			class="grid h-12 w-12 cursor-pointer place-content-center border-0 bg-white/0 text-white"
 			on:click={searchClickHandle}
 		>
 			<SearchIcon />
@@ -63,16 +63,16 @@
 					bind:searchValue
 					categories={[
 						SearchIndexCategory.Politicians,
-						SearchIndexCategory.Votings
-						// SearchIndexCategory.Bills
+						SearchIndexCategory.Votings,
+						SearchIndexCategory.Bills
 					]}
 					name="navSearch"
 					type="text"
-					class="w-[calc(320px-6rem)] h-12 p-0 bg-white/0 outline-none border-0 text-white focus:outline-none"
+					class="h-12 w-[calc(320px-6rem)] border-0 bg-white/0 p-0 text-white outline-none focus:outline-none"
 					placeholder="ค้นหาชื่อบุคคล/มติ/ร่างกฎหมาย"
 				/>
 				<button
-					class="grid place-content-center bg-white/0 border-0 text-white cursor-pointer w-12 h-12"
+					class="grid h-12 w-12 cursor-pointer place-content-center border-0 bg-white/0 text-white"
 					on:click={(e) => closeClickHandle(e, true)}
 				>
 					<CloseIcon />

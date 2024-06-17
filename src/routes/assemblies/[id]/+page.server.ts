@@ -1,7 +1,5 @@
-import dayjs from 'dayjs';
-import { AssemblyName, GroupByOption } from '$models/assembly';
-import type { Party } from '$models/party';
-import type { Politician } from '$models/politician';
+import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
+import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import {
 	fetchAssemblies,
 	fetchFromIdOr404,
@@ -10,11 +8,14 @@ import {
 	fetchVotings
 } from '$lib/datasheets';
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
-import { getMemberGroup } from './members/[groupby]/groupby';
-import { createSeo } from '../../../utils/seo';
-import type { ComponentProps } from 'svelte';
-import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
+import { createSeo } from '$lib/seo';
+import { AssemblyName, GroupByOption } from '$models/assembly';
+import type { Party } from '$models/party';
+import type { Politician } from '$models/politician';
+import { getMemberGroup } from './members/[groupby]/groupby';
+import dayjs from 'dayjs';
+import type { ComponentProps } from 'svelte';
 
 const MAX_LASTEST_VOTE = 5;
 
@@ -38,7 +39,7 @@ export interface MainMember {
 	assemblyRole: string;
 	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'>;
 	party?: Party;
-	description?: string;
+	description: string | null;
 }
 
 export async function load({ params }) {
@@ -73,7 +74,7 @@ export async function load({ params }) {
 					avatar
 				},
 				party: partyRole?.party,
-				description: assemblyRole?.appointmentMethod
+				description: assemblyRole?.appointmentMethod || null
 			}
 		];
 	}, [] as MainMember[]);
@@ -89,10 +90,10 @@ export async function load({ params }) {
 							count: party.members.length
 						})),
 						total: group.subgroups.reduce((sum, subGroup) => sum + subGroup.members.length, 0)
-				  }
+					}
 				: {
 						total: group.members.length
-				  })
+					})
 		}));
 
 	const summary: Summary = {
@@ -119,10 +120,16 @@ export async function load({ params }) {
 			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 		}));
 
-	const assemblyIds: string[] = (await fetchAssemblies()).map(({ id }) => id);
+	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
+		({ id, name, term }) => ({
+			id,
+			name,
+			term
+		})
+	);
 
 	return {
-		assemblyIds,
+		availableAssemblies,
 		assembly,
 		summary,
 		mainMembers,

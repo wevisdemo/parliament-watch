@@ -8,12 +8,13 @@
 	import SideNav from '$components/politicians/SideNav.svelte';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
-	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import dayjs from 'dayjs';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 
 	export let data;
 
@@ -54,7 +55,7 @@
 
 <Breadcrumb
 	noTrailingSlash
-	class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+	class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem>นักการเมือง</BreadcrumbItem>
@@ -63,7 +64,7 @@
 	>
 </Breadcrumb>
 <header>
-	<div class="max-w-[1200px] w-full mx-auto px-4 py-8 md:px-16 md:py-12">
+	<div class="mx-auto w-full max-w-[1200px] px-4 py-8 md:px-16 md:py-12">
 		<PoliticianPicture
 			class="mb-4 w-fit"
 			avatar={politician.avatar}
@@ -72,7 +73,7 @@
 			partySize="32"
 		/>
 		<div class="flex flex-col gap-8 md:flex-row md:gap-16">
-			<div class="flex-1 flex flex-col gap-2">
+			<div class="flex flex-1 flex-col gap-2">
 				<h1 class="fluid-heading-05">
 					{politician.prefix}
 					{politician.firstname}
@@ -81,7 +82,7 @@
 				<PositionStatus isActive={politician.isActive} />
 				{#if currentRoles?.length > 0}
 					<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
-					<ul class="body-01 list-disc ml-8">
+					<ul class="body-01 ml-8 list-disc">
 						{#each currentRoles as role, idx (idx)}
 							<!-- TODO: add link -->
 							<li>
@@ -93,16 +94,8 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2">
-				<DownloadData links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
-				<p class="label-01 text-gray-60">
-					อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric'
-					})}
-				</p>
-				<!-- TODO: add link -->
-				<!-- <a href="/" class="mr-auto helper-text-01"> ที่มาและข้อจำกัดข้อมูล </a> -->
+				<LinkTable links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
+				<DataPeriodRemark />
 				<Share label="แชร์ประวัติ" />
 			</div>
 		</div>
@@ -111,7 +104,7 @@
 
 <div class="bg-[--party]" style:--party={currentParty?.party.color ?? '#F4F4F4'}>
 	<div
-		class="max-w-[1200px] w-full mx-auto flex flex-col items-start gap-4 p-4 min-h-screen md:flex-row md:gap-8 md:py-8 md:px-16 heading-01"
+		class="heading-01 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col items-start gap-4 p-4 md:flex-row md:gap-8 md:px-16 md:py-8"
 	>
 		<SideNav
 			{currentNavElementIndex}
@@ -121,7 +114,7 @@
 			disagreedVoting={disagreedVoting.total}
 			absentTotal={votingAbsentStats.absentVoting}
 		/>
-		<div class="flex-1 flex flex-col gap-6 w-full min-w-0">
+		<div class="flex w-full min-w-0 flex-1 flex-col gap-6">
 			<Section id="personal" title="ข้อมูลพื้นฐาน">
 				<General slot="icon" size="32" />
 				<div>
@@ -182,10 +175,10 @@
 				</a>
 			</div> -->
 				{#if politician.contacts.length > 0}
-					<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
+					<hr class="m-0 box-border w-full border-0 border-t border-solid border-gray-20" />
 					<div>
 						<span class="heading-02">ช่องทางติดต่อ</span>
-						<ul class="flex flex-wrap gap-3 helper-text-01">
+						<ul class="helper-text-01 flex flex-wrap gap-3">
 							{#each politician.contacts as contact (contact.label)}
 								<li>
 									<a href={contact.url} target="_blank" rel="nofollow noopener noreferrer">
@@ -222,7 +215,7 @@
 											? role.endedAt.toLocaleDateString('th-TH', {
 													month: 'short',
 													year: '2-digit'
-											  })
+												})
 											: 'ปัจจุบัน'})
 									</span>
 								</li>
@@ -231,10 +224,10 @@
 					</div>
 				{/if}
 				{#if partyCount > 0}
-					<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
+					<hr class="m-0 box-border w-full border-0 border-t border-solid border-gray-20" />
 					<div>
 						<h3 class="heading-02">{partyCount} พรรคที่เคยสังกัด</h3>
-						<ul class="flex flex-col gap-[2px] ml-8 list-disc">
+						<ul class="ml-8 flex list-disc flex-col gap-[2px]">
 							{#each Object.entries(parties) as [party, partyData] (party)}
 								<PartyDetail {party} data={partyData} />
 							{/each}

@@ -159,26 +159,26 @@
 	});
 </script>
 
-<div class="flex flex-col w-full">
+<div class="flex w-full flex-col">
 	<header class="bg-teal-20">
-		<div class="w-full max-w-[800px] px-10 py-10 md:py-20 mx-auto">
+		<div class="mx-auto w-full max-w-[800px] px-10 py-10 md:py-20">
 			<h1 class="fluid-heading-05">ร่างกฎหมายกลายเป็นกฎหมายได้อย่างไร</h1>
 			<p>
-				<span class="text-text-primary font-bold">อัพเดตล่าสุด :</span>
+				<span class="font-bold text-text-primary">อัพเดตล่าสุด :</span>
 				<span class="text-helper-text-01">{dayjs(new Date()).format('DD MMM BBBB')}</span>
 			</p>
 		</div>
 	</header>
-	<main class="flex flex-col justify-center md:flex-row items-center md:items-start">
+	<main class="flex flex-col items-center justify-center md:flex-row md:items-start">
 		<div
-			class="legislative-process-sidebar bg-ui-01 md:bg-white w-full md:w-auto gap-10 px-4 md:px-10 md:py-0 py-8 md:top-0 md:sticky"
+			class="legislative-process-sidebar w-full gap-10 bg-ui-01 px-4 py-8 md:sticky md:top-0 md:w-auto md:bg-white md:px-10 md:py-0"
 		>
-			<div class="py-10 w-full bg-white flex items-center justify-center">
+			<div class="flex w-full items-center justify-center bg-white py-10">
 				<Sidebar {currentNavElementId} {sections} />
 			</div>
 		</div>
 		<div
-			class="w-full max-w-[800px] flex flex-col gap-10 px-4 md:px-10 py-8 bg-ui-01 md:bg-white flex-1"
+			class="flex w-full max-w-[800px] flex-1 flex-col gap-10 bg-ui-01 px-4 py-8 md:bg-white md:px-10"
 			bind:this={bodyContainer}
 		>
 			<section>
@@ -214,7 +214,7 @@
 					<h3 class="fluid-heading-03 my-6" id="การออกกฎหมายตามรัฐธรรมนูญ-2560">
 						กฎหมายที่ออกโดยรัฐสภา ต้องผ่านกระบวนการ 3 ขั้นตอนสำคัญ
 					</h3>
-					<div class="grid grid-cols-1 md:grid-cols-[1fr_16px_1fr_16px_1fr] gap-3">
+					<div class="grid grid-cols-1 gap-3 md:grid-cols-[1fr_16px_1fr_16px_1fr]">
 						<ProcessCard imgSrc="images/legislative-process/process-01.png" title="เสนอร่างกฎหมาย">
 							ผู้มีสิทธิเสนอร่างของกฎหมายแต่ละประเภท จะแตกต่างกัน
 						</ProcessCard>
@@ -223,7 +223,7 @@
 							imgSrc="images/legislative-process/process-02.png"
 							title="พิจารณาโดยรัฐสภา"
 						>
-							<ul class="list-disc list-inside">
+							<ul class="list-inside list-disc">
 								<li>สส.</li>
 								<li>สว.</li>
 								<li>สภาร่วม (สส.+ สว.)</li>
@@ -234,13 +234,13 @@
 							imgSrc="images/legislative-process/process-03.png"
 							title="กลายเป็นกฎหมายโดยสมบูรณ์"
 						>
-							<ul class="list-disc list-inside">
+							<ul class="list-inside list-disc">
 								<li>ไม่ขัดต่อรัฐธรรมนูญ</li>
 								<li>พระมหากษัตริย์ทรงลงพระปรมาภิไธย</li>
 							</ul>
 						</ProcessCard>
 					</div>
-					<ol class="list-decimal list-inside body-02 mt-6">
+					<ol class="body-02 mt-6 list-inside list-decimal">
 						<li>
 							<strong>การเสนอร่างกฎหมาย</strong> เป็นการจัดทำร่างกฎหมายและเสนอเข้าสู่รัฐสภา โดยผู้ที่มีสิทธิเสนอร่างกฎหมายจะแตกต่างกันขึ้นอยู่กับว่าเป็นร่างกฎหมายประเภทใดตามที่รัฐธรรมนูญระบุไว้
 							เช่น ร่าง พรบ.สามารถเสนอโดยคณะรัฐมนตรี หรือ สส.จำนวนไม่น้อยกว่า 20 คน หรือประชาชนจำนวน
@@ -261,7 +261,7 @@
 				<div>
 					<h2 class="fluid-heading-04" id="กฎหมายในเว็บไซต์นี้">กฎหมายในเว็บไซต์นี้</h2>
 					<hr />
-					<p class="body-02 mt-6 mb-4">
+					<p class="body-02 mb-4 mt-6">
 						เว็บไซต์ Parliament Watch มุ่งนำเสนอกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา
 						เพื่อแสดงให้เห็นถึงกระบวนการทำงานด้านนิติบัญญัติในฐานะตัวแทนประชาชน
 						รวมถึงสะท้อนให้เห็นถึงความคิดเห็นของสมาชิกรัฐสภาต่อประเด็นต่างๆ ในทางกฎหมาย
@@ -304,7 +304,7 @@
 					</p>
 
 					<h3 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h3>
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+					<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 						{#each billStatuses as billStatus}
 							<BillStatusCard {...billStatus} />
 						{/each}
@@ -324,7 +324,7 @@
 							>5 ขั้นตอน</strong
 						>ดังต่อไปนี้
 					</p>
-					<div class="flex w-full justify-center items-center pt-4">
+					<div class="flex w-full items-center justify-center pt-4">
 						<img
 							src="images/legislative-process/general-process.webp"
 							alt=""
@@ -357,7 +357,7 @@
 						</div>
 						<div class="gray-box">
 							<h5 class="heading-01">ผลลัพธ์</h5>
-							<div class="flex flex-row w-full justify-between">
+							<div class="flex w-full flex-row justify-between">
 								<div class="w-full">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-02">ร่างกฎหมายจะถูกนำไปพิจารณาวาระที่สอง</p>
@@ -410,7 +410,7 @@
 						</p>
 						<div class="gray-box">
 							<h5 class="heading-01">ผลลัพธ์</h5>
-							<div class="flex flex-row w-full justify-between">
+							<div class="flex w-full flex-row justify-between">
 								<div class="w-full">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-02">นำไปสู่การพิจารณาของ สว.</p>
@@ -446,15 +446,15 @@
 								>ในการพิจารณาร่างกฎหมายได้ เมื่อ สว.พิจารณาร่างกฎหมายแล้วสามารถลงมติได้ 3 กรณี
 							</p>
 
-							<div class="flex flex-col md:flex-row body-01 w-full mt-2">
+							<div class="body-01 mt-2 flex w-full flex-col md:flex-row">
 								<div class="w-full md:w-4/12">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-01">เตรียมนำร่างกฎหมายฯ <br /> เข้าสู่ขั้นตอนประกาศใช้</p>
 								</div>
 								<div class="vertical-gray-line" />
-								<div class="w-full md:w-4/12 pt-2 md:px-2 md:pt-0">
+								<div class="w-full pt-2 md:w-4/12 md:px-2 md:pt-0">
 									<h5 class="heading-01">แก้ไขเพิ่มเติม</h5>
-									<p class="label-01 text-gray-60 mb-2 mt-2">
+									<p class="label-01 mb-2 mt-2 text-gray-60">
 										โดยลงมติ
 										<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} /> <br />
 										ให้กับมติที่นำไปสู่การแก้ไขเพิ่มเติม
@@ -475,7 +475,7 @@
 									</ul>
 								</div>
 								<div class="vertical-gray-line" />
-								<div class="w-full md:w-4/12 pt-2 md:px-2 md:pt-0">
+								<div class="w-full pt-2 md:w-4/12 md:px-2 md:pt-0">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<ul>
 										<li>ให้ ‘ยับยั้ง’ ไว้</li>
@@ -501,18 +501,18 @@
 						</p>
 						<div class="gray-box">
 							<h5 class="heading-01 mb-2">ผลลัพธ์</h5>
-							<div class="flex flex-col md:flex-row body-01 w-full">
+							<div class="body-01 flex w-full flex-col md:flex-row">
 								<div class="w-full md:w-4/12">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-01">ถ้าไม่มีข้อความที่ขัดต่อรัฐธรรมนูญ</p>
 								</div>
 								<div class="vertical-gray-line" />
-								<div class="w-full md:w-4/12 pt-2 md:pt-0">
+								<div class="w-full pt-2 md:w-4/12 md:pt-0">
 									<h5 class="heading-01 mb-2">แก้ไขเพิ่มเติม</h5>
 									<p class="body-01">ถ้ามีข้อความที่ขัดต่อรัฐธรรมนูญ</p>
 								</div>
 								<div class="vertical-gray-line" />
-								<div class="w-full md:w-4/12 pt-2 md:pt-0">
+								<div class="w-full pt-2 md:w-4/12 md:pt-0">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<p class="body-01">ถ้ามีข้อความที่ขัดต่อรัฐธรรมนูญและเป็นสาระสำคัญของร่าง</p>
 								</div>
@@ -539,7 +539,7 @@
 						>
 						และ <strong>มีเงื่อนไขเพิ่มเติม</strong> ได้แก่
 					</p>
-					<div class="mt-10 body-02">
+					<div class="body-02 mt-10">
 						<h3 class="fluid-heading-03 mb-6">การพิจารณาร่าง พรป.</h3>
 						<p>
 							ขั้นตอนในการพิจารณาร่าง พรป.จะดำเนินในรูปแบบเดียวกันกับการออก พรบ.เว้นแต่ใน<strong
@@ -547,11 +547,11 @@
 							>ต่อไปนี้
 						</p>
 						<img
-							class="my-4 mx-auto w-full max-w-[440px]"
+							class="mx-auto my-4 w-full max-w-[440px]"
 							src="images/legislative-process/organic-law-bill-consideration.webp"
 							alt=""
 						/>
-						<ol class="list-decimal list-outside ml-6">
+						<ol class="ml-6 list-outside list-decimal">
 							<li class="mb-2">
 								การพิจารณาโดยสภาร่วม (สส. + สว.) ต้องพิจารณา 3 วาระให้เสร็จภายใน 180 วัน
 							</li>
@@ -562,7 +562,7 @@
 							<li class="mb-2">
 								เมื่อรัฐสภา ‘เห็นชอบ’ ให้ส่งร่าง พรป.ไปยังศาลฎีกา ศาลรัฐธรรมนูญ
 								หรือองค์กรอิสระที่เกี่ยวข้องภายใน 15 วัน เพื่อให้ความเห็น
-								<ul class="list-disc list-outside ml-8">
+								<ul class="ml-8 list-outside list-disc">
 									<li>หากไม่มีข้อทักท้วงภายใน 10 วัน ให้รัฐสภาดําเนินการต่อไป</li>
 									<li>
 										มีข้อความขัดต่อรัฐธรรมนูญ ให้เสนอความเห็นไปยังรัฐสภา
@@ -574,18 +574,18 @@
 							</li>
 						</ol>
 					</div>
-					<div class="mt-10 body-02">
+					<div class="body-02 mt-10">
 						<h3 class="fluid-heading-03 mb-6">การแก้ไขบทบัญญัติในรัฐธรรมนูญ</h3>
 						<p>
 							เมื่อเข้าสู่ขั้นตอนการพิจารณาของรัฐสภา การประชุมร่วมกันจะมีทั้งหมด 3 วาระ
 							เช่นเดียวกันกับการออก พรบ.แต่ปรากฏ<strong>เงื่อนไขเพิ่มเติม</strong>ดังนี้
 						</p>
 						<img
-							class="my-4 mx-auto w-full max-w-[440px]"
+							class="mx-auto my-4 w-full max-w-[440px]"
 							src="images/legislative-process/amendment-of-constitutional-provisions.webp"
 							alt=""
 						/>
-						<ol class="list-decimal list-outside gap-2 ml-6">
+						<ol class="ml-6 list-outside list-decimal gap-2">
 							<li class="mb-2">
 								ในวาระที่หนึ่ง ต้องใช้เสียงไม่น้อยกว่าครึ่งหนึ่งของสมาชิกเท่าที่มีอยู่ของสองสภาแล้ว
 								ในจำนวนนี้ต้องได้เสียง<strong>เห็นชอบจาก สว.ไม่น้อยกว่า 1 ใน 3</strong> ของจำนวน สว.ที่มีอยู่
@@ -599,7 +599,7 @@
 							</li>
 							<li class="mb-2">
 								ในวาระที่สาม การลงมติ ‘เห็นชอบ’ ต้องประกอบด้วย
-								<ul class="list-disc list-outside ml-8">
+								<ul class="ml-8 list-outside list-disc">
 									<li>
 										เสียงเห็นชอบมากกว่า<strong>ครึ่งหนึ่งของสมาชิก</strong>เท่าที่มีอยู่ของสองสภา
 									</li>
@@ -629,18 +629,18 @@
 							</li>
 						</ol>
 					</div>
-					<div class="mt-10 body-02">
+					<div class="body-02 mt-10">
 						<h3 class="fluid-heading-03 mb-6">การพิจารณาร่าง พรบ.งบประมาณประจำปี</h3>
 						<p>
 							ขั้นตอนในการพิจารณาร่าง พรบ.งบประมาณประจำปี จะแตกต่างจากการออก
 							พรบ.ทั่วไปในขั้นตอนการพิจารณาของ สว.โดยมีรายละเอียดดังนี้
 						</p>
 						<img
-							class="my-4 mx-auto w-full max-w-[440px]"
+							class="mx-auto my-4 w-full max-w-[440px]"
 							src="images/legislative-process/yearly.webp"
 							alt=""
 						/>
-						<ol class="list-decimal list-outside gap-2 ml-6">
+						<ol class="ml-6 list-outside list-decimal gap-2">
 							<li class="mb-2">
 								เมื่อ สส.มีมติรับหลักการแห่งร่าง พรบ.งบประมาณฯ ให้
 								สว.ตั้งคณะกรรมาธิการวิสามัญขึ้นคณะหนึ่งเพื่อพิจารณาศึกษาร่าง พรบ.งบประมาณฯ
@@ -683,7 +683,7 @@
 					</div>
 					<div class="grid gap-4">
 						<p><strong>1. การออกเสียงลงคะแนนเปิดเผย</strong></p>
-						<div class="flex gap-3 justify-center">
+						<div class="flex justify-center gap-3">
 							<VotingProcessImageCircle
 								src="/images/legislative-process/method-verbal.png"
 								title="การลงคะแนนเสียงด้วยวาจา"
@@ -696,7 +696,7 @@
 							/>
 						</div>
 						<p><strong>2. การออกเสียงลงคะแนนลับ</strong></p>
-						<div class="flex gap-3 justify-center">
+						<div class="flex justify-center gap-3">
 							<VotingProcessImageCircle
 								src="/images/legislative-process/method-paper.png"
 								title="การทำเครื่องหมายบนแผ่นกระดาษ"
@@ -711,8 +711,8 @@
 					</div>
 					<div class="grid gap-2">
 						<p><strong>เกณฑ์ในการเลือกวิธีการลงมติ</strong> ตามข้อบังคับการประชุมสภา</p>
-						<div class="lg:flex gap-4">
-							<div class="bg-ui-01 p-4 flex-1 mb-4 lg:mb-0 h-fit">
+						<div class="gap-4 lg:flex">
+							<div class="mb-4 h-fit flex-1 bg-ui-01 p-4 lg:mb-0">
 								<div class="mb-3">
 									<p><strong>ที่ประชุมสภาผู้แทนฯ หรือที่ประชุมวุฒิสภา</strong></p>
 								</div>
@@ -730,7 +730,7 @@
 									</ul>
 								</div>
 							</div>
-							<div class="bg-ui-01 p-4 flex-1 h-fit">
+							<div class="h-fit flex-1 bg-ui-01 p-4">
 								<div class="mb-3">
 									<p><strong>ประชุมสภาร่วม</strong></p>
 								</div>
@@ -754,7 +754,7 @@
 				<div class="my-6">
 					<h2 class="fluid-heading-04" id="ประเภทการลงมติ">ประเภทการลงมติ</h2>
 					<hr />
-					<div class="flex flex-col gap-4 mt-6">
+					<div class="mt-6 flex flex-col gap-4">
 						<p>โดยทั่วไป การประชุมจะกำหนดให้ สส.และ สว.แสดงเจตจำนงต่อประเด็นที่ใช้ลงมติดังนี้</p>
 						<div class="flex gap-4">
 							<VotingOptionTag voteOption={DefaultVoteOption.Agreed} />
@@ -766,20 +766,20 @@
 							ลักษณะของการออกคะแนนเสียงจะเป็นใน 2 รูปแบบคือ
 						</p>
 						<div class="flex gap-2">
-							<div class="flex flex-col gap-2 basis-2/5">
+							<div class="flex basis-2/5 flex-col gap-2">
 								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Abstain} />
 								<ul>
-									<li class="list-disc list-inside">สมาชิกอยู่ในองค์ประชุม แต่ไม่ลงมติ</li>
-									<li class="list-disc list-inside">
+									<li class="list-inside list-disc">สมาชิกอยู่ในองค์ประชุม แต่ไม่ลงมติ</li>
+									<li class="list-inside list-disc">
 										จะถูกนับเป็นองค์ประชุม และถูกคำนวณในคะแนนเสียงของมติ
 									</li>
 								</ul>
 							</div>
-							<div class="flex flex-col gap-2 basis-3/5">
+							<div class="flex basis-3/5 flex-col gap-2">
 								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Absent} />
 								<ul>
-									<li class="list-disc list-inside">สมาชิกไม่ได้เข้าประชุม</li>
-									<li class="list-disc list-inside">จะไม่ถูกนับเป็นองค์ประชุม</li>
+									<li class="list-inside list-disc">สมาชิกไม่ได้เข้าประชุม</li>
+									<li class="list-inside list-disc">จะไม่ถูกนับเป็นองค์ประชุม</li>
 								</ul>
 							</div>
 						</div>
@@ -788,7 +788,7 @@
 				<div class="my-6">
 					<h2 class="fluid-heading-04" id="ผลการลงมติ">ผลการลงมติ</h2>
 					<hr />
-					<div class="flex flex-col gap-4 mt-6">
+					<div class="mt-6 flex flex-col gap-4">
 						<p>
 							<strong>การลงมติที่เกี่ยวข้องกับนิติบัญญัติและญัตติต่างๆ ในสภา</strong> เช่น การโหวตรับร่างกฎหมายเข้าสภา
 							การโหวตอนุมัติ พรก.การพิจารณาญัตติ เป็นต้น จะใช้เสียงข้างมากของที่ประชุมของแต่ละสภา หรือตามข้อกำหนดที่ระบุไว้ในรัฐธรรมนูญหรือข้อบังคับการประชุม
@@ -872,26 +872,26 @@
 
 <style lang="postcss">
 	section {
-		@apply flex flex-col gap-4 bg-white px-4 md:px-0 py-8 md:py-0;
+		@apply flex flex-col gap-4 bg-white px-4 py-8 md:px-0 md:py-0;
 	}
 
 	h1,
 	h2,
 	h3,
 	h4 {
-		@apply text-text-primary mb-3 mt-4;
+		@apply mb-3 mt-4 text-text-primary;
 	}
 
 	hr {
-		@apply border-0 border-solid border-gray-20 border-t w-full box-border;
+		@apply box-border w-full border-0 border-t border-solid border-gray-20;
 	}
 
 	.vertical-gray-line {
-		@apply md:border-[1px] border-solid border-gray-20 min-h-full mx-2;
+		@apply mx-2 min-h-full border-solid border-gray-20 md:border-[1px];
 	}
 
 	.gray-box {
-		@apply bg-gray-10 p-6 w-full h-full mt-2 mb-2;
+		@apply mb-2 mt-2 h-full w-full bg-gray-10 p-6;
 	}
 
 	li::marker {
@@ -899,6 +899,6 @@
 	}
 
 	ul {
-		@apply list-disc list-outside ml-4;
+		@apply ml-4 list-outside list-disc;
 	}
 </style>

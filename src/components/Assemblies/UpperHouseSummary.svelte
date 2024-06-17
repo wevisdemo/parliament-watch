@@ -9,7 +9,7 @@
 </script>
 
 <div class="grid">
-	<div class="md:space-y-[24px] space-y-[8px]">
+	<div class="space-y-[8px] md:space-y-[24px]">
 		{#each memberGroups as group}
 			<div>
 				<div>
@@ -17,7 +17,7 @@
 					<span class="body-compact-01 text-gray-60">{group.total} คน</span>
 				</div>
 				<div
-					class="flex gap-x-[4px] w-[--width]"
+					class="flex w-[--width] gap-x-[4px]"
 					style="--width:{getPercentWidth(group.total, memberGroups)}%"
 				>
 					<Badge color={getSenateColorByTitle(group.name)} size="l" />

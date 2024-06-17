@@ -68,7 +68,7 @@ erDiagram
     string[] categories
     string status "inProgress | enacted | rejected | merged"
     Date proposedOn
-    string proposedBy "politicians | cabinet | people"
+    string proposedBy "politician | assembly | people"
     string[] proposedByPoliticianIds FK
     number proposedByAssemblyId FK
     PeopleProposer proposedByPeople "{ ledBy: string, signatoryCount: number}"
@@ -79,8 +79,8 @@ erDiagram
   Voting {
     string id PK
     string title
+    string nickname
     string description
-    string[] categories
     Date date
     string meetingType
     string[] participatedAssembleIds FK
@@ -98,14 +98,13 @@ erDiagram
     string voteOption "refer to Voting"
   }
 
-  Event {
+  BillEvent {
     number eventId PK
     number billId FK
     Date date
     string type "hearing | mp1 | mp2 | mp3 | senate1 | senate2 | senate3 | royalAssent | enforcement | other"
     string title "for other"
     string description "for other"
-    string status "succeed | in-progress | failed"
     string actionType "voted | merged | enforced"
     string votedInVotingId FK "for action voted"
     number mergedIntoBillId FK "for action merged"

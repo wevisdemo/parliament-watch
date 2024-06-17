@@ -1,102 +1,116 @@
-import { EventStatus, type Event, EventType, EventActionType } from '$models/event';
+import {
+	type BillEvent,
+	BillEventType,
+	BillEventActionType,
+	eventTypeTitleDescription
+} from '$models/bill-event';
 
-export const hearingEvent: Event = {
-	billId: 1,
+export const hearingEvent: BillEvent = {
+	billId: '1',
 	date: new Date('2023-09-12'),
 	title: 'รับฟังความเห็น',
-	type: EventType.Other,
-	status: EventStatus.Succeed
+	description: '',
+	type: BillEventType.Other,
+	actionType: null,
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null,
+	votedInVotingId: null
 };
 
-export const passingMp1Event: Event = {
-	billId: 1,
+export const passingMp1Event: BillEvent = {
+	billId: '1',
 	date: new Date('2023-10-12'),
-	type: EventType.MP1,
-	status: EventStatus.Succeed,
-	actionType: EventActionType.Voted,
-	votedInVotingId: '1'
+	type: BillEventType.MP1,
+	actionType: BillEventActionType.Voted,
+	votedInVotingId: '1',
+	...eventTypeTitleDescription[BillEventType.MP1],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
-export const inProgressMp1Event: Event = {
+export const inProgressMp1Event: BillEvent = {
 	...passingMp1Event,
-	status: EventStatus.InProgress,
-	actionType: undefined,
-	votedInVotingId: undefined
+	actionType: null,
+	votedInVotingId: null
 };
 
-export const passingMp2Event: Event = {
-	billId: 1,
+export const passingMp2Event: BillEvent = {
+	billId: '1',
 	date: new Date('2023-10-12'),
-	type: EventType.MP2,
-	status: EventStatus.Succeed
+	type: BillEventType.MP2,
+	...eventTypeTitleDescription[BillEventType.MP2],
+	actionType: null,
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null,
+	votedInVotingId: null
 };
 
-export const inProgressMp2Event: Event = {
+export const inProgressMp2Event: BillEvent = {
+	...passingMp2Event
+};
+
+export const passingMergedMp2Event: BillEvent = {
 	...passingMp2Event,
-	status: EventStatus.InProgress
+	actionType: BillEventActionType.Merged,
+	mergedIntoBillId: '1'
 };
 
-export const passingMergedMp2Event: Event = {
-	...passingMp2Event,
-	status: EventStatus.InProgress,
-	actionType: EventActionType.Merged,
-	mergedIntoBillId: 1
-};
-
-export const passingMp3Event: Event = {
-	billId: 1,
+export const passingMp3Event: BillEvent = {
+	billId: '1',
 	date: new Date('2023-10-15'),
-	type: EventType.MP3,
-	status: EventStatus.Succeed,
-	actionType: EventActionType.Voted,
-	votedInVotingId: '1'
+	type: BillEventType.MP3,
+	actionType: BillEventActionType.Voted,
+	votedInVotingId: '1',
+	...eventTypeTitleDescription[BillEventType.MP3],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
-export const failingMp3Event: Event = {
+export const failingMp3Event: BillEvent = {
 	...passingMp3Event,
-	status: EventStatus.Failed,
 	votedInVotingId: '2'
 };
 
-export const passingSenate1Event: Event = {
-	billId: 1,
+export const passingSenate1Event: BillEvent = {
+	billId: '1',
 	date: new Date('2023-10-18'),
-	type: EventType.Senate1,
-	status: EventStatus.Succeed,
-	actionType: EventActionType.Voted,
-	votedInVotingId: '3'
+	type: BillEventType.Senate1,
+	actionType: BillEventActionType.Voted,
+	votedInVotingId: '3',
+	...eventTypeTitleDescription[BillEventType.Senate1],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
-export const passingSenate2Event: Event = {
-	billId: 1,
+export const passingSenate2Event: BillEvent = {
+	billId: '1',
 	date: new Date('2023-10-18'),
-	type: EventType.Senate2,
-	status: EventStatus.Succeed,
-	actionType: EventActionType.Voted,
-	votedInVotingId: '3'
+	type: BillEventType.Senate2,
+	actionType: BillEventActionType.Voted,
+	votedInVotingId: '3',
+	...eventTypeTitleDescription[BillEventType.Senate2],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
-export const passingSenate3Event: Event = {
-	billId: 1,
+export const passingSenate3Event: BillEvent = {
+	billId: '1',
 	date: new Date('2023-10-20'),
-	type: EventType.Senate3,
-	status: EventStatus.Succeed,
-	actionType: EventActionType.Voted,
-	votedInVotingId: '3'
+	type: BillEventType.Senate3,
+	actionType: BillEventActionType.Voted,
+	votedInVotingId: '3',
+	...eventTypeTitleDescription[BillEventType.Senate3],
+	enforcementDocumentUrl: null,
+	mergedIntoBillId: null
 };
 
-export const royalAssentEvent: Event = {
-	billId: 1,
+export const enforcementEvent: BillEvent = {
+	billId: '1',
 	date: new Date('2023-10-23'),
-	type: EventType.RoyalAssent,
-	status: EventStatus.Succeed
-};
-
-export const enforcementEvent: Event = {
-	billId: 1,
-	date: new Date('2023-10-23'),
-	type: EventType.Enforcement,
-	status: EventStatus.Succeed,
-	actionType: EventActionType.Enforced,
-	enforcementDocumentUrl: 'https://google.com'
+	type: BillEventType.Enforcement,
+	actionType: BillEventActionType.Enforced,
+	enforcementDocumentUrl: 'https://google.com',
+	...eventTypeTitleDescription[BillEventType.Enforcement],
+	mergedIntoBillId: null,
+	votedInVotingId: null
 };

@@ -8,7 +8,7 @@
 </script>
 
 <Hst.Story title="Share">
-	<div class="font-sans body-02">
+	<div class="body-02 font-sans">
 		<Share {url} {label} />
 	</div>
 

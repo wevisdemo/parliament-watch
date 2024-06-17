@@ -1,12 +1,12 @@
-import { DefaultVoteOption, type Voting } from '$models/voting';
 import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { createSeo } from '../../../utils/seo';
 import { safeFind } from '$lib/datasheets/processor';
+import { createSeo } from '$lib/seo';
 import type { Vote } from '$models/vote';
+import { DefaultVoteOption, type Voting } from '$models/voting';
 
 const MAX_LASTEST_VOTE = 5;
 
-type VotingSummary = Pick<Voting, 'id' | 'title' | 'result'>;
+type VotingSummary = Pick<Voting, 'id' | 'nickname' | 'result'>;
 
 export interface VotingHistory {
 	total: number;
@@ -19,6 +19,10 @@ export interface VotingAbsentStats {
 	averageAbsentVoting: number;
 }
 
+export async function entries() {
+	return (await fetchPoliticians()).map(({ id }) => ({ id }));
+}
+
 export async function load({ params }) {
 	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
 
@@ -29,9 +33,12 @@ export async function load({ params }) {
 		.filter(({ politicianId }) => politicianId === politician.id)
 		.map(({ votingId, voteOption }) => {
 			try {
-				const { id, title, result, date } = safeFind(votings, (voting) => voting.id === votingId);
+				const { id, nickname, result, date } = safeFind(
+					votings,
+					(voting) => voting.id === votingId
+				);
 
-				return { id, title, result, date, voteOption };
+				return { id, nickname, result, date, voteOption };
 			} catch (e) {
 				throw `Could not find voting id ${votingId}`;
 			}

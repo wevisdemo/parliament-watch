@@ -1,23 +1,13 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
-
-	import { BillStatus } from '$models/bill';
 	import BillCard from './BillCard.svelte';
+	import { inProgressBill } from '../../mocks/data/bill';
 
 	export let Hst: Hst;
 
-	let nickname = 'ร่าง พรบ.กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
-	let title = 'ร่าง พรบ.กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม';
-	let proposedBy = {
-		avatar: 'https://placehold.co/24x24',
-		name: 'ดวงฤทธิ์ เบ็ญจาธิกุล ชัยรุ่งเรือง',
-		description: 'สส.ชุดที่ 26 (2566) พรรคก้าวไกล'
-	};
-	let proposedOn = new Date('July 13, 2023');
-	let status = BillStatus.InProgress;
 	let currentState = 'สส.พิจารณา วาระ 2';
 	let daySinceProposed = 210;
-	let billUrl = '#';
+	let isFullWidth = false;
 </script>
 
 <Hst.Story
@@ -28,46 +18,22 @@
 	}}
 >
 	<Hst.Variant title="BillCard.Landscape">
-		<BillCard
-			{nickname}
-			{title}
-			{proposedBy}
-			{proposedOn}
-			{status}
-			{currentState}
-			{daySinceProposed}
-			{billUrl}
-		/>
+		<BillCard bill={inProgressBill} {currentState} {daySinceProposed} {isFullWidth} />
 	</Hst.Variant>
 
 	<Hst.Variant title="BillCard.Portrait">
 		<BillCard
 			orientation="portrait"
-			{nickname}
-			{title}
-			{proposedBy}
-			{proposedOn}
-			{status}
+			bill={inProgressBill}
 			{currentState}
 			{daySinceProposed}
-			{billUrl}
+			{isFullWidth}
 		/>
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">
-		<Hst.Text bind:value={nickname} title="nickname:" />
-		<Hst.Text bind:value={title} title="title:" />
-		<Hst.Text bind:value={proposedBy.avatar} title="proposedBy.avatar:" />
-		<Hst.Text bind:value={proposedBy.name} title="proposedBy.name:" />
-		<Hst.Text bind:value={proposedBy.description} title="proposedBy.description:" />
-		<!-- TODOD: add date input for proposedOn -->
-		<Hst.Select
-			bind:value={status}
-			title="status:"
-			options={Object.entries(BillStatus)?.map(([label, value]) => ({ value, label }))}
-		/>
 		<Hst.Text bind:value={currentState} title="currentState:" />
 		<Hst.Number bind:value={daySinceProposed} title="daySinceProposed:" />
-		<Hst.Text bind:value={billUrl} title="billUrl:" />
+		<Hst.Checkbox bind:value={isFullWidth} title="isFullWidth" />
 	</svelte:fragment>
 </Hst.Story>

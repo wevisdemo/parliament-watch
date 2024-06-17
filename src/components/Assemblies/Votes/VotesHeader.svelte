@@ -1,22 +1,24 @@
 <script lang="ts">
 	import type { AssemblySummary } from '../../../routes/assemblies/[id]/votes/+page.server';
-	import AssemblyIdRunner from '$components/Assemblies/AssemblyIdRunner.svelte';
+	import AssemblyIdRunner, {
+		type AvailableAssembly
+	} from '$components/Assemblies/AssemblyIdRunner.svelte';
 
 	export let assembly: AssemblySummary;
-	export let assemblyIds: string[] = [];
+	export let availableAssemblies: AvailableAssembly[];
 </script>
 
 <div
-	class="flex md:flex-row flex-col w-full justify-between md:py-[48px] py-[16px] md:px-[64px] px-[16px] bg-field-01"
+	class="flex w-full flex-col justify-between bg-field-01 px-[16px] py-[16px] md:flex-row md:px-[64px] md:py-[48px]"
 >
-	<div class="w-full max-w-[900px] flex items-center">
-		<div class="flex md:flex-row flex-col">
+	<div class="flex w-full max-w-[900px] items-center">
+		<div class="flex flex-col md:flex-row">
 			<h2 class="fluid-heading-04">{assembly.name}</h2>
 			<AssemblyIdRunner
-				currentId={assembly.id}
-				startedYear={assembly.startedAt}
+				name={assembly.name}
 				term={assembly.term}
-				{assemblyIds}
+				startedYear={assembly.startedAt}
+				{availableAssemblies}
 				postfix="votes"
 			/>
 		</div>

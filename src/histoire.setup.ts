@@ -1,6 +1,5 @@
 import type { SearchIndexes } from '$models/search';
 import { searchIndexes } from './mocks/data/searchIndexes';
-
 import './styles/carbon/pre-compiled.css';
 import './styles/index.css';
 

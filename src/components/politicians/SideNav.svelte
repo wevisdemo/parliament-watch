@@ -11,11 +11,11 @@
 </script>
 
 <nav
-	class="w-full bg-ui-05 rounded-sm overflow-hidden md:sticky md:top-8 md:w-[224px] md:flex-[0_0_224px]"
+	class="w-full overflow-hidden rounded-sm bg-ui-05 md:sticky md:top-8 md:w-[224px] md:flex-[0_0_224px]"
 >
-	<menu class="flex flex-col gap-[1px] list-none">
+	<menu class="flex list-none flex-col gap-[1px]">
 		<li
-			class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[111ms] ease-productive-in-out"
+			class="ease-productive-in-out group bg-inverse-02 transition-colors duration-[111ms] hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05"
 			data-active={currentNavElementIndex === 0 || null}
 		>
 			<a href="#personal" class="block p-4 text-white no-underline">
@@ -27,7 +27,7 @@
 			</a>
 		</li>
 		<li
-			class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[113ms] ease-productive-in-out"
+			class="ease-productive-in-out group bg-inverse-02 transition-colors duration-[113ms] hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05"
 			data-active={currentNavElementIndex === 1 || null}
 		>
 			<a href="#politics" class="block p-4 text-white no-underline">
@@ -49,7 +49,7 @@
 			</a>
 		</li>
 		<li
-			class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[114ms] ease-productive-in-out"
+			class="ease-productive-in-out group bg-inverse-02 transition-colors duration-[114ms] hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05"
 			data-active={currentNavElementIndex === 2 || null}
 		>
 			<a href="#votes" class="block p-4 text-white no-underline">

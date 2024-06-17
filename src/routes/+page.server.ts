@@ -1,14 +1,23 @@
+import {
+	ALL_CATEGORY_KEY,
+	MAX_BILL_BY_STATUS,
+	type BillByCategoryAndStatus,
+	type BillCategoryWithStatus
+} from '$components/Index/BillContent.svelte';
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
-import { safeFind } from '$lib/datasheets/processor.js';
-import { fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import type { ComponentProps } from 'svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { fetchBills, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
+import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
-import dayjs from 'dayjs';
+import { BillStatus } from '$models/bill';
 import { DefaultVoteOption } from '$models/voting.js';
+import { rollup } from 'd3-array';
+import dayjs from 'dayjs';
+import type { ComponentProps } from 'svelte';
 
 const MAX_LASTEST_VOTE = 5;
+const MAX_ENACTED_BILL = 10;
 
 enum PoliticialPosition {
 	MP = 'สส.',
@@ -29,13 +38,14 @@ export async function load() {
 	const politicians = await fetchPoliticians();
 	const votes = await fetchVotes();
 	const votings = await fetchVotings();
+	const bills = await fetchBills();
 
 	const activePoliticians = politicians.filter(({ isActive }) => isActive);
 
 	const votesInActiveAssemblies = votes.filter(({ votingId }) =>
 		votings
 			.find(({ id }) => id === votingId)
-			?.participatedAssemblies.some(({ endedAt }) => endedAt === undefined)
+			?.participatedAssemblies.some(({ endedAt }) => !endedAt)
 	);
 
 	const highlightedPoliticians: HighlightedPolitician[] = [
@@ -70,18 +80,23 @@ export async function load() {
 					return {
 						politician,
 						value:
-							theirVotes.filter(({ voteOption }) => voteOption === DefaultVoteOption.Absent)
-								.length / theirVotes.length
+							theirVotes.length > 0
+								? theirVotes.filter(({ voteOption }) => voteOption === DefaultVoteOption.Absent)
+										.length / theirVotes.length
+								: 0
 					};
 				})
 				.sort((a, z) => z.value - a.value)[0]
 		},
-		// TODO: Not release bills yet
-		// {
-		// 	reason: HighlightedReason.HighestBillProposed,
-		// 	value: 87,
-		// 	politician: movingForwardPolitician
-		// },
+		{
+			reason: HighlightedReason.HighestBillProposed,
+			...activePoliticians
+				.map((politician) => ({
+					politician,
+					value: bills.filter((bill) => bill.proposedLedByPolitician?.id === politician.id).length
+				}))
+				.sort((a, z) => z.value - a.value)[0]
+		},
 		{
 			reason: HighlightedReason.Youngest,
 			...activePoliticians
@@ -130,9 +145,46 @@ export async function load() {
 			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 		}));
 
+	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(
+		bills.flatMap(({ categories, ...rest }) =>
+			categories.map((category) => ({ category, categories, ...rest }))
+		),
+		(billsByCategory): BillCategoryWithStatus => ({
+			count: billsByCategory.length,
+			billsByStatus: rollup(
+				billsByCategory,
+				(billsByStatus) => ({
+					samples: billsByStatus.slice(
+						0,
+						billsByStatus[0].status === BillStatus.Enacted ? MAX_ENACTED_BILL : MAX_BILL_BY_STATUS
+					),
+					count: billsByStatus.length
+				}),
+				(bill) => bill.status
+			)
+		}),
+		(bill) => bill.category
+	);
+
+	billByCategoryAndStatus.set(ALL_CATEGORY_KEY, {
+		count: bills.length,
+		billsByStatus: rollup(
+			bills,
+			(billsByStatus) => ({
+				samples: billsByStatus.slice(
+					0,
+					billsByStatus[0].status === BillStatus.Enacted ? MAX_ENACTED_BILL : MAX_BILL_BY_STATUS
+				),
+				count: billsByStatus.length
+			}),
+			(bill) => bill.status
+		)
+	});
+
 	return {
 		highlightedPoliticians,
 		otherSourcesHighlightedPoliticians,
-		latestVotings
+		latestVotings,
+		billByCategoryAndStatus
 	};
 }

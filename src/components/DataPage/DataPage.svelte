@@ -34,7 +34,7 @@
 </script>
 
 <script lang="ts">
-	import DownloadData from '$components/DownloadData/DownloadData.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import type { Link } from '$models/link';
 	import {
 		Breadcrumb,
@@ -52,7 +52,7 @@
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -87,7 +87,6 @@
 	export let selectedCheckboxValue: SelectedCheckboxValueType = Object.fromEntries(
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
-	export let mounted = false;
 	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
 	export let downloadLinks: Link[] = [];
 
@@ -121,8 +120,8 @@
 	let comboboxInternal: Record<string, string> = {};
 	let showFilter = true;
 	let isMobile = false;
+
 	onMount(() => {
-		mounted = true;
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		isMobile = !showFilter;
 	});
@@ -134,14 +133,26 @@
 		showHeader = currentFromTop <= previousFromTop;
 		previousFromTop = currentFromTop;
 	}
+
+	let renderCombobox = true;
+	export const setCombobox = (key: string, value: string) => {
+		comboboxInternal[key] = value;
+
+		// Force combobox to evaluate internal value
+		// When combobox rerendered, `select` event will auto fire
+		renderCombobox = false;
+		tick().then(() => {
+			renderCombobox = true;
+		});
+	};
 </script>
 
 <svelte:window on:scroll|passive={scrollEventHandler} />
 
-<div class="flex flex-col min-h-screen">
+<div class="flex min-h-screen flex-col">
 	<Breadcrumb
 		noTrailingSlash
-		class="px-4 py-2 body-compact-01 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
+		class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
 		{#if isMobile}
 			<BreadcrumbItem href={breadcrumbList[0].url}>{breadcrumbList[0].label}</BreadcrumbItem>
@@ -162,42 +173,33 @@
 			{/each}
 		{/if}
 	</Breadcrumb>
-	<header class="px-4 py-3 bg-ui-01 md:px-16">
-		<div class="flex flex-col gap-1 md:flex-row md:gap-16 md:items-center">
+	<header class="bg-ui-01 px-4 py-3 md:px-16">
+		<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 			<div class="flex-1">
 				<slot />
 			</div>
 			<div class="p-3 {downloadSize === 'lg' ? 'md:w-[224px]' : 'md:w-auto'}">
-				<DownloadData links={downloadLinks} />
+				<LinkTable links={downloadLinks} />
 			</div>
 			<Search
-				class="md:hidden {!mounted ? '-mt-4' : ''}"
+				class="md:hidden"
 				searchClass="md:hidden mt-2"
 				placeholder={searchPlaceholder}
 				light
 				bind:value={searchQuery}
-				skeleton={!mounted}
 			/>
 		</div>
 	</header>
-	<div class="flex-1 flex gap-1 bg-ui-01 w-full">
+	<div class="flex w-full flex-1 gap-1 bg-ui-01">
 		{#if showFilter}
 			<aside
-				class="fixed w-full h-screen md:h-auto md:max-h-screen overscroll-none md:sticky top-0 flex flex-col bg-white md:w-[250px] flex-[0_0_250px] z-50 md:z-30"
-				class:md:flex={!mounted}
-				class:hidden={!mounted}
+				class="fixed top-0 z-50 flex h-screen w-full flex-[0_0_250px] flex-col overscroll-none bg-white md:sticky md:z-30 md:h-auto md:max-h-screen md:w-[250px]"
 			>
 				<div
-					class="sticky top-0 md:top-12 flex w-full pl-6 duration-300 z-30 bg-white"
+					class="sticky top-0 z-30 flex w-full bg-white pl-6 duration-300 md:top-12"
 					class:md:top-12={showHeader}
 				>
-					<Search
-						class="flex-1 {!mounted ? '-mt-6' : ''}"
-						placeholder={searchPlaceholder}
-						light
-						bind:value={searchQuery}
-						skeleton={!mounted}
-					/>
+					<Search class="flex-1" placeholder={searchPlaceholder} light bind:value={searchQuery} />
 					<Button
 						kind="ghost"
 						icon={Minimize}
@@ -207,10 +209,9 @@
 						on:click={() => {
 							showFilter = false;
 						}}
-						skeleton={!mounted}
 					/>
 				</div>
-				<div class="flex-[1_1_auto] h-0 overflow-y-scroll py-4 px-6">
+				<div class="h-0 flex-[1_1_auto] overflow-y-scroll px-6 py-4">
 					{#each comboboxFilterList as optionGroup (optionGroup.key)}
 						<div class="mb-8">
 							<ComboBox
@@ -219,8 +220,8 @@
 								on:select={(e) => (selectedComboboxValue[optionGroup.key] = e.detail.selectedId)}
 								on:clear={() => (selectedComboboxValue[optionGroup.key] = undefined)}
 								items={optionGroup.choices}
-								disabled={!mounted}
-								bind:selectedId={comboboxInternal[optionGroup.key]}
+								disabled={!renderCombobox}
+								selectedId={comboboxInternal[optionGroup.key]}
 								{shouldFilterItem}
 							/>
 						</div>
@@ -235,107 +236,87 @@
 									bind:group={selectedCheckboxValue[optionGroup.key]}
 									value={choice.value}
 									labelText={choice.label}
-									skeleton={!mounted}
 								/>
 							{/each}
 						</FormGroup>
 					{/each}
 				</div>
-				<div class="flex space-x-[-1px] sticky bottom-0 body-compact-01 bg-white">
+				<div class="body-compact-01 sticky bottom-0 flex space-x-[-1px] bg-white">
 					<Button
-						class="flex-[2_2_0%] min-w-0 pr-4"
+						class="min-w-0 flex-[2_2_0%] pr-4"
 						kind="tertiary"
-						on:click={() => filterTickAll(false)}
-						skeleton={!mounted}>ล้างตัวเลือก</Button
+						on:click={() => filterTickAll(false)}>ล้างตัวเลือก</Button
 					>
 					<Button
-						class="flex-[2_2_0%] min-w-0 pr-4"
+						class="min-w-0 flex-[2_2_0%] pr-4"
 						kind={'tertiary' || 'secondary'}
-						on:click={() => filterTickAll()}
-						skeleton={!mounted}>เลือกทั้งหมด</Button
+						on:click={() => filterTickAll()}>เลือกทั้งหมด</Button
 					>
 					<Button
-						class="flex-1 min-w-0 pr-4 md:hidden"
+						class="min-w-0 flex-1 pr-4 md:hidden"
 						on:click={() => {
 							showFilter = false;
-						}}
-						skeleton={!mounted}>ดูที่เลือก</Button
+						}}>ดูที่เลือก</Button
 					>
 				</div>
 			</aside>
 		{/if}
-		<div class="flex-1 flex flex-col bg-white">
-			{#if mounted}
-				<div class="overflow-x-auto overflow-y-hidden">
-					<DataTable
-						class="pt-0 w-0 min-w-full"
-						size="tall"
-						headers={tableHeader}
-						rows={filteredData}
-						pageSize={tablePageSize}
-						page={tableCurrentPage}
-					>
-						<svelte:fragment slot="cell-header" let:header>
-							{#if header.key === 'files'}
-								<span>เอก<br class="md:hidden" />สาร</span>
-							{:else}
-								{header.value}
-							{/if}
-						</svelte:fragment>
-						<svelte:fragment slot="cell" let:cell let:row>
-							<slot name="table" cellKey={cell.key} cellValue={cell.value} {row} />
-						</svelte:fragment>
-					</DataTable>
+		<div class="flex flex-1 flex-col bg-white">
+			<div class="overflow-x-auto overflow-y-hidden">
+				<DataTable
+					class="w-0 min-w-full pt-0"
+					size="tall"
+					headers={tableHeader}
+					rows={filteredData}
+					pageSize={tablePageSize}
+					page={tableCurrentPage}
+				>
+					<svelte:fragment slot="cell-header" let:header>
+						{#if header.key === 'files'}
+							<span>เอก<br class="md:hidden" />สาร</span>
+						{:else}
+							{header.value}
+						{/if}
+					</svelte:fragment>
+					<svelte:fragment slot="cell" let:cell let:row>
+						<slot name="table" cellKey={cell.key} cellValue={cell.value} {row} />
+					</svelte:fragment>
+				</DataTable>
+			</div>
+			{#if filteredData.length === 0}
+				<div
+					class="body-compact-01 flex h-10 items-center border-b border-solid border-b-ui-03 px-4 text-gray-60"
+				>
+					ไม่พบข้อมูลที่ค้นหา
 				</div>
-				{#if filteredData.length === 0}
-					<div
-						class="h-10 body-compact-01 text-gray-60 px-4 flex items-center border-solid border-b border-b-ui-03"
-					>
-						ไม่พบข้อมูลที่ค้นหา
-					</div>
-				{/if}
-				<div class="flex-1" />
-				<div class="sticky bottom-0">
-					{#if !showFilter}
-						<Button
-							class="m-4"
-							tooltipAlignment="start"
-							tooltipPosition="top"
-							iconDescription="แสดงตัวเลือก"
-							icon={isFilterNotDefault ? FilterEdit : Filter}
-							kind={isFilterNotDefault ? 'secondary' : 'primary'}
-							on:click={() => {
-								showFilter = true;
-							}}
-							skeleton={!mounted}
-						/>
-					{/if}
-					<Pagination
-						class="overflow-x-hidden"
-						pageSize={tablePageSize}
-						bind:page={tableCurrentPage}
-						totalItems={filteredData.length}
-						pageSizeInputDisabled
-						forwardText="หน้าถัดไป"
-						backwardText="หน้าก่อนหน้า"
-						itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} มติ`}
-						pageRangeText={(_, total) => `จาก ${total} หน้า`}
-					/>
-				</div>
-			{:else}
-				<div class="overflow-x-auto overflow-y-hidden">
-					<DataTableSkeleton
-						class="pt-0 w-0 min-w-full"
-						size="tall"
-						headers={tableHeader}
-						rows={10}
-						showHeader={false}
-						showToolbar={false}
-					/>
-				</div>
-				<div class="flex-1" />
-				<PaginationSkeleton />
 			{/if}
+			<div class="flex-1" />
+			<div class="sticky bottom-0">
+				{#if !showFilter}
+					<Button
+						class="m-4"
+						tooltipAlignment="start"
+						tooltipPosition="top"
+						iconDescription="แสดงตัวเลือก"
+						icon={isFilterNotDefault ? FilterEdit : Filter}
+						kind={isFilterNotDefault ? 'secondary' : 'primary'}
+						on:click={() => {
+							showFilter = true;
+						}}
+					/>
+				{/if}
+				<Pagination
+					class="overflow-x-hidden"
+					pageSize={tablePageSize}
+					bind:page={tableCurrentPage}
+					totalItems={filteredData.length}
+					pageSizeInputDisabled
+					forwardText="หน้าถัดไป"
+					backwardText="หน้าก่อนหน้า"
+					itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} มติ`}
+					pageRangeText={(_, total) => `จาก ${total} หน้า`}
+				/>
+			</div>
 		</div>
 	</div>
 </div>

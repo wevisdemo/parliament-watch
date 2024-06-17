@@ -1,4 +1,4 @@
-import { createSeo } from '../../utils/seo';
+import { createSeo } from '$lib/seo';
 
 export interface DutySection {
 	heading: string;

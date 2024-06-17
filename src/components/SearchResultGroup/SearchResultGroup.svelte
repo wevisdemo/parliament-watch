@@ -7,12 +7,12 @@
 </script>
 
 <div>
-	<div class="px-4 py-2 flex items-center gap-2 bg-ui-01">
+	<div class="flex items-center gap-2 bg-ui-01 px-4 py-2">
 		<slot name="icon" />
 		<span class="text-xs text-gray-90">{heading}</span>
 	</div>
 	{#if items}
-		{#each items as item}
+		{#each items as item (item.url)}
 			<ResultItem {item} />
 		{/each}
 	{/if}

@@ -21,6 +21,7 @@ Citizens are watching
   - [Start SvelteKit](#start-sveltekit)
   - [Start Histoire](#start-histoire)
   - [Generate a new component](#generate-a-new-component)
+  - [Log](#log)
 - [🗃️ Directory Structure](#-directory-structure)
 - [🍭 Design System](#-design-system)
   - [Typography](#typography)
@@ -102,6 +103,10 @@ _src/components/ComponentName/_ directory will be created with the following fil
 - **ComponentName.svelte** for the component source code.
 - **ComponentName.story.svelte** for the Histoire's story file. Follow [a guide on writing stories](https://histoire.dev/guide/svelte3/stories.html).
 
+### Log
+
+Server-side logging for data warning and SvelteKit error can be enabled via environment variable `process.env.LOG_TARGET` by setting it to `stdout` or `file`. More details in [logger.ts](src/lib/logger.ts).
+
 ## 🗃️ Directory Structure
 
 - **/\_templates** Hygen's code generation templates
@@ -116,7 +121,7 @@ _src/components/ComponentName/_ directory will be created with the following fil
 
 ## 🍭 Design System
 
-The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with scss in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `yarn compile:sass` command.
+The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with scss in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `yarn sass:build` command.
 
 ### Typography
 

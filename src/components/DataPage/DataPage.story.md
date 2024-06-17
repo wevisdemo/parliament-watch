@@ -85,9 +85,9 @@ Default Slot จะเป็น Header ของหน้านั้นๆ
 <svelte:fragment slot="table" let:cellKey let:cellValue>
 	{#if cellKey === 'direction'}
 		{#if cellValue}
-			<span class="bg-teal-30 rounded-full px-2 text-black">ตามเสียงส่วนใหญ่ในพรรค</span>
+			<span class="rounded-full bg-teal-30 px-2 text-black">ตามเสียงส่วนใหญ่ในพรรค</span>
 		{:else}
-			<span class="bg-red-30 rounded-full px-2 text-black">ต่างจากเสียงส่วนใหญ่ในพรรค</span>
+			<span class="rounded-full bg-red-30 px-2 text-black">ต่างจากเสียงส่วนใหญ่ในพรรค</span>
 		{/if}
 	{:else}
 		{cellValue}

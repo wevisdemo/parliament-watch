@@ -2,68 +2,71 @@
 	import { Tag } from 'carbon-components-svelte';
 	import { Download, TableSplit } from 'carbon-icons-svelte';
 	import Share from '$components/Share/Share.svelte';
-	import AssemblyIdRunner from './AssemblyIdRunner.svelte';
+	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 
-	export let assemblyIds: string[] = [];
+	export let availableAssemblies: AvailableAssembly[] = [];
 
-	export let data: {
+	export let assembly: {
 		id: string;
 		name: string;
-		abbreviation?: string;
+		abbreviation: string | null;
 		term: number;
 		startedAt: Date;
-		endedAt?: Date;
-		origin: string;
+		endedAt: Date | null;
+		origin: string | null;
 	};
 
-	$: isActive = data.endedAt === undefined;
-	$: startedAtThaiFormat = new Date(data.startedAt).toLocaleDateString('th-TH', {
+	$: isActive = assembly.endedAt === undefined;
+	$: startedAtThaiFormat = new Date(assembly.startedAt).toLocaleDateString('th-TH', {
 		day: 'numeric',
 		month: 'short',
 		year: '2-digit'
 	});
-	$: endedAtThaiFormat = data.endedAt
-		? new Date(data.endedAt).toLocaleDateString('th-TH', {
+	$: endedAtThaiFormat = assembly.endedAt
+		? new Date(assembly.endedAt).toLocaleDateString('th-TH', {
 				day: 'numeric',
 				month: 'short',
 				year: '2-digit'
-		  })
+			})
 		: 'ปัจจุบัน';
 </script>
 
 <div
-	class="flex md:flex-row flex-col w-full justify-between md:py-[48px] py-[16px] md:space-x-[32px]"
+	class="flex w-full flex-col justify-between py-[16px] md:flex-row md:space-x-[32px] md:py-[48px]"
 >
 	<div class="w-full max-w-[900px]">
-		<div class="flex md:flex-row flex-col">
-			<h2 class="fluid-heading-05">{data.name}</h2>
+		<div class="flex flex-col md:flex-row">
+			<h2 class="fluid-heading-05">{assembly.name}</h2>
 			<AssemblyIdRunner
-				currentId={data.id}
-				startedYear={data.startedAt}
-				term={data.term}
-				{assemblyIds}
+				name={assembly.name}
+				term={assembly.term}
+				startedYear={assembly.startedAt}
+				{availableAssemblies}
 			/>
 		</div>
 		<div class="flex items-center">
 			<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>
 			<p class="body-01 ml-[8px]">
-				{startedAtThaiFormat}{data.endedAt ? ` - ${endedAtThaiFormat}` : ''}
+				{startedAtThaiFormat}{assembly.endedAt ? ` - ${endedAtThaiFormat}` : ''}
 			</p>
 		</div>
-		<div class="md:mt-[32px] mt-[16px]">
-			<p class="heading-01">ที่มา</p>
-			<p class="body-01 mt-[8px]">{data.origin}</p>
-		</div>
+		{#if assembly.origin}
+			<div class="mt-[16px] md:mt-[32px]">
+				<p class="heading-01">ที่มา</p>
+				<p class="body-01 mt-[8px]">{assembly.origin}</p>
+			</div>
+		{/if}
 	</div>
-	<div class="grid gap-[8px] w-full md:max-w-[224px] max-w-full mt-[16px] md:mt-[0px] h-fit">
-		<div class="flex flex-col border border-gray-20 border-solid p-[12px] text-left">
+	<div class="mt-[16px] grid h-fit w-full max-w-full gap-[8px] md:mt-[0px] md:max-w-[224px]">
+		<div class="flex flex-col border border-solid border-gray-20 p-[12px] text-left">
 			<div class="flex">
 				<Download />
 				<span class="heading-01 ml-[4px]">ดาวน์โหลดข้อมูล</span>
 			</div>
 			<a
-				href="/files/download/assemblies/{data.id}-members.csv"
-				class="flex items-center mt-[12px]"
+				href="/files/download/assemblies/{assembly.id}-members.csv"
+				class="mt-[12px] flex items-center"
 			>
 				<TableSplit />
 				<span class="helper-text-01 ml-[4px]">รายชื่อสมาชิก</span>
@@ -74,14 +77,7 @@
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
 			</a> -->
 		</div>
-		<p class="label-01 text-gray-60">
-			อัพเดตข้อมูล : {new Date().toLocaleDateString('th-TH', {
-				year: 'numeric',
-				month: 'short',
-				day: 'numeric'
-			})}
-		</p>
-		<!-- <a href="/" class="helper-text-01">ที่มาและข้อจำกัดข้อมูล</a> -->
+		<DataPeriodRemark />
 		<Share label="แชร์" />
 	</div>
 </div>

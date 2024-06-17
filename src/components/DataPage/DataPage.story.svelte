@@ -60,7 +60,6 @@
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
 	let selectedComboboxValue: SelectedComboboxValueType;
-	let mounted: boolean;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||
@@ -73,11 +72,11 @@
 						(selectedComboboxValue.filterComboboxType
 							? e.type === selectedComboboxValue.filterComboboxType
 							: true)
-			  );
+				);
 </script>
 
 <Hst.Story title="DataPage" layout={{ type: 'single', iframe: true }}>
-	<div class="font-sans body-02 bg-white">
+	<div class="body-02 bg-white font-sans">
 		<DataPage
 			{breadcrumbList}
 			{searchPlaceholder}
@@ -89,15 +88,14 @@
 			bind:searchQuery
 			bind:selectedCheckboxValue
 			bind:selectedComboboxValue
-			bind:mounted
 		>
 			<h1 class="fluid-heading-03">ประวัติการลงมติ</h1>
 			<svelte:fragment slot="table" let:cellKey let:cellValue>
 				{#if cellKey === 'direction'}
 					{#if cellValue}
-						<span class="bg-teal-30 rounded-full px-2 text-black">ตามเสียงส่วนใหญ่ในพรรค</span>
+						<span class="rounded-full bg-teal-30 px-2 text-black">ตามเสียงส่วนใหญ่ในพรรค</span>
 					{:else}
-						<span class="bg-red-30 rounded-full px-2 text-black">ต่างจากเสียงส่วนใหญ่ในพรรค</span>
+						<span class="rounded-full bg-red-30 px-2 text-black">ต่างจากเสียงส่วนใหญ่ในพรรค</span>
 					{/if}
 				{:else}
 					{cellValue}
@@ -117,15 +115,10 @@
 		<Hst.Number bind:value={tablePageSize} title="(Prop) Table Page Size" />
 		<hr />
 		<Hst.Text bind:value={searchQuery} title="(Reactive) Search Query" />
-		<section class="border border-white border-solid p-2 mb-2">
-			<strong class="block mb-2">Selected Filter?</strong>
-			<pre class="border border-gray-50 border-solid p-2"><code
+		<section class="mb-2 border border-solid border-white p-2">
+			<strong class="mb-2 block">Selected Filter?</strong>
+			<pre class="border border-solid border-gray-50 p-2"><code
 					>{JSON.stringify(selectedCheckboxValue, null, 2)}</code
-				></pre>
-		</section>
-		<section class="border border-white border-solid p-2 mb-2">
-			<strong class="block mb-2">Is Component Mounted?</strong>
-			<pre class="border border-gray-50 border-solid p-2"><code>{mounted?.toString() ?? ''}</code
 				></pre>
 		</section>
 	</svelte:fragment>

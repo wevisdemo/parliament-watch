@@ -39,7 +39,7 @@
 </script>
 
 <button
-	class="flex bg-white/0 p-0 border-0 hover:bg-gray-90 cursor-pointer group
+	class="group flex cursor-pointer border-0 bg-white/0 p-0 hover:bg-gray-90
     {active ? '!bg-gray-90' : ''}"
 	on:click={menuOpen}
 	use:clickOutSide
@@ -53,7 +53,7 @@
 			{/if}
 		</div>
 		<p
-			class="text-gray-30 p-3 whitespace-nowrap group-hover:text-gray-10
+			class="whitespace-nowrap p-3 text-gray-30 group-hover:text-gray-10
             {active ? '!text-gray-10' : ''}"
 		>
 			{menu.label}
@@ -62,14 +62,14 @@
 			<ChevronDownIcon
 				size={16}
 				class="{active ? 'rotate-180 !text-gray-10' : ''}
-                    text-gray-30 group-hover:text-gray-10 transition-all duration-200"
+                    text-gray-30 transition-all duration-200 group-hover:text-gray-10"
 			/>
 		</span>
 	</div>
 </button>
 {#if active}
 	<div
-		class="flex flex-col absolute bg-gray-90 w-[225px] overflow-hidden"
+		class="absolute flex w-[225px] flex-col overflow-hidden bg-gray-90"
 		transition:slide={{ duration: 250 }}
 	>
 		<slot />

@@ -6,7 +6,7 @@
 	import { InlineNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import '../styles/index.css';
-	import { DEFAULT_SEO, PROD_URL } from '../utils/seo';
+	import { DEFAULT_SEO, PROD_URL } from '$lib/seo';
 
 	$: title = $page.data?.seo?.title
 		? `${$page.data?.seo?.title} - Parliament Watch`
@@ -43,7 +43,7 @@
 	<meta name="twitter:image" content={og} />
 </svelte:head>
 
-<main class="min-h-screen flex flex-col">
+<main class="flex min-h-screen flex-col">
 	<NavigationBar />
 	<div class="flex-1">
 		<slot />
@@ -56,7 +56,7 @@
 		<CookieConsent />
 	{:else}
 		<InlineNotification
-			class="fixed z-50 w-full left-0 bottom-0 m-0 max-w-none min-w-0"
+			class="fixed bottom-0 left-0 z-50 m-0 w-full min-w-0 max-w-none"
 			lowContrast
 			kind="warning-alt"
 			title="คำเตือน:"

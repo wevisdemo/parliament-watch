@@ -71,7 +71,7 @@
 	);
 </script>
 
-<div class="flex md:flex-row flex-col space-y-[16px]">
+<div class="flex flex-col space-y-[16px] md:flex-row">
 	<div class="md:w-[50%]">
 		<SeatChart parties={seatParties} {lineAmounts} />
 	</div>

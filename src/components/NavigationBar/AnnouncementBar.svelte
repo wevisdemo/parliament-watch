@@ -97,14 +97,14 @@
 		class={twMerge(
 			topClass,
 			announcement.bgColor ?? 'bg-blue-60',
-			'flex items-center fixed h-12 px-4 lg:px-10 w-screen text-white font-normal'
+			'fixed flex h-12 w-screen items-center px-4 font-normal text-white lg:px-10'
 		)}
 		transition:slide={{ duration: 350, axis: 'y' }}
 	>
 		<div class="flex items-center pr-4">
 			<svelte:component this={iconMap[iconType]} size={20} />
 		</div>
-		<div class=" whitespace-nowrap overflow-hidden text-ellipsis">
+		<div class=" overflow-hidden text-ellipsis whitespace-nowrap">
 			<span class="font-semibold">{announcement.title ?? ''}</span>
 			<span>{announcement.text}</span>
 			<span class="text-text-03"
@@ -113,14 +113,14 @@
 		</div>
 		<div class="ml-auto pl-8">
 			{#if announcement.link}
-				<a class="text-white whitespace-nowrap" href={announcement.link} aria-label="รายละเอียด"
+				<a class="whitespace-nowrap text-white" href={announcement.link} aria-label="รายละเอียด"
 					>รายละเอียด</a
 				>
 			{/if}
 		</div>
 		<div class="pl-4 lg:pl-8">
 			<button
-				class="flex bg-white/0 border-0 text-text-03 hover:text-white cursor-pointer"
+				class="flex cursor-pointer border-0 bg-white/0 text-text-03 hover:text-white"
 				on:click={() => (isShown = false)}
 				><CloseIcon size={24} />
 			</button>

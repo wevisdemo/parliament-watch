@@ -28,17 +28,20 @@
 
 	onMount(() => {
 		slider = new KeenSlider(elCarousel, {
-			loop: true,
+			loop: false,
 			mode: 'free-snap',
-			slides: {
-				perView: 1,
-				spacing: 12
-			},
+			slides: { perView: 1.25, spacing: 12 },
 			renderMode: 'performance',
 			breakpoints: {
-				'(min-width: 672px)': {
+				'(min-width: 560px)': {
 					slides: {
-						perView: 3,
+						perView: 2.25,
+						spacing: 12
+					}
+				},
+				'(min-width: 960px)': {
+					slides: {
+						perView: 3.25,
 						spacing: 12
 					}
 				}

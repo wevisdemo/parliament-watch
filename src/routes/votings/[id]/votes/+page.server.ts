@@ -5,7 +5,7 @@ import {
 	fetchVotings
 } from '$lib/datasheets/index.js';
 import { getSortedUniqueVoteOptions, getVoteResultsByPerson } from '$lib/datasheets/voting.js';
-import { createSeo } from '../../../../utils/seo';
+import { createSeo } from '$lib/seo';
 
 interface FilterOptions {
 	parties: string[];
@@ -39,7 +39,7 @@ export async function load({ params }) {
 		filterOptions,
 		votes,
 		seo: createSeo({
-			title: 'ผลการลงมติรายคน ' + voting.title
+			title: 'ผลการลงมติรายคน ' + voting.nickname
 		})
 	};
 }

@@ -7,22 +7,22 @@
 </script>
 
 {#if linkMenu.type === 'link'}
-	<div class="w-screen md:w-80 pr-2">
-		<hr class=" border-0 border-b p-0 m-0 border-gray-30/20 z-40 w-11/12 ml-auto" />
+	<div class="w-screen pr-2 md:w-80">
+		<hr class=" z-40 m-0 ml-auto w-11/12 border-0 border-b border-gray-30/20 p-0" />
 	</div>
 {/if}
 <a
 	href={linkMenu.url}
 	class={twMerge(
-		'flex items-center w-screen md:w-80 pl-4 text-gray-30 hover:text-gray-10 decoration-gray-30 no-underline transition-all duration-200',
+		'flex w-screen items-center pl-4 text-gray-30 no-underline decoration-gray-30 transition-all duration-200 hover:text-gray-10 md:w-80',
 		additionalClass
 	)}
 >
 	<div class="flex w-4">
 		<svelte:component this={linkMenu.icon} class="text-inverse-link" />
 	</div>
-	<p class="p-3 whitespace-nowrap">{linkMenu.label}</p>
-	<div class="flex ml-auto mr-4">
+	<p class="whitespace-nowrap p-3">{linkMenu.label}</p>
+	<div class="ml-auto mr-4 flex">
 		<ArrowUpRightIcon />
 	</div>
 </a>
