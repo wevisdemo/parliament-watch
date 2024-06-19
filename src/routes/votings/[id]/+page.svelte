@@ -199,7 +199,7 @@
 			<div class="flex flex-col gap-2">
 				<LinkTable links={voting.files} />
 				<DataPeriodRemark />
-				<Share label="แชร์มติ" />
+				<Share label="แชร์หน้านี้" />
 			</div>
 		</div>
 	</header>
