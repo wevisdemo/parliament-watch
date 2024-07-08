@@ -201,18 +201,18 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
-				{#if bill.attachment}
-					<LinkTable
-						title="ลิงก์ที่เกี่ยวข้อง"
-						icon={Link}
-						links={[
-							{ label: bill.attachment.label, url: bill.attachment.url },
-							{ label: 'เว็บไซต์แหล่งข้อมูลต้นทาง', url: bill.lisUrl, icon: OpenPanelTop }
-						]}
-					/>
-				{/if}
+				<LinkTable
+					title="ลิงก์ที่เกี่ยวข้อง"
+					icon={Link}
+					links={[
+						...(bill.attachment
+							? [{ label: bill.attachment.label, url: bill.attachment.url }]
+							: []),
+						{ label: 'เว็บไซต์แหล่งข้อมูลต้นทาง', url: bill.lisUrl, icon: OpenPanelTop }
+					]}
+				/>
 				<DataPeriodRemark />
-				<Share label="แชร์มติ" />
+				<Share label="แชร์หน้านี้" />
 			</div>
 		</div>
 	</section>
