@@ -8,9 +8,7 @@
 	import '../styles/index.css';
 	import { DEFAULT_SEO, PROD_URL } from '$lib/seo';
 
-	$: title = $page.data?.seo?.title
-		? `${$page.data?.seo?.title} - Parliament Watch`
-		: DEFAULT_SEO.title;
+	$: title = $page.data?.seo?.title ?? DEFAULT_SEO.title;
 	$: description = $page.data?.seo?.description ?? DEFAULT_SEO.description;
 	$: url = new URL($page.url.pathname, PROD_URL).href;
 	$: og = $page.data?.seo?.og ?? DEFAULT_SEO.og;

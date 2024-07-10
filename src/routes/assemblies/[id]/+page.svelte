@@ -10,7 +10,7 @@
 
 	export let data;
 
-	$: ({ availableAssemblies, assembly, summary, mainMembers, latestVotes, seo } = data);
+	$: ({ availableAssemblies, assembly, summary, mainMembers, latestVotes } = data);
 
 	const getSenateGroupWithColor = (memberGroup: MemberGroup[]): MemberGroup[] => {
 		return memberGroup.map((group) => {
