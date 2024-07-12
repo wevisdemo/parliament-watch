@@ -17,7 +17,7 @@ import { getMemberGroup } from './members/[groupby]/groupby';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
-const MAX_LASTEST_VOTE = 5;
+const MAX_LATEST_VOTE = 5;
 
 export interface Summary {
 	totalMembers: number;
@@ -47,6 +47,7 @@ export async function load({ params }) {
 
 	const { mainRoles, ...assembly } = fullAssembly;
 	const isSenates = assembly.name === AssemblyName.Senates;
+	const isCabinet = assembly.name === AssemblyName.Cabinet;
 
 	const politicians = await fetchPoliticians();
 
@@ -107,18 +108,20 @@ export async function load({ params }) {
 		// groupByAssetValue: [],
 	};
 
-	const votes = await fetchVotes();
+	const votes = isCabinet ? [] : await fetchVotes();
 
-	const latestVotes: ComponentProps<VoteCard>[] = (await fetchVotings())
-		.filter(({ participatedAssemblies }) =>
-			participatedAssemblies.some(({ id }) => assembly.id === id)
-		)
-		.sort((a, z) => z.date.getTime() - a.date.getTime())
-		.slice(0, MAX_LASTEST_VOTE)
-		.map((voting) => ({
-			voting,
-			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
-		}));
+	const latestVotes: ComponentProps<VoteCard>[] | null = isCabinet
+		? null
+		: (await fetchVotings())
+				.filter(({ participatedAssemblies }) =>
+					participatedAssemblies.some(({ id }) => assembly.id === id)
+				)
+				.sort((a, z) => z.date.getTime() - a.date.getTime())
+				.slice(0, MAX_LATEST_VOTE)
+				.map((voting) => ({
+					voting,
+					highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
+				}));
 
 	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
 		({ id, name, term }) => ({
@@ -128,14 +131,86 @@ export async function load({ params }) {
 		})
 	);
 
+	// TODO: calculated real changes
+	const changes = isCabinet ? mockChanges : null;
+
 	return {
 		availableAssemblies,
 		assembly,
+		isCabinet,
 		summary,
 		mainMembers,
 		latestVotes,
+		changes,
 		seo: createSeo({
 			title: `${assembly.name} ${assembly.term}`
 		})
 	};
 }
+
+const mockChanges = [
+	{
+		date: new Date('2024-05-27'),
+		type: 'in',
+		politician: {
+			id: 'มาริษ-เสงี่ยมพงษ์',
+			firstname: 'มาริษ',
+			lastname: 'เสงี่ยมพงษ์',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
+	},
+	{
+		date: new Date('2024-05-27'),
+		type: 'out',
+		politician: {
+			id: 'ปานปรีย์-พหิทธานุกร',
+			firstname: 'ปานปรีย์',
+			lastname: 'พหิทธานุกร',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
+	},
+	{
+		date: new Date('2024-05-27'),
+		type: 'in',
+		politician: {
+			id: 'สุริยะ-จึงรุ่งเรืองกิจ',
+			firstname: 'สุริยะ',
+			lastname: 'จึงรุ่งเรืองกิจ',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รองนายกรัฐมนตรี'
+	},
+	{
+		date: new Date('2024-05-20'),
+		type: 'out',
+		politician: {
+			id: 'ปานปรีย์-พหิทธานุกร',
+			firstname: 'ปานปรีย์',
+			lastname: 'พหิทธานุกร',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รองนายกรัฐมนตรี'
+	}
+];
