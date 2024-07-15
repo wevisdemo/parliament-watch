@@ -53,7 +53,7 @@
 		class="my-[8px] [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
 	>
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-		<BreadcrumbItem class="hidden md:block">รัฐสภา</BreadcrumbItem>
+		<BreadcrumbItem class="hidden md:block">นักการเมือง</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
 			>{assembly.name} ชุดที่ {assembly.term}</BreadcrumbItem
 		>
