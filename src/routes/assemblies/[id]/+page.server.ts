@@ -97,11 +97,24 @@ export async function load({ params }) {
 					})
 		}));
 
+	const highlightGroup = parseMemberGroup(
+		isSenates ? GroupByOption.AppointmentMethod : GroupByOption.Party
+	);
+
 	const summary: Summary = {
 		totalMembers: activeMembers.length,
-		highlightGroup: parseMemberGroup(
-			isSenates ? GroupByOption.AppointmentMethod : GroupByOption.Party
-		),
+		highlightGroup: isCabinet
+			? [
+					{
+						name: 'คณะรัฐมนตรี',
+						parties: highlightGroup.reduce<Exclude<MemberGroup['parties'], undefined>>(
+							(list, group) => ('parties' in group ? [...list, ...group.parties] : list),
+							[]
+						),
+						total: highlightGroup.reduce((sum, { total }) => sum + total, 0)
+					}
+				]
+			: highlightGroup,
 		groupBySex: parseMemberGroup(GroupByOption.Sex),
 		groupByAgeRange: parseMemberGroup(GroupByOption.Age),
 		groupByEducation: parseMemberGroup(GroupByOption.Education)
