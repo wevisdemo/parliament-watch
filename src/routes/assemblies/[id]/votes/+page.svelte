@@ -38,7 +38,7 @@
 <DataPage
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
-		{ label: 'รัฐสภา' },
+		{ label: 'นักการเมือง' },
 		{ url: `/assemblies/${assembly.id}`, label: `${assembly.name} ชุดที่ ${assembly.term}` },
 		{ label: 'ประวัติการลงมติ' }
 	]}
