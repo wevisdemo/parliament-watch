@@ -1,4 +1,5 @@
 import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
+import { getSenateColorByTitle } from '$components/Assemblies/shared';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import {
 	fetchAssemblies,
@@ -100,6 +101,9 @@ export async function load({ params }) {
 	const highlightGroup = parseMemberGroup(
 		isSenates ? GroupByOption.AppointmentMethod : GroupByOption.Party
 	);
+	const groupBySex = parseMemberGroup(GroupByOption.Sex);
+	const groupByAgeRange = parseMemberGroup(GroupByOption.Age);
+	const groupByEducation = parseMemberGroup(GroupByOption.Education);
 
 	const summary: Summary = {
 		totalMembers: activeMembers.length,
@@ -115,9 +119,9 @@ export async function load({ params }) {
 					}
 				]
 			: highlightGroup,
-		groupBySex: parseMemberGroup(GroupByOption.Sex),
-		groupByAgeRange: parseMemberGroup(GroupByOption.Age),
-		groupByEducation: parseMemberGroup(GroupByOption.Education)
+		groupBySex: isSenates ? getSenateGroupWithColor(groupBySex) : groupBySex,
+		groupByAgeRange: isSenates ? getSenateGroupWithColor(groupByAgeRange) : groupByAgeRange,
+		groupByEducation: isSenates ? getSenateGroupWithColor(groupByEducation) : groupByEducation
 		// groupByAssetValue: [],
 	};
 
@@ -160,6 +164,18 @@ export async function load({ params }) {
 		})
 	};
 }
+
+const getSenateGroupWithColor = (memberGroup: MemberGroup[]): MemberGroup[] => {
+	return memberGroup.map((group) => {
+		const parties = group.parties?.map((party) => {
+			return {
+				...party,
+				color: getSenateColorByTitle(party.name)
+			};
+		});
+		return { ...group, parties };
+	});
+};
 
 const mockChanges = [
 	{

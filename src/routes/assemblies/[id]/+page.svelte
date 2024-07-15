@@ -3,8 +3,6 @@
 	import MainMembers from '$components/Assemblies/MainMembers.svelte';
 	import Summary from '$components/Assemblies/Summary.svelte';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import type { MemberGroup } from './+page.server.js';
-	import { getSenateColorByTitle } from '$components/Assemblies/shared.js';
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
 	import { AssemblyName } from '$models/assembly.js';
 
@@ -12,28 +10,6 @@
 
 	$: ({ availableAssemblies, assembly, isCabinet, summary, mainMembers, changes, latestVotes } =
 		data);
-
-	const getSenateGroupWithColor = (memberGroup: MemberGroup[]): MemberGroup[] => {
-		return memberGroup.map((group) => {
-			const parties = group.parties?.map((party) => {
-				return {
-					...party,
-					color: getSenateColorByTitle(party.name)
-				};
-			});
-			return { ...group, parties };
-		});
-	};
-
-	$: newSummary =
-		assembly.abbreviation == 'สว.'
-			? {
-					...summary,
-					groupBySex: getSenateGroupWithColor(summary.groupBySex),
-					groupByAgeRange: getSenateGroupWithColor(summary.groupByAgeRange),
-					groupByEducation: getSenateGroupWithColor(summary.groupByEducation)
-				}
-			: summary;
 
 	let selector = 'summary';
 
@@ -82,7 +58,7 @@
 	<section id="summary">
 		<Summary
 			assemblyId={assembly.id}
-			summary={newSummary}
+			{summary}
 			houseLevel={assembly.name === AssemblyName.Representatives ? 'lower' : 'upper'}
 		/>
 		{#if isCabinet}
