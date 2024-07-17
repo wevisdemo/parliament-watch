@@ -9,6 +9,7 @@ import {
 	fetchVotings
 } from '$lib/datasheets';
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
+import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
 import { createSeo } from '$lib/seo';
 import { AssemblyName, GroupByOption } from '$models/assembly';
@@ -33,7 +34,7 @@ export interface Summary {
 export interface MemberGroup {
 	name: string;
 	total: number;
-	parties?: (Pick<Party, 'name' | 'color'> & { count: number })[];
+	parties?: (Pick<Party, 'name' | 'color'> & { count: number; members?: AssemblyMember[] })[];
 }
 
 export interface MainMember {
