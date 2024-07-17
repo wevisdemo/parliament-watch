@@ -8,10 +8,10 @@ erDiagram
   Politician }o--o| Vote: "can"
   Politician }|--o| Bill: "can propose"
   Vote }|--|| Voting: "are couted toward"
-  Bill ||--o{ Event: "goes through"
+  Bill ||--o{ BillEvent: "goes through"
   Bill |o--o{ Bill: "can be merged to"
-  Event }o--o| Bill: "can refer to"
-  Event }o--o| Voting: "can refer to"
+  BillEvent }o--o| Bill: "can refer to"
+  BillEvent }o--o| Voting: "can refer to"
 
   Politician {
     string id PK "firstname-lastname"
@@ -117,6 +117,6 @@ erDiagram
 - **Party** = พรรค
 - **Assembly** = กลุ่มคน เช่น สส. สว. ครม.
 - **Bill** = ข้อเสนอกฎหมาย
-- **Event** = เหตุการต่างๆ ระหว่างการเสนอกฎหมาย
+- **BillEvent** = เหตุการต่างๆ ระหว่างการเสนอกฎหมาย
 - **Voting** = การลงมติ
 - **Vote** = การลงคะแนน
