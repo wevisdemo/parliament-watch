@@ -1,9 +1,11 @@
 <script lang="ts">
+	import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
+	import CabinetChart from './CabinetChart.svelte';
 	import LowerHouseSummary from './LowerHouseSummary.svelte';
 	import SeatChart from './SeatChart.svelte';
 	import UpperHouseSummary from './UpperHouseSummary.svelte';
-	import { getSenateColorByTitle, type PartySeat } from './shared';
+	import { getSenateColorByTitle, type CabinetSeat, type PartySeat } from './shared';
 
 	export let data: MemberGroup[] = [];
 	export let houseLevel = 'upper';
@@ -63,20 +65,79 @@
 		});
 	};
 
-	$: seatParties = houseLevel === 'lower' ? getLowerHouseTotalPartie() : getUpperHouseTotalPartie();
+	$: seatParties =
+		houseLevel === 'lower' || houseLevel === 'cabinet'
+			? getLowerHouseTotalPartie()
+			: getUpperHouseTotalPartie();
 
 	$: lineAmounts = distributeLowerHouseSeatLines(
 		seatParties.reduce((a, c) => a + c.count, 0),
-		houseLevel === 'lower' ? LOWER_HOUSE_ROW_RATIO : UPPER_HOUSE_ROW_RATIO
+		houseLevel === 'lower' || houseLevel === 'cabinet'
+			? LOWER_HOUSE_ROW_RATIO
+			: UPPER_HOUSE_ROW_RATIO
 	);
+
+	const getCabinetGroup = (cabinets: MemberGroup | undefined, groupName: CabinetSeat['role']) => {
+		const res =
+			cabinets?.parties
+				?.map((party) => {
+					let membersFilter: AssemblyMember[] = [];
+					if (['นายกรัฐมนตรี', 'รองนายกรัฐมนตรี'].includes(groupName)) {
+						membersFilter =
+							party.members?.filter((cabinet) => cabinet.assemblyRole?.role === groupName) || [];
+					} else if (groupName === 'รัฐมนตรี') {
+						membersFilter =
+							party.members?.filter(
+								(cabinet) =>
+									cabinet.assemblyRole?.role.includes('รัฐมนตรีว่าการ') ||
+									cabinet.assemblyRole?.role.includes('รัฐมนตรีประจำสำนักนายกรัฐมนตรี')
+							) || [];
+					} else {
+						membersFilter =
+							party.members?.filter((cabinet) => cabinet.assemblyRole?.role.includes(groupName)) ||
+							[];
+					}
+					return {
+						...party,
+						members: membersFilter,
+						count: membersFilter.length
+					};
+				})
+				.filter((party) => party.count > 0) || [];
+
+		return res;
+	};
+
+	$: getSeatCarbinet = (): CabinetSeat[] => {
+		const cabinets = data.find((group) => group.name === 'คณะรัฐมนตรี');
+		const roles = ['นายกรัฐมนตรี', 'รองนายกรัฐมนตรี', 'รัฐมนตรี', 'รัฐมนตรีช่วย'];
+		let cabinetSeat: CabinetSeat[] = [];
+		roles.forEach((role) => {
+			const cabinetGroup = getCabinetGroup(cabinets, role as CabinetSeat['role']);
+			const cabinetParties = getTotalPartiesFromGroup({
+				parties: cabinetGroup
+			} as MemberGroup);
+			cabinetSeat.push({
+				role: role as CabinetSeat['role'],
+				parties: cabinetParties
+			});
+		});
+		return cabinetSeat;
+	};
+
+	$: seatCarbinet = getSeatCarbinet();
 </script>
 
 <div class="flex flex-col space-y-[16px] md:flex-row">
 	<div class="md:w-[50%]">
-		<SeatChart parties={seatParties} {lineAmounts} />
+		{#if houseLevel === 'cabinet'}
+			<CabinetChart cabinets={seatCarbinet} />
+		{:else}
+			<SeatChart parties={seatParties} {lineAmounts} />
+		{/if}
 	</div>
 	<div class="md:w-[50%]">
-		{#if houseLevel === 'lower'}
+		{#if houseLevel === 'lower' || houseLevel === 'cabinet'}
 			<LowerHouseSummary {data} />
 		{:else}
 			<UpperHouseSummary {data} />

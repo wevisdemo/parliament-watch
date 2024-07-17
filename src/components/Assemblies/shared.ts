@@ -49,6 +49,11 @@ export interface PartySeat {
 	count: number;
 }
 
+export interface CabinetSeat {
+	role: 'นายกรัฐมนตรี' | 'รองนายกรัฐมนตรี' | 'รัฐมนตรี' | 'รัฐมนตรีช่วย';
+	parties: PartySeat[];
+}
+
 export const getSenateColorByTitle = (title: string) => {
 	switch (title) {
 		case 'เลือกโดย คสช.':
