@@ -59,7 +59,11 @@
 		<Summary
 			assemblyId={assembly.id}
 			{summary}
-			houseLevel={assembly.name === AssemblyName.Representatives ? 'lower' : 'upper'}
+			houseLevel={assembly.name === AssemblyName.Representatives
+				? 'lower'
+				: assembly.name === AssemblyName.Cabinet
+					? 'cabinet'
+					: 'upper'}
 		/>
 		{#if isCabinet}
 			{JSON.stringify(mainMembers)}
