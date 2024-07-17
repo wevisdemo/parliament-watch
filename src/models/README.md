@@ -12,6 +12,9 @@ erDiagram
   Bill |o--o{ Bill: "can be merged to"
   BillEvent }o--o| Bill: "can refer to"
   BillEvent }o--o| Voting: "can refer to"
+  Party ||--o{ Promise: "makes"
+  Promise ||--|{ PromiseProgress: "are tracked with"
+  PromiseProgress }o..o{ BillEvent: "can refer to"
 
   Politician {
     string id PK "firstname-lastname"
@@ -109,6 +112,28 @@ erDiagram
     string votedInVotingId FK "for action voted"
     number mergedIntoBillId FK "for action merged"
     string enforcementDocumentUrl "for action enforced"
+  }
+
+  Promise {
+    number promiseId PK
+    number partyId FK
+    string nickname
+    string[] statements
+    string coverImageUrl
+    string[] keywords
+    string[] categories
+    string status "notStarted | inProgress | fulfilled | unhonored"
+  }
+
+  PromiseProgress {
+    number promiseProgressId PK
+    number promiseId FK
+    string type "checkpoint | indirect"
+    Date date
+    string title
+    string description
+    number billEventId FK "refer to BillEvent"
+    Reference reference "link: { label: string, url: string }, description: string"
   }
 ```
 
