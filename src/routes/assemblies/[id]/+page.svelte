@@ -1,4 +1,6 @@
 <script lang="ts">
+	import RoleChangeLog from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
+	import PoliticianChangeIcon from '$components/icons/PoliticianChangeIcon.svelte';
 	import Header from '$components/Assemblies/Header.svelte';
 	import MainMembers from '$components/Assemblies/MainMembers.svelte';
 	import Summary from '$components/Assemblies/Summary.svelte';
@@ -35,6 +37,7 @@
 		>
 	</Breadcrumb>
 	<Header {assembly} {availableAssemblies} />
+
 	<div class="flex w-full">
 		<button
 			class="tab {selector === 'summary' ? 'tab-active' : 'tab-inactice'}"
@@ -76,9 +79,14 @@
 	{/if}
 
 	{#if changes}
-		<section id="members">
-			{JSON.stringify(changes)}
-		</section>
+		<div class="flex items-center gap-4 py-4">
+			<PoliticianChangeIcon class="h-8 w-8" />
+			<div>
+				<h4 class="fluid-heading-04 text-text-primary">การปรับคณะรัฐมนตรี</h4>
+				<p class="body-compact-01">บันทึกการปรับเปลี่ยนตำแหน่งในคณะรัฐมนตรีชุดนี้</p>
+			</div>
+		</div>
+		<RoleChangeLog {changes} selectedDate={new Date('2024-05-20')} />
 	{/if}
 
 	{#if latestVotes}
