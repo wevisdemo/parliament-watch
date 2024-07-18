@@ -110,7 +110,12 @@
 
 	$: getSeatCarbinet = (): CabinetSeat[] => {
 		const cabinets = data.find((group) => group.name === 'คณะรัฐมนตรี');
-		const roles = ['นายกรัฐมนตรี', 'รองนายกรัฐมนตรี', 'รัฐมนตรี', 'รัฐมนตรีช่วย'];
+		const roles: CabinetSeat['role'][] = [
+			'นายกรัฐมนตรี',
+			'รองนายกรัฐมนตรี',
+			'รัฐมนตรี',
+			'รัฐมนตรีช่วย'
+		];
 		let cabinetSeat: CabinetSeat[] = [];
 		roles.forEach((role) => {
 			const cabinetGroup = getCabinetGroup(cabinets, role as CabinetSeat['role']);
@@ -118,7 +123,7 @@
 				parties: cabinetGroup
 			} as MemberGroup);
 			cabinetSeat.push({
-				role: role as CabinetSeat['role'],
+				role: role,
 				parties: cabinetParties
 			});
 		});

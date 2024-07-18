@@ -50,7 +50,7 @@
 							<div class="flex items-center space-x-[4px]">
 								<div
 									class="h-[8px] w-[8px] rounded-[100%] bg-[var(--color)]"
-									style="--color: {party.color}"
+									style="--color: {party.color || '#8D8D8D'}"
 								/>
 								<span class="label-01">{party.name}</span>
 							</div>
