@@ -44,6 +44,13 @@ export interface MainMember {
 	description: string | null;
 }
 
+export interface RoleChange {
+	date: Date;
+	type: 'in' | 'out';
+	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'> & { party: Party };
+	role: string;
+}
+
 export async function load({ params }) {
 	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 
@@ -178,7 +185,7 @@ const getSenateGroupWithColor = (memberGroup: MemberGroup[]): MemberGroup[] => {
 	});
 };
 
-const mockChanges = [
+const mockChanges: RoleChange[] = [
 	{
 		date: new Date('2024-05-27'),
 		type: 'in',
