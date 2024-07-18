@@ -5,8 +5,8 @@ import dayjs from 'dayjs';
 
 const UNKNOWN_LABEL = 'ไม่พบข้อมูล';
 
-const unknownParty = {
-	name: UNKNOWN_LABEL,
+const noParty = {
+	name: 'ไม่สังกัดพรรค',
 	logo: ''
 };
 
@@ -146,7 +146,7 @@ export function createSubgroupByPartyOrAppointmentMethod(
 					members: membersByRole
 				})
 			)
-		: groupMembersBy(members, ({ partyRole }) => partyRole?.party || unknownParty).map(
+		: groupMembersBy(members, ({ partyRole }) => partyRole?.party || noParty).map(
 				([party, membersByParty]) => ({
 					name: party.name,
 					icon: party.logo,
