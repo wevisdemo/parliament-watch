@@ -11,6 +11,7 @@
 	import FacebookIcon from './FacebookIcon.svelte';
 	import InstagramIcon from './InstagramIcon.svelte';
 	import XIcon from './XIcon.svelte';
+	import PoliticianChangeIcon from './PoliticianChangeIcon.svelte';
 
 	export let Hst: Hst;
 
@@ -51,6 +52,9 @@
 	</Hst.Variant>
 	<Hst.Variant title="XIcon">
 		<XIcon {size} />
+	</Hst.Variant>
+	<Hst.Variant title="PoliticianChangeIcon">
+		<PoliticianChangeIcon {size} />
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">
