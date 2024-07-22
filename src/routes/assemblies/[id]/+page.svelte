@@ -80,7 +80,7 @@
 
 	{#if changes}
 		<div class="flex items-center gap-4 py-4">
-			<PoliticianChangeIcon class="h-8 w-8" />
+			<PoliticianChangeIcon class="h-8 w-8 flex-shrink-0" />
 			<div>
 				<h4 class="fluid-heading-04 text-text-primary">การปรับคณะรัฐมนตรี</h4>
 				<p class="body-compact-01">บันทึกการปรับเปลี่ยนตำแหน่งในคณะรัฐมนตรีชุดนี้</p>

@@ -11,7 +11,6 @@
 	export let role: string | null = null;
 	export let isLarge = false;
 	export let isActive = true;
-	export let isShowPartyName = true;
 
 	$: fullname = `${firstname} ${lastname}`;
 	$: imgSize = isLarge ? 64 : 40;
@@ -24,13 +23,13 @@
 
 <a
 	href="/politicians/{id}"
-	class="flex items-center gap-4 p-2 font-sans hover:underline"
+	class="flex gap-4 p-2 font-sans hover:underline"
 	class:opacity-50={!isActive}
 >
 	<PoliticianPicture class={imgClass} {avatar} size={imgSize} {party} />
 	<div class="flex-1">
 		<p class={twMerge('text-text-01', titleClass)}>{fullname}</p>
-		{#if party && isShowPartyName}
+		{#if party}
 			<p class={twMerge('text-text-02', subtitleClass)}>พรรค{party.name}</p>
 		{/if}
 		{#if role}
