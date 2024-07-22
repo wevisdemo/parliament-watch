@@ -11,8 +11,6 @@
 			month: 'short',
 			day: 'numeric'
 		});
-	$: console.log('1', selectedDate);
-	$: console.log('2', changeData[0].date);
 	$: isFocus = selectedDate?.getTime() === changeData[0].date?.getTime();
 </script>
 
