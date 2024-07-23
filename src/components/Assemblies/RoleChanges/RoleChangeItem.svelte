@@ -29,17 +29,15 @@
 			</div>
 		</div>
 	</div>
-	<a
-		href="/politicians/{id}"
-		class="flex items-start gap-2 px-2 py-[12px] font-sans hover:underline md:items-center md:p-2"
-	>
+
+	<div class="flex items-start gap-2 px-2 py-[12px] md:items-center md:p-2">
 		<PoliticianPicture {avatar} {party} size={32} class="flex-shrink-0" />
-
 		<div class="flex flex-col gap-1 md:flex-row">
-			<p class="body-compact-01 text-text-primary underline">
-				<span>{firstname}</span> <span>{lastname}</span>
-			</p>
-
+			<a href="/politicians/{id}" class=" font-sans hover:underline">
+				<p class="body-compact-01 text-text-primary underline">
+					<span>{firstname}</span> <span>{lastname}</span>
+				</p>
+			</a>
 			<p class="flex flex-col md:flex-row">
 				<span class="label-02 pr-1 text-text-02"
 					>{type === 'in' ? 'เข้ารับตำแหน่ง' : 'ออกจากตำแหน่ง'}</span
@@ -47,5 +45,5 @@
 				<span class="heading-compact-01 text-text-primary">{role}</span>
 			</p>
 		</div>
-	</a>
+	</div>
 </div>

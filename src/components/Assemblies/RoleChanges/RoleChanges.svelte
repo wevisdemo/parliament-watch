@@ -7,9 +7,9 @@
 
 	$: groupChangeData = group(changes, (d) => d?.date.toISOString());
 	$: convertAndSortChangeData = Array.from(groupChangeData, ([name, value]) => ({
-		name,
+		name: new Date(name).getTime(),
 		value
-	})).sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime());
+	})).sort((a, b) => a.name - b.name);
 </script>
 
 <div>
