@@ -15,7 +15,7 @@
 
 	let selector = 'summary';
 
-	const onClickTab = (tab: 'summary' | 'members' | 'latest-votes') => {
+	const onClickTab = (tab: 'summary' | 'members' | 'latest-votes' | 'role-change') => {
 		const el = document.getElementById(tab);
 		selector = tab;
 		if (!el) return;
@@ -52,6 +52,12 @@
 			สมาชิก
 		</button>
 		<button
+			class="tab {selector === 'role-change' ? 'tab-active' : 'tab-inactice'}"
+			on:click={() => onClickTab('role-change')}
+		>
+			การปรับคณะรัฐมนตรี
+		</button>
+		<button
 			class="tab {selector === 'latest-votes' ? 'tab-active' : 'tab-inactice'}"
 			on:click={() => onClickTab('latest-votes')}
 		>
@@ -79,14 +85,16 @@
 	{/if}
 
 	{#if changes}
-		<div class="flex items-center gap-4 py-4">
-			<PoliticianChangeIcon class="h-8 w-8 flex-shrink-0" />
-			<div>
-				<h4 class="fluid-heading-04 text-text-primary">การปรับคณะรัฐมนตรี</h4>
-				<p class="body-compact-01">บันทึกการปรับเปลี่ยนตำแหน่งในคณะรัฐมนตรีชุดนี้</p>
+		<section id="role-change">
+			<div class="flex items-center gap-4 py-4">
+				<PoliticianChangeIcon class="h-8 w-8 flex-shrink-0" />
+				<div>
+					<h4 class="fluid-heading-04 text-text-primary">การปรับคณะรัฐมนตรี</h4>
+					<p class="body-compact-01">บันทึกการปรับเปลี่ยนตำแหน่งในคณะรัฐมนตรีชุดนี้</p>
+				</div>
 			</div>
-		</div>
-		<RoleChangeLog {changes} selectedDate={new Date('2024-05-20')} />
+			<RoleChangeLog {changes} selectedDate={new Date('2024-05-20')} />
+		</section>
 	{/if}
 
 	{#if latestVotes}
