@@ -10,8 +10,16 @@
 
 	export let data;
 
-	$: ({ availableAssemblies, assembly, isCabinet, summary, mainMembers, changes, latestVotes } =
-		data);
+	$: ({
+		availableAssemblies,
+		assembly,
+		isCabinet,
+		summary,
+		mainMembers,
+		changes,
+		latestVotes,
+		latestBills
+	} = data);
 
 	let selector = 'summary';
 
@@ -101,6 +109,10 @@
 		<section id="latest-votes">
 			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
 		</section>
+	{/if}
+
+	{#if latestBills}
+		{JSON.stringify(latestBills)}
 	{/if}
 </div>
 
