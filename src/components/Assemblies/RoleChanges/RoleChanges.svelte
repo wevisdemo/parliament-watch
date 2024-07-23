@@ -6,10 +6,10 @@
 	export let selectedDate: Date | undefined;
 
 	$: groupChangeData = group(changes, (d) => d?.date.toISOString());
-	$: convertAndSortChangeData = Array.from(groupChangeData, ([name, value]) => ({
-		name: new Date(name).getTime(),
+	$: convertAndSortChangeData = Array.from(groupChangeData, ([time, value]) => ({
+		time: new Date(time).getTime(),
 		value
-	})).sort((a, b) => a.name - b.name);
+	})).sort((a, b) => a.time - b.time);
 </script>
 
 <div>
