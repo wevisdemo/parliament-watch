@@ -83,17 +83,15 @@
 					? 'cabinet'
 					: 'upper'}
 		/>
+	</section>
+	<section id="members">
 		{#if isCabinet}
-			<section>
-				<CabinetMembers members={mainMembers} />
-			</section>
+			<CabinetMembers members={mainMembers} />
+		{/if}
+		{#if !isCabinet}
+			<MainMembers members={mainMembers} assemblyId={assembly.id} />
 		{/if}
 	</section>
-	{#if !isCabinet}
-		<section id="members">
-			<MainMembers members={mainMembers} assemblyId={assembly.id} />
-		</section>
-	{/if}
 
 	{#if changes}
 		<section id="role-change">
