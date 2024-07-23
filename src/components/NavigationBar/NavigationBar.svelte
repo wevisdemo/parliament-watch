@@ -16,7 +16,7 @@
 					type: MenuTypes.link
 				},
 				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link },
-				{ label: 'คณะรัฐมนตรี', url: '/assemblies/คณะรัฐมนตรี-62', type: MenuTypes.link }
+				{ label: 'คณะรัฐมนตรี', url: '/assemblies/คณะรัฐมนตรี-63', type: MenuTypes.link }
 			]
 		},
 		{
