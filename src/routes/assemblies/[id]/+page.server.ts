@@ -3,6 +3,7 @@ import { getSenateColorByTitle } from '$components/Assemblies/shared';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import {
 	fetchAssemblies,
+	fetchBills,
 	fetchFromIdOr404,
 	fetchPoliticians,
 	fetchVotes,
@@ -13,6 +14,7 @@ import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
 import { createSeo } from '$lib/seo';
 import { AssemblyName, GroupByOption } from '$models/assembly';
+import type { Bill } from '$models/bill';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { getMemberGroup } from './members/[groupby]/groupby';
@@ -20,6 +22,7 @@ import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
+const MAX_LATEST_BILL = 10;
 
 export interface Summary {
 	totalMembers: number;
@@ -50,6 +53,8 @@ export interface RoleChange {
 	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'> & { party: Party };
 	role: string;
 }
+
+export type BillSummary = Pick<Bill, 'id' | 'proposedOn' | 'nickname' | 'status'>;
 
 export async function load({ params }) {
 	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
@@ -148,6 +153,18 @@ export async function load({ params }) {
 					highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 				}));
 
+	// TODO: filter bills proposed by cabinet member
+	const latestBills: BillSummary[] | null = isCabinet
+		? (await fetchBills())
+				.slice(0, MAX_LATEST_BILL)
+				.map(({ id, proposedOn, nickname, status }) => ({
+					id,
+					proposedOn,
+					nickname,
+					status
+				}))
+		: null;
+
 	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
 		({ id, name, term }) => ({
 			id,
@@ -165,8 +182,9 @@ export async function load({ params }) {
 		isCabinet,
 		summary,
 		mainMembers,
-		latestVotes,
 		changes,
+		latestVotes,
+		latestBills,
 		seo: createSeo({
 			title: `${assembly.name} ${assembly.term}`
 		})
