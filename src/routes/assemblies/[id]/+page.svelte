@@ -7,6 +7,7 @@
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
 	import { AssemblyName } from '$models/assembly.js';
+	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 
 	export let data;
 
@@ -83,7 +84,9 @@
 					: 'upper'}
 		/>
 		{#if isCabinet}
-			{JSON.stringify(mainMembers)}
+			<section>
+				<CabinetMembers members={mainMembers} />
+			</section>
 		{/if}
 	</section>
 	{#if !isCabinet}
