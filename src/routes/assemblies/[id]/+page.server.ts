@@ -71,28 +71,13 @@ export async function load({ params }) {
 			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
 	);
 
-	const mainMembers = mainRoles.reduce((list, mainRole) => {
-		const member = activeMembers.find(({ assemblyRole }) => assemblyRole?.role === mainRole);
+	const mainMembers = isCabinet
+		? activeMembers.filter(({ assemblyRole }) => assemblyRole?.role).map(parseMainMember)
+		: mainRoles.reduce((list, mainRole) => {
+				const member = activeMembers.find(({ assemblyRole }) => assemblyRole?.role === mainRole);
 
-		if (!member) return list;
-
-		const { id, firstname, lastname, avatar, partyRole, assemblyRole } = member;
-
-		return [
-			...list,
-			{
-				assemblyRole: mainRole,
-				politician: {
-					id,
-					firstname,
-					lastname,
-					avatar
-				},
-				party: partyRole?.party,
-				description: assemblyRole?.appointmentMethod || null
-			}
-		];
-	}, [] as MainMember[]);
+				return member ? [...list, parseMainMember(member)] : list;
+			}, [] as MainMember[]);
 
 	const parseMemberGroup = (groupBy: GroupByOption) =>
 		getMemberGroup(fullAssembly, activeMembers, groupBy, isSenates).map((group) => ({
@@ -191,7 +176,7 @@ export async function load({ params }) {
 	};
 }
 
-const getSenateGroupWithColor = (memberGroup: MemberGroup[]): MemberGroup[] => {
+function getSenateGroupWithColor(memberGroup: MemberGroup[]): MemberGroup[] {
 	return memberGroup.map((group) => {
 		const parties = group.parties?.map((party) => {
 			return {
@@ -201,7 +186,23 @@ const getSenateGroupWithColor = (memberGroup: MemberGroup[]): MemberGroup[] => {
 		});
 		return { ...group, parties };
 	});
-};
+}
+
+function parseMainMember(member: ReturnType<typeof getAssemblyMembers>[number]): MainMember {
+	const { id, firstname, lastname, avatar, partyRole, assemblyRole } = member;
+
+	return {
+		assemblyRole: assemblyRole?.role || '',
+		politician: {
+			id,
+			firstname,
+			lastname,
+			avatar
+		},
+		party: partyRole?.party,
+		description: assemblyRole?.appointmentMethod || null
+	};
+}
 
 const mockChanges: RoleChange[] = [
 	{
