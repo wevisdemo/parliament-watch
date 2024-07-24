@@ -7,7 +7,7 @@
 	export let summary: Summary;
 	export let houseLevel: string;
 	export let assemblyId: string;
-	export let isCabinet: boolean;
+	$: isCabinet = houseLevel === 'cabinet';
 </script>
 
 <div class="grid gap-[16px] py-[16px] md:gap-[24px] md:py-[32px]">
