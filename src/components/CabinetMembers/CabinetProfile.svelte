@@ -24,7 +24,7 @@
 			{fullname}
 		</p>
 		<p class={twMerge('text-text-02', 'text-xs leading-[16px]')}>
-			พรรค{party?.name || 'ไม่สังกัดพรรค'}
+			{party ? 'พรรค' + party.name : 'ไม่สังกัดพรรค'}
 		</p>
 	</div>
 </a>

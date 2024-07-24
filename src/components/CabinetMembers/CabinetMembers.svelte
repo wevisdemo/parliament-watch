@@ -5,7 +5,7 @@
 	import MinistryGroup from './MinistryGroup.svelte';
 	export let members: MainMember[] = [];
 
-	const ministries = Array.from(
+	$: ministries = Array.from(
 		new Set(
 			members.map((m) =>
 				m.assemblyRole
@@ -17,10 +17,10 @@
 		)
 	).filter((r) => !['นายกรัฐมนตรี', 'รองนายกรัฐมนตรี'].includes(r));
 
-	const primeMinister = members.find((m) => m.assemblyRole === 'นายกรัฐมนตรี');
-	const deputyPrimeMinisterGroup = members.filter((m) => m.assemblyRole === 'รองนายกรัฐมนตรี');
+	$: primeMinister = members.find((m) => m.assemblyRole === 'นายกรัฐมนตรี');
+	$: deputyPrimeMinisterGroup = members.filter((m) => m.assemblyRole === 'รองนายกรัฐมนตรี');
 
-	const ministryGroup = ministries
+	$: ministryGroup = ministries
 		.map((ministry) => {
 			return {
 				name: ministry,
