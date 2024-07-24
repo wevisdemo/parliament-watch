@@ -11,12 +11,15 @@
 		type PartySelected
 	} from './shared';
 	import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
+	import { ArrowRight } from 'carbon-icons-svelte';
+	import Tooltip from './Tooltip.svelte';
 
 	const MAX_GROUP_DISPLAY = 5;
 
 	export let groupBy: GroupByOption;
 	export let memberGroups: MemberGroup[];
 	export let assemblyId: string;
+	export let showHalfCircleChart = true;
 
 	interface MemberGroup {
 		name: string;
@@ -48,17 +51,28 @@
 	};
 </script>
 
-<a
-	href="/assemblies/{assemblyId}/members/{groupBy}"
+<div
 	class="m-auto flex h-full w-full min-w-[226px] flex-col bg-ui-01 p-[16px] text-black hover:bg-ui-03"
 >
-	<p class="fluid-heading-03">{groupByOptionLabelMap.get(groupBy)}</p>
-	<HalfDonutWrapper
-		chartId="summary-{groupBy}"
-		percent={getTopOfGroupsPercent(memberGroups)}
-		label={getTopOfGroups(memberGroups).name}
-	/>
-	<div class="grid gap-[8px]">
+	<div class="flex justify-between">
+		<p class="fluid-heading-03">{groupByOptionLabelMap.get(groupBy)}</p>
+		<Tooltip direction="top">
+			<a href="/assemblies/{assemblyId}/members/{groupBy}">
+				<ArrowRight />
+			</a>
+			<p slot="tooltip">
+				<span class="label-01 text-text-04">ดูรายชื่อ</span>
+			</p>
+		</Tooltip>
+	</div>
+	{#if showHalfCircleChart}
+		<HalfDonutWrapper
+			chartId="summary-{groupBy}"
+			percent={getTopOfGroupsPercent(memberGroups)}
+			label={getTopOfGroups(memberGroups).name}
+		/>
+	{/if}
+	<div class={`grid gap-[8px] ${!showHalfCircleChart ? 'mt-2' : ''}`}>
 		{#each memberGroups as group}
 			<div>
 				<div class="flex">
@@ -85,4 +99,4 @@
 			</div>
 		{/each}
 	</div>
-</a>
+</div>
