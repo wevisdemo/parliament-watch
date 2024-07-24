@@ -8,7 +8,10 @@
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
 	import { AssemblyName } from '$models/assembly.js';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
-
+	import LastestBills from '$components/Assemblies/LastestBills.svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
+	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	export let data;
 
 	$: ({
@@ -24,7 +27,9 @@
 
 	let selector = 'summary';
 
-	const onClickTab = (tab: 'summary' | 'members' | 'latest-votes' | 'role-change') => {
+	const onClickTab = (
+		tab: 'summary' | 'members' | 'latest-votes' | 'role-change' | 'latest-bills'
+	) => {
 		const el = document.getElementById(tab);
 		selector = tab;
 		if (!el) return;
@@ -67,10 +72,10 @@
 			การปรับคณะรัฐมนตรี
 		</button>
 		<button
-			class="tab {selector === 'latest-votes' ? 'tab-active' : 'tab-inactice'}"
-			on:click={() => onClickTab('latest-votes')}
+			class="tab {selector === 'latest-bills' ? 'tab-active' : 'tab-inactice'}"
+			on:click={() => onClickTab('latest-bills')}
 		>
-			การลงมติ
+			การเสนอร่างกฎหมาย
 		</button>
 	</div>
 	<section id="summary">
@@ -94,7 +99,7 @@
 	</section>
 
 	{#if changes}
-		<section id="role-change">
+		<section id="role-change" class="py-8">
 			<div class="flex items-center gap-4 py-4">
 				<PoliticianChangeIcon class="h-8 w-8 flex-shrink-0" />
 				<div>
@@ -103,9 +108,41 @@
 				</div>
 			</div>
 			<RoleChangeLog {changes} selectedDate={new Date('2024-05-20')} />
+			<!-- svelte-ignore a11y-invalid-attribute -->
+			<a href="#">
+				<button class="flex w-full items-center justify-between bg-interactive-02 p-[14px]"
+					><p class="body-compact-01 text-start text-text-04">
+						ดูการปรับเปลี่ยนตำแหน่งรัฐมนตรีตั้งแต่เริ่มต้น
+					</p>
+					<ArrowRight class="text-white" /></button
+				>
+			</a>
 		</section>
 	{/if}
-
+	{#if latestBills}
+		<section id="latest-bills" class="py-8">
+			<div class="flex flex-col items-start md:flex-row md:items-center md:justify-between">
+				<div class="flex items-center gap-4 py-4">
+					<LawIcon class="h-8 w-8 flex-shrink-0" />
+					<div>
+						<h4 class="fluid-heading-04 text-text-primary">การเสนอร่างกฎหมาย</h4>
+						<p class="body-compact-01">
+							รายการกฎหมาย/ร่างกฎหมายที่เสนอต่อรัฐสภาโดยคณะรัฐมนตรีชุดนี้
+						</p>
+					</div>
+				</div>
+				<ModalLawProcess class="pb-4 md:pb-0 md:text-right" />
+			</div>
+			<LastestBills {latestBills} />
+			<!-- svelte-ignore a11y-invalid-attribute -->
+			<a href="#">
+				<button class="flex w-full items-center justify-between bg-interactive-02 p-[14px]"
+					><p class="body-compact-01 text-start text-text-04">ดูร่างกฎหมายทั้งหมด</p>
+					<ArrowRight class="text-white" /></button
+				>
+			</a>
+		</section>
+	{/if}
 	{#if latestVotes}
 		<section id="latest-votes">
 			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
