@@ -5,7 +5,7 @@
 	export let title = '';
 	export let members: MainMember[];
 
-	const minister = members.filter(
+	$: minister = members.filter(
 		(m) =>
 			m.assemblyRole.includes('รัฐมนตรีว่าการ') ||
 			m.assemblyRole.includes('รัฐมนตรีประจำสำนักนายกรัฐมนตรี')
@@ -42,6 +42,7 @@
 						lastname={member.politician.lastname}
 						avatar={member.politician.avatar}
 						party={member.party}
+						showAvatar={false}
 					/>
 				</div>
 			{/each}
