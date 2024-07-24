@@ -51,9 +51,7 @@
 	};
 </script>
 
-<div
-	class="m-auto flex h-full w-full min-w-[226px] flex-col bg-ui-01 p-[16px] text-black hover:bg-ui-03"
->
+<div class="m-auto flex h-full w-full min-w-[226px] flex-col bg-ui-01 p-[16px] text-black">
 	<div class="flex justify-between">
 		<p class="fluid-heading-03">{groupByOptionLabelMap.get(groupBy)}</p>
 		<Tooltip direction="top">
@@ -72,7 +70,7 @@
 			label={getTopOfGroups(memberGroups).name}
 		/>
 	{/if}
-	<div class={`grid gap-[8px] ${!showHalfCircleChart ? 'mt-2' : ''}`}>
+	<div class="grid gap-[8px] {!showHalfCircleChart ? 'mt-2' : ''}">
 		{#each memberGroups as group}
 			<div>
 				<div class="flex">
