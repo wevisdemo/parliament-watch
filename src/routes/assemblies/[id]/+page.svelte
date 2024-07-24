@@ -12,7 +12,6 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
-
 	export let data;
 
 	$: ({
@@ -134,7 +133,6 @@
 			</Button>
 		</section>
 	{/if}
-
 	{#if latestVotes}
 		<section id="latest-votes">
 			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
