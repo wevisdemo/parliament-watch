@@ -33,8 +33,8 @@
 	<div class="flex items-start gap-2 px-2 py-[12px] md:items-center md:p-2">
 		<PoliticianPicture {avatar} {party} size={32} class="flex-shrink-0" />
 		<div class="flex flex-col gap-1 md:flex-row">
-			<a href="/politicians/{id}" class=" font-sans hover:underline">
-				<p class="body-compact-01 text-text-primary underline">
+			<a href="/politicians/{id}" class=" font-sans">
+				<p class="body-compact-01 text-text-primary underline hover:text-interactive-01">
 					<span>{firstname}</span> <span>{lastname}</span>
 				</p>
 			</a>
