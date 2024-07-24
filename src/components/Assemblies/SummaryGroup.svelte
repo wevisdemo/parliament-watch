@@ -55,7 +55,7 @@
 	<div class="flex justify-between">
 		<p class="fluid-heading-03">{groupByOptionLabelMap.get(groupBy)}</p>
 		<Tooltip direction="top">
-			<a href="/assemblies/{assemblyId}/members/{groupBy}">
+			<a href="/assemblies/{assemblyId}/members/{groupBy}" class="hover:opacity-50">
 				<ArrowRight />
 			</a>
 			<p slot="tooltip">
