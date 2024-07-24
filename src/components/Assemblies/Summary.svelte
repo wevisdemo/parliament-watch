@@ -7,6 +7,7 @@
 	export let summary: Summary;
 	export let houseLevel: string;
 	export let assemblyId: string;
+	export let isCabinet: boolean;
 </script>
 
 <div class="grid gap-[16px] py-[16px] md:gap-[24px] md:py-[32px]">
@@ -14,12 +15,23 @@
 	<div class="mx-auto grid w-full grid-cols-1 gap-[8px] md:grid-cols-3">
 		<!-- TODO: chnage this when change phase -->
 		<!-- <div class="grid md:grid-cols-4 grid-cols-1 gap-[8px] w-fit mx-auto w-full"> -->
-		<SummaryGroup {assemblyId} groupBy={GroupByOption.Sex} memberGroups={summary.groupBySex} />
-		<SummaryGroup {assemblyId} groupBy={GroupByOption.Age} memberGroups={summary.groupByAgeRange} />
+		<SummaryGroup
+			{assemblyId}
+			groupBy={GroupByOption.Sex}
+			memberGroups={summary.groupBySex}
+			showHalfCircleChart={!isCabinet}
+		/>
+		<SummaryGroup
+			{assemblyId}
+			groupBy={GroupByOption.Age}
+			memberGroups={summary.groupByAgeRange}
+			showHalfCircleChart={!isCabinet}
+		/>
 		<SummaryGroup
 			{assemblyId}
 			groupBy={GroupByOption.Education}
 			memberGroups={summary.groupByEducation}
+			showHalfCircleChart={!isCabinet}
 		/>
 		<!-- TODO: not release asset value in phase 1 -->
 		<!-- <SummaryGroup title="ทรัพย์สิน" data={summary.groupByAssetValue} /> -->
