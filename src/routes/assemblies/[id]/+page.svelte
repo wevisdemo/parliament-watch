@@ -109,7 +109,12 @@
 				</div>
 			</div>
 			<RoleChangeLog {changes} selectedDate={new Date('2024-05-20')} />
-			<Button href="#" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+			<Button
+				href="/assemblies/{assembly.id}/changes"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
 				ดูการปรับเปลี่ยนตำแหน่งรัฐมนตรีตั้งแต่เริ่มต้น
 			</Button>
 		</section>
