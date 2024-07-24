@@ -4,7 +4,7 @@
 	import Header from '$components/Assemblies/Header.svelte';
 	import MainMembers from '$components/Assemblies/MainMembers.svelte';
 	import Summary from '$components/Assemblies/Summary.svelte';
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
+	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
 	import { AssemblyName } from '$models/assembly.js';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
@@ -12,6 +12,7 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
+
 	export let data;
 
 	$: ({
@@ -108,15 +109,9 @@
 				</div>
 			</div>
 			<RoleChangeLog {changes} selectedDate={new Date('2024-05-20')} />
-			<!-- svelte-ignore a11y-invalid-attribute -->
-			<a href="#">
-				<button class="flex w-full items-center justify-between bg-interactive-02 p-[14px]"
-					><p class="body-compact-01 text-start text-text-04">
-						ดูการปรับเปลี่ยนตำแหน่งรัฐมนตรีตั้งแต่เริ่มต้น
-					</p>
-					<ArrowRight class="text-white" /></button
-				>
-			</a>
+			<Button href="#" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+				ดูการปรับเปลี่ยนตำแหน่งรัฐมนตรีตั้งแต่เริ่มต้น
+			</Button>
 		</section>
 	{/if}
 	{#if latestBills}
@@ -134,23 +129,16 @@
 				<ModalLawProcess class="pb-4 md:pb-0 md:text-right" />
 			</div>
 			<LastestBills {latestBills} />
-			<!-- svelte-ignore a11y-invalid-attribute -->
-			<a href="#">
-				<button class="flex w-full items-center justify-between bg-interactive-02 p-[14px]"
-					><p class="body-compact-01 text-start text-text-04">ดูร่างกฎหมายทั้งหมด</p>
-					<ArrowRight class="text-white" /></button
-				>
-			</a>
+			<Button href="#" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+				ดูร่างกฎหมายทั้งหมด
+			</Button>
 		</section>
 	{/if}
+
 	{#if latestVotes}
 		<section id="latest-votes">
 			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
 		</section>
-	{/if}
-
-	{#if latestBills}
-		{JSON.stringify(latestBills)}
 	{/if}
 </div>
 
