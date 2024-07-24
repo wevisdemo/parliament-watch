@@ -82,6 +82,7 @@
 				: assembly.name === AssemblyName.Cabinet
 					? 'cabinet'
 					: 'upper'}
+			{isCabinet}
 		/>
 	</section>
 	<section id="members">
