@@ -14,7 +14,7 @@ erDiagram
   BillEvent }o--o| Voting: "can refer to"
   Party ||--o{ Promise: "makes"
   Promise ||--|{ PromiseProgress: "are tracked with"
-  PromiseProgress }o..o{ BillEvent: "can refer to"
+  PromiseProgress }o..o| BillEvent: "can refer to"
 
   Politician {
     string id PK "firstname-lastname"
@@ -133,7 +133,8 @@ erDiagram
     string title
     string description
     number billEventId FK "refer to BillEvent"
-    Reference reference "link: { label: string, url: string }, description: string"
+    Reference reference "label: string, url: string, description: string"
+    Evidence evidence "type: image | document, url: string"
   }
 ```
 
@@ -145,3 +146,5 @@ erDiagram
 - **BillEvent** = เหตุการต่างๆ ระหว่างการเสนอกฎหมาย
 - **Voting** = การลงมติ
 - **Vote** = การลงคะแนน
+- **Promise** = คำสัญญา
+- **PromiseProgress** = ความคืบหน้าคำสัญญา
