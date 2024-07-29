@@ -19,6 +19,8 @@
 		>
 		<BreadcrumbItem class="hidden md:block">การปรับ ครม.</BreadcrumbItem>
 	</Breadcrumb>
+</div>
+<div class="bg-ui-01 px-[16px] md:px-[64px]">
 	<Header
 		headerName="การปรับคณะรัฐมนตรี"
 		{assembly}
