@@ -1,4 +1,5 @@
 import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
+import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import {
 	fetchAssemblies,
 	fetchAssemblyRoleHistory,
@@ -7,7 +8,9 @@ import {
 } from '$lib/datasheets/index';
 import { AssemblyName } from '$models/assembly';
 import type { AssemblyRoleHistory, Politician } from '$models/politician';
+import type { MainMember } from '../+page.server';
 import { error } from '@sveltejs/kit';
+import dayjs from 'dayjs';
 
 export type AssemblyRoleSummary = Pick<
 	AssemblyRoleHistory,
@@ -16,12 +19,30 @@ export type AssemblyRoleSummary = Pick<
 
 export type AssemblyMember = Omit<Politician, 'assemblyRoles'>;
 
-export async function load({ params }) {
-	const { id, name, term, startedAt, endedAt } = await fetchFromIdOr404(fetchAssemblies, params.id);
+function parseMainMember(member: ReturnType<typeof getAssemblyMembers>[number]): MainMember {
+	const { id, firstname, lastname, avatar, partyRole, assemblyRole } = member;
 
-	if (name !== AssemblyName.Cabinet) {
+	return {
+		assemblyRole: assemblyRole?.role || '',
+		politician: {
+			id,
+			firstname,
+			lastname,
+			avatar
+		},
+		party: partyRole?.party,
+		description: assemblyRole?.appointmentMethod || null
+	};
+}
+
+export async function load({ params }) {
+	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
+
+	if (fullAssembly.name !== AssemblyName.Cabinet) {
 		error(404, { message: `Currently, changes only available for the cabinet` });
 	}
+
+	const { mainRoles, ...assembly } = fullAssembly;
 
 	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map((a) => ({
 		id: a.id,
@@ -30,7 +51,7 @@ export async function load({ params }) {
 	}));
 
 	const assemblyRoles: AssemblyRoleSummary[] = (await fetchAssemblyRoleHistory())
-		.filter(({ assembly, role }) => assembly.id === id && role)
+		.filter(({ assembly, role }) => assembly.id === fullAssembly.id && role)
 		.map((ar) => ({
 			politicianId: ar.politicianId,
 			role: ar.role,
@@ -38,20 +59,26 @@ export async function load({ params }) {
 			endedAt: ar.endedAt
 		}));
 
-	const members: AssemblyMember[] = (await fetchPoliticians())
-		.filter((p) => assemblyRoles.some((ar) => p.id === ar.politicianId))
-		.map(({ assemblyRoles, ...rest }) => rest);
+	const members = (await fetchPoliticians()).filter((p) =>
+		assemblyRoles.some((ar) => p.id === ar.politicianId)
+	);
+
+	const activeMembers = getAssemblyMembers(fullAssembly, members).filter(
+		({ assemblyRole }) =>
+			!assemblyRole?.endedAt ||
+			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
+	);
 
 	return {
 		assembly: {
-			id,
-			name,
-			term,
-			startedAt,
-			endedAt
+			id: fullAssembly.id,
+			name: fullAssembly.name,
+			term: fullAssembly.term,
+			startedAt: fullAssembly.startedAt,
+			endedAt: fullAssembly.endedAt
 		},
 		availableAssemblies,
 		assemblyRoles,
-		members
+		cabinetMembers: activeMembers.map(parseMainMember)
 	};
 }
