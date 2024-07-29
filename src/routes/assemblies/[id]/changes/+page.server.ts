@@ -8,7 +8,7 @@ import {
 } from '$lib/datasheets/index';
 import { AssemblyName } from '$models/assembly';
 import type { AssemblyRoleHistory, Politician } from '$models/politician';
-import type { MainMember } from '../+page.server';
+import type { MainMember, RoleChange } from '../+page.server';
 import { error } from '@sveltejs/kit';
 import dayjs from 'dayjs';
 
@@ -79,6 +79,74 @@ export async function load({ params }) {
 		},
 		availableAssemblies,
 		assemblyRoles,
-		cabinetMembers: activeMembers.map(parseMainMember)
+		cabinetMembers: activeMembers.map(parseMainMember),
+		changes: mockChanges
 	};
 }
+
+const mockChanges: RoleChange[] = [
+	{
+		date: new Date('2024-05-27'),
+		type: 'in',
+		politician: {
+			id: 'มาริษ-เสงี่ยมพงษ์',
+			firstname: 'มาริษ',
+			lastname: 'เสงี่ยมพงษ์',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
+	},
+	{
+		date: new Date('2024-05-27'),
+		type: 'out',
+		politician: {
+			id: 'ปานปรีย์-พหิทธานุกร',
+			firstname: 'ปานปรีย์',
+			lastname: 'พหิทธานุกร',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
+	},
+	{
+		date: new Date('2024-05-27'),
+		type: 'in',
+		politician: {
+			id: 'สุริยะ-จึงรุ่งเรืองกิจ',
+			firstname: 'สุริยะ',
+			lastname: 'จึงรุ่งเรืองกิจ',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รองนายกรัฐมนตรี'
+	},
+	{
+		date: new Date('2024-05-20'),
+		type: 'out',
+		politician: {
+			id: 'ปานปรีย์-พหิทธานุกร',
+			firstname: 'ปานปรีย์',
+			lastname: 'พหิทธานุกร',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รองนายกรัฐมนตรี'
+	}
+];
