@@ -2,7 +2,7 @@
 	import Header from '$components/Assemblies/Header.svelte';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
-	import { DatePicker, DatePickerInput } from 'carbon-components-svelte';
+	import DatePicker from '$components/DatePicker/DatePicker.svelte';
 	import { ShoppingCart } from 'carbon-icons-svelte';
 	import RoleChanges from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
 
@@ -59,47 +59,7 @@
 
 	<div class="flex flex-row-reverse flex-wrap justify-between gap-4">
 		<div>
-			<DatePicker
-				datePickerType="single"
-				locale={{
-					weekdays: {
-						shorthand: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
-						longhand: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์']
-					},
-					months: {
-						shorthand: [
-							'ม.ค.',
-							'ก.พ.',
-							'มี.ค.',
-							'เม.ย.',
-							'พ.ค.',
-							'มิ.ย.',
-							'ก.ค.',
-							'ส.ค.',
-							'ก.ย.',
-							'ต.ค.',
-							'พ.ย.',
-							'ธ.ค.'
-						],
-						longhand: [
-							'มกราคม',
-							'กุมภาพันธ์',
-							'มีนาคม',
-							'เมษายน',
-							'พฤษภาคม',
-							'มิถุนายน',
-							'กรกฎาคม',
-							'สิงหาคม',
-							'กันยายน',
-							'ตุลาคม',
-							'พฤศจิกายน',
-							'ธันวาคม'
-						]
-					}
-				}}
-			>
-				<DatePickerInput />
-			</DatePicker>
+			<DatePicker />
 		</div>
 		<div class="flex w-full lg:w-fit">
 			{#each tabs as tab}
