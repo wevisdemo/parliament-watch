@@ -115,9 +115,8 @@ erDiagram
   }
 
   Promise {
-    number promiseId PK
+    number id PK
     number partyId FK
-    string nickname
     string[] statements
     string coverImageUrl
     string[] keywords
@@ -126,7 +125,7 @@ erDiagram
   }
 
   PromiseProgress {
-    number promiseProgressId PK
+    number id PK
     number promiseId FK
     string type "checkpoint | indirect"
     Date date
