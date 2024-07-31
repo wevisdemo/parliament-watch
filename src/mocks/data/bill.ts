@@ -44,3 +44,45 @@ export const enactedBill: Bill = {
 	},
 	lisUrl: ''
 };
+
+export const promiseRelatedBill: Bill = {
+	id: '3',
+	acceptanceNumber: '3',
+	title: 'ร่างพระราชบัญญัติส่งเสริมการเลี้ยงโค',
+	nickname: 'ร่าง พรบ.ส่งเสริมการเลี้ยงโค',
+	description: '',
+	status: BillStatus.InProgress,
+	categories: ['เศรษฐกิจ'],
+	proposedOn: new Date('2023-10-04'),
+	proposerType: BillProposerType.Politician,
+	proposedLedByPolitician: movingForwardPolitician,
+	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
+	proposedByAssembly: null,
+	proposedByPeople: null,
+	attachment: {
+		label: 'เอกสารเสนอกฎหมาย',
+		url: 'https://www.google.com'
+	},
+	lisUrl: ''
+};
+
+export const promiseFulfilledBill: Bill = {
+	id: '4',
+	acceptanceNumber: '4',
+	title: 'ร่างพระราชบัญญัติแก้ไขเพิ่มเติมประมวลกฎหมายแพ่งและพาณิชย์',
+	nickname: 'ร่าง พรบ.สมรสเท่าเทียม',
+	description: '',
+	status: BillStatus.Enacted,
+	categories: ['สังคม'],
+	proposedOn: new Date('2023-10-04'),
+	proposerType: BillProposerType.Politician,
+	proposedLedByPolitician: movingForwardPolitician,
+	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
+	proposedByAssembly: null,
+	proposedByPeople: null,
+	attachment: {
+		label: 'เอกสารเสนอกฎหมาย',
+		url: 'https://www.google.com'
+	},
+	lisUrl: ''
+};
