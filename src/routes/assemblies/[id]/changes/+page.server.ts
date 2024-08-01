@@ -86,7 +86,7 @@ export async function load({ params }) {
 
 const mockChanges: RoleChange[] = [
 	{
-		date: new Date('2024-05-27'),
+		date: new Date('2024-04-27'),
 		type: 'in',
 		politician: {
 			id: 'มาริษ-เสงี่ยมพงษ์',
@@ -102,7 +102,7 @@ const mockChanges: RoleChange[] = [
 		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
 	},
 	{
-		date: new Date('2024-05-27'),
+		date: new Date('2024-04-27'),
 		type: 'out',
 		politician: {
 			id: 'ปานปรีย์-พหิทธานุกร',
@@ -118,7 +118,7 @@ const mockChanges: RoleChange[] = [
 		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
 	},
 	{
-		date: new Date('2024-05-27'),
+		date: new Date('2024-04-27'),
 		type: 'in',
 		politician: {
 			id: 'สุริยะ-จึงรุ่งเรืองกิจ',
@@ -148,5 +148,101 @@ const mockChanges: RoleChange[] = [
 			}
 		},
 		role: 'รองนายกรัฐมนตรี'
+	},
+	{
+		date: new Date('2024-08-20'),
+		type: 'in',
+		politician: {
+			id: 'สมศักดิ์-เทพสุทิน',
+			firstname: 'สมศักดิ์',
+			lastname: 'เทพสุทิน',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีว่าการกระทรวงสาธารณสุข'
+	},
+	{
+		date: new Date('2024-08-20'),
+		type: 'out',
+		politician: {
+			id: 'สมศักดิ์-เทพสุทิน',
+			firstname: 'สมศักดิ์',
+			lastname: 'เทพสุทิน',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รองนายกรัฐมนตรี'
+	},
+	{
+		date: new Date('2024-08-20'),
+		type: 'out',
+		politician: {
+			id: 'ชลน่าน-ศรีแก้ว',
+			firstname: 'ชลน่าน',
+			lastname: 'ศรีแก้ว',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีว่าการกระทรวงสาธารณสุข'
+	},
+	{
+		date: new Date('2024-08-20'),
+		type: 'in',
+		politician: {
+			id: 'จิราพร-สินธุไพร',
+			firstname: 'จิราพร',
+			lastname: 'สินธุไพร',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีประจำสำนักนายกรัฐมนตรี'
+	},
+	{
+		date: new Date('2024-08-20'),
+		type: 'in',
+		politician: {
+			id: 'พิชิต-ชื่นบาน',
+			firstname: 'พิชิต',
+			lastname: 'ชื่นบาน',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีประจำสำนักนายกรัฐมนตรี'
+	},
+	{
+		date: new Date('2024-08-20'),
+		type: 'out',
+		politician: {
+			id: 'พวงเพ็ชร-ชุนละเอียด',
+			firstname: 'พวงเพ็ชร',
+			lastname: 'ชุนละเอียด',
+			avatar: 'https://placehold.co/128x128',
+			party: {
+				name: 'เพื่อไทย',
+				logo: 'https://placehold.co/64x64/white/blue?text=PT',
+				color: 'blue'
+			}
+		},
+		role: 'รัฐมนตรีประจำสำนักนายกรัฐมนตรี'
 	}
 ];

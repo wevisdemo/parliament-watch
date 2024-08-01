@@ -3,35 +3,39 @@
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 	import DatePicker from '$components/DatePicker/DatePicker.svelte';
-	import { ShoppingCart } from 'carbon-icons-svelte';
 	import RoleChanges from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
+	import TimeLineArea from '$components/Assemblies/CabinetChanges/TimeLineArea.svelte';
 
 	export let data;
-
-	$: ({ assembly, availableAssemblies, assemblyRoles, cabinetMembers } = data);
-	console.log(data);
-
 	interface Tab {
+		id: number;
 		name: string;
 		comp: typeof CabinetMembers | typeof RoleChanges;
 		props?: any;
 	}
 
-	let selectedDate = new Date('2024-05-27');
+	$: ({ assembly, availableAssemblies, assemblyRoles, cabinetMembers, changes } = data);
 
-	let tabs: Tab[] = [
+	$: selectedDate = new Date();
+	const handleSelectDate = (event: CustomEvent<{ value: Date }>) => {
+		selectedDate = event.detail.value;
+	};
+
+	$: tabs = [
 		{
+			id: 0,
 			name: 'รายชื่อรัฐมนตรีในเวลานั้น',
 			comp: CabinetMembers,
-			props: { members: data.cabinetMembers }
+			props: { members: cabinetMembers }
 		},
 		{
+			id: 1,
 			name: 'ลำดับการปรับเปลี่ยน',
 			comp: RoleChanges,
-			props: { changes: data.changes, selectedDate: selectedDate }
+			props: { changes: changes, selectedDate }
 		}
-	];
-	let curTab = tabs[0];
+	] as Tab[];
+	$: curIndexTab = 0;
 </script>
 
 <div class="px-[16px] md:px-[64px]">
@@ -47,6 +51,7 @@
 		<BreadcrumbItem class="hidden md:block">การปรับ ครม.</BreadcrumbItem>
 	</Breadcrumb>
 </div>
+
 <div class="bg-ui-01 px-[16px] md:px-[64px]">
 	<Header
 		headerName="การปรับคณะรัฐมนตรี"
@@ -57,6 +62,8 @@
 		postfixLink="changes"
 	/>
 
+	<TimeLineArea {changes} {selectedDate} {handleSelectDate} />
+
 	<div class="flex flex-row-reverse flex-wrap justify-between gap-4">
 		<div>
 			<DatePicker />
@@ -64,10 +71,10 @@
 		<div class="flex w-full lg:w-fit">
 			{#each tabs as tab}
 				<button
-					class="heading-compact-01 w-full p-[16px] lg:w-fit {curTab === tab
+					class="heading-compact-01 w-full p-[16px] lg:w-fit {curIndexTab === tab.id
 						? 'border-t-2 border-t-interactive-01 bg-ui-background'
 						: 'border-t-2 border-t-ui-03 bg-ui-03 text-text-02'}"
-					on:click={() => (curTab = tab)}
+					on:click={() => (curIndexTab = tab.id)}
 				>
 					{tab.name}
 				</button>
@@ -75,10 +82,11 @@
 		</div>
 	</div>
 </div>
+
 <div
-	class="px-[16px] md:px-[64px] {curTab.name == 'ลำดับการปรับเปลี่ยน'
+	class="px-[16px] md:px-[64px] {tabs[curIndexTab].name == 'ลำดับการปรับเปลี่ยน'
 		? 'py-[16px] md:py-[32px]'
 		: ''}"
 >
-	<svelte:component this={curTab.comp} {...curTab.props} />
+	<svelte:component this={tabs[curIndexTab].comp} {...tabs[curIndexTab].props} />
 </div>
