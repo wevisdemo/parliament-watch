@@ -52,19 +52,23 @@
 	</Breadcrumb>
 </div>
 
-<div class="bg-ui-01 px-[16px] md:px-[64px]">
-	<Header
-		headerName="การปรับคณะรัฐมนตรี"
-		{assembly}
-		{availableAssemblies}
-		showStatus={false}
-		showRemark={false}
-		postfixLink="changes"
-	/>
+<div class="bg-ui-01">
+	<div class="px-[16px] md:px-[64px]">
+		<Header
+			headerName="การปรับคณะรัฐมนตรี"
+			{assembly}
+			{availableAssemblies}
+			showStatus={false}
+			showRemark={false}
+			postfixLink="changes"
+		/>
+	</div>
 
-	<TimeLineArea {changes} {selectedDate} {handleSelectDate} />
+	<div class="hidden md:block">
+		<TimeLineArea {changes} {selectedDate} {handleSelectDate} />
+	</div>
 
-	<div class="flex flex-row-reverse flex-wrap justify-between gap-4">
+	<div class="flex flex-row-reverse flex-wrap justify-between gap-4 px-[16px] md:px-[64px]">
 		<div>
 			<DatePicker />
 		</div>

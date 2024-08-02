@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { RoleChange } from '../../../routes/assemblies/[id]/+page.server';
-	import SquareIcon from './squareIcon.svelte';
+	import SquareIcon from './SquareIcon.svelte';
 	import TimeLine from './TimeLine.svelte';
 	import { group } from 'd3';
 
@@ -16,7 +16,7 @@
 	}));
 </script>
 
-<div class="flex flex-col gap-1 pb-8">
+<div class="flex flex-col gap-1 px-[16px] md:px-[64px]">
 	<p class="heading-compact-01 text-text-01">เลือกดูช่วงที่มีความเปลี่ยนแปลง</p>
 	<div class="flex items-center gap-1">
 		<SquareIcon width={10} color="#00B9C4" />
@@ -24,17 +24,6 @@
 		<SquareIcon width={10} color="#B12000" />
 		<p>ออก</p>
 	</div>
-	<div class="no-scrollbar flex items-end overflow-x-scroll pb-10 pt-20">
-		<TimeLine data={timeLineData} {selectedDate} on:selectDate={handleSelectDate} />
-	</div>
 </div>
 
-<style>
-	.no-scrollbar::-webkit-scrollbar {
-		display: none;
-	}
-	.no-scrollbar {
-		-ms-overflow-style: none;
-		scrollbar-width: none;
-	}
-</style>
+<TimeLine data={timeLineData} {selectedDate} on:selectDate={handleSelectDate} />
