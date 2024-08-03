@@ -1,55 +1,23 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	import { compareDate, thaiMonthNames, formatThaiDate, type TimeLine } from './TimeLine';
+	import {
+		thaiMonthNames,
+		formatThaiDate,
+		type TimeLine,
+		getDateData,
+		compareDate
+	} from './TimeLine';
 	import { ChevronLeft, ChevronRight } from 'carbon-icons-svelte';
 	import TimeItem from './TimeItem.svelte';
+	import Tooltip from '../Tooltip.svelte';
+	import TimeLineToolTip from './TimeLineToolTip.svelte';
 
-	export let data: TimeLine[];
+	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;
+	export let handleSelectDate: (date: Date) => void;
 
-	const dispatch = createEventDispatcher();
-	const handleSelectDate = (dateSelect: Date) => {
-		dispatch('selectDate', { value: dateSelect });
-	};
+	$: max = Math.max(...timeLineData.map((d) => Math.max(d.in, d.out)));
 
-	$: max = Math.max(...data.map((d) => Math.max(d.in, d.out)));
-	$: minYear = Math.min(...data.map((d) => d.date.getFullYear()));
-	$: maxYear = Math.max(
-		Math.max(...data.map((d) => d.date.getFullYear())),
-		new Date().getFullYear()
-	);
-
-	$: getDateData = (minYear: number, maxYear: number) => {
-		let calendar = [];
-		for (let year = minYear; year <= maxYear; year++) {
-			let monthsInYear = [];
-			for (let month = 0; month < 12; month++) {
-				let numberDaysInMonth = new Date(year, month + 1, 0).getDate();
-				let daysInMonth = [];
-				for (let day = 1; day <= numberDaysInMonth; day++) {
-					let date = new Date(year, month, day);
-					let dataInDay = data.find((d) => compareDate(d.date, date)) || {
-						date: date,
-						in: 0,
-						out: 0
-					};
-					daysInMonth.push(dataInDay);
-				}
-				monthsInYear.push({
-					id: month,
-					month: thaiMonthNames[month],
-					days: daysInMonth
-				});
-			}
-			calendar.push({
-				yaer: year,
-				months: monthsInYear
-			});
-		}
-		return calendar;
-	};
-
-	$: dateData = getDateData(minYear, maxYear);
+	$: dateData = getDateData(timeLineData);
 </script>
 
 <div class="flex">
@@ -62,24 +30,32 @@
 				{#each year.months as month}
 					<div class="relative flex">
 						{#each month.days as day}
-							<div class="relative flex">
-								{#if day.event}
-									<div
-										class="absolute left-1 -mt-14 h-full border-l border-dashed border-black px-1 text-text-02"
-									>
-										<p class="label-01 w-fit min-w-[60px] text-text-01">
-											{formatThaiDate(day.date)}
-										</p>
-										<p class="label-01">{day.event}</p>
-									</div>
-								{/if}
+							{#if day.event}
+								<div
+									class="absolute left-1 -mt-14 h-full border-l border-dashed border-black px-1 text-text-02"
+								>
+									<p class="label-01 w-fit min-w-[60px] text-text-01">
+										{formatThaiDate(day.date)}
+									</p>
+									<p class="label-01">{day.event}</p>
+								</div>
+							{/if}
+							<Tooltip
+								direction="top"
+								showAllTime={compareDate(day.date, selectedDate)}
+								open={compareDate(day.date, selectedDate)}
+								style={compareDate(day.date, selectedDate) ? '' : 'background-color: white;'}
+							>
 								<TimeItem {day} {selectedDate} {max} {handleSelectDate} />
-							</div>
+								<div slot="tooltip">
+									<TimeLineToolTip {day} {selectedDate} />
+								</div>
+							</Tooltip>
 						{/each}
-						<div class="absolute bottom-0 -mb-7 text-text-02">
-							{thaiMonthNames[month.id]}
-							{month.id === 0 ? (year.yaer + 543).toString().slice(-2) : ''}
-						</div>
+					</div>
+					<div class="label-01 absolute bottom-0 -mb-7 text-text-02">
+						{thaiMonthNames[month.id]}
+						{month.id === 0 ? (year.yaer + 543).toString().slice(-2) : ''}
 					</div>
 				{/each}
 			{/each}

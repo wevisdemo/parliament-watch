@@ -5,6 +5,8 @@
 	import DatePicker from '$components/DatePicker/DatePicker.svelte';
 	import RoleChanges from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
 	import TimeLineArea from '$components/Assemblies/CabinetChanges/TimeLineArea.svelte';
+	import { group } from 'd3';
+	import ChangeModal from '$components/Assemblies/CabinetChanges/ChangeModal.svelte';
 
 	export let data;
 	interface Tab {
@@ -17,8 +19,8 @@
 	$: ({ assembly, availableAssemblies, assemblyRoles, cabinetMembers, changes } = data);
 
 	$: selectedDate = new Date();
-	const handleSelectDate = (event: CustomEvent<{ value: Date }>) => {
-		selectedDate = event.detail.value;
+	const handleSelectDate = (date: Date) => {
+		selectedDate = date;
 	};
 
 	$: tabs = [
@@ -36,8 +38,20 @@
 		}
 	] as Tab[];
 	$: curIndexTab = 0;
+
+	$: groupChangeData = group(changes, (d) => d?.date.toISOString());
+	$: timeLineData = Array.from(groupChangeData, ([date, value]) => ({
+		date: new Date(date),
+		in: value.filter((d) => d.type === 'in').length,
+		out: value.filter((d) => d.type === 'out').length
+	}));
+
+	$: openModal = false;
+	$: innerWidth = 0;
+	$: isSM = innerWidth > 671;
 </script>
 
+<svelte:window bind:innerWidth />
 <div class="px-[16px] md:px-[64px]">
 	<Breadcrumb
 		noTrailingSlash
@@ -64,14 +78,22 @@
 		/>
 	</div>
 
+	<ChangeModal
+		{timeLineData}
+		{selectedDate}
+		{handleSelectDate}
+		open={openModal && !isSM}
+		onClose={() => (openModal = false)}
+	/>
+
 	<div class="hidden md:block">
-		<TimeLineArea {changes} {selectedDate} {handleSelectDate} />
+		<TimeLineArea {timeLineData} {selectedDate} {handleSelectDate} />
 	</div>
 
 	<div class="flex flex-row-reverse flex-wrap justify-between gap-4 px-[16px] md:px-[64px]">
-		<div>
+		<button on:click={() => (isSM ? {} : (openModal = true))}>
 			<DatePicker />
-		</div>
+		</button>
 		<div class="flex w-full lg:w-fit">
 			{#each tabs as tab}
 				<button
