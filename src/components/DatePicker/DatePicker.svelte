@@ -11,6 +11,7 @@
 </script>
 
 <DatePicker
+	{value}
 	on:change={(e) => {
 		if (typeof e.detail === 'string') return;
 		selectedDate = e.detail.selectedDates[0];
@@ -53,7 +54,6 @@
 			]
 		}
 	}}
-	maxDate="today"
 	flatpickrProps={{
 		formatDate: (date) => formatThaiDate(date),
 		parseDate: parseThaiDate
