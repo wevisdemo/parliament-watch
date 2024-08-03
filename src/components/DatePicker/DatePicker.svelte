@@ -2,11 +2,20 @@
 	import { formatThaiDate, parseThaiDate } from '$lib/date-parser';
 	import { DatePicker, DatePickerInput } from 'carbon-components-svelte';
 
-	export let value = formatThaiDate(new Date());
+	export let handleSelectDate: (date: Date) => void;
+	export let selectedDate: Date;
+
+	let value: string;
+
+	$: if (selectedDate) value = formatThaiDate(selectedDate);
 </script>
 
 <DatePicker
-	{value}
+	on:change={(e) => {
+		if (typeof e.detail === 'string') return;
+		selectedDate = e.detail.selectedDates[0];
+		handleSelectDate(selectedDate);
+	}}
 	datePickerType="single"
 	locale={{
 		weekdays: {

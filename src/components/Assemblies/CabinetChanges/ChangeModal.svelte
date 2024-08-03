@@ -44,7 +44,7 @@
 			<SquareIcon width={10} color="#B12000" />
 			<p>ออก</p>
 		</div>
-		<DatePicker />
+		<DatePicker {selectedDate} {handleSelectDate} />
 	</div>
 	<TimeLineVertical {timeLineData} selectedDate={changeDate} handleSelectDate={handleChangeDate} />
 </Modal>

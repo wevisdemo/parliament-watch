@@ -92,7 +92,7 @@
 
 	<div class="flex flex-row-reverse flex-wrap justify-between gap-4 px-[16px] md:px-[64px]">
 		<button on:click={() => (isSM ? {} : (openModal = true))}>
-			<DatePicker />
+			<DatePicker {selectedDate} {handleSelectDate} />
 		</button>
 		<div class="flex w-full lg:w-fit">
 			{#each tabs as tab}
