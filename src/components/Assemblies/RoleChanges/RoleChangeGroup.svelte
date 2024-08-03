@@ -11,7 +11,15 @@
 			month: 'short',
 			day: 'numeric'
 		});
-	$: isFocus = selectedDate?.getTime() === changeData[0].date?.getTime();
+
+	let isFocus = false;
+
+	$: if (selectedDate) {
+		isFocus =
+			selectedDate.getDate() === changeData[0].date.getDate() &&
+			selectedDate.getMonth() === changeData[0].date.getMonth() &&
+			selectedDate.getFullYear() === changeData[0].date.getFullYear();
+	}
 </script>
 
 <div class={isFocus ? 'border-[1px] border-interactive-02' : ''}>
