@@ -22,7 +22,7 @@
 	}
 </script>
 
-<div class={isFocus ? 'border-[1px] border-interactive-02' : ''}>
+<div>
 	<div
 		class="{isFocus
 			? 'bg-interactive-02 text-text-04'
@@ -36,7 +36,11 @@
 			ปรับ {changeData.length} ตำแหน่ง
 		</p>
 	</div>
-	<div>
+	<div
+		class={isFocus
+			? 'border-[1px] border-t-0 border-interactive-02'
+			: 'border-[1px] border-t-0 border-interactive-02/0'}
+	>
 		{#each changeData as roleChangeData}
 			<RoleChangeItem
 				type={roleChangeData.type}
