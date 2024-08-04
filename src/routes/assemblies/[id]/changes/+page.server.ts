@@ -7,7 +7,7 @@ import {
 	fetchPoliticians
 } from '$lib/datasheets/index';
 import { AssemblyName } from '$models/assembly';
-import type { AssemblyRoleHistory, Politician } from '$models/politician';
+import type { AssemblyRoleHistory, PartyRoleHistory, Politician } from '$models/politician';
 import type { MainMember, RoleChange } from '../+page.server';
 import { error } from '@sveltejs/kit';
 import dayjs from 'dayjs';
@@ -69,6 +69,36 @@ export async function load({ params }) {
 			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
 	);
 
+	const changes: RoleChange[] = [];
+	for (const member of members) {
+		member.assemblyRoles.forEach((role) => {
+			if (role.assembly.name !== AssemblyName.Cabinet || role.assembly.id !== fullAssembly.id) {
+				return;
+			}
+			changes.push({
+				date: role.startedAt,
+				type: 'in',
+				role: role.role,
+				politician: {
+					...member,
+					party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
+				}
+			});
+
+			if (role.endedAt) {
+				changes.push({
+					date: role.endedAt,
+					type: 'out',
+					role: role.role,
+					politician: {
+						...member,
+						party: getPartyRoleAtDate(member.partyRoles, role.endedAt)
+					}
+				});
+			}
+		});
+	}
+
 	return {
 		assembly: {
 			id: fullAssembly.id,
@@ -80,169 +110,18 @@ export async function load({ params }) {
 		availableAssemblies,
 		assemblyRoles,
 		cabinetMembers: activeMembers.map(parseMainMember),
-		changes: mockChanges
+		changes: changes
 	};
 }
 
-const mockChanges: RoleChange[] = [
-	{
-		date: new Date('2024-04-27'),
-		type: 'in',
-		politician: {
-			id: 'มาริษ-เสงี่ยมพงษ์',
-			firstname: 'มาริษ',
-			lastname: 'เสงี่ยมพงษ์',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
-	},
-	{
-		date: new Date('2024-04-27'),
-		type: 'out',
-		politician: {
-			id: 'ปานปรีย์-พหิทธานุกร',
-			firstname: 'ปานปรีย์',
-			lastname: 'พหิทธานุกร',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
-	},
-	{
-		date: new Date('2024-04-27'),
-		type: 'in',
-		politician: {
-			id: 'สุริยะ-จึงรุ่งเรืองกิจ',
-			firstname: 'สุริยะ',
-			lastname: 'จึงรุ่งเรืองกิจ',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รองนายกรัฐมนตรี'
-	},
-	{
-		date: new Date('2024-05-20'),
-		type: 'out',
-		politician: {
-			id: 'ปานปรีย์-พหิทธานุกร',
-			firstname: 'ปานปรีย์',
-			lastname: 'พหิทธานุกร',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รองนายกรัฐมนตรี'
-	},
-	{
-		date: new Date('2024-08-20'),
-		type: 'in',
-		politician: {
-			id: 'สมศักดิ์-เทพสุทิน',
-			firstname: 'สมศักดิ์',
-			lastname: 'เทพสุทิน',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีว่าการกระทรวงสาธารณสุข'
-	},
-	{
-		date: new Date('2024-08-20'),
-		type: 'out',
-		politician: {
-			id: 'สมศักดิ์-เทพสุทิน',
-			firstname: 'สมศักดิ์',
-			lastname: 'เทพสุทิน',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รองนายกรัฐมนตรี'
-	},
-	{
-		date: new Date('2024-08-20'),
-		type: 'out',
-		politician: {
-			id: 'ชลน่าน-ศรีแก้ว',
-			firstname: 'ชลน่าน',
-			lastname: 'ศรีแก้ว',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีว่าการกระทรวงสาธารณสุข'
-	},
-	{
-		date: new Date('2024-08-20'),
-		type: 'in',
-		politician: {
-			id: 'จิราพร-สินธุไพร',
-			firstname: 'จิราพร',
-			lastname: 'สินธุไพร',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีประจำสำนักนายกรัฐมนตรี'
-	},
-	{
-		date: new Date('2024-08-20'),
-		type: 'in',
-		politician: {
-			id: 'พิชิต-ชื่นบาน',
-			firstname: 'พิชิต',
-			lastname: 'ชื่นบาน',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีประจำสำนักนายกรัฐมนตรี'
-	},
-	{
-		date: new Date('2024-08-20'),
-		type: 'out',
-		politician: {
-			id: 'พวงเพ็ชร-ชุนละเอียด',
-			firstname: 'พวงเพ็ชร',
-			lastname: 'ชุนละเอียด',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีประจำสำนักนายกรัฐมนตรี'
-	}
-];
+function getPartyRoleAtDate(
+	partyRoles: Omit<PartyRoleHistory, 'politicianId'>[],
+	date: Date
+): PartyRoleHistory['party'] {
+	const maybePartyRole = partyRoles
+		.filter(({ startedAt, endedAt }) => startedAt <= date && (!endedAt || date < endedAt))
+		.sort((a, z) => z.startedAt.getTime() - a.startedAt.getTime())
+		.at(-1);
+
+	return maybePartyRole?.party || { name: 'ไม่สังกัดพรรค', color: 'gray', logo: '' };
+}
