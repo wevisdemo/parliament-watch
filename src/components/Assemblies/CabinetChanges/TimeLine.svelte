@@ -20,13 +20,23 @@
 	$: max = Math.max(...timeLineData.map((d) => Math.max(d.in, d.out)));
 
 	$: dateData = getDateData(timeLineData, startedAt, endedAt);
+
+	let timelineContainer: HTMLDivElement;
+
+	const handleNext = () => {
+		timelineContainer.scrollBy({ left: -timelineContainer.clientWidth, behavior: 'smooth' });
+	};
+
+	const handlePrev = () => {
+		timelineContainer.scrollBy({ left: timelineContainer.clientWidth, behavior: 'smooth' });
+	};
 </script>
 
 <div class="flex">
-	<div class="chevron w-[16px] sm:w-[64px]">
+	<button class="chevron w-[16px] sm:w-[64px]" on:click={handleNext}>
 		<ChevronLeft size={32} />
-	</div>
-	<div class="no-scrollbar flex overflow-x-auto pb-10 pt-20">
+	</button>
+	<div class="no-scrollbar flex overflow-x-auto pb-10 pt-20" bind:this={timelineContainer}>
 		<div class="flex h-[65px]">
 			{#each dateData as year}
 				{#each year.months as month}
@@ -66,9 +76,9 @@
 			{/each}
 		</div>
 	</div>
-	<div class="chevron w-[16px] sm:w-[64px]">
+	<button class="chevron w-[16px] sm:w-[64px]" on:click={handlePrev}>
 		<ChevronRight size={32} />
-	</div>
+	</button>
 </div>
 
 <style>
