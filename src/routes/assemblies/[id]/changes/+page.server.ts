@@ -63,11 +63,7 @@ export async function load({ params }) {
 		assemblyRoles.some((ar) => p.id === ar.politicianId)
 	);
 
-	const activeMembers = getAssemblyMembers(fullAssembly, members).filter(
-		({ assemblyRole }) =>
-			!assemblyRole?.endedAt ||
-			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
-	);
+	const assemblyMembers = getAssemblyMembers(fullAssembly, members);
 
 	const changes: RoleChange[] = [];
 	for (const member of members) {
@@ -109,7 +105,7 @@ export async function load({ params }) {
 		},
 		availableAssemblies,
 		assemblyRoles,
-		cabinetMembers: activeMembers.map(parseMainMember),
+		cabinetMembers: assemblyMembers.map(parseMainMember),
 		changes: changes
 	};
 }

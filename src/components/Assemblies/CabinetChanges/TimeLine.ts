@@ -36,12 +36,20 @@ export const formatThaiDate = (date: Date): string => {
 	return `${day} ${month} ${year}`;
 };
 
-export const getDateData = (data: TimeLine[]) => {
-	const minYear = Math.min(...data.map((d) => d.date.getFullYear()));
-	const maxYear = Math.max(
-		Math.max(...data.map((d) => d.date.getFullYear())),
-		new Date().getFullYear()
-	);
+export const isDateInRange = (date: Date, minDate: Date, maxDate: Date): boolean => {
+	const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+	const minDateOnly = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+	const maxDateOnly = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+	return dateOnly >= minDateOnly && dateOnly <= maxDateOnly;
+};
+
+export const getDateData = (data: TimeLine[], startedAt: Date | null, endedAt: Date | null) => {
+	const minDate = startedAt ? startedAt : new Date(Math.min(...data.map((d) => d.date.getTime())));
+	const maxDate = endedAt ? endedAt : new Date();
+
+	const minYear = minDate.getFullYear();
+	const maxYear = maxDate.getFullYear();
+
 	const calendar = [];
 	for (let year = minYear; year <= maxYear; year++) {
 		const monthsInYear = [];
@@ -50,6 +58,9 @@ export const getDateData = (data: TimeLine[]) => {
 			const daysInMonth = [];
 			for (let day = 1; day <= numberDaysInMonth; day++) {
 				const date = new Date(year, month, day);
+				if (!isDateInRange(date, minDate, maxDate)) {
+					continue;
+				}
 				const dataInDay = data.find((d) => compareDate(d.date, date)) || {
 					date: date,
 					in: 0,
@@ -65,7 +76,7 @@ export const getDateData = (data: TimeLine[]) => {
 		}
 		calendar.push({
 			yaer: year,
-			months: monthsInYear
+			months: monthsInYear.filter((month) => month.days.length > 0)
 		});
 	}
 	return calendar;

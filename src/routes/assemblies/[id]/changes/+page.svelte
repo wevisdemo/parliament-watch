@@ -7,6 +7,7 @@
 	import TimeLineArea from '$components/Assemblies/CabinetChanges/TimeLineArea.svelte';
 	import { group } from 'd3';
 	import ChangeModal from '$components/Assemblies/CabinetChanges/ChangeModal.svelte';
+	import { isDateInRange } from '$components/Assemblies/CabinetChanges/TimeLine.js';
 
 	export let data;
 	interface Tab {
@@ -23,18 +24,37 @@
 		selectedDate = date;
 	};
 
+	$: getMembersAtSelectTime = () => {
+		const currentDate = new Date();
+		let assemblyRolesFilter = assemblyRoles
+			.filter((assembly) =>
+				isDateInRange(
+					selectedDate,
+					assembly.startedAt,
+					assembly.endedAt ? assembly.endedAt : currentDate
+				)
+			)
+			.map((assembly) => assembly.politicianId);
+
+		let activeMember = cabinetMembers.filter((member) =>
+			assemblyRolesFilter.includes(member.politician.id)
+		);
+		return activeMember;
+	};
+	$: membersAtSelectTime = getMembersAtSelectTime();
+
 	$: tabs = [
 		{
 			id: 0,
 			name: 'รายชื่อรัฐมนตรีในเวลานั้น',
 			comp: CabinetMembers,
-			props: { members: cabinetMembers }
+			props: { members: membersAtSelectTime }
 		},
 		{
 			id: 1,
 			name: 'ลำดับการปรับเปลี่ยน',
 			comp: RoleChanges,
-			props: { changes: changes, selectedDate }
+			props: { changes, selectedDate }
 		}
 	] as Tab[];
 	$: curIndexTab = 0;
@@ -80,6 +100,8 @@
 
 	<ChangeModal
 		{timeLineData}
+		startedAt={assembly.startedAt}
+		endedAt={assembly.endedAt}
 		{selectedDate}
 		{handleSelectDate}
 		open={openModal && !isSM}
@@ -87,13 +109,22 @@
 	/>
 
 	<div class="hidden md:block">
-		<TimeLineArea {timeLineData} {selectedDate} {handleSelectDate} />
+		<TimeLineArea
+			{timeLineData}
+			startedAt={assembly.startedAt}
+			endedAt={assembly.endedAt}
+			{selectedDate}
+			{handleSelectDate}
+		/>
 	</div>
 
 	<div class="flex flex-row-reverse flex-wrap justify-between gap-4 px-[16px] md:px-[64px]">
-		<button on:click={() => (isSM ? {} : (openModal = true))}>
-			<DatePicker {selectedDate} {handleSelectDate} />
-		</button>
+		<div class="flex flex-col md:flex-row md:items-center md:gap-2">
+			<p class="label-02">กำลังแสดงข้อมูล ณ วันที่</p>
+			<button on:click={() => (isSM ? {} : (openModal = true))}>
+				<DatePicker {selectedDate} {handleSelectDate} />
+			</button>
+		</div>
 		<div class="flex w-full lg:w-fit">
 			{#each tabs as tab}
 				<button

@@ -12,12 +12,14 @@
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
 
 	export let timeLineData: TimeLine[];
+	export let startedAt: Date | null;
+	export let endedAt: Date | null;
 	export let selectedDate: Date;
 	export let handleSelectDate: (date: Date) => void;
 
 	$: max = Math.max(...timeLineData.map((d) => Math.max(d.in, d.out)));
 
-	$: dateData = getDateData(timeLineData);
+	$: dateData = getDateData(timeLineData, startedAt, endedAt);
 </script>
 
 <div class="flex">

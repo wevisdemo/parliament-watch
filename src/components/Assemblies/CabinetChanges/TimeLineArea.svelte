@@ -4,6 +4,8 @@
 	import TimeLineComponent from './TimeLine.svelte';
 
 	export let timeLineData: TimeLine[];
+	export let startedAt: Date | null;
+	export let endedAt: Date | null;
 	export let selectedDate: Date;
 	export let handleSelectDate: (date: Date) => void;
 </script>
@@ -18,4 +20,4 @@
 	</div>
 </div>
 
-<TimeLineComponent {timeLineData} {selectedDate} {handleSelectDate} />
+<TimeLineComponent {timeLineData} {startedAt} {endedAt} {selectedDate} {handleSelectDate} />

@@ -7,6 +7,8 @@
 
 	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;
+	export let startedAt: Date | null;
+	export let endedAt: Date | null;
 	export let handleSelectDate: (date: Date) => void;
 
 	export let open = false;
@@ -46,5 +48,11 @@
 		</div>
 		<DatePicker selectedDate={changeDate} handleSelectDate={handleChangeDate} />
 	</div>
-	<TimeLineVertical {timeLineData} selectedDate={changeDate} handleSelectDate={handleChangeDate} />
+	<TimeLineVertical
+		{timeLineData}
+		{startedAt}
+		{endedAt}
+		selectedDate={changeDate}
+		handleSelectDate={handleChangeDate}
+	/>
 </Modal>
