@@ -8,6 +8,8 @@
 	import { group } from 'd3';
 	import ChangeModal from '$components/Assemblies/CabinetChanges/ChangeModal.svelte';
 	import { isDateInRange } from '$components/Assemblies/CabinetChanges/TimeLine.js';
+	import { formatThaiDate } from '$lib/date-parser';
+	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 
 	export let data;
 	interface Tab {
@@ -68,10 +70,24 @@
 
 	$: openModal = false;
 	$: innerWidth = 0;
-	$: isSM = innerWidth > 671;
+	$: isMD = innerWidth > 671;
+	$: showSideNav = false;
+	$: previousFromTop = 0;
+
+	let stickyElement: HTMLElement;
+	$: isSticky = false;
+
+	const scrollEventHandler = () => {
+		const currentFromTop = window.scrollY;
+		showSideNav = currentFromTop <= previousFromTop;
+		previousFromTop = currentFromTop;
+
+		const rect = stickyElement.getBoundingClientRect();
+		isSticky = rect.top == 0 || (rect.top <= 48 && currentFromTop <= previousFromTop);
+	};
 </script>
 
-<svelte:window bind:innerWidth />
+<svelte:window bind:innerWidth on:scroll={scrollEventHandler} />
 <div class="px-[16px] md:px-[64px]">
 	<Breadcrumb
 		noTrailingSlash
@@ -104,7 +120,7 @@
 		endedAt={assembly.endedAt}
 		{selectedDate}
 		{handleSelectDate}
-		open={openModal && !isSM}
+		open={openModal && !isMD}
 		onClose={() => (openModal = false)}
 	/>
 
@@ -117,26 +133,38 @@
 			{handleSelectDate}
 		/>
 	</div>
-
-	<div class="flex flex-row-reverse flex-wrap justify-between gap-4 px-[16px] md:px-[64px]">
-		<div class="flex flex-col md:flex-row md:items-center md:gap-2">
+</div>
+<div
+	class="sticky {showSideNav
+		? 'top-12'
+		: 'top-0'} z-50 flex flex-row-reverse flex-wrap justify-between gap-4 bg-ui-01 px-[16px] pt-4 md:px-[64px]"
+	bind:this={stickyElement}
+>
+	<div class="flex flex-col md:flex-row md:items-center md:gap-2">
+		<div class="flex gap-2">
 			<p class="label-02">กำลังแสดงข้อมูล ณ วันที่</p>
-			<button on:click={() => (isSM ? {} : (openModal = true))}>
-				<DatePicker {selectedDate} {handleSelectDate} />
+			<p class="heading-compact-01 {isSticky && !isMD ? '' : 'hidden'}">
+				{formatThaiDate(selectedDate)}
+			</p>
+		</div>
+		<button
+			on:click={() => (isMD ? {} : (openModal = true))}
+			class={isSticky && !isMD ? 'hidden' : ''}
+		>
+			<DatePicker {selectedDate} {handleSelectDate} />
+		</button>
+	</div>
+	<div class="flex w-full lg:w-fit">
+		{#each tabs as tab}
+			<button
+				class="heading-compact-01 w-full p-[16px] lg:w-fit {curIndexTab === tab.id
+					? 'border-t-2 border-t-interactive-01 bg-ui-background'
+					: 'border-t-2 border-t-ui-03 bg-ui-03 text-text-02'}"
+				on:click={() => (curIndexTab = tab.id)}
+			>
+				{tab.name}
 			</button>
-		</div>
-		<div class="flex w-full lg:w-fit">
-			{#each tabs as tab}
-				<button
-					class="heading-compact-01 w-full p-[16px] lg:w-fit {curIndexTab === tab.id
-						? 'border-t-2 border-t-interactive-01 bg-ui-background'
-						: 'border-t-2 border-t-ui-03 bg-ui-03 text-text-02'}"
-					on:click={() => (curIndexTab = tab.id)}
-				>
-					{tab.name}
-				</button>
-			{/each}
-		</div>
+		{/each}
 	</div>
 </div>
 
@@ -147,3 +175,5 @@
 >
 	<svelte:component this={tabs[curIndexTab].comp} {...tabs[curIndexTab].props} />
 </div>
+
+<BackToTopButton margin={0} />
