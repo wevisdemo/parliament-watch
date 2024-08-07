@@ -5,9 +5,7 @@
 	export let handleSelectDate: (date: Date) => void;
 	export let selectedDate: Date;
 
-	let value: string;
-
-	$: if (selectedDate) value = formatThaiDate(selectedDate);
+	$: value = selectedDate ? formatThaiDate(selectedDate) : '';
 </script>
 
 <DatePicker

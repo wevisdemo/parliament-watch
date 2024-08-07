@@ -34,7 +34,7 @@
 	{open}
 	on:close={handleClose}
 	primaryButtonText="ตกลง"
-	on:click:button--primary={() => handleSubmit()}
+	on:click:button--primary={handleSubmit}
 	secondaryButtonText="ยกเลิก"
 	on:click:button--secondary={handleClose}
 >

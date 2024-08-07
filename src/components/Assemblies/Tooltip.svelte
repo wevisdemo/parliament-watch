@@ -86,7 +86,7 @@
 	>
 		<slot />
 	</button>
-	<div role="tooltip" {id} class:bx--assistive-text={true} {style}>
+	<div role="tooltip" {id} class="bx--assistive-text" {style}>
 		<slot name="tooltip">{tooltipText}</slot>
 	</div>
 </span>

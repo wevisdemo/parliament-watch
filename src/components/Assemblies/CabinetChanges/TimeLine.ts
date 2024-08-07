@@ -75,7 +75,7 @@ export const getDateData = (data: TimeLine[], startedAt: Date | null, endedAt: D
 			});
 		}
 		calendar.push({
-			yaer: year,
+			year: year,
 			months: monthsInYear.filter((month) => month.days.length > 0)
 		});
 	}

@@ -68,14 +68,14 @@
 		out: value.filter((d) => d.type === 'out').length
 	}));
 
-	$: openModal = false;
-	$: innerWidth = 0;
+	let openModal = false;
+	let innerWidth = 0;
 	$: isMD = innerWidth > 671;
-	$: showSideNav = false;
-	$: previousFromTop = 0;
+	let showSideNav = false;
+	let previousFromTop = 0;
 
 	let stickyElement: HTMLElement;
-	$: isSticky = false;
+	let isSticky = false;
 
 	const scrollEventHandler = () => {
 		const currentFromTop = window.scrollY;
@@ -148,7 +148,9 @@
 			</p>
 		</div>
 		<button
-			on:click={() => (isMD ? {} : (openModal = true))}
+			on:click={() => {
+				if (!isMD) openModal = true;
+			}}
 			class={isSticky && !isMD ? 'hidden' : ''}
 		>
 			<DatePicker {selectedDate} {handleSelectDate} />

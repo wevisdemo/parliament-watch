@@ -12,14 +12,11 @@
 			day: 'numeric'
 		});
 
-	let isFocus = false;
-
-	$: if (selectedDate) {
-		isFocus =
-			selectedDate.getDate() === changeData[0].date.getDate() &&
-			selectedDate.getMonth() === changeData[0].date.getMonth() &&
-			selectedDate.getFullYear() === changeData[0].date.getFullYear();
-	}
+	$: isFocus =
+		selectedDate &&
+		selectedDate.getDate() === changeData[0].date.getDate() &&
+		selectedDate.getMonth() === changeData[0].date.getMonth() &&
+		selectedDate.getFullYear() === changeData[0].date.getFullYear();
 </script>
 
 <div>
@@ -37,9 +34,8 @@
 		</p>
 	</div>
 	<div
-		class={isFocus
-			? 'border-[1px] border-t-0 border-interactive-02'
-			: 'border-[1px] border-t-0 border-interactive-02/0'}
+		class="border-[1px] border-t-0
+		{isFocus ? ' border-interactive-02' : ' border-interactive-02/0'}"
 	>
 		{#each changeData as roleChangeData}
 			<RoleChangeItem

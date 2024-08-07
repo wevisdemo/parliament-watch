@@ -42,6 +42,7 @@
 				{#each year.months as month}
 					<div class="relative flex">
 						{#each month.days as day}
+							{@const isSelectedDate = compareDate(day.date, selectedDate)}
 							<div class="relative flex">
 								{#if day.event}
 									<div
@@ -55,9 +56,9 @@
 								{/if}
 								<Tooltip
 									direction="top"
-									showAllTime={compareDate(day.date, selectedDate)}
-									open={compareDate(day.date, selectedDate)}
-									style={compareDate(day.date, selectedDate) ? '' : 'background-color: white;'}
+									showAllTime={isSelectedDate}
+									open={isSelectedDate}
+									style={isSelectedDate ? 'z-index: 0;' : 'background-color: white;'}
 								>
 									<TimeItem {day} {selectedDate} {max} {handleSelectDate} />
 									<div slot="tooltip">
@@ -69,7 +70,7 @@
 
 						<div class="label-01 absolute bottom-0 -mb-7 text-text-02">
 							{thaiMonthNames[month.id]}
-							{month.id === 0 ? (year.yaer + 543).toString().slice(-2) : ''}
+							{month.id === 0 ? (year.year + 543).toString().slice(-2) : ''}
 						</div>
 					</div>
 				{/each}
