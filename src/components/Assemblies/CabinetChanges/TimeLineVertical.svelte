@@ -1,14 +1,8 @@
 <script lang="ts">
-	import {
-		thaiMonthNames,
-		formatThaiDate,
-		type TimeLine,
-		getDateData,
-		compareDate
-	} from './TimeLine';
-	import { ChevronLeft, ChevronRight } from 'carbon-icons-svelte';
+	import { type TimeLine, getDateData, compareDate } from './TimeLine';
 	import TimeItem from './TimeItem.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
+	import { shortMonthNames } from '$lib/date-parser';
 
 	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;
@@ -25,7 +19,7 @@
 		{#each year.months as month}
 			<div>
 				<div class="absolute -ml-7 w-6 text-text-02">
-					<p class="label-01">{thaiMonthNames[month.id]}</p>
+					<p class="label-01">{shortMonthNames[month.id]}</p>
 					<p class="label-01">
 						{month.id === 0 ? (year.year + 543).toString().slice(-2) : ''}
 					</p>

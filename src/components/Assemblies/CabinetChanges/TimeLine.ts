@@ -1,3 +1,5 @@
+import { shortMonthNames } from '$lib/date-parser';
+
 export interface TimeLine {
 	date: Date;
 	in: number;
@@ -13,24 +15,9 @@ export const compareDate = (date1: Date, date2: Date) => {
 	);
 };
 
-export const thaiMonthNames = [
-	'ม.ค.',
-	'ก.พ.',
-	'มี.ค.',
-	'เม.ย.',
-	'พ.ค.',
-	'มิ.ย.',
-	'ก.ค.',
-	'ส.ค.',
-	'ก.ย.',
-	'ต.ค.',
-	'พ.ย.',
-	'ธ.ค.'
-];
-
 export const formatThaiDate = (date: Date): string => {
 	const day = date.getDate();
-	const month = thaiMonthNames[date.getMonth()];
+	const month = shortMonthNames[date.getMonth()];
 	const year = (date.getFullYear() + 543).toString().slice(-2);
 
 	return `${day} ${month} ${year}`;
@@ -70,7 +57,7 @@ export const getDateData = (data: TimeLine[], startedAt: Date | null, endedAt: D
 			}
 			monthsInYear.push({
 				id: month,
-				month: thaiMonthNames[month],
+				month: shortMonthNames[month],
 				days: daysInMonth
 			});
 		}

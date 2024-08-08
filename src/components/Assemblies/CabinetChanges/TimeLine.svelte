@@ -1,15 +1,10 @@
 <script lang="ts">
-	import {
-		thaiMonthNames,
-		formatThaiDate,
-		type TimeLine,
-		getDateData,
-		compareDate
-	} from './TimeLine';
+	import { formatThaiDate, type TimeLine, getDateData, compareDate } from './TimeLine';
 	import { ChevronLeft, ChevronRight } from 'carbon-icons-svelte';
 	import TimeItem from './TimeItem.svelte';
 	import Tooltip from '../Tooltip.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
+	import { shortMonthNames } from '$lib/date-parser';
 
 	export let timeLineData: TimeLine[];
 	export let startedAt: Date | null;
@@ -69,7 +64,7 @@
 						{/each}
 
 						<div class="label-01 absolute bottom-0 -mb-7 text-text-02">
-							{thaiMonthNames[month.id]}
+							{shortMonthNames[month.id]}
 							{month.id === 0 ? (year.year + 543).toString().slice(-2) : ''}
 						</div>
 					</div>
