@@ -31,6 +31,11 @@
 	<button class="chevron w-[16px] sm:w-[64px]" on:click={handleNext}>
 		<ChevronLeft size={32} />
 	</button>
+	<Tooltip direction="top" open={true}>
+		<div slot="tooltip">
+			<TimeLineToolTip day={{ date: new Date(), in: 0, out: 0 }} selectedDate={new Date()} />
+		</div>
+	</Tooltip>
 	<div class="no-scrollbar flex overflow-x-auto pb-10 pt-20" bind:this={timelineContainer}>
 		<div class="flex h-[65px]">
 			{#each dateData as year}
