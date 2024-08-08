@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate, parseThaiDate } from '$lib/date-parser';
+	import { formatThaiDate, longMonthNames, parseThaiDate, shortMonthNames } from '$lib/date-parser';
 	import { DatePicker, DatePickerInput } from 'carbon-components-svelte';
 
 	export let handleSelectDate: (date: Date) => void;
@@ -22,34 +22,8 @@
 			longhand: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์']
 		},
 		months: {
-			shorthand: [
-				'ม.ค.',
-				'ก.พ.',
-				'มี.ค.',
-				'เม.ย.',
-				'พ.ค.',
-				'มิ.ย.',
-				'ก.ค.',
-				'ส.ค.',
-				'ก.ย.',
-				'ต.ค.',
-				'พ.ย.',
-				'ธ.ค.'
-			],
-			longhand: [
-				'มกราคม',
-				'กุมภาพันธ์',
-				'มีนาคม',
-				'เมษายน',
-				'พฤษภาคม',
-				'มิถุนายน',
-				'กรกฎาคม',
-				'สิงหาคม',
-				'กันยายน',
-				'ตุลาคม',
-				'พฤศจิกายน',
-				'ธันวาคม'
-			]
+			shorthand: shortMonthNames,
+			longhand: longMonthNames
 		}
 	}}
 	flatpickrProps={{

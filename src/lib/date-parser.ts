@@ -11,6 +11,19 @@ export const longMonthNames = [
 	'ตุลาคม',
 	'พฤศจิกายน',
 	'ธันวาคม'
+] as [
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string
 ];
 
 export const shortMonthNames = [
@@ -26,6 +39,19 @@ export const shortMonthNames = [
 	'ต.ค.',
 	'พ.ย.',
 	'ธ.ค.'
+] as [
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string,
+	string
 ];
 
 export function parseThaiDate(dateString: string): Date {
