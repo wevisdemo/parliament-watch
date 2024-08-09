@@ -8,7 +8,7 @@
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
 	import { AssemblyName } from '$models/assembly.js';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
-	import LastestBills from '$components/Assemblies/LastestBills.svelte';
+	import LatestBills from '$components/Assemblies/LatestBills.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
@@ -114,7 +114,7 @@
 					<p class="body-compact-01">บันทึกการปรับเปลี่ยนตำแหน่งในคณะรัฐมนตรีชุดนี้</p>
 				</div>
 			</div>
-			<RoleChangeLog {changes} selectedDate={new Date('2024-05-20')} />
+			<RoleChangeLog {changes} />
 			<Button
 				href="/assemblies/{assembly.id}/changes"
 				kind="secondary"
@@ -139,7 +139,7 @@
 				</div>
 				<ModalLawProcess class="pb-4 md:pb-0 md:text-right" />
 			</div>
-			<LastestBills {latestBills} />
+			<LatestBills {latestBills} />
 			<Button href="#" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
 				ดูร่างกฎหมายทั้งหมด
 			</Button>

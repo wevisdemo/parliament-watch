@@ -3,7 +3,7 @@
 	import type { RoleChange } from '../../../routes/assemblies/[id]/+page.server';
 	import RoleChangeGroup from './RoleChangeGroup.svelte';
 	export let changes: Array<RoleChange>;
-	export let selectedDate: Date | undefined;
+	export let selectedDate: Date | undefined = undefined;
 
 	$: groupChangeData = group(changes, (d) => d?.date.toISOString());
 	$: convertAndSortChangeData = Array.from(groupChangeData, ([time, value]) => ({
