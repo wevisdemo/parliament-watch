@@ -9,7 +9,12 @@
 	$: convertAndSortChangeData = Array.from(groupChangeData, ([time, value]) => ({
 		time: new Date(time).getTime(),
 		value
-	})).sort((a, b) => a.time - b.time);
+	}))
+		.sort((a, b) => b.time - a.time)
+		.filter((changeGroup) => {
+			if (!selectedDate) return true;
+			return changeGroup.time <= selectedDate?.getTime();
+		});
 </script>
 
 <div>

@@ -12,6 +12,7 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
+	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
 
 	export let data;
 
@@ -92,6 +93,11 @@
 	</section>
 	<section id="members">
 		{#if isCabinet}
+			<div class="flex items-center p-[16px]">
+				<GeneralIcon class="h-[32px] w-[32px]" />
+				<span class="fluid-heading-04 ml-[16px]">สมาชิกคณะรัฐมนตรี</span>
+			</div>
+			<div class="w-full border-b-[1px] border-solid border-gray-20" />
 			<CabinetMembers members={mainMembers} />
 		{/if}
 		{#if !isCabinet}

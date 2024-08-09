@@ -30,11 +30,16 @@
 	/** Obtain a reference to the button HTML element */
 	export let ref = null;
 
+	/** Style the tooltip */
+	export let style = '';
+
+	export let showAllTime = false;
+
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	const hide = () => (open = false);
+	const hide = () => (open = false || showAllTime);
 
 	const show = () => (open = true);
 
@@ -81,7 +86,7 @@
 	>
 		<slot />
 	</button>
-	<div role="tooltip" {id} class:bx--assistive-text={true}>
+	<div role="tooltip" {id} class="bx--assistive-text" {style}>
 		<slot name="tooltip">{tooltipText}</slot>
 	</div>
 </span>
