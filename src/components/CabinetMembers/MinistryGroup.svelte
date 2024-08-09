@@ -10,7 +10,7 @@
 			m.assemblyRole.includes('รัฐมนตรีว่าการ') ||
 			m.assemblyRole.includes('รัฐมนตรีประจำสำนักนายกรัฐมนตรี')
 	);
-	const deputyMinister = members.filter((m) => m.assemblyRole.includes('รัฐมนตรีช่วย'));
+	$: deputyMinister = members.filter((m) => m.assemblyRole.includes('รัฐมนตรีช่วย'));
 </script>
 
 <div class="flex min-w-[230px] flex-col gap-[16px] border border-ui-01 pb-[16px]">

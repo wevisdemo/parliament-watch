@@ -11,10 +11,15 @@
 			month: 'short',
 			day: 'numeric'
 		});
-	$: isFocus = selectedDate?.getTime() === changeData[0].date?.getTime();
+
+	$: isFocus =
+		selectedDate &&
+		selectedDate.getDate() === changeData[0].date.getDate() &&
+		selectedDate.getMonth() === changeData[0].date.getMonth() &&
+		selectedDate.getFullYear() === changeData[0].date.getFullYear();
 </script>
 
-<div class={isFocus ? 'border-[1px] border-interactive-02' : ''}>
+<div>
 	<div
 		class="{isFocus
 			? 'bg-interactive-02 text-text-04'
@@ -28,7 +33,10 @@
 			ปรับ {changeData.length} ตำแหน่ง
 		</p>
 	</div>
-	<div>
+	<div
+		class="border-[1px] border-t-0
+		{isFocus ? ' border-interactive-02' : ' border-interactive-02/0'}"
+	>
 		{#each changeData as roleChangeData}
 			<RoleChangeItem
 				type={roleChangeData.type}

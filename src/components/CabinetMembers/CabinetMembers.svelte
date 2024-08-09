@@ -31,11 +31,6 @@
 </script>
 
 <div class="py-[16px] md:py-[32px]">
-	<div class="flex items-center p-[16px]">
-		<GeneralIcon class="h-[32px] w-[32px]" />
-		<span class="fluid-heading-04 ml-[16px]">สมาชิกคณะรัฐมนตรี</span>
-	</div>
-	<div class="w-full border-b-[1px] border-solid border-gray-20" />
 	<div class="mt-[32px] flex flex-col items-center gap-[32px]">
 		<div class="flex flex-col items-center gap-[8px] md:gap-[16px]">
 			<p class="fluid-heading-03">นายกรัฐมนตรี</p>
