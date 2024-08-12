@@ -18,12 +18,12 @@ import type { Bill } from '$models/bill';
 import type { Party } from '$models/party';
 import type { PartyRoleHistory, Politician } from '$models/politician';
 import { getMemberGroup } from './members/[groupby]/groupby';
-import { json } from 'd3';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
 const MAX_LATEST_BILL = 10;
+const MAX_CHANGES = 5;
 
 export interface Summary {
 	totalMembers: number;
@@ -139,9 +139,18 @@ export async function load({ params }) {
 					highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 				}));
 
-	// TODO: filter bills proposed by cabinet member
+	const memberIds = mainMembers.map((member) => member.politician.id);
+
 	const latestBills: BillSummary[] | null = isCabinet
 		? (await fetchBills())
+				.filter(
+					(bill) =>
+						bill.proposedLedByPolitician &&
+						memberIds.includes(bill.proposedLedByPolitician.id) &&
+						bill.proposedOn.getTime() >= assembly.startedAt.getTime() &&
+						bill.proposedOn.getTime() <=
+							(assembly.endedAt ? assembly.endedAt.getTime() : new Date().getTime())
+				)
 				.slice(0, MAX_LATEST_BILL)
 				.map(({ id, proposedOn, nickname, status }) => ({
 					id,
@@ -201,7 +210,7 @@ export async function load({ params }) {
 				}
 			});
 		}
-		return changes.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 5);
+		return changes.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, MAX_CHANGES);
 	};
 
 	const changes = isCabinet ? getChanges() : null;
