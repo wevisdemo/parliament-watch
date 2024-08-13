@@ -22,6 +22,16 @@
 	let circleDiameter = outterRadius / 2 / lineAmounts.length;
 	let gap = 0;
 
+	let prevParties: PartySeat[] = [];
+	let prevLineAmounts: number[] = [];
+
+	const arraysAreEqual = (arr1: PartySeat[] | number[], arr2: PartySeat[] | number[]) => {
+		return (
+			arr1.length === arr2.length &&
+			arr1.every((value, index) => JSON.stringify(value) === JSON.stringify(arr2[index]))
+		);
+	};
+
 	const getIndexOfLine = (lineCals: LineCalculator[]) => {
 		const filledPercents = lineCals.map((lineCal) => lineCal.count / lineCal.total);
 		const minPercent = Math.min(...filledPercents);
@@ -109,6 +119,15 @@
 			window.removeEventListener('resize', redraw);
 		};
 	});
+
+	$: if (
+		component &&
+		(!arraysAreEqual(parties, prevParties) || !arraysAreEqual(lineAmounts, prevLineAmounts))
+	) {
+		prevParties = [...parties];
+		prevLineAmounts = [...lineAmounts];
+		redraw();
+	}
 </script>
 
 <div
