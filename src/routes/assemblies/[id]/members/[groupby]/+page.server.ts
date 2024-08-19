@@ -25,15 +25,24 @@ export type PoliticianSummaryGroupBy = PoliticianSummaryGroup[] | PoliticianSumm
 
 const checkIsDataHasSubGroup = (
 	groups: PoliticianSummaryGroupBy
-): groups is PoliticianSummarySubGroup[] => 'subgroups' in groups[0];
+): groups is PoliticianSummarySubGroup[] => {
+	return 'subgroups' in groups[0];
+};
 
 export async function load({ params }) {
 	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 	const members = getAssemblyMembers(assembly, await fetchPoliticians());
 	const isSenates = assembly.name === AssemblyName.Senates;
+	const isCabinet = assembly.name === AssemblyName.Cabinet;
 
 	if (Object.values(GroupByOption).includes(params.groupby as GroupByOption)) {
-		const groups = getMemberGroup(assembly, members, params.groupby as GroupByOption, isSenates);
+		const groups = getMemberGroup(
+			assembly,
+			members,
+			params.groupby as GroupByOption,
+			isSenates,
+			isCabinet
+		);
 
 		const isDataHasSubgroup = checkIsDataHasSubGroup(groups);
 
@@ -64,7 +73,8 @@ export async function load({ params }) {
 			availableAssemblies,
 			seo: createSeo({
 				title: `สมาชิก ${assembly.name} ${assembly.term}`
-			})
+			}),
+			isCabinet
 		};
 	} else {
 		error(404);

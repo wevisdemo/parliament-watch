@@ -19,7 +19,7 @@
 	import { GroupByOption } from '$models/assembly.js';
 
 	export let data;
-	$: ({ groups, groupByTabs, isDataHasSubgroup, availableAssemblies } = data);
+	$: ({ groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } = data);
 	$: currentPath = groupByTabs.find(({ isActive }) => isActive)?.path ?? '';
 
 	let showFilter = true;
@@ -98,6 +98,14 @@
 			return scroller.destroy;
 		}
 	});
+
+	const roleAbbreviated = (role: string) => {
+		return role
+			.replace('รัฐมนตรีว่าการ', 'รมต.')
+			.replace('รัฐมนตรีช่วยว่าการ', 'รมช.')
+			.replace('รัฐมนตรีประจำ', 'รมต.ประจำ')
+			.replace('รัฐมนตรีช่วยประจำ', 'รมช.ประจำ');
+	};
 </script>
 
 <Header {data} bind:searchQuery {availableAssemblies} />
@@ -122,7 +130,7 @@
 					/>
 				</div>
 			</div>
-			{#if currentPath === GroupByOption.Party}
+			{#if currentPath === GroupByOption.Party && !isCabinet}
 				<FormGroup legendText="ประเภท" noMargin>
 					<div class="flex items-center justify-between overflow-hidden">
 						<Checkbox labelText="แบ่งเขต" class="!m-0" bind:checked={isByDistrict} />
@@ -237,7 +245,12 @@
 								style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"
 							>
 								{#each members as { candidateType, ...member }, idx (member.id + idx)}
-									<PoliticianProfile {...member} />
+									<div class="heading-compact-01">
+										{#if isCabinet && member.assemblyRoleName}
+											{roleAbbreviated(member.assemblyRoleName)}
+										{/if}
+										<PoliticianProfile {...member} />
+									</div>
 								{/each}
 							</div>
 						</article>
@@ -259,7 +272,12 @@
 						style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"
 					>
 						{#each group.members as member, idx (member.id + idx)}
-							<PoliticianProfile {...member} />
+							<div class="heading-compact-01">
+								{#if isCabinet && member.assemblyRoleName}
+									{roleAbbreviated(member.assemblyRoleName)}
+								{/if}
+								<PoliticianProfile {...member} />
+							</div>
 						{/each}
 					</article>
 				</div>
