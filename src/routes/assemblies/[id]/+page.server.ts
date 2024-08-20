@@ -17,7 +17,7 @@ import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
 import type { Party } from '$models/party';
 import type { PartyRoleHistory, Politician } from '$models/politician';
-import { getMemberGroup } from './members/[groupby]/groupby';
+import { getMemberGroup, noParty } from './members/[groupby]/groupby';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
@@ -139,18 +139,10 @@ export async function load({ params }) {
 					highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 				}));
 
-	const memberIds = mainMembers.map((member) => member.politician.id);
-
 	const latestBills: BillSummary[] | null = isCabinet
 		? (await fetchBills())
-				.filter(
-					(bill) =>
-						bill.proposedLedByPolitician &&
-						memberIds.includes(bill.proposedLedByPolitician.id) &&
-						bill.proposedOn.getTime() >= assembly.startedAt.getTime() &&
-						bill.proposedOn.getTime() <=
-							(assembly.endedAt ? assembly.endedAt.getTime() : new Date().getTime())
-				)
+				.filter((bill) => bill.proposedByAssembly && bill.proposedByAssembly.id === assembly.id)
+				.sort((a, b) => b.proposedOn.getTime() - a.proposedOn.getTime())
 				.slice(0, MAX_LATEST_BILL)
 				.map(({ id, proposedOn, nickname, status }) => ({
 					id,
@@ -177,7 +169,7 @@ export async function load({ params }) {
 			.sort((a, z) => z.startedAt.getTime() - a.startedAt.getTime())
 			.at(-1);
 
-		return maybePartyRole?.party || { name: 'ไม่สังกัดพรรค', color: 'gray', logo: '' };
+		return maybePartyRole?.party || noParty;
 	}
 
 	const getChanges = (): RoleChange[] => {
@@ -192,7 +184,10 @@ export async function load({ params }) {
 					type: 'in',
 					role: role.role,
 					politician: {
-						...member,
+						avatar: member.avatar,
+						firstname: member.firstname,
+						lastname: member.lastname,
+						id: member.id,
 						party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
 					}
 				});
@@ -203,8 +198,11 @@ export async function load({ params }) {
 						type: 'out',
 						role: role.role,
 						politician: {
-							...member,
-							party: getPartyRoleAtDate(member.partyRoles, role.endedAt)
+							avatar: member.avatar,
+							firstname: member.firstname,
+							lastname: member.lastname,
+							id: member.id,
+							party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
 						}
 					});
 				}

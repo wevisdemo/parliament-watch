@@ -41,11 +41,7 @@
 			<RoleChangeItem
 				type={roleChangeData.type}
 				role={roleChangeData.role}
-				party={roleChangeData.politician.party}
-				avatar={roleChangeData.politician.avatar}
-				firstname={roleChangeData.politician.firstname}
-				lastname={roleChangeData.politician.lastname}
-				id={roleChangeData.politician.id}
+				{...roleChangeData.politician}
 			/>
 		{/each}
 	</div>
