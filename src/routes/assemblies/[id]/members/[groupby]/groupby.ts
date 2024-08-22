@@ -5,9 +5,10 @@ import dayjs from 'dayjs';
 
 const UNKNOWN_LABEL = 'ไม่พบข้อมูล';
 
-const noParty = {
+export const noParty = {
 	name: 'ไม่สังกัดพรรค',
-	logo: ''
+	logo: '',
+	color: 'gray'
 };
 
 export interface PoliticianGroup {
