@@ -109,6 +109,10 @@
 			window.removeEventListener('resize', redraw);
 		};
 	});
+
+	$: if (component && parties && lineAmounts) {
+		redraw();
+	}
 </script>
 
 <div
