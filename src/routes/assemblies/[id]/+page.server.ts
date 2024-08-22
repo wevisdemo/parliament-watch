@@ -16,13 +16,14 @@ import { createSeo } from '$lib/seo';
 import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
 import type { Party } from '$models/party';
-import type { Politician } from '$models/politician';
-import { getMemberGroup } from './members/[groupby]/groupby';
+import type { PartyRoleHistory, Politician } from '$models/politician';
+import { getMemberGroup, noParty } from './members/[groupby]/groupby';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
 const MAX_LATEST_BILL = 10;
+const MAX_CHANGES = 5;
 
 export interface Summary {
 	totalMembers: number;
@@ -138,9 +139,10 @@ export async function load({ params }) {
 					highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
 				}));
 
-	// TODO: filter bills proposed by cabinet member
 	const latestBills: BillSummary[] | null = isCabinet
 		? (await fetchBills())
+				.filter((bill) => bill.proposedByAssembly && bill.proposedByAssembly.id === assembly.id)
+				.sort((a, b) => b.proposedOn.getTime() - a.proposedOn.getTime())
 				.slice(0, MAX_LATEST_BILL)
 				.map(({ id, proposedOn, nickname, status }) => ({
 					id,
@@ -158,8 +160,58 @@ export async function load({ params }) {
 		})
 	);
 
-	// TODO: calculated real changes
-	const changes = isCabinet ? mockChanges : null;
+	function getPartyRoleAtDate(
+		partyRoles: Omit<PartyRoleHistory, 'politicianId'>[],
+		date: Date
+	): PartyRoleHistory['party'] {
+		const maybePartyRole = partyRoles
+			.filter(({ startedAt, endedAt }) => startedAt <= date && (!endedAt || date < endedAt))
+			.sort((a, z) => z.startedAt.getTime() - a.startedAt.getTime())
+			.at(-1);
+
+		return maybePartyRole?.party || noParty;
+	}
+
+	const getChanges = (): RoleChange[] => {
+		const changes: RoleChange[] = [];
+		for (const member of politicians) {
+			member.assemblyRoles.forEach((role) => {
+				if (role.assembly.name !== AssemblyName.Cabinet || role.assembly.id !== fullAssembly.id) {
+					return;
+				}
+				changes.push({
+					date: role.startedAt,
+					type: 'in',
+					role: role.role,
+					politician: {
+						avatar: member.avatar,
+						firstname: member.firstname,
+						lastname: member.lastname,
+						id: member.id,
+						party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
+					}
+				});
+
+				if (role.endedAt) {
+					changes.push({
+						date: role.endedAt,
+						type: 'out',
+						role: role.role,
+						politician: {
+							avatar: member.avatar,
+							firstname: member.firstname,
+							lastname: member.lastname,
+							id: member.id,
+							party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
+						}
+					});
+				}
+			});
+		}
+		return changes.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, MAX_CHANGES);
+	};
+
+	const changes = isCabinet ? getChanges() : null;
 
 	return {
 		availableAssemblies,
@@ -203,70 +255,3 @@ function parseMainMember(member: ReturnType<typeof getAssemblyMembers>[number]):
 		description: assemblyRole?.appointmentMethod || null
 	};
 }
-
-const mockChanges: RoleChange[] = [
-	{
-		date: new Date('2024-05-27'),
-		type: 'in',
-		politician: {
-			id: 'มาริษ-เสงี่ยมพงษ์',
-			firstname: 'มาริษ',
-			lastname: 'เสงี่ยมพงษ์',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
-	},
-	{
-		date: new Date('2024-05-27'),
-		type: 'out',
-		politician: {
-			id: 'ปานปรีย์-พหิทธานุกร',
-			firstname: 'ปานปรีย์',
-			lastname: 'พหิทธานุกร',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รัฐมนตรีว่าการกระทรวงต่างประเทศ'
-	},
-	{
-		date: new Date('2024-05-27'),
-		type: 'in',
-		politician: {
-			id: 'สุริยะ-จึงรุ่งเรืองกิจ',
-			firstname: 'สุริยะ',
-			lastname: 'จึงรุ่งเรืองกิจ',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รองนายกรัฐมนตรี'
-	},
-	{
-		date: new Date('2024-05-20'),
-		type: 'out',
-		politician: {
-			id: 'ปานปรีย์-พหิทธานุกร',
-			firstname: 'ปานปรีย์',
-			lastname: 'พหิทธานุกร',
-			avatar: 'https://placehold.co/128x128',
-			party: {
-				name: 'เพื่อไทย',
-				logo: 'https://placehold.co/64x64/white/blue?text=PT',
-				color: 'blue'
-			}
-		},
-		role: 'รองนายกรัฐมนตรี'
-	}
-];
