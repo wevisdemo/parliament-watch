@@ -31,7 +31,7 @@
 	export let ref = null;
 
 	/** Style the tooltip */
-	export let style = '';
+	export let tooltipStyle = '';
 
 	export let showAllTime = false;
 
@@ -86,7 +86,7 @@
 	>
 		<slot />
 	</button>
-	<div role="tooltip" {id} class="bx--assistive-text" {style}>
+	<div role="tooltip" {id} class="bx--assistive-text" style={tooltipStyle}>
 		<slot name="tooltip">{tooltipText}</slot>
 	</div>
 </span>

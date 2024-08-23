@@ -64,7 +64,7 @@
 							direction="top"
 							showAllTime={isSelectedDate}
 							open={isSelectedDate}
-							style={isSelectedDate ? '' : 'background-color: white;'}
+							tooltipStyle={isSelectedDate ? '' : 'background-color: white;'}
 						>
 							<div class="h-[65px]">
 								<TimeItem {day} {selectedDate} {max} {handleSelectDate} />
