@@ -26,6 +26,7 @@ export type AssemblyMember = ReturnType<typeof getAssemblyMembers>[number];
 
 export interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isLarge'> {
 	candidateType?: 'แบ่งเขต' | 'บัญชีรายชื่อ';
+	assemblyRoleName?: string;
 }
 
 export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary {
@@ -42,7 +43,8 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 			? 'บัญชีรายชื่อ'
 			: assemblyRole?.province && assemblyRole.districtNumber
 				? 'แบ่งเขต'
-				: undefined
+				: undefined,
+		assemblyRoleName: assemblyRole?.role
 	};
 }
 

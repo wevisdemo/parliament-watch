@@ -28,18 +28,21 @@ export function getMemberGroup(
 	assembly: Assembly,
 	members: AssemblyMember[],
 	groupby: GroupByOption,
-	isSenates = false
+	isSenates = false,
+	isCabinet = false
 ): PoliticianGroupBy {
 	switch (groupby) {
 		case GroupByOption.Party: {
-			return groupMembersBy(members, ({ partyRole }) =>
-				assembly.oppositionParties?.some((op) => op.name === partyRole?.party.name)
-					? AssemblyPartyGroup.Opposition
-					: AssemblyPartyGroup.Government
-			).map(([side, membersBySide]) => ({
-				name: side,
-				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-			}));
+			return isCabinet
+				? createSubgroupByPartyOrAppointmentMethod(members, isSenates)
+				: groupMembersBy(members, ({ partyRole }) =>
+						assembly.oppositionParties?.some((op) => op.name === partyRole?.party.name)
+							? AssemblyPartyGroup.Opposition
+							: AssemblyPartyGroup.Government
+					).map(([side, membersBySide]) => ({
+						name: side,
+						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+					}));
 		}
 
 		case GroupByOption.Province: {
@@ -64,14 +67,22 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Sex: {
-			return groupMembersBy(members, ({ sex }) => sex).map(([side, membersBySide]) => ({
-				name: side,
-				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-			}));
+			const membersGroupBySex = groupMembersBy(members, ({ sex }) => sex);
+			return isCabinet
+				? membersGroupBySex.map(([side, membersBySide]) => ({
+						name: side,
+						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+							(subGroup) => subGroup.members
+						)
+					}))
+				: membersGroupBySex.map(([side, membersBySide]) => ({
+						name: side,
+						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+					}));
 		}
 
 		case GroupByOption.Age: {
-			return groupMembersBy(members, ({ birthdate }) => {
+			const membersGroupByAge = groupMembersBy(members, ({ birthdate }) => {
 				if (!birthdate) return UNKNOWN_LABEL;
 
 				const birthDate = dayjs(birthdate);
@@ -81,24 +92,40 @@ export function getMemberGroup(
 				if (age > 55) return '56-70 ปี';
 				if (age > 40) return '41-55 ปี';
 				return '25-40 ปี';
-			}).map(([side, membersBySide]) => ({
-				name: side,
-				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-			}));
+			});
+			return isCabinet
+				? membersGroupByAge.map(([side, membersBySide]) => ({
+						name: side,
+						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+							(subGroup) => subGroup.members
+						)
+					}))
+				: membersGroupByAge.map(([side, membersBySide]) => ({
+						name: side,
+						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+					}));
 		}
 
 		case GroupByOption.Education: {
-			return groupMembersBy(members, ({ educations }) => {
+			const membersGroupByEdu = groupMembersBy(members, ({ educations }) => {
 				if (!educations.length) return UNKNOWN_LABEL;
 				if (educations.some((e) => e.includes('ปริญญาเอก'))) return 'ปริญญาเอก';
 				if (educations.some((e) => e.includes('ปริญญาโท'))) return 'ปริญญาโท';
 				if (educations.some((e) => e.includes('ปริญญาตรี'))) return 'ปริญญาตรี';
 				if (educations.some((e) => e.includes('ทหาร'))) return 'สถาบันทหาร';
 				return 'ต่ำกว่าปริญญาตรี';
-			}).map(([side, membersBySide]) => ({
-				name: side,
-				subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-			}));
+			});
+			return isCabinet
+				? membersGroupByEdu.map(([side, membersBySide]) => ({
+						name: side,
+						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+							(subGroup) => subGroup.members
+						)
+					}))
+				: membersGroupByEdu.map(([side, membersBySide]) => ({
+						name: side,
+						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+					}));
 		}
 
 		// TODO: Asset is not in phase 1
