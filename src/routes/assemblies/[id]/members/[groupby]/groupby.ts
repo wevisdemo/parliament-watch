@@ -70,9 +70,9 @@ export function getMemberGroup(
 			return isCabinet
 				? membersGroupBySex.map(([side, membersBySide]) => ({
 						name: side,
-						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-							.map((subGroup) => subGroup.members)
-							.flat()
+						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+							(subGroup) => subGroup.members
+						)
 					}))
 				: membersGroupBySex.map(([side, membersBySide]) => ({
 						name: side,
@@ -95,9 +95,9 @@ export function getMemberGroup(
 			return isCabinet
 				? membersGroupByAge.map(([side, membersBySide]) => ({
 						name: side,
-						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-							.map((subGroup) => subGroup.members)
-							.flat()
+						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+							(subGroup) => subGroup.members
+						)
 					}))
 				: membersGroupByAge.map(([side, membersBySide]) => ({
 						name: side,
@@ -117,9 +117,9 @@ export function getMemberGroup(
 			return isCabinet
 				? membersGroupByEdu.map(([side, membersBySide]) => ({
 						name: side,
-						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-							.map((subGroup) => subGroup.members)
-							.flat()
+						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+							(subGroup) => subGroup.members
+						)
 					}))
 				: membersGroupByEdu.map(([side, membersBySide]) => ({
 						name: side,
