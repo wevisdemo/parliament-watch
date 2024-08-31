@@ -15,7 +15,7 @@
 {#if subtitle === '' && title === ''}
 	<div
 		class={twMerge('h-[8px] w-full bg-[--color]', size === 'l' && 'md:h-[16px]', className)}
-		style:--color={color}
+		style:--color={color || '#8D8D8D'}
 		{style}
 		aria-describedby="idTooltipTarget"
 	/>
@@ -27,7 +27,7 @@
 	<Tooltip class={twMerge('w-full', className)} {style}>
 		<div
 			class={twMerge('h-[8px] w-full bg-[--color]', size === 'l' && 'md:h-[16px]')}
-			style:--color={color}
+			style:--color={color || '#8D8D8D'}
 			aria-describedby="idTooltipTarget"
 		/>
 		<p slot="tooltip" class="flex flex-col items-center justify-center">
