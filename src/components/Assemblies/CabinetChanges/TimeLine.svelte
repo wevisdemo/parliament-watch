@@ -18,7 +18,7 @@
 	$: dateData = getDateData(timeLineData, startedAt, endedAt);
 
 	let timelineContainer: HTMLDivElement;
-	let prevstartedAt: Date | null;
+	let prevStartedAt: Date | null;
 
 	const handleNext = () => {
 		timelineContainer.scrollBy({ left: -timelineContainer.clientWidth, behavior: 'smooth' });
@@ -39,9 +39,9 @@
 	});
 
 	afterUpdate(() => {
-		if (startedAt !== prevstartedAt) {
+		if (startedAt !== prevStartedAt) {
 			scrollToEnd();
-			prevstartedAt = startedAt;
+			prevStartedAt = startedAt;
 		}
 	});
 </script>
@@ -78,7 +78,7 @@
 							</div>
 						</div>
 					{/if}
-					<div class="sticky left-0 right-0 {isSelectedDate ? 'z-[11]' : 'z-[12]'}">
+					<div class={isSelectedDate ? 'sticky left-0 right-0 z-[2]' : ''}>
 						<Tooltip
 							direction="top"
 							showAllTime={isSelectedDate}
