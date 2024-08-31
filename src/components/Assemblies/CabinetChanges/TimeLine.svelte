@@ -5,7 +5,7 @@
 	import Tooltip from '../Tooltip.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
 	import { shortMonthNames } from '$lib/date-parser';
-	import { afterUpdate, onMount } from 'svelte';
+	import { afterUpdate, onMount, tick } from 'svelte';
 
 	export let timeLineData: TimeLine[];
 	export let startedAt: Date | null;
@@ -19,6 +19,7 @@
 
 	let timelineContainer: HTMLDivElement;
 	let prevStartedAt: Date | null;
+	let selectedDateElement: HTMLElement;
 
 	const handleNext = () => {
 		timelineContainer.scrollBy({ left: -timelineContainer.clientWidth, behavior: 'smooth' });
@@ -28,19 +29,20 @@
 		timelineContainer.scrollBy({ left: timelineContainer.clientWidth, behavior: 'smooth' });
 	};
 
-	const scrollToEnd = () => {
-		if (timelineContainer) {
-			timelineContainer.scrollTo({ left: timelineContainer.scrollWidth, behavior: 'smooth' });
+	const scrollToSelectedDate = async () => {
+		await tick();
+		if (selectedDateElement) {
+			selectedDateElement.scrollIntoView({ behavior: 'smooth', inline: 'center' });
 		}
 	};
 
 	onMount(() => {
-		scrollToEnd();
+		scrollToSelectedDate();
 	});
 
 	afterUpdate(() => {
 		if (startedAt !== prevStartedAt) {
-			scrollToEnd();
+			scrollToSelectedDate();
 			prevStartedAt = startedAt;
 		}
 	});
@@ -77,6 +79,9 @@
 								<p class="label-01">{day.event}</p>
 							</div>
 						</div>
+					{/if}
+					{#if isSelectedDate}
+						<div bind:this={selectedDateElement} />
 					{/if}
 					<div class={isSelectedDate ? 'sticky left-0 right-0 z-[2]' : ''}>
 						<Tooltip
