@@ -5,6 +5,7 @@
 	import Tooltip from '../Tooltip.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
 	import { shortMonthNames } from '$lib/date-parser';
+	import { afterUpdate, onMount } from 'svelte';
 
 	export let timeLineData: TimeLine[];
 	export let startedAt: Date | null;
@@ -17,6 +18,7 @@
 	$: dateData = getDateData(timeLineData, startedAt, endedAt);
 
 	let timelineContainer: HTMLDivElement;
+	let prevstartedAt: Date | null;
 
 	const handleNext = () => {
 		timelineContainer.scrollBy({ left: -timelineContainer.clientWidth, behavior: 'smooth' });
@@ -25,6 +27,23 @@
 	const handlePrev = () => {
 		timelineContainer.scrollBy({ left: timelineContainer.clientWidth, behavior: 'smooth' });
 	};
+
+	const scrollToEnd = () => {
+		if (timelineContainer) {
+			timelineContainer.scrollTo({ left: timelineContainer.scrollWidth, behavior: 'smooth' });
+		}
+	};
+
+	onMount(() => {
+		scrollToEnd();
+	});
+
+	afterUpdate(() => {
+		if (startedAt !== prevstartedAt) {
+			scrollToEnd();
+			prevstartedAt = startedAt;
+		}
+	});
 </script>
 
 <div class="relative">

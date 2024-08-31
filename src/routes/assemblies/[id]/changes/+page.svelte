@@ -21,7 +21,7 @@
 
 	$: ({ assembly, availableAssemblies, assemblyRoles, cabinetMembers, changes } = data);
 
-	$: selectedDate = new Date();
+	$: selectedDate = assembly.endedAt || new Date();
 	const handleSelectDate = (date: Date) => {
 		selectedDate = date;
 	};
