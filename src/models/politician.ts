@@ -10,7 +10,7 @@ export const politicianTable = Table('Politicians', {
 	prefix: Column.OptionalString(),
 	firstname: Column.String(),
 	lastname: Column.String(),
-	sex: Column.String(),
+	sex: Column.OptionalString(),
 	birthdate: Column.OptionalDate(),
 	educations: Column.OptionalString(),
 	previousOccupations: Column.OptionalString(),

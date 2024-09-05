@@ -67,7 +67,7 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Sex: {
-			const membersGroupBySex = groupMembersBy(members, ({ sex }) => sex);
+			const membersGroupBySex = groupMembersBy(members, ({ sex }) => sex || UNKNOWN_LABEL);
 			return isCabinet
 				? membersGroupBySex.map(([side, membersBySide]) => ({
 						name: side,
