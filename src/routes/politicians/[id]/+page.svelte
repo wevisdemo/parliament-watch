@@ -119,8 +119,10 @@
 				<General slot="icon" size="32" />
 				<div>
 					<p>
-						<span class="heading-02">เพศ</span>
-						{politician.sex}
+						{#if politician.sex}
+							<span class="heading-02">เพศ</span>
+							{politician.sex}
+						{/if}
 						{#if politician.birthdate}
 							{' '}<span class="heading-02">วันเกิด</span>
 							{' '}{politician.birthdate.toLocaleDateString('th-TH', { dateStyle: 'long' })} ({dayjs().diff(
