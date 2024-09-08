@@ -35,6 +35,31 @@ export const inProgressPromise: Promise = {
 			description: 'เอกสารโดยพรรคเพื่อไทย'
 		}
 	],
+	clarificationLogs: [
+		{
+			date: new Date('2024-08-14'),
+			title: 'ทีมงาน WeVis ส่งจดหมายเปิดผนึกขอคำชี้แจงไปที่พรรคเพื่อไทย info@ptp.or.th'
+		},
+		{
+			date: new Date('2024-08-18'),
+			title: 'ทีมงาน WeVis ส่งจดหมายติดตามคำชี้แจงไปที่พรรคเพื่อไทย info@ptp.or.th',
+			answer: {
+				date: new Date('2024-08-20'),
+				content:
+					'Lorem ipsum dolor sit amet consectetur. Tincidunt enim vestibulum nullam auctor volutpat non eget adipiscing. Tortor netus volutpat quam nunc faucibus sed. Sit ornare quam ultricies quisque diam velit dignissim dui integer. Nisi curabitur in mauris id habitasse consequat nec in mi.'
+			}
+		},
+		{
+			date: new Date('2024-08-21'),
+			title:
+				'ทีมงาน WeVis เห็นว่าคำสัญญานี้ยังคงคลุมเครือ แม้ว่าได้พิจารณาร่วมกับคำชี้แจ้งที่ได้รับแล้ว ในประเด็นต่อไปนี้ xxx yyy zzz จึงได้ดำเนินการขอคำชี้แจงเพิ่มเติม',
+			answer: {
+				date: new Date('2024-08-22'),
+				content:
+					'Lorem ipsum dolor sit amet consectetur. Tincidunt enim vestibulum nullam auctor volutpat non eget adipiscing. Tortor netus volutpat quam nunc faucibus sed. Sit ornare quam ultricies quisque diam velit dignissim dui integer. Nisi curabitur in mauris id habitasse consequat nec in mi.'
+			}
+		}
+	],
 	progresses: [
 		{
 			id: '1-1',
@@ -257,6 +282,70 @@ export const unhonoredPromise: Promise = {
 		{
 			label: 'นโยบายแก้รัฐธรรมนูญ - พรรคเพื่อไทย',
 			url: 'https://ptp.or.th/%E0%B8%99%E0%B9%82%E0%B8%A2%E0%B8%9A%E0%B8%B2%E0%B8%A2%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%81%E0%B8%9E%E0%B8%A3%E0%B8%A3%E0%B8%84%E0%B9%80%E0%B8%9E%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B9%84%E0%B8%97%E0%B8%A2/political-policy',
+			description: 'เว็บไซตปัจจุบัน'
+		}
+	]
+};
+
+export const clarifyingPromise: Promise = {
+	id: '5',
+	party: pheuThaiParty,
+	statements: [
+		'จัดทำ “รัฐธรรมนูญฉบับประชาชน” โดยคงรูปแบบการปกครองระบอบประชาธิปไตยอันมีพระมหากษัตริย์เป็นประมุข โดยสภาร่างรัฐธรรมนูญ (สสร.) ที่มาจากการเลือกตั้งของประชาชนและผ่านขั้นตอนการออกเสียงลงประชามติโดยประชาชน'
+	],
+	coverImageUrl:
+		'https://ptp.or.th/wp-content/uploads/2023/03/%E0%B9%81%E0%B8%81%E0%B9%89%E0%B8%A3%E0%B8%B1%E0%B8%90%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%99%E0%B8%B9%E0%B8%8D-01.jpg',
+	keywords: ['การปกครอง', 'รัฐธรรมนูญ', 'สสร'],
+	categories: ['การเมือง'],
+	status: PromiseStatus.clarifying,
+	clarificationLogs: [
+		{
+			date: new Date('2024-08-14'),
+			title: 'ทีมงาน WeVis ส่งจดหมายเปิดผนึกขอคำชี้แจงไปที่พรรคเพื่อไทย info@ptp.or.th'
+		},
+		{
+			date: new Date('2024-08-18'),
+			title: 'ทีมงาน WeVis ส่งจดหมายติดตามคำชี้แจงไปที่พรรคเพื่อไทย info@ptp.or.th',
+			answer: {
+				date: new Date('2024-08-20'),
+				content:
+					'Lorem ipsum dolor sit amet consectetur. Tincidunt enim vestibulum nullam auctor volutpat non eget adipiscing. Tortor netus volutpat quam nunc faucibus sed. Sit ornare quam ultricies quisque diam velit dignissim dui integer. Nisi curabitur in mauris id habitasse consequat nec in mi.'
+			}
+		},
+		{
+			date: new Date('2024-08-21'),
+			title:
+				'ทีมงาน WeVis เห็นว่าคำสัญญานี้ยังคงคลุมเครือ แม้ว่าได้พิจารณาร่วมกับคำชี้แจ้งที่ได้รับแล้ว ในประเด็นต่อไปนี้ xxx yyy zzz จึงได้ดำเนินการขอคำชี้แจงเพิ่มเติม'
+		}
+	],
+	progresses: [
+		{
+			id: '5-1',
+			type: 'indirect',
+			date: new Date('2023-08-12'),
+			title: 'จัดตั้งรัฐบาลสำเร็จ',
+			reference: {
+				label: 'springnews.co.th',
+				url: 'https://springnews.co.th',
+				description: 'เว็บไซต์ปัจจุบัน'
+			}
+		},
+		{
+			id: '5-2',
+			type: 'indirect',
+			date: new Date('2024-04-28'),
+			title: 'ปรับคณะรัฐมนตรีใหม่',
+			reference: {
+				label: 'springnews.co.th',
+				url: 'https://springnews.co.th',
+				description: 'เว็บไซต์ปัจจุบัน'
+			}
+		}
+	],
+	references: [
+		{
+			label: 'นโยบายแก้รัฐธรรมนูญ - พรรคเพื่อไทย',
+			url: 'https://ptp.or.th/%e0%b8%99%e0%b9%82%e0%b8%a2%e0%b8%9a%e0%b8%b2%e0%b8%a2%e0%b8%ab%e0%b8%a5%e0%b8%b1%e0%b8%81%e0%b8%9e%e0%b8%a3%e0%b8%a3%e0%b8%84%e0%b9%80%e0%b8%9e%e0%b8%b7%e0%b9%88%e0%b8%ad%e0%b9%84%e0%b8%97%e0%b8%a2/political-policy',
 			description: 'เว็บไซตปัจจุบัน'
 		}
 	]
