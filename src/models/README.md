@@ -14,6 +14,7 @@ erDiagram
   BillEvent }o--o| Voting: "can refer to"
   Party ||--o{ Promise: "makes"
   Promise ||--|{ PromiseProgress: "are tracked with"
+  Promise ||--|{ PromiseClarificationLog: "can have"
   PromiseProgress }o..o| BillEvent: "can refer to"
 
   Politician {
@@ -124,6 +125,14 @@ erDiagram
     string status "notStarted | inProgress | fulfilled | unhonored"
   }
 
+  PromiseClarificationLog {
+    number id PK
+    number promiseId FK
+    Date date
+    string title
+    Answer answer "date: Date, content: string"
+  }
+
   PromiseProgress {
     number id PK
     number promiseId FK
@@ -146,4 +155,5 @@ erDiagram
 - **Voting** = การลงมติ
 - **Vote** = การลงคะแนน
 - **Promise** = คำสัญญา
+- **PromiseClarificationLog** = บันทึกคำชี้แจงคำสัญญา
 - **PromiseProgress** = ความคืบหน้าคำสัญญา
