@@ -6,26 +6,59 @@
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
+	import { BillProposerType } from '$models/bill.js';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
-
 	let cmpDataPage: DataPage;
 
 	export let data;
 
 	$: ({ filterOptions, bills } = data);
 
+	interface Choice {
+		id: string;
+		text: string;
+	}
+
 	$: comboboxFilterList = [
 		{
 			key: 'filterProposerName',
 			legend: 'ชื่อผู้เสนอ',
 			placeholder: 'เลือกชื่อผู้เสนอ',
-			choices: filterOptions.proposerNames.map((name) => ({
-				id: name,
-				text: name
-			}))
+			choices: getChoicesComboboxFilterList()
 		}
 	];
+
+	$: getChoicesComboboxFilterList = () => {
+		let choices: Choice[] = [];
+
+		if (selectedCheckboxValue && selectedCheckboxValue.filterProposerType) {
+			const { filterProposerType } = selectedCheckboxValue;
+
+			if (filterProposerType.includes(BillProposerType.Assembly)) {
+				choices.push(
+					...filterOptions.proposerCabinet.map((cabinet) => ({
+						id: cabinet.term.toString(),
+						text: cabinet.name
+					}))
+				);
+			}
+
+			if (
+				filterProposerType.includes(BillProposerType.Politician) ||
+				filterProposerType.includes(BillProposerType.People)
+			) {
+				choices.push(
+					...filterOptions.proposerNames.map((name) => ({
+						id: name,
+						text: name
+					}))
+				);
+			}
+		}
+
+		return choices;
+	};
 
 	$: checkboxFilterList = [
 		{
@@ -71,9 +104,11 @@
 					.filter((bill) => {
 						if (
 							'filterProposerName' in selectedComboboxValue &&
-							![bill.proposedLedByPeopleName, bill.proposedLedByPoliticianName].includes(
-								selectedComboboxValue.filterProposerName as string | undefined
-							)
+							![
+								bill.proposedLedByPeopleName,
+								bill.proposedLedByPoliticianName,
+								bill.proposedByAssembly?.term.toString()
+							].includes(selectedComboboxValue.filterProposerName as string | undefined)
 						)
 							return;
 

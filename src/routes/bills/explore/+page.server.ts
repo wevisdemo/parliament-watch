@@ -13,6 +13,7 @@ interface FilterOptions {
 	categories: string[];
 	billProposerType: BillProposerType[];
 	proposerNames: string[];
+	proposerCabinet: proposerCabinetType[];
 }
 
 interface BillSummary
@@ -25,12 +26,18 @@ interface BillSummary
 		| 'categories'
 		| 'status'
 		| 'proposerType'
+		| 'proposedByAssembly'
 		| 'proposedLedByPolitician'
 		| 'proposedByPeople'
 	> {
 	purposedAtMpAssemblyId: string;
 	proposedLedByPoliticianName?: string;
 	proposedLedByPeopleName?: string;
+}
+
+interface proposerCabinetType {
+	name: string;
+	term: number;
 }
 
 export async function load() {
@@ -74,6 +81,16 @@ export async function load() {
 		)
 	].sort((a, z) => a.localeCompare(z));
 
+	const proposerCabinet = bills
+		.filter(
+			(bill) => bill.proposerType === BillProposerType.Assembly && bill.purposedAtMpAssemblyId
+		)
+		.map((bill) => ({
+			name: `คณะรัฐมนตรี ชุดที่ ${bill.proposedByAssembly!.term} (${bill.proposedByAssembly!.startedAt.getFullYear() + 543})`,
+			term: bill.proposedByAssembly!.term
+		}))
+		.filter((cabinet, index, self) => index === self.findIndex((t) => t.term === cabinet.term));
+
 	const categories = [...new Set(bills.flatMap((bill) => bill.categories))].sort((a, z) =>
 		a.localeCompare(z)
 	);
@@ -105,7 +122,8 @@ export async function load() {
 		status: billStatuses,
 		categories,
 		billProposerType: billProposerTypes,
-		proposerNames
+		proposerNames,
+		proposerCabinet
 	};
 
 	return {
