@@ -6,7 +6,6 @@
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
-	import { BillProposerType } from '$models/bill.js';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
 	let cmpDataPage: DataPage;
@@ -18,6 +17,7 @@
 	interface Choice {
 		id: string;
 		text: string;
+		disabled: boolean;
 	}
 
 	$: comboboxFilterList = [
@@ -25,39 +25,29 @@
 			key: 'filterProposerName',
 			legend: 'ชื่อผู้เสนอ',
 			placeholder: 'เลือกชื่อผู้เสนอ',
-			choices: getChoicesComboboxFilterList()
+			choices: getProposerName()
 		}
 	];
 
-	$: getChoicesComboboxFilterList = () => {
-		let choices: Choice[] = [];
+	$: getProposerName = (): Choice[] => {
+		const peopleOptions = filterOptions.proposerNames.map((name) => ({
+			id: name,
+			text: name,
+			disabled: false
+		}));
 
-		if (selectedCheckboxValue && selectedCheckboxValue.filterProposerType) {
-			const { filterProposerType } = selectedCheckboxValue;
+		const cabinetOptions = filterOptions.proposerCabinet.map((cabinet) => ({
+			id: cabinet.id,
+			text: cabinet.name,
+			disabled: false
+		}));
 
-			if (filterProposerType.includes(BillProposerType.Assembly)) {
-				choices.push(
-					...filterOptions.proposerCabinet.map((cabinet) => ({
-						id: cabinet.term.toString(),
-						text: cabinet.name
-					}))
-				);
-			}
-
-			if (
-				filterProposerType.includes(BillProposerType.Politician) ||
-				filterProposerType.includes(BillProposerType.People)
-			) {
-				choices.push(
-					...filterOptions.proposerNames.map((name) => ({
-						id: name,
-						text: name
-					}))
-				);
-			}
-		}
-
-		return choices;
+		return [
+			{ id: 'section2', text: 'บุคคล', disabled: true },
+			...peopleOptions,
+			{ id: 'section1', text: 'คณะรัฐมนตรี', disabled: true },
+			...cabinetOptions
+		];
 	};
 
 	$: checkboxFilterList = [
@@ -107,7 +97,7 @@
 							![
 								bill.proposedLedByPeopleName,
 								bill.proposedLedByPoliticianName,
-								bill.proposedByAssembly?.term.toString()
+								bill.proposedByAssembly?.id
 							].includes(selectedComboboxValue.filterProposerName as string | undefined)
 						)
 							return;

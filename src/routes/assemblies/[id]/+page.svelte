@@ -141,7 +141,7 @@
 			</div>
 			<LatestBills {latestBills} />
 			<Button
-				href="/bills/explore?proposertype=คณะรัฐมนตรี"
+				href="/bills/explore?proposername={assembly.id}"
 				kind="secondary"
 				icon={ArrowRight}
 				class="w-full max-w-none"

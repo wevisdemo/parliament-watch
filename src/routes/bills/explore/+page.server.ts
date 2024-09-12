@@ -37,7 +37,7 @@ interface BillSummary
 
 interface proposerCabinetType {
 	name: string;
-	term: number;
+	id: string;
 }
 
 export async function load() {
@@ -87,9 +87,9 @@ export async function load() {
 		)
 		.map((bill) => ({
 			name: `คณะรัฐมนตรี ชุดที่ ${bill.proposedByAssembly!.term} (${bill.proposedByAssembly!.startedAt.getFullYear() + 543})`,
-			term: bill.proposedByAssembly!.term
+			id: bill.proposedByAssembly!.id
 		}))
-		.filter((cabinet, index, self) => index === self.findIndex((t) => t.term === cabinet.term));
+		.filter((cabinet, index, self) => index === self.findIndex((t) => t.id === cabinet.id));
 
 	const categories = [...new Set(bills.flatMap((bill) => bill.categories))].sort((a, z) =>
 		a.localeCompare(z)
