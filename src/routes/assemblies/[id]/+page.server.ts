@@ -69,7 +69,7 @@ export async function load({ params }) {
 	const activeMembers = getAssemblyMembers(fullAssembly, politicians).filter(
 		({ assemblyRole }) =>
 			!assemblyRole?.endedAt ||
-			(assembly.endedAt && dayjs(assembly.endedAt).isSame(assemblyRole.endedAt))
+			(assembly.endedAt && !dayjs(assembly.endedAt).isAfter(assemblyRole.endedAt))
 	);
 
 	const mainMembers = isCabinet
