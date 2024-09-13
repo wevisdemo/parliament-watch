@@ -22,7 +22,7 @@
 	export let showStatus = true;
 	export let showRemark = true;
 
-	$: isActive = assembly.endedAt === undefined;
+	$: isActive = !assembly.endedAt;
 	$: startedAtThaiFormat = new Date(assembly.startedAt).toLocaleDateString('th-TH', {
 		day: 'numeric',
 		month: 'short',
