@@ -13,6 +13,7 @@
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
+	import NavigationTab from '$components/Assemblies/NavigationTab.svelte';
 
 	export let data;
 
@@ -26,19 +27,6 @@
 		latestVotes,
 		latestBills
 	} = data);
-
-	let selector = 'summary';
-
-	const onClickTab = (
-		tab: 'summary' | 'members' | 'latest-votes' | 'role-change' | 'latest-bills'
-	) => {
-		const el = document.getElementById(tab);
-		selector = tab;
-		if (!el) return;
-		el.scrollIntoView({
-			behavior: 'smooth'
-		});
-	};
 </script>
 
 <div class="px-[16px] md:px-[64px]">
@@ -54,57 +42,42 @@
 	</Breadcrumb>
 	<Header {assembly} {availableAssemblies} />
 
-	<div class="flex w-full">
-		<button
-			class="tab {selector === 'summary' ? 'tab-active' : 'tab-inactice'}"
-			on:click={() => onClickTab('summary')}
-		>
-			ภาพรวม
-		</button>
-		<button
-			class="tab {selector === 'members' ? 'tab-active' : 'tab-inactice'}"
-			on:click={() => onClickTab('members')}
-		>
-			สมาชิก
-		</button>
-		<button
-			class="tab {selector === 'role-change' ? 'tab-active' : 'tab-inactice'}"
-			on:click={() => onClickTab('role-change')}
-		>
-			การปรับคณะรัฐมนตรี
-		</button>
-		<button
-			class="tab {selector === 'latest-bills' ? 'tab-active' : 'tab-inactice'}"
-			on:click={() => onClickTab('latest-bills')}
-		>
-			การเสนอร่างกฎหมาย
-		</button>
-	</div>
-	<section id="summary">
-		<Summary
-			assemblyId={assembly.id}
-			{summary}
-			houseLevel={assembly.name === AssemblyName.Representatives
-				? 'lower'
-				: assembly.name === AssemblyName.Cabinet
-					? 'cabinet'
-					: 'upper'}
-		/>
-	</section>
-	<section id="members">
-		{#if isCabinet}
-			<div class="flex items-center p-[16px]">
-				<GeneralIcon class="h-[32px] w-[32px]" />
-				<span class="fluid-heading-04 ml-[16px]">สมาชิกคณะรัฐมนตรี</span>
-			</div>
-			<div class="w-full border-b-[1px] border-solid border-gray-20" />
-			<CabinetMembers members={mainMembers} />
-		{/if}
-		{#if !isCabinet}
-			<MainMembers members={mainMembers} assemblyId={assembly.id} />
-		{/if}
-	</section>
+	<NavigationTab
+		tabs={[
+			{ id: 'summary', label: 'ภาพรวม', show: summary.totalMembers },
+			{ id: 'members', label: 'สมาชิก', show: summary.totalMembers },
+			{ id: 'role-change', label: 'การปรับคณะรัฐมนตรี', show: changes?.length },
+			{ id: 'latest-bills', label: 'การเสนอร่างกฎหมาย', show: latestBills?.length },
+			{ id: 'latest-votes', label: 'ผลการลงมติล่าสุด', show: latestVotes?.length }
+		]}
+	/>
 
+	{#if summary.totalMembers}
+		<section id="summary">
+			<Summary
+				assemblyId={assembly.id}
+				{summary}
+				houseLevel={assembly.name === AssemblyName.Representatives
+					? 'lower'
+					: assembly.name === AssemblyName.Cabinet
+						? 'cabinet'
+						: 'upper'}
+			/>
+		</section>
+		<section id="members">
+			{#if isCabinet}
+				<div class="flex items-center p-[16px]">
+					<GeneralIcon class="h-[32px] w-[32px]" />
+					<span class="fluid-heading-04 ml-[16px]">สมาชิก</span>
+				</div>
+				<div class="w-full border-b-[1px] border-solid border-gray-20" />
+				<CabinetMembers members={mainMembers} />
+			{/if}
+			{#if !isCabinet}
+				<MainMembers members={mainMembers} assemblyId={assembly.id} />
+			{/if}
+		</section>
+	{/if}
 	{#if changes}
 		<section id="role-change" class="py-8">
 			<div class="flex items-center gap-4 py-4">
@@ -125,7 +98,7 @@
 			</Button>
 		</section>
 	{/if}
-	{#if latestBills}
+	{#if latestBills?.length}
 		<section id="latest-bills" class="py-8">
 			<div class="flex flex-col items-start md:flex-row md:items-center md:justify-between">
 				<div class="flex items-center gap-4 py-4">
@@ -151,23 +124,9 @@
 		</section>
 	{/if}
 
-	{#if latestVotes}
+	{#if latestVotes?.length}
 		<section id="latest-votes">
 			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
 		</section>
 	{/if}
 </div>
-
-<style lang="postcss">
-	.tab {
-		@apply w-full border-b-[2px] border-solid px-[16px] py-[11px] text-left text-[14px];
-	}
-
-	.tab-active {
-		@apply border-blue-60 font-semibold text-black;
-	}
-
-	.tab-inactice {
-		@apply border-gray-20 text-gray-60;
-	}
-</style>

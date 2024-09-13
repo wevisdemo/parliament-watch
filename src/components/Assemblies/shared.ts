@@ -34,7 +34,7 @@ export const getTopOfGroups = (groups: MemberGroup[]): MemberGroup => {
 };
 
 export const getTopOfGroupsPercent = (groups: MemberGroup[]): number => {
-	return getRoundedPercent(getTopOfGroups(groups).total, getSumOfGroupsTotal(groups));
+	return getRoundedPercent(getTopOfGroups(groups)?.total || 0, getSumOfGroupsTotal(groups));
 };
 
 export const getPercentWidth = (targetCount: number, groups: MemberGroup[]) => {
