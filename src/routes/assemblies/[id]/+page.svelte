@@ -140,7 +140,12 @@
 				<ModalLawProcess class="pb-4 md:pb-0 md:text-right" />
 			</div>
 			<LatestBills {latestBills} />
-			<Button href="#" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
+			<Button
+				href="/bills/explore?proposername={assembly.id}"
+				kind="secondary"
+				icon={ArrowRight}
+				class="w-full max-w-none"
+			>
 				ดูร่างกฎหมายทั้งหมด
 			</Button>
 		</section>
