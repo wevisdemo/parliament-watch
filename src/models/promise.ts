@@ -14,7 +14,7 @@ export interface Promise {
 	id: string;
 	party: Party;
 	statements: string[];
-	coverImageUrl: string;
+	coverImageUrl?: string;
 	keywords: string[];
 	categories: string[];
 	status: PromiseStatus;
