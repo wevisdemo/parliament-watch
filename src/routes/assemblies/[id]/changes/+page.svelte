@@ -137,7 +137,7 @@
 <div
 	class="sticky {showSideNav
 		? 'top-12'
-		: 'top-0'} z-50 flex flex-row-reverse flex-wrap justify-between gap-4 bg-ui-01 px-[16px] pt-4 md:px-[64px]"
+		: 'top-0'} z-10 flex flex-row-reverse flex-wrap justify-between gap-4 bg-ui-01 px-[16px] pt-4 md:px-[64px]"
 	bind:this={stickyElement}
 >
 	<div class="flex flex-col md:flex-row md:items-center md:gap-2">

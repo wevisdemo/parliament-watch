@@ -26,9 +26,7 @@
 				</div>
 			</div>
 			{#each month.days as day}
-				<div
-					class="{compareDate(selectedDate, day.date) ? 'sticky bottom-0 top-0' : ''} flex h-full"
-				>
+				<div class="{compareDate(selectedDate, day.date) ? 'sticky bottom-0 top-0' : ''} flex">
 					<div class="flex w-[65px] flex-none flex-col">
 						<TimeItem {day} {selectedDate} {max} {handleSelectDate} align="vertical" />
 					</div>
