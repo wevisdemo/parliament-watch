@@ -1,3 +1,7 @@
+import { fetchAssemblies, fetchParties, fetchPoliticians } from '$lib/datasheets';
+import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
+import type { Party } from '$models/party';
+import type { Politician } from '$models/politician';
 import { PromiseStatus, type Promise } from '$models/promise';
 import {
 	clarifyingPromise,
@@ -6,6 +10,15 @@ import {
 	notStartedPromise,
 	unhonoredPromise
 } from '../../mocks/data/promise';
+import { error } from '@sveltejs/kit';
+import type { Assembly } from 'carbon-icons-svelte';
+import dayjs from 'dayjs';
+
+export interface CabinetSummary extends Pick<Assembly, 'id' | 'startedAt'> {
+	primeMinister: Pick<Politician, 'firstname' | 'lastname'> & { party?: Party };
+	cabinetMemberCount: number;
+	cabinetMemberCountsByParty: { party: Party | 'ไม่สังกัดพรรค'; count: number }[];
+}
 
 export type PromiseSample = Pick<Promise, 'id' | 'statements'>;
 export type PromiseCountByStatus = Record<PromiseStatus, number>;
@@ -22,7 +35,68 @@ export interface PromisesByCategory {
 	count: number;
 }
 
+const CURRENT_CABINET_ASSEMBLY_ID = 'คณะรัฐมนตรี-64';
+
 export async function load() {
+	const cabinetAssembly = (await fetchAssemblies()).find(
+		(a) => a.id === CURRENT_CABINET_ASSEMBLY_ID
+	);
+	if (!cabinetAssembly) {
+		error(500, `Cannot find the current cabinet: ${CURRENT_CABINET_ASSEMBLY_ID}`);
+	}
+
+	const politicians = await fetchPoliticians();
+	const parties = await fetchParties();
+
+	const cabinetMembers = getAssemblyMembers(cabinetAssembly, politicians).filter(
+		({ assemblyRole }) =>
+			!assemblyRole?.endedAt ||
+			(cabinetAssembly.endedAt && !dayjs(cabinetAssembly.endedAt).isAfter(assemblyRole.endedAt))
+	);
+
+	const cabinetMemberCountsByPartyName = cabinetMembers
+		.map((m) => m.partyRole?.party.name)
+		.reduce(
+			(result, value) => {
+				const key = value ?? 'ไม่สังกัดพรรค';
+				result[key] = (result[key] ?? 0) + 1;
+				return result;
+			},
+			{} as { [partyName: string]: number }
+		);
+
+	const cabinetMemberCountsByParty = Object.entries(cabinetMemberCountsByPartyName).map(
+		([name, count]): { party: Party | 'ไม่สังกัดพรรค'; count: number } => {
+			const party =
+				name === 'ไม่สังกัดพรรค' ? 'ไม่สังกัดพรรค' : parties.find((p) => p.name === name);
+			if (!party) {
+				error(500, `Cannot find a party with name: ${name}`);
+			}
+			return {
+				party,
+				count
+			};
+		}
+	);
+
+	const primeMinister = cabinetMembers.find((m) => m.assemblyRole?.role === 'นายกรัฐมนตรี');
+
+	if (!primeMinister) {
+		error(500, `Cannot find the current prime minister in the given cabinet`);
+	}
+
+	const cabinet: CabinetSummary = {
+		id: cabinetAssembly.id,
+		startedAt: cabinetAssembly.startedAt,
+		primeMinister: {
+			firstname: primeMinister.firstname,
+			lastname: primeMinister.lastname,
+			party: primeMinister.partyRole?.party
+		},
+		cabinetMemberCount: cabinetMembers.length,
+		cabinetMemberCountsByParty
+	};
+
 	const mockPromisesByStatus: PromisesByStatus[] = [
 		{
 			status: PromiseStatus.inProgress,
@@ -130,6 +204,7 @@ export async function load() {
 	];
 
 	return {
+		cabinet,
 		byStatus: mockPromisesByStatus,
 		byCategory: mockPromisesByCategory,
 		activeCount: 100,
