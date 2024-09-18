@@ -1,3 +1,4 @@
+import { DefaultVoteOption, defaultVoteOptions } from '$models/voting';
 import { PromiseStatus, type Promise } from '../../models/promise';
 import { promiseFulfilledBill, promiseRelatedBill } from './bill';
 import { passingMp1Event, passingSenate3Event } from './event';
@@ -135,11 +136,34 @@ export const inProgressPromise: Promise = {
 			type: 'checkpoint',
 			date: new Date('2024-05-27'),
 			title: 'ร่าง พ.ร.บ. ส่งเสริมการเลี้ยงโค ผ่าน วาระ 1',
-			bill: promiseRelatedBill,
-			billEvent: {
-				...passingMp1Event,
-				billId: '3',
-				date: new Date('2024-05-27')
+			votingSummary: {
+				id: 'ร่าง-พรบ-ส่งเสริมการเลี้ยงโค-วาระ-1',
+				date: new Date('2024-05-27'),
+				title: 'ร่าง พ.ร.บ. ส่งเสริมการเลี้ยงโค (วาระ 1)',
+				result: DefaultVoteOption.Agreed,
+				voteOptions: defaultVoteOptions,
+				resultsByAffiliation: [
+					{
+						name: 'สส.ฝ่ายรัฐบาล',
+						resultSummary: {
+							[DefaultVoteOption.Agreed]: 160,
+							[DefaultVoteOption.Disagreed]: 1,
+							[DefaultVoteOption.Abstain]: 147,
+							[DefaultVoteOption.Absent]: 1,
+							[DefaultVoteOption.Novote]: 1
+						}
+					},
+					{
+						name: 'สส.ฝ่ายค้าน',
+						resultSummary: {
+							[DefaultVoteOption.Agreed]: 164,
+							[DefaultVoteOption.Disagreed]: 1,
+							[DefaultVoteOption.Abstain]: 20,
+							[DefaultVoteOption.Absent]: 0,
+							[DefaultVoteOption.Novote]: 0
+						}
+					}
+				]
 			}
 		}
 	]
@@ -226,11 +250,34 @@ export const fulfilledPromise: Promise = {
 			type: 'checkpoint',
 			date: new Date('2024-06-18'),
 			title: 'ร่าง พ.ร.บ. กฎหมายสมรสเท่าเทียม ผ่าน วาระ 3',
-			bill: promiseFulfilledBill,
-			billEvent: {
-				...passingSenate3Event,
-				billId: '4',
-				date: new Date('2024-06-18')
+			votingSummary: {
+				id: 'ร่าง-พรบ-กฎหมายสมรสเท่าเทียม-วาระ-3',
+				date: new Date('2024-06-18'),
+				title: 'ร่าง พ.ร.บ. กฎหมายสมรสเท่าเทียม (วาระ 3)',
+				result: DefaultVoteOption.Agreed,
+				voteOptions: defaultVoteOptions,
+				resultsByAffiliation: [
+					{
+						name: 'สส.ฝ่ายรัฐบาล',
+						resultSummary: {
+							[DefaultVoteOption.Agreed]: 160,
+							[DefaultVoteOption.Disagreed]: 1,
+							[DefaultVoteOption.Abstain]: 147,
+							[DefaultVoteOption.Absent]: 1,
+							[DefaultVoteOption.Novote]: 1
+						}
+					},
+					{
+						name: 'สส.ฝ่ายค้าน',
+						resultSummary: {
+							[DefaultVoteOption.Agreed]: 164,
+							[DefaultVoteOption.Disagreed]: 1,
+							[DefaultVoteOption.Abstain]: 20,
+							[DefaultVoteOption.Absent]: 0,
+							[DefaultVoteOption.Novote]: 0
+						}
+					}
+				]
 			}
 		}
 	],

@@ -1,6 +1,8 @@
+import type { groupVoteByAffiliations } from '$lib/datasheets/voting';
 import type { Bill } from './bill';
 import type { BillEvent } from './bill-event';
 import type { Party } from './party';
+import type { Voting } from './voting';
 
 export enum PromiseStatus {
 	notStarted = 'ไม่พบความเคลื่อนไหว',
@@ -42,8 +44,7 @@ export interface PromiseProgress {
 	date: Date;
 	title: string;
 	description?: string;
-	billEvent?: BillEvent;
-	bill?: Bill;
+	votingSummary?: VotingSummary;
 	reference?: {
 		label: string;
 		url: string;
@@ -53,4 +54,12 @@ export interface PromiseProgress {
 		type: 'image' | 'document';
 		url: string;
 	};
+}
+
+export interface VotingSummary
+	extends Pick<Voting, 'date' | 'title' | 'id' | 'result' | 'voteOptions'> {
+	resultsByAffiliation: Pick<
+		ReturnType<typeof groupVoteByAffiliations>[number],
+		'name' | 'resultSummary'
+	>[];
 }
