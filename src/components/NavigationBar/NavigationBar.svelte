@@ -35,6 +35,12 @@
 			]
 		},
 		{
+			label: 'ติดตามคำสัญญา',
+			icon: PromiseIcon,
+			url: '/promises',
+			type: MenuTypes.both
+		},
+		{
 			label: 'เกี่ยวกับเรา',
 			icon: WeVisIcon,
 			type: MenuTypes.root,
@@ -58,6 +64,7 @@
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuList from './SideMenuList.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
+	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
 
 	let screenSize: number;
 	let previousFromTop = 0;
