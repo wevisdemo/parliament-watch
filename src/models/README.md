@@ -140,7 +140,7 @@ erDiagram
     Date date
     string title
     string description
-    number billEventId FK "refer to BillEvent"
+    voting votingId FK "refer to Voting"
     Reference reference "label: string, url: string, description: string"
     Evidence evidence "type: image | document, url: string"
   }
