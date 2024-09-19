@@ -8,6 +8,7 @@ import {
 	fulfilledPromise,
 	inProgressPromise,
 	notStartedPromise,
+	promiseSummaries,
 	unhonoredPromise
 } from '../../mocks/data/promise';
 import { error } from '@sveltejs/kit';
@@ -208,6 +209,7 @@ export async function load() {
 		byStatus: mockPromisesByStatus,
 		byCategory: mockPromisesByCategory,
 		activeCount: 100,
-		count: 205
+		count: 205,
+		promiseSummaries
 	};
 }

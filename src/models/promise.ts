@@ -63,3 +63,8 @@ export interface VotingSummary
 		'name' | 'resultSummary'
 	>[];
 }
+
+export interface PromiseSummary
+	extends Pick<Promise, 'id' | 'statements' | 'party' | 'keywords' | 'categories' | 'status'> {
+	latestProgressDate: Date;
+}

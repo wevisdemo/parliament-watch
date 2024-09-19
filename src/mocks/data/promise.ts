@@ -1,7 +1,5 @@
 import { DefaultVoteOption, defaultVoteOptions } from '$models/voting';
 import { PromiseStatus, type Promise } from '../../models/promise';
-import { promiseFulfilledBill, promiseRelatedBill } from './bill';
-import { passingMp1Event, passingSenate3Event } from './event';
 import { pheuThaiParty } from './party';
 
 export const inProgressPromise: Promise = {
@@ -397,3 +395,47 @@ export const clarifyingPromise: Promise = {
 		}
 	]
 };
+
+export const promiseSummaries = [
+	mapToSummary(inProgressPromise),
+	mapToSummary(inProgressPromise),
+	mapToSummary(inProgressPromise),
+	mapToSummary(inProgressPromise),
+	mapToSummary(inProgressPromise),
+	mapToSummary(fulfilledPromise),
+	mapToSummary(fulfilledPromise),
+	mapToSummary(fulfilledPromise),
+	mapToSummary(fulfilledPromise),
+	mapToSummary(fulfilledPromise),
+	mapToSummary(notStartedPromise),
+	mapToSummary(notStartedPromise),
+	mapToSummary(notStartedPromise),
+	mapToSummary(notStartedPromise),
+	mapToSummary(notStartedPromise),
+	mapToSummary(unhonoredPromise),
+	mapToSummary(unhonoredPromise),
+	mapToSummary(unhonoredPromise),
+	mapToSummary(unhonoredPromise),
+	mapToSummary(unhonoredPromise),
+	mapToSummary(clarifyingPromise),
+	mapToSummary(clarifyingPromise),
+	mapToSummary(clarifyingPromise),
+	mapToSummary(clarifyingPromise),
+	mapToSummary(clarifyingPromise)
+];
+
+function mapToSummary(promise: Promise) {
+	const { id, statements, party, keywords, categories, status } = promise;
+	const latestProgressDate = promise.progresses.sort(
+		(a, b) => a.date.getUTCMilliseconds() - b.date.getUTCMilliseconds()
+	)[promise.progresses.length - 1];
+	return {
+		id,
+		statements,
+		party,
+		keywords,
+		categories,
+		status,
+		latestProgressDate
+	};
+}
