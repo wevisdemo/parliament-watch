@@ -46,7 +46,7 @@
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
-		{ key: 'title', value: 'ชื่อมติ' },
+		{ key: 'nickname', value: 'ชื่อมติ' },
 		{ key: 'result', value: 'ผลลัพท์' },
 		{ key: 'files', value: 'เอกสาร' }
 	]}
@@ -67,7 +67,7 @@
 					year: '2-digit'
 				})}</span
 			>
-		{:else if cellKey === 'title'}
+		{:else if cellKey === 'nickname'}
 			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline">{cellValue}</a>
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
