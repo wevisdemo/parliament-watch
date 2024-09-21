@@ -13,8 +13,8 @@
 
 	const getStyles = (status: PromiseStatus) => {
 		const styles = {
-			tag: 'bg-gray-50',
-			footer: 'bg-gray-50'
+			tag: 'bg-gray-30 text-black',
+			footer: 'bg-gray-10'
 		};
 		switch (status) {
 			case PromiseStatus.inProgress:
@@ -54,8 +54,8 @@
 					class="w-full translate-y-[50%] border-t border-ui-03 duration-200 group-hover:border-ui-01"
 				></div>
 			</div>
-			<div class="flex h-[166px] items-center justify-center">
-				<p class="textCustom heading-compact-02 block overflow-hidden">
+			<div class="flex h-[165px] items-center justify-center">
+				<p class="textCustom heading-compact-02 block h-full overflow-hidden">
 					{promiseSummary.statements}
 				</p>
 			</div>

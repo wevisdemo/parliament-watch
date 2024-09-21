@@ -3,11 +3,6 @@
 
 	export let data;
 	console.log(JSON.stringify(data, null, 2));
-
-	$: filterStatusData = data.promiseSummaries.filter(
-		(summary) =>
-			summary.status !== 'รอคำชี้แจงเพิ่มเติม' && summary.status !== 'ไม่พบความเคลื่อนไหว'
-	);
 </script>
 
 <ul>
@@ -16,5 +11,5 @@
 </ul>
 
 <div class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
-	<PromiseList summaries={filterStatusData} />
+	<PromiseList summaries={data.promiseSummaries} />
 </div>
