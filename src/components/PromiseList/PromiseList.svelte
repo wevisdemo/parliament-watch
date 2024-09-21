@@ -59,7 +59,7 @@
 		</div>
 	</div>
 	<div class="mx-auto grid w-fit gap-6 md:grid-cols-3">
-		{#each sortedData() as promiseSummary (promiseSummary.id)}
+		{#each sortedData() as promiseSummary, index (index)}
 			<PromiseCard {promiseSummary} />
 		{/each}
 	</div>
