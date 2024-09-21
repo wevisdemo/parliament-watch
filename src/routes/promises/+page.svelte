@@ -15,6 +15,6 @@
 	<li><a href="promises/explore">Explore page</a></li>
 </ul>
 
-<div class="px-[24px] md:px-[120px]">
+<div class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 	<PromiseList summaries={filterStatusData} />
 </div>
