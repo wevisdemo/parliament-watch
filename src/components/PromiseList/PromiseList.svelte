@@ -8,14 +8,20 @@
 	export let summaries: PromiseSummary[];
 	// export let cappedAt: number | undefined;
 
-	let sortBy = 'วันที่เคลื่อนไหวล่าสุด';
+	type SortByOptions = 'วันที่เคลื่อนไหวล่าสุด' | 'ตัวอักษร' | 'สถานะ';
+	let sortBy: SortByOptions = 'วันที่เคลื่อนไหวล่าสุด';
 
 	function handleChange(e: Event) {
 		const target = e.target as HTMLSelectElement;
-		sortBy = target?.value;
+		const value = target?.value as SortByOptions;
+		if (
+			Object.values<SortByOptions>(['วันที่เคลื่อนไหวล่าสุด', 'ตัวอักษร', 'สถานะ']).includes(value)
+		) {
+			sortBy = value;
+		}
 	}
 
-	$: sortedData = () => {
+	$: sortedData = (() => {
 		const data = Array.from(summaries);
 		switch (sortBy) {
 			case 'วันที่เคลื่อนไหวล่าสุด':
@@ -29,12 +35,12 @@
 			default:
 				return data;
 		}
-	};
+	})();
 </script>
 
 <div class="">
 	<div class="flex flex-col justify-between gap-1 pb-4 pt-6 md:flex-row md:items-center">
-		<p class="fluid-heading-03 font-bold">ผลลัพธ์ {sortedData().length} คำสัญญา</p>
+		<p class="fluid-heading-03 font-bold">ผลลัพธ์ {sortedData.length} คำสัญญา</p>
 		<div class="flex items-center gap-[15px]">
 			<div class="flex items-center gap-1">
 				<p class="body-compact-01 text-text-02">เรียงตาม</p>
@@ -59,7 +65,7 @@
 		</div>
 	</div>
 	<div class="mx-auto grid w-fit gap-6 md:grid-cols-3">
-		{#each sortedData() as promiseSummary, index (index)}
+		{#each sortedData as promiseSummary, index (index)}
 			<PromiseCard {promiseSummary} />
 		{/each}
 	</div>

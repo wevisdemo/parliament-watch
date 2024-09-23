@@ -12,36 +12,39 @@
 		});
 
 	const getStyles = (status: PromiseStatus) => {
-		const styles = {
-			tag: 'bg-gray-30 text-black',
-			footer: 'bg-gray-10'
-		};
 		switch (status) {
 			case PromiseStatus.inProgress:
-				styles.tag = 'bg-yellow-20 text-black';
-				styles.footer = 'bg-yellow-10';
-				break;
+				return {
+					tag: 'bg-yellow-20 text-black',
+					footer: 'bg-yellow-10'
+				};
 			case PromiseStatus.fulfilled:
-				styles.tag = 'bg-green-50 text-white';
-				styles.footer = 'bg-green-10';
-				break;
+				return {
+					tag: 'bg-green-50 text-white',
+					footer: 'bg-green-10'
+				};
 			case PromiseStatus.unhonored:
-				styles.tag = 'bg-magenta-50 text-white';
-				styles.footer = 'bg-magenta-10';
-				break;
+				return {
+					tag: 'bg-magenta-50 text-white',
+					footer: 'bg-magenta-10'
+				};
+			default:
+				return {
+					tag: 'bg-gray-30 text-black',
+					footer: 'bg-gray-10'
+				};
 		}
-		return styles;
 	};
 </script>
 
 <div class="flex w-full shrink-0 cursor-pointer flex-col">
-	<div class={`h-1 ${getStyles(promiseSummary.status).tag}`}></div>
+	<div class="h-1 {getStyles(promiseSummary.status).tag}"></div>
 
 	<div class="group bg-ui-background px-6 hover:bg-ui-03">
 		<div class="flex items-center gap-2 py-4">
 			<img
 				src={promiseSummary.party.logo}
-				alt="Party logo"
+				alt=""
 				class="h-8 w-8 rounded-full border border-gray-30"
 			/>
 			<p class="body-01">พรรค{promiseSummary.party.name}</p>
@@ -85,12 +88,10 @@
 		</div>
 	</div>
 
-	<div class={`${getStyles(promiseSummary.status).footer} grid grid-cols-2 gap-2  px-6 py-4`}>
+	<div class="{getStyles(promiseSummary.status).footer} grid grid-cols-2 gap-2 px-6 py-4">
 		<div class="flex flex-col gap-1">
 			<p class="heading-01">สถานะ</p>
-			<div
-				class={`${getStyles(promiseSummary.status).tag} label-01 w-fit rounded-full  px-2 py-[3px]`}
-			>
+			<div class="{getStyles(promiseSummary.status).tag} label-01 w-fit rounded-full px-2 py-[3px]">
 				{promiseSummary.status}
 			</div>
 		</div>
