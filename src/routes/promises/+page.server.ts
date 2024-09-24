@@ -2,7 +2,7 @@ import { fetchAssemblies, fetchParties, fetchPoliticians } from '$lib/datasheets
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
-import { PromiseStatus, type Promise } from '$models/promise';
+import { PromiseStatus, type Promise, type PromiseProgress } from '$models/promise';
 import {
 	clarifyingPromise,
 	fulfilledPromise,
@@ -34,6 +34,11 @@ export interface PromisesByCategory {
 	category: string;
 	byStatuses: PromiseCountByStatus;
 	count: number;
+}
+
+export interface PromiseSummary
+	extends Pick<Promise, 'id' | 'statements' | 'party' | 'keywords' | 'categories' | 'status'> {
+	latestProgressDate: PromiseProgress;
 }
 
 const CURRENT_CABINET_ASSEMBLY_ID = 'คณะรัฐมนตรี-64';
