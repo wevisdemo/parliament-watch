@@ -6,11 +6,21 @@ import type { ComponentProps } from 'svelte';
 
 export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]) =>
 	politicians
-		.map(({ assemblyRoles, ...rest }) => ({
-			...rest,
-			assemblyRole: assemblyRoles.find(({ assembly: a }) => a.id === assembly.id)
-		}))
-		.filter(({ assemblyRole }) => assemblyRole)
+		.map(({ assemblyRoles, ...rest }) => {
+			const filteredAssemblyRoles = assemblyRoles.filter(({ assembly: a }) => a.id === assembly.id);
+			return {
+				...rest,
+				assemblyRoles: filteredAssemblyRoles
+			};
+		})
+		.filter(({ assemblyRoles }) => assemblyRoles.length > 0)
+		.map(({ assemblyRoles, ...rest }) =>
+			assemblyRoles.map((assemblyRole) => ({
+				...rest,
+				assemblyRole
+			}))
+		)
+		.flat()
 		.map(({ partyRoles, ...rest }) => {
 			const partyRole = partyRoles
 				.filter(({ startedAt }) => !assembly.endedAt || dayjs(startedAt).isBefore(assembly.endedAt))
