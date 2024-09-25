@@ -38,7 +38,7 @@
 	})();
 </script>
 
-<div class="">
+<div class="mx-auto max-w-[1280px] px-4 md:px-16">
 	<div class="flex flex-col justify-between gap-1 pb-4 pt-6 md:flex-row md:items-center">
 		<p class="fluid-heading-03 font-bold">ผลลัพธ์ {sortedData.length} คำสัญญา</p>
 		<div class="flex items-center gap-[15px]">
