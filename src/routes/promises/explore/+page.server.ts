@@ -7,9 +7,13 @@ export async function load({ url }) {
 
 	let filteredPromiseSummaries = promiseSummaries;
 
+	if (!keyword && !category && !party) {
+		return { promiseSummaries: [] };
+	}
+
 	if (keyword) {
 		filteredPromiseSummaries = filteredPromiseSummaries.filter((promise) =>
-			promise.keywords.includes(keyword)
+			promise.keywords.some((k) => k.includes(keyword.trim()))
 		);
 	}
 
