@@ -83,7 +83,7 @@
 									: `category=${item}`}"
 							>
 								<button
-									class="label-01 rounded-full text-text-01 {label === 'คีย์เวิร์ด'
+									class="label-01 rounded-full py-[1px] text-text-01 {label === 'คีย์เวิร์ด'
 										? 'bg-gray-10'
 										: 'border border-black'} px-2">{item}</button
 								></a
