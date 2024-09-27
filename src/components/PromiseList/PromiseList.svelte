@@ -38,8 +38,8 @@
 	})();
 </script>
 
-<div class="">
-	<div class="flex flex-col justify-between gap-1 pb-4 pt-6 md:flex-row md:items-center">
+<div class="mx-auto max-w-[1280px] px-4 py-6 md:px-16">
+	<div class="flex flex-col justify-between gap-1 pb-4 md:flex-row md:items-center">
 		<p class="fluid-heading-03 font-bold">ผลลัพธ์ {sortedData.length} คำสัญญา</p>
 		<div class="flex items-center gap-[15px]">
 			<div class="flex items-center gap-1">

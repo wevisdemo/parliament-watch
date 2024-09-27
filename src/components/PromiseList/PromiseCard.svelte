@@ -31,7 +31,7 @@
 			default:
 				return {
 					tag: 'bg-gray-30 text-black',
-					footer: 'bg-gray-10'
+					footer: 'bg-gray-20'
 				};
 		}
 	};
@@ -41,15 +41,16 @@
 	<div class="h-1 {getStyles(promiseSummary.status).tag}"></div>
 
 	<div class="group bg-ui-background px-6 hover:bg-ui-03">
-		<div class="flex items-center gap-2 py-4">
-			<img
-				src={promiseSummary.party.logo}
-				alt=""
-				class="h-8 w-8 rounded-full border border-gray-30"
-			/>
-			<p class="body-01">พรรค{promiseSummary.party.name}</p>
-		</div>
-
+		<a href="/promises/explore?party={promiseSummary.party.name}">
+			<button class="flex items-center gap-2 py-4">
+				<img
+					src={promiseSummary.party.logo}
+					alt=""
+					class="h-8 w-8 rounded-full border border-gray-30"
+				/>
+				<p class="body-01 text-text-01">พรรค{promiseSummary.party.name}</p>
+			</button>
+		</a>
 		<div class="flex flex-col gap-2">
 			<div class="flex gap-2">
 				<Quotes class="text-text-03" />
@@ -72,14 +73,20 @@
 
 		<div class="flex flex-col gap-[5px] pb-4 pt-3">
 			{#each [{ label: 'คีย์เวิร์ด', items: promiseSummary.keywords }, { label: 'หมวด', items: promiseSummary.categories }] as { label, items } (label)}
-				<div class="flex flex-wrap gap-[2px]">
+				<div class="flex flex-wrap items-center gap-[2px]">
 					<p class="body-01 text-text-02">{label}</p>
 					{#each items as item, itemIndex (itemIndex)}
 						{#if item}
-							<button
-								class="label-01 rounded-full {label === 'คีย์เวิร์ด'
-									? 'bg-gray-10'
-									: 'border'} px-2">{item}</button
+							<a
+								href="/promises/explore?{label === 'คีย์เวิร์ด'
+									? `keyword=${item}`
+									: `category=${item}`}"
+							>
+								<button
+									class="label-01 rounded-full py-[1px] text-text-01 {label === 'คีย์เวิร์ด'
+										? 'bg-gray-10'
+										: 'border border-black'} px-2">{item}</button
+								></a
 							>
 						{/if}
 					{/each}
@@ -108,5 +115,7 @@
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 7;
 		line-height: 1.5;
+		height: auto;
+		max-height: calc(7 * 1.5em);
 	}
 </style>
