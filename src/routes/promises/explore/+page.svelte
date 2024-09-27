@@ -10,12 +10,40 @@
 
 	let exploreType: string | undefined;
 
+	let filteredPromiseSummaries = data.promiseSummaries;
+
 	$: {
 		const { searchParams } = $page.url;
+
 		[keyword, category, party] = ['keyword', 'category', 'party'].map(
-			(param) => searchParams.get(param) || undefined
+			(param) => searchParams.get(param)?.trim() || undefined
 		);
+
 		exploreType = keyword || category || party || 'ไม่พบคำที่ต้องการ';
+
+		filteredPromiseSummaries = data.promiseSummaries;
+
+		if (!keyword && !category && !party) {
+			filteredPromiseSummaries = [];
+		}
+
+		if (keyword) {
+			filteredPromiseSummaries = filteredPromiseSummaries.filter((promise) =>
+				promise.keywords.some((k) => k.includes(keyword ?? ''))
+			);
+		}
+
+		if (category) {
+			filteredPromiseSummaries = filteredPromiseSummaries.filter((promise) =>
+				promise.categories.includes(category ?? '')
+			);
+		}
+
+		if (party) {
+			filteredPromiseSummaries = filteredPromiseSummaries.filter(
+				(promise) => promise.party.name === party
+			);
+		}
 	}
 </script>
 
@@ -33,6 +61,6 @@
 		<h1 class="fluid-heading-05 text-[32px] md:text-[42px]">{exploreType}</h1>
 	</div>
 	<div class="bg-ui-01">
-		<PromiseList summaries={data.promiseSummaries} />
+		<PromiseList summaries={filteredPromiseSummaries} />
 	</div>
 </div>
