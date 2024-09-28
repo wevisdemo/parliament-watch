@@ -22,7 +22,11 @@ export interface CabinetSummary extends Pick<Assembly, 'id' | 'startedAt'> {
 }
 
 export type PromiseSample = Pick<Promise, 'id' | 'statements'>;
-export type PromiseCountByStatus = Record<PromiseStatus, number>;
+export type PromiseCountByStatus = {
+	[PromiseStatus.inProgress]: number;
+	[PromiseStatus.fulfilled]: number;
+	[PromiseStatus.unhonored]: number;
+};
 
 export interface PromisesByStatus {
 	status: PromiseStatus;
@@ -155,57 +159,47 @@ export async function load() {
 		{
 			category: 'ขนส่งสาธารณะ',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 17,
 				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.clarifying]: 1,
 				[PromiseStatus.fulfilled]: 1,
 				[PromiseStatus.unhonored]: 2
 			},
-			count: 24
+			count: 6
 		},
 		{
 			category: 'สังคม',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 1,
 				[PromiseStatus.inProgress]: 10,
-				[PromiseStatus.clarifying]: 1,
 				[PromiseStatus.fulfilled]: 0,
 				[PromiseStatus.unhonored]: 4
 			},
-			count: 16
+			count: 14
 		},
 		{
 			category: 'เศรษฐกิจ',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 1,
 				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.clarifying]: 1,
 				[PromiseStatus.fulfilled]: 1,
 				[PromiseStatus.unhonored]: 2
 			},
-			count: 8
+			count: 6
 		},
 		{
 			category: 'สิ่งแวดล้อม',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 2,
 				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.clarifying]: 0,
 				[PromiseStatus.fulfilled]: 1,
 				[PromiseStatus.unhonored]: 2
 			},
-			count: 8
+			count: 6
 		},
 		{
 			category: 'ความมั่นคง',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 2,
 				[PromiseStatus.inProgress]: 1,
-				[PromiseStatus.clarifying]: 0,
 				[PromiseStatus.fulfilled]: 0,
 				[PromiseStatus.unhonored]: 1
 			},
-			count: 4
+			count: 2
 		}
 	];
 
