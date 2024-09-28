@@ -1,13 +1,13 @@
 <script lang="ts">
-	import PromiseList from '$components/PromiseList/PromiseList.svelte';
 	import AboutSection from '$components/Promise/Home/AboutSection.svelte';
 	import ContentSection from '$components/Promise/Home/ContentSection.svelte';
+	import PromiseExporeSection from '$components/Promise/Home/PromiseExporeSection.svelte';
 	import PromiseMovementSection from '$components/Promise/Home/PromiseMovementSection.svelte';
 	import { formatThaiDate } from '$lib/date-parser';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 
 	export let data;
-	$: ({ cabinet, activeCount, count, byStatus, byCategory } = data);
+	$: ({ cabinet, activeCount, count, byStatus, byCategory, promiseSummaries } = data);
 </script>
 
 <ContentSection>
@@ -53,6 +53,6 @@
 	<PromiseMovementSection {activeCount} {count} {byStatus} {byCategory} />
 </ContentSection>
 
-<div class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
-	<PromiseList summaries={data.promiseSummaries} />
+<div class="bg-ui-01">
+	<PromiseExporeSection {promiseSummaries} />
 </div>

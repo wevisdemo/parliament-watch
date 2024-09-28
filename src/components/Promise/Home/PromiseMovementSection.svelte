@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { PromiseStatus } from '$models/promise';
-	import { Button } from 'carbon-components-svelte';
 	import type { PromisesByCategory, PromisesByStatus } from '../../../routes/promises/+page.server';
 	import OtherStatusCard from './OtherStatusCard.svelte';
 	import PromiseCategoryCard from './PromiseCategoryCard.svelte';
