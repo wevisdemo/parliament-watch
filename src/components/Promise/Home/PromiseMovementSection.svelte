@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PromiseStatus } from '$models/promise';
+	import { createEventDispatcher } from 'svelte';
 	import type { PromisesByCategory, PromisesByStatus } from '../../../routes/promises/+page.server';
 	import OtherStatusCard from './OtherStatusCard.svelte';
 	import PromiseCategoryCard from './PromiseCategoryCard.svelte';
@@ -45,6 +46,13 @@
 		scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
 		checkScrollPosition();
 	};
+
+	const dispatch = createEventDispatcher<{ buttonClick: { [key: string]: string } }>();
+
+	const handleClickViewAll = (event: CustomEvent<{ [key: string]: string }>): void => {
+		const newFilter = event.detail;
+		dispatch('buttonClick', newFilter);
+	};
 </script>
 
 <div class="flex flex-col">
@@ -64,6 +72,7 @@
 					max={maxStatusCount}
 					color="bg-yellow-20"
 					samples={inProgress?.samples}
+					on:buttonClick={handleClickViewAll}
 				/>
 			</div>
 			<div class="solid border-t border-ui-03 md:block md:border-l" />
@@ -75,6 +84,7 @@
 					max={maxStatusCount}
 					color="bg-green-50"
 					samples={fulfilled?.samples}
+					on:buttonClick={handleClickViewAll}
 				/>
 			</div>
 			<div class="solid border-t border-ui-03 md:block md:border-l" />
@@ -86,6 +96,7 @@
 					max={maxStatusCount}
 					color="bg-magenta-50"
 					samples={unhonored?.samples}
+					on:buttonClick={handleClickViewAll}
 				/>
 			</div>
 		</div>
@@ -117,6 +128,7 @@
 						unhonored={c.byStatuses.เลิกดำเนินการ}
 						totalCnt={c.count}
 						max={maxGroupCnt}
+						on:buttonClick={handleClickViewAll}
 					/>
 					{#if index < byCategory.length - 1}
 						<div class="solid border-l border-ui-03 md:block" />
@@ -137,22 +149,26 @@
 		<div class="flex md:basis-1/2">
 			<OtherStatusCard
 				title="คำสัญญาที่ไม่พบความเคลื่อนไหว"
+				status="ไม่พบความเคลื่อนไหว"
 				statusCnt={notStarted?.count || 0}
 				samples={notStarted?.samples}
 				description="เกิดจาก..Lorem ipsum dolor sit amet consectetur. Est ornare ultrices eget varius sapien.
 					Morbi nunc at aenean risus scelerisque pretium neque at. Id aliquam volutpat nulla eget
 					etiam suspendisse at neque. Pellentesque massa adipiscing elit consequat at viverra est."
+				on:buttonClick={handleClickViewAll}
 			/>
 		</div>
 
 		<div class="flex md:basis-1/2">
 			<OtherStatusCard
 				title="คำสัญญาที่รอคำชี้แจงเพิ่มเติม"
+				status="รอคำชี้แจงเพิ่มเติม"
 				statusCnt={clarifying?.count || 0}
 				samples={clarifying?.samples}
 				description="เกิดจาก..Lorem ipsum dolor sit amet consectetur. Est ornare ultrices eget varius sapien.
 				Morbi nunc at aenean risus scelerisque pretium neque at. Id aliquam volutpat nulla eget
 				etiam suspendisse at neque. Pellentesque massa adipiscing elit consequat at viverra est."
+				on:buttonClick={handleClickViewAll}
 			/>
 		</div>
 	</div>

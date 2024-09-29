@@ -1,16 +1,41 @@
 <script lang="ts">
 	import AboutSection from '$components/Promise/Home/AboutSection.svelte';
 	import ContentSection from '$components/Promise/Home/ContentSection.svelte';
-	import PromiseExporeSection from '$components/Promise/Home/PromiseExporeSection.svelte';
+	import PromiseExploreSection from '$components/Promise/Home/PromiseExploreSection.svelte';
 	import PromiseMovementSection from '$components/Promise/Home/PromiseMovementSection.svelte';
 	import { formatThaiDate } from '$lib/date-parser';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 
 	export let data;
+
 	$: ({ cabinet, activeCount, count, byStatus, byCategory, promiseSummaries } = data);
+
+	let defaultFilterBy = {
+		status: 'ทุกสถานะ',
+		party: 'ทุกพรรค',
+		category: 'ทุกหมวด'
+	};
+
+	let filterBy = { ...defaultFilterBy };
+
+	const handleViewAll = (
+		event: CustomEvent<{ status?: string; party?: string; category?: string }>
+	): void => {
+		const newFilter = event.detail;
+
+		filterBy = {
+			...defaultFilterBy,
+			...newFilter
+		};
+
+		const movementSection = document.getElementById('explore');
+		if (movementSection) {
+			movementSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+	};
 </script>
 
-<ContentSection>
+<ContentSection id="breadcrumb">
 	<Breadcrumb
 		noTrailingSlash
 		class="my-[8px] [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
@@ -20,7 +45,7 @@
 	</Breadcrumb>
 </ContentSection>
 
-<ContentSection>
+<ContentSection id="header">
 	<div class="flex flex-col items-center gap-4 px-6 py-8 md:px-12 lg:px-16">
 		<p class="fluid-heading-05 text-center">ติดตามคำสัญญาของรัฐบาล</p>
 		<p class="heading-compact-01 hidden max-w-[800px] text-center md:block">
@@ -45,14 +70,25 @@
 	</div>
 </ContentSection>
 
-<ContentSection>
+<ContentSection id="about">
 	<AboutSection {cabinet} />
 </ContentSection>
 
-<ContentSection>
-	<PromiseMovementSection {activeCount} {count} {byStatus} {byCategory} />
+<ContentSection id="movement">
+	<PromiseMovementSection
+		{activeCount}
+		{count}
+		{byStatus}
+		{byCategory}
+		on:buttonClick={handleViewAll}
+	/>
 </ContentSection>
 
 <div class="bg-ui-01">
-	<PromiseExporeSection {promiseSummaries} />
+	<PromiseExploreSection
+		selectedStatus={filterBy.status}
+		selectedParty={filterBy.party}
+		selectedCategory={filterBy.category}
+		{promiseSummaries}
+	/>
 </div>

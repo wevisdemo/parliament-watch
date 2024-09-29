@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import type { PromiseSample } from '../../../routes/promises/+page.server';
 
 	export let status: 'กำลังดำเนินการ' | 'ดำเนินการแล้ว' | 'เลิกดำเนินการ';
@@ -7,6 +8,12 @@
 	export let max: number;
 	export let color: string;
 	export let samples: PromiseSample[] = [];
+
+	const dispatch = createEventDispatcher<{ buttonClick: { status: string } }>();
+
+	const handleViewAll = (): void => {
+		dispatch('buttonClick', { status });
+	};
 </script>
 
 <div class="flex flex-col">
@@ -31,7 +38,7 @@
 			{/each}
 		</ul>
 		<div class="py-1">
-			<button class="link-01 text-blue-60 underline">ดูทั้งหมด</button>
+			<button class="link-01 text-blue-60 underline" on:click={handleViewAll}>ดูทั้งหมด</button>
 		</div>
 	</div>
 </div>

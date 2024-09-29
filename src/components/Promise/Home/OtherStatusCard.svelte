@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import type { PromiseSample } from '../../../routes/promises/+page.server';
 
 	export let title: string;
+	export let status: string;
 	export let description: string;
 	export let statusCnt: number;
 	export let samples: PromiseSample[] = [];
+
+	const dispatch = createEventDispatcher<{ buttonClick: { status: string } }>();
+
+	const handleViewAll = (): void => {
+		dispatch('buttonClick', { status });
+	};
 </script>
 
 <div class="flex flex-col gap-2 bg-gray-10 p-6">
@@ -23,6 +31,7 @@
 		{/each}
 	</ul>
 	<div class="py-1">
-		<button class="helper-text-01 text-blue-60 underline">ดูทั้งหมด</button>
+		<button class="helper-text-01 text-blue-60 underline" on:click={handleViewAll}>ดูทั้งหมด</button
+		>
 	</div>
 </div>

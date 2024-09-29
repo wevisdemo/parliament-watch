@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
 	export let categoryName = '';
 	export let inProgressCnt = 0;
 	export let fulfilledCnt = 0;
 	export let unhonored = 0;
 	export let totalCnt = 0;
 	export let max = 0;
+
+	const dispatch = createEventDispatcher<{ buttonClick: { category: string } }>();
+
+	const handleViewAll = (): void => {
+		dispatch('buttonClick', { category: categoryName });
+	};
 </script>
 
 <div class="flex min-w-[240px] flex-col gap-1">
@@ -38,7 +46,8 @@
 		/>
 	</div>
 	<div class="py-1">
-		<button class="helper-text-01 text-blue-60 underline">ดูทั้งหมด</button>
+		<button class="helper-text-01 text-blue-60 underline" on:click={handleViewAll}>ดูทั้งหมด</button
+		>
 	</div>
 </div>
 
