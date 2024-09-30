@@ -1,11 +1,8 @@
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
-	import type { VoteOptionCounter } from '$lib/datasheets/voting';
 	import { formatThaiDate } from '$lib/date-parser';
 	import { PromiseStatus, type Promise } from '$models/promise';
-	import { DefaultVotingResult } from '$models/voting';
-	import { ArrowRight, Bullhorn, CheckmarkFilled, Label } from 'carbon-icons-svelte';
+	import { Bullhorn, CheckmarkFilled } from 'carbon-icons-svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	export let promise: Promise;
@@ -49,7 +46,8 @@
 						'absolute inset-0 mx-auto w-[1px] flex-1 border-l border-l-text-primary',
 						index !== 0 && '-top-4',
 						progress.type === 'indirect' && 'border-dashed',
-						index === timeline.length - 1 && 'h-4'
+						index === timeline.length - 1 && 'h-4',
+						progress.type === 'indirect' && 'border-l-gray-60'
 					)}
 				></div>
 				{#if progress.type === 'checkpoint'}

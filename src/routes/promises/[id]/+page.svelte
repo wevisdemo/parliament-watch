@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 	import PromiseProgressTimeline from '$components/PromiseDetail/PromiseProgressTimeline.svelte';
 	import PromiseStatusModal from '$components/PromiseDetail/PromiseStatusModal.svelte';
 	import PromiseStatusTag from '$components/PromiseDetail/PromiseStatusTag.svelte';
@@ -90,7 +91,7 @@
 			</div>
 		</div>
 		<div class="flex max-w-[224px] flex-col items-start gap-3">
-			<div class="label-01 text-gray-60">อัปเดตข้อมูล: 18 ส.ค. 2566</div>
+			<DataPeriodRemark />
 			<button class="helper-text-01 text-link-01 underline">ที่มาและข้อจำกัดข้อมูล</button>
 			<Share label="แชร์คำสัญญา" />
 		</div>
