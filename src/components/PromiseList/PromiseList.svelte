@@ -36,12 +36,22 @@
 				return data;
 		}
 	})();
+
+	let isList = false;
+
+	const handleChangeView = (label: string) => {
+		if (label === 'List') {
+			isList = true;
+		} else if (label === 'Grid') {
+			isList = false;
+		}
+	};
 </script>
 
 <div class="mx-auto max-w-[1280px] px-4 py-6 md:px-16">
 	<div class="flex flex-col justify-between gap-1 pb-4 md:flex-row md:items-center">
 		<p class="fluid-heading-03 font-bold">ผลลัพธ์ {sortedData.length} คำสัญญา</p>
-		<div class="flex items-center gap-[15px]">
+		<div class="flex items-center gap-[16px]">
 			<div class="flex items-center gap-1">
 				<p class="body-compact-01 text-text-02">เรียงตาม</p>
 				<Select
@@ -57,16 +67,29 @@
 			</div>
 			<div class="hidden items-center gap-2 md:flex">
 				{#each [{ icon: List, label: 'List' }, { icon: Grid, label: 'Grid' }] as { icon, label } (label)}
-					<button class="h-8 w-8 rounded-[2px] p-1 duration-200 hover:bg-[#CACACA]">
+					<button
+						class="h-8 w-8 rounded-[2px] p-1 duration-200 hover:bg-[#CACACA]
+						{(isList && label === 'List') || (!isList && label === 'Grid') ? 'bg-[#CACACA]' : 'bg-none'}"
+						on:click={() => handleChangeView(label)}
+					>
 						<svelte:component this={icon} class="h-6 w-6" />
 					</button>
 				{/each}
 			</div>
 		</div>
 	</div>
-	<div class="mx-auto grid w-fit gap-6 md:grid-cols-3">
+	{#if isList}
+		<div class="body-01 grid grid-cols-7 gap-2 px-5 pb-2 text-text-02">
+			<p class="col-span-3">พรรค</p>
+			<p class="">คีย์เวิร์ด</p>
+			<p>หมวด</p>
+			<p>สถานะ</p>
+			<p>เคลื่อนไหวล่าสุด</p>
+		</div>
+	{/if}
+	<div class="{isList ? 'flex flex-col gap-[2px]' : 'grid gap-6 md:grid-cols-3'} mx-auto w-fit">
 		{#each sortedData as promiseSummary, index (index)}
-			<PromiseCard {promiseSummary} />
+			<PromiseCard {promiseSummary} {isList} />
 		{/each}
 	</div>
 </div>
