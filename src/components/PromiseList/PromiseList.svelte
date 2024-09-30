@@ -68,14 +68,8 @@
 			<div class="hidden items-center gap-2 md:flex">
 				{#each [{ icon: List, label: 'List' }, { icon: Grid, label: 'Grid' }] as { icon, label } (label)}
 					<button
-						class="h-8 w-8 rounded-[2px] p-1 duration-200 hover:bg-[#CACACA] {isList
-							? label === 'List'
-								? 'bg-[#CACACA]'
-								: 'bg-none'
-							: label === 'Grid'
-								? 'bg-[#CACACA]'
-								: 'bg-none'}
-"
+						class="h-8 w-8 rounded-[2px] p-1 duration-200 hover:bg-[#CACACA]
+						{(isList && label === 'List') || (!isList && label === 'Grid') ? 'bg-[#CACACA]' : 'bg-none'}"
 						on:click={() => handleChangeView(label)}
 					>
 						<svelte:component this={icon} class="h-6 w-6" />

@@ -11,8 +11,8 @@
 			day: 'numeric'
 		});
 
-	const getStyles = (status: PromiseStatus) => {
-		switch (status) {
+	$: style = (() => {
+		switch (promiseSummary.status) {
 			case PromiseStatus.inProgress:
 				return {
 					tag: 'bg-yellow-20 text-black',
@@ -34,11 +34,11 @@
 					footer: 'bg-gray-20'
 				};
 		}
-	};
+	})();
 </script>
 
 <div class="{isList ? 'flex-row' : 'flex-col'} flex h-full w-full">
-	<div class="{isList ? 'w-1' : 'h-1 w-full'} {getStyles(promiseSummary.status).tag} shrink-0" />
+	<div class="{isList ? 'w-1' : 'h-1 w-full'} {style.tag} shrink-0" />
 	<div
 		class="{isList
 			? 'grid h-[117px] grid-cols-7 gap-2 p-4 '
@@ -114,18 +114,12 @@
 			{/each}
 		</div>
 
-		<div
-			class="col-span-2 {isList
-				? ''
-				: `${getStyles(promiseSummary.status).footer} px-6 py-4`} grid grid-cols-2 gap-2"
-		>
+		<div class="col-span-2 {isList ? '' : `${style.footer} px-6 py-4`} grid grid-cols-2 gap-2">
 			<div class="flex flex-col gap-1">
 				{#if !isList}
 					<p class="heading-01">สถานะ</p>
 				{/if}
-				<div
-					class="{getStyles(promiseSummary.status).tag} label-01 w-fit rounded-full px-2 py-[3px]"
-				>
+				<div class="{style.tag} label-01 w-fit rounded-full px-2 py-[3px]">
 					{promiseSummary.status}
 				</div>
 			</div>
