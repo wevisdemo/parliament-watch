@@ -2,10 +2,10 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let categoryName = '';
-	export let inProgressCnt = 0;
-	export let fulfilledCnt = 0;
-	export let unhonored = 0;
-	export let totalCnt = 0;
+	export let inProgressCount = 0;
+	export let fulfilledCount = 0;
+	export let unhonoredCount = 0;
+	export let totalCount = 0;
 	export let max = 0;
 
 	const dispatch = createEventDispatcher<{ buttonClick: { category: string } }>();
@@ -16,33 +16,33 @@
 </script>
 
 <div class="flex min-w-[240px] flex-col gap-1">
-	<p class="heading-02 text-text-01">{totalCnt} {categoryName}</p>
+	<p class="heading-02 text-text-01">{totalCount} {categoryName}</p>
 	<div class="flex gap-3">
 		<div class="flex items-center gap-1">
 			<div class="legend bg-green-50" />
-			<p class="label-01">{fulfilledCnt}</p>
+			<p class="label-01">{fulfilledCount}</p>
 		</div>
 		<div class="flex items-center gap-1">
 			<div class="legend bg-yellow-20" />
-			<p class="label-01">{inProgressCnt}</p>
+			<p class="label-01">{inProgressCount}</p>
 		</div>
 		<div class="flex items-center gap-1">
 			<div class="legend bg-magenta-50" />
-			<p class="label-01">{unhonored}</p>
+			<p class="label-01">{unhonoredCount}</p>
 		</div>
 	</div>
-	<div class="flex" style="width:{Math.round((totalCnt / max) * 100)}%;">
+	<div class="flex" style="width:{Math.round((totalCount / max) * 100)}%;">
 		<div
 			class="h-2 w-full rounded-sm bg-green-50"
-			style="width:{Math.round((fulfilledCnt / totalCnt) * 100)}%;"
+			style="width:{Math.round((fulfilledCount / totalCount) * 100)}%;"
 		/>
 		<div
 			class="h-2 w-full rounded-sm bg-yellow-20"
-			style="width:{Math.round((inProgressCnt / totalCnt) * 100)}%;"
+			style="width:{Math.round((inProgressCount / totalCount) * 100)}%;"
 		/>
 		<div
 			class="h-2 w-full rounded-sm bg-magenta-50"
-			style="width:{Math.round((unhonored / totalCnt) * 100)}%;"
+			style="width:{Math.round((unhonoredCount / totalCount) * 100)}%;"
 		/>
 	</div>
 	<div class="py-1">
@@ -51,9 +51,8 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	.legend {
-		width: 4px;
-		height: 12px;
+		@apply h-[12px] w-[4px];
 	}
 </style>

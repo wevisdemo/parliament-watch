@@ -12,7 +12,7 @@
 	export let byStatus: PromisesByStatus[];
 	export let byCategory: PromisesByCategory[];
 
-	byCategory = byCategory.sort((a, b) => b.count - a.count);
+	$: byCategorySorted = byCategory.sort((a, b) => b.count - a.count);
 
 	$: inProgress = byStatus.find((p) => p.status === PromiseStatus.inProgress);
 	$: fulfilled = byStatus.find((p) => p.status === PromiseStatus.fulfilled);
@@ -26,7 +26,7 @@
 		unhonored?.count || 0
 	);
 
-	$: maxGroupCnt = Math.max(...byCategory.map((c) => c.count));
+	$: maxGroupCount = Math.max(...byCategorySorted.map((c) => c.count));
 
 	let scrollContainer: HTMLDivElement;
 	let showLeftButton = false;
@@ -67,7 +67,7 @@
 			<div class="md:basis-1/3">
 				<PromiseStatusCard
 					status="กำลังดำเนินการ"
-					statusCnt={inProgress?.count || 0}
+					statusCount={inProgress?.count || 0}
 					description="คำสัญญาที่เราตรวจพบข้อมูลความคืบหน้าของการดำเนินงานโดยรัฐบาล"
 					max={maxStatusCount}
 					color="bg-yellow-20"
@@ -79,7 +79,7 @@
 			<div class="md:basis-1/3">
 				<PromiseStatusCard
 					status="ดำเนินการแล้ว"
-					statusCnt={fulfilled?.count || 0}
+					statusCount={fulfilled?.count || 0}
 					description="คำสัญญาที่เราตรวจพบความคืบหน้าของการดำเนินงานโดยรัฐบาล และเกิดผลลัพธ์ตามคำสัญญาที่ได้ให้ไว้ในช่วงหาเสียง"
 					max={maxStatusCount}
 					color="bg-green-50"
@@ -91,7 +91,7 @@
 			<div class="md:basis-1/3">
 				<PromiseStatusCard
 					status="เลิกดำเนินการ"
-					statusCnt={unhonored?.count || 0}
+					statusCount={unhonored?.count || 0}
 					description="คำสัญญาที่พบว่ามีการกระทำหรือเหตุการณ์ ที่สรุปได้ว่ารัฐบาลเลิกดำเนินการ หรือไม่สามารถทำตามคำสัญญาต่อได้"
 					max={maxStatusCount}
 					color="bg-magenta-50"
@@ -120,17 +120,17 @@
 				bind:this={scrollContainer}
 				on:scroll={checkScrollPosition}
 			>
-				{#each byCategory as c, index}
+				{#each byCategorySorted as c, index}
 					<PromiseCategoryCard
 						categoryName={c.category}
-						inProgressCnt={c.byStatuses.กำลังดำเนินการ}
-						fulfilledCnt={c.byStatuses.ดำเนินการแล้ว}
-						unhonored={c.byStatuses.เลิกดำเนินการ}
-						totalCnt={c.count}
-						max={maxGroupCnt}
+						inProgressCount={c.byStatuses.กำลังดำเนินการ}
+						fulfilledCount={c.byStatuses.ดำเนินการแล้ว}
+						unhonoredCount={c.byStatuses.เลิกดำเนินการ}
+						totalCount={c.count}
+						max={maxGroupCount}
 						on:buttonClick={handleClickViewAll}
 					/>
-					{#if index < byCategory.length - 1}
+					{#if index < byCategorySorted.length - 1}
 						<div class="solid border-l border-ui-03 md:block" />
 					{/if}
 				{/each}
@@ -150,7 +150,7 @@
 			<OtherStatusCard
 				title="คำสัญญาที่ไม่พบความเคลื่อนไหว"
 				status="ไม่พบความเคลื่อนไหว"
-				statusCnt={notStarted?.count || 0}
+				statusCount={notStarted?.count || 0}
 				samples={notStarted?.samples}
 				description="เกิดจาก..Lorem ipsum dolor sit amet consectetur. Est ornare ultrices eget varius sapien.
 					Morbi nunc at aenean risus scelerisque pretium neque at. Id aliquam volutpat nulla eget
@@ -163,7 +163,7 @@
 			<OtherStatusCard
 				title="คำสัญญาที่รอคำชี้แจงเพิ่มเติม"
 				status="รอคำชี้แจงเพิ่มเติม"
-				statusCnt={clarifying?.count || 0}
+				statusCount={clarifying?.count || 0}
 				samples={clarifying?.samples}
 				description="เกิดจาก..Lorem ipsum dolor sit amet consectetur. Est ornare ultrices eget varius sapien.
 				Morbi nunc at aenean risus scelerisque pretium neque at. Id aliquam volutpat nulla eget

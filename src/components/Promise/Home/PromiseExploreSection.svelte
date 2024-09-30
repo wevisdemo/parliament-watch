@@ -2,7 +2,7 @@
 	import PromiseList from '$components/PromiseList/PromiseList.svelte';
 	import { Dropdown, Search } from 'carbon-components-svelte';
 	import type { PromiseSummary } from '../../../routes/promises/+page.server';
-	import ContentSection from './ContentSection.svelte';
+	import ContentSection from '$components/Promise/Home/ContentSection.svelte';
 	import { onMount } from 'svelte';
 
 	export let promiseSummaries: PromiseSummary[];
@@ -93,7 +93,7 @@
 		];
 	};
 
-	let inputSearch = '';
+	$: inputSearch = searchTerm;
 	let showSuggestions = false;
 
 	const getSuggestions = (input: string): string[] => {
@@ -124,6 +124,8 @@
 
 	onMount(() => {
 		window.addEventListener('click', handleClickOutside);
+
+		return () => window.removeEventListener('click', handleClickOutside);
 	});
 </script>
 
@@ -135,7 +137,7 @@
 		<p class="body-01 text-text-02">ตัวกรอง</p>
 		<div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
 			<Dropdown
-				light={true}
+				light
 				hideLabel
 				titleText="status"
 				selectedId={selectedStatus}
@@ -145,7 +147,7 @@
 				items={getStatusItems()}
 			/>
 			<Dropdown
-				light={true}
+				light
 				hideLabel
 				titleText="party"
 				selectedId={selectedParty}
@@ -155,7 +157,7 @@
 				items={getPartyItems()}
 			/>
 			<Dropdown
-				light={true}
+				light
 				hideLabel
 				titleText="category"
 				selectedId={selectedCategory}
@@ -166,7 +168,7 @@
 			/>
 			<div class="suggestion-box relative">
 				<Search
-					light={true}
+					light
 					size="lg"
 					placeholder="คีย์เวิร์ด เช่น Soft Power"
 					bind:value={inputSearch}

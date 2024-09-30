@@ -3,7 +3,7 @@
 	import type { PromiseSample } from '../../../routes/promises/+page.server';
 
 	export let status: 'กำลังดำเนินการ' | 'ดำเนินการแล้ว' | 'เลิกดำเนินการ';
-	export let statusCnt: number;
+	export let statusCount: number;
 	export let description = '';
 	export let max: number;
 	export let color: string;
@@ -18,12 +18,12 @@
 
 <div class="flex flex-col">
 	<div class="flex items-center gap-1">
-		<span class="fluid-heading-04">{statusCnt}</span>
+		<span class="fluid-heading-04">{statusCount}</span>
 		<span class="heading-02">{status}</span>
 	</div>
 	<div
 		class="h-4 w-full rounded-sm {color}"
-		style="width:{Math.round((statusCnt / max) * 100)}%;"
+		style="width:{Math.round((statusCount / max) * 100)}%;"
 	/>
 	<p class="body-01 py-1 pt-2">{description}</p>
 	<div class="flex flex-col gap-1 py-1">

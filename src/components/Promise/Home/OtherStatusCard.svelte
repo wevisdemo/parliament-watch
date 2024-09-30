@@ -5,7 +5,7 @@
 	export let title: string;
 	export let status: string;
 	export let description: string;
-	export let statusCnt: number;
+	export let statusCount: number;
 	export let samples: PromiseSample[] = [];
 
 	const dispatch = createEventDispatcher<{ buttonClick: { status: string } }>();
@@ -16,7 +16,7 @@
 </script>
 
 <div class="flex flex-col gap-2 bg-gray-10 p-6">
-	<p class="heading-01">{statusCnt} {title}</p>
+	<p class="heading-01">{statusCount} {title}</p>
 	<p class="body-01">
 		{description}
 	</p>

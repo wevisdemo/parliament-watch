@@ -1,9 +1,9 @@
 <script lang="ts">
+	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
 	import AboutSection from '$components/Promise/Home/AboutSection.svelte';
 	import ContentSection from '$components/Promise/Home/ContentSection.svelte';
 	import PromiseExploreSection from '$components/Promise/Home/PromiseExploreSection.svelte';
 	import PromiseMovementSection from '$components/Promise/Home/PromiseMovementSection.svelte';
-	import { formatThaiDate } from '$lib/date-parser';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 
 	export let data;
@@ -13,7 +13,8 @@
 	let defaultFilterBy = {
 		status: 'ทุกสถานะ',
 		party: 'ทุกพรรค',
-		category: 'ทุกหมวด'
+		category: 'ทุกหมวด',
+		search: ''
 	};
 
 	let filterBy = { ...defaultFilterBy };
@@ -62,10 +63,10 @@
 				consectetur. Leo varius lacus neque placerat. Viverra at arcu ullamcorper arcu. Non nulla
 				scelerisque enim in id bibendum vehicula lectus sit.
 			</p>
-			<p class="label-01 text-secondary md:hidden">
-				อัพเดตข้อมูล: {formatThaiDate(new Date(), true)}&nbsp;
+			<div class="flex gap-2 md:hidden">
+				<DataPeriodRemark />
 				<a href="/" class="helper-text-01 underline">ที่มาและข้อจำกัดข้อมูล</a>
-			</p>
+			</div>
 		</div>
 	</div>
 </ContentSection>
@@ -89,6 +90,7 @@
 		selectedStatus={filterBy.status}
 		selectedParty={filterBy.party}
 		selectedCategory={filterBy.category}
+		searchTerm={filterBy.search}
 		{promiseSummaries}
 	/>
 </div>
