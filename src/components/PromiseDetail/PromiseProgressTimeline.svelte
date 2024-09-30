@@ -73,39 +73,41 @@
 					/>
 				{/if}
 			</div>
-			<div class="mb-4 flex flex-1 flex-col gap-2">
-				<div class="body-01">{formatThaiDate(progress.date, true)}</div>
-				<div class="heading-02">{progress.title}</div>
-				{#if progress.description}
-					<div class="body-01">{progress.description}</div>
-				{/if}
-				{#if progress.reference}
-					<div class="label-01 text-gray-60">
-						ที่มา: <a
-							href={progress.reference.url}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="underline">{progress.reference.label}</a
-						>
-						{progress.reference.description}
-					</div>
+			<div class="flex flex-1 flex-col gap-6 md:flex-row">
+				<div class="mb-4 flex flex-1 flex-col gap-2">
+					<div class="body-01">{formatThaiDate(progress.date, true)}</div>
+					<div class="heading-02">{progress.title}</div>
+					{#if progress.description}
+						<div class="body-01">{progress.description}</div>
+					{/if}
+					{#if progress.reference}
+						<div class="label-01 text-gray-60">
+							ที่มา: <a
+								href={progress.reference.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="underline">{progress.reference.label}</a
+							>
+							{progress.reference.description}
+						</div>
+					{/if}
+				</div>
+				{#if progress.votingSummary}
+					<VoteCard
+						voting={{
+							id: progress.votingSummary.id,
+							nickname: progress.votingSummary.title || '',
+							date: progress.votingSummary.date,
+							result: progress.votingSummary.result
+						}}
+						highlightedVoteByGroups={highlightedVoteByGroups(
+							progress.votingSummary.resultsByAffiliation,
+							progress.votingSummary.result
+						)}
+						class="mb-4"
+					/>
 				{/if}
 			</div>
-			{#if progress.votingSummary}
-				<VoteCard
-					voting={{
-						id: progress.votingSummary.id,
-						nickname: progress.votingSummary.title || '',
-						date: progress.votingSummary.date,
-						result: progress.votingSummary.result
-					}}
-					highlightedVoteByGroups={highlightedVoteByGroups(
-						progress.votingSummary.resultsByAffiliation,
-						progress.votingSummary.result
-					)}
-					class="mb-4"
-				/>
-			{/if}
 		</div>
 	</div>
 {/each}

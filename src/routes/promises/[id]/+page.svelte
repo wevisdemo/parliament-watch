@@ -26,7 +26,7 @@
 {#if promise.coverImageUrl}
 	<img class="max-h-[300px] w-full object-cover" src={promise.coverImageUrl} alt="coverImageUrl" />
 {/if}
-<div class="container mx-auto py-12">
+<div class="px-4 py-8 md:px-16 md:py-12">
 	<div class="heading-01 text-text-03">คำสัญญาของพรรคการเมือง</div>
 	<div class="mt-1 flex items-center gap-2">
 		<img
@@ -49,35 +49,35 @@
 			</div>
 		{/each}
 	</div>
-	<div class="mt-4 flex items-center gap-2">
+	<div class="mt-4 flex flex-col gap-2 xl:flex-row xl:items-center">
 		<PromiseStatusTag status={promise.status} />
 		<div class="body-01 text-text-01">
 			[A definition that helps viewers understand the meaning and criteria of the status]
 		</div>
 		<button
-			class="helper-text-01 text-link-01 underline"
+			class="helper-text-01 w-fit flex-none text-link-01 underline"
 			on:click={() => (showStatusListModal = true)}
 		>
 			ดูความหมายสถานะอื่นๆ
 		</button>
 	</div>
 	<div class="mt-4 border border-gray-30 p-3"></div>
-	<div class="mt-8 flex justify-between">
+	<div class="mt-8 flex flex-col justify-between gap-8 xl:flex-row">
 		<div class="flex flex-col gap-1">
-			<div class="flex gap-1">
+			<div class="flex flex-wrap gap-1">
 				<div class="heading-01 mt-1">คีย์เวิร์ด</div>
 				{#each promise.keywords as keyword}
 					<span class="label-01 rounded-3xl bg-gray-10 px-2 py-1">{keyword}</span>
 				{/each}
 			</div>
-			<div class="flex gap-1">
+			<div class="flex flex-wrap gap-1">
 				<div class="heading-01 mt-1">หมวด</div>
 				{#each promise.categories as category}
 					<span class="label-01 rounded-3xl border px-2 py-1">{category}</span>
 				{/each}
 			</div>
-			<div class="flex gap-1">
-				<div class="heading-01 mt-1">ที่มา</div>
+			<div class="flex flex-col gap-1 md:flex-row">
+				<div class="heading-01">ที่มา</div>
 				<div>
 					{#each promise.references as reference}
 						<div class="leading-4">
@@ -90,29 +90,29 @@
 				</div>
 			</div>
 		</div>
-		<div class="flex max-w-[224px] flex-col items-start gap-3">
+		<div class="flex max-w-[224px] flex-col items-start gap-3 md:mt-0">
 			<DataPeriodRemark />
 			<button class="helper-text-01 text-link-01 underline">ที่มาและข้อจำกัดข้อมูล</button>
 			<Share label="แชร์คำสัญญา" />
 		</div>
 	</div>
 </div>
-<div class="container mx-auto py-12">
+<div class="px-4 py-8 md:px-16 md:py-12">
 	<div class="fluid-heading-04">ความคืบหน้าที่เกี่ยวข้อง</div>
 	<hr class="mt-4 border-gray-20" />
 	<div class="mb-4 mt-3 flex justify-between">
-		<div class="heading-02 flex items-center gap-1">
+		<div class="heading-02 flex flex-col gap-1 md:flex-row md:items-center">
 			สถานะ <PromiseStatusTag status={promise.status} />
 		</div>
 		<button
-			class="helper-text-01 text-link-01 underline"
+			class="helper-text-01 h-fit text-link-01 underline"
 			on:click={() => (showStatusListModal = true)}
 		>
 			คำสัญญามีสถานะอะไรบ้าง?
 		</button>
 	</div>
 	<PromiseProgressTimeline {promise} />
-	<div class="mt-8 flex justify-between bg-gray-10 p-6">
+	<div class="mt-8 flex flex-col justify-between gap-4 bg-gray-10 p-6 md:flex-row">
 		<div class="text-01">
 			<div class="heading-02">
 				พบความเคลื่อนไหวที่อัพเดตกว่านี้ หรือ มีข้อทักท้วงการจัดสถานะของนโยบายนี้?
