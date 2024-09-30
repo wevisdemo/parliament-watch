@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PromiseProgressTimeline from '$components/PromiseDetail/PromiseProgressTimeline.svelte';
 	import PromiseStatusModal from '$components/PromiseDetail/PromiseStatusModal.svelte';
 	import PromiseStatusTag from '$components/PromiseDetail/PromiseStatusTag.svelte';
 	import Share from '$components/Share/Share.svelte';
@@ -98,7 +99,7 @@
 <div class="container mx-auto py-12">
 	<div class="fluid-heading-04">ความคืบหน้าที่เกี่ยวข้อง</div>
 	<hr class="mt-4 border-gray-20" />
-	<div class="mt-3 flex justify-between">
+	<div class="mb-4 mt-3 flex justify-between">
 		<div class="heading-02 flex items-center gap-1">
 			สถานะ <PromiseStatusTag status={promise.status} />
 		</div>
@@ -109,7 +110,8 @@
 			คำสัญญามีสถานะอะไรบ้าง?
 		</button>
 	</div>
-	<div class="mt-4 flex justify-between bg-gray-10 p-6">
+	<PromiseProgressTimeline {promise} />
+	<div class="mt-8 flex justify-between bg-gray-10 p-6">
 		<div class="text-01">
 			<div class="heading-02">
 				พบความเคลื่อนไหวที่อัพเดตกว่านี้ หรือ มีข้อทักท้วงการจัดสถานะของนโยบายนี้?
