@@ -6,6 +6,7 @@
 	import Share from '$components/Share/Share.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
 	import { SendAlt } from 'carbon-icons-svelte';
+	import ClarificationLog from '$components/PromiseList/ClarificationLog.svelte';
 
 	export let data;
 
