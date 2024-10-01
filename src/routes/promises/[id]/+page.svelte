@@ -92,7 +92,6 @@
 		</div>
 		<div class="flex max-w-[224px] flex-col items-start gap-3 md:mt-0">
 			<DataPeriodRemark />
-			<button class="helper-text-01 text-link-01 underline">ที่มาและข้อจำกัดข้อมูล</button>
 			<Share label="แชร์คำสัญญา" />
 		</div>
 	</div>
