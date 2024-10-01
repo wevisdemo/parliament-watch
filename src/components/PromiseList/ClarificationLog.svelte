@@ -30,8 +30,8 @@
 {#if !clarificationLogs || clarificationLogs.length === 0}
 	<div></div>
 {:else}
-	<div>
-		<ul class="body-01 flex list-outside list-disc flex-col gap-1 text-text-02">
+	<div class="border-2 border-ui-01 p-4">
+		<ul class="body-01 flex list-outside list-disc flex-col gap-1 px-4 text-text-02">
 			{#each clarificationLogs as clarificationLog}
 				<li>
 					<div>
@@ -43,3 +43,9 @@
 		</ul>
 	</div>
 {/if}
+
+<style lang="postcss">
+	li::marker {
+		@apply text-xs;
+	}
+</style>
