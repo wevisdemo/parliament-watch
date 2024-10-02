@@ -8,11 +8,11 @@
 	import { SendAlt } from 'carbon-icons-svelte';
 
 	export let data;
-	console.log('data:', data);
 
 	$: ({ promise } = data);
 
 	let showStatusListModal = false;
+	let titleMaxLength = 45;
 </script>
 
 <Breadcrumb
@@ -21,7 +21,7 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/promises">ติดตามคำสัญญา</BreadcrumbItem>
-	<BreadcrumbItem>title</BreadcrumbItem>
+	<BreadcrumbItem>{promise.statements[0].substring(0, titleMaxLength - 3) + '...'}</BreadcrumbItem>
 </Breadcrumb>
 {#if promise.coverImageUrl}
 	<img class="max-h-[300px] w-full object-cover" src={promise.coverImageUrl} alt="coverImageUrl" />
@@ -120,7 +120,14 @@
 				ทีมงานยินดีรับฟังเพื่อนำไปปรับปรุงข้อมูลในเว็บไซต์ให้สมบูรณ์และสมเหตุสมผลที่สุด
 			</div>
 		</div>
-		<Button href="#" icon={SendAlt} kind="secondary">แจ้ง/ทักท้วงข้อมูล</Button>
+		<Button
+			target="_blank"
+			href="https://forms.gle/feikqf5TFDqjVKPx6"
+			icon={SendAlt}
+			kind="secondary"
+		>
+			แจ้ง/ทักท้วงข้อมูล
+		</Button>
 	</div>
 </div>
 <PromiseStatusModal open={showStatusListModal} onClose={() => (showStatusListModal = false)} />
