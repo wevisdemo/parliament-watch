@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import PromiseList from '$components/PromiseList/PromiseList.svelte';
 
@@ -13,36 +14,38 @@
 	let filteredPromiseSummaries = data.promiseSummaries;
 
 	$: {
-		const { searchParams } = $page.url;
+		if (browser) {
+			const { searchParams } = $page.url;
 
-		[keyword, category, party] = ['keyword', 'category', 'party'].map(
-			(param) => searchParams.get(param)?.trim() || undefined
-		);
-
-		exploreType = keyword || category || party || 'ไม่พบคำที่ต้องการ';
-
-		filteredPromiseSummaries = data.promiseSummaries;
-
-		if (!keyword && !category && !party) {
-			filteredPromiseSummaries = [];
-		}
-
-		if (keyword) {
-			filteredPromiseSummaries = filteredPromiseSummaries.filter((promise) =>
-				promise.keywords.some((k) => k.includes(keyword ?? ''))
+			[keyword, category, party] = ['keyword', 'category', 'party'].map((param) =>
+				searchParams.get(param)?.trim()
 			);
-		}
 
-		if (category) {
-			filteredPromiseSummaries = filteredPromiseSummaries.filter((promise) =>
-				promise.categories.includes(category ?? '')
-			);
-		}
+			exploreType = keyword || category || party || 'ไม่พบคำที่ต้องการ';
 
-		if (party) {
-			filteredPromiseSummaries = filteredPromiseSummaries.filter(
-				(promise) => promise.party.name === party
-			);
+			filteredPromiseSummaries = data.promiseSummaries;
+
+			if (!keyword && !category && !party) {
+				filteredPromiseSummaries = [];
+			}
+
+			if (keyword) {
+				filteredPromiseSummaries = filteredPromiseSummaries.filter((promise) =>
+					promise.keywords.some((k) => k.includes(keyword ?? ''))
+				);
+			}
+
+			if (category) {
+				filteredPromiseSummaries = filteredPromiseSummaries.filter((promise) =>
+					promise.categories.includes(category ?? '')
+				);
+			}
+
+			if (party) {
+				filteredPromiseSummaries = filteredPromiseSummaries.filter(
+					(promise) => promise.party.name === party
+				);
+			}
 		}
 	}
 </script>
@@ -53,7 +56,7 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/promises">ติดตามคำสัญญา</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies/">“{exploreType}”</BreadcrumbItem>
+	<BreadcrumbItem>"{exploreType}"</BreadcrumbItem>
 </Breadcrumb>
 <div class="">
 	<div class="mx-auto max-w-[1280px] px-4 py-6 md:px-16 md:py-8">
