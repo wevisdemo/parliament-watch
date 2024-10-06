@@ -5,7 +5,7 @@
 	import { formatThaiDate, shortMonthNames } from '$lib/date-parser';
 
 	export let cabinet: CabinetSummary;
-	$: ({ primeMinister } = cabinet);
+	$: ({ primeMinister, policyStatement } = cabinet);
 </script>
 
 <div class="flex w-full flex-col gap-4 bg-ui-05 p-6 text-text-04">
@@ -46,10 +46,7 @@
 				<span class="body-01 text-text-04">{formatThaiDate(cabinet.startedAt, true)}</span>
 			</div>
 			<p class="body-01 text-text-04">
-				นโยบายหลักและกลยุทธ์ของรัฐบาลไทยภายใต้การนำของนายกรัฐมนตรีเศรษฐา ทวีสิน
-				ระบุถึงแผนงานและความมุ่งมั่นด้านการเติบโตทางเศรษฐกิจ, สวัสดิการสังคม, ความมั่นคงทางการเมือง,
-				และการพัฒนาโครงสร้างพื้นฐาน รวมถึงการจัดการกับความท้าทายที่ประเทศไทยกำลังเผชิญ อาทิ
-				การปฏิรูปเศรษฐกิจ, ความก้าวหน้าทางเทคโนโลยี, และการเปลี่ยนแปลงในสังคม
+				{policyStatement}
 			</p>
 			<a
 				href="/assemblies/{cabinet.id}"

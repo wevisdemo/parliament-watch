@@ -15,7 +15,7 @@
 	};
 </script>
 
-<div class="flex flex-col gap-2 bg-gray-10 p-6">
+<div class="flex w-full flex-col gap-2 bg-gray-10 p-6">
 	<p class="heading-01">{statusCount} {title}</p>
 	<p class="body-01">
 		{description}

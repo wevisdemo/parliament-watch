@@ -152,9 +152,7 @@
 				status="ไม่พบความเคลื่อนไหว"
 				statusCount={notStarted?.count || 0}
 				samples={notStarted?.samples}
-				description="เกิดจาก..Lorem ipsum dolor sit amet consectetur. Est ornare ultrices eget varius sapien.
-					Morbi nunc at aenean risus scelerisque pretium neque at. Id aliquam volutpat nulla eget
-					etiam suspendisse at neque. Pellentesque massa adipiscing elit consequat at viverra est."
+				description="เราไม่พบข้อมูลความเคลื่อนไหวที่เกี่ยวกับคำสัญญานี้"
 				on:buttonClick={handleClickViewAll}
 			/>
 		</div>
@@ -165,9 +163,7 @@
 				status="รอคำชี้แจงเพิ่มเติม"
 				statusCount={clarifying?.count || 0}
 				samples={clarifying?.samples}
-				description="เกิดจาก..Lorem ipsum dolor sit amet consectetur. Est ornare ultrices eget varius sapien.
-				Morbi nunc at aenean risus scelerisque pretium neque at. Id aliquam volutpat nulla eget
-				etiam suspendisse at neque. Pellentesque massa adipiscing elit consequat at viverra est."
+				description="เราพบว่าคำสัญญานี้มีความคลุมเครือและกำลังอยู่ในระหว่างการขอคำชี้แจงเพิ่มเติม"
 				on:buttonClick={handleClickViewAll}
 			/>
 		</div>
