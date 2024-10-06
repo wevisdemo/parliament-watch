@@ -10,9 +10,16 @@
 	export let data;
 
 	$: ({ promise } = data);
+	console.log('promise?.statements?.length:', promise?.statements?.length);
 
 	let showStatusListModal = false;
-	let titleMaxLength = 45;
+
+	const TITLE_MAX_LENGTH = 45;
+
+	$: pageTitle =
+		promise?.statements?.[0]?.length > TITLE_MAX_LENGTH
+			? promise.statements[0].slice(0, TITLE_MAX_LENGTH) + '...'
+			: promise.statements?.[0];
 </script>
 
 <Breadcrumb
@@ -21,7 +28,7 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/promises">ติดตามคำสัญญา</BreadcrumbItem>
-	<BreadcrumbItem>{promise.statements[0].substring(0, titleMaxLength - 3) + '...'}</BreadcrumbItem>
+	<BreadcrumbItem>{pageTitle}</BreadcrumbItem>
 </Breadcrumb>
 {#if promise.coverImageUrl}
 	<img class="max-h-[300px] w-full object-cover" src={promise.coverImageUrl} alt="coverImageUrl" />
@@ -31,7 +38,7 @@
 	<div class="mt-1 flex items-center gap-2">
 		<img
 			src={promise.party.logo}
-			alt="partyLogo"
+			alt=""
 			class="h-8 w-8 rounded-full border border-gray-30 object-cover"
 		/>
 		<div class="body-01">พรรค{promise.party.name}</div>
@@ -40,7 +47,7 @@
 		{#each promise.statements as statement}
 			<div class="flex min-w-[80%] gap-3">
 				<div class="flex flex-none flex-col items-center gap-2">
-					<img src="/images/promises/quote.svg" alt="quote" class="w-6" />
+					<img src="/images/promises/quote.svg" alt="" class="w-6" />
 					<div class="w-1 flex-1 bg-ui-03"></div>
 				</div>
 				<div class="heading-03 text-text-primary">

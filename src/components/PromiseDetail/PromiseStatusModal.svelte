@@ -30,7 +30,7 @@
 	] as { label: PromiseStatus; text: string }[];
 </script>
 
-<Modal {open} passiveModal hasScrollingContent size="xs" on:close={() => onClose()}>
+<Modal {open} passiveModal hasScrollingContent size="xs" on:close={onClose}>
 	<div slot="heading">
 		<div class="heading-03">สถานะคำสัญญา</div>
 	</div>
