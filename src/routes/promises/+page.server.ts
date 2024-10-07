@@ -19,10 +19,15 @@ export interface CabinetSummary extends Pick<Assembly, 'id' | 'startedAt'> {
 	primeMinister: Pick<Politician, 'firstname' | 'lastname'> & { party?: Party };
 	cabinetMemberCount: number;
 	cabinetMemberCountsByParty: { party: Party | 'ไม่สังกัดพรรค'; count: number }[];
+	policyStatement: string;
 }
 
 export type PromiseSample = Pick<Promise, 'id' | 'statements'>;
-export type PromiseCountByStatus = Record<PromiseStatus, number>;
+export type PromiseCountByStatus = {
+	[PromiseStatus.inProgress]: number;
+	[PromiseStatus.fulfilled]: number;
+	[PromiseStatus.unhonored]: number;
+};
 
 export interface PromisesByStatus {
 	status: PromiseStatus;
@@ -91,6 +96,9 @@ export async function load() {
 		error(500, `Cannot find the current prime minister in the given cabinet`);
 	}
 
+	const mockPolicyStatement =
+		'นางสาวแพทองธาร ชินวัตร นายกรัฐมนตรี ได้แถลงนโยบายต่อรัฐสภาเมื่อวันที่ 12 กันยายน 2567 โดยเน้นความท้าทายที่ประเทศไทยต้องเผชิญ เช่น การเติบโตทางเศรษฐกิจที่ต่ำกว่าศักยภาพ ปัญหาหนี้สิน ความเหลื่อมล้ำ และสิ่งแวดล้อม โดยรัฐบาลตั้งใจจะเปลี่ยนความท้าทายเหล่านี้ให้เป็นโอกาสและความเสมอภาคทางเศรษฐกิจและสังคม นโยบายเร่งด่วนของรัฐบาลประกอบด้วย 10 ข้อ อาทิ การปรับโครงสร้างหนี้ การกระตุ้นเศรษฐกิจผ่านดิจิทัลวอลเล็ต การลดราคาพลังงาน และการส่งเสริมการท่องเที่ยว รวมถึงแผนระยะยาวเพื่อพัฒนาเศรษฐกิจดิจิทัล ยานยนต์ไฟฟ้า และพลังงานสะอาด ';
+
 	const cabinet: CabinetSummary = {
 		id: cabinetAssembly.id,
 		startedAt: cabinetAssembly.startedAt,
@@ -100,7 +108,8 @@ export async function load() {
 			party: primeMinister.partyRole?.party
 		},
 		cabinetMemberCount: cabinetMembers.length,
-		cabinetMemberCountsByParty
+		cabinetMemberCountsByParty,
+		policyStatement: mockPolicyStatement
 	};
 
 	const mockPromisesByStatus: PromisesByStatus[] = [
@@ -155,57 +164,47 @@ export async function load() {
 		{
 			category: 'ขนส่งสาธารณะ',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 17,
 				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.clarifying]: 1,
 				[PromiseStatus.fulfilled]: 1,
 				[PromiseStatus.unhonored]: 2
 			},
-			count: 24
+			count: 6
 		},
 		{
 			category: 'สังคม',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 1,
 				[PromiseStatus.inProgress]: 10,
-				[PromiseStatus.clarifying]: 1,
 				[PromiseStatus.fulfilled]: 0,
 				[PromiseStatus.unhonored]: 4
 			},
-			count: 16
+			count: 14
 		},
 		{
 			category: 'เศรษฐกิจ',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 1,
 				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.clarifying]: 1,
 				[PromiseStatus.fulfilled]: 1,
 				[PromiseStatus.unhonored]: 2
 			},
-			count: 8
+			count: 6
 		},
 		{
 			category: 'สิ่งแวดล้อม',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 2,
 				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.clarifying]: 0,
 				[PromiseStatus.fulfilled]: 1,
 				[PromiseStatus.unhonored]: 2
 			},
-			count: 8
+			count: 6
 		},
 		{
 			category: 'ความมั่นคง',
 			byStatuses: {
-				[PromiseStatus.notStarted]: 2,
 				[PromiseStatus.inProgress]: 1,
-				[PromiseStatus.clarifying]: 0,
 				[PromiseStatus.fulfilled]: 0,
 				[PromiseStatus.unhonored]: 1
 			},
-			count: 4
+			count: 2
 		}
 	];
 
