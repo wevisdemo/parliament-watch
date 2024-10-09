@@ -6,7 +6,7 @@
 	import Share from '$components/Share/Share.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
 	import { SendAlt } from 'carbon-icons-svelte';
-	import ClarificationLog from '$components/PromiseList/ClarificationLog.svelte';
+	import PromiseClarificationLog from '$components/PromiseDetail/PromiseClarificationLog.svelte';
 
 	export let data;
 
@@ -67,6 +67,9 @@
 		>
 			ดูความหมายสถานะอื่นๆ
 		</button>
+	</div>
+	<div class="mt-4">
+		<PromiseClarificationLog clarificationLogs={promise.clarificationLogs} />
 	</div>
 	<div class="mt-8 flex flex-col justify-between gap-8 xl:flex-row">
 		<div class="flex flex-col gap-2">

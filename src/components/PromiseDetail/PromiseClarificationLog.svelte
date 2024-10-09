@@ -29,7 +29,7 @@
 								</div>
 								<div class="flex flex-row gap-2">
 									<div class="vertical-gray-line" />
-									<div class="body-02 font-semi-bold text-text-01">
+									<div class="body-02 font-semibold text-text-01">
 										{clarificationLog.answer.content}
 									</div>
 								</div>
