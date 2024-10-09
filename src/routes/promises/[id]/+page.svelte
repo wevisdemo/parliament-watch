@@ -68,7 +68,6 @@
 			ดูความหมายสถานะอื่นๆ
 		</button>
 	</div>
-	<div class="mt-4 border border-gray-30 p-3"></div>
 	<div class="mt-8 flex flex-col justify-between gap-8 xl:flex-row">
 		<div class="flex flex-col gap-2">
 			<div class="flex flex-wrap gap-1">
