@@ -37,7 +37,8 @@
 	})();
 </script>
 
-<div class="{isList ? 'flex-row' : 'flex-col'} flex h-full w-full">
+<!-- TODO: link to actual promise ID -->
+<a href="/promises/1" class="{isList ? 'flex-row' : 'flex-col'} flex h-full w-full">
 	<div class="{isList ? 'w-1' : 'h-1 w-full'} {style.tag} shrink-0" />
 	<div
 		class="{isList
@@ -68,7 +69,7 @@
 				{/if}
 				<div class="flex {isList ? '' : 'h-[165px] items-center justify-center'}">
 					<p
-						class="{isList
+						class="text-black {isList
 							? 'line-clamp-3 max-h-[calc(2.9*1.5em)]'
 							: 'line-clamp-[7] max-h-[calc(6.85*1.5em)]'} heading-compact-02 h-auto overflow-hidden leading-6"
 					>
@@ -131,4 +132,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</a>

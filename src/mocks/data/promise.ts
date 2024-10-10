@@ -133,11 +133,11 @@ export const inProgressPromise: Promise = {
 			id: '1-7',
 			type: 'checkpoint',
 			date: new Date('2024-05-27'),
-			title: 'ร่าง พ.ร.บ. ส่งเสริมการเลี้ยงโค ผ่าน วาระ 1',
+			title: 'ร่าง พ.ร.บ. กองทุนฟื้นฟูและพัฒนาเกษตรกร (วาระ 3)',
 			votingSummary: {
-				id: 'ร่าง-พรบ-ส่งเสริมการเลี้ยงโค-วาระ-1',
+				id: 'ร่าง-พรบ-กองทุนฟื้นฟูและพัฒนาเกษ',
 				date: new Date('2024-05-27'),
-				title: 'ร่าง พ.ร.บ. ส่งเสริมการเลี้ยงโค (วาระ 1)',
+				title: 'ร่าง พ.ร.บ. กองทุนฟื้นฟูและพัฒนาเกษตรกร (วาระ 3)',
 				result: DefaultVoteOption.Agreed,
 				voteOptions: defaultVoteOptions,
 				resultsByAffiliation: [

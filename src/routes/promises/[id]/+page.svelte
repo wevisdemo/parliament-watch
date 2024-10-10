@@ -10,7 +10,6 @@
 	export let data;
 
 	$: ({ promise } = data);
-	console.log('promise?.statements?.length:', promise?.statements?.length);
 
 	let showStatusListModal = false;
 

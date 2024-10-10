@@ -24,9 +24,10 @@
 	<ul class="list-disc space-y-2 pl-6">
 		{#each samples as s}
 			<li>
-				<p class="body-01 line-clamp-2 text-text-02 underline">
+				<!-- TODO: link to actual promise ID -->
+				<a href="/promises/1" class="body-01 line-clamp-2 text-text-02 underline">
 					{s.statements}
-				</p>
+				</a>
 			</li>
 		{/each}
 	</ul>
