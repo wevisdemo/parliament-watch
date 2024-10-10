@@ -168,12 +168,13 @@ export function createSubgroupByPartyOrAppointmentMethod(
 	isSenates: boolean
 ) {
 	return isSenates
-		? groupMembersBy(members, ({ assemblyRole }) => assemblyRole?.appointmentMethod).map(
-				([method, membersByRole]) => ({
-					name: method || UNKNOWN_LABEL,
-					members: membersByRole
-				})
-			)
+		? groupMembersBy(
+				members,
+				({ assemblyRole }) => assemblyRole?.appointmentMethod || UNKNOWN_LABEL
+			).map(([method, membersByRole]) => ({
+				name: method,
+				members: membersByRole
+			}))
 		: groupMembersBy(members, ({ partyRole }) => partyRole?.party || noParty).map(
 				([party, membersByParty]) => ({
 					name: party.name,
