@@ -36,6 +36,7 @@
 </script>
 
 <DataPage
+	tablePageSize={50}
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ label: 'นักการเมือง' },
@@ -75,7 +76,7 @@
 			{@const files = cellValue}
 			{#if files.length > 0}
 				<div class="flex flex-wrap gap-2">
-					{#each files as file (file)}
+					{#each files as file, index (index)}
 						<a href={file.url} title={file.label} target="_blank" rel="noopener noreferrer"
 							><DocumentPdf /><span class="sr-only">{file.label}</span></a
 						>
