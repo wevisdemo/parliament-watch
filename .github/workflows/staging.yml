@@ -4,6 +4,7 @@ on:
     branches: ['main', '**/main']
     paths-ignore:
       - '**/README.md'
+      - '**/CONTRIBUTING.md'
       - '.github/workflows/production.yml'
   workflow_dispatch:
 jobs:

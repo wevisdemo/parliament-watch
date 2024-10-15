@@ -1,10 +1,10 @@
 # 👀 Parliament Watch
 
-![Parliament Watch](https://parliamentwatch.wevis.info/images/sapasathan.svg)
-
 Citizens are watching
 
-> Thank you for every contibutors who participated in the **HACKTOBERFEST 2023** 🎉
+> **Hacktoberfest 2024 is here!** every constibutor will receive a Parliament Watch sticker ✨ [see more](https://www.facebook.com/wevisdemo/posts/pfbid06t4zjUoG2noQW1pow9PiN2wmVQpUTHUSyE44SZcpP7bAaRRGaQy9JU1iWpUnVQAnl)
+
+![Parliament Watch](https://parliamentwatch.wevis.info/images/sapasathan.svg)
 
 **Table of Content**
 

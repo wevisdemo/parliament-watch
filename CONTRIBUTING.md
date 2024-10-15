@@ -1,16 +1,12 @@
 # Contributing Guideline
 
-- First, and the most importent one, make sure you read the [README.md file](README.md).
-- Read the [issues](https://github.com/wevisdemo/parliament-watch/issues) carefully, comment on the issue that you want to work and we will assign you to that issue.
-- For external collaborator (don't have a permission to write on a main branch)
-  - For each issue, create a new branch name in the format of `username/issuenumber-description`.
-  - Open the pull requests (PR), with the same name of the issue.
-    - If not ready for a review, please put `[WIP]` in front of the title.
-- For internal collaborator (have a permission to write on a main branch)
+1. First, and most importantly, make sure you read the [README.md file](README.md).
+2. Read the [issues](https://github.com/wevisdemo/parliament-watch/issues) carefully, comment on the issue you want to work on, and we'll assign it to you.
+3. Feels free to open a new issue, if you found a bug or have some idea.
+4. Fork the project if you don't have permission to directly edit this repository. Checkout from the branch specified in the issue.
+5. Open a pull request (PR) with the same name as the issue. Target the branch specified in the issue. The maintainer will review your work and might give you some feedback before merging.
+6. If your work isn't ready for review, add "[WIP]" at the beginning of the PR title.
+7. Feel free to ask questions or discuss on GitHub's issues or PRs in English or Thai—whichever you're more comfortable with.
+8. Open-source maintenance is not everything we do, but we'll try to be as responsive as possible.
 
-  - Can work on the main branch for fast code integration (CI)
-  - Add issue number as a commit message scope eg. `feat(issuenumber): commit description`.
-
-- Questions and discussion can be done on the Github's issue or PR in English or Thai (choose the one you are comfortable).
-
-Thank you and enjoy coding!
+Thanks for contributing, and happy coding! 🎉
