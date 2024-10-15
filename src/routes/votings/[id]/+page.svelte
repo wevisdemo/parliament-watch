@@ -115,7 +115,10 @@
 		[DefaultVotingResult.Passed]: 'text-teal-50',
 		[DefaultVoteOption.Agreed]: 'text-teal-50',
 		[DefaultVotingResult.Failed]: 'text-red-50',
-		[DefaultVoteOption.Disagreed]: 'text-red-50'
+		[DefaultVoteOption.Disagreed]: 'text-red-50',
+		[DefaultVoteOption.Novote]: 'gray-80',
+		[DefaultVoteOption.Abstain]: 'gray-50',
+		[DefaultVoteOption.Absent]: 'gray-20'
 	};
 
 	$: voterSearchResult = searchQuery.trim()
