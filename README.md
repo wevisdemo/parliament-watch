@@ -2,11 +2,11 @@
 
 Citizens are watching
 
-> **Hacktoberfest 2024 is here!** every constibutor will receive a Parliament Watch sticker ✨ [see more](https://www.facebook.com/wevisdemo/posts/pfbid06t4zjUoG2noQW1pow9PiN2wmVQpUTHUSyE44SZcpP7bAaRRGaQy9JU1iWpUnVQAnl)
+> **Hacktoberfest 2024 is here!** every contributor will receive a Parliament Watch sticker ✨ [see more](https://www.facebook.com/wevisdemo/posts/pfbid06t4zjUoG2noQW1pow9PiN2wmVQpUTHUSyE44SZcpP7bAaRRGaQy9JU1iWpUnVQAnl)
 
 ![Parliament Watch](https://parliamentwatch.wevis.info/images/sapasathan.svg)
 
-**Table of Content**
+**Table of Contents**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -61,7 +61,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 - [Yarn v1](https://classic.yarnpkg.com) as a package manager
 - Husky and lint-staged will
-  - Lint (ESLint) and format (Prettier) code before commiting
+  - Lint (ESLint) and format (Prettier) code before committing
   - Validate that commit message is align with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
   - Run svelte-check before pushing
 - For VSCode user, format on save is enabled and [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when open the project.
@@ -167,10 +167,10 @@ flowchart TD
     H --> |fetched by| E(GitHub Page)
 ```
 
-- Original data is avaiable at our public [Google Sheets](https://docs.google.com/spreadsheets/d/1SbX2kgAGsslbhGuB-EI_YdSAnIt3reU1_OEtWmDVOVk/edit?usp=sharing)
+- Original data is available at our public [Google Sheets](https://docs.google.com/spreadsheets/d/1SbX2kgAGsslbhGuB-EI_YdSAnIt3reU1_OEtWmDVOVk/edit?usp=sharing)
 - [lib/datasheets](src/lib/datasheets/index.ts) provides fetch functions for each tables wrapping [d3-fetch](https://d3js.org/d3-fetch#csv) and [Zod](https://zod.dev)'s validation.
 - Zod's schema for each data table are defined in [src/models](src/models) which also contains ER Diagram and other TypeScript's interfaces.
-- Some data, such as politician ranking from external source, will be updated periodically through [scheduled Github Action](.github/workflows/update-ranking.yml) to reduce unnessesary build-time. The output JSON data is [served through Github Pages](https://wevisdemo.github.io/parliament-watch/politician-ranking.json) and can be fetch from the client-side.
+- Some data, such as politician ranking from external source, will be updated periodically through [scheduled Github Action](.github/workflows/update-ranking.yml) to reduce unnecessary build-time. The output JSON data is [served through Github Pages](https://wevisdemo.github.io/parliament-watch/politician-ranking.json) and can be fetch from the client-side.
 
 ## 🤝 Contributing Guideline
 

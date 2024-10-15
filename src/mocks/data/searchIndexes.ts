@@ -112,7 +112,7 @@ export const searchIndexes: SearchIndexes = {
 		},
 		{
 			id: '6',
-			name: 'ร่าง พรบ.คุ้มครองสิทธิส่วนบุคคล (วาระที่ 2)',
+			name: 'ร่าง พรบ.คุ้มครองข้อมูลส่วนบุคคล (วาระที่ 2)',
 			result: DefaultVotingResult.Failed
 		},
 		{
