@@ -40,12 +40,22 @@ We want to record and visualise the Thai parliament information including politi
 
 This project can be seen as a renovated combination of [They Work for Us](https://github.com/wevisdemo/they-work-for-us), [Law Watch](https://github.com/wevisdemo/law-watch), and [Promise Tracker](https://github.com/wevisdemo/promise-tracker) which aim to support several election era.
 
+เราต้องการบันทึกข้อมูลของรัฐสภาไทยและวาดมันออกมาให้เห็นเป็นภาพ
+ข้อมูลเหล่านั้นรวมถึง ข้อมูลนักการเมือง ข้อมูลการประชุม ร่างกฎหมาย
+กระบวนการลงคะแนน และสัญญาที่ให้ไว้
+
+โครงการนี้จะว่าไปก็เหมือนกับการรวมร่างโครงการ
+[They Work for Us](https://github.com/wevisdemo/they-work-for-us),
+[Law Watch](https://github.com/wevisdemo/law-watch), และ
+[Promise Tracker](https://github.com/wevisdemo/promise-tracker)
+จากการเลือกตั้งครั้งก่อนๆ และปรับปรุงให้ดีขึ้น
+
 ## 🌎 Environments
 
-| Name                  | URL                                |
-| --------------------- | ---------------------------------- |
-| Production            | https://parliamentwatch.wevis.info |
-| Staging (main branch) | https://parliament-watch.pages.dev |
+| Name                  | URL                                  |
+| --------------------- | ------__---------------------------- |
+| Production            | <https://parliamentwatch.wevis.info> |
+| Staging (main branch) | <https://parliament-watch.pages.dev> |
 
 ## 🍱 Tech Stack
 
@@ -62,7 +72,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 - [Yarn v1](https://classic.yarnpkg.com) as a package manager
 - Husky and lint-staged will
   - Lint (ESLint) and format (Prettier) code before commiting
-  - Validate that commit message is align with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
+  - Validate that commit message is align with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using [commitlint](https://github.com/conventional-changelog/commitlint)
   - Run svelte-check before pushing
 - For VSCode user, format on save is enabled and [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when open the project.
 - [Hygen](http://www.hygen.io) for a code generation
