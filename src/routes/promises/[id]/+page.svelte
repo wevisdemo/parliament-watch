@@ -69,7 +69,10 @@
 		</button>
 	</div>
 	<div class="mt-4">
-		<PromiseClarificationLog clarificationLogs={promise.clarificationLogs} />
+		<PromiseClarificationLog
+			partyName={promise.party.name}
+			clarificationLogs={promise.clarificationLogs}
+		/>
 	</div>
 	<div class="mt-8 flex flex-col justify-between gap-8 xl:flex-row">
 		<div class="flex flex-col gap-2">
