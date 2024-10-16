@@ -1,15 +1,10 @@
 <script lang="ts">
-	import type { PromiseSummary } from '../../routes/promises/+page.server';
-	import { PromiseStatus } from '$models/promise';
+	import { formatThaiDate } from '$lib/date-parser';
+	import { PromiseStatus, type PromiseSummary } from '$models/promise';
 	import Quotes from 'carbon-icons-svelte/lib/Quotes.svelte';
+
 	export let promiseSummary: PromiseSummary;
 	export let isList: boolean;
-	const formatDate = (date: Date) =>
-		date.toLocaleDateString('th-TH', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric'
-		});
 
 	$: style = (() => {
 		switch (promiseSummary.status) {
@@ -37,8 +32,10 @@
 	})();
 </script>
 
-<!-- TODO: link to actual promise ID -->
-<a href="/promises/1" class="{isList ? 'flex-row' : 'flex-col'} flex h-full w-full">
+<a
+	href="/promises/{promiseSummary.id}"
+	class="{isList ? 'flex-row' : 'flex-col'} flex h-full w-full"
+>
 	<div class="{isList ? 'w-1' : 'h-1 w-full'} {style.tag} shrink-0" />
 	<div
 		class="{isList
@@ -115,7 +112,11 @@
 			{/each}
 		</div>
 
-		<div class="col-span-2 {isList ? '' : `${style.footer} px-6 py-4`} grid grid-cols-2 gap-2">
+		<div
+			class="col-span-2 {isList
+				? ''
+				: `${style.footer} px-6 py-4`} grid grid-cols-2 gap-2 text-black"
+		>
 			<div class="flex flex-col gap-1">
 				{#if !isList}
 					<p class="heading-01">สถานะ</p>
@@ -128,7 +129,11 @@
 				{#if !isList}
 					<p class="heading-01">เคลื่อนไหวล่าสุด</p>
 				{/if}
-				<div class="body-01">{formatDate(promiseSummary.latestProgressDate.date)}</div>
+				<div class="body-01">
+					{promiseSummary.latestProgressDate
+						? formatThaiDate(promiseSummary.latestProgressDate)
+						: '-'}
+				</div>
 			</div>
 		</div>
 	</div>

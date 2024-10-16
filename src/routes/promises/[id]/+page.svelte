@@ -89,7 +89,9 @@
 							<a href={reference.url} target="_blank" class="helper-text-01 text-link-01 underline">
 								{reference.label}
 							</a>
-							<span class="label-01 text-gray-60">{reference.description}</span>
+							{#if reference.description}
+								<span class="label-01 text-gray-60">{reference.description}</span>
+							{/if}
 						</div>
 					{/each}
 				</div>

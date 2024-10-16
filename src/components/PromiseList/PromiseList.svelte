@@ -1,12 +1,11 @@
 <script lang="ts">
-	import type { PromiseSummary } from '../../routes/promises/+page.server';
 	import { Select, SelectItem } from 'carbon-components-svelte';
 	import PromiseCard from './PromiseCard.svelte';
 	import Grid from 'carbon-icons-svelte/lib/Grid.svelte';
 	import List from 'carbon-icons-svelte/lib/List.svelte';
+	import type { PromiseSummary } from '$models/promise';
 
 	export let summaries: PromiseSummary[];
-	// export let cappedAt: number | undefined;
 
 	type SortByOptions = 'วันที่เคลื่อนไหวล่าสุด' | 'ตัวอักษร' | 'สถานะ';
 	let sortBy: SortByOptions = 'วันที่เคลื่อนไหวล่าสุด';
@@ -26,7 +25,7 @@
 		switch (sortBy) {
 			case 'วันที่เคลื่อนไหวล่าสุด':
 				return data.sort(
-					(a, b) => b.latestProgressDate.date.getTime() - a.latestProgressDate.date.getTime()
+					(a, b) => (b.latestProgressDate?.getTime() || 0) - (a.latestProgressDate?.getTime() || 0)
 				);
 			case 'ตัวอักษร':
 				return data.sort((a, b) => (a.statements[0] ?? '').localeCompare(b.statements[0] ?? ''));

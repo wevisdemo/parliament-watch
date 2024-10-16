@@ -1,9 +1,9 @@
 <script lang="ts">
 	import PromiseList from '$components/PromiseList/PromiseList.svelte';
 	import { Dropdown, Search } from 'carbon-components-svelte';
-	import type { PromiseSummary } from '../../../routes/promises/+page.server';
 	import ContentSection from '$components/Promise/Home/ContentSection.svelte';
 	import { onMount } from 'svelte';
+	import type { PromiseSummary } from '$models/promise';
 
 	export let promiseSummaries: PromiseSummary[];
 

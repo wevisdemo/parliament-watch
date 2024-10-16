@@ -1,19 +1,14 @@
-import { fetchAssemblies, fetchParties, fetchPoliticians } from '$lib/datasheets';
+import { fetchAssemblies, fetchParties, fetchPoliticians, fetchPromises } from '$lib/datasheets';
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
-import { PromiseStatus, type Promise, type PromiseProgress } from '$models/promise';
-import {
-	clarifyingPromise,
-	fulfilledPromise,
-	inProgressPromise,
-	notStartedPromise,
-	promiseSummaries,
-	unhonoredPromise
-} from '../../mocks/data/promise';
+import { PromiseStatus, type Promise, type PromiseSummary } from '$models/promise';
 import { error } from '@sveltejs/kit';
 import type { Assembly } from 'carbon-icons-svelte';
+import { groups } from 'd3';
 import dayjs from 'dayjs';
+
+const MAX_PROMISES_SAMPLE = 3;
 
 export interface CabinetSummary extends Pick<Assembly, 'id' | 'startedAt'> {
 	primeMinister: Pick<Politician, 'firstname' | 'lastname'> & { party?: Party };
@@ -41,11 +36,6 @@ export interface PromisesByCategory {
 	count: number;
 }
 
-export interface PromiseSummary
-	extends Pick<Promise, 'id' | 'statements' | 'party' | 'keywords' | 'categories' | 'status'> {
-	latestProgressDate: PromiseProgress;
-}
-
 const CURRENT_CABINET_ASSEMBLY_ID = 'คณะรัฐมนตรี-64';
 
 export async function load() {
@@ -58,6 +48,7 @@ export async function load() {
 
 	const politicians = await fetchPoliticians();
 	const parties = await fetchParties();
+	const promises = await fetchPromises();
 
 	const cabinetMembers = getAssemblyMembers(cabinetAssembly, politicians).filter(
 		({ assemblyRole }) =>
@@ -112,108 +103,53 @@ export async function load() {
 		policyStatement: mockPolicyStatement
 	};
 
-	const mockPromisesByStatus: PromisesByStatus[] = [
-		{
-			status: PromiseStatus.inProgress,
-			samples: [
-				{ id: inProgressPromise.id, statements: inProgressPromise.statements },
-				{ id: inProgressPromise.id, statements: inProgressPromise.statements },
-				{ id: inProgressPromise.id, statements: inProgressPromise.statements }
-			],
-			count: 85
-		},
-		{
-			status: PromiseStatus.fulfilled,
-			samples: [
-				{ id: fulfilledPromise.id, statements: fulfilledPromise.statements },
-				{ id: fulfilledPromise.id, statements: fulfilledPromise.statements },
-				{ id: fulfilledPromise.id, statements: fulfilledPromise.statements }
-			],
-			count: 10
-		},
-		{
-			status: PromiseStatus.unhonored,
-			samples: [
-				{ id: unhonoredPromise.id, statements: unhonoredPromise.statements },
-				{ id: unhonoredPromise.id, statements: unhonoredPromise.statements },
-				{ id: unhonoredPromise.id, statements: unhonoredPromise.statements }
-			],
-			count: 5
-		},
-		{
-			status: PromiseStatus.notStarted,
-			samples: [
-				{ id: notStartedPromise.id, statements: notStartedPromise.statements },
-				{ id: notStartedPromise.id, statements: notStartedPromise.statements },
-				{ id: notStartedPromise.id, statements: notStartedPromise.statements }
-			],
-			count: 100
-		},
-		{
-			status: PromiseStatus.clarifying,
-			samples: [
-				{ id: clarifyingPromise.id, statements: clarifyingPromise.statements },
-				{ id: clarifyingPromise.id, statements: clarifyingPromise.statements },
-				{ id: clarifyingPromise.id, statements: clarifyingPromise.statements }
-			],
-			count: 5
-		}
-	];
+	const byStatus: PromisesByStatus[] = groups(promises, (p) => p.status).map(
+		([status, promisesByStatus]) => ({
+			status,
+			samples: promisesByStatus
+				.slice(0, MAX_PROMISES_SAMPLE)
+				.map(({ id, statements }) => ({ id, statements })),
+			count: promisesByStatus.length
+		})
+	);
 
-	const mockPromisesByCategory: PromisesByCategory[] = [
-		{
-			category: 'ขนส่งสาธารณะ',
-			byStatuses: {
-				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.fulfilled]: 1,
-				[PromiseStatus.unhonored]: 2
-			},
-			count: 6
-		},
-		{
-			category: 'สังคม',
-			byStatuses: {
-				[PromiseStatus.inProgress]: 10,
-				[PromiseStatus.fulfilled]: 0,
-				[PromiseStatus.unhonored]: 4
-			},
-			count: 14
-		},
-		{
-			category: 'เศรษฐกิจ',
-			byStatuses: {
-				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.fulfilled]: 1,
-				[PromiseStatus.unhonored]: 2
-			},
-			count: 6
-		},
-		{
-			category: 'สิ่งแวดล้อม',
-			byStatuses: {
-				[PromiseStatus.inProgress]: 3,
-				[PromiseStatus.fulfilled]: 1,
-				[PromiseStatus.unhonored]: 2
-			},
-			count: 6
-		},
-		{
-			category: 'ความมั่นคง',
-			byStatuses: {
-				[PromiseStatus.inProgress]: 1,
-				[PromiseStatus.fulfilled]: 0,
-				[PromiseStatus.unhonored]: 1
-			},
-			count: 2
-		}
-	];
+	const byCategory: PromisesByCategory[] = groups(
+		promises.flatMap((p) =>
+			p.categories.map((category) => ({
+				...p,
+				category
+			}))
+		),
+		(p) => p.category
+	).map(([category, promisesByCategory]) => ({
+		category,
+		byStatuses: Object.fromEntries(
+			groups(promisesByCategory, (p) => p.status).map(([status, promisesByStatus]) => [
+				status,
+				promisesByStatus.length
+			])
+		) as PromiseCountByStatus,
+		count: promisesByCategory.length
+	}));
+
+	const promiseSummaries: PromiseSummary[] = promises.map(
+		({ id, statements, party, keywords, categories, status, progresses }) => ({
+			id,
+			statements,
+			party,
+			keywords,
+			categories,
+			status,
+			latestProgressDate: progresses.at(0)?.date
+		})
+	);
 
 	return {
 		cabinet,
-		byStatus: mockPromisesByStatus,
-		byCategory: mockPromisesByCategory,
-		activeCount: 100,
-		count: 205,
+		byStatus,
+		byCategory,
+		activeCount: promises.filter(({ status }) => status !== PromiseStatus.notStarted).length,
+		count: promises.length,
 		promiseSummaries
 	};
 }

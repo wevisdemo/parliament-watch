@@ -24,8 +24,7 @@
 	<ul class="list-disc space-y-2 pl-6">
 		{#each samples as s}
 			<li>
-				<!-- TODO: link to actual promise ID -->
-				<a href="/promises/1" class="body-01 line-clamp-2 text-text-02 underline">
+				<a href="/promises/{s.id}" class="body-01 line-clamp-2 text-text-02 underline">
 					{s.statements}
 				</a>
 			</li>

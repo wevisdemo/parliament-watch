@@ -66,7 +66,7 @@
 		<div class="flex flex-col gap-4 md:flex-row">
 			<div class="md:basis-1/3">
 				<PromiseStatusCard
-					status="กำลังดำเนินการ"
+					status={PromiseStatus.inProgress}
 					statusCount={inProgress?.count || 0}
 					description="คำสัญญาที่เราตรวจพบข้อมูลความคืบหน้าของการดำเนินงานโดยรัฐบาล"
 					max={maxStatusCount}
@@ -78,7 +78,7 @@
 			<div class="solid border-t border-ui-03 md:block md:border-l" />
 			<div class="md:basis-1/3">
 				<PromiseStatusCard
-					status="ดำเนินการแล้ว"
+					status={PromiseStatus.fulfilled}
 					statusCount={fulfilled?.count || 0}
 					description="คำสัญญาที่เราตรวจพบความคืบหน้าของการดำเนินงานโดยรัฐบาล และเกิดผลลัพธ์ตามคำสัญญาที่ได้ให้ไว้ในช่วงหาเสียง"
 					max={maxStatusCount}
@@ -90,7 +90,7 @@
 			<div class="solid border-t border-ui-03 md:block md:border-l" />
 			<div class="md:basis-1/3">
 				<PromiseStatusCard
-					status="เลิกดำเนินการ"
+					status={PromiseStatus.unhonored}
 					statusCount={unhonored?.count || 0}
 					description="คำสัญญาที่พบว่ามีการกระทำหรือเหตุการณ์ ที่สรุปได้ว่ารัฐบาลเลิกดำเนินการ หรือไม่สามารถทำตามคำสัญญาต่อได้"
 					max={maxStatusCount}

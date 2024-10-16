@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import type { PromiseSample } from '../../../routes/promises/+page.server';
+	import type { PromiseStatus } from '$models/promise';
 
-	export let status: 'กำลังดำเนินการ' | 'ดำเนินการแล้ว' | 'เลิกดำเนินการ';
+	export let status: PromiseStatus.inProgress | PromiseStatus.fulfilled | PromiseStatus.unhonored;
 	export let statusCount: number;
 	export let description = '';
 	export let max: number;
@@ -31,8 +32,7 @@
 		<ul class="list-disc space-y-2 pl-6">
 			{#each samples as s}
 				<li>
-					<!-- TODO: link to actual promise ID -->
-					<a href="/promises/1" class="body-01 line-clamp-2 text-text-02 underline">
+					<a href="/promises/{s.id}" class="body-01 line-clamp-2 text-text-02 underline">
 						{s.statements}
 					</a>
 				</li>

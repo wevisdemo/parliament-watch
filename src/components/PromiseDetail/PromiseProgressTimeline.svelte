@@ -80,15 +80,14 @@
 					{#if progress.description}
 						<div class="body-01">{progress.description}</div>
 					{/if}
-					{#if progress.reference}
+					{#if progress.url}
 						<div class="label-01 text-gray-60">
 							ที่มา: <a
-								href={progress.reference.url}
+								href={progress.url}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="underline">{progress.reference.label}</a
+								class="label-01 underline">{progress.url}</a
 							>
-							{progress.reference.description}
 						</div>
 					{/if}
 				</div>
