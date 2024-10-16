@@ -267,9 +267,7 @@
 					class="w-0 min-w-full pt-0"
 					size="tall"
 					headers={tableHeader}
-					rows={filteredData.map((data, index) => {
-						return { ...data, id: `${index}-${data.id}` };
-					})}
+					rows={filteredData}
 					pageSize={tablePageSize}
 					page={tableCurrentPage}
 				>
