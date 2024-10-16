@@ -38,6 +38,7 @@ export interface Summary {
 export interface MemberGroup {
 	name: string;
 	total: number;
+	senateMembers?: AssemblyMember[];
 	parties?: (Pick<Party, 'name' | 'color'> & { count: number; members?: AssemblyMember[] })[];
 }
 
@@ -93,6 +94,7 @@ export async function load({ params }) {
 						total: group.subgroups.reduce((sum, subGroup) => sum + subGroup.members.length, 0)
 					}
 				: {
+						senateMembers: group.members,
 						total: group.members.length
 					})
 		}));
