@@ -148,7 +148,7 @@ The project design system is based on Carbon Design System v10 with some modific
 ### Icons
 
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
-- We have customed icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also available in Histoire)
+- We have custom icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also available in Histoire)
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
 
 ## 💾 Data Pipeline
