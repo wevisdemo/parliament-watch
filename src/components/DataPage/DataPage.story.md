@@ -65,7 +65,7 @@ Props เหล่านี้ต้อง `bind:props` เพื่อให้
 | ---------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `bind:searchQuery`           | `string = ""`                                        | ข้อความในกล่องค้นหา                                                                                            |
 | `bind:selectedComboboxValue` | `SelectedComboboxValueType = ทุกช่องเป็น undefined*` | เป็น Object ที่จะมี key เป็น key ของ combobox นั้น และ value เป็น value ของ combobox นั้นๆ                     |
-| `bind:selectedCheckboxValue` | `SelectedCheckboxValueType = ทุกชอยส์**`             | เป็น Object ที่จะมี key เป็น key ของ checkbox กลุ่มนั้น และ value เป็น array ของ choice ขอกลุ่ม checkbox นั้นๆ |
+| `bind:selectedCheckboxValue` | `SelectedCheckboxValueType = ทุกชอยส์**`             | เป็น Object ที่จะมี key เป็น key ของ checkbox กลุ่มนั้น และ value เป็น array ของ choice ของกลุ่ม checkbox นั้นๆ |
 | `bind:mounted`               | `boolean = false`                                    | เอาไว้ sync กับด้านนอกว่าตอนนี้ DataPage mount แล้วหรือยัง                                                     |
 
 > - \*ทุกช่องเป็น undefined = `Object.fromEntries(comboboxFilterList.map((group) => [group.key, undefined]));`

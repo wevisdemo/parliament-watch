@@ -21,15 +21,15 @@
 			{ heading: 'สุชาติ ชมกลิ่น', description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ', url: '' }
 		],
 		bills: [
-			{ heading: 'ร่าง พรบ.สุราก้าวหน้า', billStatus: BillStatus.InProgress, url: '' },
-			{ heading: 'ร่าง พรบ.สุขภาพจิต', billStatus: BillStatus.Merged, url: '' },
-			{ heading: 'ร่าง พรบ.สุขภาพแห่งชาติ', billStatus: BillStatus.Rejected, url: '' },
-			{ heading: 'ร่าง พรบ.สุขาภิบาล', billStatus: BillStatus.Rejected, url: '' },
-			{ heading: 'ร่าง พรบ.สุสานและฌาปนสถาน', billStatus: BillStatus.Enacted, url: '' }
+			{ heading: 'ร่าง พ.ร.บ.สุราก้าวหน้า', billStatus: BillStatus.InProgress, url: '' },
+			{ heading: 'ร่าง พ.ร.บ.สุขภาพจิต', billStatus: BillStatus.Merged, url: '' },
+			{ heading: 'ร่าง พ.ร.บ.สุขภาพแห่งชาติ', billStatus: BillStatus.Rejected, url: '' },
+			{ heading: 'ร่าง พ.ร.บ.สุขาภิบาล', billStatus: BillStatus.Rejected, url: '' },
+			{ heading: 'ร่าง พ.ร.บ.สุสานและฌาปนสถาน', billStatus: BillStatus.Enacted, url: '' }
 		],
 		votings: [
 			{
-				heading: 'ร่าง พรบ.สุราก้าวหน้า (วาระที่ 1)',
+				heading: 'ร่าง พ.ร.บ.สุราก้าวหน้า (วาระที่ 1)',
 				voteResult: DefaultVotingResult.Passed,
 				url: ''
 			},
