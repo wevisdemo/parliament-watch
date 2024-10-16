@@ -1,6 +1,6 @@
 # 👀 Parliament Watch
 
-Citizens are watching
+Citizens are watching ประชาชมอยู่นะ
 
 > **Hacktoberfest 2024 is here!** every constibutor will receive a Parliament Watch sticker ✨ [see more](https://www.facebook.com/wevisdemo/posts/pfbid06t4zjUoG2noQW1pow9PiN2wmVQpUTHUSyE44SZcpP7bAaRRGaQy9JU1iWpUnVQAnl)
 
@@ -11,26 +11,27 @@ Citizens are watching
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [⭐ Goal](#-goal)
-- [🌎 Environments](#-environments)
-- [🍱 Tech Stack](#-tech-stack)
-  - [Front-end](#front-end)
-  - [Local development](#local-development)
-  - [Deployment pipeline](#deployment-pipeline)
-- [🪄 Useful Commands](#-useful-commands)
-  - [Start SvelteKit](#start-sveltekit)
-  - [Start Histoire](#start-histoire)
-  - [Generate a new component](#generate-a-new-component)
-  - [Log](#log)
-- [🗃️ Directory Structure](#-directory-structure)
-- [🍭 Design System](#-design-system)
-  - [Typography](#typography)
-  - [Colors](#colors)
-  - [Components](#components)
-  - [Icons](#icons)
-- [💾 Data Pipeline](#-data-pipeline)
-- [🤝 Contributing Guideline](#-contributing-guideline)
-- [📜 License and Terms of Use](#-license-and-terms-of-use)
+- [⭐ Goal](#-goal) เป้าหมาย
+- [🌎 Environments](#-environments) สภาพแวดล้อม
+- [🍱 Tech Stack](#-tech-stack) ชุดเทคโนโลยี
+  - [Front-end](#front-end) หน้าบ้าน
+  - [Local development](#local-development) พัฒนาที่เครื่องส่วนท้องถิ่น
+  - [Deployment pipeline](#deployment-pipeline) สายพานติดตั้ง
+- [🪄 Useful Commands](#-useful-commands) คำสั่งที่มีประโยชน์
+  - [Start SvelteKit](#start-sveltekit) สตาร์ต SvelteKit
+  - [Start Histoire](#start-histoire) สตาร์ต Histoire
+  - [Generate a new component](#generate-a-new-component) สร้างคอมโพเนนต์ใหม่
+
+  - [Log](#log) บันทึกเหตุการณ์
+- [🗃️ Directory Structure](#-directory-structure) โครงสร้างไดเรกทอรี
+- [🍭 Design System](#-design-system) ระบบการออกแบบ
+  - [Typography](#typography) ตัวพิมพ์
+  - [Colors](#colors) สี
+  - [Components](#components) คอมโพเนนต์
+  - [Icons](#icons) ไอคอน
+- [💾 Data Pipeline](#-data-pipeline) สายพานข้อมูล
+- [🤝 Contributing Guideline](#-contributing-guideline) แนวทางการสมทบงาน
+- [📜 License and Terms of Use](#-license-and-terms-of-use) สัญญาอนุญาตและเงื่อนไขการใช้งาน
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -79,8 +80,15 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 ### Deployment pipeline
 
-- **Staging**: Each push will trigger the [Github Actions Workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy on [Cloudflare Pages](https://pages.cloudflare.com). Can also be triggered manually.
-- **Production**: The [Github Actions Workflow](.github/workflows/staging.yml) can only be manually triggered to download the latest build artifact and upload to our server through SSH.
+- **Staging**: Each push will trigger the [Github Actions Workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy on [Cloudflare Pages](https://pages.cloudflare.com). Can also be triggered manually.  
+  การพุชแต่ละครั้งจะกระตุ้นให้
+  [Github Actions Workflow](.github/workflows/staging.yml)
+  ทำงานเพื่อสร้างเว็บไซต์ อัปโหลดส่วนประกอบของเว็บไซต์ที่สร้างเสร็จ
+  และติดตั้งที่ Cloudflare Pages เวิร์กโฟลว์นี้คนสามารถสั่งให้ทำงานได้
+- **Production**: The [Github Actions Workflow](.github/workflows/staging.yml) can only be manually triggered to download the latest build artifact and upload to our server through SSH.  
+  เวิร์กโฟลว์นี้จะทำงานก็ต่อเมื่อมีคนสั่งเท่านั้น
+  มันจะดาวน์โหลดส่วนประกอบของเว็บไซต์ที่ถูกสร้างล่าสุด
+  และอัปโหลดไปที่เซิร์ฟเวอร์ของเราผ่าน SSH
 
 ## 🪄 Useful Commands
 
