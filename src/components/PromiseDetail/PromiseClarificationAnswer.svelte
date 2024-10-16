@@ -3,28 +3,24 @@
 	import type { PromiseClarificationLog } from '$models/promise';
 	import { Quotes } from 'carbon-icons-svelte';
 
-	export let clarificationAnswer: PromiseClarificationLog['answer'];
+	export let clarificationAnswer: NonNullable<PromiseClarificationLog['answer']>;
 	export let partyName: string;
 </script>
 
-{#if !clarificationAnswer}
-	<div></div>
-{:else}
-	<div class="py-2">
-		<div class="flex flex-row gap-2 text-text-03">
-			<Quotes class="text-2xl" size={20} />
-			<span>
-				คำชี้แจงจากพรรค{partyName} ({formatThaiDate(clarificationAnswer.date, true)})
-			</span>
-		</div>
-		<div class="flex flex-row gap-2">
-			<div class="vertical-gray-line" />
-			<div class="body-02 font-semibold text-text-01">
-				{clarificationAnswer.content}
-			</div>
+<div class="py-2">
+	<div class="flex flex-row gap-2 text-text-03">
+		<Quotes class="text-2xl" size={20} />
+		<span>
+			คำชี้แจงจากพรรค{partyName} ({formatThaiDate(clarificationAnswer.date, true)})
+		</span>
+	</div>
+	<div class="flex flex-row gap-2">
+		<div class="vertical-gray-line" />
+		<div class="body-02 font-semibold text-text-01">
+			{clarificationAnswer.content}
 		</div>
 	</div>
-{/if}
+</div>
 
 <style lang="postcss">
 	.vertical-gray-line {

@@ -68,12 +68,14 @@
 			ดูความหมายสถานะอื่นๆ
 		</button>
 	</div>
-	<div class="mt-4">
-		<PromiseClarificationLog
-			partyName={promise.party.name}
-			clarificationLogs={promise.clarificationLogs}
-		/>
-	</div>
+	{#if promise.clarificationLogs && promise.clarificationLogs?.length > 0}
+		<div class="mt-4">
+			<PromiseClarificationLog
+				partyName={promise.party.name}
+				clarificationLogs={promise.clarificationLogs}
+			/>
+		</div>
+	{/if}
 	<div class="mt-8 flex flex-col justify-between gap-8 xl:flex-row">
 		<div class="flex flex-col gap-2">
 			<div class="flex flex-wrap gap-1">
