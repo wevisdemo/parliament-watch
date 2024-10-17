@@ -30,7 +30,7 @@ Citizens are watching
   - [Icons](#icons)
 - [💾 Data Pipeline](#-data-pipeline)
 - [🤝 Contributing Guideline](#-contributing-guideline)
-- [📜 License and Terms of Use](#-license-and-terms-of-use)
+- [📜 License](#-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -176,6 +176,6 @@ flowchart TD
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md)
 
-## 📜 License and Terms of Use
+## 📜 License
 
-Read more at [WeVis's Terms of Use](https://wevis.info/terms-of-use/) (in Thai)
+Our team is committed to developing all projects as Open Source and releasing data as Open Data under the [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) license. This means the work can be used, adapted, and built upon, but it must not be used for commercial purposes or profit-making. Credit must be given to the original creators, and any derivative work must be shared under the same license as the original. WeVis Ltd. and Punch Up Ltd. are the joint licensors of this license.
