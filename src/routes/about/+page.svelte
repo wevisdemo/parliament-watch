@@ -164,7 +164,8 @@
 			</h3>
 			<p>
 				ทางทีมมีความตั้งใจที่จะพัฒนาทุกโปรเจกต์ให้เป็น Open Source และเปิดข้อมูลเป็น Open Data
-				ภายใต้เงื่อนไข Creative Commons Attribution-NonCommercial-ShareAlike License
+				ภายใต้เงื่อนไข <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
+				Creative Commons Attribution-NonCommercial-ShareAlike License</a>
 				คือสามารถนำไปเผยแพร่และดัดแปลงได้ โดยต้องระบุที่มา แต่ห้ามนำไปใช้เพื่อการค้า
 				และต้องเผยแพร่งานดัดแปลงโดยใช้สัญญาอนุญาตชนิดเดียวกัน
 			</p>
