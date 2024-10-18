@@ -4,7 +4,7 @@
 	import AffiliationsResult from '$components/AffiliationResult/AffiliationsResult.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import {

@@ -14,7 +14,7 @@
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 
 	export let data;
 

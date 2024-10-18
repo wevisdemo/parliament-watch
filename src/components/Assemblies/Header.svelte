@@ -3,7 +3,7 @@
 	import { Download, TableSplit } from 'carbon-icons-svelte';
 	import Share from '$components/Share/Share.svelte';
 	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 
 	export let availableAssemblies: AvailableAssembly[] = [];
 
