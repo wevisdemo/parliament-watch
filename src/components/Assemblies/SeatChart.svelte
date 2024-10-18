@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
-	import type { PartySeat } from './shared';
-
+	import type { PartySeat, TooltipProp } from './shared';
+	import AssemblyTooltip from './AssemblyTooltip.svelte';
 	interface Point {
 		x: number;
 		y: number;
 		color: string;
+		title?: string;
+		additional?: string;
 	}
 
 	interface LineCalculator {
@@ -21,6 +23,7 @@
 	let outterRadius = 0;
 	let circleDiameter = outterRadius / 2 / lineAmounts.length;
 	let gap = 0;
+	let tooltipProp: TooltipProp | null = null;
 
 	const getIndexOfLine = (lineCals: LineCalculator[]) => {
 		const filledPercents = lineCals.map((lineCal) => lineCal.count / lineCal.total);
@@ -43,10 +46,13 @@
 				let index = getIndexOfLine(lineCals);
 				let line = lineCals[index];
 				let radius = outterRadius - index * circleDiameter - index * gap;
+				const name = `${party?.members?.[i].firstname} ${party?.members?.[i].lastname}`;
 				points.push({
 					x: radius * Math.cos((line.count / (line.total - 1)) * Math.PI + Math.PI),
 					y: radius * Math.sin((line.count / (line.total - 1)) * Math.PI + Math.PI),
-					color: party.color
+					color: party.color,
+					additional: party.name,
+					title: name
 				});
 				lineCals[index].count++;
 			}
@@ -87,7 +93,11 @@
 				.attr('cy', value.y + outterRadius + circleDiameter)
 				.attr('r', circleDiameter / 2)
 				.attr('fill', value.color)
-				.attr('class', 'seat');
+				.attr('class', 'seat')
+				.on('mouseover', (e) => setTooltipProperty(value, e))
+				.on('mouseout', () => {
+					tooltipProp = null;
+				});
 		});
 	};
 
@@ -98,6 +108,15 @@
 			(outterRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
 			1
 		);
+	};
+
+	const setTooltipProperty = (value: Point, event: MouseEvent): void => {
+		tooltipProp = {
+			title: value.title ?? '',
+			additional: value.additional ?? '',
+			x: event.pageX,
+			y: event.pageY + 20
+		};
 	};
 
 	onMount(() => {
@@ -126,3 +145,5 @@
 		class="transition-[height] duration-500 ease-in-out"
 	/>
 </div>
+
+<AssemblyTooltip {tooltipProp}></AssemblyTooltip>

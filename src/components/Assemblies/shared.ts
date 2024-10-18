@@ -1,3 +1,4 @@
+import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 
 export interface PartySelected {
@@ -47,6 +48,7 @@ export interface PartySeat {
 	name: string;
 	color: string;
 	count: number;
+	members?: AssemblyMember[];
 }
 
 export interface CabinetSeat {
@@ -65,4 +67,11 @@ export const getSenateColorByTitle = (title: string) => {
 		default:
 			return '#A8A8A8';
 	}
+};
+
+export type TooltipProp = {
+	title: string;
+	additional: string;
+	x: number;
+	y: number;
 };
