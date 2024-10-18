@@ -9,7 +9,7 @@
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 
 	export let data;
 

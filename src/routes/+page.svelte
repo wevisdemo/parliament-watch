@@ -10,7 +10,7 @@
 	import ContentSection from '$components/Index/ContentSection.svelte';
 	import { SearchIndexCategory } from '$models/search.js';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 
 	export let data;
 
