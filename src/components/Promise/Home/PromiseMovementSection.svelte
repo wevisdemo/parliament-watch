@@ -146,27 +146,31 @@
 		</div>
 	</div>
 	<div class="flex flex-col gap-4 py-6 md:flex-row">
-		<div class="flex md:basis-1/2">
-			<OtherStatusCard
-				title="คำสัญญาที่ไม่พบความเคลื่อนไหว"
-				status="ไม่พบความเคลื่อนไหว"
-				statusCount={notStarted?.count || 0}
-				samples={notStarted?.samples}
-				description="เราไม่พบข้อมูลความเคลื่อนไหวที่เกี่ยวกับคำสัญญานี้"
-				on:buttonClick={handleClickViewAll}
-			/>
-		</div>
+		{#if notStarted}
+			<div class="flex md:basis-1/2">
+				<OtherStatusCard
+					title="คำสัญญาที่ไม่พบความเคลื่อนไหว"
+					status="ไม่พบความเคลื่อนไหว"
+					statusCount={notStarted.count}
+					samples={notStarted.samples}
+					description="เราไม่พบข้อมูลความเคลื่อนไหวที่เกี่ยวกับคำสัญญานี้"
+					on:buttonClick={handleClickViewAll}
+				/>
+			</div>
+		{/if}
 
-		<div class="flex md:basis-1/2">
-			<OtherStatusCard
-				title="คำสัญญาที่รอคำชี้แจงเพิ่มเติม"
-				status="รอคำชี้แจงเพิ่มเติม"
-				statusCount={clarifying?.count || 0}
-				samples={clarifying?.samples}
-				description="เราพบว่าคำสัญญานี้มีความคลุมเครือและกำลังอยู่ในระหว่างการขอคำชี้แจงเพิ่มเติม"
-				on:buttonClick={handleClickViewAll}
-			/>
-		</div>
+		{#if clarifying}
+			<div class="flex md:basis-1/2">
+				<OtherStatusCard
+					title="คำสัญญาที่รอคำชี้แจงเพิ่มเติม"
+					status="รอคำชี้แจงเพิ่มเติม"
+					statusCount={clarifying.count}
+					samples={clarifying.samples}
+					description="เราพบว่าคำสัญญานี้มีความคลุมเครือและกำลังอยู่ในระหว่างการขอคำชี้แจงเพิ่มเติม"
+					on:buttonClick={handleClickViewAll}
+				/>
+			</div>
+		{/if}
 	</div>
 </div>
 
