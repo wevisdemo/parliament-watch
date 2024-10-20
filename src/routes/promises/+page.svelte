@@ -8,7 +8,8 @@
 
 	export let data;
 
-	$: ({ cabinet, activeCount, count, byStatus, byCategory, promiseSummaries } = data);
+	$: ({ cabinet, previousCabinet, activeCount, count, byStatus, byCategory, promiseSummaries } =
+		data);
 
 	let defaultFilterBy = {
 		status: 'ทุกสถานะ',
@@ -75,7 +76,7 @@
 </ContentSection>
 
 <ContentSection id="about">
-	<AboutSection {cabinet} />
+	<AboutSection {cabinet} {previousCabinet} />
 </ContentSection>
 
 <ContentSection id="movement">

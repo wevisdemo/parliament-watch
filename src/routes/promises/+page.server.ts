@@ -1,20 +1,26 @@
 import { fetchAssemblies, fetchParties, fetchPoliticians, fetchPromises } from '$lib/datasheets';
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
+import type { Assembly } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import { PromiseStatus, type Promise, type PromiseSummary } from '$models/promise';
 import { error } from '@sveltejs/kit';
-import type { Assembly } from 'carbon-icons-svelte';
 import { groups } from 'd3';
 import dayjs from 'dayjs';
 
 const MAX_PROMISES_SAMPLE = 3;
 
 export interface CabinetSummary extends Pick<Assembly, 'id' | 'startedAt'> {
-	primeMinister: Pick<Politician, 'firstname' | 'lastname'> & { party?: Party };
+	primeMinister: Pick<Politician, 'firstname' | 'lastname' | 'avatar'> & { party?: Party };
 	cabinetMemberCount: number;
 	cabinetMemberCountsByParty: { party: Party | 'ไม่สังกัดพรรค'; count: number }[];
 	policyStatement: string;
+}
+
+export interface PreviousCabinetSummary extends Pick<Assembly, 'id' | 'startedAt'> {
+	primeMinister: Pick<Politician, 'firstname' | 'lastname'> & { party?: Party };
+	cabinetMemberCountsByParty: { party: Party | 'ไม่สังกัดพรรค'; count: number }[];
+	endedAt: Date;
 }
 
 export type PromiseSample = Pick<Promise, 'id' | 'statements'>;
@@ -36,26 +42,36 @@ export interface PromisesByCategory {
 	count: number;
 }
 
+export type AssemblyMember = ReturnType<typeof getAssemblyMembers>[number];
+
 const CURRENT_CABINET_ASSEMBLY_ID = 'คณะรัฐมนตรี-64';
+const PREVIOUS_CABINET_ASSEMBLY_ID = 'คณะรัฐมนตรี-63';
 
-export async function load() {
-	const cabinetAssembly = (await fetchAssemblies()).find(
-		(a) => a.id === CURRENT_CABINET_ASSEMBLY_ID
-	);
+function findCabinetAssemblyWithId(assemblies: Assembly[], id: string) {
+	const cabinetAssembly = assemblies.find((a) => a.id === id);
 	if (!cabinetAssembly) {
-		error(500, `Cannot find the current cabinet: ${CURRENT_CABINET_ASSEMBLY_ID}`);
+		error(500, `Cannot find the cabinet: ${id}`);
 	}
+	return cabinetAssembly;
+}
 
-	const politicians = await fetchPoliticians();
-	const parties = await fetchParties();
-	const promises = await fetchPromises();
+function findPrimeMinister(cabinetMembers: AssemblyMember[]) {
+	const primeMinister = cabinetMembers.find((m) => m.assemblyRole?.role === 'นายกรัฐมนตรี');
+	if (!primeMinister) {
+		error(500, `Cannot find the prime minister in the given cabinet`);
+	}
+	return primeMinister;
+}
 
-	const cabinetMembers = getAssemblyMembers(cabinetAssembly, politicians).filter(
+function getCainetMembers(cabinetAssembly: Assembly, politicians: Politician[]) {
+	return getAssemblyMembers(cabinetAssembly, politicians).filter(
 		({ assemblyRole }) =>
 			!assemblyRole?.endedAt ||
 			(cabinetAssembly.endedAt && !dayjs(cabinetAssembly.endedAt).isAfter(assemblyRole.endedAt))
 	);
+}
 
+function getCabinetMemberCountsByParty(cabinetMembers: any[], parties: Party[]) {
 	const cabinetMemberCountsByPartyName = cabinetMembers
 		.map((m) => m.partyRole?.party.name)
 		.reduce(
@@ -67,7 +83,7 @@ export async function load() {
 			{} as { [partyName: string]: number }
 		);
 
-	const cabinetMemberCountsByParty = Object.entries(cabinetMemberCountsByPartyName).map(
+	return Object.entries(cabinetMemberCountsByPartyName).map(
 		([name, count]): { party: Party | 'ไม่สังกัดพรรค'; count: number } => {
 			const party =
 				name === 'ไม่สังกัดพรรค' ? 'ไม่สังกัดพรรค' : parties.find((p) => p.name === name);
@@ -76,16 +92,22 @@ export async function load() {
 			}
 			return {
 				party,
-				count
+				count: count as number
 			};
 		}
 	);
+}
 
-	const primeMinister = cabinetMembers.find((m) => m.assemblyRole?.role === 'นายกรัฐมนตรี');
+export async function load() {
+	const assemblies: Assembly[] = await fetchAssemblies();
+	const politicians: Politician[] = await fetchPoliticians();
+	const parties: Party[] = await fetchParties();
+	const promises: Promise[] = await fetchPromises();
 
-	if (!primeMinister) {
-		error(500, `Cannot find the current prime minister in the given cabinet`);
-	}
+	const cabinetAssembly = findCabinetAssemblyWithId(assemblies, CURRENT_CABINET_ASSEMBLY_ID);
+	const cabinetMembers = getCainetMembers(cabinetAssembly, politicians);
+	const cabinetMemberCountsByParty = getCabinetMemberCountsByParty(cabinetMembers, parties);
+	const primeMinister = findPrimeMinister(cabinetMembers);
 
 	const mockPolicyStatement =
 		'นางสาวแพทองธาร ชินวัตร นายกรัฐมนตรี ได้แถลงนโยบายต่อรัฐสภาเมื่อวันที่ 12 กันยายน 2567 โดยเน้นความท้าทายที่ประเทศไทยต้องเผชิญ เช่น การเติบโตทางเศรษฐกิจที่ต่ำกว่าศักยภาพ ปัญหาหนี้สิน ความเหลื่อมล้ำ และสิ่งแวดล้อม โดยรัฐบาลตั้งใจจะเปลี่ยนความท้าทายเหล่านี้ให้เป็นโอกาสและความเสมอภาคทางเศรษฐกิจและสังคม นโยบายเร่งด่วนของรัฐบาลประกอบด้วย 10 ข้อ อาทิ การปรับโครงสร้างหนี้ การกระตุ้นเศรษฐกิจผ่านดิจิทัลวอลเล็ต การลดราคาพลังงาน และการส่งเสริมการท่องเที่ยว รวมถึงแผนระยะยาวเพื่อพัฒนาเศรษฐกิจดิจิทัล ยานยนต์ไฟฟ้า และพลังงานสะอาด ';
@@ -96,11 +118,39 @@ export async function load() {
 		primeMinister: {
 			firstname: primeMinister.firstname,
 			lastname: primeMinister.lastname,
-			party: primeMinister.partyRole?.party
+			party: primeMinister.partyRole?.party,
+			avatar: primeMinister.avatar
 		},
 		cabinetMemberCount: cabinetMembers.length,
 		cabinetMemberCountsByParty,
 		policyStatement: mockPolicyStatement
+	};
+
+	const previousCabinetAssembly = findCabinetAssemblyWithId(
+		assemblies,
+		PREVIOUS_CABINET_ASSEMBLY_ID
+	);
+	const previousCabinetMembers = getCainetMembers(previousCabinetAssembly, politicians);
+	const previousCabinetMemberCountsByParty = getCabinetMemberCountsByParty(
+		previousCabinetMembers,
+		parties
+	);
+	const previousPrimeMinister = findPrimeMinister(previousCabinetMembers);
+
+	if (!previousCabinetAssembly.endedAt) {
+		error(500, `Previous cabinet not have endedAt`);
+	}
+
+	const previousCabinet: PreviousCabinetSummary = {
+		id: previousCabinetAssembly.id,
+		startedAt: previousCabinetAssembly.startedAt,
+		endedAt: previousCabinetAssembly.endedAt,
+		primeMinister: {
+			firstname: previousPrimeMinister.firstname,
+			lastname: previousPrimeMinister.lastname,
+			party: previousPrimeMinister.partyRole?.party
+		},
+		cabinetMemberCountsByParty: previousCabinetMemberCountsByParty
 	};
 
 	const byStatus: PromisesByStatus[] = groups(promises, (p) => p.status).map(
@@ -146,6 +196,7 @@ export async function load() {
 
 	return {
 		cabinet,
+		previousCabinet,
 		byStatus,
 		byCategory,
 		activeCount: promises.filter(({ status }) => status !== PromiseStatus.notStarted).length,
