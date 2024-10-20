@@ -17,7 +17,12 @@
 			if (foundParty) {
 				foundParty.count += party.count;
 			} else {
-				acc.push({ name: party.name, count: party.count, color: party.color });
+				acc.push({
+					name: party.name,
+					count: party.count,
+					color: party.color,
+					members: party.members
+				});
 			}
 			return acc;
 		}, []);
@@ -60,7 +65,8 @@
 			return {
 				name: group.name,
 				count: group.total,
-				color: getSenateColorByTitle(group.name)
+				color: getSenateColorByTitle(group.name),
+				members: group.senateMembers
 			};
 		});
 	};
