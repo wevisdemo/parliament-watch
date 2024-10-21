@@ -28,7 +28,6 @@
 		{ label: 'unhonored', value: PromiseStatus.unhonored }
 	];
 
-	$: latestProgressDate = new Date(dateString);
 	$: promiseSummary = {
 		id: 'PST-33',
 		status,
@@ -36,7 +35,7 @@
 		keywords,
 		categories,
 		party,
-		latestProgressDate
+		latestProgressDate: new Date(dateString)
 	};
 </script>
 
