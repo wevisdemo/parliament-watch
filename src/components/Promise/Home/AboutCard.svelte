@@ -72,9 +72,7 @@
 			<li class="label-01 ml-5">
 				นายกรัฐมนตรี{previousCabinet.primeMinister.firstname}
 				{previousCabinet.primeMinister.lastname} และคณะรัฐมนตรีจาก
-				{#each Array.from({ length: previousCabinetMemberCountsByParty.length }, (_, i) => i) as i}
-					{@const party = previousCabinetMemberCountsByParty[i]}
-
+				{#each previousCabinetMemberCountsByParty as party, i}
 					{#if typeof party.party !== 'string'}
 						{party.party.name} ({party.count} ตำแหน่ง)
 					{:else}

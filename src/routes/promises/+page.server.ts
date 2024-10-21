@@ -1,5 +1,5 @@
 import { fetchAssemblies, fetchParties, fetchPoliticians, fetchPromises } from '$lib/datasheets';
-import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
+import { getAssemblyMembers, type AssemblyMember } from '$lib/datasheets/assembly-member';
 import type { Assembly } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
@@ -42,19 +42,6 @@ export interface PromisesByCategory {
 	count: number;
 }
 
-export type AssemblyMember = ReturnType<typeof getAssemblyMembers>[number];
-
-const CURRENT_CABINET_ASSEMBLY_ID = 'คณะรัฐมนตรี-64';
-const PREVIOUS_CABINET_ASSEMBLY_ID = 'คณะรัฐมนตรี-63';
-
-function findCabinetAssemblyWithId(assemblies: Assembly[], id: string) {
-	const cabinetAssembly = assemblies.find((a) => a.id === id);
-	if (!cabinetAssembly) {
-		error(500, `Cannot find the cabinet: ${id}`);
-	}
-	return cabinetAssembly;
-}
-
 function findPrimeMinister(cabinetMembers: AssemblyMember[]) {
 	const primeMinister = cabinetMembers.find((m) => m.assemblyRole?.role === 'นายกรัฐมนตรี');
 	if (!primeMinister) {
@@ -63,7 +50,7 @@ function findPrimeMinister(cabinetMembers: AssemblyMember[]) {
 	return primeMinister;
 }
 
-function getCainetMembers(cabinetAssembly: Assembly, politicians: Politician[]) {
+function getCabinetMembers(cabinetAssembly: Assembly, politicians: Politician[]) {
 	return getAssemblyMembers(cabinetAssembly, politicians).filter(
 		({ assemblyRole }) =>
 			!assemblyRole?.endedAt ||
@@ -71,7 +58,7 @@ function getCainetMembers(cabinetAssembly: Assembly, politicians: Politician[]) 
 	);
 }
 
-function getCabinetMemberCountsByParty(cabinetMembers: any[], parties: Party[]) {
+function getCabinetMemberCountsByParty(cabinetMembers: AssemblyMember[], parties: Party[]) {
 	const cabinetMemberCountsByPartyName = cabinetMembers
 		.map((m) => m.partyRole?.party.name)
 		.reduce(
@@ -104,8 +91,13 @@ export async function load() {
 	const parties: Party[] = await fetchParties();
 	const promises: Promise[] = await fetchPromises();
 
-	const cabinetAssembly = findCabinetAssemblyWithId(assemblies, CURRENT_CABINET_ASSEMBLY_ID);
-	const cabinetMembers = getCainetMembers(cabinetAssembly, politicians);
+	const currentAndPreviousAssembiles = assemblies
+		.filter((assembly) => assembly.name == 'คณะรัฐมนตรี')
+		.sort((a, b) => b.term - a.term)
+		.slice(0, 2);
+
+	const cabinetAssembly = currentAndPreviousAssembiles[0];
+	const cabinetMembers = getCabinetMembers(cabinetAssembly, politicians);
 	const cabinetMemberCountsByParty = getCabinetMemberCountsByParty(cabinetMembers, parties);
 	const primeMinister = findPrimeMinister(cabinetMembers);
 
@@ -126,11 +118,8 @@ export async function load() {
 		policyStatement: mockPolicyStatement
 	};
 
-	const previousCabinetAssembly = findCabinetAssemblyWithId(
-		assemblies,
-		PREVIOUS_CABINET_ASSEMBLY_ID
-	);
-	const previousCabinetMembers = getCainetMembers(previousCabinetAssembly, politicians);
+	const previousCabinetAssembly = currentAndPreviousAssembiles[1];
+	const previousCabinetMembers = getCabinetMembers(previousCabinetAssembly, politicians);
 	const previousCabinetMemberCountsByParty = getCabinetMemberCountsByParty(
 		previousCabinetMembers,
 		parties
