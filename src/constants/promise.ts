@@ -22,3 +22,9 @@ export const promiseStatusList = [
 		text: 'เราพบข้อมูลความคืบหน้า ที่ชี้ว่ามีการเลิกดำเนินการเพื่อบรรลุเป้าหมายตามคำสัญญานี้แล้ว'
 	}
 ] as { label: PromiseStatus; text: string }[];
+
+export const promiseBgColorClass = {
+	[PromiseStatus.inProgress]: 'bg-yellow-20',
+	[PromiseStatus.fulfilled]: 'bg-green-50',
+	[PromiseStatus.unhonored]: 'bg-magenta-50'
+} as const;

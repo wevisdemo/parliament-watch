@@ -9,7 +9,7 @@
 	export let title: string;
 	export let icon: ComponentType;
 	export let searchPlaceholder: string;
-	export let seachCategories: SearchIndexCategory[];
+	export let searchCategories: SearchIndexCategory[] = [];
 	let className = '';
 	export { className as class };
 
@@ -23,22 +23,24 @@
 				<svelte:component this={icon} width="32" height="32" />
 				<h2 class="fluid-heading-05">{title}</h2>
 			</div>
-			<div class="body-01 md:flex-1">
+			<div class="body-01 flex items-center self-stretch md:flex-1">
 				<slot name="description" />
 			</div>
 		</div>
-		<div class="relative">
-			<SearchInput
-				as={Search}
-				size="lg"
-				placeholder={searchPlaceholder}
-				categories={seachCategories}
-				bind:searchResults
-			/>
-			{#if searchResults}
-				<SearchResult {searchResults} class="absolute left-0 z-10 w-full" />
-			{/if}
-		</div>
+		{#if searchCategories.length > 0}
+			<div class="relative">
+				<SearchInput
+					as={Search}
+					size="lg"
+					placeholder={searchPlaceholder}
+					categories={searchCategories}
+					bind:searchResults
+				/>
+				{#if searchResults}
+					<SearchResult {searchResults} class="absolute left-0 z-10 w-full" />
+				{/if}
+			</div>
+		{/if}
 		<slot />
 	</div>
 </section>

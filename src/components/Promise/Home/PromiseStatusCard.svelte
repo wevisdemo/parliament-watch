@@ -9,6 +9,7 @@
 	export let max: number;
 	export let color: string;
 	export let samples: PromiseSample[] = [];
+	export let hideSeeAll = false;
 
 	const dispatch = createEventDispatcher<{ buttonClick: { status: string } }>();
 
@@ -39,9 +40,11 @@
 					</li>
 				{/each}
 			</ul>
-			<div class="py-1">
-				<button class="link-01 text-blue-60 underline" on:click={handleViewAll}>ดูทั้งหมด</button>
-			</div>
+			{#if !hideSeeAll}
+				<div class="py-1">
+					<button class="link-01 text-blue-60 underline" on:click={handleViewAll}>ดูทั้งหมด</button>
+				</div>
+			{/if}
 		</div>
 	{/if}
 </div>
