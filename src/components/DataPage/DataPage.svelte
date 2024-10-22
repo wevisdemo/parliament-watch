@@ -43,10 +43,10 @@
 		Checkbox,
 		ComboBox,
 		DataTable,
-		DataTableSkeleton,
+		// DataTableSkeleton,
 		FormGroup,
 		Pagination,
-		PaginationSkeleton,
+		// PaginationSkeleton,
 		Search
 	} from 'carbon-components-svelte';
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
@@ -145,6 +145,9 @@
 			renderCombobox = true;
 		});
 	};
+
+	export let unit = '';
+	$: textForUnit = unit === 'bills' ? 'ร่างกฎหมาย' : 'มติ';
 </script>
 
 <svelte:window on:scroll|passive={scrollEventHandler} />
@@ -313,7 +316,7 @@
 					pageSizeInputDisabled
 					forwardText="หน้าถัดไป"
 					backwardText="หน้าก่อนหน้า"
-					itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} มติ`}
+					itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} ${textForUnit}`}
 					pageRangeText={(_, total) => `จาก ${total} หน้า`}
 				/>
 			</div>

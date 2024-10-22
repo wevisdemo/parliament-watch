@@ -47,26 +47,27 @@ export type SelectedComboboxValueType = Record<
 
 ## Props
 
-| Props                | Type                                      | Meaning                                           |
-| -------------------- | ----------------------------------------- | ------------------------------------------------- |
-| `breadcrumbList`     | `{ label: string; url: string }[]`        | ข้อมูล Breadcrumb                                 |
-| `searchPlaceholder`  | `string = 'ชื่อมติ หรือ คำที่เกี่ยวข้อง'` | Placeholder ในช่อง Search                         |
-| `comboboxFilterList` | `ComboboxFilterGroup[] = []`              | ข้อมูล Filter ประเภท Combobox ว่าจะต้องมีอะไรบ้าง |
-| `checkboxFilterList` | `CheckboxFilterGroup[]`                   | ข้อมูล Filter ประเภท Checkbox ว่าจะต้องมีอะไรบ้าง |
-| `filteredData`       | `{ id: any; [key: string]: any }[]`       | ข้อมูลใส่ตารางที่ผ่านการ filter มาจากด้านนอกแล้ว  |
-| `tableHeader`        | `{ key: string; value: string }[]`        | ข้อมูลหัวตาราง                                    |
-| `tablePageSize`      | `number = 10`                             | จำนวนข้อมูลต่อหน้า                                |
+| Props                | Type                                      | Meaning                                                                           |
+| -------------------- | ----------------------------------------- | --------------------------------------------------------------------------------- |
+| `breadcrumbList`     | `{ label: string; url: string }[]`        | ข้อมูล Breadcrumb                                                                 |
+| `searchPlaceholder`  | `string = 'ชื่อมติ หรือ คำที่เกี่ยวข้อง'` | Placeholder ในช่อง Search                                                         |
+| `comboboxFilterList` | `ComboboxFilterGroup[] = []`              | ข้อมูล Filter ประเภท Combobox ว่าจะต้องมีอะไรบ้าง                                 |
+| `checkboxFilterList` | `CheckboxFilterGroup[]`                   | ข้อมูล Filter ประเภท Checkbox ว่าจะต้องมีอะไรบ้าง                                 |
+| `filteredData`       | `{ id: any; [key: string]: any }[]`       | ข้อมูลใส่ตารางที่ผ่านการ filter มาจากด้านนอกแล้ว                                  |
+| `tableHeader`        | `{ key: string; value: string }[]`        | ข้อมูลหัวตาราง                                                                    |
+| `tablePageSize`      | `number = 10`                             | จำนวนข้อมูลต่อหน้า                                                                |
+| `unit`               | `string = 'bills หรือ "" '`               | หน้าที่เรียกใช้ (ถ้า unit = 'bills' ข้อความจะแสดงคำว่า 'ร่างกฎหมาย' แทนที่ 'มติ') |
 
 ## Reactive Props
 
 Props เหล่านี้ต้อง `bind:props` เพื่อให้ parent component สามารถทราบ state ด้านใน component ได้
 
-| Props                        | Type                                                 | Meaning                                                                                                        |
-| ---------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `bind:searchQuery`           | `string = ""`                                        | ข้อความในกล่องค้นหา                                                                                            |
-| `bind:selectedComboboxValue` | `SelectedComboboxValueType = ทุกช่องเป็น undefined*` | เป็น Object ที่จะมี key เป็น key ของ combobox นั้น และ value เป็น value ของ combobox นั้นๆ                     |
+| Props                        | Type                                                 | Meaning                                                                                                         |
+| ---------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `bind:searchQuery`           | `string = ""`                                        | ข้อความในกล่องค้นหา                                                                                             |
+| `bind:selectedComboboxValue` | `SelectedComboboxValueType = ทุกช่องเป็น undefined*` | เป็น Object ที่จะมี key เป็น key ของ combobox นั้น และ value เป็น value ของ combobox นั้นๆ                      |
 | `bind:selectedCheckboxValue` | `SelectedCheckboxValueType = ทุกชอยส์**`             | เป็น Object ที่จะมี key เป็น key ของ checkbox กลุ่มนั้น และ value เป็น array ของ choice ของกลุ่ม checkbox นั้นๆ |
-| `bind:mounted`               | `boolean = false`                                    | เอาไว้ sync กับด้านนอกว่าตอนนี้ DataPage mount แล้วหรือยัง                                                     |
+| `bind:mounted`               | `boolean = false`                                    | เอาไว้ sync กับด้านนอกว่าตอนนี้ DataPage mount แล้วหรือยัง                                                      |
 
 > - \*ทุกช่องเป็น undefined = `Object.fromEntries(comboboxFilterList.map((group) => [group.key, undefined]));`
 > - \*ทุกชอยส์ = `Object.fromEntries(checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)]));`

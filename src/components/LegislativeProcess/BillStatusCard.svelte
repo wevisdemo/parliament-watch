@@ -4,7 +4,7 @@
 	import BillStatusTag from '../BillStatusTag/BillStatusTag.svelte';
 
 	export let billStatus: BillStatus;
-	export let billAmount: string;
+	// export let billAmount: string;
 	export let descriptionTitle: string | null;
 	export let descriptionList: Array<string>;
 	export let learnMoreLabel: string;
@@ -26,13 +26,7 @@
 			isLarge={true}
 			status={billStatus}
 		/>
-		<div
-			class="my-2 text-sm font-semibold
-		"
-		>
-			จำนวน {billAmount} ฉบับ
-		</div>
-		<div class="text-sm font-normal">
+		<div class="mt-2 text-sm font-normal">
 			{descriptionTitle}
 			<ul class="px-4">
 				{#each descriptionList as list}
