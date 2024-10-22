@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import AboutSection from '$components/Promise/Home/AboutSection.svelte';
 	import ContentSection from '$components/Promise/Home/ContentSection.svelte';
 	import PromiseExploreSection from '$components/Promise/Home/PromiseExploreSection.svelte';

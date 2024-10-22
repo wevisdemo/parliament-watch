@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import PromiseProgressTimeline from '$components/PromiseDetail/PromiseProgressTimeline.svelte';
 	import PromiseStatusModal from '$components/PromiseDetail/PromiseStatusModal.svelte';
 	import PromiseStatusTag from '$components/PromiseDetail/PromiseStatusTag.svelte';
