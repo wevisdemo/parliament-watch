@@ -87,7 +87,7 @@
 				<div class="heading-01 mt-1">คีย์เวิร์ด</div>
 				{#each promise.keywords as keyword}
 					<a
-						href={`/promises/explore?keyword=${keyword}`}
+						href="/promises/explore?keyword={keyword}"
 						class="label-01 rounded-3xl bg-gray-10 px-2 py-1 text-text-01"
 					>
 						{keyword}
@@ -98,7 +98,7 @@
 				<div class="heading-01 mt-1">หมวด</div>
 				{#each promise.categories as category}
 					<a
-						href={`/promises/explore?category=${category}`}
+						href="/promises/explore?category={category}"
 						class="label-01 rounded-3xl border border-black px-2 py-1 text-text-01">{category}</a
 					>
 				{/each}
