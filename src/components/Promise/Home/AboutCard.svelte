@@ -1,11 +1,16 @@
 <script lang="ts">
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import type { CabinetSummary } from '../../../routes/promises/+page.server';
-	import { formatThaiDate, shortMonthNames } from '$lib/date-parser';
+	import type {
+		CabinetSummary,
+		PreviousCabinetSummary
+	} from '../../../routes/promises/+page.server';
+	import { formatThaiDate } from '$lib/date-parser';
 
 	export let cabinet: CabinetSummary;
+	export let previousCabinet: PreviousCabinetSummary;
 	$: ({ primeMinister, policyStatement } = cabinet);
+	$: previousCabinetMemberCountsByParty = previousCabinet.cabinetMemberCountsByParty;
 </script>
 
 <div class="flex w-full flex-col gap-4 bg-ui-05 p-6 text-text-04">
@@ -14,7 +19,7 @@
 			<p class="heading-01">นายกรัฐมนตรี</p>
 			<div class="flex flex-col gap-2">
 				<div class="flex gap-2">
-					<PoliticianPicture size="64" party={primeMinister.party} />
+					<PoliticianPicture avatar={primeMinister.avatar} size="64" party={primeMinister.party} />
 					<div>
 						<p class="fluid-heading-04">{primeMinister.firstname} {primeMinister.lastname}</p>
 						<p class="body-01">
@@ -28,12 +33,14 @@
 				</div>
 				<div class="flex flex-wrap">
 					{#each cabinet.cabinetMemberCountsByParty as party}
-						<div class="flex gap-1 py-1 pr-2">
+						<div class="flex items-center gap-1 py-1 pr-3">
 							{#if typeof party.party != 'string'}
 								<img src={party.party.logo} class="block h-5 w-5 rounded-full" alt="" />
-								<p>{party.party.name}</p>
+								<p class="label-01">{party.party.name}</p>
+								<p class="label-01 text-text-03">{party.count}</p>
 							{:else}
-								<p>{party.party}</p>
+								<p class="label-01">{party.party}</p>
+								<p class="label-01 text-text-03">{party.count}</p>
 							{/if}
 						</div>
 					{/each}
@@ -59,21 +66,27 @@
 	</div>
 	<div class="flex flex-col gap-2 border-t border-ui-04 pt-3">
 		<p class="label-01 text-text-03">
-			รัฐบาลชุดที่ผ่านมาในสมัยการเลือกตั้ง {cabinet.startedAt.getFullYear() + 543}
+			รัฐบาลชุดที่ผ่านมาในสมัยการเลือกตั้ง {previousCabinet.startedAt.getFullYear() + 543}
 		</p>
 		<ul class="list-disc">
 			<li class="label-01 ml-5">
-				นายกรัฐมนตรี{primeMinister.firstname}
-				{primeMinister.lastname} และคณะรัฐมนตรีจาก
-				{#each cabinet.cabinetMemberCountsByParty as party}
-					{#if typeof party.party != 'string'}
-						{party.party.name} ({party.count} ตำแหน่ง),&nbsp;
+				นายกรัฐมนตรี{previousCabinet.primeMinister.firstname}
+				{previousCabinet.primeMinister.lastname} และคณะรัฐมนตรีจาก
+				{#each previousCabinetMemberCountsByParty as party, i}
+					{#if typeof party.party !== 'string'}
+						{party.party.name} ({party.count} ตำแหน่ง)
 					{:else}
-						{party.party}
+						{party.party} ({party.count} ตำแหน่ง)
+					{/if}
+					{#if i < previousCabinetMemberCountsByParty.length - 1}
+						,&nbsp
 					{/if}
 				{/each}
 				<p class="label-01 text-text-03">
-					{formatThaiDate(cabinet.startedAt, true)} - {formatThaiDate(new Date(), true)}
+					{formatThaiDate(previousCabinet.startedAt, true)} - {formatThaiDate(
+						previousCabinet.endedAt,
+						true
+					)}
 				</p>
 			</li>
 		</ul>
