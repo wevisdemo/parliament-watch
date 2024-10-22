@@ -7,6 +7,7 @@
 	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
 	import { SendAlt } from 'carbon-icons-svelte';
 	import PromiseClarificationLog from '$components/PromiseDetail/PromiseClarificationLog.svelte';
+	import { promiseStatusList } from '../../../constants/promise.js';
 
 	export let data;
 
@@ -20,6 +21,8 @@
 		promise?.statements?.[0]?.length > TITLE_MAX_LENGTH
 			? promise.statements[0].slice(0, TITLE_MAX_LENGTH) + '...'
 			: promise.statements?.[0];
+
+	$: promiseText = promiseStatusList.find((status) => status.label === promise.status)?.text;
 </script>
 
 <Breadcrumb
@@ -43,7 +46,9 @@
 		/>
 		<div class="body-01">พรรค{promise.party.name}</div>
 	</div>
-	<div class="mt-4 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden">
+	<div
+		class="-mx-4 mt-4 flex flex-nowrap gap-3 overflow-x-auto overflow-y-hidden px-4 md:mx-0 md:px-0"
+	>
 		{#each promise.statements as statement}
 			<div class="flex min-w-[80%] gap-3">
 				<div class="flex flex-none flex-col items-center gap-2">
@@ -59,7 +64,7 @@
 	<div class="mt-4 flex flex-col gap-2 xl:flex-row xl:items-center">
 		<PromiseStatusTag status={promise.status} />
 		<div class="body-01 text-text-01">
-			[A definition that helps viewers understand the meaning and criteria of the status]
+			{promiseText}
 		</div>
 		<button
 			class="helper-text-01 w-fit flex-none text-link-01 underline"
@@ -81,13 +86,21 @@
 			<div class="flex flex-wrap gap-1">
 				<div class="heading-01 mt-1">คีย์เวิร์ด</div>
 				{#each promise.keywords as keyword}
-					<span class="label-01 rounded-3xl bg-gray-10 px-2 py-1">{keyword}</span>
+					<a
+						href={`/promises/explore?keyword=${keyword}`}
+						class="label-01 rounded-3xl bg-gray-10 px-2 py-1 text-text-01"
+					>
+						{keyword}
+					</a>
 				{/each}
 			</div>
 			<div class="flex flex-wrap gap-1">
 				<div class="heading-01 mt-1">หมวด</div>
 				{#each promise.categories as category}
-					<span class="label-01 rounded-3xl border px-2 py-1">{category}</span>
+					<a
+						href={`/promises/explore?category=${category}`}
+						class="label-01 rounded-3xl border border-black px-2 py-1 text-text-01">{category}</a
+					>
 				{/each}
 			</div>
 			<div class="flex flex-col gap-1 md:flex-row">
