@@ -73,7 +73,7 @@
 							? e.type === selectedComboboxValue.filterComboboxType
 							: true)
 				);
-	let unit = '';
+	let unit = 'มติ';
 </script>
 
 <Hst.Story title="DataPage" layout={{ type: 'single', iframe: true }}>
