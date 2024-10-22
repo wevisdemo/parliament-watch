@@ -149,6 +149,7 @@
 
 <DataPage
 	bind:this={cmpDataPage}
+	unit="ร่างกฎหมาย"
 	tablePageSize={50}
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
