@@ -86,8 +86,10 @@
 								href={progress.url}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="label-01 underline">{progress.url}</a
+								class="label-01 break-all underline"
 							>
+								{progress.url}
+							</a>
 						</div>
 					{/if}
 				</div>
