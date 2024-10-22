@@ -11,6 +11,8 @@
 	import { SearchIndexCategory } from '$models/search.js';
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
+	import PromiseContent from '$components/Index/PromiseContent.svelte';
 
 	export let data;
 
@@ -18,7 +20,8 @@
 		highlightedPoliticians,
 		otherSourcesHighlightedPoliticians,
 		latestVotings,
-		billByCategoryAndStatus
+		billByCategoryAndStatus,
+		promiseSummary
 	} = data);
 </script>
 
@@ -61,10 +64,16 @@
 				href="#voting"
 			/>
 			<SectionMenuItem
-				title="การออกกฎหมาย"
+				title="การเสนอกฎหมาย"
 				description="ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ"
 				icon={LawIcon}
 				href="#bill"
+			/>
+			<SectionMenuItem
+				title="คำสัญญาทางการเมือง"
+				description="ติดตามความคืบหน้าของนโยบายที่รัฐบาลสัญญาไว้"
+				icon={PromiseIcon}
+				href="#promise"
 			/>
 		</menu>
 	</nav>
@@ -75,7 +84,7 @@
 	title="นักการเมือง"
 	icon={PoliticianIcon}
 	searchPlaceholder="ค้นด้วยชื่อ-นามสกุล เช่น ประวิตร, ชลน่าน, ชัยธวัช"
-	seachCategories={[SearchIndexCategory.Politicians]}
+	searchCategories={[SearchIndexCategory.Politicians]}
 	class="bg-ui-01"
 >
 	<span slot="description"
@@ -90,7 +99,7 @@
 	title="การลงมติ"
 	icon={VoteIcon}
 	searchPlaceholder="ค้นด้วยชื่อมติ เช่น อภิปรายไม่ไว้วางใจ, แก้ รธน."
-	seachCategories={[SearchIndexCategory.Votings]}
+	searchCategories={[SearchIndexCategory.Votings]}
 	class="bg-white"
 >
 	<span slot="description"
@@ -101,10 +110,10 @@
 
 <ContentSection
 	id="bill"
-	title="การออกกฏหมาย"
+	title="การเสนอกฎหมาย"
 	icon={LawIcon}
 	searchPlaceholder="ค้นด้วยชื่อมติ เช่น อภิปรายไม่ไว้วางใจ, แก้ รธน."
-	seachCategories={[SearchIndexCategory.Bills]}
+	searchCategories={[SearchIndexCategory.Bills]}
 	class="bg-ui-01"
 >
 	<span slot="description"
@@ -114,6 +123,20 @@
 		></span
 	>
 	<BillContent {billByCategoryAndStatus} />
+</ContentSection>
+
+<ContentSection
+	id="promise"
+	title="คำสัญญาทางการเมือง"
+	icon={PromiseIcon}
+	searchPlaceholder="ค้นหาด้วยคำสัญญา เช่น กระเป๋าเงินดิจิทัล"
+	class="bg-ui-white"
+>
+	<span slot="description"
+		>ทุกการเลือกตั้งมาพร้อมคำสัญญาจากพรรคการเมือง แต่พวกเขาทำได้จริงแค่ไหน
+		ข้อมูลได้ถูกรวบรวมไว้ให้คุณได้ติดตามและตรวจสอบความคืบหน้าได้ง่ายขึ้น</span
+	>
+	<PromiseContent {...promiseSummary} />
 </ContentSection>
 
 <BackToTopButton />

@@ -7,17 +7,26 @@ import {
 import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import { fetchBills, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
+import {
+	fetchBills,
+	fetchPoliticians,
+	fetchPromises,
+	fetchVotes,
+	fetchVotings
+} from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
 import { BillStatus } from '$models/bill';
+import { PromiseStatus } from '$models/promise';
 import { DefaultVoteOption } from '$models/voting.js';
-import { rollup } from 'd3-array';
+import type { PromisesByStatus } from './promises/+page.server';
+import { groups, rollup } from 'd3-array';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
-const MAX_LASTEST_VOTE = 5;
+const MAX_LATEST_VOTE = 5;
 const MAX_ENACTED_BILL = 10;
+const MAX_PROMISES_SAMPLE = 3;
 
 enum PoliticialPosition {
 	MP = 'สส.',
@@ -39,6 +48,7 @@ export async function load() {
 	const votes = await fetchVotes();
 	const votings = await fetchVotings();
 	const bills = await fetchBills();
+	const promises = await fetchPromises();
 
 	const activePoliticians = politicians.filter(({ isActive }) => isActive);
 
@@ -139,7 +149,7 @@ export async function load() {
 
 	const latestVotings: ComponentProps<VoteCard>[] = [...(await fetchVotings())]
 		.sort((a, z) => z.date.getTime() - a.date.getTime())
-		.slice(0, MAX_LASTEST_VOTE)
+		.slice(0, MAX_LATEST_VOTE)
 		.map((voting) => ({
 			voting,
 			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
@@ -181,10 +191,29 @@ export async function load() {
 		)
 	});
 
+	const promiseSummary = {
+		total: promises.length,
+		byStatus: groups(
+			promises.filter((p) =>
+				[PromiseStatus.inProgress, PromiseStatus.fulfilled, PromiseStatus.unhonored].includes(
+					p.status
+				)
+			),
+			(p) => p.status
+		).map<PromisesByStatus>(([status, promisesByStatus]) => ({
+			status,
+			samples: promisesByStatus
+				.slice(0, MAX_PROMISES_SAMPLE)
+				.map(({ id, statements }) => ({ id, statements })),
+			count: promisesByStatus.length
+		}))
+	};
+
 	return {
 		highlightedPoliticians,
 		otherSourcesHighlightedPoliticians,
 		latestVotings,
-		billByCategoryAndStatus
+		billByCategoryAndStatus,
+		promiseSummary
 	};
 }

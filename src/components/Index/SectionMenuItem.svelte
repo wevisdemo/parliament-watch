@@ -8,7 +8,7 @@
 	export let icon: ComponentType;
 </script>
 
-<li class="flex-1">
+<li class="flex flex-1">
 	<a
 		{href}
 		class="body-01 flex items-start gap-3 bg-white p-4 text-[color:inherit] !no-underline hover:bg-ui-01 md:flex-col md:items-center md:gap-1 md:p-8 md:text-center"
