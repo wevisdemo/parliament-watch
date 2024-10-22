@@ -35,7 +35,7 @@
 			]
 		},
 		{
-			label: 'ติดตามคำสัญญา',
+			label: 'คำสัญญาทางการเมือง',
 			icon: PromiseIcon,
 			url: '/promises',
 			type: MenuTypes.both
