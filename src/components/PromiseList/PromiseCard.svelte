@@ -127,7 +127,7 @@
 			</div>
 			<div class="flex flex-col gap-1">
 				{#if !isList}
-					<p class="heading-01">เคลื่อนไหวล่าสุด</p>
+					<p class="heading-01">อัปเดตล่าสุด</p>
 				{/if}
 				<div class="body-01">
 					{promiseSummary.latestProgressDate
