@@ -8,6 +8,7 @@ import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
 import { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import {
+	fetchAssemblies,
 	fetchBills,
 	fetchPoliticians,
 	fetchPromises,
@@ -49,6 +50,7 @@ export async function load() {
 	const votings = await fetchVotings();
 	const bills = await fetchBills();
 	const promises = await fetchPromises();
+	const assembles = await fetchAssemblies();
 
 	const activePoliticians = politicians.filter(({ isActive }) => isActive);
 
@@ -152,7 +154,7 @@ export async function load() {
 		.slice(0, MAX_LATEST_VOTE)
 		.map((voting) => ({
 			voting,
-			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
+			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians, assembles)
 		}));
 
 	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(

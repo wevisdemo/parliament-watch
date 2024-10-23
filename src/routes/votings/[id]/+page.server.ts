@@ -1,4 +1,10 @@
-import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
+import {
+	fetchAssemblies,
+	fetchFromIdOr404,
+	fetchPoliticians,
+	fetchVotes,
+	fetchVotings
+} from '$lib/datasheets';
 import {
 	getVoteResultsByPerson,
 	groupVoteByAffiliations,
@@ -16,6 +22,7 @@ export async function load({ params }) {
 	const voting = await fetchFromIdOr404(fetchVotings, params.id);
 	const votes = (await fetchVotes()).filter(({ votingId }) => votingId === voting.id);
 	const politicians = await fetchPoliticians();
+	const assembles = await fetchAssemblies();
 
 	// TODO: Not release bill yet
 	const relatedBill: Bill | null = null;
@@ -30,23 +37,24 @@ export async function load({ params }) {
 	const resultsByAffiliation: ResultsByAffiliation = groupVoteByAffiliations(
 		voting,
 		votes,
-		politicians
-	)
-		.map(({ name, resultSummary, byParties }) => ({
-			affiliationName: name,
-			resultSummary: convertResultSummaryToArray(resultSummary),
-			byParties: byParties.map(({ party, resultSummary: partyResultSummary }) => ({
-				party,
-				resultSummary: convertResultSummaryToArray(partyResultSummary)
-			}))
+		politicians,
+		assembles
+	).map(({ name, resultSummary, byParties }) => ({
+		affiliationName: name,
+		resultSummary: convertResultSummaryToArray(resultSummary),
+		byParties: byParties.map(({ party, resultSummary: partyResultSummary }) => ({
+			party,
+			resultSummary: convertResultSummaryToArray(partyResultSummary)
 		}))
-		.filter(({ resultSummary }) => resultSummary.reduce((sum, { total }) => sum + total, 0) > 0);
+	}));
 
 	return {
 		voting,
 		relatedBill,
 		results,
-		resultsByAffiliation,
+		resultsByAffiliation: resultsByAffiliation.filter(
+			({ resultSummary }) => resultSummary.reduce((sum, { total }) => sum + total, 0) > 0
+		),
 		resultsByPerson,
 		seo: createSeo({
 			title: 'การลงมติ ' + voting.nickname

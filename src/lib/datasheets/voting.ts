@@ -1,6 +1,6 @@
 import type { HighlightedVoteByGroup } from '$components/VoteCard/VoteCard.svelte';
 import { logger } from '$lib/logger';
-import { AssemblyName } from '$models/assembly';
+import { AssemblyName, type Assembly } from '$models/assembly';
 import type { Party } from '$models/party';
 import type { Politician } from '$models/politician';
 import type { Vote } from '$models/vote';
@@ -13,6 +13,7 @@ import {
 } from '$models/voting';
 import { getAssemblyMembers } from './assembly-member';
 import { safeFind } from './processor';
+import dayjs from 'dayjs';
 
 export interface VoteOptionCounter {
 	[option: string]: number;
@@ -34,12 +35,13 @@ export type ResultByPerson = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'l
 export function getHighlightedVoteByGroups(
 	voting: Voting,
 	votes: Vote[],
-	politicians: Politician[]
+	politicians: Politician[],
+	assemblies: Assembly[]
 ): HighlightedVoteByGroup[] {
 	const winningOption = getWinningOption(voting.result);
 	const participatedVotes = votes.filter(({ votingId }) => votingId === voting.id);
 
-	return groupVoteByAffiliations(voting, participatedVotes, politicians)
+	return groupVoteByAffiliations(voting, participatedVotes, politicians, assemblies)
 		.map(({ name, resultSummary }) => ({
 			name,
 			count: resultSummary[winningOption],
@@ -48,12 +50,19 @@ export function getHighlightedVoteByGroups(
 		.filter(({ count }) => count > 0);
 }
 
-export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicians: Politician[]) {
+export function groupVoteByAffiliations(
+	voting: Voting,
+	votes: Vote[],
+	politicians: Politician[],
+	assemblies: Assembly[]
+) {
 	const initCounterRecord = () =>
 		voting.voteOptions.reduce<VoteOptionCounter>(
 			(obj, option) => ({ ...obj, [typeof option === 'string' ? option : option.label]: 0 }),
 			{}
 		);
+
+	const votingDay = dayjs(voting.date);
 
 	const initVoteOptionRecord = (): {
 		resultSummary: VoteOptionCounter;
@@ -92,11 +101,26 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 					);
 
 					if (partyRole) {
-						group = assemblyRole.assembly.oppositionParties.some(
+						const assemblyWithPartyGroup =
+							assemblyRole.assembly.governmentParties.length ||
+							assemblyRole.assembly.oppositionParties.length
+								? assemblyRole.assembly
+								: assemblies.find(
+										(a) =>
+											(a.governmentParties.length || a.oppositionParties.length) &&
+											votingDay.isAfter(a.startedAt) &&
+											(!a.endedAt || votingDay.isBefore(a.endedAt))
+									);
+
+						group = assemblyWithPartyGroup?.governmentParties.some(
 							({ name }) => name === partyRole.party.name
 						)
-							? 'สส.ฝ่ายค้าน'
-							: 'สส.ฝ่ายรัฐบาล';
+							? 'สส.ฝ่ายรัฐบาล'
+							: assemblyWithPartyGroup?.oppositionParties.some(
+										({ name }) => name === partyRole.party.name
+								  )
+								? 'สส.ฝ่ายค้าน'
+								: 'สส.ไม่ทราบฝ่าย';
 
 						if (!counter[group].byParties[partyRole.party.name]) {
 							counter[group].byParties[partyRole.party.name] = {
@@ -122,7 +146,7 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 
 				counter[group].resultSummary[voteOption]++;
 			} catch (e) {
-				logger.error({ politicianId }, 'Could not find politican');
+				logger.error({ politicianId }, 'Could not find politician');
 			}
 
 			return counter;
@@ -130,6 +154,7 @@ export function groupVoteByAffiliations(voting: Voting, votes: Vote[], politicia
 		{
 			'สส.ฝ่ายรัฐบาล': initVoteOptionRecord(),
 			'สส.ฝ่ายค้าน': initVoteOptionRecord(),
+			'สส.ไม่ทราบฝ่าย': initVoteOptionRecord(),
 			'สส.ไม่สังกัดพรรค': initVoteOptionRecord(),
 			'สว.': initVoteOptionRecord()
 		}

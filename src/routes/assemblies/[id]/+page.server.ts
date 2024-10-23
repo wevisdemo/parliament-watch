@@ -60,6 +60,31 @@ export type BillSummary = Pick<Bill, 'id' | 'proposedOn' | 'nickname' | 'status'
 
 export async function load({ params }) {
 	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
+	const assemblies = await fetchAssemblies();
+
+	const assemblyLatestDay = dayjs(fullAssembly.endedAt ?? new Date());
+
+	// Take government/opposition parties from overlapsed assembly if not defined
+	if (!fullAssembly.governmentParties.length || !fullAssembly.governmentParties.length) {
+		const assemblyWithPartyGroup = assemblies
+			.filter((a) => (!a.endedAt && a.governmentParties.length) || a.oppositionParties.length)
+			.map((a) => ({
+				...a,
+				endedAt: a.endedAt ?? new Date()
+			}))
+			.filter(
+				(a) =>
+					assemblyLatestDay.isAfter(a.startedAt) &&
+					(assemblyLatestDay.isSame(a.endedAt) || assemblyLatestDay.isBefore(a.endedAt))
+			)
+			.sort((z, a) => z.endedAt.getTime() - a.endedAt.getTime())
+			.at(0);
+
+		if (assemblyWithPartyGroup) {
+			fullAssembly.governmentParties = assemblyWithPartyGroup.governmentParties;
+			fullAssembly.oppositionParties = assemblyWithPartyGroup.oppositionParties;
+		}
+	}
 
 	const { mainRoles, ...assembly } = fullAssembly;
 	const isSenates = assembly.name === AssemblyName.Senates;
@@ -138,7 +163,12 @@ export async function load({ params }) {
 				.slice(0, MAX_LATEST_VOTE)
 				.map((voting) => ({
 					voting,
-					highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians)
+					highlightedVoteByGroups: getHighlightedVoteByGroups(
+						voting,
+						votes,
+						politicians,
+						assemblies
+					)
 				}));
 
 	const latestBills: BillSummary[] | null = isCabinet
