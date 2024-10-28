@@ -118,6 +118,8 @@
 
 <SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
-		<SideMenuList {menuList} />
+		<button on:click={() => (sideNavActive = !sideNavActive)}>
+			<SideMenuList {menuList} />
+		</button>
 	{/if}
 </SideMenuPane>
