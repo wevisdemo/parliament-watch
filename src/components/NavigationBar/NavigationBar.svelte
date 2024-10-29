@@ -65,6 +65,7 @@
 	import SideMenuList from './SideMenuList.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
 	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
+	import { setContext } from 'svelte';
 
 	let screenSize: number;
 	let previousFromTop = 0;
@@ -87,6 +88,10 @@
 		previousFromTop = currentFromTop;
 		sideNavActive = false;
 	}
+
+	setContext('closeSideNav', () => {
+		sideNavActive = false;
+	});
 </script>
 
 <svelte:window bind:innerWidth={screenSize} on:scroll={scrollEventHandler} />
@@ -118,8 +123,6 @@
 
 <SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
-		<button on:click={() => (sideNavActive = !sideNavActive)}>
-			<SideMenuList {menuList} />
-		</button>
+		<SideMenuList {menuList} />
 	{/if}
 </SideMenuPane>
