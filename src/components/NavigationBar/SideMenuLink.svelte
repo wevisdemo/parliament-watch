@@ -3,10 +3,11 @@
 	import ArrowUpRightIcon from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	import { twMerge } from 'tailwind-merge';
 	import { getContext } from 'svelte';
-	const closeSideNav: () => void = getContext('closeSideNav');
 
 	export let linkMenu: Menu;
 	export let additionalClass = '';
+
+	const closeSideNav: () => void = getContext('closeSideNav');
 </script>
 
 {#if linkMenu.type === 'link'}
@@ -15,7 +16,7 @@
 	</div>
 {/if}
 <a
-	on:click={() => closeSideNav()}
+	on:click={closeSideNav}
 	href={linkMenu.url}
 	class={twMerge(
 		'flex w-screen items-center pl-4 text-gray-30 no-underline decoration-gray-30 transition-all duration-200 hover:text-gray-10 md:w-80',
