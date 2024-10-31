@@ -1,4 +1,5 @@
 import type { BillStatus } from './bill';
+import type { PromiseStatus } from './promise';
 
 export enum SearchIndexCategory {
 	Politicians = 'politicians',
@@ -42,37 +43,50 @@ interface PoliticianSearchResultItem extends BaseSearchResultItem {
 	billStatus?: never;
 	voteResult?: never;
 	proposedBillsCount?: never;
+	promiseStatus?: never;
 }
 
 interface BillSearchResultItem extends BaseSearchResultItem {
 	billStatus: BillStatus;
 	voteResult?: never;
 	proposedBillsCount?: never;
+	promiseStatus?: never;
 }
 
 interface VotingSearchResultItem extends BaseSearchResultItem {
 	billStatus?: never;
 	voteResult?: string;
 	proposedBillsCount?: never;
+	promiseStatus?: never;
 }
 
 interface BillProposerSearchResultItem extends BaseSearchResultItem {
 	billStatus?: never;
 	voteResult?: never;
 	proposedBillsCount: number;
+	promiseStatus?: never;
+}
+
+interface PromiseSearchResultItem extends BaseSearchResultItem {
+	billStatus?: never;
+	voteResult?: never;
+	proposedBillsCount?: never;
+	promiseStatus: PromiseStatus;
 }
 
 export type SearchResultItem =
 	| PoliticianSearchResultItem
 	| BillSearchResultItem
 	| VotingSearchResultItem
-	| BillProposerSearchResultItem;
+	| BillProposerSearchResultItem
+	| PromiseSearchResultItem;
 
 export interface SearchResults {
 	politicians?: PoliticianSearchResultItem[];
 	bills?: BillSearchResultItem[];
 	votings?: VotingSearchResultItem[];
 	billProposers?: BillProposerSearchResultItem[];
+	promises?: PromiseSearchResultItem[];
 }
 
 export interface ScoreResultItem<T> {

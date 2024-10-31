@@ -3,6 +3,7 @@
 	import SearchResultGroup from '$components/SearchResultGroup/SearchResultGroup.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import type { SearchResults } from '$models/search';
 	import { twMerge } from 'tailwind-merge';
@@ -37,6 +38,11 @@
 			{#if searchResults.billProposers}
 				<SearchResultGroup heading="ชื่อผู้เสนอร่าง" items={searchResults.billProposers}>
 					<VoteIcon slot="icon" class="fill-interactive-01" />
+				</SearchResultGroup>
+			{/if}
+			{#if searchResults.promises}
+				<SearchResultGroup heading="คำสัญญา" items={searchResults.promises}>
+					<PromiseIcon slot="icon" class="fill-interactive-01" />
 				</SearchResultGroup>
 			{/if}
 		{:else}

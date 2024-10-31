@@ -1,5 +1,6 @@
 <script lang="ts">
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
+	import PromiseStatusTag from '$components/PromiseDetail/PromiseStatusTag.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import type { SearchResultItem } from '$models/search';
 	import HightlightText from './HightlightText.svelte';
@@ -20,7 +21,7 @@
 					<p class="text-xs text-text-03">{item.description}</p>
 				{/if}
 			</div>
-			{#if item.billStatus !== undefined || item.voteResult !== undefined || item.proposedBillsCount !== undefined}
+			{#if item.billStatus !== undefined || item.voteResult !== undefined || item.proposedBillsCount !== undefined || item.promiseStatus !== undefined}
 				<div class="shrink-0">
 					{#if item.billStatus}
 						<BillStatusTag status={item.billStatus} />
@@ -30,6 +31,9 @@
 					{/if}
 					{#if item.proposedBillsCount}
 						<p class="label-02 text-text-02">{item.proposedBillsCount} ร่าง</p>
+					{/if}
+					{#if item.promiseStatus}
+						<PromiseStatusTag isLarge={false} status={item.promiseStatus} />
 					{/if}
 				</div>
 			{/if}
