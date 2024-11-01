@@ -1,15 +1,22 @@
 name: Build and deploy to staging
 on:
   push:
-    branches: ['main']
+    branches: ['main', '**/main']
     paths-ignore:
       - '**/README.md'
+      - '**/CONTRIBUTING.md'
       - '.github/workflows/production.yml'
   workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Set artifact name
+        run: |
+          ARTIFACT=${{ github.ref_name }}
+          ARTIFACT=build-${ARTIFACT/\//-}
+          echo "ARTIFACT=${ARTIFACT}" >> $GITHUB_ENV
+          echo "Set artifact name as ${ARTIFACT}"
       - uses: actions/checkout@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -27,24 +34,28 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact
+          name: ${{ env.ARTIFACT }}
           path: build/*
           if-no-files-found: error
-          retention-days: 7
+          retention-days: ${{ github.ref_name == 'main' && 7 || 1 }}
           overwrite: true
   deploy-to-staging:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Set artifact name
+        run: |
+          ARTIFACT=${{ github.ref_name }}
+          ARTIFACT=build-${ARTIFACT/\//-}
+          echo "ARTIFACT=${ARTIFACT}" >> $GITHUB_ENV
+          echo "Set artifact name as ${ARTIFACT}"
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-artifact
+          name: ${{ env.ARTIFACT }}
       - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: parliament-watch
-          directory: ./
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy ./ --project-name=parliament-watch --branch=${{ github.ref_name }}

@@ -73,11 +73,13 @@
 							? e.type === selectedComboboxValue.filterComboboxType
 							: true)
 				);
+	let unit = 'มติ';
 </script>
 
 <Hst.Story title="DataPage" layout={{ type: 'single', iframe: true }}>
 	<div class="body-02 bg-white font-sans">
 		<DataPage
+			{unit}
 			{breadcrumbList}
 			{searchPlaceholder}
 			{comboboxFilterList}
@@ -115,6 +117,7 @@
 		<Hst.Number bind:value={tablePageSize} title="(Prop) Table Page Size" />
 		<hr />
 		<Hst.Text bind:value={searchQuery} title="(Reactive) Search Query" />
+		<Hst.Text bind:value={unit} title="(Prop) unit" />
 		<section class="mb-2 border border-solid border-white p-2">
 			<strong class="mb-2 block">Selected Filter?</strong>
 			<pre class="border border-solid border-gray-50 p-2"><code

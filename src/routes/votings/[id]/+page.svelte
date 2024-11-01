@@ -4,7 +4,7 @@
 	import AffiliationsResult from '$components/AffiliationResult/AffiliationsResult.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import {
@@ -115,7 +115,10 @@
 		[DefaultVotingResult.Passed]: 'text-teal-50',
 		[DefaultVoteOption.Agreed]: 'text-teal-50',
 		[DefaultVotingResult.Failed]: 'text-red-50',
-		[DefaultVoteOption.Disagreed]: 'text-red-50'
+		[DefaultVoteOption.Disagreed]: 'text-red-50',
+		[DefaultVoteOption.Novote]: 'gray-80',
+		[DefaultVoteOption.Abstain]: 'gray-50',
+		[DefaultVoteOption.Absent]: 'gray-20'
 	};
 
 	$: voterSearchResult = searchQuery.trim()
@@ -209,6 +212,7 @@
 			{#if resultsByPerson.length === 0}
 				<div class="body-compact-01 my-3 text-center text-gray-60 md:my-8">ไม่พบข้อมูล</div>
 			{:else}
+				{@const winningOption = getWinningOption(voting.result)}
 				<div
 					class="voting-jumpnav sticky top-0 z-10 mt-4 flex w-full items-center gap-x-[1px] bg-white"
 				>
@@ -246,14 +250,12 @@
 						class="flex items-center gap-x-1 {resultColorLookup[voting.result] ?? 'text-purple-70'}"
 					>
 						<span class="fluid-heading-05 ml-0 md:ml-1">
-							{Math.round(
-								(results.reduce(
-									(max, result) => (result.total > max.total ? result : max),
-									results[0]
-								).total /
-									resultsByPerson.length) *
-									100
-							)}% {getWinningOption(voting.result)}
+							{#if resultColorLookup[voting.result]}
+								{Math.round(
+									((results.find((r) => r.voteOption === winningOption)?.total ?? 0) * 100) /
+										resultsByPerson.length
+								)}%
+							{/if}{winningOption}
 						</span>
 					</div>
 					<div

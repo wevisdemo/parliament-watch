@@ -6,11 +6,21 @@ import type { ComponentProps } from 'svelte';
 
 export const getAssemblyMembers = (assembly: Assembly, politicians: Politician[]) =>
 	politicians
-		.map(({ assemblyRoles, ...rest }) => ({
-			...rest,
-			assemblyRole: assemblyRoles.find(({ assembly: a }) => a.id === assembly.id)
-		}))
-		.filter(({ assemblyRole }) => assemblyRole)
+		.map(({ assemblyRoles, ...rest }) => {
+			const filteredAssemblyRoles = assemblyRoles.filter(({ assembly: a }) => a.id === assembly.id);
+			return {
+				...rest,
+				assemblyRoles: filteredAssemblyRoles
+			};
+		})
+		.filter(({ assemblyRoles }) => assemblyRoles.length > 0)
+		.map(({ assemblyRoles, ...rest }) =>
+			assemblyRoles.map((assemblyRole) => ({
+				...rest,
+				assemblyRole
+			}))
+		)
+		.flat()
 		.map(({ partyRoles, ...rest }) => {
 			const partyRole = partyRoles
 				.filter(({ startedAt }) => !assembly.endedAt || dayjs(startedAt).isBefore(assembly.endedAt))
@@ -26,6 +36,7 @@ export type AssemblyMember = ReturnType<typeof getAssemblyMembers>[number];
 
 export interface PoliticianSummary extends Omit<ComponentProps<PoliticianProfile>, 'isLarge'> {
 	candidateType?: 'แบ่งเขต' | 'บัญชีรายชื่อ';
+	assemblyRoleName?: string;
 }
 
 export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary {
@@ -42,7 +53,8 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 			? 'บัญชีรายชื่อ'
 			: assemblyRole?.province && assemblyRole.districtNumber
 				? 'แบ่งเขต'
-				: undefined
+				: undefined,
+		assemblyRoleName: assemblyRole?.role
 	};
 }
 

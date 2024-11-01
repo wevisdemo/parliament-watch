@@ -8,24 +8,47 @@
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
-
 	let cmpDataPage: DataPage;
 
 	export let data;
 
 	$: ({ filterOptions, bills } = data);
 
+	interface Choice {
+		id: string;
+		text: string;
+		disabled: boolean;
+	}
+
 	$: comboboxFilterList = [
 		{
 			key: 'filterProposerName',
 			legend: 'ชื่อผู้เสนอ',
 			placeholder: 'เลือกชื่อผู้เสนอ',
-			choices: filterOptions.proposerNames.map((name) => ({
-				id: name,
-				text: name
-			}))
+			choices: getProposerName()
 		}
 	];
+
+	$: getProposerName = (): Choice[] => {
+		const peopleOptions = filterOptions.proposerNames.map((name) => ({
+			id: name,
+			text: name,
+			disabled: false
+		}));
+
+		const cabinetOptions = filterOptions.proposerCabinet.map((cabinet) => ({
+			id: cabinet.id,
+			text: cabinet.name,
+			disabled: false
+		}));
+
+		return [
+			{ id: 'section2', text: 'บุคคล', disabled: true },
+			...peopleOptions,
+			{ id: 'section1', text: 'คณะรัฐมนตรี', disabled: true },
+			...cabinetOptions
+		];
+	};
 
 	$: checkboxFilterList = [
 		{
@@ -71,9 +94,11 @@
 					.filter((bill) => {
 						if (
 							'filterProposerName' in selectedComboboxValue &&
-							![bill.proposedLedByPeopleName, bill.proposedLedByPoliticianName].includes(
-								selectedComboboxValue.filterProposerName as string | undefined
-							)
+							![
+								bill.proposedLedByPeopleName,
+								bill.proposedLedByPoliticianName,
+								bill.proposedByAssembly?.id
+							].includes(selectedComboboxValue.filterProposerName as string | undefined)
 						)
 							return;
 
@@ -124,6 +149,8 @@
 
 <DataPage
 	bind:this={cmpDataPage}
+	unit="ร่างกฎหมาย"
+	tablePageSize={50}
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ url: '/bills', label: 'ร่างกฎหมายในสภา' },

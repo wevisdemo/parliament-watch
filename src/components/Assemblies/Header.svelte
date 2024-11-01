@@ -3,21 +3,26 @@
 	import { Download, TableSplit } from 'carbon-icons-svelte';
 	import Share from '$components/Share/Share.svelte';
 	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 
 	export let availableAssemblies: AvailableAssembly[] = [];
 
 	export let assembly: {
 		id: string;
 		name: string;
-		abbreviation: string | null;
+		abbreviation?: string | null;
 		term: number;
 		startedAt: Date;
-		endedAt: Date | null;
-		origin: string | null;
+		endedAt?: Date | null;
+		origin?: string | null;
 	};
 
-	$: isActive = assembly.endedAt === undefined;
+	export let postfixLink = '';
+	export let headerName: string | null = null;
+	export let showStatus = true;
+	export let showRemark = true;
+
+	$: isActive = !assembly.endedAt;
 	$: startedAtThaiFormat = new Date(assembly.startedAt).toLocaleDateString('th-TH', {
 		day: 'numeric',
 		month: 'short',
@@ -37,20 +42,23 @@
 >
 	<div class="w-full max-w-[900px]">
 		<div class="flex flex-col md:flex-row">
-			<h2 class="fluid-heading-05">{assembly.name}</h2>
+			<h2 class="fluid-heading-05">{headerName ? headerName : assembly.name}</h2>
 			<AssemblyIdRunner
 				name={assembly.name}
 				term={assembly.term}
 				startedYear={assembly.startedAt}
 				{availableAssemblies}
+				postfix={postfixLink}
 			/>
 		</div>
-		<div class="flex items-center">
-			<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>
-			<p class="body-01 ml-[8px]">
-				{startedAtThaiFormat}{assembly.endedAt ? ` - ${endedAtThaiFormat}` : ''}
-			</p>
-		</div>
+		{#if showStatus}
+			<div class="flex items-center">
+				<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>
+				<p class="body-01 ml-[8px]">
+					{startedAtThaiFormat}{assembly.endedAt ? ` - ${endedAtThaiFormat}` : ''}
+				</p>
+			</div>
+		{/if}
 		{#if assembly.origin}
 			<div class="mt-[16px] md:mt-[32px]">
 				<p class="heading-01">ที่มา</p>
@@ -77,7 +85,9 @@
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
 			</a> -->
 		</div>
-		<DataPeriodRemark />
-		<Share label="แชร์" />
+		{#if showRemark}
+			<DataPeriodRemark />
+			<Share label="แชร์" />
+		{/if}
 	</div>
 </div>

@@ -24,7 +24,12 @@ export async function load({ params }) {
 		.filter(
 			name === AssemblyName.Senates
 				? (path) => [GroupByOption.Party, GroupByOption.Province].every((option) => option !== path)
-				: (path) => path !== GroupByOption.AppointmentMethod
+				: name === AssemblyName.Cabinet
+					? (path) =>
+							[GroupByOption.AppointmentMethod, GroupByOption.Province].every(
+								(option) => option !== path
+							)
+					: (path) => path !== GroupByOption.AppointmentMethod
 		)
 		.map<GroupByTab>((path) => ({
 			path,

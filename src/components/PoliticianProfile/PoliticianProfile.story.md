@@ -24,5 +24,5 @@ export interface Party {
 | `lastname`  | `string`          | lastname or familyname of the politician |
 | `avatar`    | `string`          | avatar image of the politician           |
 | `party`     | `Party`           | party of the politician                  |
-| `role`      | `string`          | role of the politician in paliarment     |
+| `role`      | `string`          | role of the politician in parliament     |
 | `isLarge`   | `boolean = false` | display a component in big scale type    |

@@ -25,7 +25,6 @@ const assemblyStaticInfoMap = {
 	},
 	[AssemblyName.Cabinet]: {
 		abbreviation: 'ครม.',
-		// TODO: No cabinet member data yet
 		mainRoles: []
 	}
 };

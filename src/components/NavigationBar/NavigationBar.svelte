@@ -15,7 +15,8 @@
 					url: '/assemblies/สภาผู้แทนราษฎร-26',
 					type: MenuTypes.link
 				},
-				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link }
+				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link },
+				{ label: 'คณะรัฐมนตรี', url: '/assemblies/คณะรัฐมนตรี-64', type: MenuTypes.link }
 			]
 		},
 		{
@@ -32,6 +33,12 @@
 				{ label: 'สำรวจร่างกฎหมายในสภา', url: '/bills', type: MenuTypes.link },
 				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
 			]
+		},
+		{
+			label: 'คำสัญญาทางการเมือง',
+			icon: PromiseIcon,
+			url: '/promises',
+			type: MenuTypes.both
 		},
 		{
 			label: 'เกี่ยวกับเรา',
@@ -57,6 +64,8 @@
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuList from './SideMenuList.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
+	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
+	import { setContext } from 'svelte';
 
 	let screenSize: number;
 	let previousFromTop = 0;
@@ -79,6 +88,10 @@
 		previousFromTop = currentFromTop;
 		sideNavActive = false;
 	}
+
+	setContext('closeSideNav', () => {
+		sideNavActive = false;
+	});
 </script>
 
 <svelte:window bind:innerWidth={screenSize} on:scroll={scrollEventHandler} />

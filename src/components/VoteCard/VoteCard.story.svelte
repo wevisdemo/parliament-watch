@@ -9,14 +9,14 @@
 	const passedVoting: VoteCardVoting = {
 		id: '1',
 		date: new Date('2023-08-31T17:00:00.000Z'),
-		nickname: 'ร่าง พรบ.สุราก้าวหน้า (ส่งไป ครม.)',
+		nickname: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
 		result: DefaultVotingResult.Passed
 	};
 
 	const failedVoting: VoteCardVoting = {
 		id: '2',
 		date: new Date('2023-09-01T17:00:00.000Z'),
-		nickname: 'ร่าง พรบ.สุราก้าวหน้า (ส่งไป ครม.)',
+		nickname: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
 		result: DefaultVotingResult.Failed
 	};
 

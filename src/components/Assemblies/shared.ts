@@ -1,3 +1,4 @@
+import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 
 export interface PartySelected {
@@ -34,7 +35,7 @@ export const getTopOfGroups = (groups: MemberGroup[]): MemberGroup => {
 };
 
 export const getTopOfGroupsPercent = (groups: MemberGroup[]): number => {
-	return getRoundedPercent(getTopOfGroups(groups).total, getSumOfGroupsTotal(groups));
+	return getRoundedPercent(getTopOfGroups(groups)?.total || 0, getSumOfGroupsTotal(groups));
 };
 
 export const getPercentWidth = (targetCount: number, groups: MemberGroup[]) => {
@@ -47,6 +48,12 @@ export interface PartySeat {
 	name: string;
 	color: string;
 	count: number;
+	members?: AssemblyMember[];
+}
+
+export interface CabinetSeat {
+	role: 'นายกรัฐมนตรี' | 'รองนายกรัฐมนตรี' | 'รัฐมนตรี' | 'รัฐมนตรีช่วย';
+	parties: PartySeat[];
 }
 
 export const getSenateColorByTitle = (title: string) => {
@@ -60,4 +67,11 @@ export const getSenateColorByTitle = (title: string) => {
 		default:
 			return '#A8A8A8';
 	}
+};
+
+export type TooltipProp = {
+	title: string;
+	additional: string;
+	x: number;
+	y: number;
 };

@@ -11,6 +11,8 @@
 	import FacebookIcon from './FacebookIcon.svelte';
 	import InstagramIcon from './InstagramIcon.svelte';
 	import XIcon from './XIcon.svelte';
+	import PoliticianChangeIcon from './PoliticianChangeIcon.svelte';
+	import PromiseIcon from './PromiseIcon.svelte';
 
 	export let Hst: Hst;
 
@@ -37,6 +39,9 @@
 	<Hst.Variant title="VoteIcon">
 		<Vote {size} />
 	</Hst.Variant>
+	<Hst.Variant title="PromiseIcon">
+		<PromiseIcon {size} />
+	</Hst.Variant>
 	<Hst.Variant title="WeVisIcon">
 		<WeVisIcon {size} />
 	</Hst.Variant>
@@ -51,6 +56,9 @@
 	</Hst.Variant>
 	<Hst.Variant title="XIcon">
 		<XIcon {size} />
+	</Hst.Variant>
+	<Hst.Variant title="PoliticianChangeIcon">
+		<PoliticianChangeIcon {size} />
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">

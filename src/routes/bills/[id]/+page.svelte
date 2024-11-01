@@ -18,7 +18,7 @@
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import Progress from '$components/bills/Progress.svelte';
 	import type { Party } from '$models/party.js';
-	import DataPeriodRemark from '$components/DataPeriodRemark.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 

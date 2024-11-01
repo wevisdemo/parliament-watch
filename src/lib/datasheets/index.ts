@@ -10,9 +10,11 @@ import {
 	transformPartyRole,
 	transformPolitician
 } from '$models/politician';
+import { promiseProgressTable, promiseTable } from '$models/promise';
 import { transformVote, voteTable } from '$models/vote';
 import { transformVoting, votingTable } from '$models/voting';
 import { StaticImageResolver } from './image';
+import { transformPromises } from './promises';
 import { error } from '@sveltejs/kit';
 import { Spreadsheet } from 'sheethuahua';
 
@@ -27,12 +29,12 @@ const sheets = Spreadsheet('1SbX2kgAGsslbhGuB-EI_YdSAnIt3reU1_OEtWmDVOVk', [
 	partyRoleTable,
 	assemblyRoleTable,
 	voteTable,
-	votingTable
+	votingTable,
+	promiseTable,
+	promiseProgressTable
 ]);
 
-type SheetName = Parameters<typeof sheets.get>[0];
-
-const sheetCaches = new Map<SheetName, object[]>();
+const sheetCaches = new Map<string, object[]>();
 
 export const fetchParties = withCache('Parties', async () =>
 	(await sheets.get('Parties')).map((party) =>
@@ -103,7 +105,15 @@ export const fetchBillEvents = withCache('BillEvents', async () =>
 	(await sheets.get('BillEvents')).map(transformBillEvent)
 );
 
-function withCache<T extends object[]>(key: SheetName, getter: () => Promise<T>) {
+export const fetchPromises = withCache('Promises', async () =>
+	transformPromises(
+		await sheets.get('Promises'),
+		await sheets.get('Promise Progress'),
+		await fetchParties()
+	)
+);
+
+function withCache<T extends object[]>(key: string, getter: () => Promise<T>) {
 	return async (): Promise<T> => {
 		if (!sheetCaches.has(key)) {
 			sheetCaches.set(key, await getter());

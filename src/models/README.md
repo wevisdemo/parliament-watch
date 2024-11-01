@@ -8,10 +8,14 @@ erDiagram
   Politician }o--o| Vote: "can"
   Politician }|--o| Bill: "can propose"
   Vote }|--|| Voting: "are couted toward"
-  Bill ||--o{ Event: "goes through"
+  Bill ||--o{ BillEvent: "goes through"
   Bill |o--o{ Bill: "can be merged to"
-  Event }o--o| Bill: "can refer to"
-  Event }o--o| Voting: "can refer to"
+  BillEvent }o--o| Bill: "can refer to"
+  BillEvent }o--o| Voting: "can refer to"
+  Party ||--o{ Promise: "makes"
+  Promise ||--|{ PromiseProgress: "are tracked with"
+  Promise ||--|{ PromiseClarificationLog: "can have"
+  PromiseProgress }o..o| BillEvent: "can refer to"
 
   Politician {
     string id PK "firstname-lastname"
@@ -110,6 +114,36 @@ erDiagram
     number mergedIntoBillId FK "for action merged"
     string enforcementDocumentUrl "for action enforced"
   }
+
+  Promise {
+    number id PK
+    number partyId FK
+    string[] statements
+    string coverImageUrl
+    string[] keywords
+    string[] categories
+    string status "notStarted | inProgress | fulfilled | unhonored"
+  }
+
+  PromiseClarificationLog {
+    number id PK
+    number promiseId FK
+    Date date
+    string title
+    Answer answer "date: Date, content: string"
+  }
+
+  PromiseProgress {
+    number id PK
+    number promiseId FK
+    string type "checkpoint | indirect"
+    Date date
+    string title
+    string description
+    voting votingId FK "refer to Voting"
+    Reference reference "label: string, url: string, description: string"
+    Evidence evidence "type: image | document, url: string"
+  }
 ```
 
 - **Politician** = นักการเมือง
@@ -117,6 +151,9 @@ erDiagram
 - **Party** = พรรค
 - **Assembly** = กลุ่มคน เช่น สส. สว. ครม.
 - **Bill** = ข้อเสนอกฎหมาย
-- **Event** = เหตุการต่างๆ ระหว่างการเสนอกฎหมาย
+- **BillEvent** = เหตุการต่างๆ ระหว่างการเสนอกฎหมาย
 - **Voting** = การลงมติ
 - **Vote** = การลงคะแนน
+- **Promise** = คำสัญญา
+- **PromiseClarificationLog** = บันทึกคำชี้แจงคำสัญญา
+- **PromiseProgress** = ความคืบหน้าคำสัญญา

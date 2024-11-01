@@ -5,7 +5,8 @@ import {
 	fetchBillEvents,
 	fetchVotings,
 	fetchVotes,
-	fetchPoliticians
+	fetchPoliticians,
+	fetchAssemblies
 } from '$lib/datasheets';
 import { groupVoteByAffiliations } from '$lib/datasheets/voting';
 import { createSeo } from '$lib/seo';
@@ -32,13 +33,14 @@ export async function load({ params }) {
 	const votings = await fetchVotings();
 	const votes = await fetchVotes();
 	const politicians = await fetchPoliticians();
+	const assemblies = await fetchAssemblies();
 
 	const relatedVotingResults = events.reduce<RelatedVotingResults>((obj, { votedInVotingId }) => {
 		if (votedInVotingId) {
 			const voting = votings.find(({ id }) => id === votedInVotingId);
 
 			if (voting) {
-				const corespondedVotes = votes.filter(({ votingId }) => votingId === voting.id);
+				const correspondedVotes = votes.filter(({ votingId }) => votingId === voting.id);
 				const highlightedVoteOption =
 					voting.result === DefaultVotingResult.Passed
 						? DefaultVoteOption.Agreed
@@ -47,11 +49,11 @@ export async function load({ params }) {
 				obj[votedInVotingId] = {
 					voting,
 					resultSummary: {
-						total: corespondedVotes.length,
-						agreed: corespondedVotes.filter(
+						total: correspondedVotes.length,
+						agreed: correspondedVotes.filter(
 							({ voteOption }) => voteOption === highlightedVoteOption
 						).length,
-						subResults: groupVoteByAffiliations(voting, corespondedVotes, politicians)
+						subResults: groupVoteByAffiliations(voting, correspondedVotes, politicians, assemblies)
 							.map(({ name, resultSummary }) => ({
 								affiliationName: name,
 								agreed: resultSummary[highlightedVoteOption] ?? 0,

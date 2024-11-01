@@ -1,6 +1,9 @@
 <script lang="ts">
 	import type { DefaultVoteOption, CustomVoteOption } from '$models/voting.js';
-	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
+	import type {
+		SelectedCheckboxValueType,
+		SelectedComboboxValueType
+	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 
@@ -41,6 +44,7 @@
 
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let selectedComboboxValue: SelectedComboboxValueType;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||
@@ -49,10 +53,13 @@
 			: votes.filter((vote) => {
 					const search = searchQuery.trim();
 					if (search && !vote.politician.id.includes(search)) return;
+					const selectedParty = selectedComboboxValue?.filterComboboxType;
+
 					const { filterPosition, filterVoteType } = selectedCheckboxValue;
 					return (
 						filterVoteType.includes(generalVoteType(vote.voteOption)) &&
-						filterPosition.includes(vote.role)
+						filterPosition.includes(vote.role) &&
+						(!selectedParty || vote.party === selectedParty)
 					);
 				});
 
@@ -83,6 +90,7 @@
 	]}
 	bind:searchQuery
 	bind:selectedCheckboxValue
+	bind:selectedComboboxValue
 >
 	<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 		<div class="flex-1">
