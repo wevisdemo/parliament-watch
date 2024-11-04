@@ -3,7 +3,7 @@
 	import { twMerge } from 'tailwind-merge';
 
 	export let status: PromiseStatus;
-	export let isLarge = true;
+	export let isLarge = false;
 </script>
 
 <div

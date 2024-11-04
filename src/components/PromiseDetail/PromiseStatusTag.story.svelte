@@ -4,7 +4,7 @@
 	import { promiseStatusList } from '../../constants/promise';
 
 	export let Hst: Hst;
-	let isLarge = true;
+	let isLarge = false;
 </script>
 
 <Hst.Story
@@ -15,7 +15,7 @@
 >
 	{#each promiseStatusList as status}
 		<Hst.Variant title={status.label}>
-			<PromiseStatusTag {isLarge} status={status.label} />
+			<PromiseStatusTag isLarge status={status.label} />
 		</Hst.Variant>
 	{/each}
 	<svelte:fragment slot="controls">
