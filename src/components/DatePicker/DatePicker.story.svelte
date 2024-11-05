@@ -3,7 +3,7 @@
 	import DatePicker from './DatePicker.svelte';
 	export let Hst: Hst;
 
-	$: selectedDate = new Date();
+	let selectedDate = new Date();
 	const handleSelectDate = (date: Date) => {
 		selectedDate = date;
 	};
