@@ -14,7 +14,7 @@
 	<div class="mt-4 flex flex-col gap-4">
 		{#each promiseStatusList as status}
 			<div>
-				<PromiseStatusTag status={status.label} />
+				<PromiseStatusTag isLarge status={status.label} />
 				<div class="body-02 mt-2">{status.text}</div>
 			</div>
 		{/each}
