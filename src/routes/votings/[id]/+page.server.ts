@@ -4,7 +4,7 @@ import {
 	fetchPoliticians,
 	fetchVotes,
 	fetchVotings
-} from '$lib/datasheets';
+} from '$lib/datasheets/index.js';
 import {
 	getVoteResultsByPerson,
 	groupVoteByAffiliations,

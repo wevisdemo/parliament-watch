@@ -4,18 +4,14 @@
 	import Share from '$components/Share/Share.svelte';
 	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import type { Assembly } from '$models/assembly';
 
 	export let availableAssemblies: AvailableAssembly[] = [];
 
-	export let assembly: {
-		id: string;
-		name: string;
-		abbreviation?: string | null;
-		term: number;
-		startedAt: Date;
-		endedAt?: Date | null;
-		origin?: string | null;
-	};
+	export let assembly: Pick<
+		Assembly,
+		'id' | 'name' | 'abbreviation' | 'term' | 'startedAt' | 'endedAt' | 'origin'
+	>;
 
 	export let postfixLink = '';
 	export let headerName: string | null = null;

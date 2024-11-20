@@ -135,7 +135,7 @@ export async function load() {
 	};
 }
 
-function formatThaiYear(date: Date | null) {
+function formatThaiYear(date?: Date) {
 	if (!date) return;
 	return date.toLocaleString('th-TH', { year: 'numeric' });
 }

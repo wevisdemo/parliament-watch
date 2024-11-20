@@ -1,5 +1,14 @@
-import { slugify } from '$lib/slug';
-import { Table, Column, type RowType } from 'sheethuahua';
+export type BillEvent = {
+	date?: Date;
+	type: BillEventType;
+	actionType?: BillEventActionType;
+	enforcementDocumentUrl?: string;
+	billId: string;
+	title: string;
+	description: string;
+	mergedIntoBillId?: string;
+	votedInVotingId?: string;
+};
 
 export enum BillEventType {
 	Hearing = 'hearing',
@@ -57,33 +66,3 @@ export const eventTypeTitleDescription = {
 		description: ''
 	}
 };
-
-export const billEventTable = Table('BillEvents', {
-	billId: Column.String(),
-	date: Column.OptionalDate(),
-	type: Column.OneOf(Object.values(BillEventType)),
-	title: Column.OptionalString(),
-	description: Column.OptionalString(),
-	actionType: Column.OptionalOneOf(Object.values(BillEventActionType)),
-	votedInVotingId: Column.OptionalString(),
-	mergedIntoBillId: Column.OptionalString(),
-	enforcementDocumentUrl: Column.OptionalString()
-});
-
-export const transformBillEvent = ({
-	billId,
-	title,
-	description,
-	mergedIntoBillId,
-	votedInVotingId,
-	...rest
-}: RowType<typeof billEventTable>) => ({
-	billId: slugify(billId),
-	title: title ?? eventTypeTitleDescription[rest.type].title,
-	description: description ?? eventTypeTitleDescription[rest.type].description,
-	mergedIntoBillId: mergedIntoBillId && slugify(mergedIntoBillId),
-	votedInVotingId: votedInVotingId && slugify(votedInVotingId),
-	...rest
-});
-
-export type BillEvent = ReturnType<typeof transformBillEvent>;

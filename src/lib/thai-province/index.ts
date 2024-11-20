@@ -1,16 +1,12 @@
 import rawProvince from './provinces.csv?raw';
-import { Table, Column, parseCSVFromString } from 'sheethuahua';
+import { Column, parseCsv, asString, Tuple, createTransformer } from 'sheethuahua';
 
-const provinceTable = Table({
-	ProvinceNameThai: Column.String(),
-	Region_RDPB: Column.String()
-});
+const provinceTable = Tuple([
+	Column(
+		'ProvinceNameThai',
+		createTransformer((province) => province.replace('จังหวัด', ''))
+	),
+	Column('Region_RDPB', asString())
+]);
 
-const provinces = await parseCSVFromString(rawProvince, provinceTable);
-
-export const provinceRegionMap = new Map<string, string>(
-	provinces.map(({ ProvinceNameThai, Region_RDPB }) => [
-		ProvinceNameThai.replace('จังหวัด', ''),
-		Region_RDPB
-	])
-);
+export const provinceRegionMap = new Map(parseCsv(rawProvince, provinceTable));

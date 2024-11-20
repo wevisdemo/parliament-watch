@@ -578,6 +578,11 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.1.tgz#16308cea045f0fc777b6ff20a9f25474dd8293d2"
   integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
 
+"@formkit/tempo@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@formkit/tempo/-/tempo-0.1.2.tgz#85ff615dddc6cc55ab9f9ca83cf9a41cfdf778fc"
+  integrity sha512-jNPPbjL8oj7hK3eHX++CwbR6X4GKQt+x00/q4yeXkwynXHGKL27dylYhpEgwrmediPP4y7s0XtN1if/M/JYujg==
+
 "@histoire/app@^0.17.17":
   version "0.17.17"
   resolved "https://registry.yarnpkg.com/@histoire/app/-/app-0.17.17.tgz#3aa6fbb7be516c865480b5a2cf2cfad07e230af0"
@@ -876,10 +881,10 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
-"@sinclair/typebox@^0.32.20":
-  version "0.32.31"
-  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.32.31.tgz#f18a5c73301d732caa166b47a0a64a7edfef0cfc"
-  integrity sha512-rYB0tgGHawpom3ZwwsGidvI0NI+W/rRHu1dyyO1KlIoH8iMdg3esSnYQxQtyJ8eflhqxmzEV7Nu8zT4JY7CHKw==
+"@sinclair/typebox@^0.33.19":
+  version "0.33.22"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.33.22.tgz#3339d85172509095a8384cb4b44834a7c9309d86"
+  integrity sha512-auUj4k+f4pyrIVf4GW5UKquSZFHJWri06QgARy9C0t9ZTjJLIuNIrr1yl9bWcJWJ1Gz1vOvYN1D+QPaIlNMVkQ==
 
 "@sveltejs/adapter-static@^3.0.0":
   version "3.0.1"
@@ -5501,12 +5506,13 @@ shebang-regex@^3.0.0:
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-sheethuahua@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/sheethuahua/-/sheethuahua-2.0.0.tgz#49f98fe6c4d33d4f51e11563fa7b050a66718545"
-  integrity sha512-IScqhw2ep1fOLtSjhX7z0K9227HLm99MVAvdYXh+U/03NT/7iWU5haBNcsbSKyPNYC4tVslUCUiwTyCQBsqqYQ==
+sheethuahua@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/sheethuahua/-/sheethuahua-3.1.0.tgz#68ab2f13b6d08f10091b55a605de534fb518b97e"
+  integrity sha512-RDTyHehWVDoFkcH/eE2ZnnHP5oSlKPAOpII6rtano+ZWkMb9N/CJssbOoStroVG5x+iAs3H/KcSBKoVF+QLSNA==
   dependencies:
-    "@sinclair/typebox" "^0.32.20"
+    "@formkit/tempo" "^0.1.2"
+    "@sinclair/typebox" "^0.33.19"
     d3-dsv "^3.0.1"
 
 shell-quote@^1.8.1:

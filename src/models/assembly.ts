@@ -1,14 +1,24 @@
-import { safeFind } from '$lib/datasheets/processor';
 import type { Party } from './party';
-import { Table, Column, type RowType } from 'sheethuahua';
 
 export enum AssemblyName {
 	Representatives = 'สภาผู้แทนราษฎร',
 	Senates = 'วุฒิสภา',
 	Cabinet = 'คณะรัฐมนตรี'
 }
+export interface Assembly {
+	id: string;
+	name: AssemblyName;
+	term: number;
+	startedAt: Date;
+	endedAt?: Date;
+	origin?: string;
+	governmentParties: Party[];
+	oppositionParties: Party[];
+	abbreviation: string;
+	mainRoles: string[];
+}
 
-const assemblyStaticInfoMap = {
+export const assemblyStaticInfoMap = {
 	[AssemblyName.Representatives]: {
 		abbreviation: 'สส.',
 		mainRoles: [
@@ -29,45 +39,10 @@ const assemblyStaticInfoMap = {
 	}
 };
 
-export const assemblyTable = Table('Assemblies', {
-	id: Column.String(),
-	name: Column.OneOf(Object.values(AssemblyName)),
-	term: Column.Number(),
-	startedAt: Column.Date(),
-	endedAt: Column.OptionalDate(),
-	origin: Column.OptionalString()
-});
-
-export function transformAssembly(
-	assembly: RowType<typeof assemblyTable>,
-	parties: Party[],
-	assemblyPartyGroups: RowType<typeof assemblyPartyGroupTable>[]
-) {
-	const getPartyGroup = (groupName: AssemblyPartyGroup) =>
-		assemblyPartyGroups
-			.filter(({ assemblyId, group }) => assemblyId === assembly.id && group === groupName)
-			.map(({ partyName }) => safeFind(parties, ({ name }) => name === partyName));
-
-	return {
-		...assembly,
-		...(assemblyStaticInfoMap[assembly.name] as { abbreviation: string; mainRoles: string[] }),
-		governmentParties: getPartyGroup(AssemblyPartyGroup.Government),
-		oppositionParties: getPartyGroup(AssemblyPartyGroup.Opposition)
-	};
-}
-
-export type Assembly = ReturnType<typeof transformAssembly>;
-
 export enum AssemblyPartyGroup {
 	Government = 'ฝ่ายรัฐบาล',
 	Opposition = 'ฝ่ายค้าน'
 }
-
-export const assemblyPartyGroupTable = Table('AssemblyPartyGroups', {
-	assemblyId: Column.String(),
-	partyName: Column.String(),
-	group: Column.OneOf(Object.values(AssemblyPartyGroup))
-});
 
 export enum GroupByOption {
 	Party = 'party',

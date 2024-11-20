@@ -6,8 +6,8 @@
 
 	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;
-	export let startedAt: Date | null;
-	export let endedAt: Date | null;
+	export let startedAt: Date | undefined;
+	export let endedAt: Date | undefined;
 	export let handleSelectDate: (date: Date) => void;
 
 	$: max = Math.max(...timeLineData.map((d) => Math.max(d.in, d.out)));

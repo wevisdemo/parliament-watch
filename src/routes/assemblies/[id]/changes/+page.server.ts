@@ -10,7 +10,6 @@ import { AssemblyName } from '$models/assembly';
 import type { AssemblyRoleHistory, PartyRoleHistory, Politician } from '$models/politician';
 import type { MainMember, RoleChange } from '../+page.server';
 import { error } from '@sveltejs/kit';
-import dayjs from 'dayjs';
 
 export type AssemblyRoleSummary = Pick<
 	AssemblyRoleHistory,
@@ -36,13 +35,11 @@ function parseMainMember(member: ReturnType<typeof getAssemblyMembers>[number]):
 }
 
 export async function load({ params }) {
-	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
+	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
 
-	if (fullAssembly.name !== AssemblyName.Cabinet) {
+	if (assembly.name !== AssemblyName.Cabinet) {
 		error(404, { message: `Currently, changes only available for the cabinet` });
 	}
-
-	const { mainRoles, ...assembly } = fullAssembly;
 
 	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map((a) => ({
 		id: a.id,
@@ -51,7 +48,7 @@ export async function load({ params }) {
 	}));
 
 	const assemblyRoles: AssemblyRoleSummary[] = (await fetchAssemblyRoleHistory())
-		.filter(({ assembly, role }) => assembly.id === fullAssembly.id && role)
+		.filter(({ assembly: { id }, role }) => id === assembly.id && role)
 		.map((ar) => ({
 			politicianId: ar.politicianId,
 			role: ar.role,
@@ -63,12 +60,12 @@ export async function load({ params }) {
 		assemblyRoles.some((ar) => p.id === ar.politicianId)
 	);
 
-	const assemblyMembers = getAssemblyMembers(fullAssembly, members);
+	const assemblyMembers = getAssemblyMembers(assembly, members);
 
 	const changes: RoleChange[] = [];
 	for (const member of members) {
 		member.assemblyRoles.forEach((role) => {
-			if (role.assembly.name !== AssemblyName.Cabinet || role.assembly.id !== fullAssembly.id) {
+			if (role.assembly.name !== AssemblyName.Cabinet || role.assembly.id !== assembly.id) {
 				return;
 			}
 			changes.push({
@@ -97,11 +94,12 @@ export async function load({ params }) {
 
 	return {
 		assembly: {
-			id: fullAssembly.id,
-			name: fullAssembly.name,
-			term: fullAssembly.term,
-			startedAt: fullAssembly.startedAt,
-			endedAt: fullAssembly.endedAt
+			id: assembly.id,
+			abbreviation: assembly.abbreviation,
+			name: assembly.name,
+			term: assembly.term,
+			startedAt: assembly.startedAt,
+			endedAt: assembly.endedAt
 		},
 		availableAssemblies,
 		assemblyRoles,

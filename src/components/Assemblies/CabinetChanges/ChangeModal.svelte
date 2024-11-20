@@ -7,8 +7,8 @@
 
 	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;
-	export let startedAt: Date | null;
-	export let endedAt: Date | null;
+	export let startedAt: Date | undefined;
+	export let endedAt: Date | undefined;
 	export let handleSelectDate: (date: Date) => void;
 
 	export let open = false;
