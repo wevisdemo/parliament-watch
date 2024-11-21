@@ -1,6 +1,6 @@
 import { BillProposerType, BillStatus, type Bill, type PeopleProposer } from '$models/bill';
 import type { Link } from '$models/link';
-import { asPolitician, asSlug, asValidAssembly } from '../transformers';
+import { asPolitician, asPoliticianList, asSlug, asValidAssembly } from '../transformers';
 import { sheets, withCache } from './shared';
 import { asDate, asOneOf, asString, Column, Object, asArray, asNumber } from 'sheethuahua';
 
@@ -18,8 +18,12 @@ export const fetchBills = withCache('Bills', async (): Promise<Bill[]> => {
 			name: Column('attachmentName', asString().optional()),
 			url: Column('attachmentUrl', asString().optional())
 		}),
-		proposedLedByPolitician: Column('proposedLedByPoliticianId', await asPolitician()).optional(),
-		proposedByAssembly: Column('proposedByAssemblyId', await asValidAssembly()).optional(),
+		proposedLedByPolitician: Column('proposedLedByPoliticianId', (await asPolitician()).optional()),
+		coProposedByPoliticians: Column(
+			'coProposedByPoliticians',
+			(await asPoliticianList()).optional()
+		),
+		proposedByAssembly: Column('proposedByAssemblyId', (await asValidAssembly()).optional()),
 		proposedByPeople: Object({
 			ledBy: Column('proposedLedByPeople', asString().optional()),
 			signatoryCount: Column('peopleSignatureCount', asNumber().optional(0))

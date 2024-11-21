@@ -52,6 +52,19 @@ export const asPolitician = async () => {
 	return createTransformer((politicianId) => politicians.find(({ id }) => id === politicianId));
 };
 
+export const asPoliticianList = async () => {
+	const politicians = await fetchPoliticians();
+	return createTransformer((list) =>
+		list.split(',').map((text) => {
+			const corpus = text.split(' ').filter((word) => word);
+			const expectedId = corpus.join('-');
+			return (
+				politicians.find((politician) => expectedId.includes(politician.id)) || corpus.join(' ')
+			);
+		})
+	);
+};
+
 export const asCsvLinks = () =>
 	createTransformer((text) =>
 		text.split('\n').map<Link>((ref) => {
