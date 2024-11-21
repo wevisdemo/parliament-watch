@@ -16,13 +16,7 @@
 
 	export let data;
 
-	$: ({
-		highlightedPoliticians,
-		otherSourcesHighlightedPoliticians,
-		latestVotings,
-		billByCategoryAndStatus,
-		promiseSummary
-	} = data);
+	$: ({ highlightedPoliticians, latestVotings, billByCategoryAndStatus, promiseSummary } = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -91,7 +85,7 @@
 		>รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
 		ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา</span
 	>
-	<PoliticianContent {highlightedPoliticians} {otherSourcesHighlightedPoliticians} />
+	<PoliticianContent {highlightedPoliticians} />
 </ContentSection>
 
 <ContentSection

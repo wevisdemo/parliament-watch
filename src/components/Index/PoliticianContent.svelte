@@ -10,7 +10,6 @@
 	}
 
 	export let highlightedPoliticians: HighlightedPolitician[];
-	export let otherSourcesHighlightedPoliticians: HighlightedPolitician[];
 
 	async function getExternalHighlightedPoliticians(): Promise<HighlightedPolitician[]> {
 		const { politicianWithMostWikipediaVisit, politicianWithMostGun, updatedAt } =
@@ -30,22 +29,8 @@
 	}
 </script>
 
-<div>
-	<h3 class="fluid-heading-04">นักการเมืองชุดล่าสุดที่น่าสนใจ</h3>
-	<p class="label-01 mb-6 text-gray-60">
-		หมายเหตุ : ในกรณีที่มีมากกว่า 1 คน จะเลือกจากลำดับตัวอักษรในชื่อ
-	</p>
-	<div class="grid grid-cols-1 gap-3 md:grid-cols-3">
-		{#each highlightedPoliticians as politicianData (politicianData.reason)}
-			<StatCard {politicianData} />
-		{/each}
-	</div>
-</div>
-<div>
-	<h3 class="heading-01 relative mb-6 text-center">
-		<span class="absolute left-0 top-1/2 h-[1px] w-full bg-text-03" aria-hidden="true" />
-		<span class="relative z-10 bg-ui-01 px-2 text-text-03">คัดเลือกโดยใช้แหล่งข้อมูลอื่นๆ</span>
-	</h3>
+<div class="space-y-6">
+	<h3 class="fluid-heading-04">นักการเมืองที่น่าสนใจ</h3>
 	{#await getExternalHighlightedPoliticians()}
 		<InlineLoading class="flex items-center justify-center p-12" />
 	{:then externalHighlightedPoliticians}
@@ -53,7 +38,7 @@
 			arrowLeftClass="top-auto bottom-[75px] translate-y-1/2"
 			arrowRightClass="top-auto bottom-[75px] translate-y-1/2"
 		>
-			{#each [...otherSourcesHighlightedPoliticians, ...externalHighlightedPoliticians] as politicianData (politicianData.reason)}
+			{#each [...highlightedPoliticians, ...externalHighlightedPoliticians] as politicianData (politicianData.reason)}
 				<StatCard class="keen-slider__slide" {politicianData} />
 			{/each}
 		</Carousel>

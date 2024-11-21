@@ -19,10 +19,8 @@ import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
 import { BillStatus } from '$models/bill';
 import { PromiseStatus } from '$models/promise';
-import { DefaultVoteOption } from '$models/voting.js';
 import type { PromisesByStatus } from './promises/+page.server';
 import { groups, rollup } from 'd3-array';
-import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
@@ -47,83 +45,16 @@ interface MostFrequentlyServedAsMinisterPolitician extends HighlightedPolitician
 export async function load() {
 	const politicians = await fetchPoliticians();
 	const votes = await fetchVotes();
-	const votings = await fetchVotings();
 	const bills = await fetchBills();
 	const promises = await fetchPromises();
 	const assembles = await fetchAssemblies();
 
 	const activePoliticians = politicians.filter(({ isActive }) => isActive);
 
-	const votesInActiveAssemblies = votes.filter(({ votingId }) =>
-		votings
-			.find(({ id }) => id === votingId)
-			?.participatedAssemblies.some(({ endedAt }) => !endedAt)
-	);
-
-	const highlightedPoliticians: HighlightedPolitician[] = [
-		// TODO: Not release assets and debts yet
-		// {
-		// 	reason: HighlightedReason.HighestAssetOwned,
-		// 	value: 95787230000,
-		// 	politician: movingForwardPolitician
-		// },
-		// {
-		// 	reason: HighlightedReason.HighestDebtOwned,
-		// 	value: 1862770000,
-		// 	politician: movingForwardPolitician
-		// },
-		{
-			reason: HighlightedReason.HighestPartySwitching,
-			...activePoliticians
-				.map((politician) => ({
-					politician,
-					value: new Set(politician.partyRoles.map(({ party }) => party.name)).size
-				}))
-				.sort((a, z) => z.value - a.value)[0]
-		},
-		{
-			reason: HighlightedReason.HighestAbsentRate,
-			...activePoliticians
-				.map((politician) => {
-					const theirVotes = votesInActiveAssemblies.filter(
-						({ politicianId }) => politicianId === politician.id
-					);
-
-					return {
-						politician,
-						value:
-							theirVotes.length > 0
-								? theirVotes.filter(({ voteOption }) => voteOption === DefaultVoteOption.Absent)
-										.length / theirVotes.length
-								: 0
-					};
-				})
-				.sort((a, z) => z.value - a.value)[0]
-		},
-		{
-			reason: HighlightedReason.HighestBillProposed,
-			...activePoliticians
-				.map((politician) => ({
-					politician,
-					value: bills.filter((bill) => bill.proposedLedByPolitician?.id === politician.id).length
-				}))
-				.sort((a, z) => z.value - a.value)[0]
-		},
-		{
-			reason: HighlightedReason.Youngest,
-			...activePoliticians
-				.map((politician) => ({
-					politician,
-					value: politician.birthdate ? dayjs().diff(politician.birthdate, 'years') : 999
-				}))
-				.sort((a, z) => a.value - z.value)[0]
-		}
-	];
-
 	const chuanLeekpai = safeFind(activePoliticians, (p) => p.id === 'ชวน-หลีกภัย');
 	const banyatBantadtan = safeFind(activePoliticians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
 
-	const otherSourcesHighlightedPoliticians: HighlightedPolitician[] = [
+	const highlightedPoliticians: HighlightedPolitician[] = [
 		{
 			reason: HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,
@@ -213,7 +144,6 @@ export async function load() {
 
 	return {
 		highlightedPoliticians,
-		otherSourcesHighlightedPoliticians,
 		latestVotings,
 		billByCategoryAndStatus,
 		promiseSummary
