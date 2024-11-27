@@ -11,7 +11,7 @@
 
 	export let data;
 
-	$: ({ promise } = data);
+	$: ({ promise, globalEvents } = data);
 
 	let showStatusListModal = false;
 
@@ -139,7 +139,7 @@
 			คำสัญญามีสถานะอะไรบ้าง?
 		</button>
 	</div>
-	<PromiseProgressTimeline {promise} />
+	<PromiseProgressTimeline {promise} {globalEvents} />
 	<div class="mt-8 flex flex-col justify-between gap-4 bg-gray-10 p-6 md:flex-row">
 		<div class="text-01">
 			<div class="heading-02">

@@ -3,6 +3,7 @@ import { error } from '@sveltejs/kit';
 export * from './fetchers/assembly';
 export * from './fetchers/bill';
 export * from './fetchers/bill-events';
+export * from './fetchers/global-events';
 export * from './fetchers/party';
 export * from './fetchers/politician';
 export * from './fetchers/promise';

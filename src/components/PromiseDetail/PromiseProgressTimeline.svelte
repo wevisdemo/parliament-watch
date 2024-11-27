@@ -1,11 +1,15 @@
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { formatThaiDate } from '$lib/date-parser';
+	import type { GlobalEvent } from '$models/global-event';
 	import { PromiseStatus, type Promise } from '$models/promise';
 	import { Bullhorn, CheckmarkFilled } from 'carbon-icons-svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	export let promise: Promise;
+	export let globalEvents: GlobalEvent[];
+
+	console.log(globalEvents); // don't forget to remove this
 
 	$: timeline = promise.progresses.sort((a, b) => {
 		return b.date > a.date ? 1 : -1;
