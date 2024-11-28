@@ -9,10 +9,7 @@
 	export let promise: Promise;
 	export let globalEvents: GlobalEvent[];
 
-	globalEvents.forEach((obj) => (obj.isGlobalEvent = true));
-
-	const promises = promise.progresses.concat(globalEvents);
-	$: timeline = promises.sort((a, b) => {
+	$: timeline = [...promise.progresses, ...globalEvents].sort((a, b) => {
 		return b.date > a.date ? 1 : -1;
 	});
 
@@ -31,11 +28,12 @@
 	};
 </script>
 
-{#each timeline as progress, index}
+{#each timeline as event, index}
+	{@const isProgress = 'type' in event}
 	<div
 		class={twMerge(
 			'p-4 pb-0 text-text-01',
-			progress.type === 'indirect' && 'text-gray-60',
+			isProgress && event.type === 'indirect' && 'text-gray-60',
 			index === 0 && promise.status === PromiseStatus.inProgress && 'bg-yellow-10',
 			index === 0 && promise.status === PromiseStatus.fulfilled && 'bg-green-10',
 			index === 0 && promise.status === PromiseStatus.unhonored && 'bg-magenta-10'
@@ -50,12 +48,12 @@
 					class={twMerge(
 						'absolute inset-0 mx-auto w-[1px] flex-1 border-l border-l-text-primary',
 						index !== 0 && '-top-4',
-						progress.type === 'indirect' && 'border-dashed',
+						isProgress && event.type === 'indirect' && 'border-dashed',
 						index === timeline.length - 1 && 'h-4',
-						progress.type === 'indirect' && 'border-l-gray-60'
+						isProgress && event.type === 'indirect' && 'border-l-gray-60'
 					)}
 				/>
-				{#if progress.type === 'checkpoint'}
+				{#if isProgress && event.type === 'checkpoint'}
 					<CheckmarkFilled
 						size={24}
 						class={twMerge(
@@ -66,7 +64,7 @@
 						)}
 					/>
 				{/if}
-				{#if progress.type === 'indirect' || progress.isGlobalEvent}
+				{#if !isProgress || event.type === 'indirect'}
 					<Bullhorn
 						size={24}
 						class={twMerge(
@@ -80,21 +78,21 @@
 			</div>
 			<div class="flex flex-1 flex-col gap-6 md:flex-row">
 				<div class="mb-4 flex flex-1 flex-col gap-2">
-					<div class={twMerge('body-01', progress.isGlobalEvent && 'text-gray-50')}>
-						{formatThaiDate(progress.date, true)}
+					<div class={twMerge('body-01', !isProgress && 'text-text-02')}>
+						{formatThaiDate(event.date, true)}
 					</div>
-					<div class={twMerge('heading-02', progress.isGlobalEvent && 'text-gray-50')}>
-						{progress.title}
+					<div class={twMerge('heading-02', !isProgress && 'text-text-02')}>
+						{event.title}
 					</div>
-					{#if progress.description}
-						<div class={twMerge('body-01', progress.isGlobalEvent && 'text-gray-50')}>
-							{progress.description}
+					{#if event.description}
+						<div class={twMerge('body-01', !isProgress && 'text-text-02')}>
+							{event.description}
 						</div>
 					{/if}
-					{#if progress.url}
+					{#if event.url}
 						<div class="label-01 text-gray-60">
 							<a
-								href={progress.url}
+								href={event.url}
 								target="_blank"
 								rel="noopener noreferrer"
 								class="label-01 break-all underline"
@@ -104,17 +102,17 @@
 						</div>
 					{/if}
 				</div>
-				{#if progress.votingSummary}
+				{#if isProgress && event.votingSummary}
 					<VoteCard
 						voting={{
-							id: progress.votingSummary.id,
-							nickname: progress.votingSummary.title || '',
-							date: progress.votingSummary.date,
-							result: progress.votingSummary.result
+							id: event.votingSummary.id,
+							nickname: event.votingSummary.title || '',
+							date: event.votingSummary.date,
+							result: event.votingSummary.result
 						}}
 						highlightedVoteByGroups={highlightedVoteByGroups(
-							progress.votingSummary.resultsByAffiliation,
-							progress.votingSummary.result
+							event.votingSummary.resultsByAffiliation,
+							event.votingSummary.result
 						)}
 						class="mb-4"
 					/>
