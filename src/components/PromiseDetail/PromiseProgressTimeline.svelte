@@ -9,9 +9,10 @@
 	export let promise: Promise;
 	export let globalEvents: GlobalEvent[];
 
-	console.log(globalEvents); // don't forget to remove this
+	globalEvents.forEach((obj) => (obj.isGlobalEvent = true));
 
-	$: timeline = promise.progresses.sort((a, b) => {
+	const promises = promise.progresses.concat(globalEvents);
+	$: timeline = promises.sort((a, b) => {
 		return b.date > a.date ? 1 : -1;
 	});
 
@@ -53,7 +54,7 @@
 						index === timeline.length - 1 && 'h-4',
 						progress.type === 'indirect' && 'border-l-gray-60'
 					)}
-				></div>
+				/>
 				{#if progress.type === 'checkpoint'}
 					<CheckmarkFilled
 						size={24}
@@ -65,7 +66,7 @@
 						)}
 					/>
 				{/if}
-				{#if progress.type === 'indirect'}
+				{#if progress.type === 'indirect' || progress.isGlobalEvent}
 					<Bullhorn
 						size={24}
 						class={twMerge(
@@ -79,20 +80,26 @@
 			</div>
 			<div class="flex flex-1 flex-col gap-6 md:flex-row">
 				<div class="mb-4 flex flex-1 flex-col gap-2">
-					<div class="body-01">{formatThaiDate(progress.date, true)}</div>
-					<div class="heading-02">{progress.title}</div>
+					<div class={twMerge('body-01', progress.isGlobalEvent && 'text-gray-50')}>
+						{formatThaiDate(progress.date, true)}
+					</div>
+					<div class={twMerge('heading-02', progress.isGlobalEvent && 'text-gray-50')}>
+						{progress.title}
+					</div>
 					{#if progress.description}
-						<div class="body-01">{progress.description}</div>
+						<div class={twMerge('body-01', progress.isGlobalEvent && 'text-gray-50')}>
+							{progress.description}
+						</div>
 					{/if}
 					{#if progress.url}
 						<div class="label-01 text-gray-60">
-							ที่มา: <a
+							<a
 								href={progress.url}
 								target="_blank"
 								rel="noopener noreferrer"
 								class="label-01 break-all underline"
 							>
-								{progress.url}
+								ที่มา
 							</a>
 						</div>
 					{/if}
