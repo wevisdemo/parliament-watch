@@ -91,13 +91,13 @@
 					{/if}
 					{#if event.url}
 						<div class="label-01 text-gray-60">
-							<a
+							ที่มา: <a
 								href={event.url}
 								target="_blank"
 								rel="noopener noreferrer"
 								class="label-01 break-all underline"
 							>
-								ที่มา
+								{event.url}
 							</a>
 						</div>
 					{/if}
