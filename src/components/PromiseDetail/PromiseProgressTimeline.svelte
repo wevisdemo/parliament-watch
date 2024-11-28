@@ -48,9 +48,9 @@
 					class={twMerge(
 						'absolute inset-0 mx-auto w-[1px] flex-1 border-l border-l-text-primary',
 						index !== 0 && '-top-4',
-						isProgress && event.type === 'indirect' && 'border-dashed',
+						isProgress && event.type === 'indirect' && 'border-dashed border-l-gray-60',
 						index === timeline.length - 1 && 'h-4',
-						isProgress && event.type === 'indirect' && 'border-l-gray-60'
+						!isProgress && 'border-dashed border-l-gray-60'
 					)}
 				/>
 				{#if isProgress && event.type === 'checkpoint'}
