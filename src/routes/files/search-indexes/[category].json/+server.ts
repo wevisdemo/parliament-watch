@@ -1,4 +1,9 @@
-import { fetchPoliticians, fetchVotings, fetchBills } from '$lib/datasheets/index.js';
+import {
+	fetchPoliticians,
+	fetchVotings,
+	fetchBills,
+	fetchPromises
+} from '$lib/datasheets/index.js';
 import { BillProposerType } from '$models/bill';
 import type { AssemblyRoleHistory, PartyRoleHistory } from '$models/politician';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';
@@ -94,6 +99,18 @@ export async function GET({ params }) {
 					result: result
 				}))
 				.sort((a, z) => a.id.localeCompare(z.id));
+
+			return createJSONFileResponse(indexes);
+		}
+
+		case SearchIndexCategory.Promises: {
+			const indexes: SearchIndexes['promises'] = (await fetchPromises()).map(
+				({ id, statements, status }) => ({
+					id,
+					name: statements[0],
+					status
+				})
+			);
 
 			return createJSONFileResponse(indexes);
 		}

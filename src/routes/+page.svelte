@@ -124,6 +124,7 @@
 	title="คำสัญญาทางการเมือง"
 	icon={PromiseIcon}
 	searchPlaceholder="ค้นหาด้วยคำสัญญา เช่น กระเป๋าเงินดิจิทัล"
+	searchCategories={[SearchIndexCategory.Promises]}
 	class="bg-ui-white"
 >
 	<span slot="description"

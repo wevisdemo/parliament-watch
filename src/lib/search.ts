@@ -94,6 +94,16 @@ export function search(
 						url: '/bills/explore?proposername=' + proposer.item.name
 					})
 				)
+			: undefined,
+		promises: searchIndexes.promises
+			? getScoredAndHighlightedResultItems(queries, searchIndexes.promises, keepTopN).map(
+					(promise) => ({
+						heading: promise.item.name.slice(0, 16),
+						headingHighlight: highlight ? promise.highlightedName : undefined,
+						promiseStatus: promise.item.status,
+						url: '/promises/' + promise.item.id
+					})
+				)
 			: undefined
 	};
 }
@@ -103,7 +113,7 @@ function getScoredAndHighlightedResultItems<T extends { name: string }>(
 	searchIndexes: T[],
 	keepTopN: number
 ) {
-	return postCalcuateScore(calculateScore(queries, searchIndexes), keepTopN);
+	return postCalculateScore(calculateScore(queries, searchIndexes), keepTopN);
 }
 
 /**
@@ -179,7 +189,7 @@ export function calculateScore<T extends { name: string }>(
  * @param keepTopN - The number of top candidates to return.
  * @returns - The list of top candidates with highlighted matched indices.
  */
-function postCalcuateScore<T extends { name: string }>(
+function postCalculateScore<T extends { name: string }>(
 	candidates: ScoreResultItem<T>[],
 	keepTopN = 5
 ): ScoreAndHighlightResultItem<T>[] {

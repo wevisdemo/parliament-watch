@@ -5,10 +5,10 @@ export enum SearchIndexCategory {
 	Politicians = 'politicians',
 	Bills = 'bills',
 	Votings = 'votings',
-	BillProposers = 'billProposers'
+	BillProposers = 'billProposers',
+	Promises = 'promises'
 }
 
-// TODO - เช็คว่าตัวอื่นต้องใช้อะไรในการ Link ไปหน้านั้นๆ
 export interface SearchIndexes {
 	[SearchIndexCategory.Politicians]?: {
 		id: string;
@@ -29,6 +29,11 @@ export interface SearchIndexes {
 		name: string;
 		description: string;
 		proposedBillsCount: number;
+	}[];
+	[SearchIndexCategory.Promises]?: {
+		id: string;
+		name: string;
+		status: PromiseStatus;
 	}[];
 }
 
