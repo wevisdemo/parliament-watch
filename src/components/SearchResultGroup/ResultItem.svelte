@@ -3,19 +3,22 @@
 	import PromiseStatusTag from '$components/PromiseDetail/PromiseStatusTag.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import type { SearchResultItem } from '$models/search';
-	import HightlightText from './HightlightText.svelte';
+	import HighlightText from './HighlightText.svelte';
 
 	export let item: SearchResultItem;
 </script>
 
 <a href={item.url} data-sveltekit-reload>
 	<div class="bg-ui-background px-4">
-		<div class="item-inner-container">
+		<div class="flex gap-1 border-b border-ui-01 px-0 py-2">
 			<div>
 				{#if item.headingHighlight}
-					<HightlightText textList={item.headingHighlight} textClass="text-sm text-text-02" />
+					<HighlightText
+						textList={item.headingHighlight}
+						textClass="text-sm text-text-02 line-clamp-2"
+					/>
 				{:else}
-					<div class="text-sm text-text-02">{item.heading}</div>
+					<div class="line-clamp-2 text-sm text-text-02">{item.heading}</div>
 				{/if}
 				{#if item.description}
 					<p class="text-xs text-text-03">{item.description}</p>
@@ -40,15 +43,3 @@
 		</div>
 	</div>
 </a>
-
-<style lang="postcss">
-	.item-inner-container {
-		border-bottom: 1px solid;
-		padding: 8px 0;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		@apply border-ui-01;
-	}
-</style>
