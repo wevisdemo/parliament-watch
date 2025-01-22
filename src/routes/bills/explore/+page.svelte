@@ -192,7 +192,7 @@
 				>{cellValue.title}</a
 			>
 		{:else if cellKey === 'status'}
-			<BillStatusTag status={cellValue} isLarge />
+			<BillStatusTag class="m-0" status={cellValue} isLarge />
 		{:else if cellValue}
 			<a href={cellValue.url} title={cellValue.label} target="_blank" rel="noopener noreferrer">
 				<DocumentPdf />
