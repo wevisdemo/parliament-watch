@@ -2,8 +2,6 @@
 
 Citizens are watching
 
-> **Hacktoberfest 2024 is here!** every contributor will receive a Parliament Watch sticker ✨ [see more](https://www.facebook.com/wevisdemo/posts/pfbid06t4zjUoG2noQW1pow9PiN2wmVQpUTHUSyE44SZcpP7bAaRRGaQy9JU1iWpUnVQAnl)
-
 ![Parliament Watch](https://parliamentwatch.wevis.info/images/sapasathan.svg)
 
 **Table of Contents**
