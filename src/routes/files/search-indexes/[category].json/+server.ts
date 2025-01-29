@@ -1,9 +1,5 @@
-import {
-	fetchPoliticians,
-	fetchVotings,
-	fetchBills,
-	fetchPromises
-} from '$lib/datasheets/index.js';
+import { fetchVotings, fetchBills, fetchPromises } from '$lib/datasheets/index.js';
+import { graphql } from '$lib/politigraph.js';
 import { BillProposerType } from '$models/bill';
 import type { AssemblyRoleHistory, PartyRoleHistory } from '$models/politician';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';
@@ -17,17 +13,50 @@ export const entries = () => Object.values(SearchIndexCategory).map((category) =
 export async function GET({ params }) {
 	switch (params.category) {
 		case SearchIndexCategory.Politicians: {
-			const indexes: SearchIndexes['politicians'] = (await fetchPoliticians())
-				.map(({ id, firstname, lastname, assemblyRoles, partyRoles }) => {
-					const currentAssembly = assemblyRoles.find(({ endedAt }) => !endedAt);
-					const currentParty = partyRoles.find(({ endedAt }) => !endedAt);
+			const { people } = await graphql.query({
+				people: {
+					id: true,
+					firstname: true,
+					lastname: true,
+					memberships: {
+						__args: {
+							where: {
+								end_date_EQ: null,
+								posts_ALL: {
+									organizations_ALL: {
+										classification_IN: [
+											'HOUSE_OF_REPRESENTATIVE',
+											'HOUSE_OF_SENATE',
+											'POLITICAL_PARTY'
+										]
+									}
+								}
+							}
+						},
+						label: true,
+						posts: {
+							organizations: {
+								classification: true,
+								name: true,
+								abbreviation: true
+							}
+						}
+					}
+				}
+			});
 
-					return {
-						id,
-						name: `${firstname} ${lastname}`,
-						description: getPoliticianDescription(currentAssembly, currentParty)
-					};
-				})
+			const indexes: SearchIndexes['politicians'] = people
+				.map(({ id, firstname, lastname, memberships }) => ({
+					id,
+					name: `${firstname} ${lastname}`,
+					description: memberships
+						.map(({ posts: [{ organizations }], label }) =>
+							organizations[0].classification === 'POLITICAL_PARTY'
+								? `พรรค${organizations[0].name}`
+								: `${organizations[0].abbreviation} ${label || ''}`.trim()
+						)
+						.join(' | ')
+				}))
 				.sort((a, z) => a.id.localeCompare(z.id));
 
 			return createJSONFileResponse(indexes);
