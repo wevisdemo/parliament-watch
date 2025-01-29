@@ -5,8 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"prepare": "husky install",
-		"dev": "vite dev",
-		"build": "vite build",
+		"dev": "npm run gen:graphql && vite dev",
+		"build": "npm run gen:graphql && vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -16,6 +16,7 @@
 		"story:dev": "histoire dev",
 		"story:build": "HISTOIRE_BASE=/stories/ histoire build",
 		"story:preview": "histoire preview",
+		"gen:graphql": "genql --endpoint https://politigraph.wevis.info/graphql --output src/lib/genql -S Date:string -S DateTime:string",
 		"gen:component": "hygen component new",
 		"test": "vitest",
 		"update:politician-ranking": "tsx src/lib/politician-ranking/run-update-job.ts"
@@ -36,6 +37,7 @@
 	"devDependencies": {
 		"@commitlint/cli": "^17.7.0",
 		"@commitlint/config-conventional": "^17.7.0",
+		"@genql/cli": "^6.3.3",
 		"@histoire/plugin-svelte": "^0.17.14",
 		"@melt-ui/svelte": "^0.70.0",
 		"@sveltejs/adapter-static": "^3.0.0",
