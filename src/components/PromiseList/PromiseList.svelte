@@ -3,9 +3,9 @@
 	import PromiseCard from './PromiseCard.svelte';
 	import Grid from 'carbon-icons-svelte/lib/Grid.svelte';
 	import List from 'carbon-icons-svelte/lib/List.svelte';
-	import type { PromiseSummary } from '$models/promise';
+	import type { ComponentProps } from 'svelte';
 
-	export let summaries: PromiseSummary[];
+	export let summaries: ComponentProps<PromiseCard>['promiseSummary'][];
 
 	type SortByOptions = 'วันที่เคลื่อนไหวล่าสุด' | 'ตัวอักษร' | 'สถานะ';
 	let sortBy: SortByOptions = 'วันที่เคลื่อนไหวล่าสุด';

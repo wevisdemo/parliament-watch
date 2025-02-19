@@ -1,7 +1,17 @@
 <script lang="ts">
 	import { formatThaiDate } from '$lib/date-parser';
-	import { PromiseStatus, type PromiseSummary } from '$models/promise';
 	import Quotes from 'carbon-icons-svelte/lib/Quotes.svelte';
+	import { PromiseStatus } from '$models/promise';
+
+	type PromiseSummary = {
+		id: string;
+		status: PromiseStatus;
+		latestProgressDate?: Date;
+		party: { name: string; logo: string };
+		statements: string[];
+		keywords: string[];
+		categories: string[];
+	};
 
 	export let promiseSummary: PromiseSummary;
 	export let isList: boolean;
