@@ -30,7 +30,7 @@
 				avatar: movingForwardPolitician.avatar,
 				assembly: {
 					id: rep26.id,
-					name: rep26.abbreviation,
+					abbreviation: rep26.abbreviation,
 					term: rep26.term,
 					startedAt: rep26.startedAt
 				},
@@ -44,7 +44,7 @@
 			assembly={{
 				id: 'คณะรัฐมนตรี-64',
 				isCabinet: true,
-				name: 'คณะรัฐมนตรี',
+				abbreviation: 'คณะรัฐมนตรี',
 				term: 64,
 				startedAt: new Date('04/09/2024')
 			}}
@@ -56,7 +56,7 @@
 			assembly={{
 				id: rep26.id,
 				isCabinet: false,
-				name: rep26.name,
+				abbreviation: rep26.name,
 				term: rep26.term,
 				startedAt: rep26.startedAt
 			}}

@@ -6,7 +6,7 @@
 		avatar: string;
 		assembly?: {
 			id: string;
-			name: string;
+			abbreviation: string;
 			term: number;
 			startedAt: Date;
 		};
@@ -16,7 +16,7 @@
 	export type AssemblyProposer = {
 		id: string;
 		isCabinet: boolean;
-		name: string;
+		abbreviation: string;
 		term: number;
 		startedAt: Date;
 	};
@@ -65,7 +65,7 @@
 				</a>
 				{#if assembly}
 					<a href={`/assemblies/${assembly.id}`} class="text-sm text-black underline">
-						{assembly.name} ชุดที่ {assembly.term} ({getBudistYear(assembly.startedAt)})
+						{assembly.abbreviation} ชุดที่ {assembly.term} ({getBudistYear(assembly.startedAt)})
 					</a>
 				{/if}
 			</p>
@@ -74,7 +74,7 @@
 			{/if}
 		</div>
 	{:else if assembly}
-		{@const { id, name, term, isCabinet, startedAt } = assembly}
+		{@const { id, abbreviation, term, isCabinet, startedAt } = assembly}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 			<svelte:component
 				this={isCabinet ? GeneralIcon : PoliticianIcon}
@@ -83,7 +83,7 @@
 			/>
 		</div>
 		<a href={`/assemblies/${id}`} class="text-sm text-black">
-			{name}
+			{abbreviation}
 			<span class="underline">ชุดที่ {term} ({getBudistYear(startedAt)})</span>
 		</a>
 	{:else if people}
@@ -95,7 +95,7 @@
 		<p class="text-sm text-black">
 			{ledBy}
 			{#if signatoryCount}
-				<span class="text-gray-60">และประชาชน {signatoryCount} คน</span>
+				<span class="text-gray-60">และประชาชน {signatoryCount.toLocaleString()} คน</span>
 			{/if}
 		</p>
 	{:else}
