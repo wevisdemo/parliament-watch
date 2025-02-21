@@ -1,28 +1,17 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import Proposer from './Proposer.svelte';
-	import { AssemblyName, type Assembly } from '$models/assembly';
-	import { BillProposerType } from '$models/bill';
-	import { inProgressBill } from '../../mocks/data/bill';
+	import { AssemblyName } from '$models/assembly';
 	import type { ComponentProps } from 'svelte';
+	import { movingForwardPolitician } from '../../mocks/data/politician';
+	import { movingForwardParty } from '../../mocks/data/party';
 
-	const rep26: Assembly = {
+	const rep26 = {
 		id: 'สภาผู้แทนราษฎร-26',
 		name: AssemblyName.Representatives,
 		abbreviation: 'สส.',
 		term: 26,
-		startedAt: new Date('01/01/2023'),
-		origin:
-			'มาจากการเลือกตั้งทั่วไป พ.ศ. 2566 ประกอบด้วยสมาชิก (สส.) 500 คน ตามระบบจัดสรรปันส่วนผสมโดย 400 คนเป็นผู้แทนเขต และอีก 100 คน มาจากระบบบัญชีรายชื่อ',
-		mainRoles: [
-			'ประธานสภา',
-			'รองประธานสภา คนที่ 1',
-			'รองประธานสภา คนที่ 2',
-			'ประธานฝ่ายรัฐบาล',
-			'ประธานฝ่ายค้าน'
-		],
-		governmentParties: [],
-		oppositionParties: []
+		startedAt: new Date('01/01/2023')
 	};
 
 	let orientation: ComponentProps<Proposer>['orientation'] = 'landscape';
@@ -32,32 +21,58 @@
 
 <Hst.Story title="Proposer" layout={{ type: 'grid', width: 400 }}>
 	<Hst.Variant title="Politician">
-		<Proposer {orientation} bill={inProgressBill} />
+		<Proposer
+			{orientation}
+			politician={{
+				id: movingForwardPolitician.id,
+				firstname: movingForwardPolitician.firstname,
+				lastname: movingForwardPolitician.lastname,
+				avatar: movingForwardPolitician.avatar,
+				assembly: {
+					id: rep26.id,
+					name: rep26.abbreviation,
+					term: rep26.term,
+					startedAt: rep26.startedAt
+				},
+				partyName: movingForwardParty.name
+			}}
+		/>
 	</Hst.Variant>
 	<Hst.Variant title="Cabinet">
 		<Proposer
 			{orientation}
-			bill={{
-				...inProgressBill,
-				proposerType: BillProposerType.Assembly,
-				proposedLedByPolitician: undefined,
-				proposedByAssembly: rep26
+			assembly={{
+				id: 'คณะรัฐมนตรี-64',
+				isCabinet: true,
+				name: 'คณะรัฐมนตรี',
+				term: 64,
+				startedAt: new Date('04/09/2024')
+			}}
+		/>
+	</Hst.Variant>
+	<Hst.Variant title="Representatives">
+		<Proposer
+			{orientation}
+			assembly={{
+				id: rep26.id,
+				isCabinet: false,
+				name: rep26.name,
+				term: rep26.term,
+				startedAt: rep26.startedAt
 			}}
 		/>
 	</Hst.Variant>
 	<Hst.Variant title="People">
 		<Proposer
 			{orientation}
-			bill={{
-				...inProgressBill,
-				proposerType: BillProposerType.People,
-				proposedLedByPolitician: undefined,
-				proposedByPeople: {
-					ledBy: 'นายยิ่งชีพ',
-					signatoryCount: 150000
-				}
+			people={{
+				ledBy: 'นายยิ่งชีพ',
+				signatoryCount: 150000
 			}}
 		/>
+	</Hst.Variant>
+	<Hst.Variant title="Not Found">
+		<Proposer {orientation} />
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">

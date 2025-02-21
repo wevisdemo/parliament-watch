@@ -14,11 +14,12 @@
 	import { showModalListCoProposer } from '$components/bills/store';
 	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
 	import CoProposer from '$components/bills/CoProposer.svelte';
-	import type { Politician } from '$models/politician.js';
+	import { getRoleHistoryAtTime, type Politician } from '$models/politician.js';
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import Progress from '$components/bills/Progress.svelte';
 	import type { Party } from '$models/party.js';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import { AssemblyName } from '$models/assembly.js';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
@@ -132,7 +133,31 @@
 					</div>
 					<div>
 						<b>เสนอโดย</b>
-						<Proposer {bill} />
+						<Proposer
+							politician={bill.proposerType === BillProposerType.Politician &&
+							bill.proposedLedByPolitician
+								? {
+										...bill.proposedLedByPolitician,
+										assembly: getRoleHistoryAtTime(
+											bill.proposedLedByPolitician.assemblyRoles,
+											bill.proposedOn
+										)?.assembly,
+										partyName: getRoleHistoryAtTime(
+											bill.proposedLedByPolitician.partyRoles,
+											bill.proposedOn
+										)?.party.name
+									}
+								: undefined}
+							assembly={bill.proposerType === BillProposerType.Assembly && bill.proposedByAssembly
+								? {
+										...bill.proposedByAssembly,
+										isCabinet: bill.proposedByAssembly.name === AssemblyName.Cabinet
+									}
+								: undefined}
+							people={bill.proposerType === BillProposerType.People && bill.proposedByPeople
+								? bill.proposedByPeople
+								: undefined}
+						/>
 					</div>
 				</div>
 				<hr class="border-gray-30" />
