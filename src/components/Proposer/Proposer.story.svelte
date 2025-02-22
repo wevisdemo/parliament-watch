@@ -1,18 +1,7 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import Proposer from './Proposer.svelte';
-	import { AssemblyName } from '$models/assembly';
 	import type { ComponentProps } from 'svelte';
-	import { movingForwardPolitician } from '../../mocks/data/politician';
-	import { movingForwardParty } from '../../mocks/data/party';
-
-	const rep26 = {
-		id: 'สภาผู้แทนราษฎร-26',
-		name: AssemblyName.Representatives,
-		abbreviation: 'สส.',
-		term: 26,
-		startedAt: new Date('01/01/2023')
-	};
 
 	let orientation: ComponentProps<Proposer>['orientation'] = 'landscape';
 
@@ -24,17 +13,17 @@
 		<Proposer
 			{orientation}
 			proposer={{
-				id: movingForwardPolitician.id,
-				firstname: movingForwardPolitician.firstname,
-				lastname: movingForwardPolitician.lastname,
-				avatar: movingForwardPolitician.avatar,
+				id: 'พริษฐ์-วัชรสินธุ',
+				firstname: 'พริษฐ์',
+				lastname: 'วัชรสินธุ',
+				avatar: 'https://via.placeholder.com/64',
 				assembly: {
-					id: rep26.id,
-					abbreviation: rep26.abbreviation,
-					term: rep26.term,
-					startedAt: rep26.startedAt
+					id: 'สภาผู้แทนราษฎร-26',
+					abbreviation: 'ส.ส.',
+					term: 26,
+					startedAt: new Date('01/01/2023')
 				},
-				partyName: movingForwardParty.name
+				partyName: 'ก้าวไกล'
 			}}
 		/>
 	</Hst.Variant>
@@ -54,11 +43,11 @@
 		<Proposer
 			{orientation}
 			proposer={{
-				id: rep26.id,
+				id: 'สภาผู้แทนราษฎร-26',
 				isCabinet: false,
-				abbreviation: rep26.name,
-				term: rep26.term,
-				startedAt: rep26.startedAt
+				abbreviation: 'ส.ส.',
+				term: 26,
+				startedAt: new Date('01/01/2023')
 			}}
 		/>
 	</Hst.Variant>
