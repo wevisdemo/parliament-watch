@@ -1,4 +1,7 @@
-import type { HighlightedVoteByGroup } from '$components/VoteCard/VoteCard.svelte';
+import {
+	type HighlightedVoteByGroup,
+	type VoteCardVoting
+} from '$components/VoteCard/VoteCard.svelte';
 import { logger } from '$lib/logger';
 import { AssemblyName, type Assembly } from '$models/assembly';
 import type { Party } from '$models/party';
@@ -48,6 +51,19 @@ export function getHighlightedVoteByGroups(
 			total: Object.values(resultSummary).reduce((total, count) => total + count, 0)
 		}))
 		.filter(({ count }) => count > 0);
+}
+
+export function toVoteCardVoting(
+	voting: Voting,
+	highlightedVoteByGroups: HighlightedVoteByGroup[]
+): VoteCardVoting {
+	return {
+		id: voting.id,
+		date: voting.date,
+		nickname: voting.nickname,
+		result: voting.result,
+		votesByGroup: highlightedVoteByGroups
+	};
 }
 
 export function groupVoteByAffiliations(

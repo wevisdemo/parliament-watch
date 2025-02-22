@@ -26,7 +26,7 @@
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import type { Voting } from '$models/voting';
-
+	import { toVoteCardVoting } from '$lib/datasheets/voting';
 	export let event: BillEvent;
 	export let tooltipText: string;
 	export let relatedVotingResults: RelatedVotingResults | undefined;
@@ -39,12 +39,16 @@
 		day: 'numeric'
 	};
 
-	$: voting = event.votedInVotingId
-		? relatedVotingResults?.[event.votedInVotingId]?.voting
-		: undefined;
+	$: voting = (() => {
+		let voting;
+		if (event.votedInVotingId) {
+			voting = relatedVotingResults?.[event.votedInVotingId]?.voting;
+		}
+		return voting ? toVoteCardVoting(voting, highlightedVoteByGroups) : undefined;
+	})();
 
 	$: highlightedVoteByGroups = (() => {
-		if (!event.votedInVotingId) return undefined;
+		if (!event.votedInVotingId) return [];
 
 		const resultSummary = relatedVotingResults?.[event.votedInVotingId]?.resultSummary;
 
@@ -64,7 +68,7 @@
 			];
 		}
 
-		return undefined;
+		return [];
 	})();
 </script>
 
@@ -83,10 +87,10 @@
 				<p>{event.description}</p>
 			</div>
 		</div>
-		{#if voting && highlightedVoteByGroups}
+		{#if voting}
 			<div class="flex flex-1 flex-col">
 				<p class="text-text-02">ผลการลงมติ</p>
-				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
+				<VoteCard isFullWidth={true} {voting} />
 			</div>
 		{:else if event.enforcementDocumentUrl}
 			<div class="flex-1 pt-5">
