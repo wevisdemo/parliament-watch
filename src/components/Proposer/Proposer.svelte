@@ -38,10 +38,8 @@
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-	export let politician: PoliticianProposer | undefined = undefined;
-	export let assembly: AssemblyProposer | undefined = undefined;
-	export let people: PeopleProposer | undefined = undefined;
-
+	export let proposer: PoliticianProposer | AssemblyProposer | PeopleProposer | undefined =
+		undefined;
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 
 	$: isLandscape = orientation === 'landscape';
@@ -52,8 +50,10 @@
 </script>
 
 <div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
-	{#if politician}
-		{@const { id, firstname, lastname, avatar, assembly, partyName } = politician}
+	{#if proposer === undefined}
+		<p class="text-sm text-gray-60">ไม่พบข้อมูล</p>
+	{:else if 'firstname' in proposer}
+		{@const { id, firstname, lastname, avatar, assembly, partyName } = proposer}
 		<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
 			<img src={avatar} alt="{firstname} {lastname}" class="h-full w-full" loading="lazy" />
 		</figure>
@@ -73,8 +73,8 @@
 				<span class="text-sm text-gray-60">พรรค{partyName}</span>
 			{/if}
 		</div>
-	{:else if assembly}
-		{@const { id, abbreviation, term, isCabinet, startedAt } = assembly}
+	{:else if 'term' in proposer}
+		{@const { id, abbreviation, term, isCabinet, startedAt } = proposer}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 			<svelte:component
 				this={isCabinet ? GeneralIcon : PoliticianIcon}
@@ -86,9 +86,8 @@
 			{abbreviation}
 			<span class="underline">ชุดที่ {term} ({getBudistYear(startedAt)})</span>
 		</a>
-	{:else if people}
-		{@const { ledBy, signatoryCount } = people}
-
+	{:else}
+		{@const { ledBy, signatoryCount } = proposer}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 			<PeopleIcon class="stroke-white" size={16} />
 		</div>
@@ -98,7 +97,5 @@
 				<span class="text-gray-60">และประชาชน {signatoryCount.toLocaleString()} คน</span>
 			{/if}
 		</p>
-	{:else}
-		<p class="text-sm text-gray-60">ไม่พบข้อมูล</p>
 	{/if}
 </div>

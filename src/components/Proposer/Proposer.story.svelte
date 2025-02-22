@@ -23,7 +23,7 @@
 	<Hst.Variant title="Politician">
 		<Proposer
 			{orientation}
-			politician={{
+			proposer={{
 				id: movingForwardPolitician.id,
 				firstname: movingForwardPolitician.firstname,
 				lastname: movingForwardPolitician.lastname,
@@ -41,7 +41,7 @@
 	<Hst.Variant title="Cabinet">
 		<Proposer
 			{orientation}
-			assembly={{
+			proposer={{
 				id: 'คณะรัฐมนตรี-64',
 				isCabinet: true,
 				abbreviation: 'คณะรัฐมนตรี',
@@ -53,7 +53,7 @@
 	<Hst.Variant title="Representatives">
 		<Proposer
 			{orientation}
-			assembly={{
+			proposer={{
 				id: rep26.id,
 				isCabinet: false,
 				abbreviation: rep26.name,
@@ -65,12 +65,13 @@
 	<Hst.Variant title="People">
 		<Proposer
 			{orientation}
-			people={{
+			proposer={{
 				ledBy: 'นายยิ่งชีพ',
 				signatoryCount: 150000
 			}}
 		/>
 	</Hst.Variant>
+
 	<Hst.Variant title="Not Found">
 		<Proposer {orientation} />
 	</Hst.Variant>

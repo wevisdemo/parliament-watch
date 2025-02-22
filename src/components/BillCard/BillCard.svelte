@@ -3,9 +3,14 @@
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import { BillProposerType, type Bill } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
-	import Proposer from '$components/Proposer/Proposer.svelte';
+	import Proposer, {
+		type AssemblyProposer,
+		type PeopleProposer,
+		type PoliticianProposer
+	} from '$components/Proposer/Proposer.svelte';
 	import { getRoleHistoryAtTime } from '$models/politician';
 	import { AssemblyName } from '$models/assembly';
+	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
 
 	export let bill: Bill;
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
@@ -34,30 +39,7 @@
 		</a>
 		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{bill.title}</p>
 		<p class="font-semibold">เสนอโดย</p>
-		<Proposer
-			politician={bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician
-				? {
-						...bill.proposedLedByPolitician,
-						assembly: getRoleHistoryAtTime(
-							bill.proposedLedByPolitician.assemblyRoles,
-							bill.proposedOn
-						)?.assembly,
-						partyName: getRoleHistoryAtTime(
-							bill.proposedLedByPolitician.partyRoles,
-							bill.proposedOn
-						)?.party.name
-					}
-				: undefined}
-			assembly={bill.proposerType === BillProposerType.Assembly && bill.proposedByAssembly
-				? {
-						...bill.proposedByAssembly,
-						isCabinet: bill.proposedByAssembly.name === AssemblyName.Cabinet
-					}
-				: undefined}
-			people={bill.proposerType === BillProposerType.People && bill.proposedByPeople
-				? bill.proposedByPeople
-				: undefined}
-		/>
+		<Proposer proposer={getProposerFromBill(bill)} />
 	</div>
 
 	<div
