@@ -64,7 +64,7 @@
 					{lastname}
 				</a>
 				{#if assembly}
-					<a href={`/assemblies/${assembly.id}`} class="text-sm text-black underline">
+					<a href="/assemblies/{assembly.id}" class="text-sm text-black underline">
 						{assembly.abbreviation} ชุดที่ {assembly.term} ({getBudistYear(assembly.startedAt)})
 					</a>
 				{/if}
@@ -82,7 +82,7 @@
 				size={16}
 			/>
 		</div>
-		<a href={`/assemblies/${id}`} class="text-sm text-black">
+		<a href="/assemblies/{id}" class="text-sm text-black">
 			{abbreviation}
 			<span class="underline">ชุดที่ {term} ({getBudistYear(startedAt)})</span>
 		</a>
