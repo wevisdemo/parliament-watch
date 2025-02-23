@@ -108,6 +108,7 @@
 					<BillCard
 						orientation="portrait"
 						bill={mergedIntoBill}
+						{...mergedIntoBill}
 						isFullWidth={true}
 						currentState={mergedIntoBillLatestEvent ? event.title : ''}
 					/>

@@ -95,7 +95,7 @@
 		</h2>
 		<Carousel>
 			{#each data.latestEnactedBills as bill (bill.id)}
-				<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {bill} />
+				<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {bill} {...bill} />
 			{/each}
 		</Carousel>
 	</section>
