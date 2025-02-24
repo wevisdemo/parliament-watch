@@ -1,15 +1,9 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import { BillProposerType, type Bill } from '$models/bill';
+	import type { Bill } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
-	import Proposer, {
-		type AssemblyProposer,
-		type PeopleProposer,
-		type PoliticianProposer
-	} from '$components/Proposer/Proposer.svelte';
-	import { getRoleHistoryAtTime } from '$models/politician';
-	import { AssemblyName } from '$models/assembly';
+	import Proposer from '$components/Proposer/Proposer.svelte';
 	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
 
 	export let bill: Bill;
