@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import { type Bill } from '$models/bill';
+	import type { Bill } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
 	import Proposer from '$components/Proposer/Proposer.svelte';
+	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
 
 	export let bill: Bill;
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
@@ -32,7 +33,7 @@
 		</a>
 		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{bill.title}</p>
 		<p class="font-semibold">เสนอโดย</p>
-		<Proposer {bill} />
+		<Proposer proposer={getProposerFromBill(bill)} />
 	</div>
 
 	<div
