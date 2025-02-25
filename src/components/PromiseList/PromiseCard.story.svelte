@@ -41,28 +41,10 @@
 
 <Hst.Story title="PromiseCard">
 	<Hst.Variant title="PromiseCard.notList">
-		<PromiseCard
-			id={promiseSummary.id}
-			status={promiseSummary.status}
-			latestProgressDate={promiseSummary.latestProgressDate}
-			party={promiseSummary.party}
-			statements={promiseSummary.statements}
-			keywords={promiseSummary.keywords}
-			categories={promiseSummary.categories}
-			isList={false}
-		/>
+		<PromiseCard {...promiseSummary} isList={false} />
 	</Hst.Variant>
 	<Hst.Variant title="PromiseCard.isList">
-		<PromiseCard
-			id={promiseSummary.id}
-			status={promiseSummary.status}
-			latestProgressDate={promiseSummary.latestProgressDate}
-			party={promiseSummary.party}
-			statements={promiseSummary.statements}
-			keywords={promiseSummary.keywords}
-			categories={promiseSummary.categories}
-			isList={true}
-		/>
+		<PromiseCard {...promiseSummary} isList={true} />
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">

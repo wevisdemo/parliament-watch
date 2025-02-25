@@ -87,17 +87,8 @@
 		</div>
 	{/if}
 	<div class="{isList ? 'flex flex-col gap-[2px]' : 'grid gap-6 md:grid-cols-3'} mx-auto w-fit">
-		{#each sortedData as { id, status, latestProgressDate, party, statements, keywords, categories }, index (index)}
-			<PromiseCard
-				{id}
-				{status}
-				{latestProgressDate}
-				{party}
-				{statements}
-				{keywords}
-				{categories}
-				{isList}
-			/>
+		{#each sortedData as promiseSummary, index (index)}
+			<PromiseCard {...promiseSummary} {isList} />
 		{/each}
 	</div>
 </div>
