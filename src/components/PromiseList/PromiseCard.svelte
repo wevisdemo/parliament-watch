@@ -11,7 +11,7 @@
 	export let keywords: string[];
 	export let categories: string[];
 
-	export let isList: boolean;
+	export let isList = false;
 
 	$: style = (() => {
 		switch (status) {
