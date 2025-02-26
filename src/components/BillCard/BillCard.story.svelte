@@ -18,13 +18,13 @@
 	}}
 >
 	<Hst.Variant title="BillCard.Landscape">
-		<BillCard bill={inProgressBill} {currentState} {daySinceProposed} {isFullWidth} />
+		<BillCard {...inProgressBill} {currentState} {daySinceProposed} {isFullWidth} />
 	</Hst.Variant>
 
 	<Hst.Variant title="BillCard.Portrait">
 		<BillCard
 			orientation="portrait"
-			bill={inProgressBill}
+			{...inProgressBill}
 			{currentState}
 			{daySinceProposed}
 			{isFullWidth}
