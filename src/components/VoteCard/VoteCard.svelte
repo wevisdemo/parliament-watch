@@ -1,16 +1,22 @@
 <script context="module" lang="ts">
-	export type VoteCardVoting = Pick<Voting, 'id' | 'nickname' | 'date' | 'result'>;
-
 	export interface HighlightedVoteByGroup {
 		name: string;
 		count: number;
 		total: number;
 	}
+
+	export type VoteCardVoting = {
+		date: Date;
+		nickname: string;
+		id: string;
+		result: string;
+		votesByGroup: HighlightedVoteByGroup[];
+	};
 </script>
 
 <script lang="ts">
 	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
-	import { DefaultVoteOption, DefaultVotingResult, type Voting } from '$models/voting';
+	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
@@ -48,7 +54,6 @@
 	};
 
 	export let voting: VoteCardVoting;
-	export let highlightedVoteByGroups: HighlightedVoteByGroup[] = [];
 	export let isFullWidth = false;
 
 	let className = '';
@@ -58,9 +63,12 @@
 		totalCount: number;
 		totalAmount: number;
 	}
-	$: ({ totalCount, totalAmount } = highlightedVoteByGroups.reduce<HighlightedVoteSummary>(
+	$: ({ totalCount, totalAmount } = voting.votesByGroup.reduce<HighlightedVoteSummary>(
 		reduceHighlightedVoteSummary,
-		{ totalCount: 0, totalAmount: 0 }
+		{
+			totalCount: 0,
+			totalAmount: 0
+		}
 	));
 	$: theme = CARD_THEMES[voting.result as DefaultVotingResult] || CANDIDATE_CARD_THEME;
 	$: isCandidate = ![DefaultVotingResult.Failed, DefaultVotingResult.Passed].includes(
@@ -111,7 +119,7 @@
 				</div>
 			{/if}
 			<ul class="vote-card__result--list">
-				{#each highlightedVoteByGroups as voteByGroup (voteByGroup.name)}
+				{#each voting.votesByGroup as voteByGroup (voteByGroup.name)}
 					<li class="vote-card__result--item flex flex-row justify-between align-middle">
 						<p class="body-01 text-text-01">{voteByGroup.name}</p>
 						<p class="body-01">
