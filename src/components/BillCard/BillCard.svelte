@@ -38,7 +38,7 @@
 		<a href="/bills/{id}" class="block after:absolute after:inset-0 after:content-['']">
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
-		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{bill.title}</p>
+		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
 		<p class="font-semibold">เสนอโดย</p>
 		<Proposer {bill} />
 	</div>
