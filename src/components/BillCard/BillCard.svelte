@@ -4,6 +4,7 @@
 	import { BillStatus, type Bill } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
 	import Proposer from '$components/Proposer/Proposer.svelte';
+	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
 
 	export let id: string;
 	export let nickname: string;
@@ -45,7 +46,7 @@
 		</a>
 		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
 		<p class="font-semibold">เสนอโดย</p>
-		<Proposer {bill} />
+		<Proposer proposer={getProposerFromBill(bill)} />
 	</div>
 
 	<div

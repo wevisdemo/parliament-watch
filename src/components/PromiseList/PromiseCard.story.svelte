@@ -41,10 +41,10 @@
 
 <Hst.Story title="PromiseCard">
 	<Hst.Variant title="PromiseCard.notList">
-		<PromiseCard {promiseSummary} isList={false} />
+		<PromiseCard {...promiseSummary} />
 	</Hst.Variant>
 	<Hst.Variant title="PromiseCard.isList">
-		<PromiseCard {promiseSummary} isList={true} />
+		<PromiseCard {...promiseSummary} isList />
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">
