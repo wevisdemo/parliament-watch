@@ -5,9 +5,6 @@
 	import { twMerge } from 'tailwind-merge';
 	import Proposer from '$components/Proposer/Proposer.svelte';
 
-	// TODO: Remove bill from props when Proposer is refactored.
-	export let bill: Bill;
-
 	export let id: string;
 	export let nickname: string;
 	export let title: string;
@@ -22,6 +19,14 @@
 	export { className as class };
 
 	$: isLandscape = orientation === 'landscape';
+
+	$: bill = {
+		id,
+		nickname,
+		title,
+		proposedOn,
+		status
+	} as Bill;
 </script>
 
 <div
