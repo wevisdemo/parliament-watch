@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import type { Bill } from '$models/bill';
+	import { BillStatus, type Bill } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
 
-	export let bill: Bill;
+	export let id: string;
+	export let nickname: string;
+	export let title: string;
+	export let proposedOn: Date | undefined;
+	export let status: BillStatus;
+
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 	export let currentState: string | undefined = undefined;
 	export let daySinceProposed: number | undefined = undefined;
@@ -15,6 +20,14 @@
 	export { className as class };
 
 	$: isLandscape = orientation === 'landscape';
+
+	$: bill = {
+		id,
+		nickname,
+		title,
+		proposedOn,
+		status
+	} as Bill;
 </script>
 
 <div
@@ -28,10 +41,10 @@
 	)}
 >
 	<div class={twMerge('space-y-1', isLandscape ? 'w-full md:w-2/3' : 'w-full')}>
-		<a href="/bills/{bill.id}" class="block after:absolute after:inset-0 after:content-['']">
-			<h3 class="fluid-heading-03 text-text-01">{bill.nickname}</h3>
+		<a href="/bills/{id}" class="block after:absolute after:inset-0 after:content-['']">
+			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
-		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{bill.title}</p>
+		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
 		<p class="font-semibold">เสนอโดย</p>
 		<Proposer proposer={getProposerFromBill(bill)} />
 	</div>
@@ -42,12 +55,12 @@
 			: 'flex-col gap-y-4'}"
 	>
 		<div class="grow space-y-2">
-			{#if bill.proposedOn}
+			{#if proposedOn}
 				<div>
 					<p class="text-sm font-semibold">วันที่เสนอ</p>
 
 					<p class="text-sm">
-						{bill.proposedOn.toLocaleDateString('th-TH', {
+						{proposedOn.toLocaleDateString('th-TH', {
 							day: 'numeric',
 							month: 'short',
 							year: 'numeric'
@@ -58,7 +71,7 @@
 
 			<div>
 				<p class="text-sm font-semibold">สถานะ</p>
-				<BillStatusTag isLarge status={bill.status} />
+				<BillStatusTag isLarge {status} />
 				{#if currentState}
 					<p class="text-sm font-semibold">{currentState}</p>
 				{/if}

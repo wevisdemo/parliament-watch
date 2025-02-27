@@ -107,7 +107,7 @@
 				<div class="w-full rounded-sm border border-gray-20">
 					<BillCard
 						orientation="portrait"
-						bill={mergedIntoBill}
+						{...mergedIntoBill}
 						isFullWidth={true}
 						currentState={mergedIntoBillLatestEvent ? event.title : ''}
 					/>
