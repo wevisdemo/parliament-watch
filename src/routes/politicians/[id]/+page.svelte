@@ -69,7 +69,7 @@
 			class="mb-4 w-fit"
 			avatar={politician.avatar}
 			size="120"
-			party={currentParty?.party}
+			partyLogo={currentParty?.party.logo}
 			partySize="32"
 		/>
 		<div class="flex flex-col gap-8 md:flex-row md:gap-16">
@@ -150,7 +150,7 @@
 					{/if}
 				</div>
 				<!-- TODO: debt won't be released in phase 1
-					<hr class="border-0 border-solid border-gray-20 border-t w-full m-0 box-border" />
+					<hr class="box-border w-full m-0 border-0 border-t border-solid border-gray-20" />
 			<div>
 				<ul class="mb-1">
 					<li>
@@ -168,7 +168,7 @@
 				<!-- TODO: Add link -->
 				<!-- <a
 					href="/"
-					class="mr-auto helper-text-01 flex gap-2 items-center w-fit"
+					class="flex items-center gap-2 mr-auto helper-text-01 w-fit"
 					target="_blank"
 					rel="nofollow noopener noreferrer"
 				>

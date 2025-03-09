@@ -19,7 +19,11 @@
 			<p class="heading-01">นายกรัฐมนตรี</p>
 			<div class="flex flex-col gap-2">
 				<div class="flex gap-2">
-					<PoliticianPicture avatar={primeMinister.avatar} size="64" party={primeMinister.party} />
+					<PoliticianPicture
+						avatar={primeMinister.avatar}
+						size="64"
+						partyLogo={primeMinister.party?.logo}
+					/>
 					<div>
 						<p class="fluid-heading-04">{primeMinister.firstname} {primeMinister.lastname}</p>
 						<p class="body-01">

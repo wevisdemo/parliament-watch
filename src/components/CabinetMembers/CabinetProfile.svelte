@@ -18,7 +18,7 @@
 	href="/politicians/{id}"
 	class="flex min-w-[144px] flex-col items-center gap-[12px] font-sans hover:underline"
 >
-	<PoliticianPicture {avatar} size={imgSize} {partySize} {party} />
+	<PoliticianPicture {avatar} size={imgSize} {partySize} partyLogo={party?.logo} />
 	<div class="text-center">
 		<p class={twMerge('mb-1 text-sm leading-[18px] text-text-01 underline')}>
 			{fullname}

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Party } from '$models/party';
 	import { twMerge } from 'tailwind-merge';
 
 	let className = '';
@@ -7,7 +6,7 @@
 	export let avatar = 'https://placehold.co/128x128?text=politician';
 	export let size: string | number = '40';
 	export let avatarClass = '';
-	export let party: Pick<Party, 'logo'> | undefined = undefined;
+	export let partyLogo: string | undefined = undefined;
 	export let partySize: string | number = '16';
 	export let partyClass = '';
 </script>
@@ -22,13 +21,13 @@
 		loading="lazy"
 		decoding="async"
 	/>
-	{#if party}
+	{#if partyLogo}
 		<img
 			class={twMerge(
 				'absolute bottom-0 right-0 aspect-square overflow-hidden rounded-full border border-solid border-[#C0BFBE] bg-white object-contain',
 				partyClass
 			)}
-			src={party.logo}
+			src={partyLogo}
 			alt=""
 			width={partySize}
 			height={partySize}

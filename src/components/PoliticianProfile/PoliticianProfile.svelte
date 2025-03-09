@@ -28,7 +28,7 @@
 	class:opacity-50={!isActive}
 >
 	{#if showAvatar}
-		<PoliticianPicture class={imgClass} {avatar} size={imgSize} {party} />
+		<PoliticianPicture class={imgClass} {avatar} size={imgSize} partyLogo={party?.logo} />
 	{/if}
 	<div class="flex-1">
 		<p class={twMerge('text-text-01', titleClass)}>{fullname}</p>
