@@ -19,6 +19,7 @@
 	import Progress from '$components/bills/Progress.svelte';
 	import type { Party } from '$models/party.js';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
@@ -132,7 +133,7 @@
 					</div>
 					<div>
 						<b>เสนอโดย</b>
-						<Proposer {bill} />
+						<Proposer proposer={getProposerFromBill(bill)} />
 					</div>
 				</div>
 				<hr class="border-gray-30" />

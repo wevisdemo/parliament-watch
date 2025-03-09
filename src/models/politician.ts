@@ -37,3 +37,19 @@ export type PartyRoleHistory = {
 	startedAt: Date;
 	endedAt?: Date;
 };
+
+export type RoleHistory = {
+	role: string;
+	startedAt: Date;
+	endedAt?: Date;
+};
+
+export function getRoleHistoryAtTime<T extends RoleHistory>(
+	histories: T[],
+	time: Date
+): T | undefined {
+	return histories.find(
+		({ startedAt, endedAt }) =>
+			time.getTime() >= startedAt.getTime() && (!endedAt || time.getTime() <= endedAt.getTime())
+	);
+}
