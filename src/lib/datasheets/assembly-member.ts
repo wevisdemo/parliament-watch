@@ -47,7 +47,8 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 		lastname,
 		avatar,
 		isActive,
-		party: partyRole?.party,
+		partyName: partyRole?.party.name,
+		partyLogo: partyRole?.party.logo,
 		role: !isActive ? 'พ้นสภาพก่อนสภาหมดอายุ' : getAssemblyRoleDescription(assemblyRole),
 		candidateType: assemblyRole?.listNumber
 			? 'บัญชีรายชื่อ'

@@ -17,7 +17,15 @@
 
 <Hst.Story title="PoliticianProfile" layout={{ type: 'grid', width: 320 }}>
 	<Hst.Variant title="Default">
-		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} />
+		<PoliticianProfile
+			{id}
+			{firstname}
+			{lastname}
+			{avatar}
+			partyName={party.name}
+			partyLogo={party.logo}
+			{role}
+		/>
 	</Hst.Variant>
 
 	<Hst.Variant title="Party is not given">
@@ -25,11 +33,29 @@
 	</Hst.Variant>
 
 	<Hst.Variant title="isLarge = true">
-		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} isLarge />
+		<PoliticianProfile
+			{id}
+			{firstname}
+			{lastname}
+			{avatar}
+			partyName={party.name}
+			partyLogo={party.logo}
+			{role}
+			isLarge
+		/>
 	</Hst.Variant>
 
 	<Hst.Variant title="isActive = false">
-		<PoliticianProfile {id} {firstname} {lastname} {avatar} {party} {role} isActive={false} />
+		<PoliticianProfile
+			{id}
+			{firstname}
+			{lastname}
+			{avatar}
+			partyName={party.name}
+			partyLogo={party.logo}
+			{role}
+			isActive={false}
+		/>
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">

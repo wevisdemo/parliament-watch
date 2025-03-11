@@ -23,7 +23,8 @@
 					firstname={politician.firstname}
 					lastname={politician.lastname}
 					avatar={politician.avatar}
-					{party}
+					partyName={party?.name}
+					partyLogo={party?.logo}
 					role={description}
 					isLarge
 				/>

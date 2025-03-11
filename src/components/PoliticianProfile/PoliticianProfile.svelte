@@ -1,13 +1,13 @@
 <script lang="ts">
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
-	import type { Party } from '$models/party';
 	import { twMerge } from 'tailwind-merge';
 
 	export let id: string;
 	export let firstname: string;
 	export let lastname: string;
 	export let avatar: string;
-	export let party: Pick<Party, 'logo' | 'name'> | undefined = undefined;
+	export let partyLogo: string | undefined = undefined;
+	export let partyName: string | undefined = undefined;
 	export let role: string | null = null;
 	export let isLarge = false;
 	export let isActive = true;
@@ -28,12 +28,12 @@
 	class:opacity-50={!isActive}
 >
 	{#if showAvatar}
-		<PoliticianPicture class={imgClass} {avatar} size={imgSize} partyLogo={party?.logo} />
+		<PoliticianPicture class={imgClass} {avatar} size={imgSize} {partyLogo} />
 	{/if}
 	<div class="flex-1">
 		<p class={twMerge('text-text-01', titleClass)}>{fullname}</p>
 		<p class={twMerge('text-text-02', subtitleClass)}>
-			{party ? 'พรรค' + party.name : 'ไม่สังกัดพรรค'}
+			{partyName ? 'พรรค' + partyName : 'ไม่สังกัดพรรค'}
 		</p>
 		{#if role}
 			<p class={twMerge('text-text-02', subtitleClass)}>{role}</p>

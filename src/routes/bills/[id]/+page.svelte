@@ -246,7 +246,8 @@
 							{firstname}
 							{lastname}
 							{avatar}
-							party={matchedPartyRoles?.party}
+							partyName={matchedPartyRoles?.party.name}
+							partyLogo={matchedPartyRoles?.party.logo}
 							role={matchedAssemblyRole?.role}
 						/>
 					</div>
