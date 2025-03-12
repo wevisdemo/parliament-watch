@@ -23,7 +23,7 @@
 			{avatar}
 			{size}
 			{avatarClass}
-			{party}
+			partyLogo={party.logo}
 			{partySize}
 			{partyClass}
 		/>

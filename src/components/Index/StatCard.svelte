@@ -132,7 +132,7 @@
 			<PoliticianPicture
 				avatar={politician.avatar}
 				size="40"
-				party={politician.partyRoles[0]?.party}
+				partyLogo={politician.partyRoles[0]?.party.logo}
 			/>
 			<span class="heading-02 text-gray-100">{politician.firstname} {politician.lastname}</span>
 			<span class="label-01 -mt-2 text-gray-60">

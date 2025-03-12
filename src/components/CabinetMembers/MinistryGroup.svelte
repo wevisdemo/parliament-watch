@@ -26,7 +26,8 @@
 					firstname={member.politician.firstname}
 					lastname={member.politician.lastname}
 					avatar={member.politician.avatar}
-					party={member.party}
+					partyName={member.party?.name}
+					partyLogo={member.party?.logo}
 				/>
 			</div>
 		</div>
@@ -41,7 +42,8 @@
 						firstname={member.politician.firstname}
 						lastname={member.politician.lastname}
 						avatar={member.politician.avatar}
-						party={member.party}
+						partyName={member.party?.name}
+						partyLogo={member.party?.logo}
 						showAvatar={false}
 					/>
 				</div>
