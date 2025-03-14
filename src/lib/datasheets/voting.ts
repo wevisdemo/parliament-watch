@@ -1,4 +1,4 @@
-import { type HighlightedVoteByGroup, VoteCard } from '$components/VoteCard/VoteCard.svelte';
+import VoteCard, { type HighlightedVoteByGroup } from '$components/VoteCard/VoteCard.svelte';
 import { logger } from '$lib/logger';
 import { AssemblyName, type Assembly } from '$models/assembly';
 import type { Party } from '$models/party';
