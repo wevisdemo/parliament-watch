@@ -162,12 +162,12 @@ export async function load({ params }) {
 				)
 				.sort((a, z) => z.date.getTime() - a.date.getTime())
 				.slice(0, MAX_LATEST_VOTE)
-				.map((voting) => ({
-					voting: toVoteCardVoting(
+				.map((voting) =>
+					toVoteCardVoting(
 						voting,
 						getHighlightedVoteByGroups(voting, votes, politicians, assemblies)
 					)
-				}));
+				);
 
 	const latestBills: BillSummary[] | null = isCabinet
 		? (await fetchBills())
