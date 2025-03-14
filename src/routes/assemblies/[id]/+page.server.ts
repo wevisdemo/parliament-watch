@@ -12,6 +12,7 @@ import {
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
+import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
 import { createSeo } from '$lib/seo';
 import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
@@ -161,15 +162,12 @@ export async function load({ params }) {
 				)
 				.sort((a, z) => z.date.getTime() - a.date.getTime())
 				.slice(0, MAX_LATEST_VOTE)
-				.map((voting) => ({
-					voting,
-					highlightedVoteByGroups: getHighlightedVoteByGroups(
+				.map((voting) =>
+					toVoteCardVoting(
 						voting,
-						votes,
-						politicians,
-						assemblies
+						getHighlightedVoteByGroups(voting, votes, politicians, assemblies)
 					)
-				}));
+				);
 
 	const latestBills: BillSummary[] | null = isCabinet
 		? (await fetchBills())
