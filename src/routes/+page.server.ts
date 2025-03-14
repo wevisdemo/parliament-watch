@@ -16,7 +16,8 @@ import {
 	fetchVotings
 } from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
-import { getHighlightedVoteByGroups, toVoteCardVoting } from '$lib/datasheets/voting.js';
+import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
+import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
 import { BillStatus } from '$models/bill';
 import { PromiseStatus } from '$models/promise';
 import type { PromisesByStatus } from './promises/+page.server';

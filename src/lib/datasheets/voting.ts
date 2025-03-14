@@ -53,19 +53,6 @@ export function getHighlightedVoteByGroups(
 		.filter(({ count }) => count > 0);
 }
 
-export function toVoteCardVoting(
-	voting: Voting,
-	highlightedVoteByGroups: HighlightedVoteByGroup[]
-): VoteCardVoting {
-	return {
-		id: voting.id,
-		date: voting.date,
-		nickname: voting.nickname,
-		result: voting.result,
-		votesByGroup: highlightedVoteByGroups
-	};
-}
-
 export function groupVoteByAffiliations(
 	voting: Voting,
 	votes: Vote[],

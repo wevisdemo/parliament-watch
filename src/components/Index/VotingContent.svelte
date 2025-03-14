@@ -12,7 +12,7 @@
 	<h3 class="fluid-heading-04 mb-4">{latestVotings.length} ผลการลงมติล่าสุด</h3>
 	<Carousel>
 		{#each latestVotings as voting}
-			<VoteCard class="keen-slider__slide" {voting} />
+			<VoteCard class="keen-slider__slide" {...voting} />
 		{/each}
 	</Carousel>
 </div>

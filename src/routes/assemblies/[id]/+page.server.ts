@@ -11,7 +11,8 @@ import {
 } from '$lib/datasheets';
 import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
 import type { AssemblyMember } from '$lib/datasheets/assembly-member';
-import { getHighlightedVoteByGroups, toVoteCardVoting } from '$lib/datasheets/voting';
+import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
+import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
 import { createSeo } from '$lib/seo';
 import { AssemblyName, GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';

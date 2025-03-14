@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { DefaultVotingResult } from '$models/voting';
 	import type { ComponentProps } from 'svelte';
-	import VoteCard, { type VoteCardVoting, type HighlightedVoteByGroup } from './VoteCard.svelte';
+	import VoteCard, { type HighlightedVoteByGroup } from './VoteCard.svelte';
 	import type { Hst } from '@histoire/plugin-svelte';
 
 	export let Hst: Hst;
@@ -24,7 +24,7 @@
 		}
 	];
 
-	const passedVoting: VoteCardVoting = {
+	const passedVoting: ComponentProps<VoteCard> = {
 		id: '1',
 		date: new Date('2023-08-31T17:00:00.000Z'),
 		nickname: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
@@ -32,7 +32,7 @@
 		votesByGroup: passedHighlightedVoteByGroups
 	};
 
-	const failedVoting: VoteCardVoting = {
+	const failedVoting: ComponentProps<VoteCard> = {
 		id: '2',
 		date: new Date('2023-09-01T17:00:00.000Z'),
 		nickname: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
@@ -57,36 +57,30 @@
 	};
 
 	const dictVoteCardProps: Record<DefaultVotingResult, ComponentProps<VoteCard>> = {
-		[DefaultVotingResult.Passed]: {
-			voting: passedVoting
-		},
-		[DefaultVotingResult.Failed]: {
-			voting: failedVoting
-		}
+		[DefaultVotingResult.Passed]: passedVoting,
+		[DefaultVotingResult.Failed]: failedVoting
 	};
 
 	let result: DefaultVotingResult = DefaultVotingResult.Passed;
 	let candidateName = '';
 
 	$: isCandidateResult = 'candidate' === (result as string);
-	$: ({ voting } = dictVoteCardProps[result] || candidateVoteCardProps);
+	$: voting = dictVoteCardProps[result] || candidateVoteCardProps;
 	$: candidateVoteCardProps = {
-		voting: {
-			id: '3',
-			/**
-			 * @author fResult <Styxmaz@gmail.com>
-			 * FIXME: Actually, it should be new Date('2023-09-02T17:00:00.000Z'), but I can't get Date object from Reactivity (Proxie)
-			 */
-			date: '2023-09-02T17:00:00.000Z' as unknown as Date,
-			nickname: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-			result: candidateName || 'Mr. Candidate Krub',
-			votesByGroup: passedHighlightedVoteByGroups
-		}
+		id: '3',
+		/**
+		 * @author fResult <Styxmaz@gmail.com>
+		 * FIXME: Actually, it should be new Date('2023-09-02T17:00:00.000Z'), but I can't get Date object from Reactivity (Proxie)
+		 */
+		date: '2023-09-02T17:00:00.000Z' as unknown as Date,
+		nickname: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
+		result: candidateName || 'Mr. Candidate Krub',
+		votesByGroup: passedHighlightedVoteByGroups
 	} satisfies ComponentProps<VoteCard>;
 </script>
 
 <Hst.Story title="VoteCard">
-	<VoteCard {voting} />
+	<VoteCard {...voting} />
 
 	<svelte:fragment slot="controls">
 		<p>Card Result:</p>

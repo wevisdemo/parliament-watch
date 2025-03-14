@@ -1,13 +1,11 @@
-import {
-	type HighlightedVoteByGroup,
-	type VoteCardVoting
-} from '$components/VoteCard/VoteCard.svelte';
+import { type HighlightedVoteByGroup, type VoteCard } from '$components/VoteCard/VoteCard.svelte';
 import { type Voting } from '$models/voting';
+import type { ComponentProps } from 'svelte';
 
 export function toVoteCardVoting(
 	voting: Voting,
 	highlightedVoteByGroups: HighlightedVoteByGroup[]
-): VoteCardVoting {
+): ComponentProps<VoteCard> {
 	return {
 		id: voting.id,
 		date: voting.date,

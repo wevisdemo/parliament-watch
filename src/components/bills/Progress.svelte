@@ -26,7 +26,7 @@
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import type { Voting } from '$models/voting';
-	import { toVoteCardVoting } from '$lib/datasheets/voting';
+	import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
 	export let event: BillEvent;
 	export let tooltipText: string;
 	export let relatedVotingResults: RelatedVotingResults | undefined;
@@ -90,7 +90,7 @@
 		{#if voting}
 			<div class="flex flex-1 flex-col">
 				<p class="text-text-02">ผลการลงมติ</p>
-				<VoteCard isFullWidth={true} {voting} />
+				<VoteCard isFullWidth {...voting} />
 			</div>
 		{:else if event.enforcementDocumentUrl}
 			<div class="flex-1 pt-5">

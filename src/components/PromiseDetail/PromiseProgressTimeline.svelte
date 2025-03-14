@@ -104,16 +104,14 @@
 				</div>
 				{#if isProgress && event.votingSummary}
 					<VoteCard
-						voting={{
-							id: event.votingSummary.id,
-							nickname: event.votingSummary.title || '',
-							date: event.votingSummary.date,
-							result: event.votingSummary.result,
-							votesByGroup: highlightedVoteByGroups(
-								event.votingSummary.resultsByAffiliation,
-								event.votingSummary.result
-							)
-						}}
+						id={event.votingSummary.id}
+						nickname={event.votingSummary.title || ''}
+						date={event.votingSummary.date}
+						result={event.votingSummary.result}
+						votesByGroup={highlightedVoteByGroups(
+							event.votingSummary.resultsByAffiliation,
+							event.votingSummary.result
+						)}
 						class="mb-4"
 					/>
 				{/if}
