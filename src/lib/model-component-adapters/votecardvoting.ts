@@ -1,4 +1,4 @@
-import { type HighlightedVoteByGroup, type VoteCard } from '$components/VoteCard/VoteCard.svelte';
+import { type HighlightedVoteByGroup, VoteCard } from '$components/VoteCard/VoteCard.svelte';
 import { type Voting } from '$models/voting';
 import type { ComponentProps } from 'svelte';
 
