@@ -7,10 +7,6 @@
 	import { InlineNotification } from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
-	import type {
-		CheckboxFilterGroup,
-		SelectedCheckboxValueType
-	} from '$components/DataPage/DataPage.svelte';
 
 	export let data;
 	const { politician, filterOptions, votes } = data;
@@ -20,7 +16,7 @@
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};
 
-	const checkboxFilterList: CheckboxFilterGroup[] = [
+	const checkboxFilterList = [
 		{
 			key: 'filterAssembly',
 			legend: 'สมัยการทำงาน',
@@ -57,7 +53,7 @@
 	];
 
 	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let selectedCheckboxValue: { [x: string]: (string | number | boolean)[] };
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||
@@ -80,12 +76,16 @@
 							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority)
 						);
 					})
-					.map((vote) => ({
+					.map((vote, index) => ({
+						id: `vote-${index}`,
+						date: vote.date,
 						titleColumn: {
 							id: vote.id,
 							title: vote.nickname
 						},
-						...vote
+						voteOption: vote.voteOption,
+						result: vote.result,
+						files: vote.files
 					}));
 
 	onMount(() => {

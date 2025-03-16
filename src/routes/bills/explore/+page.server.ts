@@ -1,4 +1,3 @@
-import type { CheckboxFilterChoice } from '$components/DataPage/DataPage.svelte';
 import { fetchAssemblies, fetchBills } from '$lib/datasheets';
 import { createSeo } from '$lib/seo';
 import { AssemblyName } from '$models/assembly';
@@ -6,6 +5,11 @@ import { BillProposerType, BillStatus, type Bill } from '$models/bill';
 import dayjs from 'dayjs';
 
 const OTHER_CATEGORY_KEY = 'อื่นๆ';
+
+interface CheckboxFilterChoice {
+	label: string;
+	value: string | number | boolean;
+}
 
 interface FilterOptions {
 	mpAssemblies: CheckboxFilterChoice[];
@@ -29,6 +33,7 @@ interface BillSummary
 		| 'proposedByAssembly'
 		| 'proposedLedByPolitician'
 		| 'proposedByPeople'
+		| 'attachment'
 	> {
 	purposedAtMpAssemblyId: string;
 	proposedLedByPoliticianName?: string;

@@ -3,8 +3,13 @@
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { DocumentBlank } from 'carbon-icons-svelte';
-	import type { Link } from '$models/link';
 	import type { ComponentType } from 'svelte';
+
+	interface Link {
+		label: string;
+		url: string;
+		icon?: ComponentType;
+	}
 
 	export let title = 'ดาวน์โหลดข้อมูล';
 	export let icon: ComponentType = Download;

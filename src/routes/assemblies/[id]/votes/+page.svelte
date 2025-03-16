@@ -2,7 +2,6 @@
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
-	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import VotesHeader from '$components/Assemblies/Votes/VotesHeader.svelte';
 
 	export let data;
@@ -21,18 +20,27 @@
 	];
 
 	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let selectedCheckboxValue: { [x: string]: (string | number | boolean)[] };
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votes.filter((vote) => {
-					const search = searchQuery.trim();
-					if (search && !vote.nickname.includes(search)) return;
-					const { filterResult } = selectedCheckboxValue;
-					return filterResult.includes(vote.result);
-				});
+			: votes
+					.filter((vote) => {
+						const search = searchQuery.trim();
+						if (search && !vote.nickname.includes(search)) return;
+						const { filterResult } = selectedCheckboxValue;
+						return filterResult.includes(vote.result);
+					})
+					.map((vote, index) => ({
+						id: `vote-${index}`,
+						url: vote.id,
+						date: vote.date,
+						nickname: vote.nickname,
+						result: vote.result,
+						files: vote.files
+					}));
 </script>
 
 <DataPage
@@ -69,7 +77,7 @@
 				})}</span
 			>
 		{:else if cellKey === 'nickname'}
-			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline">{cellValue}</a>
+			<a href="/votings/{row.url}" class="body-01 text-gray-100 underline">{cellValue}</a>
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
 		{:else if cellKey === 'files'}
