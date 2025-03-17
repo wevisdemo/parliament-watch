@@ -1,6 +1,4 @@
 <script context="module" lang="ts">
-	export type VoteCardVoting = Pick<Voting, 'id' | 'nickname' | 'date' | 'result'>;
-
 	export interface HighlightedVoteByGroup {
 		name: string;
 		count: number;
@@ -10,7 +8,7 @@
 
 <script lang="ts">
 	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
-	import { DefaultVoteOption, DefaultVotingResult, type Voting } from '$models/voting';
+	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
@@ -47,8 +45,11 @@
 		tagFontColor: 'text-white'
 	};
 
-	export let voting: VoteCardVoting;
-	export let highlightedVoteByGroups: HighlightedVoteByGroup[] = [];
+	export let date: Date;
+	export let nickname: string;
+	export let id: string;
+	export let result: string;
+	export let votesByGroup: HighlightedVoteByGroup[];
 	export let isFullWidth = false;
 
 	let className = '';
@@ -58,13 +59,16 @@
 		totalCount: number;
 		totalAmount: number;
 	}
-	$: ({ totalCount, totalAmount } = highlightedVoteByGroups.reduce<HighlightedVoteSummary>(
+	$: ({ totalCount, totalAmount } = votesByGroup.reduce<HighlightedVoteSummary>(
 		reduceHighlightedVoteSummary,
-		{ totalCount: 0, totalAmount: 0 }
+		{
+			totalCount: 0,
+			totalAmount: 0
+		}
 	));
-	$: theme = CARD_THEMES[voting.result as DefaultVotingResult] || CANDIDATE_CARD_THEME;
+	$: theme = CARD_THEMES[result as DefaultVotingResult] || CANDIDATE_CARD_THEME;
 	$: isCandidate = ![DefaultVotingResult.Failed, DefaultVotingResult.Passed].includes(
-		voting.result as DefaultVotingResult
+		result as DefaultVotingResult
 	);
 
 	function reduceHighlightedVoteSummary(
@@ -79,7 +83,7 @@
 </script>
 
 <a
-	href="/votings/{voting.id}"
+	href="/votings/{id}"
 	class={twMerge(
 		'vote-card h-64.5 relative flex w-72 flex-col gap-y-2 whitespace-break-spaces rounded-sm p-4',
 		theme.bg,
@@ -89,18 +93,18 @@
 	)}
 >
 	<p class="body-compact-01 text-text-02">
-		{dayjs(voting.date).format('D MMM BB')}
+		{dayjs(date).format('D MMM BB')}
 	</p>
-	<h3 class="fluid-heading-03 text-text-01">{voting.nickname}</h3>
+	<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 	<section class="vote-card__result flex w-56 flex-col gap-y-2">
-		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} m-0 w-fit`}>{voting.result}</Tag>
+		<Tag class={`label-01 ${theme.tagFontColor} ${theme.tagBg} m-0 w-fit`}>{result}</Tag>
 		<div class="flex flex-col gap-x-1">
 			{#if totalAmount > 0}
 				<div class="flex items-center justify-between">
 					<p class="heading-01 text-text-01">
 						{isCandidate
 							? 'ได้รับคะแนนเสียง'
-							: voting.result === DefaultVotingResult.Passed
+							: result === DefaultVotingResult.Passed
 								? DefaultVoteOption.Agreed
 								: DefaultVoteOption.Disagreed}
 					</p>
@@ -111,7 +115,7 @@
 				</div>
 			{/if}
 			<ul class="vote-card__result--list">
-				{#each highlightedVoteByGroups as voteByGroup (voteByGroup.name)}
+				{#each votesByGroup as voteByGroup (voteByGroup.name)}
 					<li class="vote-card__result--item flex flex-row justify-between align-middle">
 						<p class="body-01 text-text-01">{voteByGroup.name}</p>
 						<p class="body-01">

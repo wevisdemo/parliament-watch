@@ -17,6 +17,7 @@ import {
 } from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
+import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
 import { BillStatus } from '$models/bill';
 import { PromiseStatus } from '$models/promise';
 import type { PromisesByStatus } from './promises/+page.server';
@@ -83,10 +84,9 @@ export async function load() {
 	const latestVotings: ComponentProps<VoteCard>[] = [...(await fetchVotings())]
 		.sort((a, z) => z.date.getTime() - a.date.getTime())
 		.slice(0, MAX_LATEST_VOTE)
-		.map((voting) => ({
-			voting,
-			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians, assembles)
-		}));
+		.map((voting) =>
+			toVoteCardVoting(voting, getHighlightedVoteByGroups(voting, votes, politicians, assembles))
+		);
 
 	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(
 		bills.flatMap(({ categories, ...rest }) =>
