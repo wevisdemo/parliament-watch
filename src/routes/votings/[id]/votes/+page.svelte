@@ -1,5 +1,9 @@
 <script lang="ts">
 	import type { DefaultVoteOption, CustomVoteOption } from '$models/voting.js';
+	import type {
+		SelectedCheckboxValueType,
+		SelectedComboboxValueType
+	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 
@@ -39,8 +43,8 @@
 	];
 
 	let searchQuery = '';
-	let selectedCheckboxValue: { [x: string]: (string | number | boolean)[] };
-	let selectedComboboxValue: { [x: string]: string | number | undefined };
+	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let selectedComboboxValue: SelectedComboboxValueType;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||

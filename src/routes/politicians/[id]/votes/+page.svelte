@@ -7,6 +7,10 @@
 	import { InlineNotification } from 'carbon-components-svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
+	import type {
+		CheckboxFilterGroup,
+		SelectedCheckboxValueType
+	} from '$components/DataPage/DataPage.svelte';
 
 	export let data;
 	const { politician, filterOptions, votes } = data;
@@ -16,7 +20,7 @@
 		return date.toLocaleString('th-TH', { year: 'numeric' });
 	};
 
-	const checkboxFilterList = [
+	const checkboxFilterList: CheckboxFilterGroup[] = [
 		{
 			key: 'filterAssembly',
 			legend: 'สมัยการทำงาน',
@@ -53,7 +57,7 @@
 	];
 
 	let searchQuery = '';
-	let selectedCheckboxValue: { [x: string]: (string | number | boolean)[] };
+	let selectedCheckboxValue: SelectedCheckboxValueType;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||

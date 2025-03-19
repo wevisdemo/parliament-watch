@@ -1,6 +1,11 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
-	import DataPage from './DataPage.svelte';
+	import DataPage, {
+		type SelectedComboboxValueType,
+		type CheckboxFilterGroup,
+		type ComboboxFilterGroup,
+		type SelectedCheckboxValueType
+	} from './DataPage.svelte';
 
 	export let Hst: Hst;
 
@@ -18,7 +23,7 @@
 		{ url: '/votelog', label: 'ประวัติการลงมติ' }
 	];
 	let searchPlaceholder = 'ชื่อ-นามสกุล';
-	let comboboxFilterList = [
+	let comboboxFilterList: ComboboxFilterGroup[] = [
 		{
 			key: 'filterComboboxType',
 			legend: 'กลุ่ม',
@@ -30,7 +35,7 @@
 			]
 		}
 	];
-	let checkboxFilterList = [
+	let checkboxFilterList: CheckboxFilterGroup[] = [
 		{
 			key: 'filterVoteDirection',
 			legend: 'เงื่อนไขพิเศษ',
@@ -53,8 +58,8 @@
 	];
 	let tablePageSize = 10;
 	let searchQuery = '';
-	let selectedCheckboxValue: { [x: string]: (string | number | boolean)[] };
-	let selectedComboboxValue: { [x: string]: string | number | undefined };
+	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let selectedComboboxValue: SelectedComboboxValueType;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||

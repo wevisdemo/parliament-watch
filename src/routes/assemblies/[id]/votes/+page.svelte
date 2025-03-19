@@ -2,6 +2,7 @@
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
+	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import VotesHeader from '$components/Assemblies/Votes/VotesHeader.svelte';
 
 	export let data;
@@ -20,7 +21,7 @@
 	];
 
 	let searchQuery = '';
-	let selectedCheckboxValue: { [x: string]: (string | number | boolean)[] };
+	let selectedCheckboxValue: SelectedCheckboxValueType;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||

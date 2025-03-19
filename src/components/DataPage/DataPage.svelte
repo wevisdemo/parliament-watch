@@ -1,3 +1,38 @@
+<script lang="ts" context="module">
+	export interface CheckboxFilterChoice {
+		label: string;
+		value: string | number | boolean;
+	}
+
+	export interface CheckboxFilterGroup {
+		key: string;
+		legend: string;
+		choices: CheckboxFilterChoice[];
+	}
+
+	export type SelectedCheckboxValueType = Record<
+		CheckboxFilterGroup['key'],
+		CheckboxFilterChoice['value'][]
+	>;
+
+	export interface ComboboxFilterChoice {
+		id: string | number;
+		text: string;
+	}
+
+	export interface ComboboxFilterGroup {
+		key: string;
+		legend: string;
+		placeholder: string;
+		choices: ComboboxFilterChoice[];
+	}
+
+	export type SelectedComboboxValueType = Record<
+		ComboboxFilterGroup['key'],
+		ComboboxFilterChoice['id'] | undefined
+	>;
+</script>
+
 <script lang="ts">
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import {
@@ -14,46 +49,7 @@
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
-	import { onMount, tick } from 'svelte';
-	import type { ComponentType } from 'svelte';
-	interface CheckboxFilterChoice {
-		label: string;
-		value: string | number | boolean;
-	}
-
-	interface CheckboxFilterGroup {
-		key: string;
-		legend: string;
-		choices: CheckboxFilterChoice[];
-	}
-
-	type SelectedCheckboxValueType = Record<
-		CheckboxFilterGroup['key'],
-		CheckboxFilterChoice['value'][]
-	>;
-
-	interface ComboboxFilterChoice {
-		id: string | number;
-		text: string;
-	}
-
-	interface ComboboxFilterGroup {
-		key: string;
-		legend: string;
-		placeholder: string;
-		choices: ComboboxFilterChoice[];
-	}
-
-	type SelectedComboboxValueType = Record<
-		ComboboxFilterGroup['key'],
-		ComboboxFilterChoice['id'] | undefined
-	>;
-
-	interface Link {
-		label: string;
-		url: string;
-		icon?: ComponentType;
-	}
+	import { onMount, tick, type ComponentProps } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -89,7 +85,7 @@
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
 	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
-	export let downloadLinks: Link[] = [];
+	export let downloadLinks: ComponentProps<LinkTable>['links'] = [];
 
 	// Reactive
 	let tableCurrentPage = 1;

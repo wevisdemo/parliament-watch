@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
+	import type {
+		SelectedCheckboxValueType,
+		SelectedComboboxValueType
+	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import { onMount } from 'svelte';
@@ -79,8 +83,8 @@
 	];
 
 	let searchQuery = '';
-	let selectedComboboxValue: { [x: string]: string | undefined };
-	let selectedCheckboxValue: { [x: string]: (string | number | boolean)[] };
+	let selectedComboboxValue: SelectedComboboxValueType;
+	let selectedCheckboxValue: SelectedCheckboxValueType;
 
 	$: filteredData =
 		selectedCheckboxValue === undefined ||
