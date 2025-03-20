@@ -80,12 +80,16 @@
 							// filterVoteDirection.includes(vote.isVoteAlignWithPartyMajority)
 						);
 					})
-					.map((vote) => ({
+					.map((vote, index) => ({
+						id: `vote-${index}`,
+						date: vote.date,
 						titleColumn: {
 							id: vote.id,
 							title: vote.nickname
 						},
-						...vote
+						voteOption: vote.voteOption,
+						result: vote.result,
+						files: vote.files
 					}));
 
 	onMount(() => {

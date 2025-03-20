@@ -117,11 +117,14 @@
 						);
 					})
 					.map((bill) => ({
-						...bill,
+						id: bill.id,
+						proposedOn: bill.proposedOn,
 						titleColumn: {
 							id: bill.id,
 							title: bill.title
-						}
+						},
+						status: bill.status,
+						attachment: bill.attachment
 					}));
 
 	onMount(() => {

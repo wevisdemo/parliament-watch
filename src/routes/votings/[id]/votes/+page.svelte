@@ -50,18 +50,26 @@
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votes.filter((vote) => {
-					const search = searchQuery.trim();
-					if (search && !vote.politician.id.includes(search)) return;
-					const selectedParty = selectedComboboxValue?.filterComboboxType;
+			: votes
+					.filter((vote) => {
+						const search = searchQuery.trim();
+						if (search && !vote.politician.id.includes(search)) return;
+						const selectedParty = selectedComboboxValue?.filterComboboxType;
 
-					const { filterPosition, filterVoteType } = selectedCheckboxValue;
-					return (
-						filterVoteType.includes(generalVoteType(vote.voteOption)) &&
-						filterPosition.includes(vote.role) &&
-						(!selectedParty || vote.party === selectedParty)
-					);
-				});
+						const { filterPosition, filterVoteType } = selectedCheckboxValue;
+						return (
+							filterVoteType.includes(generalVoteType(vote.voteOption)) &&
+							filterPosition.includes(vote.role) &&
+							(!selectedParty || vote.party === selectedParty)
+						);
+					})
+					.map((vote, index) => ({
+						id: `vote-${index}`,
+						politician: vote.politician,
+						role: vote.role,
+						party: vote.party,
+						voteOption: vote.voteOption
+					}));
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';

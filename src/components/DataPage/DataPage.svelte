@@ -35,7 +35,6 @@
 
 <script lang="ts">
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
-	import type { Link } from '$models/link';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -50,7 +49,7 @@
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, type ComponentProps } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -86,7 +85,7 @@
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
 	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
-	export let downloadLinks: Link[] = [];
+	export let downloadLinks: ComponentProps<LinkTable>['links'] = [];
 
 	// Reactive
 	let tableCurrentPage = 1;

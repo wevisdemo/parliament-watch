@@ -29,6 +29,7 @@ interface BillSummary
 		| 'proposedByAssembly'
 		| 'proposedLedByPolitician'
 		| 'proposedByPeople'
+		| 'attachment'
 	> {
 	purposedAtMpAssemblyId: string;
 	proposedLedByPoliticianName?: string;
