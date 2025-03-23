@@ -5,11 +5,31 @@
 	import { BillProposerType, BillStatus } from '$models/bill';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import DocumentUnknown from 'carbon-icons-svelte/lib/DocumentUnknown.svelte';
-	import type {
-		BillsByCategory,
-		BillsByProposerType,
-		BillsByStatus
-	} from '../../routes/bills/+page.server';
+
+	interface BillSample {
+		id: string;
+		nickname: string;
+	}
+	interface BillsByStatus {
+		status: BillStatus;
+		samples: BillSample[];
+		count: number;
+	}
+
+	interface BillsByCategory {
+		category: string;
+		samples: BillSample[];
+		count: number;
+	}
+
+	interface BillsByProposerType {
+		proposerType: BillProposerType;
+		samples: BillSample[];
+		count: number;
+		countByStatus: {
+			[status in BillStatus]: number;
+		};
+	}
 
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;
