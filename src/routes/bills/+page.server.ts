@@ -1,3 +1,8 @@
+import type {
+	BillsByCategory,
+	BillsByProposerType,
+	BillsByStatus
+} from '$components/LawStatusCard/LawStatusCard.svelte';
 import { fetchBills } from '$lib/datasheets';
 import { createSeo } from '$lib/seo';
 import { BillProposerType, BillStatus, type Bill } from '$models/bill';
@@ -5,29 +10,6 @@ import { rollup } from 'd3';
 
 const BILL_SAMPLE_LIMIT = 3;
 const LATEST_ENACTED_BILL_LIMIT = 10;
-
-type BillSample = Pick<Bill, 'id' | 'nickname'>;
-
-export interface BillsByStatus {
-	status: BillStatus;
-	samples: BillSample[];
-	count: number;
-}
-
-export interface BillsByCategory {
-	category: string;
-	samples: BillSample[];
-	count: number;
-}
-
-export interface BillsByProposerType {
-	proposerType: BillProposerType;
-	samples: BillSample[];
-	count: number;
-	countByStatus: {
-		[status in BillStatus]: number;
-	};
-}
 
 export async function load() {
 	const bills = (await fetchBills()).sort(
