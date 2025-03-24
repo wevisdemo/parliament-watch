@@ -39,6 +39,10 @@
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={description} />
 	<meta name="twitter:image" content={og} />
+
+	{#if import.meta.env.PROD}
+		<link rel="canonical" href={url} />
+	{/if}
 </svelte:head>
 
 <main class="flex min-h-screen flex-col">
