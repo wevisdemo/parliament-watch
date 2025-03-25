@@ -44,8 +44,11 @@
 	{@const billsByStatus = [...billsBySelectedCategory.billsByStatus.entries()]
 		.map(([status, bill]) => ({
 			status,
-			...bill,
-			samples: bill.samples.slice(0, MAX_BILL_BY_STATUS)
+			count: bill.count,
+			samples: bill.samples.slice(0, MAX_BILL_BY_STATUS).map((s) => ({
+				id: s.id,
+				nickname: s.nickname
+			}))
 		}))
 		.sort((a, z) => billStatusList.indexOf(a.status) - billStatusList.indexOf(z.status))}
 	{@const lastestEnactedBills =
