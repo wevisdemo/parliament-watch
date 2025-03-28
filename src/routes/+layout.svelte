@@ -39,6 +39,8 @@
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={description} />
 	<meta name="twitter:image" content={og} />
+
+	<link rel="canonical" href={url} />
 </svelte:head>
 
 <main class="flex min-h-screen flex-col">
