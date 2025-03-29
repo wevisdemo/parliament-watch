@@ -131,8 +131,9 @@ export function calculateScore<T extends { name: string }>(
 	return searchItems.map((item: T) => {
 		let score = 0;
 		const matchedIndices: number[] = [];
-		for (const query of queries) {
-			const stringMenu = item.name;
+		const stringMenu = item.name.toLowerCase();
+		const normalizedQueries = queries.map((q) => q.toLowerCase());
+		for (const query of normalizedQueries) {
 			let matchedIndex = 0;
 			let startIndex = 0;
 			let addedScore = 0;
