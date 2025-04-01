@@ -15,23 +15,21 @@
 	import { onMount } from 'svelte';
 	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import { groups } from 'd3';
 
 	export let data;
 
 	$: ({ politician, agreedVoting, disagreedVoting, votingAbsentStats } = data);
 
-	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
-		arr.reduce(
-			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
-			{} as Record<K, T[]>
-		);
-
-	$: parties = politician?.partyRoles
-		? groupBy(politician.partyRoles, (role) => role.party.name)
-		: [];
-	$: currentParty = politician?.partyRoles.find((e) => !e.endedAt);
-	$: partyCount = Object.keys(parties).length;
-	$: currentRoles = politician?.assemblyRoles.filter((e) => !e.endedAt);
+	$: partyMemberships = politician.memberships.filter(
+		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+	);
+	$: currentParty = partyMemberships.find((m) => !m.end_date)?.posts[0].organizations[0];
+	$: membershipInEachParties = groups(partyMemberships, (m) => m.posts[0].organizations[0].name);
+	$: assemblyMemberships = politician.memberships.filter(
+		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+	);
+	$: currentAssemblyMemberships = assemblyMemberships.filter((m) => !m.end_date);
 
 	let currentNavElementIndex = 0;
 	onMount(() => {
@@ -67,9 +65,9 @@
 	<div class="mx-auto w-full max-w-[1200px] px-4 py-8 md:px-16 md:py-12">
 		<PoliticianPicture
 			class="mb-4 w-fit"
-			avatar={politician.avatar}
+			avatar={politician.image ?? undefined}
 			size="120"
-			partyLogo={currentParty?.party.logo}
+			partyLogo={currentParty?.image ?? undefined}
 			partySize="32"
 		/>
 		<div class="flex flex-col gap-8 md:flex-row md:gap-16">
@@ -79,15 +77,19 @@
 					{politician.firstname}
 					{politician.lastname}
 				</h1>
-				<PositionStatus isActive={politician.isActive} />
-				{#if currentRoles?.length > 0}
+				<PositionStatus
+					isActive={currentAssemblyMemberships.some(
+						(m) => !m.end_date && !m.posts[0].organizations[0].dissolution_date
+					)}
+				/>
+				{#if currentAssemblyMemberships.length}
 					<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
 					<ul class="body-01 ml-8 list-disc">
-						{#each currentRoles as role, idx (idx)}
+						{#each currentAssemblyMemberships as { posts: [post] }, idx (idx)}
 							<!-- TODO: add link -->
 							<li>
-								{role.role} ใน
-								<a class="text-black" href="/">{role.assembly.name} ชุดที่ {role.assembly.term}</a>
+								{post.role} ใน
+								<a class="text-black" href="/">{post.organizations[0].name}</a>
 							</li>
 						{/each}
 					</ul>
@@ -109,14 +111,14 @@
 	</div>
 </header>
 
-<div class="bg-[--party]" style:--party={currentParty?.party.color ?? '#F4F4F4'}>
+<div class="bg-[--party]" style:--party={currentParty?.color ?? '#F4F4F4'}>
 	<div
 		class="heading-01 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col items-start gap-4 p-4 md:flex-row md:gap-8 md:px-16 md:py-8"
 	>
 		<SideNav
 			{currentNavElementIndex}
-			assemblyRolesLength={politician.assemblyRoles.length}
-			{partyCount}
+			assemblyRolesLength={assemblyMemberships.length}
+			partyCount={membershipInEachParties.length}
 			agreedVoting={agreedVoting.total}
 			disagreedVoting={disagreedVoting.total}
 			absentTotal={votingAbsentStats.absentVoting}
@@ -126,32 +128,31 @@
 				<General slot="icon" size="32" />
 				<div>
 					<p>
-						{#if politician.sex}
+						{#if politician.gender}
 							<span class="heading-02">เพศ</span>
-							{politician.sex}
+							{politician.gender === 'MALE' ? 'ชาย' : 'หญิง'}
 						{/if}
-						{#if politician.birthdate}
+						{#if politician.birth_date}
 							{' '}<span class="heading-02">วันเกิด</span>
-							{' '}{politician.birthdate.toLocaleDateString('th-TH', { dateStyle: 'long' })} ({dayjs().diff(
-								politician.birthdate,
-								'years'
-							)} ปี)
+							{' '}{new Date(politician.birth_date).toLocaleDateString('th-TH', {
+								dateStyle: 'long'
+							})} ({dayjs().diff(politician.birth_date, 'years')} ปี)
 						{/if}
 					</p>
 
-					{#if politician.educations.length > 0}
+					{#if politician.educations}
 						<span class="heading-02">การศึกษา</span>
 						<ul class="ml-8 list-disc">
-							{#each politician.educations as education, idx (idx)}
-								<li>{education}</li>
+							{#each politician.educations.split('\n') as education, idx (idx)}
+								<li>{education.replace('-', '').trim()}</li>
 							{/each}
 						</ul>
 					{/if}
-					{#if politician.previousOccupations.length > 0}
+					{#if politician.previous_occupations}
 						<span class="heading-02">อาชีพเดิม</span>
 						<ul class="ml-8 list-disc">
-							{#each politician.previousOccupations as oldjob, idx (idx)}
-								<li>{oldjob}</li>
+							{#each politician.previous_occupations.split('\n') as oldjob, idx (idx)}
+								<li>{oldjob.replace('-', '').trim()}</li>
 							{/each}
 						</ul>
 					{/if}
@@ -183,15 +184,15 @@
 					<ArrowUpRight />
 				</a>
 			</div> -->
-				{#if politician.contacts.length > 0}
+				{#if politician.links.length}
 					<hr class="m-0 box-border w-full border-0 border-t border-solid border-gray-20" />
 					<div>
 						<span class="heading-02">ช่องทางติดต่อ</span>
 						<ul class="helper-text-01 flex flex-wrap gap-3">
-							{#each politician.contacts as contact (contact.label)}
+							{#each politician.links as contact (contact.note)}
 								<li>
 									<a href={contact.url} target="_blank" rel="nofollow noopener noreferrer">
-										{contact.label}
+										{contact.note}
 									</a>
 								</li>
 							{/each}
@@ -204,24 +205,23 @@
 				<p slot="header-extension" class="label-01 text-gray-60">
 					หมายเหตุ : ข้อมูลย้อนหลังถึงปี 2562
 				</p>
-				{#if politician.assemblyRoles.length > 0}
+				{#if assemblyMemberships.length}
 					<div>
-						<h3 class="heading-02">{politician.assemblyRoles.length} ตำแหน่งทางการเมือง</h3>
+						<h3 class="heading-02">{assemblyMemberships.length} ตำแหน่งทางการเมือง</h3>
 						<ul class="ml-8 list-disc">
-							{#each politician.assemblyRoles as role, idx (idx)}
+							{#each assemblyMemberships as { posts: [post], start_date, end_date }, idx (idx)}
 								<li>
-									{role.role}
-									<!-- TODO: add links -->
-									<a class="text-black" href="/">
-										{role.assembly.abbreviation} ชุดที่ {role.assembly.term}
+									{post.role}
+									<a class="text-black underline" href="/assemblies/{post.organizations[0].id}">
+										{post.organizations[0].name}
 									</a>
 									<span class="body-compact-02 text-gray-60">
-										({role.startedAt.toLocaleDateString('th-TH', {
+										({new Date(start_date).toLocaleDateString('th-TH', {
 											month: 'short',
 											year: '2-digit'
 										})}
-										- {role.endedAt
-											? role.endedAt.toLocaleDateString('th-TH', {
+										- {end_date
+											? new Date(end_date).toLocaleDateString('th-TH', {
 													month: 'short',
 													year: '2-digit'
 												})
@@ -232,19 +232,25 @@
 						</ul>
 					</div>
 				{/if}
-				{#if partyCount > 0}
+				{#if membershipInEachParties.length}
 					<hr class="m-0 box-border w-full border-0 border-t border-solid border-gray-20" />
 					<div>
-						<h3 class="heading-02">{partyCount} พรรคที่เคยสังกัด</h3>
+						<h3 class="heading-02">{membershipInEachParties.length} พรรคที่เคยสังกัด</h3>
 						<ul class="ml-8 flex list-disc flex-col gap-[2px]">
-							{#each Object.entries(parties) as [party, partyData] (party)}
-								<PartyDetail {party} data={partyData} />
+							{#each membershipInEachParties as [party, memberships] (party)}
+								<PartyDetail {party} {memberships} />
 							{/each}
 						</ul>
 					</div>
 				{/if}
 			</Section>
-			<PoliticianVoteSummary {politician} {agreedVoting} {disagreedVoting} {votingAbsentStats} />
+			<PoliticianVoteSummary
+				politicianId={politician.id}
+				politicianFirstname={politician.firstname}
+				{agreedVoting}
+				{disagreedVoting}
+				{votingAbsentStats}
+			/>
 		</div>
 	</div>
 </div>

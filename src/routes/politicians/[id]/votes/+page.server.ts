@@ -1,10 +1,11 @@
-import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
+import { fetchVotes, fetchVotings } from '$lib/datasheets';
 import { safeFind } from '$lib/datasheets/processor.js';
 import { getSortedUniqueVoteOptions } from '$lib/datasheets/voting.js';
+import { graphql } from '$lib/politigraph';
 import { createSeo } from '$lib/seo.js';
 import type { Assembly } from '$models/assembly';
-import type { Politician } from '$models/politician.js';
 import { DefaultVoteOption, type Voting } from '$models/voting.js';
+import { error } from '@sveltejs/kit';
 
 interface VoteSummary
 	extends Pick<Voting, 'id' | 'nickname' | 'result' | 'date' | 'files' | 'participatedAssemblies'> {
@@ -17,10 +18,24 @@ interface FilterOptions {
 	voteOptions: string[];
 }
 
-type PoliticianSummary = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'lastname'>;
-
 export async function load({ params }) {
-	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
+	const {
+		people: [politician]
+	} = await graphql.query({
+		people: {
+			__args: {
+				where: { id_EQ: params.id }
+			},
+			id: true,
+			prefix: true,
+			firstname: true,
+			lastname: true
+		}
+	});
+
+	if (!politician) {
+		error(404);
+	}
 
 	const votings = await fetchVotings();
 	const allVotes = await fetchVotes();
@@ -48,19 +63,12 @@ export async function load({ params }) {
 		voteOptions: getSortedUniqueVoteOptions(votes)
 	};
 
-	const politicianSummary: PoliticianSummary = (({ id, prefix, firstname, lastname }) => ({
-		id,
-		prefix,
-		firstname,
-		lastname
-	}))(politician);
-
 	return {
-		politician: politicianSummary,
+		politician,
 		filterOptions,
 		votes,
 		seo: createSeo({
-			title: `ประวัติการลงมติ ${politicianSummary.firstname} ${politicianSummary.lastname}`
+			title: `ประวัติการลงมติ ${politician.firstname} ${politician.lastname}`
 		})
 	};
 }

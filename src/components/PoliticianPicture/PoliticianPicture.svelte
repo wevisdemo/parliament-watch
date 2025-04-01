@@ -3,7 +3,7 @@
 
 	let className = '';
 	export { className as class };
-	export let avatar = 'https://placehold.co/128x128?text=politician';
+	export let avatar = '/images/politicians/_placeholder.webp';
 	export let size: string | number = '40';
 	export let avatarClass = '';
 	export let partyLogo: string | undefined = undefined;
