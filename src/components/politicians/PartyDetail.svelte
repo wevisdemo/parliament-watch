@@ -1,16 +1,19 @@
 <script lang="ts">
-	import type { Politician } from '$models/politician';
+	import type { Membership, Post } from '$lib/genql';
 	export let party: string;
-	export let data: Politician['partyRoles'];
+
+	export let memberships: (Pick<Membership, 'start_date' | 'end_date'> & {
+		posts: Pick<Post, 'role'>[];
+	})[];
 
 	// NOTE: assume ว่า data จะ sort มาแล้ว + มีข้อมูลอย่างน้อย 1
-	let partyFrom = data.at(-1)?.startedAt;
-	let partyTo = data[0].endedAt;
+	$: partyFrom = memberships.at(-1)?.start_date;
+	$: partyTo = memberships.at(0)?.end_date;
 </script>
 
 <li>
 	<!-- TODO: add links -->
-	<a class="text-black" href="/">{party}</a>
+	<span class="text-black">{party}</span>
 	<span class="text-gray-60"
 		>({partyFrom
 			? new Date(partyFrom).toLocaleDateString('th-TH', {
@@ -26,20 +29,20 @@
 	>
 	<span class="label-01 block">
 		ตำแหน่ง :
-		{#each data as role, idx (idx)}
+		{#each memberships as { posts: [post], start_date, end_date }, idx (idx)}
 			<span>
-				{role.role}
+				{post.role}
 				<span class="text-gray-60"
-					>({new Date(role.startedAt).toLocaleDateString('th-TH', {
+					>({new Date(start_date).toLocaleDateString('th-TH', {
 						month: 'short',
 						year: '2-digit'
-					})} - {role.endedAt
-						? new Date(role.endedAt).toLocaleDateString('th-TH', {
+					})} - {end_date
+						? new Date(end_date).toLocaleDateString('th-TH', {
 								month: 'short',
 								year: '2-digit'
 							})
 						: 'ปัจจุบัน'})</span
-				>{idx !== data.length - 1 ? ',' : ''}
+				>{idx !== memberships.length - 1 ? ',' : ''}
 			</span>
 		{/each}
 	</span>
