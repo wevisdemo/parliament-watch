@@ -19,7 +19,7 @@ export const asStaticImage = (path: string, placeholder = '_placeholder.webp') =
 	);
 };
 
-export const asSlug = (separator = '-', maxLength = 32) =>
+export const asSlug = (separator = '-', maxLength = 64) =>
 	createTransformer((text): string =>
 		text
 			.trim()
