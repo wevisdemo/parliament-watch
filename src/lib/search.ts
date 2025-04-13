@@ -5,6 +5,7 @@ import type {
 	SearchResults,
 	HighlightedText
 } from '$models/search';
+import { distance } from 'fastest-levenshtein';
 
 /**
  * Tokenizes the given text into an array of words.
@@ -155,6 +156,31 @@ export function calculateScore<T extends { name: string }>(
 
 				// Set the start index of next search
 				startIndex = endMatchedIndex;
+			}
+
+			if (addedScore == 0) {
+				// Try fuzzy match using sliding window
+				let bestDistance = Infinity;
+				let bestIndex = -1;
+
+				for (let i = 0; i <= stringMenu.length - query.length; i++) {
+					const sub = stringMenu.slice(i, i + query.length);
+					const d = distance(sub, query);
+					if (d < bestDistance) {
+						bestDistance = d;
+						bestIndex = i;
+					}
+				}
+
+				// Accept fuzzy match if close enough
+				const threshold = Math.max(1, Math.floor(query.length / 3));
+				if (bestDistance <= threshold) {
+					const similarity = 1 - bestDistance / query.length;
+					addedScore += (similarity * query.length * 0.2) / stringMenu.length;
+					for (let i = bestIndex; i < bestIndex + query.length; i++) {
+						if (!matchedIndices.includes(i)) matchedIndices.push(i);
+					}
+				}
 			}
 
 			// If not found query
