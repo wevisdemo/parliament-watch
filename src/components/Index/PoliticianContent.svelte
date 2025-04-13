@@ -54,7 +54,21 @@
 		สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
 	</Button>
 
-	<Button href="/assemblies/วุฒิสภา-12" kind="secondary" icon={ArrowRight} class="w-full max-w-none"
-		>สมาชิกวุฒิสภา (สว.) ทั้งหมด</Button
+	<Button
+		href="/assemblies/วุฒิสภา-12"
+		kind="secondary"
+		icon={ArrowRight}
+		class="w-full max-w-none"
 	>
+		สมาชิกวุฒิสภา (สว.) ทั้งหมด
+	</Button>
+
+	<Button
+		href="/assemblies/คณะรัฐมนตรี-64"
+		kind="secondary"
+		icon={ArrowRight}
+		class="w-full max-w-none"
+	>
+		สมาชิกคณะรัฐมนตรี ทั้งหมด
+	</Button>
 </div>
