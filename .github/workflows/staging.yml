@@ -30,6 +30,7 @@ jobs:
       - name: Build SvelteKit
         run: yarn build
       - name: Build Histoire
+        continue-on-error: true
         run: yarn story:build
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
