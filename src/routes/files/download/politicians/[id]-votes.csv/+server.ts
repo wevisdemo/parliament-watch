@@ -1,26 +1,34 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { safeFind } from '$lib/datasheets/processor.js';
+import { graphql } from '$lib/politigraph.js';
 
 export const prerender = true;
 
 export async function GET({ params }) {
-	const politician = await fetchFromIdOr404(fetchPoliticians, params.id);
-	const votings = await fetchVotings();
-	const votes = await fetchVotes();
+	const { votes } = await graphql.query({
+		votes: {
+			__args: {
+				where: {
+					voters_ALL: {
+						id_EQ: params.id
+					}
+				}
+			},
+			option: true,
+			vote_events: {
+				title: true,
+				result: true,
+				start_date: true,
+				end_date: true
+			}
+		}
+	});
 
 	return createCsvFileResponse(
 		votes
-			.filter(({ politicianId }) => politicianId === politician.id)
-			.map(({ votingId, voteOption }) => {
-				const { nickname, result, date } = safeFind(votings, (voting) => voting.id === votingId);
-				return {
-					date,
-					nickname,
-					result,
-					voteOption
-				};
-			})
-			.sort((a, z) => z.date.getTime() - a.date.getTime())
+			.map(({ option, vote_events }) => ({
+				...(vote_events[0] ?? {}),
+				option
+			}))
+			.sort((a, z) => z.start_date.localeCompare(a.start_date))
 	);
 }

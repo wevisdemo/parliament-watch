@@ -1,23 +1,23 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { getVoteResultsByPerson } from '$lib/datasheets/voting.js';
+import { graphql } from '$lib/politigraph.js';
 
 export const prerender = true;
 
 export async function GET({ params }) {
-	const voting = await fetchFromIdOr404(fetchVotings, params.id);
-	const politicians = await fetchPoliticians();
-
-	return createCsvFileResponse(
-		getVoteResultsByPerson(
-			voting,
-			(await fetchVotes()).filter(({ votingId }) => votingId === voting.id),
-			politicians
-		).map(({ firstname, lastname, party, role, voteOption }) => ({
-			politician: `${firstname} ${lastname}`,
-			role,
-			party: party?.name || '',
-			voteOption
-		}))
-	);
+	const { votes } = await graphql.query({
+		votes: {
+			__args: {
+				where: {
+					vote_events_ALL: {
+						id_EQ: params.id
+					}
+				},
+				sort: [{ voter_name: 'ASC' }]
+			},
+			voter_name: true,
+			voter_party: true,
+			option: true
+		}
+	});
+	return createCsvFileResponse(votes);
 }
