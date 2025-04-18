@@ -1,31 +1,88 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { fetchAssemblies, fetchFromIdOr404, fetchPoliticians } from '$lib/datasheets';
-import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
+import { graphql } from '$lib/politigraph.js';
 
 export const prerender = true;
 
 export async function GET({ params }) {
-	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
-	const members = getAssemblyMembers(assembly, await fetchPoliticians());
+	const {
+		organizations: [{ dissolution_date }]
+	} = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				}
+			},
+			dissolution_date: true
+		}
+	});
+
+	const { posts } = await graphql.query({
+		posts: {
+			__args: {
+				where: {
+					organizations_ALL: {
+						id_EQ: params.id
+					}
+				}
+			},
+			role: true,
+			memberships: {
+				label: true,
+				province: true,
+				district_number: true,
+				list_number: true,
+				start_date: true,
+				end_date: true,
+				members: {
+					on_Person: {
+						prefix: true,
+						firstname: true,
+						lastname: true,
+						memberships: {
+							__args: {
+								where: {
+									posts_ALL: {
+										organizations_ALL: {
+											classification_EQ: 'POLITICAL_PARTY'
+										}
+									},
+									...(dissolution_date
+										? {
+												start_date_LTE: dissolution_date,
+												OR: [{ end_date_GTE: dissolution_date }, { end_date_EQ: null }]
+											}
+										: {
+												end_date_EQ: null
+											})
+								},
+								sort: [{ start_date: 'DESC' }],
+								limit: 1
+							},
+							posts: {
+								organizations: {
+									name: true
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
 
 	return createCsvFileResponse(
-		members.map(
-			({ prefix, firstname, lastname, sex, birthdate, educations, assemblyRole, partyRole }) => ({
-				prefix,
-				firstname,
-				lastname,
-				sex,
-				birthdate,
-				educations: educations.join(','),
-				role: assemblyRole?.role,
-				appointmentMethod: assemblyRole?.appointmentMethod,
-				party: partyRole?.party.name,
-				province: assemblyRole?.province,
-				districtNumber: assemblyRole?.districtNumber,
-				listNumber: assemblyRole?.listNumber,
-				startedAt: assemblyRole?.startedAt,
-				endedAt: assemblyRole?.endedAt
-			})
+		posts.flatMap(({ role, memberships }) =>
+			memberships.flatMap(({ members, ...restMembership }) =>
+				members
+					.filter((m) => 'firstname' in m)
+					.map(({ memberships: [partyMember], ...restPeople }) => ({
+						role,
+						...restPeople,
+						party: partyMember?.posts[0]?.organizations[0]?.name,
+						...restMembership
+					}))
+			)
 		)
 	);
 }
