@@ -1,13 +1,26 @@
+<script context="module" lang="ts">
+	export interface VotingHistory {
+		total: number;
+		latest: {
+			id: string;
+			title: string;
+			result: string | null;
+		}[];
+	}
+
+	export interface VotingAbsentStats {
+		totalVoting: number;
+		absentVoting: number;
+		averageAbsentVoting: number;
+	}
+</script>
+
 <script lang="ts">
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import { Button, InlineNotification } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import type {
-		VotingAbsentStats,
-		VotingHistory
-	} from '../../routes/politicians/[id]/+page.server';
 
 	export let politicianId: string;
 	export let politicianFirstname: string;
@@ -44,7 +57,7 @@
 							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="max-w-max flex-1 underline">{voting.nickname}</span>
+							<span class="max-w-max flex-1 underline">{voting.title}</span>
 							<VotingResultTag
 								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}
@@ -76,7 +89,7 @@
 							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="max-w-max flex-1 underline">{voting.nickname}</span>
+							<span class="max-w-max flex-1 underline">{voting.title}</span>
 							<VotingResultTag
 								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}
