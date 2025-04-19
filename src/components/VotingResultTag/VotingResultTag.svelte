@@ -2,7 +2,9 @@
 	import { DefaultVotingResult } from '$models/voting';
 	import { twMerge } from 'tailwind-merge';
 
-	export let result: DefaultVotingResult | string;
+	const RESULT_CONFIRMATION_PENDING = 'รอตรวจสอบ';
+
+	export let result: DefaultVotingResult | string | null;
 	export let isLarge = false;
 
 	let tagColor = 'bg-purple-70 text-text-04';
@@ -23,7 +25,7 @@
 		default:
 			// purple tag and white text
 			tagColor = 'bg-purple-70 text-text-04';
-			label = result;
+			label = result ?? RESULT_CONFIRMATION_PENDING;
 			break;
 	}
 
