@@ -94,7 +94,14 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2">
-				<LinkTable links={[{ label: 'ผลการลงมติรายคน', url: '/' }]} />
+				<LinkTable
+					links={[
+						{
+							label: 'ผลการลงมติรายคน',
+							url: `/files/download/politicians/${politician.id}-votes.csv`
+						}
+					]}
+				/>
 				<DataPeriodRemark />
 				<Share label="แชร์ประวัติ" />
 			</div>
