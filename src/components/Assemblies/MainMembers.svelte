@@ -2,9 +2,9 @@
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import type { MainMember } from '../../routes/assemblies/[id]/+page.server';
+	import type { ComponentProps } from 'svelte';
 
-	export let members: MainMember[] = [];
+	export let members: { assemblyRole: string; profile: ComponentProps<PoliticianProfile> }[] = [];
 	export let assemblyId: string;
 </script>
 
@@ -15,19 +15,10 @@
 	</div>
 	<div class="w-full border-b-[1px] border-solid border-gray-20" />
 	<div class="mt-[16px] flex flex-wrap justify-center gap-[8px] md:justify-start">
-		{#each members as { politician, assemblyRole, party, description }}
+		{#each members as { assemblyRole, profile }}
 			<div class="w-[288px]">
 				<span class="heading-01">{assemblyRole}</span>
-				<PoliticianProfile
-					id={politician.id}
-					firstname={politician.firstname}
-					lastname={politician.lastname}
-					avatar={politician.avatar}
-					partyName={party?.name}
-					partyLogo={party?.logo}
-					role={description}
-					isLarge
-				/>
+				<PoliticianProfile {...profile} isLarge />
 			</div>
 		{/each}
 		<a

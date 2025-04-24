@@ -1,10 +1,12 @@
 <script lang="ts" context="module">
-	export type AvailableAssembly = Pick<Assembly, 'id' | 'name' | 'term'>;
+	export type AvailableAssembly = {
+		id: string;
+		term: number | null;
+	};
 </script>
 
 <script lang="ts">
 	import AngleRightIcon from '$components/icons/AngleRightIcon.svelte';
-	import type { Assembly } from '$models/assembly';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
@@ -12,19 +14,16 @@
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-	export let name: string;
 	export let term: number;
 	export let startedYear: Date;
 	export let availableAssemblies: AvailableAssembly[] = [];
-	export let postfix = '';
+	export let linkPostfix = '';
 
 	$: formattedYear = dayjs(startedYear).format('BBBB');
 
 	$: getSameAssemblyPathFromDifferentTerm = (newTerm: number) => {
-		const assembly = availableAssemblies.find(
-			(assembly) => assembly.name === name && assembly.term === newTerm
-		);
-		return assembly ? `/assemblies/${assembly.id}${postfix ? `/${postfix}` : ''}` : '';
+		const assembly = availableAssemblies.find((assembly) => assembly.term === newTerm);
+		return assembly ? `/assemblies/${assembly.id}${linkPostfix ? `/${linkPostfix}` : ''}` : '';
 	};
 
 	$: nextUrl = getSameAssemblyPathFromDifferentTerm(term + 1);

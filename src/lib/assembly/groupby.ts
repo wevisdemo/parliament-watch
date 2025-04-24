@@ -1,13 +1,19 @@
-import type { AssemblyMember } from '$lib/datasheets/assembly-member';
+import { enumGender } from '$lib/genql';
 import { provinceRegionMap } from '$lib/thai-province';
-import { type Assembly, GroupByOption, AssemblyPartyGroup } from '$models/assembly';
+import { GroupByOption, AssemblyPartyGroup } from '$models/assembly';
+import type { AssemblyMember } from './member';
 import dayjs from 'dayjs';
 
 const UNKNOWN_LABEL = 'ไม่พบข้อมูล';
 
+const sexTranslationMap = new Map([
+	[enumGender.MALE, 'ชาย'],
+	[enumGender.FEMALE, 'หญิง']
+]);
+
 export const noParty = {
 	name: 'ไม่สังกัดพรรค',
-	logo: '',
+	image: '',
 	color: 'gray'
 };
 
@@ -25,7 +31,6 @@ export interface PoliticianSubGroup {
 export type PoliticianGroupBy = PoliticianGroup[] | PoliticianSubGroup[];
 
 export function getMemberGroup(
-	assembly: Assembly,
 	members: AssemblyMember[],
 	groupby: GroupByOption,
 	isSenates = false,
@@ -35,8 +40,12 @@ export function getMemberGroup(
 		case GroupByOption.Party: {
 			return isCabinet
 				? createSubgroupByPartyOrAppointmentMethod(members, isSenates)
-				: groupMembersBy(members, ({ partyRole }) =>
-						assembly.oppositionParties?.some((op) => op.name === partyRole?.party.name)
+				: groupMembersBy(members, ({ memberships }) =>
+						memberships
+							.find((m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY')
+							?.posts[0].organizations[0].memberships[0]?.posts[0].role.endsWith(
+								AssemblyPartyGroup.Opposition
+							)
 							? AssemblyPartyGroup.Opposition
 							: AssemblyPartyGroup.Government
 					).map(([side, membersBySide]) => ({
@@ -46,15 +55,19 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Province: {
-			return groupMembersBy(
-				members,
-				({ assemblyRole }) =>
-					assemblyRole?.province && provinceRegionMap.get(assemblyRole?.province)
-			).map(([region, membersByRegion]) => ({
+			return groupMembersBy(members, ({ memberships }) => {
+				const province = memberships.find(
+					(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+				)?.province;
+				return province && provinceRegionMap.get(province);
+			}).map(([region, membersByRegion]) => ({
 				name: region || UNKNOWN_LABEL,
 				subgroups: groupMembersBy(
 					membersByRegion,
-					({ assemblyRole }) => assemblyRole?.province
+					({ memberships }) =>
+						memberships.find(
+							(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+						)?.province
 				).map(([province, membersByProvince]) => ({
 					name: province || UNKNOWN_LABEL,
 					members: membersByProvince
@@ -67,7 +80,10 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Sex: {
-			const membersGroupBySex = groupMembersBy(members, ({ sex }) => sex || UNKNOWN_LABEL);
+			const membersGroupBySex = groupMembersBy(
+				members,
+				({ gender }) => (gender && sexTranslationMap.get(gender)) || UNKNOWN_LABEL
+			);
 			return isCabinet
 				? membersGroupBySex.map(([side, membersBySide]) => ({
 						name: side,
@@ -82,10 +98,10 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Age: {
-			const membersGroupByAge = groupMembersBy(members, ({ birthdate }) => {
-				if (!birthdate) return UNKNOWN_LABEL;
+			const membersGroupByAge = groupMembersBy(members, ({ birth_date }) => {
+				if (!birth_date) return UNKNOWN_LABEL;
 
-				const birthDate = dayjs(birthdate);
+				const birthDate = dayjs(birth_date);
 				const age = dayjs().diff(birthDate, 'year');
 
 				if (age > 71) return '71 ปีขึ้นไป';
@@ -108,11 +124,11 @@ export function getMemberGroup(
 
 		case GroupByOption.Education: {
 			const membersGroupByEdu = groupMembersBy(members, ({ educations }) => {
-				if (!educations.length) return UNKNOWN_LABEL;
-				if (educations.some((e) => e.includes('ปริญญาเอก'))) return 'ปริญญาเอก';
-				if (educations.some((e) => e.includes('ปริญญาโท'))) return 'ปริญญาโท';
-				if (educations.some((e) => e.includes('ปริญญาตรี'))) return 'ปริญญาตรี';
-				if (educations.some((e) => e.includes('ทหาร'))) return 'สถาบันทหาร';
+				if (!educations) return UNKNOWN_LABEL;
+				if (educations.includes('ปริญญาเอก')) return 'ปริญญาเอก';
+				if (educations.includes('ปริญญาโท')) return 'ปริญญาโท';
+				if (educations.includes('ปริญญาตรี')) return 'ปริญญาตรี';
+				if (educations.includes('ทหาร')) return 'สถาบันทหาร';
 				return 'ต่ำกว่าปริญญาตรี';
 			});
 			return isCabinet
@@ -127,38 +143,19 @@ export function getMemberGroup(
 						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
 					}));
 		}
-
-		// TODO: Asset is not in phase 1
-		// case GroupByOption.Assets: {
-		// 	return {
-		// 		groups: mockPoliticianGroupsWithSubgroups(
-		// 			[
-		// 				'ต่ำกว่า 1 ล้านบาท',
-		// 				'1-10 ล้านบาท',
-		// 				'10-100 ล้านบาท',
-		// 				'100-1000 ล้านบาท',
-		// 				'1000 ล้านบาทขึ้นไป',
-		// 				'ไม่พบข้อมูล'
-		// 			],
-		// 			isSenates
-		// 		)
-		// 	};
-		// }
 	}
 }
 
-export function groupMembersBy<T>(
-	members: AssemblyMember[],
-	groupBy: (member: AssemblyMember) => T | undefined
-): [T, AssemblyMember[]][] {
+export function groupMembersBy<M, T>(members: M[], groupBy: (member: M) => T): [T, M[]][] {
 	const groupMap = members.reduce((map, member) => {
 		const group = groupBy(member);
+
 		if (group) {
 			map.set(group, [...(map.get(group) || []), member]);
 		}
 
 		return map;
-	}, new Map<T, AssemblyMember[]>());
+	}, new Map<T, M[]>());
 
 	return [...groupMap.entries()].sort((a, z) => z[1].length - a[1].length);
 }
@@ -170,16 +167,27 @@ export function createSubgroupByPartyOrAppointmentMethod(
 	return isSenates
 		? groupMembersBy(
 				members,
-				({ assemblyRole }) => assemblyRole?.appointmentMethod || UNKNOWN_LABEL
+				({ memberships }) =>
+					memberships.find((m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY')
+						?.label ?? UNKNOWN_LABEL
 			).map(([method, membersByRole]) => ({
 				name: method,
 				members: membersByRole
 			}))
-		: groupMembersBy(members, ({ partyRole }) => partyRole?.party || noParty).map(
-				([party, membersByParty]) => ({
-					name: party.name,
-					icon: party.logo,
+		: groupMembersBy(
+				members,
+				({ memberships }) =>
+					memberships.find((m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY')
+						?.posts[0].organizations[0].name
+			).map(([partyName, membersByParty]) => {
+				const { name, image } =
+					membersByParty[0].memberships.find((m) => m.posts[0].organizations[0].name === partyName)
+						?.posts[0].organizations[0] ?? noParty;
+
+				return {
+					name: name,
+					image: image,
 					members: membersByParty
-				})
-			);
+				};
+			});
 }
