@@ -1,12 +1,6 @@
-import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
-import {
-	AssemblyName,
-	type Assembly,
-	GroupByOption,
-	groupByOptionLabelMap
-} from '$models/assembly';
-
-export type AssemblySummary = Pick<Assembly, 'id' | 'name' | 'term' | 'startedAt'>;
+import { graphql } from '$lib/politigraph';
+import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
+import { error } from '@sveltejs/kit';
 
 export interface GroupByTab {
 	path: string;
@@ -15,16 +9,32 @@ export interface GroupByTab {
 }
 
 export async function load({ params }) {
-	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
+	const {
+		organizations: [assembly]
+	} = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				}
+			},
+			classification: true,
+			id: true,
+			name: true,
+			term: true,
+			founding_date: true
+		}
+	});
 
-	const { id, name, term, startedAt } = fullAssembly;
-	const assembly: AssemblySummary = { id, name, term, startedAt };
+	if (!assembly) {
+		error(404);
+	}
 
 	const groupByTabs = Object.values(GroupByOption)
 		.filter(
-			name === AssemblyName.Senates
+			assembly.classification === 'HOUSE_OF_SENATE'
 				? (path) => [GroupByOption.Party, GroupByOption.Province].every((option) => option !== path)
-				: name === AssemblyName.Cabinet
+				: assembly.classification === 'CABINET'
 					? (path) =>
 							[GroupByOption.AppointmentMethod, GroupByOption.Province].every(
 								(option) => option !== path

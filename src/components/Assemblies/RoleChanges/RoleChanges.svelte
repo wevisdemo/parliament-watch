@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { group } from 'd3';
-	import type { RoleChange } from '../../../routes/assemblies/[id]/+page.server';
 	import RoleChangeGroup from './RoleChangeGroup.svelte';
-	export let changes: Array<RoleChange>;
+	import type { RoleChange } from '$lib/assembly/change';
+
+	export let changes: RoleChange[];
 	export let selectedDate: Date | undefined = undefined;
 
 	$: groupChangeData = group(changes, (d) => d?.date.toISOString());

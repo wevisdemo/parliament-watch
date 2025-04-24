@@ -1,24 +1,22 @@
-import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
 import { getSenateColorByTitle } from '$components/Assemblies/shared';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { getRoleChanges } from '$lib/assembly/change';
+import { getMemberGroup, noParty } from '$lib/assembly/groupby';
+import { queryAssemblyMembers, parseMainMember, type AssemblyMember } from '$lib/assembly/member';
 import {
 	fetchAssemblies,
 	fetchBills,
-	fetchFromIdOr404,
 	fetchPoliticians,
 	fetchVotes,
 	fetchVotings
 } from '$lib/datasheets';
-import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
-import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
 import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
+import { graphql } from '$lib/politigraph';
 import { createSeo } from '$lib/seo';
-import { AssemblyName, GroupByOption } from '$models/assembly';
+import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
-import type { Party } from '$models/party';
-import type { PartyRoleHistory, Politician } from '$models/politician';
-import { getMemberGroup, noParty } from './members/[groupby]/groupby';
+import { error } from '@sveltejs/kit';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
@@ -40,81 +38,87 @@ export interface MemberGroup {
 	name: string;
 	total: number;
 	senateMembers?: AssemblyMember[];
-	parties?: (Pick<Party, 'name' | 'color'> & { count: number; members?: AssemblyMember[] })[];
-}
-
-export interface MainMember {
-	assemblyRole: string;
-	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'>;
-	party?: Party;
-	description: string | null;
-}
-
-export interface RoleChange {
-	date: Date;
-	type: 'in' | 'out';
-	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'> & { party: Party };
-	role: string;
+	parties?: { name: string; color: string; count: number; members?: AssemblyMember[] }[];
 }
 
 export type BillSummary = Pick<Bill, 'id' | 'proposedOn' | 'nickname' | 'status'>;
 
 export async function load({ params }) {
-	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
-	const assemblies = await fetchAssemblies();
-
-	const assemblyLatestDay = dayjs(fullAssembly.endedAt ?? new Date());
-
-	// Take government/opposition parties from overlapsed assembly if not defined
-	if (!fullAssembly.governmentParties.length || !fullAssembly.governmentParties.length) {
-		const assemblyWithPartyGroup = assemblies
-			.filter((a) => (!a.endedAt && a.governmentParties.length) || a.oppositionParties.length)
-			.map((a) => ({
-				...a,
-				endedAt: a.endedAt ?? new Date()
-			}))
-			.filter(
-				(a) =>
-					assemblyLatestDay.isAfter(a.startedAt) &&
-					(assemblyLatestDay.isSame(a.endedAt) || assemblyLatestDay.isBefore(a.endedAt))
-			)
-			.sort((z, a) => z.endedAt.getTime() - a.endedAt.getTime())
-			.at(0);
-
-		if (assemblyWithPartyGroup) {
-			fullAssembly.governmentParties = assemblyWithPartyGroup.governmentParties;
-			fullAssembly.oppositionParties = assemblyWithPartyGroup.oppositionParties;
+	const {
+		organizations: [assembly]
+	} = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				},
+				limit: 1
+			},
+			id: true,
+			name: true,
+			classification: true,
+			term: true,
+			description: true,
+			founding_date: true,
+			dissolution_date: true
 		}
+	});
+
+	if (!assembly) {
+		error(404);
 	}
 
-	const { mainRoles, ...assembly } = fullAssembly;
-	const isSenates = assembly.name === AssemblyName.Senates;
-	const isCabinet = assembly.name === AssemblyName.Cabinet;
+	const { organizations: availableAssemblies } = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					classification_EQ: assembly.classification
+				}
+			},
+			id: true,
+			term: true
+		}
+	});
 
-	const politicians = await fetchPoliticians();
+	const members = await queryAssemblyMembers(assembly);
 
-	const activeMembers = getAssemblyMembers(fullAssembly, politicians).filter(
-		({ assemblyRole }) =>
-			!assemblyRole?.endedAt ||
-			(assembly.endedAt && !dayjs(assembly.endedAt).isAfter(assemblyRole.endedAt))
-	);
+	const isSenates = assembly.classification === 'HOUSE_OF_SENATE';
+	const isCabinet = assembly.classification === 'CABINET';
 
-	const mainMembers = isCabinet
-		? activeMembers.filter(({ assemblyRole }) => assemblyRole?.role).map(parseMainMember)
-		: mainRoles.reduce((list, mainRole) => {
-				const member = activeMembers.find(({ assemblyRole }) => assemblyRole?.role === mainRole);
+	const activeMembers = members.filter(({ memberships }) => {
+		const assemblyMembership = memberships.find(
+			(m) => m.posts[0].organizations[0].id === assembly.id
+		);
 
-				return member ? [...list, parseMainMember(member)] : list;
-			}, [] as MainMember[]);
+		if (!assemblyMembership) return false;
+
+		return (
+			!assemblyMembership.end_date ||
+			(assembly.dissolution_date &&
+				!dayjs(assembly.dissolution_date).isAfter(assemblyMembership.end_date))
+		);
+	});
+
+	const mainMembers = activeMembers
+		.filter(
+			({ memberships }) =>
+				!memberships
+					.find((m) => m.posts[0].organizations[0].id === assembly.id)
+					?.posts[0].role.startsWith('สมาชิก')
+		)
+		.map(parseMainMember);
 
 	const parseMemberGroup = (groupBy: GroupByOption) =>
-		getMemberGroup(fullAssembly, activeMembers, groupBy, isSenates).map((group) => ({
+		getMemberGroup(activeMembers, groupBy, isSenates).map((group) => ({
 			name: group.name,
 			...('subgroups' in group
 				? {
 						parties: group.subgroups.map((party) => ({
 							...party,
-							color: party.members[0].partyRole?.party.color as string,
+							color:
+								party.members[0].memberships.find(
+									(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+								)?.posts[0].organizations[0]?.color ?? noParty.color,
 							count: party.members.length
 						})),
 						total: group.subgroups.reduce((sum, subGroup) => sum + subGroup.members.length, 0)
@@ -149,13 +153,14 @@ export async function load({ params }) {
 		groupBySex: isSenates ? getSenateGroupWithColor(groupBySex) : groupBySex,
 		groupByAgeRange: isSenates ? getSenateGroupWithColor(groupByAgeRange) : groupByAgeRange,
 		groupByEducation: isSenates ? getSenateGroupWithColor(groupByEducation) : groupByEducation
-		// groupByAssetValue: [],
 	};
 
 	const votes = isCabinet ? [] : await fetchVotes();
+	const politicians = await fetchPoliticians();
+	const assemblies = await fetchAssemblies();
 
-	const latestVotes: ComponentProps<VoteCard>[] | null = isCabinet
-		? null
+	const latestVotes: ComponentProps<VoteCard>[] = isCabinet
+		? []
 		: (await fetchVotings())
 				.filter(({ participatedAssemblies }) =>
 					participatedAssemblies.some(({ id }) => assembly.id === id)
@@ -169,7 +174,7 @@ export async function load({ params }) {
 					)
 				);
 
-	const latestBills: BillSummary[] | null = isCabinet
+	const latestBills: BillSummary[] = isCabinet
 		? (await fetchBills())
 				.filter((bill) => bill.proposedByAssembly && bill.proposedByAssembly.id === assembly.id)
 				.sort((a, b) => b.proposedOn.getTime() - a.proposedOn.getTime())
@@ -180,68 +185,9 @@ export async function load({ params }) {
 					nickname,
 					status
 				}))
-		: null;
+		: [];
 
-	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
-		({ id, name, term }) => ({
-			id,
-			name,
-			term
-		})
-	);
-
-	function getPartyRoleAtDate(
-		partyRoles: Omit<PartyRoleHistory, 'politicianId'>[],
-		date: Date
-	): PartyRoleHistory['party'] {
-		const maybePartyRole = partyRoles
-			.filter(({ startedAt, endedAt }) => startedAt <= date && (!endedAt || date < endedAt))
-			.sort((a, z) => z.startedAt.getTime() - a.startedAt.getTime())
-			.at(-1);
-
-		return maybePartyRole?.party || noParty;
-	}
-
-	const getChanges = (): RoleChange[] => {
-		const changes: RoleChange[] = [];
-		for (const member of politicians) {
-			member.assemblyRoles.forEach((role) => {
-				if (role.assembly.name !== AssemblyName.Cabinet || role.assembly.id !== fullAssembly.id) {
-					return;
-				}
-				changes.push({
-					date: role.startedAt,
-					type: 'in',
-					role: role.role,
-					politician: {
-						avatar: member.avatar,
-						firstname: member.firstname,
-						lastname: member.lastname,
-						id: member.id,
-						party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
-					}
-				});
-
-				if (role.endedAt) {
-					changes.push({
-						date: role.endedAt,
-						type: 'out',
-						role: role.role,
-						politician: {
-							avatar: member.avatar,
-							firstname: member.firstname,
-							lastname: member.lastname,
-							id: member.id,
-							party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
-						}
-					});
-				}
-			});
-		}
-		return changes.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, MAX_CHANGES);
-	};
-
-	const changes = isCabinet ? getChanges() : null;
+	const changes = isCabinet ? getRoleChanges(assembly.id, members, MAX_CHANGES) : null;
 
 	return {
 		availableAssemblies,
@@ -253,7 +199,7 @@ export async function load({ params }) {
 		latestVotes,
 		latestBills,
 		seo: createSeo({
-			title: `${assembly.name} ${assembly.term}`
+			title: assembly.name
 		})
 	};
 }
@@ -268,20 +214,4 @@ function getSenateGroupWithColor(memberGroup: MemberGroup[]): MemberGroup[] {
 		});
 		return { ...group, parties };
 	});
-}
-
-function parseMainMember(member: ReturnType<typeof getAssemblyMembers>[number]): MainMember {
-	const { id, firstname, lastname, avatar, partyRole, assemblyRole } = member;
-
-	return {
-		assemblyRole: assemblyRole?.role || '',
-		politician: {
-			id,
-			firstname,
-			lastname,
-			avatar
-		},
-		party: partyRole?.party,
-		description: assemblyRole?.appointmentMethod || null
-	};
 }

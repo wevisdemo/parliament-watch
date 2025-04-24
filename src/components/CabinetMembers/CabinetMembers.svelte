@@ -1,9 +1,9 @@
 <script lang="ts">
-	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
-	import type { MainMember } from '../../routes/assemblies/[id]/+page.server';
+	import type { ComponentProps } from 'svelte';
 	import CabinetProfile from './CabinetProfile.svelte';
 	import MinistryGroup from './MinistryGroup.svelte';
-	export let members: MainMember[] = [];
+
+	export let members: { assemblyRole: string; profile: ComponentProps<CabinetProfile> }[] = [];
 
 	$: ministries = Array.from(
 		new Set(
@@ -35,28 +35,14 @@
 		<div class="flex flex-col items-center gap-[8px] md:gap-[16px]">
 			<p class="fluid-heading-03">นายกรัฐมนตรี</p>
 			{#if primeMinister}
-				<CabinetProfile
-					id={primeMinister.politician.id}
-					firstname={primeMinister.politician.firstname}
-					lastname={primeMinister.politician.lastname}
-					avatar={primeMinister.politician.avatar}
-					party={primeMinister.party}
-					imgSize={80}
-					partySize={32}
-				/>
+				<CabinetProfile {...primeMinister.profile} imgSize={80} partySize={32} />
 			{/if}
 		</div>
 		<div class="flex flex-col items-center gap-[8px] md:gap-[16px]">
 			<p class="fluid-heading-03">รองนายกรัฐมนตรี</p>
 			<div class="flex flex-wrap justify-evenly gap-[2px]">
-				{#each deputyPrimeMinisterGroup as deputyPrimeMinister}
-					<CabinetProfile
-						id={deputyPrimeMinister.politician.id}
-						firstname={deputyPrimeMinister.politician.firstname}
-						lastname={deputyPrimeMinister.politician.lastname}
-						avatar={deputyPrimeMinister.politician.avatar}
-						party={deputyPrimeMinister.party}
-					/>
+				{#each deputyPrimeMinisterGroup as { profile }}
+					<CabinetProfile {...profile} />
 				{/each}
 			</div>
 		</div>

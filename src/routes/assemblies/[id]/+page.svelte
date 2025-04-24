@@ -6,7 +6,6 @@
 	import Summary from '$components/Assemblies/Summary.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
-	import { AssemblyName } from '$models/assembly.js';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 	import LatestBills from '$components/Assemblies/LatestBills.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
@@ -37,10 +36,18 @@
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block">นักการเมือง</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
-			>{assembly.name} ชุดที่ {assembly.term}</BreadcrumbItem
+			>{assembly.name}</BreadcrumbItem
 		>
 	</Breadcrumb>
-	<Header {assembly} {availableAssemblies} />
+	<Header
+		id={assembly.id}
+		name={assembly.name.split(' ')[0]}
+		term={assembly.term ?? 0}
+		startedAt={assembly.founding_date ? new Date(assembly.founding_date) : new Date()}
+		endedAt={assembly.dissolution_date ? new Date(assembly.dissolution_date) : undefined}
+		description={assembly.description}
+		{availableAssemblies}
+	/>
 
 	<NavigationTab
 		tabs={[
@@ -57,9 +64,9 @@
 			<Summary
 				assemblyId={assembly.id}
 				{summary}
-				houseLevel={assembly.name === AssemblyName.Representatives
+				houseLevel={assembly.classification === 'HOUSE_OF_REPRESENTATIVE'
 					? 'lower'
-					: assembly.name === AssemblyName.Cabinet
+					: assembly.classification === 'CABINET'
 						? 'cabinet'
 						: 'upper'}
 			/>
@@ -98,7 +105,7 @@
 			</Button>
 		</section>
 	{/if}
-	{#if latestBills?.length}
+	{#if latestBills.length}
 		<section id="latest-bills" class="py-8">
 			<div class="flex flex-col items-start md:flex-row md:items-center md:justify-between">
 				<div class="flex items-center gap-4 py-4">
@@ -124,7 +131,7 @@
 		</section>
 	{/if}
 
-	{#if latestVotes?.length}
+	{#if latestVotes.length}
 		<section id="latest-votes">
 			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
 		</section>

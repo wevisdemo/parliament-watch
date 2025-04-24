@@ -49,7 +49,7 @@
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ label: 'นักการเมือง' },
-		{ url: `/assemblies/${assembly.id}`, label: `${assembly.name} ชุดที่ ${assembly.term}` },
+		{ url: `/assemblies/${assembly.id}`, label: assembly.name },
 		{ label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
@@ -66,7 +66,12 @@
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >
-	<VotesHeader {assembly} {availableAssemblies} />
+	<VotesHeader
+		name={assembly.name}
+		term={assembly.term ?? 0}
+		startedYear={assembly.founding_date ? new Date(assembly.founding_date) : new Date()}
+		{availableAssemblies}
+	/>
 
 	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
 		{#if cellKey === 'date'}

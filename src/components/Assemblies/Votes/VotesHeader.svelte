@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { AssemblySummary } from '../../../routes/assemblies/[id]/votes/+page.server';
 	import AssemblyIdRunner, {
 		type AvailableAssembly
 	} from '$components/Assemblies/AssemblyIdRunner.svelte';
 
-	export let assembly: AssemblySummary;
+	export let name: string;
+	export let term: number;
+	export let startedYear: Date;
 	export let availableAssemblies: AvailableAssembly[];
 </script>
 
@@ -13,14 +14,8 @@
 >
 	<div class="flex w-full max-w-[900px] items-center">
 		<div class="flex flex-col md:flex-row">
-			<h2 class="fluid-heading-04">{assembly.name}</h2>
-			<AssemblyIdRunner
-				name={assembly.name}
-				term={assembly.term}
-				startedYear={assembly.startedAt}
-				{availableAssemblies}
-				postfix="votes"
-			/>
+			<h2 class="fluid-heading-04">{name}</h2>
+			<AssemblyIdRunner {term} {startedYear} {availableAssemblies} linkPostfix="votes" />
 		</div>
 	</div>
 </div>

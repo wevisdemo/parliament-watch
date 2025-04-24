@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { AssemblyMember } from '$lib/datasheets/assembly-member';
 	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 	import CabinetChart from './CabinetChart.svelte';
 	import LowerHouseSummary from './LowerHouseSummary.svelte';
@@ -87,22 +86,28 @@
 		const res =
 			cabinets?.parties
 				?.map((party) => {
-					let membersFilter: AssemblyMember[] = [];
-					if (['นายกรัฐมนตรี', 'รองนายกรัฐมนตรี'].includes(groupName)) {
-						membersFilter =
-							party.members?.filter((cabinet) => cabinet.assemblyRole?.role === groupName) || [];
-					} else if (groupName === 'รัฐมนตรี') {
-						membersFilter =
-							party.members?.filter(
-								(cabinet) =>
-									cabinet.assemblyRole?.role.includes('รัฐมนตรีว่าการ') ||
-									cabinet.assemblyRole?.role.includes('รัฐมนตรีประจำสำนักนายกรัฐมนตรี')
-							) || [];
-					} else {
-						membersFilter =
-							party.members?.filter((cabinet) => cabinet.assemblyRole?.role.includes(groupName)) ||
-							[];
-					}
+					const membersFilter =
+						party.members?.filter(({ memberships }) => {
+							const role = memberships.find(
+								(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+							)?.posts[0].role;
+
+							if (!role) return [];
+
+							switch (groupName) {
+								case 'นายกรัฐมนตรี':
+								case 'รองนายกรัฐมนตรี':
+									return role === groupName;
+								case 'รัฐมนตรี':
+									return (
+										role.includes('รัฐมนตรีว่าการ') ||
+										role.includes('รัฐมนตรีประจำสำนักนายกรัฐมนตรี')
+									);
+								default:
+									return role.includes(groupName);
+							}
+						}) || [];
+
 					return {
 						...party,
 						members: membersFilter,
