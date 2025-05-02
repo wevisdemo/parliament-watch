@@ -1,11 +1,12 @@
-import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
+import type StatCard from '$components/Index/StatCard.svelte';
+import type { ComponentProps } from 'svelte';
 
 export const OUT_FILE = 'politician-ranking.json';
 export const GITHUB_PAGE_URL = 'https://wevisdemo.github.io/parliament-watch/';
 
 export interface ExternalPoliticianRanking {
-	politicianWithMostWikipediaVisit: Omit<HighlightedPolitician, 'reason'>;
-	politicianWithMostGun: Omit<HighlightedPolitician, 'reason'>;
+	politicianWithMostWikipediaVisit: Omit<ComponentProps<StatCard>, 'reason'>;
+	politicianWithMostGun: Omit<ComponentProps<StatCard>, 'reason'>;
 	updatedAt: Date;
 }
 

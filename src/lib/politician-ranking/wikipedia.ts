@@ -1,26 +1,25 @@
-import type { Politician } from '$models/politician';
-import { movingForwardPolitician } from '../../mocks/data/politician';
 import dayjs from 'dayjs';
 
-export interface PoliticianResult {
-	politician: Politician;
+interface PoliticianInput {
+	id: string;
+	firstname: string;
+	lastname: string;
+}
+interface PoliticianResult extends PoliticianInput {
 	value: number;
 }
 
-let wikiResult: PoliticianResult | undefined = undefined;
+let wikiResult: PoliticianResult;
 
-export async function getPoliticianWithMostViewLastMonth(politicians: Politician[]) {
+export async function getPoliticianWithMostViewLastMonth(politicians: PoliticianInput[]) {
 	if (!wikiResult) {
 		wikiResult = await _getPoliticianWithMostViewLastMonth(politicians);
 	}
 	return wikiResult;
 }
 
-export async function _getPoliticianWithMostViewLastMonth(politicians: Politician[]) {
-	let result: PoliticianResult = {
-		politician: movingForwardPolitician,
-		value: 0
-	};
+export async function _getPoliticianWithMostViewLastMonth(politicians: PoliticianInput[]) {
+	let result: PoliticianResult | undefined = undefined;
 
 	for (const politician of politicians) {
 		const { firstname, lastname } = politician;
@@ -32,15 +31,17 @@ export async function _getPoliticianWithMostViewLastMonth(politicians: Politicia
 			if (data?.items?.[0]?.views) {
 				const { views } = data.items[0];
 
-				if (views > result.value) {
+				if (!result || views > result.value) {
 					result = {
-						politician: politician,
+						...politician,
 						value: views
 					};
 				}
 			}
 		}
 	}
+
+	if (!result) throw 'Could not find any politicians page on wikipedia';
 
 	return result;
 }

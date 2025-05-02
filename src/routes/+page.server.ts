@@ -4,8 +4,7 @@ import {
 	type BillByCategoryAndStatus,
 	type BillCategoryWithStatus
 } from '$components/Index/BillContent.svelte';
-import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
-import { HighlightedReason } from '$components/Index/StatCard.svelte';
+import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import {
 	fetchAssemblies,
@@ -15,9 +14,9 @@ import {
 	fetchVotes,
 	fetchVotings
 } from '$lib/datasheets';
-import { safeFind } from '$lib/datasheets/processor.js';
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
 import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
+import { graphql } from '$lib/politigraph';
 import { BillStatus } from '$models/bill';
 import { PromiseStatus } from '$models/promise';
 import type { PromisesByStatus } from './promises/+page.server';
@@ -28,18 +27,21 @@ const MAX_LATEST_VOTE = 5;
 const MAX_ENACTED_BILL = 10;
 const MAX_PROMISES_SAMPLE = 3;
 
+const CHUAN_ID = 'ชวน-หลีกภัย';
+const BANYAT_ID = 'บัญญัติ-บรรทัดฐาน';
+
 enum PoliticialPosition {
 	MP = 'สส.',
 	Senate = 'สว.',
 	Cabinet = 'รัฐมนตรี'
 }
 
-interface LongestServedInPoliticalPositionsPolitician extends HighlightedPolitician {
+interface LongestServedInPoliticalPositionsPolitician extends ComponentProps<StatCard> {
 	position: PoliticialPosition;
 	year: number;
 }
 
-interface MostFrequentlyServedAsMinisterPolitician extends HighlightedPolitician {
+interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCard> {
 	cabinetTerms: number[];
 }
 
@@ -50,34 +52,90 @@ export async function load() {
 	const promises = await fetchPromises();
 	const assembles = await fetchAssemblies();
 
-	const activePoliticians = politicians.filter(({ isActive }) => isActive);
+	const highlightPoliticians = (
+		await graphql.query({
+			people: {
+				__args: {
+					where: {
+						id_IN: [CHUAN_ID, BANYAT_ID]
+					}
+				},
+				id: true,
+				firstname: true,
+				lastname: true,
+				image: true,
+				memberships: {
+					__args: {
+						where: {
+							end_date_EQ: null,
+							posts_ALL: {
+								organizations_ALL: {
+									classification_IN: [
+										'CABINET',
+										'HOUSE_OF_REPRESENTATIVE',
+										'HOUSE_OF_SENATE',
+										'POLITICAL_PARTY'
+									]
+								}
+							}
+						}
+					},
+					posts: {
+						role: true,
+						organizations: {
+							classification: true,
+							name: true,
+							image: true
+						}
+					}
+				}
+			}
+		})
+	).people.map(({ image, memberships, ...rest }) => {
+		const assembly = memberships.find(
+			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+		);
+		const party = memberships.find(
+			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+		);
 
-	const chuanLeekpai = safeFind(activePoliticians, (p) => p.id === 'ชวน-หลีกภัย');
-	const banyatBantadtan = safeFind(activePoliticians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
+		return {
+			...rest,
+			avatar: image ?? '',
+			assemblyRole: assembly?.posts[0].role ?? '',
+			partyImage: party?.posts[0].organizations[0].name ?? '',
+			partyLogo: party?.posts[0].organizations[0].image ?? ''
+		};
+	});
 
-	const highlightedPoliticians: HighlightedPolitician[] = [
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const chuanLeekpai = highlightPoliticians.find((p) => p.id === CHUAN_ID)!;
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const banyatBantadtan = highlightPoliticians.find((p) => p.id === BANYAT_ID)!;
+
+	const highlightedPoliticians: ComponentProps<StatCard>[] = [
 		{
 			reason: HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,
-			politician: chuanLeekpai,
+			...chuanLeekpai,
 			position: PoliticialPosition.MP,
 			year: 2512
 		} as LongestServedInPoliticalPositionsPolitician,
 		{
 			reason: HighlightedReason.MostFrequentlyElectedInConstituency,
 			value: 12,
-			politician: banyatBantadtan
+			...banyatBantadtan
 		},
 		{
 			reason: HighlightedReason.MostFrequentlyServedAsMinister,
 			value: 5,
-			politician: chuanLeekpai,
+			...chuanLeekpai,
 			cabinetTerms: [38, 42, 43, 45, 53]
 		} as MostFrequentlyServedAsMinisterPolitician,
 		{
 			reason: HighlightedReason.MostDiverseServedAsMinister,
 			value: 6,
-			politician: chuanLeekpai
+			...chuanLeekpai
 		}
 	];
 
