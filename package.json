@@ -16,7 +16,7 @@
 		"story:dev": "histoire dev",
 		"story:build": "HISTOIRE_BASE=/stories/ histoire build",
 		"story:preview": "histoire preview",
-		"gen:graphql": "genql --endpoint https://politigraph.wevis.info/graphql --output src/lib/genql -S Date:string -S DateTime:string",
+		"gen:graphql": "genql --endpoint https://politigraph.wevis.info/graphql --output src/lib/politigraph/genql -S Date:string -S DateTime:string",
 		"gen:component": "hygen component new",
 		"test": "vitest",
 		"update:politician-ranking": "tsx src/lib/politician-ranking/run-update-job.ts"

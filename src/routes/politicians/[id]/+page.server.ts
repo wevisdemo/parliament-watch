@@ -2,8 +2,8 @@ import type {
 	VotingAbsentStats,
 	VotingHistory
 } from '$components/politicians/PoliticianVoteSummary.svelte';
-import type { Vote, VoteEvent } from '$lib/genql/schema.js';
-import { graphql } from '$lib/politigraph.js';
+import { graphql } from '$lib/politigraph';
+import type { Vote, VoteEvent } from '$lib/politigraph/genql/schema';
 import { createSeo } from '$lib/seo';
 import { DefaultVoteOption } from '$models/voting';
 import { error } from '@sveltejs/kit';

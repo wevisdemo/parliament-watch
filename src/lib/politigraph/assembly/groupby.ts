@@ -1,4 +1,4 @@
-import { enumGender } from '$lib/genql';
+import { enumGender } from '$lib/politigraph/genql';
 import { provinceRegionMap } from '$lib/thai-province';
 import { GroupByOption, AssemblyPartyGroup } from '$models/assembly';
 import type { AssemblyMember } from './member';

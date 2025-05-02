@@ -1,7 +1,7 @@
 import type MainMembers from '$components/Assemblies/MainMembers.svelte';
 import type CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
-import type { Organization } from '$lib/genql';
 import { graphql } from '$lib/politigraph';
+import type { Organization } from '$lib/politigraph/genql';
 import { noParty } from './groupby';
 import type { ComponentProps } from 'svelte';
 

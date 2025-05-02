@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 	import RoleChangeItem from './RoleChangeItem.svelte';
-	import type { RoleChange } from '$lib/assembly/change';
+	import type { RoleChange } from '$lib/politigraph/assembly/change';
 
 	export let changeData: RoleChange[];
 	export let selectedDate: Date | undefined;

@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph.js';
+import { graphql } from '$lib/politigraph';
 import { GroupByOption } from '$models/assembly.js';
 import { error, redirect } from '@sveltejs/kit';
 
