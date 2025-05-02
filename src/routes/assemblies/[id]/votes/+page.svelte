@@ -4,10 +4,11 @@
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import VotesHeader from '$components/Assemblies/Votes/VotesHeader.svelte';
+	import { NotebookReference } from 'carbon-icons-svelte';
 
 	export let data;
 
-	$: ({ availableAssemblies, assembly, votes, filterOptions } = data);
+	$: ({ availableAssemblies, assembly, voteEvents, filterOptions } = data);
 
 	$: checkboxFilterList = [
 		{
@@ -27,20 +28,17 @@
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votes
-					.filter((vote) => {
+			: voteEvents
+					.filter(({ nickname, title, result }) => {
 						const search = searchQuery.trim();
-						if (search && !vote.nickname.includes(search)) return;
-						const { filterResult } = selectedCheckboxValue;
-						return filterResult.includes(vote.result);
+						if (search && !title.includes(search) && !(nickname && nickname.includes(search)))
+							return false;
+						return selectedCheckboxValue.filterResult.includes(result ?? '');
 					})
-					.map((vote, index) => ({
-						id: `vote-${index}`,
-						url: vote.id,
-						date: vote.date,
-						nickname: vote.nickname,
-						result: vote.result,
-						files: vote.files
+					.map(({ start_date, nickname, title, ...rest }) => ({
+						date: start_date,
+						name: nickname ?? title,
+						...rest
 					}));
 </script>
 
@@ -56,9 +54,9 @@
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
-		{ key: 'nickname', value: 'ชื่อมติ' },
+		{ key: 'name', value: 'ชื่อมติ' },
 		{ key: 'result', value: 'ผลลัพท์' },
-		{ key: 'files', value: 'เอกสาร' }
+		{ key: 'links', value: 'ลิงก์' }
 	]}
 	downloadLinks={[
 		{ label: 'ประวัติการลงมติ', url: `/files/download/assemblies/${assembly.id}-votings.csv` }
@@ -76,23 +74,23 @@
 	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
 		{#if cellKey === 'date'}
 			<span class="body-01 text-gray-60"
-				>{cellValue.toLocaleDateString('th-TH', {
+				>{new Date(cellValue).toLocaleDateString('th-TH', {
 					day: 'numeric',
 					month: 'short',
 					year: '2-digit'
 				})}</span
 			>
-		{:else if cellKey === 'nickname'}
-			<a href="/votings/{row.url}" class="body-01 text-gray-100 underline">{cellValue}</a>
+		{:else if cellKey === 'name'}
+			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline">{cellValue}</a>
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
-		{:else if cellKey === 'files'}
-			{@const files = cellValue}
-			{#if files.length > 0}
-				<div class="flex flex-wrap gap-2">
-					{#each files as file (file)}
-						<a href={file.url} title={file.label} target="_blank" rel="noopener noreferrer"
-							><DocumentPdf /><span class="sr-only">{file.label}</span></a
+		{:else if cellKey === 'links'}
+			{#if cellValue.length > 0}
+				<div class="flex flex-row gap-2">
+					{#each cellValue as { note, url } (note)}
+						<a href={url} target="_blank" rel="noopener noreferrer" title={note}
+							><svelte:component this={url.includes('.pdf') ? DocumentPdf : NotebookReference}
+							></svelte:component><span class="sr-only">{note}</span></a
 						>
 					{/each}
 				</div>

@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { DefaultVotingResult } from '$models/voting';
+	import { DefaultVotingResult, RESULT_CONFIRMATION_PENDING } from '$models/voting';
 	import { twMerge } from 'tailwind-merge';
-
-	const RESULT_CONFIRMATION_PENDING = 'รอตรวจสอบ';
 
 	export let result: DefaultVotingResult | string | null;
 	export let isLarge = false;
