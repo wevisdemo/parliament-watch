@@ -1,23 +1,44 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { fetchAssemblies, fetchFromIdOr404, fetchVotings } from '$lib/datasheets';
+import { graphql } from '$lib/politigraph';
+import { error } from '@sveltejs/kit';
 
 export const prerender = true;
 
 export async function GET({ params }) {
-	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
+	const {
+		organizations: [assembly]
+	} = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				}
+			},
+			events: {
+				on_VoteEvent: {
+					start_date: true,
+					end_date: true,
+					nickname: true,
+					title: true,
+					result: true
+				}
+			}
+		}
+	});
 
-	const votes = (await fetchVotings())
-		.filter(({ participatedAssemblies }) =>
-			participatedAssemblies.some((pa) => assembly.id === pa.id)
-		)
-		.sort((a, z) => z.date.getTime() - a.date.getTime());
+	if (!assembly) {
+		error(404);
+	}
 
 	return createCsvFileResponse(
-		votes.map(({ date, nickname, title, result }) => ({
-			date,
-			nickname,
-			title,
-			result
-		}))
+		assembly.events
+			.filter((event) => 'title' in event)
+			.map(({ start_date, end_date, nickname, title, result }) => ({
+				start_date,
+				end_date,
+				nickname,
+				title,
+				result
+			}))
 	);
 }

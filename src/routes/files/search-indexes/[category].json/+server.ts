@@ -1,4 +1,4 @@
-import { fetchVotings, fetchBills, fetchPromises } from '$lib/datasheets/index.js';
+import { fetchBills, fetchPromises } from '$lib/datasheets';
 import { graphql } from '$lib/politigraph';
 import { BillProposerType } from '$models/bill';
 import type { AssemblyRoleHistory, PartyRoleHistory } from '$models/politician';
@@ -121,13 +121,25 @@ export async function GET({ params }) {
 		}
 
 		case SearchIndexCategory.Votings: {
-			const indexes: SearchIndexes['votings'] = (await fetchVotings())
-				.map(({ id, nickname, result }) => ({
+			const { voteEvents } = await graphql.query({
+				voteEvents: {
+					__args: {
+						sort: [{ start_date: 'ASC' }]
+					},
+					id: true,
+					title: true,
+					nickname: true,
+					result: true
+				}
+			});
+
+			const indexes: SearchIndexes['votings'] = voteEvents.map(
+				({ id, title, nickname, result }) => ({
 					id,
-					name: nickname,
-					result: result
-				}))
-				.sort((a, z) => a.id.localeCompare(z.id));
+					name: nickname ?? title,
+					result: result ? result : undefined
+				})
+			);
 
 			return createJSONFileResponse(indexes);
 		}
