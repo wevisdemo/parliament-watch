@@ -1,14 +1,7 @@
-import { fetchVotings } from '$lib/datasheets/index.js';
 import { graphql } from '$lib/politigraph';
-import { createSeo } from '$lib/seo.js';
-import { DefaultVotingResult, type Voting } from '$models/voting.js';
+import { createSeo } from '$lib/seo';
+import { DefaultVotingResult, RESULT_CONFIRMATION_PENDING } from '$models/voting';
 import { error } from '@sveltejs/kit';
-
-export type VoteSummary = Pick<Voting, 'id' | 'nickname' | 'result' | 'date' | 'files'>;
-
-export interface FilterOptions {
-	result: string[];
-}
 
 export async function load({ params }) {
 	const {
@@ -32,7 +25,7 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const { organizations: availableAssemblies } = await graphql.query({
+	const { organizations: availableAssemblies, voteEvents } = await graphql.query({
 		organizations: {
 			__args: {
 				where: {
@@ -41,23 +34,50 @@ export async function load({ params }) {
 			},
 			id: true,
 			term: true
+		},
+		voteEvents: {
+			__args: {
+				where: {
+					organizations_SOME: {
+						id_EQ: assembly.id
+					}
+				},
+				sort: [
+					{
+						start_date: 'DESC'
+					}
+				]
+			},
+			id: true,
+			title: true,
+			nickname: true,
+			result: true,
+			start_date: true,
+			links: {
+				__args: {
+					sort: [{ note: 'ASC' }]
+				},
+				__scalar: true
+			}
 		}
 	});
 
-	const votes: VoteSummary[] = (await fetchVotings())
-		.filter(({ participatedAssemblies }) =>
-			participatedAssemblies.some((pa) => assembly.id === pa.id)
-		)
-		.sort((a, z) => z.date.getTime() - a.date.getTime());
+	const eventsWithNotNullResult = voteEvents.map((event) => ({
+		...event,
+		result: event.result ?? RESULT_CONFIRMATION_PENDING
+	}));
 
-	const filterOptions: FilterOptions = {
-		result: [DefaultVotingResult.Passed, DefaultVotingResult.Failed]
+	const filterOptions = {
+		result: eventsWithNotNullResult.reduce<string[]>(
+			(uniques, { result }) => (uniques.includes(result) ? uniques : [...uniques, result]),
+			[DefaultVotingResult.Passed, DefaultVotingResult.Failed]
+		)
 	};
 
 	return {
 		availableAssemblies,
 		assembly,
-		votes,
+		voteEvents: eventsWithNotNullResult,
 		filterOptions,
 		seo: createSeo({
 			title: `การลงมติ ${assembly.name}`

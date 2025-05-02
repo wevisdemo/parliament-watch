@@ -41,3 +41,5 @@ export const defaultVoteOptions: string[] = [
 	DefaultVoteOption.Abstain,
 	DefaultVoteOption.Absent
 ];
+
+export const RESULT_CONFIRMATION_PENDING = 'รอตรวจสอบ';

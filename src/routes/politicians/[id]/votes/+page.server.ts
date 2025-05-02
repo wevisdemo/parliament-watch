@@ -1,22 +1,7 @@
-import { fetchVotes, fetchVotings } from '$lib/datasheets';
-import { safeFind } from '$lib/datasheets/processor.js';
-import { getSortedUniqueVoteOptions } from '$lib/datasheets/voting.js';
 import { graphql } from '$lib/politigraph';
-import { createSeo } from '$lib/seo.js';
-import type { Assembly } from '$models/assembly';
-import { DefaultVoteOption, type Voting } from '$models/voting.js';
+import { createSeo } from '$lib/seo';
+import { defaultVoteOptions } from '$models/voting';
 import { error } from '@sveltejs/kit';
-
-interface VoteSummary
-	extends Pick<Voting, 'id' | 'nickname' | 'result' | 'date' | 'files' | 'participatedAssemblies'> {
-	voteOption: string;
-	// isVoteAlignWithPartyMajority: boolean;
-}
-
-interface FilterOptions {
-	assemblies: Assembly[];
-	voteOptions: string[];
-}
 
 export async function load({ params }) {
 	const {
@@ -37,30 +22,53 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const votings = await fetchVotings();
-	const allVotes = await fetchVotes();
+	const { votes } = await graphql.query({
+		votes: {
+			__args: {
+				where: {
+					voters_ALL: {
+						id_EQ: politician.id
+					},
+					vote_events_ALL: {
+						publish_status_EQ: 'PUBLISHED',
+						organizations_ALL: {
+							classification_IN: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
+						}
+					}
+				}
+			},
+			vote_events: {
+				id: true,
+				title: true,
+				nickname: true,
+				result: true,
+				start_date: true,
+				links: {
+					__args: {
+						sort: [{ note: 'ASC' }]
+					},
+					__scalar: true
+				},
+				organizations: {
+					id: true,
+					name: true,
+					founding_date: true,
+					dissolution_date: true
+				}
+			},
+			option: true
+		}
+	});
 
-	const votes: VoteSummary[] = allVotes
-		.filter(({ politicianId }) => politicianId === politician.id)
-		.map(({ votingId, voteOption }) => {
-			try {
-				const voting = safeFind(votings, ({ id }) => id === votingId);
-
-				return {
-					...voting,
-					voteOption: voteOption as DefaultVoteOption
-					// TODO: calculate isVoteAlignWithPartyMajority
-					// isVoteAlignWithPartyMajority: true
-				};
-			} catch (e) {
-				throw `Could not find voting id ${votingId}`;
-			}
-		})
-		.sort((a, z) => z.date.getTime() - a.date.getTime());
-
-	const filterOptions: FilterOptions = {
-		assemblies: [...new Set(votes.flatMap(({ participatedAssemblies }) => participatedAssemblies))],
-		voteOptions: getSortedUniqueVoteOptions(votes)
+	const filterOptions = {
+		assemblies: votes
+			.flatMap((v) => v.vote_events[0].organizations)
+			.reduce<(typeof votes)[number]['vote_events'][number]['organizations']>(
+				(uniques, org) => (uniques.some((u) => u.id === org.id) ? uniques : [...uniques, org]),
+				[]
+			)
+			.sort((a, z) => a.name.localeCompare(z.name)),
+		voteOptions: defaultVoteOptions
 	};
 
 	return {
