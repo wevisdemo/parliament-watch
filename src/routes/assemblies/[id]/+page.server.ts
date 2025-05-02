@@ -1,8 +1,5 @@
 import { getSenateColorByTitle } from '$components/Assemblies/shared';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import { getRoleChanges } from '$lib/assembly/change';
-import { getMemberGroup, noParty } from '$lib/assembly/groupby';
-import { queryAssemblyMembers, parseMainMember, type AssemblyMember } from '$lib/assembly/member';
 import {
 	fetchAssemblies,
 	fetchBills,
@@ -13,6 +10,13 @@ import {
 import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
 import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
 import { graphql } from '$lib/politigraph';
+import { getRoleChanges } from '$lib/politigraph/assembly/change';
+import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
+import {
+	queryAssemblyMembers,
+	parseMainMember,
+	type AssemblyMember
+} from '$lib/politigraph/assembly/member';
 import { createSeo } from '$lib/seo';
 import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';

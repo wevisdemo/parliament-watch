@@ -1,5 +1,5 @@
 import { fetchVotings, fetchBills, fetchPromises } from '$lib/datasheets/index.js';
-import { graphql } from '$lib/politigraph.js';
+import { graphql } from '$lib/politigraph';
 import { BillProposerType } from '$models/bill';
 import type { AssemblyRoleHistory, PartyRoleHistory } from '$models/politician';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';

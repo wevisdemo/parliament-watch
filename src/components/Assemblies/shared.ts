@@ -1,4 +1,4 @@
-import type { AssemblyMember } from '$lib/assembly/member';
+import type { AssemblyMember } from '$lib/politigraph/assembly/member';
 import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 
 export interface PartySelected {

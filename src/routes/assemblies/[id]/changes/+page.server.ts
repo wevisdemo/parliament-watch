@@ -1,6 +1,6 @@
-import { getRoleChanges } from '$lib/assembly/change';
-import { queryAssemblyMembers, parseMainMember } from '$lib/assembly/member';
 import { graphql } from '$lib/politigraph';
+import { getRoleChanges } from '$lib/politigraph/assembly/change';
+import { queryAssemblyMembers, parseMainMember } from '$lib/politigraph/assembly/member';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {

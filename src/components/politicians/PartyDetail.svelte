@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Membership, Post } from '$lib/genql';
+	import type { Membership, Post } from '$lib/politigraph/genql';
 	export let party: string;
 
 	export let memberships: (Pick<Membership, 'start_date' | 'end_date'> & {
