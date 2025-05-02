@@ -70,8 +70,8 @@ export async function load({ params }) {
 					voters_ALL: {
 						id_EQ: params.id
 					},
-					vote_eventsAggregate: {
-						count_GT: 0
+					vote_events_ALL: {
+						publish_status_EQ: 'PUBLISHED'
 					}
 				}
 			},
