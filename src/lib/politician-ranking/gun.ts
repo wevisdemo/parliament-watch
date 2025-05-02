@@ -1,13 +1,16 @@
-import type { Politician } from '$models/politician';
+interface PoliticianInput {
+	id: string;
+	firstname: string;
+	lastname: string;
+}
 
 let gunResult:
-	| {
-			politician: Politician;
+	| (PoliticianInput & {
 			value: number;
-	  }
+	  })
 	| undefined;
 
-export const getPoliticianWithMostGun = async (politicians: Politician[]) => {
+export const getPoliticianWithMostGun = async (politicians: PoliticianInput[]) => {
 	if (gunResult) return gunResult;
 
 	// Get latest files
@@ -73,7 +76,7 @@ export const getPoliticianWithMostGun = async (politicians: Politician[]) => {
 		);
 		if (searchResult) {
 			gunResult = {
-				politician: searchResult,
+				...searchResult,
 				value
 			};
 			break;

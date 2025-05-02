@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import StatCard, { HighlightedReason, type HighlightedPolitician } from './StatCard.svelte';
+	import StatCard, { HighlightedReason } from './StatCard.svelte';
 	import { fetchExternalPoliticianRanking } from '$lib/politician-ranking';
 	import Carousel from './Carousel.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
+	import type { ComponentProps } from 'svelte';
 
-	interface MostVisitedInWikipediaLastMonthPolitician extends HighlightedPolitician {
+	interface MostVisitedInWikipediaLastMonthPolitician extends ComponentProps<StatCard> {
 		updatedAt: Date;
 	}
 
-	export let highlightedPoliticians: HighlightedPolitician[];
+	export let highlightedPoliticians: ComponentProps<StatCard>[];
 
-	async function getExternalHighlightedPoliticians(): Promise<HighlightedPolitician[]> {
+	async function getExternalHighlightedPoliticians(): Promise<ComponentProps<StatCard>[]> {
 		const { politicianWithMostWikipediaVisit, politicianWithMostGun, updatedAt } =
 			await fetchExternalPoliticianRanking();
 
@@ -39,7 +40,7 @@
 			arrowRightClass="top-auto bottom-[75px] translate-y-1/2"
 		>
 			{#each [...highlightedPoliticians, ...externalHighlightedPoliticians] as politicianData (politicianData.reason)}
-				<StatCard class="keen-slider__slide" {politicianData} />
+				<StatCard class="keen-slider__slide" {...politicianData} />
 			{/each}
 		</Carousel>
 	{/await}
