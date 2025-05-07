@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let color: string;
+	export let option: string;
 	export let value: number;
 	export let total: number;
 
@@ -36,5 +37,5 @@
 		on:focus={show}
 		on:blur={hide}
 	/>
-	<div role="tooltip" {id} class="bx--assistive-text">{value} คน</div>
+	<div role="tooltip" {id} class="bx--assistive-text">{option} {value} คน</div>
 </span>

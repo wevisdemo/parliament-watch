@@ -1,11 +1,8 @@
-import {
-	fetchFromIdOr404,
-	fetchPoliticians,
-	fetchVotes,
-	fetchVotings
-} from '$lib/datasheets/index.js';
-import { getSortedUniqueVoteOptions, getVoteResultsByPerson } from '$lib/datasheets/voting.js';
+import { graphql } from '$lib/politigraph/index';
+import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
+import { defaultVoteOptions } from '$models/voting';
+import { error } from '@sveltejs/kit';
 
 interface FilterOptions {
 	parties: string[];
@@ -14,37 +11,55 @@ interface FilterOptions {
 }
 
 export async function load({ params }) {
-	const voting = await fetchFromIdOr404(fetchVotings, params.id);
-	const politicians = await fetchPoliticians();
+	const {
+		voteEvents: [voteEvent]
+	} = await graphql.query({
+		voteEvents: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				}
+			},
+			id: true,
+			title: true,
+			nickname: true,
+			organizations: {
+				id: true
+			},
+			start_date: true,
+			end_date: true
+		}
+	});
 
-	const votes = getVoteResultsByPerson(
-		voting,
-		(await fetchVotes()).filter(({ votingId }) => votingId === voting.id),
-		politicians
-	).map(({ id, firstname, lastname, party, ...vote }) => ({
-		id,
-		party: party?.name,
-		politician: { id, firstname, lastname },
-		...vote
-	}));
+	if (!voteEvent) {
+		error(404);
+	}
+
+	const votes = await queryPoliticiansVote(voteEvent);
 
 	const filterOptions: FilterOptions = {
-		parties: getSortedUniqueValue(votes, 'party'),
+		parties: getSortedUniqueValue(
+			votes.map((v) => v.party).filter((p) => p !== undefined),
+			'name'
+		),
 		roles: getSortedUniqueValue(votes, 'role').reverse(),
-		voteOptions: getSortedUniqueVoteOptions(votes)
+		voteOptions: defaultVoteOptions
 	};
 
 	return {
-		voting,
+		voteEvent,
 		filterOptions,
 		votes,
 		seo: createSeo({
-			title: 'ผลการลงมติรายคน ' + voting.nickname
+			title: `ผลการลงมติรายคน ${voteEvent.nickname ?? voteEvent.title}`
 		})
 	};
 }
 
-const getSortedUniqueValue = (list: { [key: string]: unknown }[], key: string): string[] =>
+const getSortedUniqueValue = <T extends { [key: string]: unknown }>(
+	list: T[],
+	key: keyof T
+): string[] =>
 	[...new Set(list.map((item) => item[key]).filter((item) => item) as string[])].sort((a, z) =>
 		a.localeCompare?.(z)
 	);
