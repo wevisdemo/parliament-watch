@@ -183,19 +183,19 @@
 	</div>
 	<svelte:fragment slot="table" let:cellKey let:cellValue>
 		{#if cellKey === 'proposedOn'}
-			<span class="body-compact-01 text-gray-60"
-				>{new Date(cellValue).toLocaleString('th-TH', {
+			<div class="body-compact-01 whitespace-nowrap text-gray-60">
+				{new Date(cellValue).toLocaleString('th-TH', {
 					day: 'numeric',
 					month: 'short',
 					year: '2-digit'
-				})}</span
-			>
+				})}
+			</div>
 		{:else if cellKey === 'titleColumn'}
 			<a class="text-text-01 underline hover:text-interactive-01" href="/bills/{cellValue.id}"
 				>{cellValue.title}</a
 			>
 		{:else if cellKey === 'status'}
-			<BillStatusTag status={cellValue} isLarge />
+			<BillStatusTag class="m-0" status={cellValue} isLarge />
 		{:else if cellValue}
 			<a href={cellValue.url} title={cellValue.label} target="_blank" rel="noopener noreferrer">
 				<DocumentPdf />
