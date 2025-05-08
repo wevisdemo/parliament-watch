@@ -180,7 +180,7 @@
 	</div>
 	<svelte:fragment slot="table" let:cellKey let:cellValue>
 		{#if cellKey === 'proposedOn'}
-			<div class="body-compact-01 w-20 text-gray-60">
+			<div class="body-compact-01 whitespace-nowrap text-gray-60">
 				{new Date(cellValue).toLocaleString('th-TH', {
 					day: 'numeric',
 					month: 'short',
