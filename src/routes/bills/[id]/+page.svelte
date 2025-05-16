@@ -31,7 +31,7 @@
 		events,
 		mergedIntoBill,
 		mergedIntoBillLatestEvent,
-		relatedVotingResults
+		relatedVoteEvents
 	} = data;
 
 	const tooltipText =
@@ -321,7 +321,7 @@
 							<Progress
 								{event}
 								{tooltipText}
-								{relatedVotingResults}
+								{relatedVoteEvents}
 								{mergedIntoBill}
 								{mergedIntoBillLatestEvent}
 							/>
@@ -332,7 +332,7 @@
 							<Progress
 								event={events[events.length - 1]}
 								{tooltipText}
-								{relatedVotingResults}
+								{relatedVoteEvents}
 								{mergedIntoBill}
 								{mergedIntoBillLatestEvent}
 							/>

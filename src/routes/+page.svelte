@@ -16,7 +16,7 @@
 
 	export let data;
 
-	$: ({ highlightedPoliticians, latestVotings, billByCategoryAndStatus, promiseSummary } = data);
+	$: ({ highlightedPoliticians, latestVoteEvents, billByCategoryAndStatus, promiseSummary } = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -99,7 +99,7 @@
 	<span slot="description"
 		>ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ</span
 	>
-	<VotingContent {latestVotings} />
+	<VotingContent {latestVoteEvents} />
 </ContentSection>
 
 <ContentSection

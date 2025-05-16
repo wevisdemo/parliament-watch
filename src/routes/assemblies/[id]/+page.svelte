@@ -23,7 +23,7 @@
 		summary,
 		mainMembers,
 		changes,
-		latestVotes,
+		latestVoteEvents,
 		latestBills
 	} = data);
 </script>
@@ -55,7 +55,7 @@
 			{ id: 'members', label: 'สมาชิก', show: summary.totalMembers },
 			{ id: 'role-change', label: 'การปรับคณะรัฐมนตรี', show: changes?.length },
 			{ id: 'latest-bills', label: 'การเสนอร่างกฎหมาย', show: latestBills?.length },
-			{ id: 'latest-votes', label: 'ผลการลงมติล่าสุด', show: latestVotes?.length }
+			{ id: 'latest-votes', label: 'ผลการลงมติล่าสุด', show: latestVoteEvents?.length }
 		]}
 	/>
 
@@ -131,9 +131,9 @@
 		</section>
 	{/if}
 
-	{#if latestVotes.length}
+	{#if latestVoteEvents.length}
 		<section id="latest-votes">
-			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
+			<LatestVotes votes={latestVoteEvents} assemblyId={assembly.id} />
 		</section>
 	{/if}
 </div>

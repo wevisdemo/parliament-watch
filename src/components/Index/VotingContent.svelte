@@ -5,13 +5,13 @@
 	import Carousel from './Carousel.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
 
-	export let latestVotings: ComponentProps<VoteCard>[];
+	export let latestVoteEvents: ComponentProps<VoteCard>[];
 </script>
 
 <div>
-	<h3 class="fluid-heading-04 mb-4">{latestVotings.length} ผลการลงมติล่าสุด</h3>
+	<h3 class="fluid-heading-04 mb-4">{latestVoteEvents.length} ผลการลงมติล่าสุด</h3>
 	<Carousel>
-		{#each latestVotings as voting}
+		{#each latestVoteEvents as voting}
 			<VoteCard class="keen-slider__slide" {...voting} />
 		{/each}
 	</Carousel>

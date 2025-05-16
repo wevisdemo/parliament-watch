@@ -105,13 +105,9 @@
 				{#if isProgress && event.votingSummary}
 					<VoteCard
 						id={event.votingSummary.id}
-						nickname={event.votingSummary.title || ''}
-						date={event.votingSummary.date}
+						title={event.votingSummary.title || ''}
+						date={event.votingSummary.date.toISOString()}
 						result={event.votingSummary.result}
-						votesByGroup={highlightedVoteByGroups(
-							event.votingSummary.resultsByAffiliation,
-							event.votingSummary.result
-						)}
 						class="mb-4"
 					/>
 				{/if}
