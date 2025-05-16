@@ -1,22 +1,3 @@
-<script lang="ts" context="module">
-	export interface VotingResultSummary {
-		agreed: number;
-		total: number;
-		subResults?: {
-			affiliationName: string;
-			agreed: number;
-			total: number;
-		}[];
-	}
-
-	export interface RelatedVotingResults {
-		[id: string]: {
-			voting: Voting;
-			resultSummary: VotingResultSummary;
-		};
-	}
-</script>
-
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { type Bill } from '$models/bill';
@@ -25,11 +6,11 @@
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
-	import type { Voting } from '$models/voting';
-	import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
+	import type { ComponentProps } from 'svelte';
+
 	export let event: BillEvent;
 	export let tooltipText: string;
-	export let relatedVotingResults: RelatedVotingResults | undefined;
+	export let relatedVoteEvents: ComponentProps<VoteCard>[];
 	export let mergedIntoBill: Bill | undefined;
 	export let mergedIntoBillLatestEvent: BillEvent | undefined;
 
@@ -39,37 +20,8 @@
 		day: 'numeric'
 	};
 
-	$: voting = (() => {
-		let voting;
-		if (event.votedInVotingId) {
-			voting = relatedVotingResults?.[event.votedInVotingId]?.voting;
-		}
-		return voting ? toVoteCardVoting(voting, highlightedVoteByGroups) : undefined;
-	})();
-
-	$: highlightedVoteByGroups = (() => {
-		if (!event.votedInVotingId) return [];
-
-		const resultSummary = relatedVotingResults?.[event.votedInVotingId]?.resultSummary;
-
-		if (resultSummary?.subResults) {
-			return resultSummary?.subResults.map((subResult) => ({
-				name: subResult.affiliationName,
-				count: subResult.agreed,
-				total: subResult.total
-			}));
-		} else if (resultSummary && event.type.includes('senate')) {
-			return [
-				{
-					name: 'สว.',
-					count: resultSummary.agreed,
-					total: resultSummary.total
-				}
-			];
-		}
-
-		return [];
-	})();
+	$: voting =
+		event.votedInVotingId && relatedVoteEvents.find((v) => v.id === event.votedInVotingId);
 </script>
 
 <li class="-mt-1 mb-10 ms-4">

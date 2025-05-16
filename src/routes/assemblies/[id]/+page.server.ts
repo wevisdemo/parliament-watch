@@ -1,14 +1,6 @@
 import { getSenateColorByTitle } from '$components/Assemblies/shared';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import {
-	fetchAssemblies,
-	fetchBills,
-	fetchPoliticians,
-	fetchVotes,
-	fetchVotings
-} from '$lib/datasheets';
-import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
-import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
+import { fetchBills } from '$lib/datasheets';
 import { graphql } from '$lib/politigraph';
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
@@ -17,6 +9,9 @@ import {
 	parseMainMember,
 	type AssemblyMember
 } from '$lib/politigraph/assembly/member';
+import { countVotesInEachOption } from '$lib/politigraph/vote/group';
+import { groupVotesByAffiliation } from '$lib/politigraph/vote/group';
+import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
 import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
@@ -159,24 +154,41 @@ export async function load({ params }) {
 		groupByEducation: isSenates ? getSenateGroupWithColor(groupByEducation) : groupByEducation
 	};
 
-	const votes = isCabinet ? [] : await fetchVotes();
-	const politicians = await fetchPoliticians();
-	const assemblies = await fetchAssemblies();
+	const { voteEvents } = isCabinet
+		? { voteEvents: [] }
+		: await graphql.query({
+				voteEvents: {
+					__args: {
+						where: {
+							organizations_SOME: {
+								id_EQ: params.id
+							}
+						},
+						sort: [{ start_date: 'DESC' }],
+						limit: MAX_LATEST_VOTE
+					},
+					id: true,
+					title: true,
+					nickname: true,
+					start_date: true,
+					result: true,
+					end_date: true,
+					organizations: {
+						id: true
+					}
+				}
+			});
 
-	const latestVotes: ComponentProps<VoteCard>[] = isCabinet
-		? []
-		: (await fetchVotings())
-				.filter(({ participatedAssemblies }) =>
-					participatedAssemblies.some(({ id }) => assembly.id === id)
-				)
-				.sort((a, z) => z.date.getTime() - a.date.getTime())
-				.slice(0, MAX_LATEST_VOTE)
-				.map((voting) =>
-					toVoteCardVoting(
-						voting,
-						getHighlightedVoteByGroups(voting, votes, politicians, assemblies)
-					)
-				);
+	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
+		voteEvents.map(async (voteEvent) => ({
+			...voteEvent,
+			date: voteEvent.start_date,
+			votesByGroup: groupVotesByAffiliation(await queryPoliticiansVote(voteEvent)).map((aff) => ({
+				name: aff.name,
+				options: countVotesInEachOption(aff.votes)
+			}))
+		}))
+	);
 
 	const latestBills: BillSummary[] = isCabinet
 		? (await fetchBills())
@@ -200,7 +212,7 @@ export async function load({ params }) {
 		summary,
 		mainMembers,
 		changes,
-		latestVotes,
+		latestVoteEvents,
 		latestBills,
 		seo: createSeo({
 			title: assembly.name

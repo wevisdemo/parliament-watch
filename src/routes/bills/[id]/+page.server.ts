@@ -1,18 +1,13 @@
-import type { RelatedVotingResults } from '$components/bills/Progress.svelte';
-import {
-	fetchFromIdOr404,
-	fetchBills,
-	fetchBillEvents,
-	fetchVotings,
-	fetchVotes,
-	fetchPoliticians,
-	fetchAssemblies
-} from '$lib/datasheets';
-import { groupVoteByAffiliations } from '$lib/datasheets/voting';
+import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { fetchFromIdOr404, fetchBills, fetchBillEvents, fetchVotings } from '$lib/datasheets';
+import { graphql } from '$lib/politigraph';
+import { countVotesInEachOption } from '$lib/politigraph/vote/group';
+import { groupVotesByAffiliation } from '$lib/politigraph/vote/group';
+import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
 import type { Bill } from '$models/bill';
 import { BillEventType, type BillEvent } from '$models/bill-event';
-import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
+import type { ComponentProps } from 'svelte';
 
 export async function entries() {
 	return (await fetchBills()).map(({ id }) => ({ id }));
@@ -31,51 +26,68 @@ export async function load({ params }) {
 		);
 
 	const votings = await fetchVotings();
-	const votes = await fetchVotes();
-	const politicians = await fetchPoliticians();
-	const assemblies = await fetchAssemblies();
 
-	const relatedVotingResults = events.reduce<RelatedVotingResults>((obj, { votedInVotingId }) => {
-		if (votedInVotingId) {
-			const voting = votings.find(({ id }) => id === votedInVotingId);
+	// TODO: Remove this when we migrate bill to Politigraph
+	const legacyVotingIdAndMbisIdMap = events.reduce<Map<string, number>>((map, event) => {
+		if (event.votedInVotingId) {
+			const legacyVoting = votings.find((voting) => voting.id === event.votedInVotingId);
 
-			if (voting) {
-				const correspondedVotes = votes.filter(({ votingId }) => votingId === voting.id);
-				const highlightedVoteOption =
-					voting.result === DefaultVotingResult.Passed
-						? DefaultVoteOption.Agreed
-						: DefaultVoteOption.Disagreed;
-
-				obj[votedInVotingId] = {
-					voting,
-					resultSummary: {
-						total: correspondedVotes.length,
-						agreed: correspondedVotes.filter(
-							({ voteOption }) => voteOption === highlightedVoteOption
-						).length,
-						subResults: groupVoteByAffiliations(voting, correspondedVotes, politicians, assemblies)
-							.map(({ name, resultSummary }) => ({
-								affiliationName: name,
-								agreed: resultSummary[highlightedVoteOption] ?? 0,
-								total: Object.values(resultSummary).reduce((sum, count) => sum + count, 0)
-							}))
-							.filter(({ total }) => total > 0)
-					}
-				};
+			if (legacyVoting) {
+				map.set(legacyVoting.id, +legacyVoting.sourceUrl.split('m_id=')[1]);
 			}
 		}
 
-		return obj;
-	}, {});
+		return map;
+	}, new Map());
+
+	const { voteEvents } = await graphql.query({
+		voteEvents: {
+			__args: {
+				where: {
+					msbis_id_IN: [...legacyVotingIdAndMbisIdMap.values()]
+				}
+			},
+			id: true,
+			msbis_id: true,
+			title: true,
+			nickname: true,
+			start_date: true,
+			result: true,
+			end_date: true,
+			organizations: {
+				id: true
+			}
+		}
+	});
+
+	const relatedVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
+		voteEvents.map(async (voteEvent) => ({
+			...voteEvent,
+			date: voteEvent.start_date,
+			votesByGroup: groupVotesByAffiliation(await queryPoliticiansVote(voteEvent)).map((aff) => ({
+				name: aff.name,
+				options: countVotesInEachOption(aff.votes)
+			}))
+		}))
+	);
 
 	return {
 		bill,
 		// TODO: merged bill data is not ready yet
 		mergedBills: [] as Bill[], // Bills that got merged into this bill.
-		events,
+		// TODO: Remove this when we migrate bill to Politigraph
+		events: events.map((event) => ({
+			...event,
+			votedInVotingId: event.votedInVotingId
+				? voteEvents.find(
+						(voteEvent) =>
+							voteEvent.msbis_id === legacyVotingIdAndMbisIdMap.get(event.votedInVotingId as string)
+					)?.id
+				: undefined
+		})),
 		mergedIntoBill: undefined as Bill | undefined, // The bill that this bill got merged into. (merged event)
 		mergedIntoBillLatestEvent: undefined as BillEvent | undefined,
-		relatedVotingResults,
+		relatedVoteEvents,
 		seo: createSeo({
 			title: bill.nickname
 		})
