@@ -6,17 +6,10 @@ import {
 } from '$components/Index/BillContent.svelte';
 import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import {
-	fetchAssemblies,
-	fetchBills,
-	fetchPoliticians,
-	fetchPromises,
-	fetchVotes,
-	fetchVotings
-} from '$lib/datasheets';
-import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
-import { toVoteCardVoting } from '$lib/model-component-adapters/votecardvoting';
+import { fetchBills, fetchPromises } from '$lib/datasheets';
 import { graphql } from '$lib/politigraph';
+import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
+import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { BillStatus } from '$models/bill';
 import { PromiseStatus } from '$models/promise';
 import type { PromisesByStatus } from './promises/+page.server';
@@ -46,11 +39,8 @@ interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCa
 }
 
 export async function load() {
-	const politicians = await fetchPoliticians();
-	const votes = await fetchVotes();
 	const bills = await fetchBills();
 	const promises = await fetchPromises();
-	const assembles = await fetchAssemblies();
 
 	const highlightPoliticians = (
 		await graphql.query({
@@ -139,12 +129,34 @@ export async function load() {
 		}
 	];
 
-	const latestVotings: ComponentProps<VoteCard>[] = [...(await fetchVotings())]
-		.sort((a, z) => z.date.getTime() - a.date.getTime())
-		.slice(0, MAX_LATEST_VOTE)
-		.map((voting) =>
-			toVoteCardVoting(voting, getHighlightedVoteByGroups(voting, votes, politicians, assembles))
-		);
+	const { voteEvents } = await graphql.query({
+		voteEvents: {
+			__args: {
+				sort: [{ start_date: 'DESC' }],
+				limit: MAX_LATEST_VOTE
+			},
+			id: true,
+			title: true,
+			nickname: true,
+			start_date: true,
+			result: true,
+			end_date: true,
+			organizations: {
+				id: true
+			}
+		}
+	});
+
+	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
+		voteEvents.map(async (voteEvent) => ({
+			...voteEvent,
+			date: voteEvent.start_date,
+			votesByGroup: groupVotesByAffiliation(await queryPoliticiansVote(voteEvent)).map((aff) => ({
+				name: aff.name,
+				options: countVotesInEachOption(aff.votes)
+			}))
+		}))
+	);
 
 	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(
 		bills.flatMap(({ categories, ...rest }) =>
@@ -202,7 +214,7 @@ export async function load() {
 
 	return {
 		highlightedPoliticians,
-		latestVotings,
+		latestVoteEvents,
 		billByCategoryAndStatus,
 		promiseSummary
 	};

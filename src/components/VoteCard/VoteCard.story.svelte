@@ -1,59 +1,67 @@
 <script lang="ts">
 	import { DefaultVotingResult } from '$models/voting';
 	import type { ComponentProps } from 'svelte';
-	import VoteCard, { type HighlightedVoteByGroup } from './VoteCard.svelte';
+	import VoteCard from './VoteCard.svelte';
 	import type { Hst } from '@histoire/plugin-svelte';
 
 	export let Hst: Hst;
 
-	const passedHighlightedVoteByGroups: HighlightedVoteByGroup[] = [
+	const votesByGroup: ComponentProps<VoteCard>['votesByGroup'] = [
 		{
 			name: 'สส.ฝ่ายรัฐบาล',
-			count: 160,
-			total: 315
+			options: [
+				{
+					name: 'เห็นด้วย',
+					count: 160
+				},
+				{
+					name: 'ไม่เห็นด้วย',
+					count: 40
+				}
+			]
 		},
 		{
 			name: 'สส.ฝ่ายค้าน',
-			count: 164,
-			total: 185
+			options: [
+				{
+					name: 'เห็นด้วย',
+					count: 100
+				},
+				{
+					name: 'ไม่เห็นด้วย',
+					count: 80
+				}
+			]
 		},
 		{
 			name: 'สว.',
-			count: 200,
-			total: 250
+			options: [
+				{
+					name: 'เห็นด้วย',
+					count: 100
+				},
+				{
+					name: 'ไม่เห็นด้วย',
+					count: 120
+				}
+			]
 		}
 	];
 
 	const passedVoting: ComponentProps<VoteCard> = {
 		id: '1',
-		date: new Date('2023-08-31T17:00:00.000Z'),
-		nickname: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
+		date: '2023-08-31',
+		title: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
 		result: DefaultVotingResult.Passed,
-		votesByGroup: passedHighlightedVoteByGroups
+		votesByGroup: votesByGroup
 	};
 
 	const failedVoting: ComponentProps<VoteCard> = {
 		id: '2',
-		date: new Date('2023-09-01T17:00:00.000Z'),
-		nickname: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
+		date: '2023-09-01',
+		title: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
 		result: DefaultVotingResult.Failed,
-		votesByGroup: [
-			{
-				name: 'สส.ฝ่ายรัฐบาล',
-				count: 16,
-				total: 315
-			},
-			{
-				name: 'สส.ฝ่ายค้าน',
-				count: 4,
-				total: 185
-			},
-			{
-				name: 'สว.',
-				count: 20,
-				total: 250
-			}
-		]
+		votesByGroup: votesByGroup
 	};
 
 	const dictVoteCardProps: Record<DefaultVotingResult, ComponentProps<VoteCard>> = {
@@ -68,14 +76,10 @@
 	$: voting = dictVoteCardProps[result] || candidateVoteCardProps;
 	$: candidateVoteCardProps = {
 		id: '3',
-		/**
-		 * @author fResult <Styxmaz@gmail.com>
-		 * FIXME: Actually, it should be new Date('2023-09-02T17:00:00.000Z'), but I can't get Date object from Reactivity (Proxie)
-		 */
-		date: '2023-09-02T17:00:00.000Z' as unknown as Date,
-		nickname: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
+		date: '2023-09-02T17:00:00.000Z',
+		title: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
 		result: candidateName || 'Mr. Candidate Krub',
-		votesByGroup: passedHighlightedVoteByGroups
+		votesByGroup
 	} satisfies ComponentProps<VoteCard>;
 </script>
 

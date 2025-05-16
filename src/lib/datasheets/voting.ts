@@ -1,4 +1,3 @@
-import type { HighlightedVoteByGroup } from '$components/VoteCard/VoteCard.svelte';
 import { logger } from '$lib/logger';
 import { AssemblyName, type Assembly } from '$models/assembly';
 import type { Party } from '$models/party';
@@ -31,24 +30,6 @@ export type ResultByPerson = Pick<Politician, 'id' | 'prefix' | 'firstname' | 'l
 	party?: Party;
 	voteOption: DefaultVoteOption | CustomVoteOption | string;
 };
-
-export function getHighlightedVoteByGroups(
-	voting: Voting,
-	votes: Vote[],
-	politicians: Politician[],
-	assemblies: Assembly[]
-): HighlightedVoteByGroup[] {
-	const winningOption = getWinningOption(voting.result);
-	const participatedVotes = votes.filter(({ votingId }) => votingId === voting.id);
-
-	return groupVoteByAffiliations(voting, participatedVotes, politicians, assemblies)
-		.map(({ name, resultSummary }) => ({
-			name,
-			count: resultSummary[winningOption],
-			total: Object.values(resultSummary).reduce((total, count) => total + count, 0)
-		}))
-		.filter(({ count }) => count > 0);
-}
 
 export function groupVoteByAffiliations(
 	voting: Voting,
