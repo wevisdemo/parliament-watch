@@ -39,7 +39,7 @@ export async function load({ params }) {
 
 	const filterOptions: FilterOptions = {
 		parties: getSortedUniqueValue(
-			votes.map((v) => v.party).filter((p) => p !== undefined),
+			votes.map((v) => v.party).filter((p) => p !== undefined) as { name: string }[],
 			'name'
 		),
 		roles: getSortedUniqueValue(votes, 'role').reverse(),

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AssemblyMember } from '$lib/datasheets/assembly-member';
+	import type { AssemblyMember } from '$lib/politigraph/assembly/member';
 	import AssemblyTooltip from './AssemblyTooltip.svelte';
 	import type { CabinetSeat, TooltipProp } from './shared';
 
@@ -13,7 +13,7 @@
 
 		tooltipProp = {
 			title: name,
-			additional: member.assemblyRole.role,
+			additional: member.memberships[0].label ?? '',
 			x: event.layerX,
 			y: event.layerY + 20
 		};

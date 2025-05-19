@@ -6,8 +6,8 @@
 	export let firstname: string;
 	export let lastname: string;
 	export let avatar: string | undefined;
-	export let partyLogo: string | undefined;
-	export let partyName: string | undefined;
+	export let partyLogo: string | undefined = undefined;
+	export let partyName: string | undefined = undefined;
 	export let role: string | null = null;
 	export let isLarge = false;
 	export let isActive = true;
