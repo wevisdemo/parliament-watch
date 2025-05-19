@@ -1,5 +1,6 @@
 import { createCsvFileResponse } from '$lib/csv';
 import { graphql } from '$lib/politigraph';
+import type { VoteEvent } from '$lib/politigraph/genql/schema';
 import { error } from '@sveltejs/kit';
 
 export const prerender = true;
@@ -31,14 +32,14 @@ export async function GET({ params }) {
 	}
 
 	return createCsvFileResponse(
-		assembly.events
-			.filter((event) => 'title' in event)
-			.map(({ start_date, end_date, nickname, title, result }) => ({
+		(assembly.events.filter((event) => 'title' in event) as Partial<VoteEvent>[]).map(
+			({ start_date, end_date, nickname, title, result }) => ({
 				start_date,
 				end_date,
 				nickname,
 				title,
 				result
-			}))
+			})
+		)
 	);
 }
