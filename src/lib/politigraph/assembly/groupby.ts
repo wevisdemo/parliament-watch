@@ -85,15 +85,15 @@ export function getMemberGroup(
 				({ gender }) => (gender && sexTranslationMap.get(gender)) || UNKNOWN_LABEL
 			);
 			return isCabinet
-				? membersGroupBySex.map(([side, membersBySide]) => ({
-						name: side,
-						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+				? membersGroupBySex.map(([sex, membersBySex]) => ({
+						name: sex,
+						members: createSubgroupByPartyOrAppointmentMethod(membersBySex, isSenates).flatMap(
 							(subGroup) => subGroup.members
 						)
 					}))
-				: membersGroupBySex.map(([side, membersBySide]) => ({
-						name: side,
-						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+				: membersGroupBySex.map(([sex, membersBySex]) => ({
+						name: sex,
+						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySex, isSenates)
 					}));
 		}
 
@@ -110,15 +110,15 @@ export function getMemberGroup(
 				return '25-40 ปี';
 			});
 			return isCabinet
-				? membersGroupByAge.map(([side, membersBySide]) => ({
-						name: side,
-						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
+				? membersGroupByAge.map(([age, membersByAge]) => ({
+						name: age,
+						members: createSubgroupByPartyOrAppointmentMethod(membersByAge, isSenates).flatMap(
 							(subGroup) => subGroup.members
 						)
 					}))
-				: membersGroupByAge.map(([side, membersBySide]) => ({
-						name: side,
-						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+				: membersGroupByAge.map(([age, membersByAge]) => ({
+						name: age,
+						subgroups: createSubgroupByPartyOrAppointmentMethod(membersByAge, isSenates)
 					}));
 		}
 
@@ -131,16 +131,18 @@ export function getMemberGroup(
 				if (educations.includes('ทหาร')) return 'สถาบันทหาร';
 				return 'ต่ำกว่าปริญญาตรี';
 			});
+
 			return isCabinet
-				? membersGroupByEdu.map(([side, membersBySide]) => ({
-						name: side,
-						members: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates).flatMap(
-							(subGroup) => subGroup.members
-						)
+				? membersGroupByEdu.map(([education, membersByEducation]) => ({
+						name: education,
+						members: createSubgroupByPartyOrAppointmentMethod(
+							membersByEducation,
+							isSenates
+						).flatMap((subGroup) => subGroup.members)
 					}))
-				: membersGroupByEdu.map(([side, membersBySide]) => ({
-						name: side,
-						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+				: membersGroupByEdu.map(([education, membersByEducation]) => ({
+						name: education,
+						subgroups: createSubgroupByPartyOrAppointmentMethod(membersByEducation, isSenates)
 					}));
 		}
 	}
@@ -178,7 +180,7 @@ export function createSubgroupByPartyOrAppointmentMethod(
 				members,
 				({ memberships }) =>
 					memberships.find((m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY')
-						?.posts[0].organizations[0].name
+						?.posts[0].organizations[0].name ?? UNKNOWN_LABEL
 			).map(([partyName, membersByParty]) => {
 				const { name, image } =
 					membersByParty[0].memberships.find((m) => m.posts[0].organizations[0].name === partyName)
