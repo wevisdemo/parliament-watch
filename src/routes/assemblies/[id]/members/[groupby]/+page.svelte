@@ -15,8 +15,8 @@
 	import SearchLocate from 'carbon-icons-svelte/lib/SearchLocate.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
-	import type { PoliticianSummaryGroupBy } from './+page.server.js';
-	import { GroupByOption } from '$models/assembly.js';
+	import type { PoliticianSummaryGroupBy } from './+page.server';
+	import { GroupByOption } from '$models/assembly';
 
 	export let data;
 	$: ({ assembly, groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } = data);
@@ -150,7 +150,7 @@
 											<span class="font-normal text-gray-60"
 												>({group.subgroups
 													.map((e) => e.members.length)
-													.reduce((a, c) => a + c)})</span
+													.reduce((a, c) => a + c, 0)})</span
 											>
 										{/if}
 									</span>
