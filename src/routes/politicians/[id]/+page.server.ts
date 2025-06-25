@@ -43,7 +43,12 @@ export async function load({ params }) {
 					where: {
 						posts_ALL: {
 							organizations_ALL: {
-								classification_IN: ['HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE', 'POLITICAL_PARTY']
+								classification_IN: [
+									'CABINET',
+									'HOUSE_OF_REPRESENTATIVE',
+									'HOUSE_OF_SENATE',
+									'POLITICAL_PARTY'
+								]
 							}
 						}
 					},

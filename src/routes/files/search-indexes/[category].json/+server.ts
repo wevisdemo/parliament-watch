@@ -25,6 +25,7 @@ export async function GET({ params }) {
 								posts_ALL: {
 									organizations_ALL: {
 										classification_IN: [
+											'CABINET',
 											'HOUSE_OF_REPRESENTATIVE',
 											'HOUSE_OF_SENATE',
 											'POLITICAL_PARTY'
@@ -38,7 +39,8 @@ export async function GET({ params }) {
 							organizations: {
 								classification: true,
 								name: true,
-								abbreviation: true
+								abbreviation: true,
+								term: true
 							}
 						}
 					}
@@ -50,10 +52,25 @@ export async function GET({ params }) {
 					id,
 					name: `${firstname} ${lastname}`,
 					description: memberships
-						.map(({ posts: [{ organizations }], label }) =>
-							organizations[0].classification === 'POLITICAL_PARTY'
-								? `พรรค${organizations[0].name}`
-								: `${organizations[0].abbreviation} ${label || ''}`.trim()
+						.sort((a, z) =>
+							a.posts[0].organizations[0].classification.localeCompare(
+								z.posts[0].organizations[0].classification
+							)
+						)
+						.map(
+							({
+								posts: [
+									{
+										organizations: [org]
+									}
+								],
+								label
+							}) =>
+								org.classification === 'POLITICAL_PARTY'
+									? `พรรค${org.name}`
+									: [org.abbreviation, label, org.term && `ชุดที่ ${org.term}`]
+											.filter((value) => value)
+											.join(' ')
 						)
 						.join(' | ')
 				}))
