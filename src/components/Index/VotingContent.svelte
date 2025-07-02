@@ -26,11 +26,11 @@
 		ดูการลงมติทั้งหมดของสมาชิกสภาผู้แทนราษฎร ชุดที่ 26
 	</Button>
 	<Button
-		href="/assemblies/วุฒิสภา-12/votes"
+		href="/assemblies/วุฒิสภา-13/votes"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		ดูการลงมติทั้งหมดของสมาชิกวุฒิสภา ชุดที่ 12
+		ดูการลงมติทั้งหมดของสมาชิกวุฒิสภา ชุดที่ 13
 	</Button>
 </div>

@@ -56,7 +56,7 @@
 	</Button>
 
 	<Button
-		href="/assemblies/วุฒิสภา-12"
+		href="/assemblies/วุฒิสภา-13"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
