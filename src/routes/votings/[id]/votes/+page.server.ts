@@ -1,5 +1,8 @@
 import { graphql } from '$lib/politigraph/index';
-import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
+import {
+	queryPoliticiansVote,
+	sortPoliticiansVoteByDominantGroup
+} from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
 import { defaultVoteOptions } from '$models/voting';
 import { error } from '@sveltejs/kit';
@@ -35,7 +38,7 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const votes = await queryPoliticiansVote(voteEvent);
+	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 
 	const filterOptions: FilterOptions = {
 		parties: getSortedUniqueValue(

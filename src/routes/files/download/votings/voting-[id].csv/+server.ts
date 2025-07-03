@@ -1,6 +1,9 @@
 import { createCsvFileResponse } from '$lib/csv';
 import { graphql } from '$lib/politigraph';
-import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
+import {
+	queryPoliticiansVote,
+	sortPoliticiansVoteByDominantGroup
+} from '$lib/politigraph/vote/with-politician';
 
 export const prerender = true;
 
@@ -23,7 +26,7 @@ export async function GET({ params }) {
 		}
 	});
 
-	const votes = await queryPoliticiansVote(voteEvent);
+	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 
 	return createCsvFileResponse(
 		votes.map(({ politician, role, party, option }) => ({

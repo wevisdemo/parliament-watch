@@ -1,6 +1,9 @@
 import { graphql } from '$lib/politigraph';
 import { countVotesInEachOption, groupVotesByAffiliation } from '$lib/politigraph/vote/group.js';
-import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician.js';
+import {
+	queryPoliticiansVote,
+	sortPoliticiansVoteByDominantGroup
+} from '$lib/politigraph/vote/with-politician.js';
 import { createSeo } from '$lib/seo';
 import type { Bill } from '$models/bill';
 import { defaultVoteOptions } from '$models/voting.js';
@@ -57,7 +60,7 @@ export async function load({ params }) {
 	// TODO: Not release bill yet
 	const relatedBill: Bill | null = null;
 
-	const votes = await queryPoliticiansVote(voteEvent);
+	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 
 	const results = defaultVoteOptions.map((option) => ({
 		option,

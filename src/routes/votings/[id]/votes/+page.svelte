@@ -80,7 +80,7 @@
 	tableHeader={[
 		{ key: 'politician', value: 'ชื่อ-นามสกุล' },
 		{ key: 'role', value: 'ตำแหน่ง' },
-		{ key: 'partyName', value: 'สังกัดพรรค' },
+		{ key: 'party', value: 'สังกัดพรรค' },
 		{ key: 'option', value: 'การลงมติ' }
 	]}
 	downloadSize="lg"
@@ -111,10 +111,12 @@
 			{:else}
 				<p class="body-01 text-gray-100">{cellValue.name}</p>
 			{/if}
+		{:else if cellKey === 'role'}
+			<p class="body-compact-01 text-gray-60">{cellValue ?? '-'}</p>
+		{:else if cellKey === 'party'}
+			<p class="body-compact-01 text-gray-60">{cellValue?.name ?? '-'}</p>
 		{:else if cellKey === 'option'}
 			<VotingOptionTag voteOption={cellValue} />
-		{:else}
-			<p class="body-compact-01 text-gray-60">{cellValue || '-'}</p>
 		{/if}
 	</svelte:fragment>
 </DataPage>

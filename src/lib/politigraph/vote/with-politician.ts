@@ -1,5 +1,7 @@
 import { graphql } from '..';
 
+const NO_INFO_LABEL = 'ไม่พบข้อมูล';
+
 export async function queryPoliticiansVote(voteEvent: {
 	id: string;
 	start_date: string;
@@ -89,37 +91,69 @@ export async function queryPoliticiansVote(voteEvent: {
 		posts.flatMap((p) => p.memberships.map((m) => [m.members[0].id, p.role]))
 	);
 
-	return votes
-		.map(({ id, option, voter_name, voter_party, voters: [politician] }) => {
-			const partyMembership = politician?.memberships.find(
-				(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-			);
+	return votes.map(({ id, option, voter_name, voter_party, voters: [politician] }) => {
+		const partyMembership = politician?.memberships.find(
+			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+		);
 
-			const assemblyRole = politician?.memberships.find(
-				(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
-			);
-			const party = partyMembership?.posts[0].organizations[0];
+		const assemblyRole = politician?.memberships.find(
+			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+		);
+		const party = partyMembership?.posts[0].organizations[0];
 
-			return {
-				id: id,
-				option: option,
-				politician: {
-					name: politician ? `${politician.firstname} ${politician.lastname}` : voter_name ?? '',
-					id: politician?.id
-				},
-				party: party
-					? {
-							name:
-								party.name ??
-								(voter_party?.startsWith('พรรค') ? voter_party.replace('พรรค', '') : undefined),
-							image: party.image ?? undefined,
-							side: partySideMap.get(party.id)
-						}
-					: undefined,
-				role: assemblyRole
-					? `${assemblyRole.posts[0].organizations[0].abbreviation} ${assemblyRole.label ?? ''}`.trim()
-					: 'ไม่พบข้อมูล'
-			};
-		})
-		.sort((a, z) => a.politician.name.localeCompare(z.politician.name));
+		return {
+			id: id,
+			option: option,
+			politician: {
+				name: politician ? `${politician.firstname} ${politician.lastname}` : voter_name ?? '',
+				id: politician?.id
+			},
+			party: party
+				? {
+						name:
+							party.name ??
+							(voter_party?.startsWith('พรรค') ? voter_party.replace('พรรค', '') : undefined),
+						image: party.image ?? undefined,
+						side: partySideMap.get(party.id)
+					}
+				: undefined,
+			role: assemblyRole
+				? `${assemblyRole.posts[0].organizations[0].abbreviation} ${assemblyRole.label ?? ''}`.trim()
+				: NO_INFO_LABEL
+		};
+	});
+}
+
+type VoteWithPolitician = Awaited<ReturnType<typeof queryPoliticiansVote>>[number];
+
+export function sortPoliticiansVoteByDominantGroup(votes: VoteWithPolitician[]) {
+	const groupSortScore = votes.reduce<{ [group: string]: number }>(
+		(count, vote) => {
+			const key = getGroupKey(vote);
+
+			if (key === NO_INFO_LABEL) {
+				return count;
+			}
+
+			if (count[key]) {
+				// Name localeCompare will be either -1, 0 or 1, use 10 to sort by group first
+				count[key] += 10;
+			} else {
+				count[key] = 10;
+			}
+			return count;
+		},
+		{ [NO_INFO_LABEL]: 0 }
+	);
+
+	return votes.sort(
+		(a, z) =>
+			groupSortScore[getGroupKey(z)] -
+			groupSortScore[getGroupKey(a)] +
+			a.politician.name.localeCompare(z.politician.name)
+	);
+}
+
+function getGroupKey(vote: VoteWithPolitician) {
+	return vote.party?.name ?? NO_INFO_LABEL;
 }
