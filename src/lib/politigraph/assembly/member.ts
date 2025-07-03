@@ -113,22 +113,28 @@ export async function queryAssemblyMembers({
 	return people;
 }
 
-export function parseMainMember({ id, firstname, lastname, image, memberships }: AssemblyMember) {
+export function parseMemberWithAssemblyRoles({
+	id,
+	firstname,
+	lastname,
+	image,
+	memberships
+}: AssemblyMember) {
 	const party = memberships.find(
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	)?.posts[0].organizations[0];
 
-	return {
-		profile: {
-			id,
-			firstname,
-			lastname,
-			avatar: image ? image : undefined,
-			partyName: party?.name ?? noParty.name,
-			partyLogo: party?.image ?? noParty.image
-		},
-		assemblyRole:
-			memberships.find((m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY')
-				?.posts[0].role ?? ''
-	};
+	return memberships
+		.filter((m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY')
+		.map((m) => ({
+			profile: {
+				id,
+				firstname,
+				lastname,
+				avatar: image ? image : undefined,
+				partyName: party?.name ?? noParty.name,
+				partyLogo: party?.image ?? noParty.image
+			},
+			assemblyRole: m.posts[0].role ?? ''
+		}));
 }

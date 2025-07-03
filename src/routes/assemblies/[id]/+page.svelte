@@ -21,7 +21,7 @@
 		assembly,
 		isCabinet,
 		summary,
-		mainMembers,
+		mainPositions,
 		changes,
 		latestVoteEvents,
 		latestBills
@@ -78,10 +78,10 @@
 					<span class="fluid-heading-04 ml-[16px]">สมาชิก</span>
 				</div>
 				<div class="w-full border-b-[1px] border-solid border-gray-20" />
-				<CabinetMembers members={mainMembers} />
+				<CabinetMembers members={mainPositions} />
 			{/if}
 			{#if !isCabinet}
-				<MainMembers members={mainMembers} assemblyId={assembly.id} />
+				<MainMembers members={mainPositions} assemblyId={assembly.id} />
 			{/if}
 		</section>
 	{/if}

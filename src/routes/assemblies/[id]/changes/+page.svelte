@@ -19,7 +19,7 @@
 		props?: any;
 	}
 
-	$: ({ assembly, availableAssemblies, cabinetMembers, changes } = data);
+	$: ({ assembly, availableAssemblies, cabinetPositions: cabinetMembers, changes } = data);
 
 	$: selectedDate = assembly.endedAt || new Date();
 	const handleSelectDate = (date: Date) => {

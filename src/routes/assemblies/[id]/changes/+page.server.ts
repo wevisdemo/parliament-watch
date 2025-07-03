@@ -1,6 +1,9 @@
 import { graphql } from '$lib/politigraph';
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
-import { queryAssemblyMembers, parseMainMember } from '$lib/politigraph/assembly/member';
+import {
+	queryAssemblyMembers,
+	parseMemberWithAssemblyRoles
+} from '$lib/politigraph/assembly/member';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
@@ -53,7 +56,7 @@ export async function load({ params }) {
 			endedAt: assembly.dissolution_date ? new Date(assembly.dissolution_date) : undefined
 		},
 		availableAssemblies,
-		cabinetMembers: members.map(parseMainMember),
+		cabinetPositions: members.flatMap(parseMemberWithAssemblyRoles),
 		changes
 	};
 }

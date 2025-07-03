@@ -6,7 +6,7 @@ import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
 import {
 	queryAssemblyMembers,
-	parseMainMember,
+	parseMemberWithAssemblyRoles,
 	type AssemblyMember
 } from '$lib/politigraph/assembly/member';
 import { countVotesInEachOption } from '$lib/politigraph/vote/group';
@@ -98,14 +98,14 @@ export async function load({ params }) {
 		);
 	});
 
-	const mainMembers = activeMembers
+	const mainPositions = activeMembers
 		.filter(
 			({ memberships }) =>
 				!memberships
 					.find((m) => m.posts[0].organizations[0].id === assembly.id)
 					?.posts[0].role.startsWith('สมาชิก')
 		)
-		.map(parseMainMember)
+		.flatMap(parseMemberWithAssemblyRoles)
 		.sort((a, z) => {
 			const getRoleSortingScore = (member: typeof a) =>
 				member.assemblyRole.startsWith('ประธาน')
@@ -224,7 +224,7 @@ export async function load({ params }) {
 		assembly,
 		isCabinet,
 		summary,
-		mainMembers,
+		mainPositions,
 		changes,
 		latestVoteEvents,
 		latestBills,
