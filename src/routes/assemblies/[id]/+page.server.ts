@@ -105,7 +105,21 @@ export async function load({ params }) {
 					.find((m) => m.posts[0].organizations[0].id === assembly.id)
 					?.posts[0].role.startsWith('สมาชิก')
 		)
-		.map(parseMainMember);
+		.map(parseMainMember)
+		.sort((a, z) => {
+			const getRoleSortingScore = (member: typeof a) =>
+				member.assemblyRole.startsWith('ประธาน')
+					? 20
+					: member.assemblyRole.startsWith('รองประธาน')
+						? 10
+						: 0;
+
+			return (
+				getRoleSortingScore(z) -
+				getRoleSortingScore(a) +
+				a.assemblyRole.localeCompare(z.assemblyRole)
+			);
+		});
 
 	const parseMemberGroup = (groupBy: GroupByOption) =>
 		getMemberGroup(activeMembers, groupBy, isSenates).map((group) => ({
