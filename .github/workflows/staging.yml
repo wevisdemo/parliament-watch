@@ -6,6 +6,7 @@ on:
       - '**/README.md'
       - '**/CONTRIBUTING.md'
       - '.github/workflows/production.yml'
+      - '.github/workflows/update-ranking.yml'
   workflow_dispatch:
 jobs:
   build:
