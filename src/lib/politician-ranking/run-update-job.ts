@@ -83,10 +83,10 @@ async function writePoliticianRankingFile() {
 
 		return {
 			id,
-			avatar: image ?? '',
+			avatar: image ?? '/images/politicians/_placeholder.webp',
 			assemblyRole: assembly?.posts[0].role ?? '',
-			partyImage: party?.posts[0].organizations[0].name ?? '',
-			partyLogo: party?.posts[0].organizations[0].image ?? ''
+			partyName: party?.posts[0].organizations[0].name ?? '',
+			partyLogo: party?.posts[0].organizations[0].image ?? '/images/parties/_placeholder.webp'
 		};
 	});
 
