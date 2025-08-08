@@ -30,7 +30,6 @@ export async function load({ params }) {
 						id_EQ: politician.id
 					},
 					vote_events_ALL: {
-						publish_status_EQ: 'PUBLISHED',
 						organizations_ALL: {
 							classification_IN: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
 						}

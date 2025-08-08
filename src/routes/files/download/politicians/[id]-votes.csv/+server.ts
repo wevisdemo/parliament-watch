@@ -10,9 +10,6 @@ export async function GET({ params }) {
 				where: {
 					voters_ALL: {
 						id_EQ: params.id
-					},
-					vote_events_ALL: {
-						publish_status_EQ: 'PUBLISHED'
 					}
 				}
 			},
