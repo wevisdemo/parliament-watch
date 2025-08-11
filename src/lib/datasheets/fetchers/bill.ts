@@ -33,7 +33,7 @@ export const fetchBills = withCache('Bills', async (): Promise<Bill[]> => {
 
 	return (await sheets.get('Bills', billSchema)).map((bill) => ({
 		...bill,
-		nickname: bill.nickname ?? bill.title.replace('ร่างพระราชบัญญัติ', 'ร่าง พ.ร.บ.'),
+		nickname: bill.nickname || bill.title.replace('ร่างพระราชบัญญัติ', 'ร่าง พ.ร.บ.'),
 		proposerType: bill.proposedLedByPolitician
 			? BillProposerType.Politician
 			: bill.proposedByAssembly

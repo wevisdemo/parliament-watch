@@ -65,7 +65,7 @@
 					.map(({ option, vote_events: [{ id, start_date, title, nickname, result, links }] }) => ({
 						id,
 						date: start_date,
-						name: nickname ?? title,
+						name: nickname || title,
 						option,
 						result,
 						links

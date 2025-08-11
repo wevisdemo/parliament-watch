@@ -163,7 +163,7 @@
 	>
 		<BreadcrumbItem href="/">หน้าแรก</BreadcrumbItem>
 		<BreadcrumbItem>การลงมติ</BreadcrumbItem>
-		<BreadcrumbItem>{voteEvent.nickname ?? voteEvent.title}</BreadcrumbItem>
+		<BreadcrumbItem>{voteEvent.nickname || voteEvent.title}</BreadcrumbItem>
 	</Breadcrumb>
 	<header
 		class="flex w-full flex-col gap-y-4 md:gap-y-8 {getBillStatusColor(

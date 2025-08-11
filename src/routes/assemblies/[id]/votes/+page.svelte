@@ -37,7 +37,7 @@
 					})
 					.map(({ start_date, nickname, title, ...rest }) => ({
 						date: start_date,
-						name: nickname ?? title,
+						name: nickname || title,
 						...rest
 					}));
 </script>

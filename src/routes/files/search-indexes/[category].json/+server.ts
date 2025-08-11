@@ -153,7 +153,7 @@ export async function GET({ params }) {
 			const indexes: SearchIndexes['votings'] = voteEvents.map(
 				({ id, title, nickname, result }) => ({
 					id,
-					name: nickname ?? title,
+					name: nickname || title,
 					result: result ? result : undefined
 				})
 			);

@@ -87,7 +87,7 @@ export async function load({ params }) {
 		resultsByAffiliation,
 		votes,
 		seo: createSeo({
-			title: `การลงมติ ${voteEvent.nickname ?? voteEvent.title}`
+			title: `การลงมติ ${voteEvent.nickname || voteEvent.title}`
 		})
 	};
 }

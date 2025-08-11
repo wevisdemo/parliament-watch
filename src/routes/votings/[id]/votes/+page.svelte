@@ -70,7 +70,7 @@
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ label: 'การลงมติ' },
-		{ url: `/votings/${voteEvent.id}`, label: voteEvent.nickname ?? voteEvent.title },
+		{ url: `/votings/${voteEvent.id}`, label: voteEvent.nickname || voteEvent.title },
 		{ label: 'ผลการลงมติรายคน' }
 	]}
 	searchPlaceholder="ชื่อ-นามสกุล"
@@ -96,7 +96,7 @@
 			<p class="heading-01">ผลการลงมติรายคน</p>
 			<h1 class="fluid-heading-03">
 				<a href="/votings/{voteEvent.id}" class="text-text-01 no-underline hover:text-blue-70">
-					{voteEvent.nickname ?? voteEvent.title}
+					{voteEvent.nickname || voteEvent.title}
 				</a>
 			</h1>
 			<p class="label-01 text-gray-60">หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ</p>
