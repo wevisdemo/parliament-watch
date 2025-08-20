@@ -8,19 +8,13 @@
 	import { SendAlt } from 'carbon-icons-svelte';
 	import PromiseClarificationLog from '$components/PromiseDetail/PromiseClarificationLog.svelte';
 	import { promiseStatusList } from '../../../constants/promise.js';
+	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 
 	export let data;
 
 	$: ({ promise, globalEvents } = data);
 
 	let showStatusListModal = false;
-
-	const TITLE_MAX_LENGTH = 45;
-
-	$: pageTitle =
-		promise?.statements?.[0]?.length > TITLE_MAX_LENGTH
-			? promise.statements[0].slice(0, TITLE_MAX_LENGTH) + '...'
-			: promise.statements?.[0];
 
 	$: promiseText = promiseStatusList.find((status) => status.label === promise.status)?.text;
 </script>
@@ -31,7 +25,7 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/promises">ติดตามคำสัญญา</BreadcrumbItem>
-	<BreadcrumbItem>{pageTitle}</BreadcrumbItem>
+	<BreadcrumbItem>{trimBreadcrumbTitle(promise?.statements?.[0])}</BreadcrumbItem>
 </Breadcrumb>
 {#if promise.coverImageUrl}
 	<img class="max-h-[300px] w-full object-cover" src={promise.coverImageUrl} alt="coverImageUrl" />

@@ -20,6 +20,7 @@
 	import type { Party } from '$models/party.js';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
+	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
@@ -108,7 +109,9 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/bills">ร่างกฎหมายในสภา</BreadcrumbItem>
-	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage>{bill.nickname}</BreadcrumbItem>
+	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage
+		>{trimBreadcrumbTitle(bill.nickname)}</BreadcrumbItem
+	>
 </Breadcrumb>
 
 <div class="mx-auto flex w-full max-w-[1200px] flex-col">

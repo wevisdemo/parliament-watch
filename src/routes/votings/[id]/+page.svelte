@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
@@ -19,6 +18,7 @@
 
 	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting';
 	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
+	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
 
 	export let data;
 
@@ -163,7 +163,7 @@
 	>
 		<BreadcrumbItem href="/">หน้าแรก</BreadcrumbItem>
 		<BreadcrumbItem>การลงมติ</BreadcrumbItem>
-		<BreadcrumbItem>{voteEvent.nickname || voteEvent.title}</BreadcrumbItem>
+		<BreadcrumbItem>{trimBreadcrumbTitle(voteEvent.nickname || voteEvent.title)}</BreadcrumbItem>
 	</Breadcrumb>
 	<header
 		class="flex w-full flex-col gap-y-4 md:gap-y-8 {getBillStatusColor(
