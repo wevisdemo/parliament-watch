@@ -40,10 +40,7 @@
 									...subgroup,
 									members: subgroup.members.filter((member) => {
 										return (
-											(formattedSearchQuery === '' ||
-												(member.firstname + ' ' + member.lastname).includes(
-													formattedSearchQuery
-												)) &&
+											member.name.includes(formattedSearchQuery) &&
 											((isByDistrict && member.candidateType === 'แบ่งเขต') ||
 												(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
 										);
@@ -56,8 +53,7 @@
 						...group,
 						members: group.members.filter((member) => {
 							return (
-								(formattedSearchQuery === '' ||
-									(member.firstname + ' ' + member.lastname).includes(formattedSearchQuery)) &&
+								member.name.includes(formattedSearchQuery) &&
 								((isByDistrict && member.candidateType === 'แบ่งเขต') ||
 									(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
 							);

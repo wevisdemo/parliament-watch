@@ -243,9 +243,8 @@
 						<b class="handing-02 text-text-primary">ผู้เสนอ</b>
 						<PoliticianProfile
 							{id}
-							{firstname}
-							{lastname}
 							{avatar}
+							name={`${firstname} ${lastname}`}
 							partyName={matchedPartyRoles?.party.name}
 							partyLogo={matchedPartyRoles?.party.logo}
 							role={matchedAssemblyRole?.role}

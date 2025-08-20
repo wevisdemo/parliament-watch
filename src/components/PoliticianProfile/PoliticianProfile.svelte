@@ -3,8 +3,7 @@
 	import { twMerge } from 'tailwind-merge';
 
 	export let id: string;
-	export let firstname: string;
-	export let lastname: string;
+	export let name: string;
 	export let avatar: string | undefined;
 	export let partyLogo: string | undefined = undefined;
 	export let partyName: string | undefined = undefined;
@@ -13,7 +12,6 @@
 	export let isActive = true;
 	export let showAvatar = true;
 
-	$: fullname = `${firstname} ${lastname}`;
 	$: imgSize = isLarge ? 64 : 40;
 	$: imgClass = isLarge ? 'w-[64px] h-[64px]' : 'w-[40px] h-[40px]';
 	$: titleClass = isLarge
@@ -31,7 +29,7 @@
 		<PoliticianPicture class={imgClass} {avatar} size={imgSize} {partyLogo} />
 	{/if}
 	<div class="flex-1">
-		<p class={twMerge('text-text-01', titleClass)}>{fullname}</p>
+		<p class={twMerge('text-text-01', titleClass)}>{name}</p>
 		<p class={twMerge('text-text-02', subtitleClass)}>
 			{partyName ? 'พรรค' + partyName : 'ไม่สังกัดพรรค'}
 		</p>

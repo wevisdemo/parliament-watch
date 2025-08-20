@@ -16,8 +16,7 @@ export async function GET({ params }) {
 			const { people } = await graphql.query({
 				people: {
 					id: true,
-					firstname: true,
-					lastname: true,
+					name: true,
 					memberships: {
 						__args: {
 							where: {
@@ -48,9 +47,9 @@ export async function GET({ params }) {
 			});
 
 			const indexes: SearchIndexes['politicians'] = people
-				.map(({ id, firstname, lastname, memberships }) => ({
+				.map(({ id, name, memberships }) => ({
 					id,
-					name: `${firstname} ${lastname}`,
+					name,
 					description: memberships
 						.sort((a, z) =>
 							a.posts[0].organizations[0].classification.localeCompare(

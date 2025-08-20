@@ -20,8 +20,7 @@ export async function queryPoliticiansVote(voteEvent: {
 			id: true,
 			voters: {
 				id: true,
-				firstname: true,
-				lastname: true,
+				name: true,
 				memberships: {
 					__args: {
 						where: {
@@ -105,7 +104,7 @@ export async function queryPoliticiansVote(voteEvent: {
 			id: id,
 			option: option,
 			politician: {
-				name: politician ? `${politician.firstname} ${politician.lastname}` : voter_name ?? '',
+				name: politician ? politician.name : voter_name ?? '',
 				id: politician?.id
 			},
 			party: party

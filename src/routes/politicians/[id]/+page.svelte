@@ -58,7 +58,7 @@
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem>นักการเมือง</BreadcrumbItem>
 	<BreadcrumbItem href="/politicians/{politician.id}" isCurrentPage
-		>{politician.firstname} {politician.lastname}</BreadcrumbItem
+		>{politician.name}</BreadcrumbItem
 	>
 </Breadcrumb>
 <header>
@@ -74,8 +74,7 @@
 			<div class="flex flex-1 flex-col gap-2">
 				<h1 class="fluid-heading-05">
 					{politician.prefix}
-					{politician.firstname}
-					{politician.lastname}
+					{politician.name}
 				</h1>
 				<PositionStatus
 					isActive={currentAssemblyMemberships.some(

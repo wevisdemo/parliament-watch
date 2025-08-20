@@ -9,10 +9,8 @@
 	let tooltipProp: TooltipProp | null = null;
 
 	const showTooltip = (event: MouseEvent, member: AssemblyMember) => {
-		const name = `${member.firstname} ${member.lastname}`;
-
 		tooltipProp = {
-			title: name,
+			title: member.name,
 			additional: member.memberships[0].label ?? '',
 			x: event.layerX,
 			y: event.layerY + 20

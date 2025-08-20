@@ -96,7 +96,7 @@ export async function load({ params }) {
 	};
 }
 
-function getPoliticianSummary({ id, firstname, lastname, image, memberships }: AssemblyMember) {
+function getPoliticianSummary({ id, name, image, memberships }: AssemblyMember) {
 	const partyMembership = memberships.find(
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	);
@@ -107,8 +107,7 @@ function getPoliticianSummary({ id, firstname, lastname, image, memberships }: A
 
 	return {
 		id,
-		firstname,
-		lastname,
+		name,
 		avatar: image ?? undefined,
 		isActive: true,
 		partyName: partyMembership?.posts[0].organizations[0].name,

@@ -5,7 +5,7 @@ import type { Person } from 'carbon-icons-svelte';
 export interface RoleChange {
 	date: Date;
 	type: 'in' | 'out';
-	politician: Pick<Person, 'id' | 'firstname' | 'lastname' | 'image'> & {
+	politician: Pick<Person, 'id' | 'name' | 'image'> & {
 		partyLogo: string | null;
 	};
 	role: string;
@@ -23,8 +23,7 @@ export function getRoleChanges(
 				.flatMap((membership) => {
 					const politician = {
 						image: member.image,
-						firstname: member.firstname,
-						lastname: member.lastname,
+						name: member.name,
 						id: member.id,
 						partyLogo: getPartyLogoAtDate(member.memberships, membership.start_date)
 					};

@@ -28,8 +28,7 @@
 	export let reason: HighlightedReason;
 	export let value: number;
 	export let id: string;
-	export let firstname: string;
-	export let lastname: string;
+	export let name: string;
 	export let avatar: string;
 	export let assemblyRole: string;
 	export let partyName: string | undefined = undefined;
@@ -133,7 +132,7 @@
 	<a href={`/politicians/${id}`} class="mt-1 flex bg-white text-gray-100 hover:bg-ui-01">
 		<div class="flex flex-1 flex-col gap-2 p-4">
 			<PoliticianPicture {avatar} {partyLogo} size="40" />
-			<span class="heading-02 text-gray-100">{firstname} {lastname}</span>
+			<span class="heading-02 text-gray-100">{name}</span>
 			<span class="label-01 -mt-2 text-gray-60">
 				{#if assemblyRole}
 					<span>{assemblyRole}</span>

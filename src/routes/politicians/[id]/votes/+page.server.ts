@@ -13,8 +13,7 @@ export async function load({ params }) {
 			},
 			id: true,
 			prefix: true,
-			firstname: true,
-			lastname: true
+			name: true
 		}
 	});
 
@@ -75,7 +74,7 @@ export async function load({ params }) {
 		filterOptions,
 		votes,
 		seo: createSeo({
-			title: `ประวัติการลงมติ ${politician.firstname} ${politician.lastname}`
+			title: `ประวัติการลงมติ ${politician.name}`
 		})
 	};
 }

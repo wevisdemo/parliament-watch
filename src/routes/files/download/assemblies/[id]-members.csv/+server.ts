@@ -37,8 +37,7 @@ export async function GET({ params }) {
 				members: {
 					on_Person: {
 						prefix: true,
-						firstname: true,
-						lastname: true,
+						name: true,
 						memberships: {
 							__args: {
 								where: {

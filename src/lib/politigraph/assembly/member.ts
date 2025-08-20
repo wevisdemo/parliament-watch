@@ -37,8 +37,7 @@ export async function queryAssemblyMembers({
 				}
 			},
 			id: true,
-			firstname: true,
-			lastname: true,
+			name: true,
 			image: true,
 			gender: true,
 			birth_date: true,
@@ -113,13 +112,7 @@ export async function queryAssemblyMembers({
 	return people;
 }
 
-export function parseMemberWithAssemblyRoles({
-	id,
-	firstname,
-	lastname,
-	image,
-	memberships
-}: AssemblyMember) {
+export function parseMemberWithAssemblyRoles({ id, name, image, memberships }: AssemblyMember) {
 	const party = memberships.find(
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	)?.posts[0].organizations[0];
@@ -129,8 +122,7 @@ export function parseMemberWithAssemblyRoles({
 		.map((m) => ({
 			profile: {
 				id,
-				firstname,
-				lastname,
+				name,
 				avatar: image ? image : undefined,
 				partyName: party?.name ?? noParty.name,
 				partyLogo: party?.image ?? noParty.image

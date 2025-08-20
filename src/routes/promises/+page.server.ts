@@ -55,8 +55,7 @@ export async function load() {
 				memberships: {
 					members: {
 						on_Person: {
-							firstname: true,
-							lastname: true,
+							name: true,
 							image: true,
 							memberships: {
 								__args: {

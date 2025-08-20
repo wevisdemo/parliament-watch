@@ -25,8 +25,7 @@ async function writePoliticianRankingFile() {
 				}
 			},
 			id: true,
-			firstname: true,
-			lastname: true
+			name: true
 		}
 	});
 

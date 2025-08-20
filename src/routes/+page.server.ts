@@ -51,8 +51,7 @@ export async function load() {
 					}
 				},
 				id: true,
-				firstname: true,
-				lastname: true,
+				name: true,
 				image: true,
 				memberships: {
 					__args: {

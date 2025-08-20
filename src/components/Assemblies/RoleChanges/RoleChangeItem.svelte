@@ -6,8 +6,7 @@
 	export let role: string;
 	export let partyLogo: string | null;
 	export let image: string | null;
-	export let firstname: string;
-	export let lastname: string;
+	export let name: string;
 	export let id: string;
 
 	$: statusStyle =
@@ -39,7 +38,7 @@
 		<div class="flex flex-col gap-1 md:flex-row">
 			<a href="/politicians/{id}" class="font-sans">
 				<p class="body-compact-01 text-text-primary underline hover:text-interactive-01">
-					<span>{firstname}</span> <span>{lastname}</span>
+					{name}
 				</p>
 			</a>
 			<p class="flex flex-col md:flex-row">

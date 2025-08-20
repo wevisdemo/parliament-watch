@@ -2,8 +2,7 @@ import dayjs from 'dayjs';
 
 interface PoliticianInput {
 	id: string;
-	firstname: string;
-	lastname: string;
+	name: string;
 }
 interface PoliticianResult extends PoliticianInput {
 	value: number;
@@ -22,8 +21,7 @@ export async function _getPoliticianWithMostViewLastMonth(politicians: Politicia
 	let result: PoliticianResult | undefined = undefined;
 
 	for (const politician of politicians) {
-		const { firstname, lastname } = politician;
-		const res = await fetch(getWikipediaViewEndpoint(firstname, lastname));
+		const res = await fetch(getWikipediaViewEndpoint(politician.name));
 
 		if (res.ok) {
 			const data = await res.json();
@@ -46,8 +44,8 @@ export async function _getPoliticianWithMostViewLastMonth(politicians: Politicia
 	return result;
 }
 
-function getWikipediaViewEndpoint(firstname: string, lastname: string) {
-	const article = [firstname, lastname].join('_');
+function getWikipediaViewEndpoint(name: string) {
+	const article = name.replaceAll(' ', '_');
 	const fromDate = dayjs().subtract(1, 'month').startOf('month').format('YYYYMMDD');
 	const toDate = dayjs().subtract(1, 'month').endOf('month').format('YYYYMMDD');
 

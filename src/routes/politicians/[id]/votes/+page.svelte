@@ -92,7 +92,7 @@
 		{ label: 'นักการเมือง' },
 		{
 			url: `/politicians/${politician.id}`,
-			label: `${politician.firstname} ${politician.lastname}`
+			label: politician.name
 		},
 		{ url: `/politicians/${politician.id}/votes`, label: 'ประวัติการลงมติ' }
 	]}
@@ -114,7 +114,7 @@
 	<p class="heading-01">ประวัติการลงมติ</p>
 	<h1 class="fluid-heading-03 mb-1">
 		<a class="text-text-01 no-underline hover:text-blue-70" href="/politicians/{politician.id}"
-			>{politician.prefix} {politician.firstname} {politician.lastname}</a
+			>{politician.prefix} {politician.name}</a
 		>
 	</h1>
 	<InlineNotification

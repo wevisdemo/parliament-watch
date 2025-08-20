@@ -1,7 +1,6 @@
 interface PoliticianInput {
 	id: string;
-	firstname: string;
-	lastname: string;
+	name: string;
 }
 
 let gunResult:
@@ -70,10 +69,8 @@ export const getPoliticianWithMostGun = async (politicians: PoliticianInput[]) =
 		});
 
 	// Match politician data
-	for (const { firstname: gFirst, lastname: gLast, value } of sortedGunOwner) {
-		const searchResult = politicians.find(
-			({ firstname: pFirst, lastname: pLast }) => pFirst === gFirst && pLast === gLast
-		);
+	for (const { firstname, lastname, value } of sortedGunOwner) {
+		const searchResult = politicians.find(({ name }) => name === `${firstname} ${lastname}`);
 		if (searchResult) {
 			gunResult = {
 				...searchResult,

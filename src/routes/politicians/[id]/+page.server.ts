@@ -26,8 +26,8 @@ export async function load({ params }) {
 			},
 			id: true,
 			prefix: true,
+			name: true,
 			firstname: true,
-			lastname: true,
 			image: true,
 			email: true,
 			gender: true,
@@ -133,7 +133,7 @@ export async function load({ params }) {
 		disagreedVoting,
 		votingAbsentStats,
 		seo: createSeo({
-			title: `${politician.firstname} ${politician.lastname}`
+			title: politician.name
 		})
 	};
 }

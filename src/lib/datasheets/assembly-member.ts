@@ -43,8 +43,7 @@ export function getPoliticianSummary(member: AssemblyMember): PoliticianSummary 
 	const { id, firstname, lastname, avatar, isActive, partyRole, assemblyRole } = member;
 	return {
 		id,
-		firstname,
-		lastname,
+		name: `${firstname} ${lastname}`,
 		avatar,
 		isActive,
 		partyName: partyRole?.party.name,
