@@ -20,8 +20,8 @@ const MAX_LATEST_VOTE = 5;
 const MAX_ENACTED_BILL = 10;
 const MAX_PROMISES_SAMPLE = 3;
 
-const CHUAN_ID = 'ชวน-หลีกภัย';
-const BANYAT_ID = 'บัญญัติ-บรรทัดฐาน';
+const CHUAN_ID = '891ea463-c463-4f76-840d-e7d24a97d70c';
+const BANYAT_ID = 'e26bbc32-f2d5-41f1-8006-2ea439576771';
 
 enum PoliticialPosition {
 	MP = 'สส.',
