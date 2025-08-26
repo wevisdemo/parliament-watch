@@ -105,6 +105,7 @@ export async function load({ params }) {
 					?.posts[0].role.startsWith('สมาชิก')
 		)
 		.flatMap(parseMemberWithAssemblyRoles)
+		.filter((member) => !member.assemblyRole.startsWith('สมาชิก'))
 		.sort((a, z) => {
 			const getRoleSortingScore = (member: typeof a) =>
 				member.assemblyRole.startsWith('ประธาน')
