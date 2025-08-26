@@ -12,7 +12,7 @@ const sexTranslationMap = new Map([
 ]);
 
 export const noParty = {
-	name: 'ไม่สังกัดพรรค',
+	name: '',
 	image: '',
 	color: 'gray'
 };

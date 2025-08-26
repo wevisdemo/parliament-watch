@@ -31,7 +31,7 @@
 	<div class="flex-1">
 		<p class={twMerge('text-text-01', titleClass)}>{name}</p>
 		<p class={twMerge('text-text-02', subtitleClass)}>
-			{partyName ? 'พรรค' + partyName : 'ไม่สังกัดพรรค'}
+			{partyName ? `พรรค${partyName}` : 'ไม่สังกัดพรรค'}
 		</p>
 		{#if role}
 			<p class={twMerge('text-text-02', subtitleClass)}>{role}</p>

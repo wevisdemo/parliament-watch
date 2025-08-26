@@ -101,7 +101,7 @@ export async function load() {
 				posts.map(
 					(p) =>
 						p.memberships[0]?.members[0]?.memberships[0]?.posts[0]?.organizations[0] || {
-							name: 'ไม่สังกัดพรรค'
+							name: ''
 						}
 				),
 				(p) => p?.name
