@@ -109,7 +109,7 @@ function getPoliticianSummary({ id, name, image, memberships }: AssemblyMember) 
 		id,
 		name,
 		avatar: image ?? undefined,
-		isActive: true,
+		isActive: !assemblyMembership?.end_date,
 		partyName: partyMembership?.posts[0].organizations[0].name,
 		partyLogo: partyMembership?.posts[0].organizations[0].image ?? undefined,
 		role: !isActive
