@@ -4,14 +4,15 @@
 	import LowerHouseSummary from './LowerHouseSummary.svelte';
 	import SeatChart from './SeatChart.svelte';
 	import UpperHouseSummary from './UpperHouseSummary.svelte';
-	import { getSenateColorByTitle, type CabinetSeat, type PartySeat } from './shared';
+	import { type CabinetSeat, type PartySeat } from './shared';
 
 	export let data: MemberGroup[] = [];
 	export let houseLevel = 'upper';
-	const getTotalPartiesFromGroup = (group: MemberGroup | undefined): PartySeat[] => {
+
+	const getTotalSubgroupsFromGroup = (group: MemberGroup | undefined): PartySeat[] => {
 		if (!group) return [];
-		const parties = group.parties || [];
-		const result = parties.reduce<PartySeat[]>((acc, party) => {
+		const subgroups = group.subgroups || [];
+		const result = subgroups.reduce<PartySeat[]>((acc, party) => {
 			const foundParty = acc.find((p) => p.name === party.name);
 			if (foundParty) {
 				foundParty.count += party.count;
@@ -27,9 +28,6 @@
 		}, []);
 		return result;
 	};
-
-	// const lowerHouseSeatLines = [58, 54, 51, 49, 46, 43, 40, 37, 35, 32, 29, 26];
-	// const upperHouseSeatLines = [39, 36, 33, 30, 28, 25, 22, 20, 17];
 
 	const LOWER_HOUSE_ROW_RATIO = [
 		0.116, 0.108, 0.102, 0.098, 0.092, 0.086, 0.08, 0.074, 0.07, 0.064, 0.058
@@ -50,25 +48,23 @@
 	$: getLowerHouseTotalPartie = (): PartySeat[] => {
 		const governmentGroup = data.find((group) => group.name === 'ฝ่ายรัฐบาล');
 		const oppositeGovGroup = data.find((group) => group.name === 'ฝ่ายค้าน');
-		const governmentParties = getTotalPartiesFromGroup(governmentGroup);
-		const oppositeGovParties = getTotalPartiesFromGroup(oppositeGovGroup);
-		// sort governmentParties by count DESC
-		governmentParties.sort((a, b) => b.count - a.count);
-		// sort oppositeGovParties by count ASC
-		oppositeGovParties.sort((a, b) => a.count - b.count);
+		const governmentParties = getTotalSubgroupsFromGroup(governmentGroup).sort(
+			(a, b) => b.count - a.count
+		);
+		const oppositeGovParties = getTotalSubgroupsFromGroup(oppositeGovGroup).sort(
+			(a, b) => a.count - b.count
+		);
+
 		return [...governmentParties, ...oppositeGovParties];
 	};
 
-	$: getUpperHouseTotalPartie = (): PartySeat[] => {
-		return data.map((group) => {
-			return {
-				name: group.name,
-				count: group.total,
-				color: getSenateColorByTitle(group.name),
-				members: group.senateMembers
-			};
-		});
-	};
+	$: getUpperHouseTotalPartie = (): PartySeat[] =>
+		data.map((group) => ({
+			name: group.name,
+			count: group.total,
+			color: group.color ?? '',
+			members: group.members
+		}));
 
 	$: seatParties =
 		houseLevel === 'lower' || houseLevel === 'cabinet'
@@ -84,10 +80,10 @@
 
 	const getCabinetGroup = (cabinets: MemberGroup | undefined, groupName: CabinetSeat['role']) => {
 		const res =
-			cabinets?.parties
-				?.map((party) => {
+			cabinets?.subgroups
+				?.map((subgroup) => {
 					const membersFilter =
-						party.members?.filter(({ memberships }) => {
+						subgroup.members?.filter(({ memberships }) => {
 							const role = memberships.find(
 								(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 							)?.posts[0].role;
@@ -109,12 +105,12 @@
 						}) || [];
 
 					return {
-						...party,
+						...subgroup,
 						members: membersFilter,
 						count: membersFilter.length
 					};
 				})
-				.filter((party) => party.count > 0) || [];
+				.filter((subgroup) => subgroup.count > 0) || [];
 
 		return res;
 	};
@@ -130,8 +126,8 @@
 		let cabinetSeat: CabinetSeat[] = [];
 		roles.forEach((role) => {
 			const cabinetGroup = getCabinetGroup(cabinets, role as CabinetSeat['role']);
-			const cabinetParties = getTotalPartiesFromGroup({
-				parties: cabinetGroup
+			const cabinetParties = getTotalSubgroupsFromGroup({
+				subgroups: cabinetGroup
 			} as MemberGroup);
 			cabinetSeat.push({
 				role: role,
@@ -144,15 +140,15 @@
 	$: seatCarbinet = getSeatCarbinet();
 </script>
 
-<div class="flex flex-col space-y-[16px] md:flex-row">
-	<div class="md:w-[50%]">
+<div class="flex flex-col gap-4 md:flex-row">
+	<div class="flex justify-center md:flex-1">
 		{#if houseLevel === 'cabinet'}
 			<CabinetChart cabinets={seatCarbinet} />
 		{:else}
 			<SeatChart parties={seatParties} {lineAmounts} />
 		{/if}
 	</div>
-	<div class="md:w-[50%]">
+	<div class="md:flex-1">
 		{#if houseLevel === 'lower' || houseLevel === 'cabinet'}
 			<LowerHouseSummary {data} />
 		{:else}

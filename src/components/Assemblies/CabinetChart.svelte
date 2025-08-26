@@ -6,7 +6,7 @@
 </script>
 
 <div
-	class="relative m-auto flex h-full w-full max-w-[calc(100vw-32px)] flex-col items-center justify-center gap-3 px-4 md:max-w-[448px]"
+	class="relative flex h-full w-full max-w-[calc(100vw-32px)] flex-col items-center gap-3 md:max-w-[448px]"
 >
 	<CabinetRole {cabinets} role="นายกรัฐมนตรี" />
 	<CabinetRole {cabinets} role="รองนายกรัฐมนตรี" />

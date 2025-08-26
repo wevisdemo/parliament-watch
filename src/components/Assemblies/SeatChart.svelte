@@ -135,7 +135,7 @@
 
 <div
 	bind:this={component}
-	class="relative m-auto flex h-full w-full max-w-[calc(100vw-32px)] items-center justify-center md:max-w-[448px]"
+	class="flex h-full w-full max-w-[calc(100vw-32px)] justify-center md:max-w-[448px]"
 >
 	<svg
 		id="half-circle-chart"

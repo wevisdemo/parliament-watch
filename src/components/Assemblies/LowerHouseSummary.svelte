@@ -1,25 +1,14 @@
 <script lang="ts">
 	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 	import Badge from './Badge.svelte';
-	import { getPercentWidth, type PartySelected } from './shared';
+	import { getPercentWidth, type SubgroupSelected } from './shared';
 
 	export let data: MemberGroup[] = [];
 
 	$: memberGroups = data;
 
-	$: getTop5OfGroup = (parties: MemberGroup['parties'] = []): PartySelected[] => {
-		// sort parties by count DESC
-		const sortedParties = [...parties].slice().sort((a, b) => b.count - a.count);
-		// get top 5 parties
-		const top5Parties = sortedParties.slice(0, 5);
-		// map top5Parties to PartySelected
-		const result = top5Parties.map((party) => ({
-			label: party.name,
-			count: party.count,
-			color: party.color
-		}));
-		return result;
-	};
+	const getTop5OfGroup = (parties: MemberGroup['subgroups'] = []): SubgroupSelected[] =>
+		[...parties].sort((a, b) => b.count - a.count).slice(0, 5);
 </script>
 
 <div class="grid">
@@ -34,10 +23,10 @@
 					class="flex w-[--width] gap-x-[4px]"
 					style="--width:{getPercentWidth(group.total, memberGroups)}%"
 				>
-					{#each getTop5OfGroup(group.parties) as party}
+					{#each getTop5OfGroup(group.subgroups) as party}
 						<Badge
 							color={party.color}
-							title={party.label}
+							title={party.name}
 							subtitle={`${party.count} คน`}
 							size="l"
 							style="flex:{party.count} {party.count} 0%"
@@ -45,12 +34,12 @@
 					{/each}
 				</div>
 				<div class="mt-[8px] flex flex-wrap gap-[4px]">
-					{#each group.parties || [] as party}
+					{#each group.subgroups || [] as party}
 						<div class="mr-[8px] flex w-[152px] justify-between md:mr-[24px]">
 							<div class="flex items-center space-x-[4px]">
 								<div
-									class="h-[8px] w-[8px] rounded-[100%] bg-[var(--color)]"
-									style="--color: {party.color || '#8D8D8D'}"
+									class="h-[8px] w-[8px] rounded-[100%]"
+									style="background-color: {party.color || '#8D8D8D'}"
 								/>
 								<span class="label-01">{party.name}</span>
 							</div>

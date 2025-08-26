@@ -1,4 +1,3 @@
-import { getSenateColorByTitle } from '$components/Assemblies/shared';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
 import { fetchBills } from '$lib/datasheets';
 import { graphql } from '$lib/politigraph';
@@ -16,6 +15,7 @@ import { createSeo } from '$lib/seo';
 import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
 import { error } from '@sveltejs/kit';
+import { interpolateRainbow } from 'd3';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
@@ -29,15 +29,14 @@ export interface Summary {
 	groupBySex: MemberGroup[];
 	groupByAgeRange: MemberGroup[];
 	groupByEducation: MemberGroup[];
-	// TODO: not release asset value in phase 1
-	// groupByAssetValue: MemberGroup[];
 }
 
 export interface MemberGroup {
 	name: string;
 	total: number;
-	senateMembers?: AssemblyMember[];
-	parties?: { name: string; color: string; count: number; members?: AssemblyMember[] }[];
+	members?: AssemblyMember[];
+	color?: string;
+	subgroups?: { name: string; color: string; count: number; members?: AssemblyMember[] }[];
 }
 
 export type BillSummary = Pick<Bill, 'id' | 'proposedOn' | 'nickname' | 'status'>;
@@ -126,7 +125,7 @@ export async function load({ params }) {
 			name: group.name,
 			...('subgroups' in group
 				? {
-						parties: group.subgroups.map((party) => ({
+						subgroups: group.subgroups.map((party) => ({
 							...party,
 							color:
 								party.members[0].memberships.find(
@@ -149,20 +148,42 @@ export async function load({ params }) {
 	const groupByAgeRange = parseMemberGroup(GroupByOption.Age);
 	const groupByEducation = parseMemberGroup(GroupByOption.Education);
 
+	const highlightGroupColorMap = new Map<string, string>(
+		highlightGroup.map((group, i) => [
+			group.name,
+			interpolateRainbow(i / (highlightGroup.length + 1))
+		])
+	);
+
+	function getSenateGroupWithColor(memberGroup: MemberGroup[]): MemberGroup[] {
+		return memberGroup.map(({ subgroups, ...group }) => ({
+			...group,
+			subgroups: subgroups?.map((subgroup) => ({
+				...subgroup,
+				color: highlightGroupColorMap.get(subgroup.name) ?? '#A8A8A8'
+			}))
+		}));
+	}
+
 	const summary: Summary = {
 		totalMembers: activeMembers.length,
 		highlightGroup: isCabinet
 			? [
 					{
 						name: 'คณะรัฐมนตรี',
-						parties: highlightGroup.reduce<Exclude<MemberGroup['parties'], undefined>>(
-							(list, group) => ('parties' in group ? [...list, ...group.parties] : list),
+						subgroups: highlightGroup.reduce<Exclude<MemberGroup['subgroups'], undefined>>(
+							(list, group) => ('subgroups' in group ? [...list, ...group.subgroups] : list),
 							[]
 						),
 						total: highlightGroup.reduce((sum, { total }) => sum + total, 0)
 					}
 				]
-			: highlightGroup,
+			: isSenates
+				? highlightGroup.map((group) => ({
+						...group,
+						color: highlightGroupColorMap.get(group.name)
+					}))
+				: highlightGroup,
 		groupBySex: isSenates ? getSenateGroupWithColor(groupBySex) : groupBySex,
 		groupByAgeRange: isSenates ? getSenateGroupWithColor(groupByAgeRange) : groupByAgeRange,
 		groupByEducation: isSenates ? getSenateGroupWithColor(groupByEducation) : groupByEducation
@@ -232,16 +253,4 @@ export async function load({ params }) {
 			title: assembly.name
 		})
 	};
-}
-
-function getSenateGroupWithColor(memberGroup: MemberGroup[]): MemberGroup[] {
-	return memberGroup.map((group) => {
-		const parties = group.parties?.map((party) => {
-			return {
-				...party,
-				color: getSenateColorByTitle(party.name)
-			};
-		});
-		return { ...group, parties };
-	});
 }
