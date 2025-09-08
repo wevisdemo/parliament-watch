@@ -18,7 +18,8 @@
 	</div>
 	<div class="flex">
 		{#if party?.id}
-			<a href="/party?/{party?.id}">พรรค{party?.name}</a>
+			<!-- TODO: link to party when implemented -->
+			<p>พรรค{party?.name}</p>
 		{:else}
 			<p>ไม่พบข้อมูลพรรค</p>
 		{/if}
