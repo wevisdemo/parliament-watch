@@ -14,9 +14,8 @@
 			{orientation}
 			proposer={{
 				id: 'พริษฐ์-วัชรสินธุ',
-				firstname: 'พริษฐ์',
-				lastname: 'วัชรสินธุ',
-				avatar: 'https://via.placeholder.com/64',
+				name: 'พริษฐ์ วัชรสินธุ',
+				image: 'https://via.placeholder.com/64',
 				assembly: {
 					id: 'สภาผู้แทนราษฎร-26',
 					abbreviation: 'ส.ส.',
@@ -32,8 +31,7 @@
 			{orientation}
 			proposer={{
 				id: 'คณะรัฐมนตรี-64',
-				isCabinet: true,
-				abbreviation: 'คณะรัฐมนตรี',
+				abbreviation: 'ครม.',
 				term: 64,
 				startedAt: new Date('04/09/2024')
 			}}
@@ -44,8 +42,7 @@
 			{orientation}
 			proposer={{
 				id: 'สภาผู้แทนราษฎร-26',
-				isCabinet: false,
-				abbreviation: 'ส.ส.',
+				abbreviation: 'สส.',
 				term: 26,
 				startedAt: new Date('01/01/2023')
 			}}

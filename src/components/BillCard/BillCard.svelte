@@ -3,8 +3,7 @@
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import { BillStatus, type Bill } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
-	import Proposer from '$components/Proposer/Proposer.svelte';
-	import { getProposerFromBill } from '$lib/model-component-adapters/bill-proposer';
+	// import Proposer from '$components/Proposer/Proposer.svelte';
 
 	export let id: string;
 	export let nickname: string;
@@ -45,8 +44,9 @@
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
 		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
-		<p class="font-semibold">เสนอโดย</p>
-		<Proposer proposer={getProposerFromBill(bill)} />
+		<!-- TODO: Waiting for new Bill data from Politigraph -->
+		<!-- <p class="font-semibold">เสนอโดย</p>
+		<Proposer proposer={getProposerFromBill(bill)} /> -->
 	</div>
 
 	<div

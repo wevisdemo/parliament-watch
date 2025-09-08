@@ -7,6 +7,7 @@ import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
 import type { Bill } from '$models/bill';
 import { BillEventType, type BillEvent } from '$models/bill-event';
+import type { Politician } from '$models/politician';
 import type { ComponentProps } from 'svelte';
 
 export async function entries() {
@@ -71,8 +72,26 @@ export async function load({ params }) {
 		}))
 	);
 
+	// TODO: workaround to temporary match old sheet politician id with new politician politigraph id
+	const proposedLedByPolitician = bill.proposedLedByPolitician
+		? await mapOldPoliticianToNewPolitician(bill.proposedOn, bill.proposedLedByPolitician)
+		: undefined;
+	const coProposedByPoliticians = bill.coProposedByPoliticians
+		? await Promise.all(
+				bill.coProposedByPoliticians.map((politician) =>
+					typeof politician === 'string'
+						? { name: politician }
+						: mapOldPoliticianToNewPolitician(bill.proposedOn, politician)
+				)
+			)
+		: undefined;
+
 	return {
-		bill,
+		bill: {
+			...bill,
+			proposedLedByPolitician,
+			coProposedByPoliticians
+		},
 		// TODO: merged bill data is not ready yet
 		mergedBills: [] as Bill[], // Bills that got merged into this bill.
 		// TODO: Remove this when we migrate bill to Politigraph
@@ -91,5 +110,65 @@ export async function load({ params }) {
 		seo: createSeo({
 			title: bill.nickname
 		})
+	};
+}
+
+async function mapOldPoliticianToNewPolitician(billProposedDate: Date, politician: Politician) {
+	const [{ memberships, ...rest }] = (
+		await graphql.query({
+			people: {
+				__args: {
+					where: {
+						firstname_EQ: politician.firstname,
+						OR: [
+							{ lastname_EQ: politician.lastname },
+							{ lastname_EQ: politician.lastname.split(' ').at(-1) }
+						]
+					}
+				},
+				id: true,
+				name: true,
+				image: true,
+				memberships: {
+					__args: {
+						where: {
+							start_date_LTE: billProposedDate.toUTCString(),
+							OR: [{ end_date_EQ: null }, { end_date_GTE: billProposedDate.toUTCString() }]
+						}
+					},
+					posts: {
+						label: true,
+						organizations: {
+							id: true,
+							name: true,
+							image: true,
+							term: true,
+							abbreviation: true,
+							classification: true,
+							founding_date: true
+						}
+					}
+				}
+			}
+		})
+	).people;
+
+	const assembly = memberships.find(
+		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+	);
+
+	return {
+		...rest,
+		party: memberships.find((m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY')
+			?.posts[0].organizations[0],
+		assembly: assembly
+			? {
+					id: assembly.posts[0].organizations[0].id,
+					abbreviation: assembly.posts[0].organizations[0].abbreviation,
+					term: assembly.posts[0].organizations[0].term,
+					startedAt: assembly.posts[0].organizations[0].founding_date,
+					postLabel: assembly.posts[0].label
+				}
+			: undefined
 	};
 }

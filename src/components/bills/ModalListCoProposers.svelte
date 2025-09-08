@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { showModalListCoProposer } from '$components/bills/store';
-	import type { Politician } from '$models/politician';
 	import CloseLarge from 'carbon-icons-svelte/lib/CloseLarge.svelte';
 	import CoProposer from './CoProposer.svelte';
+	import type { ComponentProps } from 'svelte';
 
-	export let coProposedByPoliticians: (Politician | string)[];
-	export let billProposedOn: Date;
+	export let coProposedByPoliticians: ComponentProps<CoProposer>['politician'][];
 </script>
 
 {#if $showModalListCoProposer}
@@ -32,7 +31,7 @@
 				<div class="flex flex-col pb-5 pl-8 pr-5">
 					<table class="w-full">
 						{#each coProposedByPoliticians as politician, i}
-							<CoProposer index={i + 1} {politician} {billProposedOn} />
+							<CoProposer index={i + 1} {politician} />
 						{/each}
 					</table>
 				</div>

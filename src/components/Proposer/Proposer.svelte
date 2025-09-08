@@ -1,24 +1,22 @@
 <script context="module" lang="ts">
 	export type PoliticianProposer = {
 		id: string;
-		firstname: string;
-		lastname: string;
-		avatar: string;
+		name: string;
+		image: string | null;
 		assembly?: {
 			id: string;
-			abbreviation: string;
-			term: number;
-			startedAt: Date;
+			abbreviation: string | null;
+			term: number | null;
+			startedAt: Date | string | null;
 		};
 		partyName?: string;
 	};
 
 	export type AssemblyProposer = {
 		id: string;
-		isCabinet: boolean;
 		abbreviation: string;
 		term: number;
-		startedAt: Date;
+		startedAt: Date | string | null;
 	};
 
 	export type PeopleProposer = {
@@ -44,47 +42,57 @@
 
 	$: isLandscape = orientation === 'landscape';
 
-	function getBudistYear(date: Date) {
+	function getBudistYear(date: string | Date) {
 		return dayjs(date).format('BBBB');
 	}
 </script>
 
-<div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+<div class="flex items-center {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
 	{#if proposer === undefined}
 		<p class="text-sm text-gray-60">ไม่พบข้อมูล</p>
-	{:else if 'firstname' in proposer}
-		{@const { id, firstname, lastname, avatar, assembly, partyName } = proposer}
+	{:else if 'image' in proposer}
+		{@const { id, name, image, assembly, partyName } = proposer}
 		<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
-			<img src={avatar} alt="{firstname} {lastname}" class="h-full w-full" loading="lazy" />
+			<img
+				src={image || '/images/politicians/_placeholder.webp'}
+				alt=""
+				class="h-full w-full"
+				loading="lazy"
+			/>
 		</figure>
-		<div>
-			<p class="text-sm">
-				<a href="/politicians/{id}" class="text-black">
-					{firstname}
-					{lastname}
+		<p class="text-sm">
+			<a href="/politicians/{id}" class="text-black">
+				{name}
+			</a>
+			{#if assembly}
+				<a href="/assemblies/{assembly.id}" class="text-sm text-black underline">
+					{assembly.abbreviation} ชุดที่ {assembly.term}
+					{#if assembly.startedAt}
+						({getBudistYear(assembly.startedAt)})
+					{/if}
 				</a>
-				{#if assembly}
-					<a href="/assemblies/{assembly.id}" class="text-sm text-black underline">
-						{assembly.abbreviation} ชุดที่ {assembly.term} ({getBudistYear(assembly.startedAt)})
-					</a>
-				{/if}
-			</p>
-			{#if partyName}
-				<span class="text-sm text-gray-60">พรรค{partyName}</span>
 			{/if}
-		</div>
+		</p>
+		{#if partyName}
+			<span class="text-sm text-gray-60">พรรค{partyName}</span>
+		{/if}
 	{:else if 'term' in proposer}
-		{@const { id, abbreviation, term, isCabinet, startedAt } = proposer}
+		{@const { id, abbreviation, term, startedAt } = proposer}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 			<svelte:component
-				this={isCabinet ? GeneralIcon : PoliticianIcon}
+				this={abbreviation === 'ครม.' ? GeneralIcon : PoliticianIcon}
 				class="stroke-white"
 				size={16}
 			/>
 		</div>
 		<a href="/assemblies/{id}" class="text-sm text-black">
 			{abbreviation}
-			<span class="underline">ชุดที่ {term} ({getBudistYear(startedAt)})</span>
+			<span class="underline"
+				>ชุดที่ {term}
+				{#if startedAt}
+					({getBudistYear(startedAt)})
+				{/if}
+			</span>
 		</a>
 	{:else}
 		{@const { ledBy, signatoryCount } = proposer}
