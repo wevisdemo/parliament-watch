@@ -10,9 +10,9 @@ import { BillEventType, type BillEvent } from '$models/bill-event';
 import type { Politician } from '$models/politician';
 import type { ComponentProps } from 'svelte';
 
-export async function entries() {
-	return (await fetchBills()).map(({ id }) => ({ id }));
-}
+// export async function entries() {
+// 	return (await fetchBills()).map(({ id }) => ({ id }));
+// }
 
 const expectedEventOrder = Object.values(BillEventType).reverse();
 

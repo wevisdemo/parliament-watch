@@ -79,61 +79,61 @@ export async function GET({ params }) {
 		}
 
 		case SearchIndexCategory.Bills: {
-			const indexes: SearchIndexes['bills'] = (await fetchBills())
-				.map(({ id, nickname, status }) => ({ id, name: nickname, status }))
-				.sort((a, z) => a.name.localeCompare(z.name));
+			// const indexes: SearchIndexes['bills'] = (await fetchBills())
+			// 	.map(({ id, nickname, status }) => ({ id, name: nickname, status }))
+			// 	.sort((a, z) => a.name.localeCompare(z.name));
 
-			return createJSONFileResponse(indexes);
+			return createJSONFileResponse([]);
 		}
 
 		case SearchIndexCategory.BillProposers: {
-			const proposers = (await fetchBills())
-				.map((bill) => {
-					if (bill.proposedLedByPolitician) {
-						const { firstname, lastname, assemblyRoles, partyRoles } = bill.proposedLedByPolitician;
-						const billProposedOn = bill.proposedOn.getTime();
+			// const proposers = (await fetchBills())
+			// 	.map((bill) => {
+			// 		if (bill.proposedLedByPolitician) {
+			// 			const { firstname, lastname, assemblyRoles, partyRoles } = bill.proposedLedByPolitician;
+			// 			const billProposedOn = bill.proposedOn.getTime();
 
-						const matchedAssemblyRole = assemblyRoles?.find(
-							({ startedAt, endedAt }) =>
-								billProposedOn >= startedAt.getTime() &&
-								(!endedAt || billProposedOn <= endedAt.getTime())
-						);
+			// 			const matchedAssemblyRole = assemblyRoles?.find(
+			// 				({ startedAt, endedAt }) =>
+			// 					billProposedOn >= startedAt.getTime() &&
+			// 					(!endedAt || billProposedOn <= endedAt.getTime())
+			// 			);
 
-						const matchedPartyRole = partyRoles?.find(
-							({ startedAt, endedAt }) =>
-								billProposedOn >= startedAt.getTime() &&
-								(!endedAt || billProposedOn <= endedAt.getTime())
-						);
+			// 			const matchedPartyRole = partyRoles?.find(
+			// 				({ startedAt, endedAt }) =>
+			// 					billProposedOn >= startedAt.getTime() &&
+			// 					(!endedAt || billProposedOn <= endedAt.getTime())
+			// 			);
 
-						return {
-							name: `${firstname} ${lastname}`,
-							description:
-								getPoliticianDescription(matchedAssemblyRole, matchedPartyRole) ||
-								BillProposerType.Politician
-						};
-					} else if (bill.proposedByPeople) {
-						return {
-							name: bill.proposedByPeople.ledBy,
-							description: BillProposerType.People
-						};
-					}
+			// 			return {
+			// 				name: `${firstname} ${lastname}`,
+			// 				description:
+			// 					getPoliticianDescription(matchedAssemblyRole, matchedPartyRole) ||
+			// 					BillProposerType.Politician
+			// 			};
+			// 		} else if (bill.proposedByPeople) {
+			// 			return {
+			// 				name: bill.proposedByPeople.ledBy,
+			// 				description: BillProposerType.People
+			// 			};
+			// 		}
 
-					return { name: '', description: '' };
-				})
-				.filter(({ name }) => name);
+			// 		return { name: '', description: '' };
+			// 	})
+			// 	.filter(({ name }) => name);
 
-			const indexes: SearchIndexes['billProposers'] = [
-				...rollup(
-					proposers,
-					(group) => ({
-						...group[0],
-						proposedBillsCount: group.length
-					}),
-					({ name }) => name
-				).values()
-			].sort((a, z) => a.name.localeCompare(z.name));
+			// const indexes: SearchIndexes['billProposers'] = [
+			// 	...rollup(
+			// 		proposers,
+			// 		(group) => ({
+			// 			...group[0],
+			// 			proposedBillsCount: group.length
+			// 		}),
+			// 		({ name }) => name
+			// 	).values()
+			// ].sort((a, z) => a.name.localeCompare(z.name));
 
-			return createJSONFileResponse(indexes);
+			return createJSONFileResponse([]);
 		}
 
 		case SearchIndexCategory.Votings: {

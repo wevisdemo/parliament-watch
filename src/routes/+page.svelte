@@ -59,9 +59,8 @@
 			/>
 			<SectionMenuItem
 				title="การเสนอกฎหมาย"
-				description="ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ"
+				description="อยู่ระหว่างการปรับปรุงข้อมูล"
 				icon={LawIcon}
-				href="#bill"
 			/>
 			<SectionMenuItem
 				title="คำสัญญาทางการเมือง"
@@ -102,7 +101,7 @@
 	<VotingContent {latestVoteEvents} />
 </ContentSection>
 
-<ContentSection
+<!-- <ContentSection
 	id="bill"
 	title="การเสนอกฎหมาย"
 	icon={LawIcon}
@@ -117,7 +116,7 @@
 		></span
 	>
 	<BillContent {billByCategoryAndStatus} />
-</ContentSection>
+</ContentSection> -->
 
 <ContentSection
 	id="promise"

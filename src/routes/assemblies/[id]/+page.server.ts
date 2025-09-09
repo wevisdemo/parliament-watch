@@ -1,5 +1,4 @@
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import { fetchBills } from '$lib/datasheets';
 import { graphql } from '$lib/politigraph';
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
@@ -20,7 +19,6 @@ import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
-const MAX_LATEST_BILL = 10;
 const MAX_CHANGES = 5;
 
 export interface Summary {
@@ -226,18 +224,7 @@ export async function load({ params }) {
 		}))
 	);
 
-	const latestBills: BillSummary[] = isCabinet
-		? (await fetchBills())
-				.filter((bill) => bill.proposedByAssembly && bill.proposedByAssembly.id === assembly.id)
-				.sort((a, b) => b.proposedOn.getTime() - a.proposedOn.getTime())
-				.slice(0, MAX_LATEST_BILL)
-				.map(({ id, proposedOn, nickname, status }) => ({
-					id,
-					proposedOn,
-					nickname,
-					status
-				}))
-		: [];
+	const latestBills: BillSummary[] = [];
 
 	const changes = isCabinet ? getRoleChanges(assembly.id, members, MAX_CHANGES) : null;
 
