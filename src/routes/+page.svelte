@@ -64,9 +64,8 @@
 			/>
 			<SectionMenuItem
 				title="คำสัญญาทางการเมือง"
-				description="ติดตามความคืบหน้าของนโยบายที่รัฐบาลสัญญาไว้"
+				description="อยู่ระหว่างการปรับปรุงข้อมูล"
 				icon={PromiseIcon}
-				href="#promise"
 			/>
 		</menu>
 	</nav>
@@ -118,7 +117,7 @@
 	<BillContent {billByCategoryAndStatus} />
 </ContentSection> -->
 
-<ContentSection
+<!-- <ContentSection
 	id="promise"
 	title="คำสัญญาทางการเมือง"
 	icon={PromiseIcon}
@@ -131,6 +130,6 @@
 		ข้อมูลได้ถูกรวบรวมไว้ให้คุณได้ติดตามและตรวจสอบความคืบหน้าได้ง่ายขึ้น</span
 	>
 	<PromiseContent {...promiseSummary} />
-</ContentSection>
+</ContentSection> -->
 
 <BackToTopButton />

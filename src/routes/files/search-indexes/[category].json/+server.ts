@@ -161,15 +161,15 @@ export async function GET({ params }) {
 		}
 
 		case SearchIndexCategory.Promises: {
-			const indexes: SearchIndexes['promises'] = (await fetchPromises()).map(
-				({ id, statements, status }) => ({
-					id,
-					name: statements[0],
-					status
-				})
-			);
+			// const indexes: SearchIndexes['promises'] = (await fetchPromises()).map(
+			// 	({ id, statements, status }) => ({
+			// 		id,
+			// 		name: statements[0],
+			// 		status
+			// 	})
+			// );
 
-			return createJSONFileResponse(indexes);
+			return createJSONFileResponse([]);
 		}
 
 		default:
