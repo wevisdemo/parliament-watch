@@ -6,7 +6,7 @@ import {
 } from '$lib/politigraph/vote/with-politician.js';
 import { createSeo } from '$lib/seo';
 import type { Bill } from '$models/bill';
-import { defaultVoteOptions } from '$models/voting.js';
+import { DefaultVoteOption, defaultVoteOptions, type CustomVoteOption } from '$models/voting.js';
 import { error } from '@sveltejs/kit';
 import { groups } from 'd3';
 
@@ -62,10 +62,27 @@ export async function load({ params }) {
 
 	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 
-	const results = defaultVoteOptions.map((option) => ({
-		option,
-		total: votes.filter((vote) => vote.option === option).length
-	}));
+	const nonDefaultVotes = groups(
+		votes.filter((vote) => vote.option && !defaultVoteOptions.includes(vote.option)),
+		(vote) => vote.option
+	).sort((a, z) => z[1].length - a[1].length);
+
+	const customOptionResults = nonDefaultVotes.map<{ option: CustomVoteOption; total: number }>(
+		([label, optionVotes], i) => ({
+			option: {
+				label,
+				colorIntensity: 1 - i / nonDefaultVotes.length
+			},
+			total: optionVotes.length
+		})
+	);
+
+	const defaultOptionResults = defaultVoteOptions
+		.map((option) => ({
+			option: option as DefaultVoteOption,
+			total: votes.filter((vote) => vote.option === option).length
+		}))
+		.filter((result) => !customOptionResults.length || result.total);
 
 	const resultsByAffiliation = groupVotesByAffiliation(votes).map((aff) => ({
 		name: aff.name,
@@ -83,9 +100,10 @@ export async function load({ params }) {
 	return {
 		voteEvent,
 		relatedBill,
-		results,
+		results: [...customOptionResults, ...defaultOptionResults],
 		resultsByAffiliation,
 		votes,
+		customOptionResults,
 		seo: createSeo({
 			title: `การลงมติ ${voteEvent.nickname || voteEvent.title}`
 		})

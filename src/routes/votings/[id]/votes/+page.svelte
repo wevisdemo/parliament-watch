@@ -9,7 +9,7 @@
 
 	export let data;
 
-	$: ({ voteEvent, filterOptions, votes } = data);
+	$: ({ voteEvent, filterOptions, customVoteOptions, votes } = data);
 
 	$: comboboxFilterList = [
 		{
@@ -116,7 +116,9 @@
 		{:else if cellKey === 'party'}
 			<p class="body-compact-01 text-gray-60">{cellValue?.name ?? '-'}</p>
 		{:else if cellKey === 'option'}
-			<VotingOptionTag voteOption={cellValue} />
+			<VotingOptionTag
+				voteOption={customVoteOptions.find((option) => option.label === cellValue) ?? cellValue}
+			/>
 		{/if}
 	</svelte:fragment>
 </DataPage>

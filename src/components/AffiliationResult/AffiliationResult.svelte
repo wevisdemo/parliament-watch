@@ -20,7 +20,10 @@
 	export let affiliationPercent = 100;
 	export let isViewPercent: boolean;
 	export let resultColorLookup: Record<string, string | undefined>;
-	export let getVoteColor: (vote: DefaultVoteOption | CustomVoteOption | string) => string;
+	export let getOptionColor: (vote: string) => {
+		className: string;
+		style?: string;
+	};
 
 	let isExpanded = false;
 	let selectedTab: string[] = [];
@@ -89,8 +92,9 @@
 		</div>
 		<div class="mt-1 flex items-center gap-x-3">
 			{#each allVotes as vote}
+				{@const { className, style } = getOptionColor(vote.name)}
 				<div class="flex items-center gap-x-1">
-					<div class="h-3 w-1 {getVoteColor(vote.name)}" />
+					<div class="h-3 w-1 {className}" {style} />
 					<p class="label-01">
 						{isViewPercent ? formatPercent(vote.count, count) : vote.count}
 					</p>
@@ -100,11 +104,13 @@
 		<div class="mt-1 flex h-[30px]" style:width="{affiliationPercent}%">
 			{#each allVotes as vote}
 				{#if count}
+					{@const { className, style } = getOptionColor(vote.name)}
 					<VoteChartTooltip
 						option={vote.name}
 						value={vote.count}
 						total={count}
-						color={getVoteColor(vote.name)}
+						class={className}
+						{style}
 					/>
 				{/if}
 			{/each}
@@ -134,7 +140,7 @@
 						<div class="mt-1 flex items-center gap-x-3">
 							{#each party.options as partyVote}
 								<div class="flex items-center gap-x-1">
-									<div class="h-3 w-1 {getVoteColor(partyVote.name)}" />
+									<div class="h-3 w-1 {getOptionColor(partyVote.name)}" />
 									<p class="label-01">
 										{isViewPercent ? formatPercent(partyVote.count, party.count) : partyVote.count}
 									</p>
@@ -144,11 +150,13 @@
 						<div class="mt-1 flex h-[20px] w-full">
 							{#each party.options as partyVote}
 								{#if partyVote.count}
+									{@const { className, style } = getOptionColor(partyVote.name)}
 									<VoteChartTooltip
 										option={partyVote.name}
 										value={partyVote.count}
 										total={count}
-										color={getVoteColor(partyVote.name)}
+										class={className}
+										{style}
 									/>
 								{/if}
 							{/each}

@@ -4,8 +4,10 @@ import {
 	sortPoliticiansVoteByDominantGroup
 } from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
+import type { CustomVoteOption } from '$models/voting';
 import { defaultVoteOptions } from '$models/voting';
 import { error } from '@sveltejs/kit';
+import { groups } from 'd3';
 
 interface FilterOptions {
 	parties: string[];
@@ -40,18 +42,32 @@ export async function load({ params }) {
 
 	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 
+	const nonDefaultVotes = groups(
+		votes.filter((vote) => vote.option && !defaultVoteOptions.includes(vote.option)),
+		(vote) => vote.option
+	).sort((a, z) => z[1].length - a[1].length);
+
+	const customVoteOptions = nonDefaultVotes.map<CustomVoteOption>(([label], i) => ({
+		label,
+		colorIntensity: 1 - i / nonDefaultVotes.length
+	}));
+
 	const filterOptions: FilterOptions = {
 		parties: getSortedUniqueValue(
 			votes.map((v) => v.party).filter((p) => p !== undefined) as { name: string }[],
 			'name'
 		),
 		roles: getSortedUniqueValue(votes, 'role').reverse(),
-		voteOptions: defaultVoteOptions
+		voteOptions: [
+			...customVoteOptions.map(({ label }) => label),
+			...defaultVoteOptions.filter((option) => votes.some((vote) => vote.option === option))
+		]
 	};
 
 	return {
 		voteEvent,
 		filterOptions,
+		customVoteOptions,
 		votes,
 		seo: createSeo({
 			title: `ผลการลงมติรายคน ${voteEvent.nickname || voteEvent.title}`

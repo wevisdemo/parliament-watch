@@ -19,10 +19,11 @@
 	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting';
 	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 
 	export let data;
 
-	$: ({ voteEvent, results, resultsByAffiliation, votes } = data);
+	$: ({ voteEvent, results, customOptionResults, resultsByAffiliation, votes } = data);
 
 	enum Menu {
 		Summary = 'summary',
@@ -47,25 +48,31 @@
 		}).format(new Date(date));
 	}
 
-	function getVoteColor(vote: DefaultVoteOption | CustomVoteOption | string) {
-		switch (vote) {
-			case DefaultVoteOption.Agreed:
-				return 'bg-teal-40';
-			case DefaultVoteOption.Disagreed:
-				return 'bg-red-50 text-white';
-			case DefaultVoteOption.Novote:
-				return 'bg-gray-80 text-white';
-			case DefaultVoteOption.Abstain:
-				return 'bg-gray-50';
-			case DefaultVoteOption.Absent:
-				return 'bg-gray-20';
-			default:
-				if (typeof vote === 'string') {
-					return 'bg-purple-70';
-				} else {
-					return `bg-purple-70 opacity-${vote.colorIntensity * 100} text-white`;
-				}
+	function getVoteColor(option: DefaultVoteOption | CustomVoteOption | string): {
+		className: string;
+		style?: string;
+	} {
+		if (typeof option === 'string') {
+			switch (option) {
+				case DefaultVoteOption.Agreed:
+					return { className: 'bg-teal-40' };
+				case DefaultVoteOption.Disagreed:
+					return { className: 'bg-red-50 text-white' };
+				case DefaultVoteOption.Novote:
+					return { className: 'bg-gray-80 text-white' };
+				case DefaultVoteOption.Abstain:
+					return { className: 'bg-gray-50' };
+				case DefaultVoteOption.Absent:
+					return { className: 'bg-gray-20' };
+				default:
+					return { className: 'bg-purple-70' };
+			}
 		}
+
+		return {
+			className: 'bg-purple-70 text-white',
+			style: `--tw-bg-opacity: ${option.colorIntensity}`
+		};
 	}
 
 	function getBillStatusColor(status: string | null) {
@@ -186,7 +193,7 @@
 				{#if winningOption && votes.length > 0}
 					<span class="body-02 text-gray-60"
 						><span class="heading-compact-02 text-text-01"
-							>{winningOption}
+							>{winningOption !== voteEvent.result ? winningOption : 'ได้รับคะแนนเสียง'}
 							{votes.filter((v) => v.option === winningOption).length}</span
 						>/{votes.length}</span
 					>
@@ -309,10 +316,11 @@
 							<p class="body-02">{votes.length}</p>
 						</div>
 						{#each results as { option, total }}
+							{@const { className, style } = getVoteColor(option)}
 							<div class="flex items-center gap-x-1">
-								<div class="h-4 w-4 rounded-sm {getVoteColor(option)}" />
+								<div class="h-4 w-4 rounded-sm {className}" {style} />
 								<p class="heading-02">
-									{option}
+									{typeof option === 'string' ? option : option.label}
 								</p>
 								<p class="body-02">{total}</p>
 							</div>
@@ -321,13 +329,14 @@
 				</div>
 				<div class="my-2 flex h-[50px] w-full">
 					{#each results as { option, total }}
-						{@const resultLen = votes.length}
+						{@const { className, style } = getVoteColor(option)}
 						{#if total}
 							<VoteChartTooltip
-								{option}
+								option={typeof option === 'string' ? option : option.label}
 								value={total}
-								total={resultLen}
-								color={getVoteColor(option)}
+								total={votes.length}
+								class={className}
+								{style}
 							/>
 						{/if}
 					{/each}
@@ -375,7 +384,12 @@
 							affiliationPercent={(result.count / maxAffiliationVote) * 100}
 							{isViewPercent}
 							{resultColorLookup}
-							{getVoteColor}
+							getOptionColor={(label) =>
+								getVoteColor(
+									results.find(({ option }) =>
+										typeof option === 'string' ? option === label : option.label === label
+									)?.option ?? label
+								)}
 						/>
 					{/each}
 				</div>
@@ -413,7 +427,12 @@
 						</div>
 					</div>
 					{#if voterSearchResult.length}
-						{#each voterSearchResult as { id, politician, role, party, option }}
+						{#each voterSearchResult as { politician, role, party, option }}
+							{@const voteOption = results.find((result) =>
+								typeof result.option === 'string'
+									? option === result.option
+									: option === result.option.label
+							)?.option}
 							<div class="flex w-full border-t border-gray-30">
 								<div class="body-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
 									{#if politician.id}
@@ -435,7 +454,9 @@
 									{party?.name ?? '-'}
 								</div>
 								<div class="hidden w-[112px] px-4 py-[11px] md:block md:w-1/4 md:py-[15px]">
-									<Tag class={getVoteColor(option)}>{option}</Tag>
+									{#if voteOption}
+										<VotingOptionTag {voteOption} />
+									{/if}
 								</div>
 							</div>
 						{/each}
