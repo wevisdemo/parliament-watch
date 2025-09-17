@@ -19,8 +19,9 @@ jobs:
           ARTIFACT=build-${ARTIFACT/\//-}
           echo "ARTIFACT=${ARTIFACT}" >> $GITHUB_ENV
           echo "Set artifact name as ${ARTIFACT}"
-      - uses: actions/checkout@v4
-      - name: Use Node.js
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -29,8 +30,29 @@ jobs:
         run: yarn install
       - name: Test
         run: yarn test
-      - name: Build SvelteKit
+      - name: Set up rsync
+        id: rsync
+        uses: GuillaumeFalourd/setup-rsync@v1.2
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+      - name: Register Politigraph host and key
+        run: |
+          mkdir ~/.ssh
+          ssh-keyscan ${{ secrets.POLITIGRAPH_SSH_HOST }} > ~/.ssh/known_hosts
+          eval $(ssh-agent)
+          ssh-add ${{ steps.rsync.outputs.ssh_key_path }}
+      - name: Pull latest Politigraph snapshot
+        run: |
+          rsync -azvP bot@${{ secrets.POLITIGRAPH_SSH_HOST }}:${{ secrets.POLITIGRAPH_SSH_PATH }}/* ./politigraph
+          docker load --input ./politigraph/politigraph-image.tar.gz
+      - name: Start Politigraph services
+        run: cd politigraph && docker compose -f compose.server.yml up -d neo4j nuxt && cd ..
+      - name: Build static site
         run: yarn build
+        env:
+          POLITIGRAPH_GRAPHQL_URL: http://localhost:3000/graphql
+      - name: Stop Politigraph services
+        run: cd politigraph && docker compose -f compose.server.yml down && cd ..
       - name: Build Histoire
         continue-on-error: true
         run: yarn story:build

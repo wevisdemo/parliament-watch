@@ -16,8 +16,8 @@ jobs:
         uses: burnett01/rsync-deployments@6.0.0
         with:
           remote_host: ${{ secrets.PRODUCTION_HOST }}
-          remote_user: ${{ secrets.PRODUCTION_USER }}
-          remote_key: ${{ secrets.PRODUCTION_KEY }}
+          remote_user: bot
+          remote_key: ${{ secrets.SSH_KEY }}
           remote_path: ${{ secrets.PRODUCTION_PATH }}
           switches: -avzr --omit-dir-times --no-owner --no-group --no-perms --delete
           path: ./
