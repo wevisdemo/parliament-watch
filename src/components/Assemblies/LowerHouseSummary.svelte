@@ -41,7 +41,7 @@
 									class="h-[8px] w-[8px] rounded-[100%]"
 									style="background-color: {party.color || '#8D8D8D'}"
 								/>
-								<span class="label-01">{party.name}</span>
+								<span class="label-01">{party.name || 'ไม่สังกัดพรรค'}</span>
 							</div>
 							<span class="label-01 text-gray-60">{party.count}</span>
 						</div>
