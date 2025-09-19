@@ -1,13 +1,13 @@
 name: Build and deploy to staging
 on:
-  push:
-    branches: ['main', '**/main']
-    paths-ignore:
-      - '**/README.md'
-      - '**/CONTRIBUTING.md'
-      - '.github/ISSUE_TEMPLATE/**'
-      - '.github/workflows/production.yml'
-      - '.github/workflows/update-ranking.yml'
+  # push:
+  #   branches: ['main', '**/main']
+  #   paths-ignore:
+  #     - '**/README.md'
+  #     - '**/CONTRIBUTING.md'
+  #     - '.github/ISSUE_TEMPLATE/**'
+  #     - '.github/workflows/production.yml'
+  #     - '.github/workflows/update-ranking.yml'
   workflow_dispatch:
 jobs:
   build:
