@@ -1,7 +1,8 @@
+import { PUBLIC_POLITIGRAPH_ENDPOINT } from '$env/static/public';
 import { createClient } from './genql';
 
 export const graphql = createClient({
-	url: import.meta.env.POLITIGRAPH_GRAPHQL_URL || 'https://politigraph.wevis.info/graphql',
+	url: PUBLIC_POLITIGRAPH_ENDPOINT || 'https://politigraph.wevis.info/graphql',
 	batch: {
 		maxBatchSize: 10,
 		batchInterval: 200

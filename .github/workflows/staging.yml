@@ -50,7 +50,7 @@ jobs:
       - name: Build static site
         run: yarn build
         env:
-          POLITIGRAPH_GRAPHQL_URL: http://localhost:3000/graphql
+          PUBLIC_POLITIGRAPH_ENDPOINT: http://localhost:3000/graphql
       - name: Stop Politigraph services
         run: cd politigraph && docker compose -f compose.server.yml down && cd ..
       - name: Build Histoire
