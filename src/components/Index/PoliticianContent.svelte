@@ -65,7 +65,7 @@
 	</Button>
 
 	<Button
-		href="/assemblies/คณะรัฐมนตรี-64"
+		href="/assemblies/คณะรัฐมนตรี-65"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
