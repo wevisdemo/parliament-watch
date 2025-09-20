@@ -13,7 +13,7 @@
 	$: checkboxFilterList = [
 		{
 			key: 'filterResult',
-			legend: 'ผลลัพท์',
+			legend: 'ผลลัพธ์',
 			choices: filterOptions.result.map((result) => ({
 				label: result,
 				value: result
@@ -55,7 +55,7 @@
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
 		{ key: 'name', value: 'ชื่อมติ' },
-		{ key: 'result', value: 'ผลลัพท์' },
+		{ key: 'result', value: 'ผลลัพธ์' },
 		{ key: 'links', value: 'ลิงก์' }
 	]}
 	downloadLinks={[
