@@ -73,14 +73,12 @@ export async function GET({ params }) {
 	return createCsvFileResponse(
 		posts.flatMap(({ role, memberships }) =>
 			memberships.flatMap(({ members, ...restMembership }) =>
-				members
-					.filter((m) => 'firstname' in m)
-					.map(({ memberships: [partyMember], ...restPeople }) => ({
-						role,
-						...restPeople,
-						party: partyMember?.posts[0]?.organizations[0]?.name,
-						...restMembership
-					}))
+				members.map(({ memberships: [partyMember], ...restPeople }) => ({
+					role,
+					...restPeople,
+					party: partyMember?.posts[0]?.organizations[0]?.name,
+					...restMembership
+				}))
 			)
 		)
 	);
