@@ -27,6 +27,8 @@ Citizens are watching
   - [Components](#components)
   - [Icons](#icons)
 - [💾 Data Pipeline](#-data-pipeline)
+  - [Migrating away from: Google Sheets](#migrating-away-from-google-sheets)
+  - [Migrating to: Politigraph](#migrating-to-politigraph)
 - [🤝 Contributing Guideline](#-contributing-guideline)
 - [📜 License](#-license)
 
@@ -36,14 +38,16 @@ Citizens are watching
 
 We want to record and visualise the Thai parliament information including politicians, assemblies, bills, voting processes, and promises.
 
-This project can be seen as a renovated combination of [They Work for Us](https://github.com/wevisdemo/they-work-for-us), [Law Watch](https://github.com/wevisdemo/law-watch), and [Promise Tracker](https://github.com/wevisdemo/promise-tracker) which aim to support several election era.
+This project can be seen as a renovated combination of [They Work for Us](https://github.com/wevisdemo/they-work-for-us), [Law Watch](https://github.com/wevisdemo/law-watch), and [Promise Tracker](https://github.com/wevisdemo/promise-tracker) which aim to support several election eras.
 
 ## 🌎 Environments
 
-| Name                  | URL                                |
-| --------------------- | ---------------------------------- |
-| Production            | https://parliamentwatch.wevis.info |
-| Staging (main branch) | https://parliament-watch.pages.dev |
+| Name                  | URL                                    |
+| --------------------- | -------------------------------------- |
+| Production            | https://parliamentwatch.wevis.info     |
+| Staging (main branch) | ~~https://parliament-watch.pages.dev~~ |
+
+**Currently pausing due to the backend migration**
 
 ## 🍱 Tech Stack
 
@@ -60,14 +64,14 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 - [Yarn v1](https://classic.yarnpkg.com) as a package manager
 - Husky and lint-staged will
   - Lint (ESLint) and format (Prettier) code before committing
-  - Validate that commit message is align with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
+  - Validate that commit message is aligned with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
   - Run svelte-check before pushing
 - For VSCode user, format on save is enabled and [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when open the project.
 - [Hygen](http://www.hygen.io) for a code generation
 
 ### Deployment pipeline
 
-- **Staging**: Each push will trigger the [Github Actions Workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy on [Cloudflare Pages](https://pages.cloudflare.com). Can also be triggered manually.
+- **Staging**: ~~Each push will trigger the [Github Actions Workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy on [Cloudflare Pages](https://pages.cloudflare.com). Can also be triggered manually.~~ We are pausing staging CI/CD pipeline in GitHub Action due to the failed build during new data backend migration.
 - **Production**: The [Github Actions Workflow](.github/workflows/staging.yml) can only be manually triggered to download the latest build artifact and upload to our server through SSH.
 
 ## 🪄 Useful Commands
@@ -119,17 +123,17 @@ Server-side logging for data warning and SvelteKit error can be enabled via envi
 
 ## 🍭 Design System
 
-The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with scss in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `yarn sass:build` command.
+The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with SCSS in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `yarn sass:build` command.
 
 ### Typography
 
-- The utility classes is globally available as declared in [typography.scss](src/styles/carbon/typography.scss)
+- The utility classes are globally available as declared in [typography.scss](src/styles/carbon/typography.scss)
 - See [Figma file](<https://www.figma.com/file/wydykFjb2U2SLFIz5YmiE8/(v11)-Text-Styles---IBM-Design-Language-(Community)>)
 
 ### Colors
 
 - [tailwind.config.js](tailwind.config.js) define utility classes based on color function name according to the Carbon's theme (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)>))
-- scss variable (need to be imported where you want to use)
+- SCSS variable (need to be imported where you want to use)
   - [colors.scss](src/styles/carbon/colors.scss) define variable of all color palette (see [Figma file](<https://www.figma.com/file/DLpm4GWpqa1BUEWApXGeGc/Color-Styles---IBM-Design-Language-(Community)>))
   - [theme.scss](src/styles/carbon/theme.scss) define variable according to the Carbon theme's color function name (see [Figma file](<https://www.figma.com/file/JhpIXQHbn07yn2GVD806dA/(v10)-White-Theme---Carbon-Design-System-(Community)?node-id=169%3A0>))
 
@@ -137,8 +141,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
 - We have custom shared component available in [src/components/](src/components/).
-  - To see shared components' story, open Histoire in local with `yarn story:dev` or browse it in the [staging/stories](https://parliament-watch.pages.dev/stories)
-  - See all planned component in [Figma file.](https://www.figma.com/file/cdtZnPegHm5CGHWqIND5Im/Design_Phase01?node-id=40%3A67247)
+  - To see shared components' story, open Histoire in local with `yarn story:dev`
 - If the component is not yet developed:
   - If the component is used by only a specific route, create it in _src/components/route-name-and-sub-route-if-exist/_
   - If the component is shared, run `yarn gen:component` to generate a new component. Don't forget to update a story file for the component documentation.
@@ -151,12 +154,22 @@ The project design system is based on Carbon Design System v10 with some modific
 
 ## 💾 Data Pipeline
 
-Data is pre-process server-side during the build step as following
+We are migrating away from Google Sheets to our new political GraphQL service called ["Politigraph"](https://politigraph.wevis.info). The data that are completely migrated are:
+
+- [x] Politicians
+- [x] Political Parties
+- [x] Assemblies
+- [x] Vote Events
+- [ ] Bills
+- [ ] Promises
+
+### Migrating away from: Google Sheets
+
+Data is pre-process server-side during the Static Site Generation (SSG) build step as following
 
 ```mermaid
 flowchart TD
-    A[Google Sheets] -->|d3 fetch: fetch and parse| B(JS objects)
-    B --> |Zod: validate and transform| C(Type-safe objects)
+    B[Google Sheets] --> |Fetched, validated, parsed| C(Sheethuahua)
     C --> |used in| D(Svelte's routes)
     D --> |Svelte SSR/SSG| E(dev/prod website)
     C --> |used in| G(Scheduled GitHub Action)
@@ -166,9 +179,26 @@ flowchart TD
 ```
 
 - Original data is available at our public [Google Sheets](https://docs.google.com/spreadsheets/d/1SbX2kgAGsslbhGuB-EI_YdSAnIt3reU1_OEtWmDVOVk/edit?usp=sharing)
-- [lib/datasheets](src/lib/datasheets/index.ts) provides fetch functions for each tables wrapping [d3-fetch](https://d3js.org/d3-fetch#csv) and [Zod](https://zod.dev)'s validation.
-- Zod's schema for each data table are defined in [src/models](src/models) which also contains ER Diagram and other TypeScript's interfaces.
-- Some data, such as politician ranking from external source, will be updated periodically through [scheduled Github Action](.github/workflows/update-ranking.yml) to reduce unnecessary build-time. The output JSON data is [served through Github Pages](https://wevisdemo.github.io/parliament-watch/politician-ranking.json) and can be fetch from the client-side.
+- [lib/datasheets](src/lib/datasheets/index.ts) provides functions using [Sheethuahua](https://punchupworld.github.io/sheethuahua/) to fetch, validate, and parse data from Google Sheets.
+- The [src/models](src/models) contains ER Diagram and other TypeScript's interfaces.
+- Some data, such as politician ranking from external source, will be updated periodically through [scheduled GitHub Action](.github/workflows/update-ranking.yml) to reduce unnecessary build-time. The output JSON data is [served through GitHub Pages](https://wevisdemo.github.io/parliament-watch/politician-ranking.json) and can be fetched from the client-side.
+
+### Migrating to: Politigraph
+
+[Politigraph](https://politigraph.wevis.info) is a Thai politics graph database using GraphQL and Neo4j. Fully migrated to this will allow us to run Parliament Watch in SSR mode, requesting data from Politigraph in real-time.
+
+```mermaid
+flowchart TD
+    B[Politigraph's GraphQL] --> |fetched by| C(GenQL's generated client)
+    C --> |used in| D(Svelte's routes)
+    D --> |Svelte SSR| E(dev/prod website)
+    C --> |used in| G(Scheduled GitHub Action)
+    F(External data source) --> |fetched by| G
+    G --> |build| H(JSON on GitHub Page)
+    H --> |fetched by| E(SvelteKit SSR Website)
+```
+
+- We use [GenQL](https://genql.dev) to generate type-safe GraphQL client, communicating with [Politigraph](https://politigraph.wevis.info) GraphQL endpoint
 
 ## 🤝 Contributing Guideline
 

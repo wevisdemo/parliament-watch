@@ -10,3 +10,5 @@ Close #<tag-related-issue-number-here>
 ## Screenshot (if any)
 
 ## Help needed (if any)
+
+## Did you use AI in your PR? If so, how did you use AI, and what did you do to ensure the quality?
