@@ -52,7 +52,7 @@
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		สมาชิกสภาผู้แทนราษฎร (สส.) ทั้งหมด
+		สมาชิกสภาผู้แทนราษฎร (สส.) ชุดที่ 26 (ชุดปัจจุบัน)
 	</Button>
 
 	<Button
@@ -61,7 +61,7 @@
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		สมาชิกวุฒิสภา (สว.) ทั้งหมด
+		สมาชิกวุฒิสภา (สว.) ชุดที่ 13 (ชุดปัจจุบัน)
 	</Button>
 
 	<Button
@@ -70,6 +70,6 @@
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		สมาชิกคณะรัฐมนตรี ทั้งหมด
+		คณะรัฐมนตรี ชุดที่ 65 (ชุดปัจจุบัน)
 	</Button>
 </div>
