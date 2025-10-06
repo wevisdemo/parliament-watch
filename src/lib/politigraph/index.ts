@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { PUBLIC_POLITIGRAPH_ENDPOINT } from '$env/static/public';
 import { createClient } from './genql';
 
