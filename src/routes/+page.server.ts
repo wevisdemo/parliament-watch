@@ -70,6 +70,7 @@ export async function load() {
 						}
 					},
 					posts: {
+						label: true,
 						role: true,
 						organizations: {
 							classification: true,
@@ -91,9 +92,10 @@ export async function load() {
 		return {
 			...rest,
 			avatar: image ?? '',
-			assemblyRole: assembly?.posts[0].role ?? '',
+			role: assembly?.posts[0].label ?? '',
 			partyImage: party?.posts[0].organizations[0].name ?? '',
-			partyLogo: party?.posts[0].organizations[0].image ?? ''
+			partyLogo: party?.posts[0].organizations[0].image ?? '',
+			partyName: party?.posts[0].organizations[0].name ?? ''
 		};
 	});
 
