@@ -30,7 +30,7 @@
 	export let id: string;
 	export let name: string;
 	export let avatar: string;
-	export let assemblyRole: string;
+	export let role: string;
 	export let partyName: string | undefined = undefined;
 	export let partyLogo: string | undefined = undefined;
 
@@ -134,10 +134,10 @@
 			<PoliticianPicture {avatar} {partyLogo} size="40" />
 			<span class="heading-02 text-gray-100">{name}</span>
 			<span class="label-01 -mt-2 text-gray-60">
-				{#if assemblyRole}
-					<span>{assemblyRole}</span>
+				{#if role}
+					<span>{role}</span>
 				{/if}
-				{#if assemblyRole && partyName}
+				{#if role && partyName}
 					<span>|</span>
 				{/if}
 				{#if partyName}
