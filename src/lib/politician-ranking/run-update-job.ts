@@ -83,7 +83,7 @@ async function writePoliticianRankingFile() {
 		return {
 			id,
 			avatar: image ?? '/images/politicians/_placeholder.webp',
-			role: assembly?.posts[0].role ?? '',
+			label: assembly?.posts[0].role ?? '',
 			partyName: party?.posts[0].organizations[0].name ?? '',
 			partyLogo: party?.posts[0].organizations[0].image ?? '/images/parties/_placeholder.webp'
 		};
