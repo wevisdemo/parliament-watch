@@ -76,6 +76,7 @@
 		"tsx": "^4.7.0",
 		"typescript": "^5.0.0",
 		"vite": "^5.0.0",
+		"vite-plugin-devtools-json": "^1.0.0",
 		"vitest": "^1.0.0"
 	},
 	"packageManager": "yarn@1.22.19"
