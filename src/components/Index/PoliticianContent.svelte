@@ -13,19 +13,14 @@
 	export let highlightedPoliticians: ComponentProps<StatCard>[];
 
 	async function getExternalHighlightedPoliticians(): Promise<ComponentProps<StatCard>[]> {
-		const { politicianWithMostWikipediaVisit, politicianWithMostGun, updatedAt } =
-			await fetchExternalPoliticianRanking();
+		const { politicianWithMostWikipediaVisit, updatedAt } = await fetchExternalPoliticianRanking();
 
 		return [
 			{
 				reason: HighlightedReason.MostVisitedInWikipediaLastMonth,
 				...politicianWithMostWikipediaVisit,
 				updatedAt
-			} as MostVisitedInWikipediaLastMonthPolitician,
-			{
-				reason: HighlightedReason.MostGunOwned,
-				...politicianWithMostGun
-			}
+			} as MostVisitedInWikipediaLastMonthPolitician
 		];
 	}
 </script>
