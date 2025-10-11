@@ -1,6 +1,5 @@
 import { graphql } from '$lib/politigraph';
 import { OUT_FILE, type ExternalPoliticianRanking } from '.';
-import { getPoliticianWithMostGun } from './gun';
 import { getPoliticianWithMostViewLastMonth } from './wikipedia';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
@@ -32,15 +31,12 @@ async function writePoliticianRankingFile() {
 	console.info('Fetching wikipedia views...');
 	const politicianWithMostWikipediaVisit = await getPoliticianWithMostViewLastMonth(people);
 
-	console.info('Fetching gun ownership...');
-	const politicianWithMostGun = await getPoliticianWithMostGun(people);
-
 	const highlightPoliticians = (
 		await graphql.query({
 			people: {
 				__args: {
 					where: {
-						id_IN: [politicianWithMostWikipediaVisit.id, politicianWithMostGun.id]
+						id_IN: [politicianWithMostWikipediaVisit.id]
 					}
 				},
 				id: true,
@@ -95,11 +91,6 @@ async function writePoliticianRankingFile() {
 			...politicianWithMostWikipediaVisit,
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			...highlightPoliticians.find((p) => p.id === politicianWithMostWikipediaVisit.id)!
-		},
-		politicianWithMostGun: {
-			...politicianWithMostGun,
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			...highlightPoliticians.find((p) => p.id === politicianWithMostGun.id)!
 		},
 		updatedAt: new Date()
 	};

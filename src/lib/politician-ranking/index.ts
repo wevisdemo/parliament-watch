@@ -6,7 +6,6 @@ export const GITHUB_PAGE_URL = 'https://wevisdemo.github.io/parliament-watch/';
 
 export interface ExternalPoliticianRanking {
 	politicianWithMostWikipediaVisit: Omit<ComponentProps<StatCard>, 'reason'>;
-	politicianWithMostGun: Omit<ComponentProps<StatCard>, 'reason'>;
 	updatedAt: Date;
 }
 
