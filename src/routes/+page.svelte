@@ -6,17 +6,15 @@
 	import PoliticianContent from '$components/Index/PoliticianContent.svelte';
 	import VotingContent from '$components/Index/VotingContent.svelte';
 	import SectionMenuItem from '$components/Index/SectionMenuItem.svelte';
-	import BillContent from '$components/Index/BillContent.svelte';
 	import ContentSection from '$components/Index/ContentSection.svelte';
 	import { SearchIndexCategory } from '$models/search.js';
-	import { ArrowRight } from 'carbon-icons-svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
-	import PromiseContent from '$components/Index/PromiseContent.svelte';
+	import CrowdfundingBanner from '$components/CrowdfundingBanner/CrowdfundingBanner.svelte';
 
 	export let data;
 
-	$: ({ highlightedPoliticians, latestVoteEvents, billByCategoryAndStatus, promiseSummary } = data);
+	$: ({ highlightedPoliticians, latestVoteEvents } = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -70,6 +68,8 @@
 		</menu>
 	</nav>
 </div>
+
+<CrowdfundingBanner variant="compact" />
 
 <ContentSection
 	id="politician"
