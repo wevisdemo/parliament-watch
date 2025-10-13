@@ -4,30 +4,24 @@ import {
 	type BillByCategoryAndStatus,
 	type BillCategoryWithStatus
 } from '$components/Index/BillContent.svelte';
-import type { HighlightedPolitician } from '$components/Index/StatCard.svelte';
-import { HighlightedReason } from '$components/Index/StatCard.svelte';
+import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import {
-	fetchAssemblies,
-	fetchBills,
-	fetchPoliticians,
-	fetchPromises,
-	fetchVotes,
-	fetchVotings
-} from '$lib/datasheets';
-import { safeFind } from '$lib/datasheets/processor.js';
-import { getHighlightedVoteByGroups } from '$lib/datasheets/voting.js';
+import { fetchBills, fetchPromises } from '$lib/datasheets';
+import { graphql } from '$lib/politigraph';
+import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
+import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { BillStatus } from '$models/bill';
 import { PromiseStatus } from '$models/promise';
-import { DefaultVoteOption } from '$models/voting.js';
 import type { PromisesByStatus } from './promises/+page.server';
 import { groups, rollup } from 'd3-array';
-import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
 const MAX_ENACTED_BILL = 10;
 const MAX_PROMISES_SAMPLE = 3;
+
+const CHUAN_ID = '891ea463-c463-4f76-840d-e7d24a97d70c';
+const BANYAT_ID = 'e26bbc32-f2d5-41f1-8006-2ea439576771';
 
 enum PoliticialPosition {
 	MP = 'สส.',
@@ -35,127 +29,135 @@ enum PoliticialPosition {
 	Cabinet = 'รัฐมนตรี'
 }
 
-interface LongestServedInPoliticalPositionsPolitician extends HighlightedPolitician {
+interface LongestServedInPoliticalPositionsPolitician extends ComponentProps<StatCard> {
 	position: PoliticialPosition;
 	year: number;
 }
 
-interface MostFrequentlyServedAsMinisterPolitician extends HighlightedPolitician {
+interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCard> {
 	cabinetTerms: number[];
 }
 
 export async function load() {
-	const politicians = await fetchPoliticians();
-	const votes = await fetchVotes();
-	const votings = await fetchVotings();
 	const bills = await fetchBills();
 	const promises = await fetchPromises();
-	const assembles = await fetchAssemblies();
 
-	const activePoliticians = politicians.filter(({ isActive }) => isActive);
+	const highlightPoliticians = (
+		await graphql.query({
+			people: {
+				__args: {
+					where: {
+						id_IN: [CHUAN_ID, BANYAT_ID]
+					}
+				},
+				id: true,
+				name: true,
+				image: true,
+				memberships: {
+					__args: {
+						where: {
+							end_date_EQ: null,
+							posts_ALL: {
+								organizations_ALL: {
+									classification_IN: [
+										'CABINET',
+										'HOUSE_OF_REPRESENTATIVE',
+										'HOUSE_OF_SENATE',
+										'POLITICAL_PARTY'
+									]
+								}
+							}
+						}
+					},
+					posts: {
+						label: true,
+						role: true,
+						organizations: {
+							classification: true,
+							name: true,
+							image: true
+						}
+					}
+				}
+			}
+		})
+	).people.map(({ image, memberships, ...rest }) => {
+		const assembly = memberships.find(
+			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+		);
+		const party = memberships.find(
+			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+		);
 
-	const votesInActiveAssemblies = votes.filter(({ votingId }) =>
-		votings
-			.find(({ id }) => id === votingId)
-			?.participatedAssemblies.some(({ endedAt }) => !endedAt)
-	);
+		return {
+			...rest,
+			avatar: image ?? '',
+			label: assembly?.posts[0].label ?? '',
+			partyImage: party?.posts[0].organizations[0].name ?? '',
+			partyLogo: party?.posts[0].organizations[0].image ?? '',
+			partyName: party?.posts[0].organizations[0].name ?? ''
+		};
+	});
 
-	const highlightedPoliticians: HighlightedPolitician[] = [
-		// TODO: Not release assets and debts yet
-		// {
-		// 	reason: HighlightedReason.HighestAssetOwned,
-		// 	value: 95787230000,
-		// 	politician: movingForwardPolitician
-		// },
-		// {
-		// 	reason: HighlightedReason.HighestDebtOwned,
-		// 	value: 1862770000,
-		// 	politician: movingForwardPolitician
-		// },
-		{
-			reason: HighlightedReason.HighestPartySwitching,
-			...activePoliticians
-				.map((politician) => ({
-					politician,
-					value: new Set(politician.partyRoles.map(({ party }) => party.name)).size
-				}))
-				.sort((a, z) => z.value - a.value)[0]
-		},
-		{
-			reason: HighlightedReason.HighestAbsentRate,
-			...activePoliticians
-				.map((politician) => {
-					const theirVotes = votesInActiveAssemblies.filter(
-						({ politicianId }) => politicianId === politician.id
-					);
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const chuanLeekpai = highlightPoliticians.find((p) => p.id === CHUAN_ID)!;
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const banyatBantadtan = highlightPoliticians.find((p) => p.id === BANYAT_ID)!;
 
-					return {
-						politician,
-						value:
-							theirVotes.length > 0
-								? theirVotes.filter(({ voteOption }) => voteOption === DefaultVoteOption.Absent)
-										.length / theirVotes.length
-								: 0
-					};
-				})
-				.sort((a, z) => z.value - a.value)[0]
-		},
-		{
-			reason: HighlightedReason.HighestBillProposed,
-			...activePoliticians
-				.map((politician) => ({
-					politician,
-					value: bills.filter((bill) => bill.proposedLedByPolitician?.id === politician.id).length
-				}))
-				.sort((a, z) => z.value - a.value)[0]
-		},
-		{
-			reason: HighlightedReason.Youngest,
-			...activePoliticians
-				.map((politician) => ({
-					politician,
-					value: politician.birthdate ? dayjs().diff(politician.birthdate, 'years') : 999
-				}))
-				.sort((a, z) => a.value - z.value)[0]
-		}
-	];
-
-	const chuanLeekpai = safeFind(activePoliticians, (p) => p.id === 'ชวน-หลีกภัย');
-	const banyatBantadtan = safeFind(activePoliticians, (p) => p.id === 'บัญญัติ-บรรทัดฐาน');
-
-	const otherSourcesHighlightedPoliticians: HighlightedPolitician[] = [
+	const highlightedPoliticians: ComponentProps<StatCard>[] = [
 		{
 			reason: HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,
-			politician: chuanLeekpai,
+			...chuanLeekpai,
 			position: PoliticialPosition.MP,
 			year: 2512
 		} as LongestServedInPoliticalPositionsPolitician,
 		{
 			reason: HighlightedReason.MostFrequentlyElectedInConstituency,
 			value: 12,
-			politician: banyatBantadtan
+			...banyatBantadtan
 		},
 		{
 			reason: HighlightedReason.MostFrequentlyServedAsMinister,
 			value: 5,
-			politician: chuanLeekpai,
+			...chuanLeekpai,
 			cabinetTerms: [38, 42, 43, 45, 53]
 		} as MostFrequentlyServedAsMinisterPolitician,
 		{
 			reason: HighlightedReason.MostDiverseServedAsMinister,
 			value: 6,
-			politician: chuanLeekpai
+			...chuanLeekpai
 		}
 	];
 
-	const latestVotings: ComponentProps<VoteCard>[] = [...(await fetchVotings())]
-		.sort((a, z) => z.date.getTime() - a.date.getTime())
-		.slice(0, MAX_LATEST_VOTE)
-		.map((voting) => ({
-			voting,
-			highlightedVoteByGroups: getHighlightedVoteByGroups(voting, votes, politicians, assembles)
-		}));
+	const { voteEvents } = await graphql.query({
+		voteEvents: {
+			__args: {
+				sort: [{ start_date: 'DESC' }],
+				limit: MAX_LATEST_VOTE
+			},
+			id: true,
+			title: true,
+			nickname: true,
+			start_date: true,
+			result: true,
+			end_date: true,
+			organizations: {
+				id: true
+			}
+		}
+	});
+
+	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
+		voteEvents.map(async (voteEvent) => ({
+			...voteEvent,
+			date: voteEvent.start_date,
+			votesByGroup: groupVotesByAffiliation(await queryPoliticiansVote(voteEvent)).map((aff) => ({
+				name: aff.name,
+				options: countVotesInEachOption(aff.votes)
+			}))
+		}))
+	);
 
 	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(
 		bills.flatMap(({ categories, ...rest }) =>
@@ -213,8 +215,7 @@ export async function load() {
 
 	return {
 		highlightedPoliticians,
-		otherSourcesHighlightedPoliticians,
-		latestVotings,
+		latestVoteEvents,
 		billByCategoryAndStatus,
 		promiseSummary
 	};

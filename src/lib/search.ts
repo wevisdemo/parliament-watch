@@ -5,6 +5,7 @@ import type {
 	SearchResults,
 	HighlightedText
 } from '$models/search';
+import { distance } from 'fastest-levenshtein';
 
 /**
  * Tokenizes the given text into an array of words.
@@ -94,6 +95,16 @@ export function search(
 						url: '/bills/explore?proposername=' + proposer.item.name
 					})
 				)
+			: undefined,
+		promises: searchIndexes.promises
+			? getScoredAndHighlightedResultItems(queries, searchIndexes.promises, keepTopN).map(
+					(promise) => ({
+						heading: promise.item.name.slice(0, 16),
+						headingHighlight: highlight ? promise.highlightedName : undefined,
+						promiseStatus: promise.item.status,
+						url: '/promises/' + promise.item.id
+					})
+				)
 			: undefined
 	};
 }
@@ -103,7 +114,7 @@ function getScoredAndHighlightedResultItems<T extends { name: string }>(
 	searchIndexes: T[],
 	keepTopN: number
 ) {
-	return postCalcuateScore(calculateScore(queries, searchIndexes), keepTopN);
+	return postCalculateScore(calculateScore(queries, searchIndexes), keepTopN);
 }
 
 /**
@@ -121,8 +132,9 @@ export function calculateScore<T extends { name: string }>(
 	return searchItems.map((item: T) => {
 		let score = 0;
 		const matchedIndices: number[] = [];
-		for (const query of queries) {
-			const stringMenu = item.name;
+		const stringMenu = item.name.toLowerCase();
+		const normalizedQueries = queries.map((q) => q.toLowerCase());
+		for (const query of normalizedQueries) {
 			let matchedIndex = 0;
 			let startIndex = 0;
 			let addedScore = 0;
@@ -144,6 +156,31 @@ export function calculateScore<T extends { name: string }>(
 
 				// Set the start index of next search
 				startIndex = endMatchedIndex;
+			}
+
+			if (addedScore == 0) {
+				// Try fuzzy match using sliding window
+				let bestDistance = Infinity;
+				let bestIndex = -1;
+
+				for (let i = 0; i <= stringMenu.length - query.length; i++) {
+					const sub = stringMenu.slice(i, i + query.length);
+					const d = distance(sub, query);
+					if (d < bestDistance) {
+						bestDistance = d;
+						bestIndex = i;
+					}
+				}
+
+				// Accept fuzzy match if close enough
+				const threshold = Math.max(1, Math.floor(query.length / 3));
+				if (bestDistance <= threshold) {
+					const similarity = 1 - bestDistance / query.length;
+					addedScore += (similarity * query.length * 0.2) / stringMenu.length;
+					for (let i = bestIndex; i < bestIndex + query.length; i++) {
+						if (!matchedIndices.includes(i)) matchedIndices.push(i);
+					}
+				}
 			}
 
 			// If not found query
@@ -179,7 +216,7 @@ export function calculateScore<T extends { name: string }>(
  * @param keepTopN - The number of top candidates to return.
  * @returns - The list of top candidates with highlighted matched indices.
  */
-function postCalcuateScore<T extends { name: string }>(
+function postCalculateScore<T extends { name: string }>(
 	candidates: ScoreResultItem<T>[],
 	keepTopN = 5
 ): ScoreAndHighlightResultItem<T>[] {

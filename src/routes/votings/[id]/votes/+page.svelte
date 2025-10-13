@@ -9,7 +9,7 @@
 
 	export let data;
 
-	$: ({ voting, filterOptions, votes } = data);
+	$: ({ voteEvent, filterOptions, customVoteOptions, votes } = data);
 
 	$: comboboxFilterList = [
 		{
@@ -50,16 +50,15 @@
 		selectedCheckboxValue === undefined ||
 		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
-			: votes.filter((vote) => {
+			: votes.filter(({ politician, option, role, party }) => {
 					const search = searchQuery.trim();
-					if (search && !vote.politician.id.includes(search)) return;
+					if (search && !politician.name.includes(search)) return;
 					const selectedParty = selectedComboboxValue?.filterComboboxType;
 
-					const { filterPosition, filterVoteType } = selectedCheckboxValue;
 					return (
-						filterVoteType.includes(generalVoteType(vote.voteOption)) &&
-						filterPosition.includes(vote.role) &&
-						(!selectedParty || vote.party === selectedParty)
+						selectedCheckboxValue.filterVoteType.includes(generalVoteType(option)) &&
+						selectedCheckboxValue.filterPosition.includes(role) &&
+						(!selectedParty || party?.name === selectedParty)
 					);
 				});
 
@@ -71,7 +70,7 @@
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ label: 'การลงมติ' },
-		{ url: `/votings/${voting.id}`, label: voting.nickname },
+		{ url: `/votings/${voteEvent.id}`, label: voteEvent.nickname || voteEvent.title },
 		{ label: 'ผลการลงมติรายคน' }
 	]}
 	searchPlaceholder="ชื่อ-นามสกุล"
@@ -82,11 +81,11 @@
 		{ key: 'politician', value: 'ชื่อ-นามสกุล' },
 		{ key: 'role', value: 'ตำแหน่ง' },
 		{ key: 'party', value: 'สังกัดพรรค' },
-		{ key: 'voteOption', value: 'การลงมติ' }
+		{ key: 'option', value: 'การลงมติ' }
 	]}
 	downloadSize="lg"
 	downloadLinks={[
-		{ label: 'ผลการลงมติรายคน', url: `/files/download/votings/voting-${voting.id}.csv` }
+		{ label: 'ผลการลงมติรายคน', url: `/files/download/votings/voting-${voteEvent.id}.csv` }
 	]}
 	bind:searchQuery
 	bind:selectedCheckboxValue
@@ -96,8 +95,8 @@
 		<div class="flex-1">
 			<p class="heading-01">ผลการลงมติรายคน</p>
 			<h1 class="fluid-heading-03">
-				<a href="/votings/{voting.id}" class="text-text-01 no-underline hover:text-blue-70">
-					{data.voting.nickname}
+				<a href="/votings/{voteEvent.id}" class="text-text-01 no-underline hover:text-blue-70">
+					{voteEvent.nickname || voteEvent.title}
 				</a>
 			</h1>
 			<p class="label-01 text-gray-60">หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ</p>
@@ -105,13 +104,21 @@
 	</div>
 	<svelte:fragment slot="table" let:cellKey let:cellValue>
 		{#if cellKey === 'politician'}
-			<a href="/politicians/{cellValue.id}" class="body-01 text-gray-100 underline"
-				>{cellValue.firstname} {cellValue.lastname}</a
-			>
-		{:else if cellKey === 'voteOption'}
-			<VotingOptionTag voteOption={cellValue} />
-		{:else}
-			<p class="body-compact-01 text-gray-60">{cellValue || '-'}</p>
+			{#if cellValue.id}
+				<a href="/politicians/{cellValue.id}" class="body-01 text-gray-100 underline"
+					>{cellValue.name}</a
+				>
+			{:else}
+				<p class="body-01 text-gray-100">{cellValue.name}</p>
+			{/if}
+		{:else if cellKey === 'role'}
+			<p class="body-compact-01 text-gray-60">{cellValue ?? '-'}</p>
+		{:else if cellKey === 'party'}
+			<p class="body-compact-01 text-gray-60">{cellValue?.name ?? '-'}</p>
+		{:else if cellKey === 'option'}
+			<VotingOptionTag
+				voteOption={customVoteOptions.find((option) => option.label === cellValue) ?? cellValue}
+			/>
 		{/if}
 	</svelte:fragment>
 </DataPage>

@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import LawIcon from '$components/icons/LawIcon.svelte';
+	// import LawIcon from '$components/icons/LawIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
@@ -15,8 +15,8 @@
 					url: '/assemblies/สภาผู้แทนราษฎร-26',
 					type: MenuTypes.link
 				},
-				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-12', type: MenuTypes.link },
-				{ label: 'คณะรัฐมนตรี', url: '/assemblies/คณะรัฐมนตรี-64', type: MenuTypes.link }
+				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-13', type: MenuTypes.link },
+				{ label: 'คณะรัฐมนตรี', url: '/assemblies/คณะรัฐมนตรี-65', type: MenuTypes.link }
 			]
 		},
 		{
@@ -25,21 +25,21 @@
 			url: '/assemblies/สภาผู้แทนราษฎร-26/votes',
 			type: MenuTypes.both
 		},
-		{
-			label: 'การเสนอกฎหมาย',
-			icon: LawIcon,
-			type: MenuTypes.root,
-			subs: [
-				{ label: 'สำรวจร่างกฎหมายในสภา', url: '/bills', type: MenuTypes.link },
-				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
-			]
-		},
-		{
-			label: 'คำสัญญาทางการเมือง',
-			icon: PromiseIcon,
-			url: '/promises',
-			type: MenuTypes.both
-		},
+		// {
+		// 	label: 'การเสนอกฎหมาย',
+		// 	icon: LawIcon,
+		// 	type: MenuTypes.root,
+		// 	subs: [
+		// 		{ label: 'สำรวจร่างกฎหมายในสภา', url: '/bills', type: MenuTypes.link },
+		// 		{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
+		// 	]
+		// },
+		// {
+		// 	label: 'คำสัญญาทางการเมือง',
+		// 	icon: PromiseIcon,
+		// 	url: '/promises',
+		// 	type: MenuTypes.both
+		// },
 		{
 			label: 'เกี่ยวกับเรา',
 			icon: WeVisIcon,
@@ -64,7 +64,7 @@
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuList from './SideMenuList.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
-	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
+	// import PromiseIcon from '$components/icons/PromiseIcon.svelte';
 	import { setContext } from 'svelte';
 
 	let screenSize: number;

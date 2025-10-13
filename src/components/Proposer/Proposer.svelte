@@ -1,9 +1,34 @@
+<script context="module" lang="ts">
+	export type PoliticianProposer = {
+		id: string;
+		name: string;
+		image: string | null;
+		assembly?: {
+			id: string;
+			abbreviation: string | null;
+			term: number | null;
+			startedAt: Date | string | null;
+		};
+		partyName?: string;
+	};
+
+	export type AssemblyProposer = {
+		id: string;
+		abbreviation: string;
+		term: number;
+		startedAt: Date | string | null;
+	};
+
+	export type PeopleProposer = {
+		ledBy: string;
+		signatoryCount: number;
+	};
+</script>
+
 <script lang="ts">
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import { AssemblyName } from '$models/assembly';
-	import type { Bill } from '$models/bill';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
@@ -11,91 +36,74 @@
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
 
-	export let bill: Bill;
+	export let proposer: PoliticianProposer | AssemblyProposer | PeopleProposer | undefined =
+		undefined;
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 
 	$: isLandscape = orientation === 'landscape';
 
-	function getBudistYear(date: Date) {
+	function getBudistYear(date: string | Date) {
 		return dayjs(date).format('BBBB');
 	}
 </script>
 
-<div class="flex {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
-	{#if bill.proposedLedByPolitician}
-		{@const { id, firstname, lastname, avatar, assemblyRoles, partyRoles } =
-			bill.proposedLedByPolitician}
-
-		{@const matchedAssemblyRole = assemblyRoles.find(
-			({ startedAt, endedAt }) =>
-				bill.proposedOn.getTime() >= startedAt.getTime() &&
-				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
-		)}
-
-		{@const matchedPartyRoles = partyRoles.find(
-			({ startedAt, endedAt }) =>
-				bill.proposedOn.getTime() >= startedAt.getTime() &&
-				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
-		)}
-
+<div class="flex items-center {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+	{#if proposer === undefined}
+		<p class="text-sm text-gray-60">ไม่พบข้อมูล</p>
+	{:else if 'image' in proposer}
+		{@const { id, name, image, assembly, partyName } = proposer}
 		<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
-			<img src={avatar} alt="{firstname} {lastname}" class="h-full w-full" loading="lazy" />
+			<img
+				src={image || '/images/politicians/_placeholder.webp'}
+				alt=""
+				class="h-full w-full"
+				loading="lazy"
+			/>
 		</figure>
-		<div>
-			<p class="text-sm">
-				<a href="/politicians/{id}" class="text-black">
-					{firstname}
-					{lastname}
+		<p class="text-sm">
+			<a href="/politicians/{id}" class="text-black">
+				{name}
+			</a>
+			{#if assembly}
+				<a href="/assemblies/{assembly.id}" class="text-sm text-black underline">
+					{assembly.abbreviation} ชุดที่ {assembly.term}
+					{#if assembly.startedAt}
+						({getBudistYear(assembly.startedAt)})
+					{/if}
 				</a>
-				{#if matchedAssemblyRole}
-					{@const { assembly } = matchedAssemblyRole}
-					<!-- TODO: cabinet is not released yet -->
-					{@const isCabinet = assembly.name === AssemblyName.Cabinet}
-					<svelte:element
-						this={isCabinet ? 'p' : 'a'}
-						href={isCabinet ? undefined : `/assemblies/${assembly.id}`}
-						class="text-sm text-black {isCabinet ? '' : 'underline'}"
-					>
-						{assembly.abbreviation} ชุดที่ {assembly.term} ({getBudistYear(assembly.startedAt)})
-					</svelte:element>
-				{/if}
-			</p>
-			{#if matchedPartyRoles}
-				<span class="text-sm text-gray-60">พรรค{matchedPartyRoles.party.name}</span>
 			{/if}
-		</div>
-	{:else if bill.proposedByAssembly}
-		{@const { id, name, term, startedAt } = bill.proposedByAssembly}
-		<!-- TODO: cabinet is not released yet -->
-		{@const isCabinet = name === AssemblyName.Cabinet}
+		</p>
+		{#if partyName}
+			<span class="text-sm text-gray-60">พรรค{partyName}</span>
+		{/if}
+	{:else if 'term' in proposer}
+		{@const { id, abbreviation, term, startedAt } = proposer}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 			<svelte:component
-				this={isCabinet ? GeneralIcon : PoliticianIcon}
+				this={abbreviation === 'ครม.' ? GeneralIcon : PoliticianIcon}
 				class="stroke-white"
 				size={16}
 			/>
 		</div>
-		<svelte:element
-			this={isCabinet ? 'p' : 'a'}
-			href={isCabinet ? undefined : `/assemblies/${id}`}
-			class="text-sm text-black"
-		>
-			{name}
-			<span class="underline">ชุดที่ {term} ({getBudistYear(startedAt)})</span>
-		</svelte:element>
-	{:else if bill.proposedByPeople}
-		{@const { ledBy, signatoryCount } = bill.proposedByPeople}
-
+		<a href="/assemblies/{id}" class="text-sm text-black">
+			{abbreviation}
+			<span class="underline"
+				>ชุดที่ {term}
+				{#if startedAt}
+					({getBudistYear(startedAt)})
+				{/if}
+			</span>
+		</a>
+	{:else}
+		{@const { ledBy, signatoryCount } = proposer}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
 			<PeopleIcon class="stroke-white" size={16} />
 		</div>
 		<p class="text-sm text-black">
 			{ledBy}
 			{#if signatoryCount}
-				<span class="text-gray-60">และประชาชน {signatoryCount} คน</span>
+				<span class="text-gray-60">และประชาชน {signatoryCount.toLocaleString()} คน</span>
 			{/if}
 		</p>
-	{:else}
-		<p class="text-sm text-gray-60">ไม่พบข้อมูล</p>
 	{/if}
 </div>

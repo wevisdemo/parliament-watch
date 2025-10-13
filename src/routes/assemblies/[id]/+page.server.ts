@@ -1,28 +1,24 @@
-import type { AvailableAssembly } from '$components/Assemblies/AssemblyIdRunner.svelte';
-import { getSenateColorByTitle } from '$components/Assemblies/shared';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { graphql } from '$lib/politigraph';
+import { getRoleChanges } from '$lib/politigraph/assembly/change';
+import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
 import {
-	fetchAssemblies,
-	fetchBills,
-	fetchFromIdOr404,
-	fetchPoliticians,
-	fetchVotes,
-	fetchVotings
-} from '$lib/datasheets';
-import { getAssemblyMembers } from '$lib/datasheets/assembly-member';
-import type { AssemblyMember } from '$lib/datasheets/assembly-member';
-import { getHighlightedVoteByGroups } from '$lib/datasheets/voting';
+	queryAssemblyMembers,
+	parseMemberWithAssemblyRoles,
+	type AssemblyMember
+} from '$lib/politigraph/assembly/member';
+import { countVotesInEachOption } from '$lib/politigraph/vote/group';
+import { groupVotesByAffiliation } from '$lib/politigraph/vote/group';
+import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
-import { AssemblyName, GroupByOption } from '$models/assembly';
+import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
-import type { Party } from '$models/party';
-import type { PartyRoleHistory, Politician } from '$models/politician';
-import { getMemberGroup, noParty } from './members/[groupby]/groupby';
+import { error } from '@sveltejs/kit';
+import { interpolateRainbow } from 'd3';
 import dayjs from 'dayjs';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
-const MAX_LATEST_BILL = 10;
 const MAX_CHANGES = 5;
 
 export interface Summary {
@@ -31,89 +27,109 @@ export interface Summary {
 	groupBySex: MemberGroup[];
 	groupByAgeRange: MemberGroup[];
 	groupByEducation: MemberGroup[];
-	// TODO: not release asset value in phase 1
-	// groupByAssetValue: MemberGroup[];
 }
 
 export interface MemberGroup {
 	name: string;
 	total: number;
-	senateMembers?: AssemblyMember[];
-	parties?: (Pick<Party, 'name' | 'color'> & { count: number; members?: AssemblyMember[] })[];
-}
-
-export interface MainMember {
-	assemblyRole: string;
-	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'>;
-	party?: Party;
-	description: string | null;
-}
-
-export interface RoleChange {
-	date: Date;
-	type: 'in' | 'out';
-	politician: Pick<Politician, 'id' | 'firstname' | 'lastname' | 'avatar'> & { party: Party };
-	role: string;
+	members?: AssemblyMember[];
+	color?: string;
+	subgroups?: { name: string; color: string; count: number; members?: AssemblyMember[] }[];
 }
 
 export type BillSummary = Pick<Bill, 'id' | 'proposedOn' | 'nickname' | 'status'>;
 
 export async function load({ params }) {
-	const fullAssembly = await fetchFromIdOr404(fetchAssemblies, params.id);
-	const assemblies = await fetchAssemblies();
-
-	const assemblyLatestDay = dayjs(fullAssembly.endedAt ?? new Date());
-
-	// Take government/opposition parties from overlapsed assembly if not defined
-	if (!fullAssembly.governmentParties.length || !fullAssembly.governmentParties.length) {
-		const assemblyWithPartyGroup = assemblies
-			.filter((a) => (!a.endedAt && a.governmentParties.length) || a.oppositionParties.length)
-			.map((a) => ({
-				...a,
-				endedAt: a.endedAt ?? new Date()
-			}))
-			.filter(
-				(a) =>
-					assemblyLatestDay.isAfter(a.startedAt) &&
-					(assemblyLatestDay.isSame(a.endedAt) || assemblyLatestDay.isBefore(a.endedAt))
-			)
-			.sort((z, a) => z.endedAt.getTime() - a.endedAt.getTime())
-			.at(0);
-
-		if (assemblyWithPartyGroup) {
-			fullAssembly.governmentParties = assemblyWithPartyGroup.governmentParties;
-			fullAssembly.oppositionParties = assemblyWithPartyGroup.oppositionParties;
+	const {
+		organizations: [assembly]
+	} = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				},
+				limit: 1
+			},
+			id: true,
+			name: true,
+			classification: true,
+			term: true,
+			description: true,
+			founding_date: true,
+			dissolution_date: true
 		}
+	});
+
+	if (!assembly) {
+		error(404);
 	}
 
-	const { mainRoles, ...assembly } = fullAssembly;
-	const isSenates = assembly.name === AssemblyName.Senates;
-	const isCabinet = assembly.name === AssemblyName.Cabinet;
+	const { organizations: availableAssemblies } = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					classification_EQ: assembly.classification
+				}
+			},
+			id: true,
+			term: true
+		}
+	});
 
-	const politicians = await fetchPoliticians();
+	const members = await queryAssemblyMembers(assembly);
 
-	const activeMembers = getAssemblyMembers(fullAssembly, politicians).filter(
-		({ assemblyRole }) =>
-			!assemblyRole?.endedAt ||
-			(assembly.endedAt && !dayjs(assembly.endedAt).isAfter(assemblyRole.endedAt))
-	);
+	const isSenates = assembly.classification === 'HOUSE_OF_SENATE';
+	const isCabinet = assembly.classification === 'CABINET';
 
-	const mainMembers = isCabinet
-		? activeMembers.filter(({ assemblyRole }) => assemblyRole?.role).map(parseMainMember)
-		: mainRoles.reduce((list, mainRole) => {
-				const member = activeMembers.find(({ assemblyRole }) => assemblyRole?.role === mainRole);
+	const activeMembers = members.filter(({ memberships }) => {
+		const assemblyMembership = memberships.find(
+			(m) => m.posts[0].organizations[0].id === assembly.id
+		);
 
-				return member ? [...list, parseMainMember(member)] : list;
-			}, [] as MainMember[]);
+		if (!assemblyMembership) return false;
+
+		return (
+			!assemblyMembership.end_date ||
+			(assembly.dissolution_date &&
+				!dayjs(assembly.dissolution_date).isAfter(assemblyMembership.end_date))
+		);
+	});
+
+	const mainPositions = activeMembers
+		.filter(
+			({ memberships }) =>
+				!memberships
+					.find((m) => m.posts[0].organizations[0].id === assembly.id)
+					?.posts[0].role.startsWith('สมาชิก')
+		)
+		.flatMap(parseMemberWithAssemblyRoles)
+		.filter((member) => !member.assemblyRole.startsWith('สมาชิก'))
+		.sort((a, z) => {
+			const getRoleSortingScore = (member: typeof a) =>
+				member.assemblyRole.startsWith('ประธาน')
+					? 20
+					: member.assemblyRole.startsWith('รองประธาน')
+						? 10
+						: 0;
+
+			return (
+				getRoleSortingScore(z) -
+				getRoleSortingScore(a) +
+				a.assemblyRole.localeCompare(z.assemblyRole)
+			);
+		});
 
 	const parseMemberGroup = (groupBy: GroupByOption) =>
-		getMemberGroup(fullAssembly, activeMembers, groupBy, isSenates).map((group) => ({
+		getMemberGroup(activeMembers, groupBy, isSenates).map((group) => ({
 			name: group.name,
 			...('subgroups' in group
 				? {
-						parties: group.subgroups.map((party) => ({
+						subgroups: group.subgroups.map((party) => ({
 							...party,
-							color: party.members[0].partyRole?.party.color as string,
+							color:
+								party.members[0].memberships.find(
+									(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+								)?.posts[0].organizations[0]?.color ?? noParty.color,
 							count: party.members.length
 						})),
 						total: group.subgroups.reduce((sum, subGroup) => sum + subGroup.members.length, 0)
@@ -131,159 +147,98 @@ export async function load({ params }) {
 	const groupByAgeRange = parseMemberGroup(GroupByOption.Age);
 	const groupByEducation = parseMemberGroup(GroupByOption.Education);
 
+	const highlightGroupColorMap = new Map<string, string>(
+		highlightGroup.map((group, i) => [
+			group.name,
+			interpolateRainbow(i / (highlightGroup.length + 1))
+		])
+	);
+
+	function getSenateGroupWithColor(memberGroup: MemberGroup[]): MemberGroup[] {
+		return memberGroup.map(({ subgroups, ...group }) => ({
+			...group,
+			subgroups: subgroups?.map((subgroup) => ({
+				...subgroup,
+				color: highlightGroupColorMap.get(subgroup.name) ?? '#A8A8A8'
+			}))
+		}));
+	}
+
 	const summary: Summary = {
 		totalMembers: activeMembers.length,
 		highlightGroup: isCabinet
 			? [
 					{
 						name: 'คณะรัฐมนตรี',
-						parties: highlightGroup.reduce<Exclude<MemberGroup['parties'], undefined>>(
-							(list, group) => ('parties' in group ? [...list, ...group.parties] : list),
+						subgroups: highlightGroup.reduce<Exclude<MemberGroup['subgroups'], undefined>>(
+							(list, group) => ('subgroups' in group ? [...list, ...group.subgroups] : list),
 							[]
 						),
 						total: highlightGroup.reduce((sum, { total }) => sum + total, 0)
 					}
 				]
-			: highlightGroup,
+			: isSenates
+				? highlightGroup.map((group) => ({
+						...group,
+						color: highlightGroupColorMap.get(group.name)
+					}))
+				: highlightGroup,
 		groupBySex: isSenates ? getSenateGroupWithColor(groupBySex) : groupBySex,
 		groupByAgeRange: isSenates ? getSenateGroupWithColor(groupByAgeRange) : groupByAgeRange,
 		groupByEducation: isSenates ? getSenateGroupWithColor(groupByEducation) : groupByEducation
-		// groupByAssetValue: [],
 	};
 
-	const votes = isCabinet ? [] : await fetchVotes();
-
-	const latestVotes: ComponentProps<VoteCard>[] | null = isCabinet
-		? null
-		: (await fetchVotings())
-				.filter(({ participatedAssemblies }) =>
-					participatedAssemblies.some(({ id }) => assembly.id === id)
-				)
-				.sort((a, z) => z.date.getTime() - a.date.getTime())
-				.slice(0, MAX_LATEST_VOTE)
-				.map((voting) => ({
-					voting,
-					highlightedVoteByGroups: getHighlightedVoteByGroups(
-						voting,
-						votes,
-						politicians,
-						assemblies
-					)
-				}));
-
-	const latestBills: BillSummary[] | null = isCabinet
-		? (await fetchBills())
-				.filter((bill) => bill.proposedByAssembly && bill.proposedByAssembly.id === assembly.id)
-				.sort((a, b) => b.proposedOn.getTime() - a.proposedOn.getTime())
-				.slice(0, MAX_LATEST_BILL)
-				.map(({ id, proposedOn, nickname, status }) => ({
-					id,
-					proposedOn,
-					nickname,
-					status
-				}))
-		: null;
-
-	const availableAssemblies: AvailableAssembly[] = (await fetchAssemblies()).map(
-		({ id, name, term }) => ({
-			id,
-			name,
-			term
-		})
-	);
-
-	function getPartyRoleAtDate(
-		partyRoles: Omit<PartyRoleHistory, 'politicianId'>[],
-		date: Date
-	): PartyRoleHistory['party'] {
-		const maybePartyRole = partyRoles
-			.filter(({ startedAt, endedAt }) => startedAt <= date && (!endedAt || date < endedAt))
-			.sort((a, z) => z.startedAt.getTime() - a.startedAt.getTime())
-			.at(-1);
-
-		return maybePartyRole?.party || noParty;
-	}
-
-	const getChanges = (): RoleChange[] => {
-		const changes: RoleChange[] = [];
-		for (const member of politicians) {
-			member.assemblyRoles.forEach((role) => {
-				if (role.assembly.name !== AssemblyName.Cabinet || role.assembly.id !== fullAssembly.id) {
-					return;
-				}
-				changes.push({
-					date: role.startedAt,
-					type: 'in',
-					role: role.role,
-					politician: {
-						avatar: member.avatar,
-						firstname: member.firstname,
-						lastname: member.lastname,
-						id: member.id,
-						party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
+	const { voteEvents } = isCabinet
+		? { voteEvents: [] }
+		: await graphql.query({
+				voteEvents: {
+					__args: {
+						where: {
+							organizations_SOME: {
+								id_EQ: params.id
+							}
+						},
+						sort: [{ start_date: 'DESC' }],
+						limit: MAX_LATEST_VOTE
+					},
+					id: true,
+					title: true,
+					nickname: true,
+					start_date: true,
+					result: true,
+					end_date: true,
+					organizations: {
+						id: true
 					}
-				});
-
-				if (role.endedAt) {
-					changes.push({
-						date: role.endedAt,
-						type: 'out',
-						role: role.role,
-						politician: {
-							avatar: member.avatar,
-							firstname: member.firstname,
-							lastname: member.lastname,
-							id: member.id,
-							party: getPartyRoleAtDate(member.partyRoles, role.startedAt)
-						}
-					});
 				}
 			});
-		}
-		return changes.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, MAX_CHANGES);
-	};
 
-	const changes = isCabinet ? getChanges() : null;
+	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
+		voteEvents.map(async (voteEvent) => ({
+			...voteEvent,
+			date: voteEvent.start_date,
+			votesByGroup: groupVotesByAffiliation(await queryPoliticiansVote(voteEvent)).map((aff) => ({
+				name: aff.name,
+				options: countVotesInEachOption(aff.votes)
+			}))
+		}))
+	);
+
+	const latestBills: BillSummary[] = [];
+
+	const changes = isCabinet ? getRoleChanges(assembly.id, members, MAX_CHANGES) : null;
 
 	return {
 		availableAssemblies,
 		assembly,
 		isCabinet,
 		summary,
-		mainMembers,
+		mainPositions,
 		changes,
-		latestVotes,
+		latestVoteEvents,
 		latestBills,
 		seo: createSeo({
-			title: `${assembly.name} ${assembly.term}`
+			title: assembly.name
 		})
-	};
-}
-
-function getSenateGroupWithColor(memberGroup: MemberGroup[]): MemberGroup[] {
-	return memberGroup.map((group) => {
-		const parties = group.parties?.map((party) => {
-			return {
-				...party,
-				color: getSenateColorByTitle(party.name)
-			};
-		});
-		return { ...group, parties };
-	});
-}
-
-function parseMainMember(member: ReturnType<typeof getAssemblyMembers>[number]): MainMember {
-	const { id, firstname, lastname, avatar, partyRole, assemblyRole } = member;
-
-	return {
-		assemblyRole: assemblyRole?.role || '',
-		politician: {
-			id,
-			firstname,
-			lastname,
-			avatar
-		},
-		party: partyRole?.party,
-		description: assemblyRole?.appointmentMethod || null
 	};
 }

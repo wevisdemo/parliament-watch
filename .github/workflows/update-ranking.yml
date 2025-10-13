@@ -4,23 +4,26 @@ on:
   schedule:
     - cron: '0 0 1 * *'
 jobs:
-  update-ranking:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'yarn'
       - name: Install dependencies
         run: yarn install
       - name: Test
         run: yarn test
+      - name: Generate GraphQL client
+        run: yarn gen:graphql
       - name: Fetch politician ranking data
         run: yarn update:politician-ranking
       - name: Deploy to Github Page
         uses: JamesIves/github-pages-deploy-action@v4
         with:
+          branch: politician-ranking-data
           folder: out
-          commit-message: 'feat: update external politican ranking data'
+          commit-message: 'feat: update external politician ranking data'

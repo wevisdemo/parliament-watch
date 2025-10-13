@@ -5,14 +5,14 @@
 	import Carousel from './Carousel.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
 
-	export let latestVotings: ComponentProps<VoteCard>[];
+	export let latestVoteEvents: ComponentProps<VoteCard>[];
 </script>
 
 <div>
-	<h3 class="fluid-heading-04 mb-4">{latestVotings.length} ผลการลงมติล่าสุด</h3>
+	<h3 class="fluid-heading-04 mb-4">{latestVoteEvents.length} ผลการลงมติล่าสุด</h3>
 	<Carousel>
-		{#each latestVotings as { voting, highlightedVoteByGroups } (voting.id)}
-			<VoteCard class="keen-slider__slide" {voting} {highlightedVoteByGroups} />
+		{#each latestVoteEvents as voting}
+			<VoteCard class="keen-slider__slide" {...voting} />
 		{/each}
 	</Carousel>
 </div>
@@ -23,14 +23,14 @@
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		ดูการลงมติทั้งหมดของสมาชิกสภาผู้แทนราษฎร ชุดที่ 26
+		ดูการลงมติของสมาชิกสภาผู้แทนราษฎร (สส.) ชุดที่ 26 (ชุดปัจจุบัน)
 	</Button>
 	<Button
-		href="/assemblies/วุฒิสภา-12/votes"
+		href="/assemblies/วุฒิสภา-13/votes"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		ดูการลงมติทั้งหมดของสมาชิกวุฒิสภา ชุดที่ 12
+		ดูการลงมติของสมาชิกวุฒิสภา (สว.) ชุดที่ 13 (ชุดปัจจุบัน)
 	</Button>
 </div>

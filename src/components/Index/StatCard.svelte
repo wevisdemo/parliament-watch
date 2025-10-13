@@ -1,6 +1,4 @@
 <script lang="ts" context="module">
-	import type { Politician } from '$models/politician.js';
-
 	export enum HighlightedReason {
 		HighestAssetOwned = 'มีทรัพย์สินมากที่สุด',
 		HighestDebtOwned = 'มีหนี้สินมากที่สุด',
@@ -17,12 +15,6 @@
 		MostVisitedInWikipediaLastMonth = 'ยอดเข้าชมประวัติใน Wikipedia มากสุดในเดือนที่แล้ว',
 		MostGunOwned = 'ครอบครองปืนมากที่สุด'
 	}
-
-	export interface HighlightedPolitician {
-		reason: HighlightedReason;
-		value: number;
-		politician: Politician;
-	}
 </script>
 
 <script lang="ts">
@@ -33,11 +25,18 @@
 	let className = '';
 	export { className as class };
 
-	export let politicianData: HighlightedPolitician;
-	$: ({ reason, value, politician } = politicianData);
+	export let reason: HighlightedReason;
+	export let value: number;
+	export let id: string;
+	export let name: string;
+	export let avatar: string;
+	export let label: string;
+	export let partyName: string | undefined = undefined;
+	export let partyLogo: string | undefined = undefined;
 
-	let formattedValue: string;
-	let unit: string;
+	export let year: number | undefined = undefined;
+	export let position: string | undefined = undefined;
+	export let cabinetTerms: number[] | undefined = undefined;
 
 	const POSTFIX_LOOKUP: Record<string, string | undefined> = {
 		[HighlightedReason.HighestPartySwitching]: '(ข้อมูลย้อนหลังถึงปี 2562)'
@@ -58,48 +57,51 @@
 		[HighlightedReason.MostGunOwned]: 'กระบอก'
 	};
 
-	$: switch (reason) {
-		case HighlightedReason.LongestServedInPoliticalPositions:
-			if ('year' in politicianData && 'position' in politicianData) {
-				unit = 'ปี (เป็น ' + politicianData.position + ' ครั้งแรกในปี ' + politicianData.year + ')';
+	$: unit = (() => {
+		switch (reason) {
+			case HighlightedReason.LongestServedInPoliticalPositions:
+				if (year && position) {
+					return 'ปี (เป็น ' + position + ' ครั้งแรกในปี ' + year + ')';
+				}
+				break;
+			case HighlightedReason.MostFrequentlyServedAsMinister:
+				if (cabinetTerms) {
+					return 'คณะ (ชุดที่ ' + cabinetTerms.join(', ') + ')';
+				}
+				break;
+			case HighlightedReason.MostVisitedInWikipediaLastMonth: {
+				const previousMonthDate = new Date();
+				previousMonthDate.setDate(0);
+				return (
+					'ครั้ง ในเดือน ' +
+					previousMonthDate.toLocaleDateString('th-TH', { month: 'short', year: '2-digit' })
+				);
 			}
-			break;
-		case HighlightedReason.MostFrequentlyServedAsMinister:
-			if ('cabinetTerms' in politicianData) {
-				unit = 'คณะ (ชุดที่ ' + (politicianData.cabinetTerms as Array<string>).join(', ') + ')';
-			}
-			break;
-		case HighlightedReason.MostVisitedInWikipediaLastMonth: {
-			const previousMonthDate = new Date();
-			previousMonthDate.setDate(0);
-			unit =
-				'ครั้ง ในเดือน ' +
-				previousMonthDate.toLocaleDateString('th-TH', { month: 'short', year: '2-digit' });
-			break;
+			default:
+				return UNIT_LOOKUP[reason] ?? 'หน่วย';
 		}
-		default:
-			unit = UNIT_LOOKUP[reason] ?? 'หน่วย';
-	}
+	})();
 
 	// Value Lookup
-	$: switch (reason) {
-		case HighlightedReason.HighestAssetOwned:
-		case HighlightedReason.HighestDebtOwned:
-			formattedValue = (value / 1_000_000).toLocaleString('th-TH', {
-				maximumFractionDigits: 2
-			});
-			break;
-		case HighlightedReason.HighestAbsentRate:
-			formattedValue =
-				(value * 100).toLocaleString('th-TH', {
+	$: formattedValue = (() => {
+		switch (reason) {
+			case HighlightedReason.HighestAssetOwned:
+			case HighlightedReason.HighestDebtOwned:
+				return (value / 1_000_000).toLocaleString('th-TH', {
 					maximumFractionDigits: 2
-				}) + '%';
-			break;
-		default:
-			formattedValue = value.toLocaleString('th-TH', {
-				maximumFractionDigits: 2
-			});
-	}
+				});
+			case HighlightedReason.HighestAbsentRate:
+				return (
+					(value * 100).toLocaleString('th-TH', {
+						maximumFractionDigits: 2
+					}) + '%'
+				);
+			default:
+				return value.toLocaleString('th-TH', {
+					maximumFractionDigits: 2
+				});
+		}
+	})();
 
 	// Description Lookup
 	const DESC_LOOKUP: Record<string, string | undefined> = {
@@ -127,23 +129,19 @@
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		<p class="label-01 flex-[1_1_70px] text-gray-60">{@html description}</p>
 	{/if}
-	<a href={`/politicians/${politician.id}`} class="mt-1 flex bg-white text-gray-100 hover:bg-ui-01">
+	<a href={`/politicians/${id}`} class="mt-1 flex bg-white text-gray-100 hover:bg-ui-01">
 		<div class="flex flex-1 flex-col gap-2 p-4">
-			<PoliticianPicture
-				avatar={politician.avatar}
-				size="40"
-				party={politician.partyRoles[0]?.party}
-			/>
-			<span class="heading-02 text-gray-100">{politician.firstname} {politician.lastname}</span>
+			<PoliticianPicture {avatar} {partyLogo} size="40" />
+			<span class="heading-02 text-gray-100">{name}</span>
 			<span class="label-01 -mt-2 text-gray-60">
-				{#if politician.assemblyRoles[0]}
-					<span>{politician.assemblyRoles[0].role}</span>
+				{#if label}
+					<span>{label}</span>
 				{/if}
-				{#if politician.assemblyRoles[0] && politician.partyRoles[0]}
+				{#if label && partyName}
 					<span>|</span>
 				{/if}
-				{#if politician.partyRoles[0]}
-					<span class="whitespace-nowrap">พรรค{politician.partyRoles[0]?.party.name}</span>
+				{#if partyName}
+					<span class="whitespace-nowrap">พรรค{partyName}</span>
 				{/if}
 			</span>
 			<span class="body-01 text-blue-70">{formattedValue} {unit}</span>

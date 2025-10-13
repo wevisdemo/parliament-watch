@@ -1,22 +1,3 @@
-<script lang="ts" context="module">
-	export interface VotingResultSummary {
-		agreed: number;
-		total: number;
-		subResults?: {
-			affiliationName: string;
-			agreed: number;
-			total: number;
-		}[];
-	}
-
-	export interface RelatedVotingResults {
-		[id: string]: {
-			voting: Voting;
-			resultSummary: VotingResultSummary;
-		};
-	}
-</script>
-
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { type Bill } from '$models/bill';
@@ -25,11 +6,11 @@
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
-	import type { Voting } from '$models/voting';
+	import type { ComponentProps } from 'svelte';
 
 	export let event: BillEvent;
 	export let tooltipText: string;
-	export let relatedVotingResults: RelatedVotingResults | undefined;
+	export let relatedVoteEvents: ComponentProps<VoteCard>[];
 	export let mergedIntoBill: Bill | undefined;
 	export let mergedIntoBillLatestEvent: BillEvent | undefined;
 
@@ -39,33 +20,8 @@
 		day: 'numeric'
 	};
 
-	$: voting = event.votedInVotingId
-		? relatedVotingResults?.[event.votedInVotingId]?.voting
-		: undefined;
-
-	$: highlightedVoteByGroups = (() => {
-		if (!event.votedInVotingId) return undefined;
-
-		const resultSummary = relatedVotingResults?.[event.votedInVotingId]?.resultSummary;
-
-		if (resultSummary?.subResults) {
-			return resultSummary?.subResults.map((subResult) => ({
-				name: subResult.affiliationName,
-				count: subResult.agreed,
-				total: subResult.total
-			}));
-		} else if (resultSummary && event.type.includes('senate')) {
-			return [
-				{
-					name: 'สว.',
-					count: resultSummary.agreed,
-					total: resultSummary.total
-				}
-			];
-		}
-
-		return undefined;
-	})();
+	$: voting =
+		event.votedInVotingId && relatedVoteEvents.find((v) => v.id === event.votedInVotingId);
 </script>
 
 <li class="-mt-1 mb-10 ms-4">
@@ -83,10 +39,10 @@
 				<p>{event.description}</p>
 			</div>
 		</div>
-		{#if voting && highlightedVoteByGroups}
+		{#if voting}
 			<div class="flex flex-1 flex-col">
 				<p class="text-text-02">ผลการลงมติ</p>
-				<VoteCard isFullWidth={true} {voting} {highlightedVoteByGroups} />
+				<VoteCard isFullWidth {...voting} />
 			</div>
 		{:else if event.enforcementDocumentUrl}
 			<div class="flex-1 pt-5">
@@ -107,7 +63,7 @@
 				<div class="w-full rounded-sm border border-gray-20">
 					<BillCard
 						orientation="portrait"
-						bill={mergedIntoBill}
+						{...mergedIntoBill}
 						isFullWidth={true}
 						currentState={mergedIntoBillLatestEvent ? event.title : ''}
 					/>

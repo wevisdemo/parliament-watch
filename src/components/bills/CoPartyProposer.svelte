@@ -1,13 +1,12 @@
 <script lang="ts">
-	import type { Politician } from '$models/politician';
-
-	export let name: string;
-	export let politicians: (Politician | string)[];
-
-	$: party =
-		typeof politicians[0] === 'object'
-			? politicians[0].partyRoles.find((e) => !e.endedAt)?.party
-			: undefined;
+	export let politicianCount: number;
+	export let party:
+		| {
+				id?: string;
+				name: string;
+				logo?: string;
+		  }
+		| undefined = undefined;
 </script>
 
 <div class="flex gap-2">
@@ -18,8 +17,12 @@
 		<img src={party?.logo || '/images/politicians/_placeholder.webp'} alt="" />
 	</div>
 	<div class="flex">
-		<!-- TODO: link to party when implemented -->
-		<p>{party ? 'พรรค' : ''}{name}</p>
-		<p class="body-02 ml-1 text-text-02">{politicians.length} คน</p>
+		{#if party?.id}
+			<!-- TODO: link to party when implemented -->
+			<p>พรรค{party?.name}</p>
+		{:else}
+			<p>ไม่พบข้อมูลพรรค</p>
+		{/if}
+		<p class="body-02 ml-1 text-text-02">{politicianCount} คน</p>
 	</div>
 </div>

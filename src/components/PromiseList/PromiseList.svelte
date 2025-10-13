@@ -3,9 +3,9 @@
 	import PromiseCard from './PromiseCard.svelte';
 	import Grid from 'carbon-icons-svelte/lib/Grid.svelte';
 	import List from 'carbon-icons-svelte/lib/List.svelte';
-	import type { PromiseSummary } from '$models/promise';
+	import type { ComponentProps } from 'svelte';
 
-	export let summaries: PromiseSummary[];
+	export let summaries: Omit<ComponentProps<PromiseCard>, 'isList'>[];
 
 	type SortByOptions = 'วันที่เคลื่อนไหวล่าสุด' | 'ตัวอักษร' | 'สถานะ';
 	let sortBy: SortByOptions = 'วันที่เคลื่อนไหวล่าสุด';
@@ -88,7 +88,7 @@
 	{/if}
 	<div class="{isList ? 'flex flex-col gap-[2px]' : 'grid gap-6 md:grid-cols-3'} mx-auto w-fit">
 		{#each sortedData as promiseSummary, index (index)}
-			<PromiseCard {promiseSummary} {isList} />
+			<PromiseCard {...promiseSummary} {isList} />
 		{/each}
 	</div>
 </div>

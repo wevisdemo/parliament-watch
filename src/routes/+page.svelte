@@ -16,13 +16,7 @@
 
 	export let data;
 
-	$: ({
-		highlightedPoliticians,
-		otherSourcesHighlightedPoliticians,
-		latestVotings,
-		billByCategoryAndStatus,
-		promiseSummary
-	} = data);
+	$: ({ highlightedPoliticians, latestVoteEvents, billByCategoryAndStatus, promiseSummary } = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -65,15 +59,13 @@
 			/>
 			<SectionMenuItem
 				title="การเสนอกฎหมาย"
-				description="ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ"
+				description="อยู่ระหว่างการปรับปรุงข้อมูล"
 				icon={LawIcon}
-				href="#bill"
 			/>
 			<SectionMenuItem
 				title="คำสัญญาทางการเมือง"
-				description="ติดตามความคืบหน้าของนโยบายที่รัฐบาลสัญญาไว้"
+				description="อยู่ระหว่างการปรับปรุงข้อมูล"
 				icon={PromiseIcon}
-				href="#promise"
 			/>
 		</menu>
 	</nav>
@@ -89,9 +81,9 @@
 >
 	<span slot="description"
 		>รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
-		ข้อมูลทรัพย์สิน-หนี้สิน ประวัติทางการเมือง ไปจนถึงผลงานในสภา</span
+		ประวัติทางการเมือง ไปจนถึงผลงานในสภา</span
 	>
-	<PoliticianContent {highlightedPoliticians} {otherSourcesHighlightedPoliticians} />
+	<PoliticianContent {highlightedPoliticians} />
 </ContentSection>
 
 <ContentSection
@@ -105,10 +97,10 @@
 	<span slot="description"
 		>ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ</span
 	>
-	<VotingContent {latestVotings} />
+	<VotingContent {latestVoteEvents} />
 </ContentSection>
 
-<ContentSection
+<!-- <ContentSection
 	id="bill"
 	title="การเสนอกฎหมาย"
 	icon={LawIcon}
@@ -123,13 +115,14 @@
 		></span
 	>
 	<BillContent {billByCategoryAndStatus} />
-</ContentSection>
+</ContentSection> -->
 
-<ContentSection
+<!-- <ContentSection
 	id="promise"
 	title="คำสัญญาทางการเมือง"
 	icon={PromiseIcon}
 	searchPlaceholder="ค้นหาด้วยคำสัญญา เช่น กระเป๋าเงินดิจิทัล"
+	searchCategories={[SearchIndexCategory.Promises]}
 	class="bg-ui-white"
 >
 	<span slot="description"
@@ -137,6 +130,6 @@
 		ข้อมูลได้ถูกรวบรวมไว้ให้คุณได้ติดตามและตรวจสอบความคืบหน้าได้ง่ายขึ้น</span
 	>
 	<PromiseContent {...promiseSummary} />
-</ContentSection>
+</ContentSection> -->
 
 <BackToTopButton />

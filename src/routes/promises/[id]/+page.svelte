@@ -8,19 +8,13 @@
 	import { SendAlt } from 'carbon-icons-svelte';
 	import PromiseClarificationLog from '$components/PromiseDetail/PromiseClarificationLog.svelte';
 	import { promiseStatusList } from '../../../constants/promise.js';
+	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 
 	export let data;
 
-	$: ({ promise } = data);
+	$: ({ promise, globalEvents } = data);
 
 	let showStatusListModal = false;
-
-	const TITLE_MAX_LENGTH = 45;
-
-	$: pageTitle =
-		promise?.statements?.[0]?.length > TITLE_MAX_LENGTH
-			? promise.statements[0].slice(0, TITLE_MAX_LENGTH) + '...'
-			: promise.statements?.[0];
 
 	$: promiseText = promiseStatusList.find((status) => status.label === promise.status)?.text;
 </script>
@@ -31,7 +25,7 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/promises">ติดตามคำสัญญา</BreadcrumbItem>
-	<BreadcrumbItem>{pageTitle}</BreadcrumbItem>
+	<BreadcrumbItem>{trimBreadcrumbTitle(promise?.statements?.[0])}</BreadcrumbItem>
 </Breadcrumb>
 {#if promise.coverImageUrl}
 	<img class="max-h-[300px] w-full object-cover" src={promise.coverImageUrl} alt="coverImageUrl" />
@@ -62,7 +56,7 @@
 		{/each}
 	</div>
 	<div class="mt-4 flex flex-col gap-2 xl:flex-row xl:items-center">
-		<PromiseStatusTag status={promise.status} />
+		<PromiseStatusTag isLarge status={promise.status} />
 		<div class="body-01 text-text-01">
 			{promiseText}
 		</div>
@@ -130,7 +124,7 @@
 	<hr class="mt-4 border-gray-20" />
 	<div class="mb-4 mt-3 flex justify-between">
 		<div class="heading-02 flex flex-col gap-1 md:flex-row md:items-center">
-			สถานะ <PromiseStatusTag status={promise.status} />
+			สถานะ <PromiseStatusTag isLarge status={promise.status} />
 		</div>
 		<button
 			class="helper-text-01 h-fit text-link-01 underline"
@@ -139,7 +133,7 @@
 			คำสัญญามีสถานะอะไรบ้าง?
 		</button>
 	</div>
-	<PromiseProgressTimeline {promise} />
+	<PromiseProgressTimeline {promise} {globalEvents} />
 	<div class="mt-8 flex flex-col justify-between gap-4 bg-gray-10 p-6 md:flex-row">
 		<div class="text-01">
 			<div class="heading-02">

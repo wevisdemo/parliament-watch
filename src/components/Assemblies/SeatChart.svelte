@@ -20,8 +20,8 @@
 	export let lineAmounts: number[] = [];
 
 	let component: HTMLDivElement | null = null;
-	let outterRadius = 0;
-	let circleDiameter = outterRadius / 2 / lineAmounts.length;
+	let outerRadius = 0;
+	let circleDiameter = outerRadius / 2 / lineAmounts.length;
 	let gap = 0;
 	let tooltipProp: TooltipProp | null = null;
 
@@ -45,14 +45,13 @@
 			for (let i = 0; i < party.count; i++) {
 				let index = getIndexOfLine(lineCals);
 				let line = lineCals[index];
-				let radius = outterRadius - index * circleDiameter - index * gap;
-				const name = `${party?.members?.[i].firstname} ${party?.members?.[i].lastname}`;
+				let radius = outerRadius - index * circleDiameter - index * gap;
 				points.push({
 					x: radius * Math.cos((line.count / (line.total - 1)) * Math.PI + Math.PI),
 					y: radius * Math.sin((line.count / (line.total - 1)) * Math.PI + Math.PI),
 					color: party.color,
 					additional: party.name,
-					title: name
+					title: party?.members?.[i].name
 				});
 				lineCals[index].count++;
 			}
@@ -71,7 +70,7 @@
 		return -1;
 	}
 
-	const getOutterRadius = () => {
+	const getOuterRadius = () => {
 		const componentWidth = component?.clientWidth || 0;
 		return Math.min((componentWidth - 20) / 2, 224);
 	};
@@ -89,8 +88,8 @@
 		points.forEach((value) => {
 			svg
 				.append('circle')
-				.attr('cx', value.x + outterRadius + circleDiameter)
-				.attr('cy', value.y + outterRadius + circleDiameter)
+				.attr('cx', value.x + outerRadius + circleDiameter)
+				.attr('cy', value.y + outerRadius + circleDiameter)
 				.attr('r', circleDiameter / 2)
 				.attr('fill', value.color)
 				.attr('class', 'seat')
@@ -102,10 +101,10 @@
 	};
 
 	const setUpComponentENV = () => {
-		outterRadius = getOutterRadius();
-		circleDiameter = Math.max(4, outterRadius / 2 / lineAmounts.length);
+		outerRadius = getOuterRadius();
+		circleDiameter = Math.max(4, outerRadius / 2 / lineAmounts.length);
 		gap = Math.max(
-			(outterRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
+			(outerRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
 			1
 		);
 	};
@@ -136,12 +135,12 @@
 
 <div
 	bind:this={component}
-	class="relative m-auto flex h-full w-full max-w-[calc(100vw-32px)] items-center justify-center md:max-w-[448px]"
+	class="flex h-full w-full max-w-[calc(100vw-32px)] justify-center md:max-w-[448px]"
 >
 	<svg
 		id="half-circle-chart"
-		width={(outterRadius + circleDiameter) * 2}
-		height={outterRadius + circleDiameter * 2}
+		width={(outerRadius + circleDiameter) * 2}
+		height={outerRadius + circleDiameter * 2}
 		class="transition-[height] duration-500 ease-in-out"
 	/>
 </div>

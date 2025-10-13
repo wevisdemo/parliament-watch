@@ -5,8 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"prepare": "husky install",
-		"dev": "vite dev",
-		"build": "vite build",
+		"dev": "npm run gen:graphql && vite dev",
+		"build": "npm run gen:graphql && vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -16,6 +16,7 @@
 		"story:dev": "histoire dev",
 		"story:build": "HISTOIRE_BASE=/stories/ histoire build",
 		"story:preview": "histoire preview",
+		"gen:graphql": "genql --endpoint ${PUBLIC_POLITIGRAPH_ENDPOINT:-https://politigraph.wevis.info/graphql} --output src/lib/politigraph/genql -S Date:string -S DateTime:string",
 		"gen:component": "hygen component new",
 		"test": "vitest",
 		"update:politician-ranking": "tsx src/lib/politician-ranking/run-update-job.ts"
@@ -29,12 +30,14 @@
 		"@wevisdemo/ui": "^7.0.2",
 		"d3": "^7.8.5",
 		"dayjs": "^1.11.10",
+		"fastest-levenshtein": "^1.0.16",
 		"keen-slider": "^6.8.6",
 		"scrollama": "^3.2.0"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.7.0",
 		"@commitlint/config-conventional": "^17.7.0",
+		"@genql/cli": "^6.3.3",
 		"@histoire/plugin-svelte": "^0.17.14",
 		"@melt-ui/svelte": "^0.70.0",
 		"@sveltejs/adapter-static": "^3.0.0",
@@ -64,7 +67,7 @@
 		"prettier-plugin-svelte": "^3.2.2",
 		"prettier-plugin-tailwindcss": "^0.5.12",
 		"sass": "^1.67.0",
-		"sheethuahua": "^2.0.0",
+		"sheethuahua": "^3.1.0",
 		"svelte": "^4.2.12",
 		"svelte-check": "^3.6.6",
 		"tailwind-merge": "^2.1.0",

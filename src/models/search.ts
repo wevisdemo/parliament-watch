@@ -1,13 +1,14 @@
 import type { BillStatus } from './bill';
+import type { PromiseStatus } from './promise';
 
 export enum SearchIndexCategory {
 	Politicians = 'politicians',
 	Bills = 'bills',
 	Votings = 'votings',
-	BillProposers = 'billProposers'
+	BillProposers = 'billProposers',
+	Promises = 'promises'
 }
 
-// TODO - เช็คว่าตัวอื่นต้องใช้อะไรในการ Link ไปหน้านั้นๆ
 export interface SearchIndexes {
 	[SearchIndexCategory.Politicians]?: {
 		id: string;
@@ -29,6 +30,11 @@ export interface SearchIndexes {
 		description: string;
 		proposedBillsCount: number;
 	}[];
+	[SearchIndexCategory.Promises]?: {
+		id: string;
+		name: string;
+		status: PromiseStatus;
+	}[];
 }
 
 interface BaseSearchResultItem {
@@ -42,37 +48,50 @@ interface PoliticianSearchResultItem extends BaseSearchResultItem {
 	billStatus?: never;
 	voteResult?: never;
 	proposedBillsCount?: never;
+	promiseStatus?: never;
 }
 
 interface BillSearchResultItem extends BaseSearchResultItem {
 	billStatus: BillStatus;
 	voteResult?: never;
 	proposedBillsCount?: never;
+	promiseStatus?: never;
 }
 
 interface VotingSearchResultItem extends BaseSearchResultItem {
 	billStatus?: never;
 	voteResult?: string;
 	proposedBillsCount?: never;
+	promiseStatus?: never;
 }
 
 interface BillProposerSearchResultItem extends BaseSearchResultItem {
 	billStatus?: never;
 	voteResult?: never;
 	proposedBillsCount: number;
+	promiseStatus?: never;
+}
+
+interface PromiseSearchResultItem extends BaseSearchResultItem {
+	billStatus?: never;
+	voteResult?: never;
+	proposedBillsCount?: never;
+	promiseStatus: PromiseStatus;
 }
 
 export type SearchResultItem =
 	| PoliticianSearchResultItem
 	| BillSearchResultItem
 	| VotingSearchResultItem
-	| BillProposerSearchResultItem;
+	| BillProposerSearchResultItem
+	| PromiseSearchResultItem;
 
 export interface SearchResults {
 	politicians?: PoliticianSearchResultItem[];
 	bills?: BillSearchResultItem[];
 	votings?: VotingSearchResultItem[];
 	billProposers?: BillProposerSearchResultItem[];
+	promises?: PromiseSearchResultItem[];
 }
 
 export interface ScoreResultItem<T> {

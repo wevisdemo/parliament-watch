@@ -11,3 +11,4 @@ vite.config.ts.timestamp-*
 __snapshots__
 log.json
 *.cpuprofile
+src/lib/politigraph/genql

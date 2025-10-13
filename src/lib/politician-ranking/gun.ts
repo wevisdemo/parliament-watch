@@ -1,13 +1,15 @@
-import type { Politician } from '$models/politician';
+interface PoliticianInput {
+	id: string;
+	name: string;
+}
 
 let gunResult:
-	| {
-			politician: Politician;
+	| (PoliticianInput & {
 			value: number;
-	  }
+	  })
 	| undefined;
 
-export const getPoliticianWithMostGun = async (politicians: Politician[]) => {
+export const getPoliticianWithMostGun = async (politicians: PoliticianInput[]) => {
 	if (gunResult) return gunResult;
 
 	// Get latest files
@@ -67,13 +69,11 @@ export const getPoliticianWithMostGun = async (politicians: Politician[]) => {
 		});
 
 	// Match politician data
-	for (const { firstname: gFirst, lastname: gLast, value } of sortedGunOwner) {
-		const searchResult = politicians.find(
-			({ firstname: pFirst, lastname: pLast }) => pFirst === gFirst && pLast === gLast
-		);
+	for (const { firstname, lastname, value } of sortedGunOwner) {
+		const searchResult = politicians.find(({ name }) => name === `${firstname} ${lastname}`);
 		if (searchResult) {
 			gunResult = {
-				politician: searchResult,
+				...searchResult,
 				value
 			};
 			break;

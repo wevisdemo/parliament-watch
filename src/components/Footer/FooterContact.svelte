@@ -9,10 +9,10 @@
 <div class="flex flex-col">
 	<div class="mb-3 text-sm">
 		<div class="mb-2">ติดต่อ</div>
-		<a href="mailto:info@punchup.world" class="text-gray-30 no-underline hover:text-white">
+		<a href="mailto:team@wevis.info" class="text-gray-30 no-underline hover:text-white">
 			<div class="flex w-min flex-row items-center">
 				<Email size={16} />
-				<span class="ml-2">info@punchup.world</span>
+				<span class="ml-2">team@wevis.info</span>
 			</div>
 		</a>
 	</div>

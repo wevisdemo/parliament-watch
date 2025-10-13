@@ -30,7 +30,11 @@ export const isDateInRange = (date: Date, minDate: Date, maxDate: Date): boolean
 	return dateOnly >= minDateOnly && dateOnly <= maxDateOnly;
 };
 
-export const getDateData = (data: TimeLine[], startedAt: Date | null, endedAt: Date | null) => {
+export const getDateData = (
+	data: TimeLine[],
+	startedAt: Date | undefined,
+	endedAt: Date | undefined
+) => {
 	const minDate = startedAt ? startedAt : new Date(Math.min(...data.map((d) => d.date.getTime())));
 	const maxDate = endedAt ? endedAt : new Date();
 

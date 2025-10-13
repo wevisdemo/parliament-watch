@@ -15,11 +15,11 @@
 	import SearchLocate from 'carbon-icons-svelte/lib/SearchLocate.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
-	import type { PoliticianSummaryGroupBy } from './+page.server.js';
-	import { GroupByOption } from '$models/assembly.js';
+	import type { PoliticianSummaryGroupBy } from './+page.server';
+	import { GroupByOption } from '$models/assembly';
 
 	export let data;
-	$: ({ groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } = data);
+	$: ({ assembly, groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } = data);
 	$: currentPath = groupByTabs.find(({ isActive }) => isActive)?.path ?? '';
 
 	let showFilter = true;
@@ -40,10 +40,7 @@
 									...subgroup,
 									members: subgroup.members.filter((member) => {
 										return (
-											(formattedSearchQuery === '' ||
-												(member.firstname + ' ' + member.lastname).includes(
-													formattedSearchQuery
-												)) &&
+											member.name.includes(formattedSearchQuery) &&
 											((isByDistrict && member.candidateType === 'แบ่งเขต') ||
 												(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
 										);
@@ -56,8 +53,7 @@
 						...group,
 						members: group.members.filter((member) => {
 							return (
-								(formattedSearchQuery === '' ||
-									(member.firstname + ' ' + member.lastname).includes(formattedSearchQuery)) &&
+								member.name.includes(formattedSearchQuery) &&
 								((isByDistrict && member.candidateType === 'แบ่งเขต') ||
 									(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
 							);
@@ -108,8 +104,8 @@
 	};
 </script>
 
-<Header {data} bind:searchQuery {availableAssemblies} />
-<Tab {data} />
+<Header {...assembly} bind:searchQuery {availableAssemblies} />
+<Tab {...assembly} {groupByTabs} />
 <div class="relative flex">
 	{#if showFilter}
 		<aside
@@ -150,7 +146,7 @@
 											<span class="font-normal text-gray-60"
 												>({group.subgroups
 													.map((e) => e.members.length)
-													.reduce((a, c) => a + c)})</span
+													.reduce((a, c) => a + c, 0)})</span
 											>
 										{/if}
 									</span>

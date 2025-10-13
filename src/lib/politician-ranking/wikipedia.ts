@@ -1,30 +1,27 @@
-import type { Politician } from '$models/politician';
-import { movingForwardPolitician } from '../../mocks/data/politician';
 import dayjs from 'dayjs';
 
-export interface PoliticianResult {
-	politician: Politician;
+interface PoliticianInput {
+	id: string;
+	name: string;
+}
+interface PoliticianResult extends PoliticianInput {
 	value: number;
 }
 
-let wikiResult: PoliticianResult | undefined = undefined;
+let wikiResult: PoliticianResult;
 
-export async function getPoliticianWithMostViewLastMonth(politicians: Politician[]) {
+export async function getPoliticianWithMostViewLastMonth(politicians: PoliticianInput[]) {
 	if (!wikiResult) {
 		wikiResult = await _getPoliticianWithMostViewLastMonth(politicians);
 	}
 	return wikiResult;
 }
 
-export async function _getPoliticianWithMostViewLastMonth(politicians: Politician[]) {
-	let result: PoliticianResult = {
-		politician: movingForwardPolitician,
-		value: 0
-	};
+export async function _getPoliticianWithMostViewLastMonth(politicians: PoliticianInput[]) {
+	let result: PoliticianResult | undefined = undefined;
 
 	for (const politician of politicians) {
-		const { firstname, lastname } = politician;
-		const res = await fetch(getWikipediaViewEndpoint(firstname, lastname));
+		const res = await fetch(getWikipediaViewEndpoint(politician.name));
 
 		if (res.ok) {
 			const data = await res.json();
@@ -32,9 +29,9 @@ export async function _getPoliticianWithMostViewLastMonth(politicians: Politicia
 			if (data?.items?.[0]?.views) {
 				const { views } = data.items[0];
 
-				if (views > result.value) {
+				if (!result || views > result.value) {
 					result = {
-						politician: politician,
+						...politician,
 						value: views
 					};
 				}
@@ -42,11 +39,13 @@ export async function _getPoliticianWithMostViewLastMonth(politicians: Politicia
 		}
 	}
 
+	if (!result) throw 'Could not find any politicians page on wikipedia';
+
 	return result;
 }
 
-function getWikipediaViewEndpoint(firstname: string, lastname: string) {
-	const article = [firstname, lastname].join('_');
+function getWikipediaViewEndpoint(name: string) {
+	const article = name.replaceAll(' ', '_');
 	const fromDate = dayjs().subtract(1, 'month').startOf('month').format('YYYYMMDD');
 	const toDate = dayjs().subtract(1, 'month').endOf('month').format('YYYYMMDD');
 

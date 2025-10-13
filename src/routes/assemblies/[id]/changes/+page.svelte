@@ -19,31 +19,19 @@
 		props?: any;
 	}
 
-	$: ({ assembly, availableAssemblies, assemblyRoles, cabinetMembers, changes } = data);
+	$: ({ assembly, availableAssemblies, cabinetPositions: cabinetMembers, changes } = data);
 
 	$: selectedDate = assembly.endedAt || new Date();
 	const handleSelectDate = (date: Date) => {
 		selectedDate = date;
 	};
 
-	$: getMembersAtSelectTime = () => {
-		const currentDate = new Date();
-		let assemblyRolesFilter = assemblyRoles
-			.filter((assembly) =>
-				isDateInRange(
-					selectedDate,
-					assembly.startedAt,
-					assembly.endedAt ? assembly.endedAt : currentDate
-				)
-			)
-			.map((assembly) => assembly.politicianId);
+	$: membersAtSelectTime = cabinetMembers.filter(({ profile }) => {
+		const start = changes.find((c) => c.politician.id === profile.id && c.type === 'in')?.date;
+		const end = changes.find((c) => c.politician.id === profile.id && c.type === 'out')?.date;
 
-		let activeMember = cabinetMembers.filter((member) =>
-			assemblyRolesFilter.includes(member.politician.id)
-		);
-		return activeMember;
-	};
-	$: membersAtSelectTime = getMembersAtSelectTime();
+		return start && isDateInRange(selectedDate, start, end ?? new Date());
+	});
 
 	$: tabs = [
 		{
@@ -105,12 +93,12 @@
 <div class="bg-ui-01">
 	<div class="px-[16px] md:px-[64px]">
 		<Header
-			headerName="การปรับคณะรัฐมนตรี"
-			{assembly}
+			{...assembly}
+			name="การปรับคณะรัฐมนตรี"
 			{availableAssemblies}
 			showStatus={false}
 			showRemark={false}
-			postfixLink="changes"
+			linkPostfix="changes"
 		/>
 	</div>
 

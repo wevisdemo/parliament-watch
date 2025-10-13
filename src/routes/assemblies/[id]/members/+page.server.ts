@@ -1,14 +1,31 @@
-import { fetchAssemblies, fetchFromIdOr404 } from '$lib/datasheets/index.js';
-import { AssemblyName, GroupByOption } from '$models/assembly.js';
-import { redirect } from '@sveltejs/kit';
+import { graphql } from '$lib/politigraph';
+import { GroupByOption } from '$models/assembly.js';
+import { error, redirect } from '@sveltejs/kit';
 
 export async function load({ params }) {
-	const assembly = await fetchFromIdOr404(fetchAssemblies, params.id);
+	const {
+		organizations: [assembly]
+	} = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				}
+			},
+			classification: true
+		}
+	});
+
+	if (!assembly) {
+		error(404);
+	}
 
 	redirect(
 		307,
 		`members/${
-			assembly.name === AssemblyName.Senates ? GroupByOption.AppointmentMethod : GroupByOption.Party
+			assembly.classification === 'HOUSE_OF_SENATE'
+				? GroupByOption.AppointmentMethod
+				: GroupByOption.Party
 		}`
 	);
 }

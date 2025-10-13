@@ -1,14 +1,12 @@
 <script lang="ts">
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
-	import type { Party } from '$models/party';
 	import Login from 'carbon-icons-svelte/lib/Login.svelte';
 	import Logout from 'carbon-icons-svelte/lib/Logout.svelte';
 	export let type: 'in' | 'out';
 	export let role: string;
-	export let party: Party;
-	export let avatar: string;
-	export let firstname: string;
-	export let lastname: string;
+	export let partyLogo: string | null;
+	export let image: string | null;
+	export let name: string;
 	export let id: string;
 
 	$: statusStyle =
@@ -31,11 +29,16 @@
 	</div>
 
 	<div class="flex items-start gap-2 px-2 py-[12px] md:items-center md:p-2">
-		<PoliticianPicture {avatar} {party} size={32} class="flex-shrink-0" />
+		<PoliticianPicture
+			avatar={image ?? undefined}
+			partyLogo={partyLogo ?? undefined}
+			size={32}
+			class="flex-shrink-0"
+		/>
 		<div class="flex flex-col gap-1 md:flex-row">
-			<a href="/politicians/{id}" class=" font-sans">
+			<a href="/politicians/{id}" class="font-sans">
 				<p class="body-compact-01 text-text-primary underline hover:text-interactive-01">
-					<span>{firstname}</span> <span>{lastname}</span>
+					{name}
 				</p>
 			</a>
 			<p class="flex flex-col md:flex-row">

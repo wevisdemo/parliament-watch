@@ -1,23 +1,39 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { fetchFromIdOr404, fetchPoliticians, fetchVotes, fetchVotings } from '$lib/datasheets';
-import { getVoteResultsByPerson } from '$lib/datasheets/voting.js';
+import { graphql } from '$lib/politigraph';
+import {
+	queryPoliticiansVote,
+	sortPoliticiansVoteByDominantGroup
+} from '$lib/politigraph/vote/with-politician';
 
 export const prerender = true;
 
 export async function GET({ params }) {
-	const voting = await fetchFromIdOr404(fetchVotings, params.id);
-	const politicians = await fetchPoliticians();
+	const {
+		voteEvents: [voteEvent]
+	} = await graphql.query({
+		voteEvents: {
+			__args: {
+				where: {
+					id_EQ: params.id
+				}
+			},
+			id: true,
+			organizations: {
+				id: true
+			},
+			start_date: true,
+			end_date: true
+		}
+	});
+
+	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 
 	return createCsvFileResponse(
-		getVoteResultsByPerson(
-			voting,
-			(await fetchVotes()).filter(({ votingId }) => votingId === voting.id),
-			politicians
-		).map(({ firstname, lastname, party, role, voteOption }) => ({
-			politician: `${firstname} ${lastname}`,
+		votes.map(({ politician, role, party, option }) => ({
+			name: politician.name,
 			role,
 			party: party?.name || '',
-			voteOption
+			option
 		}))
 	);
 }

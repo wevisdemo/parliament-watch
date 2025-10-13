@@ -13,8 +13,6 @@
 <div class="grid gap-[16px] py-[16px] md:gap-[24px] md:py-[32px]">
 	<SummaryTotal {houseLevel} data={summary.highlightGroup} />
 	<div class="mx-auto grid w-full grid-cols-1 gap-[8px] md:grid-cols-3">
-		<!-- TODO: chnage this when change phase -->
-		<!-- <div class="grid md:grid-cols-4 grid-cols-1 gap-[8px] w-fit mx-auto w-full"> -->
 		<SummaryGroup
 			{assemblyId}
 			groupBy={GroupByOption.Sex}
@@ -33,7 +31,5 @@
 			memberGroups={summary.groupByEducation}
 			showHalfCircleChart={!isCabinet}
 		/>
-		<!-- TODO: not release asset value in phase 1 -->
-		<!-- <SummaryGroup title="ทรัพย์สิน" data={summary.groupByAssetValue} /> -->
 	</div>
 </div>

@@ -6,7 +6,6 @@
 	import Summary from '$components/Assemblies/Summary.svelte';
 	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
 	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
-	import { AssemblyName } from '$models/assembly.js';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 	import LatestBills from '$components/Assemblies/LatestBills.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
@@ -22,9 +21,9 @@
 		assembly,
 		isCabinet,
 		summary,
-		mainMembers,
+		mainPositions,
 		changes,
-		latestVotes,
+		latestVoteEvents,
 		latestBills
 	} = data);
 </script>
@@ -37,10 +36,18 @@
 		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block">นักการเมือง</BreadcrumbItem>
 		<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
-			>{assembly.name} ชุดที่ {assembly.term}</BreadcrumbItem
+			>{assembly.name}</BreadcrumbItem
 		>
 	</Breadcrumb>
-	<Header {assembly} {availableAssemblies} />
+	<Header
+		id={assembly.id}
+		name={assembly.name.split(' ')[0]}
+		term={assembly.term ?? 0}
+		startedAt={assembly.founding_date ? new Date(assembly.founding_date) : new Date()}
+		endedAt={assembly.dissolution_date ? new Date(assembly.dissolution_date) : undefined}
+		description={assembly.description}
+		{availableAssemblies}
+	/>
 
 	<NavigationTab
 		tabs={[
@@ -48,7 +55,7 @@
 			{ id: 'members', label: 'สมาชิก', show: summary.totalMembers },
 			{ id: 'role-change', label: 'การปรับคณะรัฐมนตรี', show: changes?.length },
 			{ id: 'latest-bills', label: 'การเสนอร่างกฎหมาย', show: latestBills?.length },
-			{ id: 'latest-votes', label: 'ผลการลงมติล่าสุด', show: latestVotes?.length }
+			{ id: 'latest-votes', label: 'ผลการลงมติล่าสุด', show: latestVoteEvents?.length }
 		]}
 	/>
 
@@ -57,9 +64,9 @@
 			<Summary
 				assemblyId={assembly.id}
 				{summary}
-				houseLevel={assembly.name === AssemblyName.Representatives
+				houseLevel={assembly.classification === 'HOUSE_OF_REPRESENTATIVE'
 					? 'lower'
-					: assembly.name === AssemblyName.Cabinet
+					: assembly.classification === 'CABINET'
 						? 'cabinet'
 						: 'upper'}
 			/>
@@ -71,10 +78,10 @@
 					<span class="fluid-heading-04 ml-[16px]">สมาชิก</span>
 				</div>
 				<div class="w-full border-b-[1px] border-solid border-gray-20" />
-				<CabinetMembers members={mainMembers} />
+				<CabinetMembers members={mainPositions} />
 			{/if}
 			{#if !isCabinet}
-				<MainMembers members={mainMembers} assemblyId={assembly.id} />
+				<MainMembers members={mainPositions} assemblyId={assembly.id} />
 			{/if}
 		</section>
 	{/if}
@@ -98,7 +105,7 @@
 			</Button>
 		</section>
 	{/if}
-	{#if latestBills?.length}
+	{#if latestBills.length}
 		<section id="latest-bills" class="py-8">
 			<div class="flex flex-col items-start md:flex-row md:items-center md:justify-between">
 				<div class="flex items-center gap-4 py-4">
@@ -124,9 +131,9 @@
 		</section>
 	{/if}
 
-	{#if latestVotes?.length}
+	{#if latestVoteEvents.length}
 		<section id="latest-votes">
-			<LatestVotes votes={latestVotes} assemblyId={assembly.id} />
+			<LatestVotes votes={latestVoteEvents} assemblyId={assembly.id} />
 		</section>
 	{/if}
 </div>

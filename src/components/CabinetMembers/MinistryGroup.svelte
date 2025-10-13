@@ -1,9 +1,9 @@
 <script lang="ts">
+	import type { ComponentProps } from 'svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import type { MainMember } from '../../routes/assemblies/[id]/+page.server';
 
 	export let title = '';
-	export let members: MainMember[];
+	export let members: { assemblyRole: string; profile: ComponentProps<PoliticianProfile> }[];
 
 	$: minister = members.filter(
 		(m) =>
@@ -17,33 +17,20 @@
 	<div class="flex h-[34px] flex-none items-center bg-ui-01 px-[16px]">
 		<p class="heading-compact-01">{title}</p>
 	</div>
-	{#each minister as member}
+	{#each minister as { profile }}
 		<div class="flex flex-col gap-[8px] px-[24px]">
 			<p class="heading-compact-01">รัฐมนตรี</p>
 			<div class="-mx-2">
-				<PoliticianProfile
-					id={member.politician.id}
-					firstname={member.politician.firstname}
-					lastname={member.politician.lastname}
-					avatar={member.politician.avatar}
-					party={member.party}
-				/>
+				<PoliticianProfile {...profile} />
 			</div>
 		</div>
 	{/each}
 	{#if deputyMinister.length != 0}
 		<div class="flex flex-col px-[24px]">
 			<p class="heading-compact-01 mb-[8px]">รัฐมนตรีช่วยว่าการ</p>
-			{#each deputyMinister as member}
+			{#each deputyMinister as { profile }}
 				<div class="-mx-2">
-					<PoliticianProfile
-						id={member.politician.id}
-						firstname={member.politician.firstname}
-						lastname={member.politician.lastname}
-						avatar={member.politician.avatar}
-						party={member.party}
-						showAvatar={false}
-					/>
+					<PoliticianProfile {...profile} showAvatar={false} />
 				</div>
 			{/each}
 		</div>

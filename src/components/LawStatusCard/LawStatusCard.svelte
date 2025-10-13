@@ -1,3 +1,30 @@
+<script context="module" lang="ts">
+	export interface BillSample {
+		id: string;
+		nickname: string;
+	}
+	export interface BillsByStatus {
+		status: BillStatus;
+		samples: BillSample[];
+		count: number;
+	}
+
+	export interface BillsByCategory {
+		category: string;
+		samples: BillSample[];
+		count: number;
+	}
+
+	export interface BillsByProposerType {
+		proposerType: BillProposerType;
+		samples: BillSample[];
+		count: number;
+		countByStatus: {
+			[status in BillStatus]: number;
+		};
+	}
+</script>
+
 <script lang="ts">
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
@@ -5,11 +32,6 @@
 	import { BillProposerType, BillStatus } from '$models/bill';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import DocumentUnknown from 'carbon-icons-svelte/lib/DocumentUnknown.svelte';
-	import type {
-		BillsByCategory,
-		BillsByProposerType,
-		BillsByStatus
-	} from '../../routes/bills/+page.server';
 
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;

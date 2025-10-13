@@ -4,7 +4,7 @@
 	import { DocumentMultiple_02, Information, Link, OpenPanelTop } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
-	import Tooltip from '$components/Assemblies/Tooltip.svelte';
+	// import Tooltip from '$components/Assemblies/Tooltip.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import { BillProposerType, BillStatus } from '$models/bill';
@@ -14,11 +14,10 @@
 	import { showModalListCoProposer } from '$components/bills/store';
 	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
 	import CoProposer from '$components/bills/CoProposer.svelte';
-	import type { Politician } from '$models/politician.js';
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import Progress from '$components/bills/Progress.svelte';
-	import type { Party } from '$models/party.js';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
@@ -30,7 +29,7 @@
 		events,
 		mergedIntoBill,
 		mergedIntoBillLatestEvent,
-		relatedVotingResults
+		relatedVoteEvents
 	} = data;
 
 	const tooltipText =
@@ -53,42 +52,11 @@
 		);
 
 	$: partiesCoProposed = bill.coProposedByPoliticians
-		? groupBy(bill.coProposedByPoliticians, (politician) =>
-				typeof politician === 'string'
-					? NO_PARTY_FOUND_LABEL
-					: getMatchedParty(politician)?.name || NO_PARTY_FOUND_LABEL
+		? groupBy(
+				bill.coProposedByPoliticians,
+				(politician) => ('party' in politician && politician.party?.name) || NO_PARTY_FOUND_LABEL
 			)
 		: null;
-
-	$: getMatchedParty = (politician: Politician): Party | undefined =>
-		politician.partyRoles?.find(
-			({ startedAt, endedAt }) =>
-				bill.proposedOn.getTime() >= startedAt.getTime() &&
-				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
-		)?.party;
-
-	$: getCurrentRoles = (politician: Politician) => {
-		let assemblyRole = politician.assemblyRoles.find(
-			({ startedAt, endedAt }) =>
-				bill.proposedOn.getTime() >= startedAt.getTime() &&
-				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
-		);
-
-		if (assemblyRole) {
-			let year = new Date(
-				assemblyRole.assembly.startedAt.toLocaleDateString('th-TH')
-			).getFullYear();
-			return (
-				assemblyRole.assembly.abbreviation +
-				' ชุดที่ ' +
-				assemblyRole.assembly.term +
-				' (' +
-				year +
-				')'
-			);
-		}
-		return '';
-	};
 
 	$: dayElapsed = dayjs(
 		bill.status === BillStatus.InProgress
@@ -107,7 +75,9 @@
 >
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/bills">ร่างกฎหมายในสภา</BreadcrumbItem>
-	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage>{bill.nickname}</BreadcrumbItem>
+	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage
+		>{trimBreadcrumbTitle(bill.nickname)}</BreadcrumbItem
+	>
 </Breadcrumb>
 
 <div class="mx-auto flex w-full max-w-[1200px] flex-col">
@@ -132,14 +102,20 @@
 					</div>
 					<div>
 						<b>เสนอโดย</b>
-						<Proposer {bill} />
+						<Proposer
+							proposer={bill.proposedLedByPolitician ??
+								bill.proposedByAssembly ??
+								bill.proposedByPeople}
+						/>
 					</div>
 				</div>
 				<hr class="border-gray-30" />
-				<div>
-					<b>สรุปเนื้อหา</b>
-					<p class="whitespace-pre-wrap">{bill.description}</p>
-				</div>
+				{#if bill.description}
+					<div>
+						<b>สรุปเนื้อหา</b>
+						<p class="whitespace-pre-wrap">{bill.description}</p>
+					</div>
+				{/if}
 				{#if bill.categories.length > 0}
 					<div class="flex gap-2">
 						<b>หมวด</b>
@@ -148,7 +124,8 @@
 						{/each}
 					</div>
 				{/if}
-				{#if mergedBills?.length > 0}
+				<!-- TODO: No merged bill data yet -->
+				<!-- {#if mergedBills?.length > 0}
 					<div>
 						<div class="flex items-center gap-1">
 							<DocumentMultiple_02 size={24} color="#2600A3" />
@@ -198,7 +175,7 @@
 							{/each}
 						</ul>
 					</div>
-				{/if}
+				{/if} -->
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
 				<LinkTable
@@ -218,20 +195,7 @@
 	</section>
 
 	{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician && bill.coProposedByPoliticians}
-		{@const { id, firstname, lastname, avatar, assemblyRoles, partyRoles } =
-			bill.proposedLedByPolitician}
-
-		{@const matchedAssemblyRole = assemblyRoles.find(
-			({ startedAt, endedAt }) =>
-				bill.proposedOn.getTime() >= startedAt.getTime() &&
-				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
-		)}
-
-		{@const matchedPartyRoles = partyRoles.find(
-			({ startedAt, endedAt }) =>
-				bill.proposedOn.getTime() >= startedAt.getTime() &&
-				(!endedAt || bill.proposedOn.getTime() <= endedAt.getTime())
-		)}
+		{@const { id, name, image, party, assembly } = bill.proposedLedByPolitician}
 
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
@@ -242,11 +206,11 @@
 						<b class="handing-02 text-text-primary">ผู้เสนอ</b>
 						<PoliticianProfile
 							{id}
-							{firstname}
-							{lastname}
-							{avatar}
-							party={matchedPartyRoles?.party}
-							role={matchedAssemblyRole?.role}
+							{name}
+							avatar={image ?? undefined}
+							partyName={party?.name}
+							partyLogo={party?.image ?? undefined}
+							role={assembly?.postLabel}
 						/>
 					</div>
 					<div class="flex flex-col gap-3 md:w-full">
@@ -257,7 +221,10 @@
 						<div class="flex flex-col flex-wrap gap-3 px-3 md:flex-row">
 							{#if partiesCoProposed}
 								{#each Object.entries(partiesCoProposed) as [name, politicians] (name)}
-									<CoPartyProposer {name} {politicians} />
+									<CoPartyProposer
+										party={'party' in politicians[0] ? politicians[0].party : undefined}
+										politicianCount={politicians.length}
+									/>
 								{/each}
 							{/if}
 						</div>
@@ -267,7 +234,11 @@
 								<div class="relative flex flex-col">
 									<table class="w-full">
 										{#each bill.coProposedByPoliticians.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i}
-											<CoProposer index={i + 1} {politician} billProposedOn={bill.proposedOn} />
+											<CoProposer
+												index={i + 1}
+												{politician}
+												partyLogo={'party' in politician ? politician.party?.image : null}
+											/>
 										{/each}
 									</table>
 
@@ -285,10 +256,7 @@
 										</div>{/if}
 								</div>
 							{/if}
-							<ModalListCoProposers
-								coProposedByPoliticians={bill.coProposedByPoliticians}
-								billProposedOn={bill.proposedOn}
-							/>
+							<ModalListCoProposers coProposedByPoliticians={bill.coProposedByPoliticians} />
 						</div>
 						<div />
 					</div>
@@ -319,7 +287,7 @@
 							<Progress
 								{event}
 								{tooltipText}
-								{relatedVotingResults}
+								{relatedVoteEvents}
 								{mergedIntoBill}
 								{mergedIntoBillLatestEvent}
 							/>
@@ -330,7 +298,7 @@
 							<Progress
 								event={events[events.length - 1]}
 								{tooltipText}
-								{relatedVotingResults}
+								{relatedVoteEvents}
 								{mergedIntoBill}
 								{mergedIntoBillLatestEvent}
 							/>

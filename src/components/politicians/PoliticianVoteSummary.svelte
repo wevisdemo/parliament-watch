@@ -1,16 +1,29 @@
+<script context="module" lang="ts">
+	export interface VotingHistory {
+		total: number;
+		latest: {
+			id: string;
+			title: string;
+			result: string | null;
+		}[];
+	}
+
+	export interface VotingAbsentStats {
+		totalVoting: number;
+		absentVoting: number;
+		averageAbsentVoting: number;
+	}
+</script>
+
 <script lang="ts">
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
 	import Section from '$components/politicians/Section.svelte';
-	import type { Politician } from '$models/politician';
 	import { Button, InlineNotification } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import type {
-		VotingAbsentStats,
-		VotingHistory
-	} from '../../routes/politicians/[id]/+page.server';
 
-	export let politician: Politician;
+	export let politicianId: string;
+	export let politicianFirstname: string;
 	export let agreedVoting: VotingHistory;
 	export let disagreedVoting: VotingHistory;
 	export let votingAbsentStats: VotingAbsentStats;
@@ -32,7 +45,7 @@
 	<div class="flex flex-col gap-6">
 		<div class="flex flex-col gap-2">
 			<h3 class="body-02 bg-teal-40 px-2 py-1">
-				{agreedVoting.latest.length} มติล่าสุด ที่{politician.firstname}<span class="heading-02"
+				{agreedVoting.latest.length} มติล่าสุด ที่{politicianFirstname}<span class="heading-02"
 					>เห็นด้วย</span
 				>
 			</h3>
@@ -44,7 +57,7 @@
 							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="max-w-max flex-1 underline">{voting.nickname}</span>
+							<span class="max-w-max flex-1 underline">{voting.title}</span>
 							<VotingResultTag
 								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}
@@ -54,7 +67,7 @@
 				{/each}
 			</ul>
 			<a
-				href="/politicians/{politician.id}/votes?votetype=agreed"
+				href="/politicians/{politicianId}/votes?votetype=agreed"
 				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
@@ -65,7 +78,7 @@
 		</div>
 		<div class="flex flex-col gap-2">
 			<h3 class="body-02 bg-red-50 px-2 py-1 text-white">
-				{disagreedVoting.latest.length} มติล่าสุด ที่{politician.firstname}<span class="heading-02"
+				{disagreedVoting.latest.length} มติล่าสุด ที่{politicianFirstname}<span class="heading-02"
 					>ไม่เห็นด้วย</span
 				>
 			</h3>
@@ -76,7 +89,7 @@
 							class="flex cursor-pointer items-start gap-1 text-black no-underline"
 							href="/votings/{voting.id}"
 						>
-							<span class="max-w-max flex-1 underline">{voting.nickname}</span>
+							<span class="max-w-max flex-1 underline">{voting.title}</span>
 							<VotingResultTag
 								class="m-0 cursor-pointer whitespace-nowrap"
 								result={voting.result}
@@ -86,7 +99,7 @@
 				{/each}
 			</ul>
 			<a
-				href="/politicians/{politician.id}/votes?votetype=disagreed"
+				href="/politicians/{politicianId}/votes?votetype=disagreed"
 				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
@@ -98,7 +111,7 @@
 		<div class="flex flex-col gap-2">
 			<h3 class="body-02 heading-02 bg-gray-20 px-2 py-1">การลา / ขาดลงมติ</h3>
 			<p class="body-02">
-				{politician.firstname}ลา / ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({absentPercentage}%)
+				{politicianFirstname}ลา / ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({absentPercentage}%)
 				จากทั้งหมด
 				{votingAbsentStats.totalVoting}
 				มติในฐานข้อมูล ซึ่ง{absentPercentage === votingAbsentStats.averageAbsentVoting
@@ -114,7 +127,7 @@
 				จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
 			</p>
 			<a
-				href="/politicians/{politician.id}/votes?votetype=absent"
+				href="/politicians/{politicianId}/votes?votetype=absent"
 				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
@@ -123,7 +136,7 @@
 				<ArrowRight />
 			</a>
 		</div>
-		<Button href="/politicians/{politician.id}/votes" kind="tertiary" icon={ArrowRight} size="small"
+		<Button href="/politicians/{politicianId}/votes" kind="tertiary" icon={ArrowRight} size="small"
 			>ดูการลงมติทั้งหมด</Button
 		>
 	</div>

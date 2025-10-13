@@ -1,16 +1,9 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
-	import type {
-		AssemblySummary,
-		GroupByTab
-	} from '../../../routes/assemblies/[id]/members/[groupby]/+layout.server';
+	import type { GroupByTab } from '../../../routes/assemblies/[id]/members/[groupby]/+layout.server';
 
-	export let data: {
-		assembly: AssemblySummary;
-		groupByTabs: GroupByTab[];
-	};
-
-	$: ({ assembly, groupByTabs } = data);
+	export let id: string;
+	export let groupByTabs: GroupByTab[];
 </script>
 
 <nav
@@ -29,7 +22,7 @@
 			>
 				<a
 					class="flex items-center whitespace-nowrap px-4 text-[inherit]"
-					href="/assemblies/{assembly.id}/members/{path}"
+					href="/assemblies/{id}/members/{path}"
 					data-sveltekit-reload
 				>
 					{label}

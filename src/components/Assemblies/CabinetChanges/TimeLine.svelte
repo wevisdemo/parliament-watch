@@ -8,8 +8,8 @@
 	import { afterUpdate, onMount, tick } from 'svelte';
 
 	export let timeLineData: TimeLine[];
-	export let startedAt: Date | null;
-	export let endedAt: Date | null;
+	export let startedAt: Date | undefined;
+	export let endedAt: Date | undefined;
 	export let selectedDate: Date;
 	export let handleSelectDate: (date: Date) => void;
 
@@ -18,7 +18,7 @@
 	$: dateData = getDateData(timeLineData, startedAt, endedAt);
 
 	let timelineContainer: HTMLDivElement;
-	let prevStartedAt: Date | null;
+	let prevStartedAt: Date | undefined;
 	let selectedDateElement: HTMLElement;
 
 	const handleNext = () => {
