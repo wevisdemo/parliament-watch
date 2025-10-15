@@ -74,7 +74,8 @@ export async function GET({ params }) {
 		posts.flatMap(({ role, memberships }) =>
 			memberships.flatMap(({ members, ...restMembership }) =>
 				members
-					.filter((m) => m.memberships?.length)
+					// filter out organization as a member (government/opposition party in assembly)
+					.filter((m) => m.memberships)
 					.map(({ memberships: [partyMember], ...restPeople }) => ({
 						role,
 						...restPeople,
