@@ -132,4 +132,6 @@
 	<PromiseContent {...promiseSummary} />
 </ContentSection> -->
 
+<CrowdfundingBanner variant="full" />
+
 <BackToTopButton />
