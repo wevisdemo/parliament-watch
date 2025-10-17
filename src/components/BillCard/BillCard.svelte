@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import { BillStatus, type Bill } from '$models/bill';
+	import { BillStatus } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
 	// import Proposer from '$components/Proposer/Proposer.svelte';
 
 	export let id: string;
-	export let nickname: string;
-	export let title: string;
-	export let proposedOn: Date | undefined;
+	export let nickname: string | null;
+	export let title: string | null;
+	export let proposedOn: Date | null;
 	export let status: BillStatus;
 
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
@@ -19,14 +19,6 @@
 	export { className as class };
 
 	$: isLandscape = orientation === 'landscape';
-
-	$: bill = {
-		id,
-		nickname,
-		title,
-		proposedOn,
-		status
-	} as Bill;
 </script>
 
 <div
@@ -43,8 +35,9 @@
 		<a href="/bills/{id}" class="block after:absolute after:inset-0 after:content-['']">
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
-		<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
-		<!-- TODO: Waiting for new Bill data from Politigraph -->
+		{#if title}
+			<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
+		{/if}
 		<!-- <p class="font-semibold">เสนอโดย</p>
 		<Proposer proposer={getProposerFromBill(bill)} /> -->
 	</div>

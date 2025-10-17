@@ -12,11 +12,11 @@
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
-	import PromiseContent from '$components/Index/PromiseContent.svelte';
+	// import PromiseContent from '$components/Index/PromiseContent.svelte';
 
 	export let data;
 
-	$: ({ highlightedPoliticians, latestVoteEvents, billByCategoryAndStatus, promiseSummary } = data);
+	$: ({ highlightedPoliticians, latestVoteEvents, billCategories } = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -100,7 +100,7 @@
 	<VotingContent {latestVoteEvents} />
 </ContentSection>
 
-<!-- <ContentSection
+<ContentSection
 	id="bill"
 	title="การเสนอกฎหมาย"
 	icon={LawIcon}
@@ -114,8 +114,8 @@
 			>รัฐออกกฏหมายอย่างไร? <ArrowRight class="ml-1" /></a
 		></span
 	>
-	<BillContent {billByCategoryAndStatus} />
-</ContentSection> -->
+	<BillContent {billCategories} />
+</ContentSection>
 
 <!-- <ContentSection
 	id="promise"
