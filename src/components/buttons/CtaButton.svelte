@@ -14,7 +14,7 @@
 	{href}
 	class={`btn-cta bx--btn bx--btn--primary p-[14px] font-bold text-text-04 visited:text-white hover:!text-white hover:no-underline ${$$restProps.class}`}
 	{icon}
-	{...external && { target: '_blank', rel: 'noopener' }}
+	{...external && { target: '_blank', rel: 'nofollow noopener noreferrer' }}
 >
 	<slot />
 </Link>

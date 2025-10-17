@@ -9,11 +9,18 @@
 </script>
 
 <div role="banner" class="banner-crowdfunding grid">
-	<aside class="mx-auto my-auto flex w-full max-w-[1280px] justify-between px-16 py-6">
+	<aside
+		class="relative mx-auto my-auto flex w-full max-w-[1280px] justify-between px-16 py-6"
+		aria-labelledby="crowdfunding-heading"
+	>
 		<div class="flex gap-x-4">
-			<span class="banner-crowdfunding--emoji my-auto flex text-[46px]">🥹</span>
+			{#if variant == 'compact'}
+				<span class="banner-crowdfunding--emoji my-auto flex text-[46px]" aria-hidden>🥹</span>
+			{/if}
 			<div>
-				<h2 class="banner-crowdfunding__heading font-bold">ร่วมสนับสนุนเว็บไซต์นี้</h2>
+				<h2 id="crowdfunding-heading" class="banner-crowdfunding__heading font-bold">
+					ร่วมสนับสนุนเว็บไซต์นี้
+				</h2>
 				<p class="banner-crowdfunding__desc font-bold">
 					การสนับสนุนของคุณ คือส่วนสำคัญให้เครื่องมือติดตามการทำงานของผู้แทนนี้ ถูกพัฒนาต่อไป
 				</p>
