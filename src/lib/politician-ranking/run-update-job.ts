@@ -40,7 +40,7 @@ async function writePoliticianRankingFile() {
 			people: {
 				__args: {
 					where: {
-						id_IN: [politicianWithMostWikipediaVisit.id]
+						id_EQ: politicianWithMostWikipediaVisit.id
 					}
 				},
 				id: true,
