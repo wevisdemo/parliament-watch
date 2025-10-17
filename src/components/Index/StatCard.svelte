@@ -12,8 +12,7 @@
 		MostFrequentlyElectedInConstituency = 'ได้รับเลือกตั้งระบบเขตบ่อยที่สุด',
 		MostFrequentlyServedAsMinister = 'ได้ตำแหน่งรัฐมนตรีบ่อยที่สุด',
 		MostDiverseServedAsMinister = 'ได้ตำแหน่งรัฐมนตรีหลากหลายกระทรวงสุด',
-		MostVisitedInWikipediaLastMonth = 'ยอดเข้าชมประวัติใน Wikipedia มากสุดในเดือนที่แล้ว',
-		MostGunOwned = 'ครอบครองปืนมากที่สุด'
+		MostVisitedInWikipediaLastMonth = 'ยอดเข้าชมประวัติใน Wikipedia มากสุดในเดือนที่แล้ว'
 	}
 </script>
 
@@ -53,8 +52,7 @@
 		[HighlightedReason.HighestBillProposed]: 'ร่างกฎหมาย',
 		[HighlightedReason.Youngest]: 'ปี',
 		[HighlightedReason.MostFrequentlyElectedInConstituency]: 'สมัย',
-		[HighlightedReason.MostDiverseServedAsMinister]: 'กระทรวง',
-		[HighlightedReason.MostGunOwned]: 'กระบอก'
+		[HighlightedReason.MostDiverseServedAsMinister]: 'กระทรวง'
 	};
 
 	$: unit = (() => {
@@ -114,9 +112,7 @@
 		[HighlightedReason.MostDiverseServedAsMinister]:
 			'พิจารณาจากกระทรวงทั้งหมด ที่นักการเมืองในฐานข้อมูลนี้เคยได้รับตำแหน่งรัฐมนตรี โดยไม่นับกระทรวงที่เคยได้ซ้ำ ',
 		[HighlightedReason.MostVisitedInWikipediaLastMonth]:
-			'ใช้ข้อมูลยอดเข้าชม (pageview) รวมทั้งเดือนจาก Wikipedia API',
-		[HighlightedReason.MostGunOwned]:
-			'ใช้ข้อมูลจากการยื่นบัญชีทรัพย์สินครั้งล่าสุด จาก <a class="underline text-[color:inherit]" href="https://poldata.actai.co/" target="_blank" rel="nofollow noopener noreferrer">poldata.actai.co</a>'
+			'ใช้ข้อมูลยอดเข้าชม (pageview) รวมทั้งเดือนจาก Wikipedia API'
 	};
 	$: description = DESC_LOOKUP[reason] ?? '';
 </script>
