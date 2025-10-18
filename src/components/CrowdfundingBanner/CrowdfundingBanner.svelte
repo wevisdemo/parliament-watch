@@ -41,9 +41,9 @@
 		aria-labelledby="banner-crowdfunding__heading"
 	>
 		{#if variant === 'full'}
-			<div class="-my-11 -ml-8 w-[528px] bg-black px-[92px] py-6">
+			<div class="-my-11 -ml-8 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
 				<img
-					class="banner-crowdfunding__illustration h-[175px] w-[345px]"
+					class="banner-crowdfunding__illustration m-auto h-[175px] w-[345px]"
 					src="/images/home/support-us.svg"
 					alt="ร่วมซัพพอร์ต WeVis ภาคประชาชน"
 				/>
