@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph';
+import { createClient } from '$lib/politigraph/genql';
 import { OUT_FILE, type ExternalPoliticianRanking } from '.';
 import { getPoliticianWithMostGun } from './gun';
 import { getPoliticianWithMostViewLastMonth } from './wikipedia';
@@ -6,6 +6,10 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const OUT_DIR = './out';
+
+const graphql = createClient({
+	url: process.env.PUBLIC_POLITIGRAPH_ENDPOINT || 'https://politigraph.wevis.info/graphql'
+});
 
 async function writePoliticianRankingFile() {
 	console.info('Fetching politicians...');

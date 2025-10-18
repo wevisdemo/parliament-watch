@@ -1,7 +1,6 @@
 <script lang="ts">
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
-	import type { CustomVoteOption, DefaultVoteOption } from '$models/voting.js';
-	import { Add } from 'carbon-icons-svelte';
+	import { ChevronDown } from 'carbon-icons-svelte';
 	import { groups } from 'd3';
 	import { onMount } from 'svelte';
 
@@ -26,7 +25,6 @@
 	};
 
 	let isExpanded = false;
-	let selectedTab: string[] = [];
 
 	function toggleExpanding() {
 		isExpanded = !isExpanded;
@@ -79,7 +77,11 @@
 					>{/if}
 			</p>
 			<p class="body-02 text-gray-60">{count} คน</p>
-			<Add class="ml-auto flex self-start justify-self-start md:hidden" />
+			<ChevronDown
+				class="ml-auto flex self-start justify-self-start transition-transform md:hidden {isExpanded
+					? 'rotate-180'
+					: ''}"
+			/>
 		</div>
 		<div
 			class="mt-1 flex items-center gap-x-1 {resultColorLookup[highestVote.name] ??
@@ -119,7 +121,7 @@
 	{#if parties.length > 1}
 		<div
 			id={'aff-' + name.replace(/\s/g, '-')}
-			class="{selectedTab.includes(name) ? 'flex' : 'hidden'} mt-4 w-full flex-col gap-y-4 md:flex"
+			class="{isExpanded ? 'flex' : 'hidden'} mt-4 w-full flex-col gap-y-4 md:flex"
 		>
 			{#each parties as party}
 				<div class="flex items-start gap-x-1">
@@ -139,8 +141,9 @@
 						</div>
 						<div class="mt-1 flex items-center gap-x-3">
 							{#each party.options as partyVote}
+								{@const { className, style } = getOptionColor(partyVote.name)}
 								<div class="flex items-center gap-x-1">
-									<div class="h-3 w-1 {getOptionColor(partyVote.name)}" />
+									<div class="h-3 w-1 {className}" {style} />
 									<p class="label-01">
 										{isViewPercent ? formatPercent(partyVote.count, party.count) : partyVote.count}
 									</p>
