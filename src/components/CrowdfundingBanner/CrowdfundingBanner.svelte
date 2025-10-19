@@ -7,30 +7,45 @@
 	export let variant: BannerVariant;
 	$: variantClasses = {
 		root: {
-			compact: 'banner-crowdfunding__root--compact',
-			full: 'banner-crowdfunding__root--full'
+			compact: compactVariantBemClasses('root'),
+			full: fullVariantBemClasses('root')
 		},
 		content: {
-			compact: 'banner-crowdfunding__content--compact',
-			full: 'banner-crowdfunding__content--full'
+			compact: compactVariantBemClasses('content'),
+			full: fullVariantBemClasses('content')
 		},
 		description: {
-			compact: 'banner-crowdfunding__description--compact',
-			full: 'banner-crowdfunding__description--full'
+			compact: compactVariantBemClasses('description'),
+			full: fullVariantBemClasses('description')
 		},
 		contentCta: {
-			compact: 'banner-crowdfunding__content-cta--compact',
-			full: 'banner-crowdfunding__content-cta--full'
+			compact: compactVariantBemClasses('content-cta'),
+			full: fullVariantBemClasses('content-cta')
 		},
 		textContent: {
-			compact: 'banner-crowdfunding__text-content--compact',
-			full: 'banner-crowdfunding__text-content--full'
+			compact: compactVariantBemClasses('text-content--compact'),
+			full: fullVariantBemClasses('text-content--compact')
 		},
 		ctaWrapper: {
-			compact: 'banner-crowdfunding__cta-wrapper--compact',
-			full: 'banner-crowdfunding__cta-wrapper--full'
+			compact: compactVariantBemClasses('cta-wrapper'),
+			full: fullVariantBemClasses('cta-wrapper')
 		}
 	} satisfies Record<string, Record<BannerVariant, string>>;
+
+	function compactVariantBemClasses(element: string) {
+		return buildBemClasses(element, 'compact');
+	}
+
+	function fullVariantBemClasses(element: string) {
+		return buildBemClasses(element, 'full');
+	}
+
+	function buildBemClasses(element: string, modifier: string): string {
+		const block = 'banner-crowdfunding';
+		const blockElement = `${block}__${element}`;
+
+		return [blockElement, `${blockElement}--${modifier}`].join(' ');
+	}
 </script>
 
 <div role="banner" class="banner-crowdfunding grid">
