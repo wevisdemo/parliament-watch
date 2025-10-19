@@ -6,42 +6,42 @@
 
 	export let variant: BannerVariant;
 	$: variantClasses = {
-		container: {
-			compact: 'banner-crowdfunding__container--compact',
-			full: 'banner-crowdfunding__container--full'
+		root: {
+			compact: 'banner-crowdfunding__root--compact',
+			full: 'banner-crowdfunding__root--full'
 		},
 		content: {
 			compact: 'banner-crowdfunding__content--compact',
 			full: 'banner-crowdfunding__content--full'
 		},
 		description: {
-			compact: 'banner-crowdfunding__desc--compact',
-			full: 'banner-crowdfunding__desc--full'
+			compact: 'banner-crowdfunding__description--compact',
+			full: 'banner-crowdfunding__description--full'
 		},
 		contentCta: {
 			compact: 'banner-crowdfunding__content-cta--compact',
 			full: 'banner-crowdfunding__content-cta--full'
 		},
-		textCta: {
-			compact: 'banner-crowdfunding__text-cta--compact',
-			full: 'banner-crowdfunding__text-cta--full'
+		textContent: {
+			compact: 'banner-crowdfunding__text-content--compact',
+			full: 'banner-crowdfunding__text-content--full'
 		},
-		encasingCtaBtn: {
-			compact: 'banner-crowdfunding__encasing-cta-btn--compact',
-			full: 'banner-crowdfunding__encasing-cta-btn--full'
+		ctaWrapper: {
+			compact: 'banner-crowdfunding__cta-wrapper--compact',
+			full: 'banner-crowdfunding__cta-wrapper--full'
 		}
 	} satisfies Record<string, Record<BannerVariant, string>>;
 </script>
 
 <div role="banner" class="banner-crowdfunding grid">
 	<aside
-		class="{variantClasses.container[
+		class="{variantClasses.root[
 			variant
 		]} relative mx-auto my-auto flex w-full max-w-[1280px] justify-between px-16 py-6"
 		aria-labelledby="banner-crowdfunding__heading"
 	>
 		{#if variant === 'full'}
-			<div class="-my-11 -ml-8 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
+			<div class="-mx-8 -my-11 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
 				<img
 					class="banner-crowdfunding__illustration m-auto h-[175px] w-[345px]"
 					src="/images/home/support-us.svg"
@@ -49,7 +49,7 @@
 				/>
 			</div>
 		{/if}
-		<div class="{variantClasses.content[variant]} flex gap-x-4">
+		<div class="{variantClasses.content[variant]} flex gap-x-4 pl-6">
 			{#if variant === 'compact'}
 				<span class="banner-crowdfunding__emoji my-auto flex text-[46px]" aria-hidden>🥹</span>
 			{/if}
@@ -60,7 +60,7 @@
 				class:w-full={variant === 'compact'}
 				class:justify-between={variant === 'compact'}
 			>
-				<div class={variantClasses.textCta[variant]}>
+				<div class={variantClasses.textContent[variant]}>
 					<h2 id="banner-crowdfunding__heading" class="banner-crowdfunding__heading font-bold">
 						ร่วมสนับสนุนเว็บไซต์นี้
 					</h2>
@@ -75,7 +75,7 @@
 						{/if}
 					</p>
 				</div>
-				<div class="{variantClasses.encasingCtaBtn[variant]} flex">
+				<div class="{variantClasses.ctaWrapper[variant]} flex">
 					<CtaButton
 						class="banner-crowdfunding__cta-btn visited:text-white hover:text-white"
 						icon={ArrowRight}
@@ -94,7 +94,7 @@
 	.banner-crowdfunding {
 		background-color: #a6ebd8;
 
-		&__container {
+		&__root {
 			&--compact {
 			}
 
@@ -120,7 +120,7 @@
 			}
 		}
 
-		&__text-cta {
+		&__text-content {
 			&--compact {
 				/* @apply gap-x-4; */
 			}
@@ -130,7 +130,7 @@
 			}
 		}
 
-		&__desc {
+		&__description {
 			&--compact {
 				@apply text-[16px] font-bold leading-[22px];
 			}
@@ -149,7 +149,7 @@
 			}
 		}
 
-		&__encasing-cta-btn {
+		&__cta-wrapper {
 			&--compact {
 				@apply my-auto h-fit;
 			}
