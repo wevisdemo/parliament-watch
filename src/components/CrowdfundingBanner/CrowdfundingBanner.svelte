@@ -139,19 +139,6 @@
 			&--compact {
 				@apply w-full;
 			}
-
-			&--full {
-			}
-		}
-
-		&__text-content {
-			&--compact {
-				/* @apply gap-x-4; */
-			}
-
-			&--full {
-				/* @apply gap-y-4; */
-			}
 		}
 
 		&__description {
