@@ -57,19 +57,19 @@
 		{#if variant === 'full'}
 			<div class="-mx-8 -my-11 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
 				<img
-					class="banner-crowdfunding__illustration m-auto h-[175px] w-[345px]"
+					class="banner-crowdfunding__illustration"
 					src="/images/home/support-us.svg"
 					alt="ร่วมซัพพอร์ต WeVis ภาคประชาชน"
 				/>
 			</div>
 		{/if}
-		<div class="{variantClasses.content[variant]} flex gap-x-4 pl-6">
+		<div class={variantClasses.content[variant]}>
 			{#if variant === 'compact'}
-				<span class="banner-crowdfunding__emoji my-auto flex text-[46px]" aria-hidden>🥹</span>
+				<span class="banner-crowdfunding__emoji" aria-hidden>🥹</span>
 			{/if}
 			<div class={variantClasses.contentGroup[variant]}>
 				<div class={variantClasses.textContent[variant]}>
-					<h2 id="banner-crowdfunding__heading" class="banner-crowdfunding__heading font-bold">
+					<h2 id="banner-crowdfunding__heading" class="banner-crowdfunding__heading">
 						ร่วมสนับสนุนเว็บไซต์นี้
 					</h2>
 					<p class={variantClasses.description[variant]} class:font-bold={variant === 'compact'}>
@@ -83,7 +83,7 @@
 						{/if}
 					</p>
 				</div>
-				<div class="{variantClasses.ctaWrapper[variant]} flex">
+				<div class={variantClasses.ctaWrapper[variant]}>
 					<CtaButton
 						class="banner-crowdfunding__cta-btn visited:text-white hover:text-white"
 						icon={ArrowRight}
@@ -114,11 +114,11 @@
 		}
 
 		&__illustration {
-			@apply h-[175px] w-[345px];
+			@apply m-auto h-[175px] h-[175px] w-[345px] w-[345px];
 		}
 
 		&__heading {
-			@apply font-['Kondolar_Thai'] text-[28px] leading-9;
+			@apply font-['Kondolar_Thai'] text-[28px] font-bold leading-9;
 		}
 
 		&__content-group {
@@ -134,6 +134,8 @@
 		}
 
 		&__content {
+			@apply flex gap-x-4 pl-6;
+
 			&--compact {
 				@apply w-full;
 			}
@@ -163,6 +165,7 @@
 		}
 
 		&__emoji {
+			@apply my-auto flex text-[46px];
 		}
 
 		&__cta-btn {
@@ -172,6 +175,8 @@
 		}
 
 		&__cta-wrapper {
+			@apply flex;
+
 			&--compact {
 				@apply my-auto h-fit;
 			}
