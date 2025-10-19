@@ -10,6 +10,10 @@
 			compact: compactVariantBemClasses('root'),
 			full: fullVariantBemClasses('root')
 		},
+		contentGroup: {
+			compact: compactVariantBemClasses('content-group'),
+			full: fullVariantBemClasses('content-group')
+		},
 		content: {
 			compact: compactVariantBemClasses('content'),
 			full: fullVariantBemClasses('content')
@@ -63,13 +67,7 @@
 			{#if variant === 'compact'}
 				<span class="banner-crowdfunding__emoji my-auto flex text-[46px]" aria-hidden>🥹</span>
 			{/if}
-			<div
-				class="flex"
-				class:flex-col={variant === 'full'}
-				class:gap-y-6={variant === 'full'}
-				class:w-full={variant === 'compact'}
-				class:justify-between={variant === 'compact'}
-			>
+			<div class={variantClasses.contentGroup[variant]}>
 				<div class={variantClasses.textContent[variant]}>
 					<h2 id="banner-crowdfunding__heading" class="banner-crowdfunding__heading font-bold">
 						ร่วมสนับสนุนเว็บไซต์นี้
@@ -121,6 +119,18 @@
 
 		&__heading {
 			@apply font-['Kondolar_Thai'] text-[28px] leading-9;
+		}
+
+		&__content-group {
+			@apply flex;
+
+			&--compact {
+				@apply w-full justify-between;
+			}
+
+			&--full {
+				@apply flex-col gap-y-6;
+			}
 		}
 
 		&__content {
