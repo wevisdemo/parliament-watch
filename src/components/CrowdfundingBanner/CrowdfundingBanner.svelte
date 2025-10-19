@@ -49,12 +49,7 @@
 </script>
 
 <div role="banner" class="banner-crowdfunding grid">
-	<aside
-		class="{variantClasses.root[
-			variant
-		]} relative mx-auto my-auto flex w-full max-w-[1280px] justify-between px-16 py-6"
-		aria-labelledby="banner-crowdfunding__heading"
-	>
+	<aside class={variantClasses.root[variant]} aria-labelledby="banner-crowdfunding__heading">
 		{#if variant === 'full'}
 			<div class="-mx-8 -my-11 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
 				<img
@@ -110,6 +105,8 @@
 		background-color: #a6ebd8;
 
 		&__root {
+			@apply relative mx-auto my-auto flex w-full max-w-[1280px] justify-between px-16 py-6;
+
 			&--compact {
 			}
 
