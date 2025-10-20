@@ -27,8 +27,8 @@
 			full: fullVariantBemClasses('content-cta')
 		},
 		textContent: {
-			compact: compactVariantBemClasses('text-content--compact'),
-			full: fullVariantBemClasses('text-content--compact')
+			compact: compactVariantBemClasses('text-content'),
+			full: fullVariantBemClasses('text-content')
 		},
 		ctaWrapper: {
 			compact: compactVariantBemClasses('cta-wrapper'),
