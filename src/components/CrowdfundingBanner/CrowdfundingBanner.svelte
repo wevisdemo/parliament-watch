@@ -58,7 +58,7 @@
 			<div class="-mx-8 -my-11 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
 				<img
 					class="banner-crowdfunding__illustration"
-					src="/images/home/support-us.svg"
+					src="/images/home/support-us.jpg"
 					alt="ร่วมซัพพอร์ต WeVis ภาคประชาชน"
 				/>
 			</div>
