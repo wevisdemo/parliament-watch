@@ -52,7 +52,7 @@
 	}
 </script>
 
-<div role="banner" class="banner-crowdfunding grid">
+<div role="banner" class="banner-crowdfunding">
 	<aside class={variantClasses.root[variant]} aria-labelledby="banner-crowdfunding__heading">
 		{#if variant === 'full'}
 			<div class="-mx-8 -my-11 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
@@ -100,13 +100,10 @@
 
 <style lang="postcss">
 	.banner-crowdfunding {
-		background-color: #a6ebd8;
+		@apply grid bg-[#A6EBD8];
 
 		&__root {
 			@apply relative mx-auto my-auto flex w-full max-w-[1280px] justify-between px-16 py-6;
-
-			&--compact {
-			}
 
 			&--full {
 				@apply flex gap-6 px-6 py-11;
@@ -114,7 +111,7 @@
 		}
 
 		&__illustration {
-			@apply m-auto h-[175px] h-[175px] w-[345px] w-[345px];
+			@apply m-auto h-[175px] w-[345px];
 		}
 
 		&__heading {
@@ -153,12 +150,6 @@
 
 		&__emoji {
 			@apply my-auto flex text-[46px];
-		}
-
-		&__cta-btn {
-			&::after {
-				@apply absolute inset-0 content-[''];
-			}
 		}
 
 		&__cta-wrapper {
