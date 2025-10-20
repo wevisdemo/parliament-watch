@@ -11,7 +11,7 @@
 
 <Link
 	{...$$restProps}
-	class={`btn-cta bx--btn bx--btn--primary p-[14px] font-bold text-text-04 visited:text-white hover:!text-white hover:no-underline ${$$restProps.class}`}
+	class="btn-cta bx--btn bx--btn--primary p-[14px] font-bold text-text-04 visited:text-white hover:!text-white hover:no-underline {$$restProps.class}"
 	{href}
 	{icon}
 	{...external && { target: '_blank', rel: 'nofollow noopener noreferrer' }}
