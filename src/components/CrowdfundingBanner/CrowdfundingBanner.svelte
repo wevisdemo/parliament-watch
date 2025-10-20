@@ -5,7 +5,7 @@
 	type BannerVariant = 'compact' | 'full';
 
 	export let variant: BannerVariant;
-	$: variantClasses = {
+	const variantClasses = {
 		root: {
 			compact: compactVariantBemClasses('root'),
 			full: fullVariantBemClasses('root')
@@ -34,7 +34,7 @@
 			compact: compactVariantBemClasses('cta-wrapper'),
 			full: fullVariantBemClasses('cta-wrapper')
 		}
-	} satisfies Record<string, Record<BannerVariant, string>>;
+	} as const satisfies Record<string, Record<BannerVariant, string>>;
 
 	function compactVariantBemClasses(element: string) {
 		return buildBemClasses(element, 'compact');
