@@ -55,7 +55,7 @@
 <div role="banner" class="banner-crowdfunding">
 	<aside class={variantClasses.root[variant]} aria-labelledby="banner-crowdfunding__heading">
 		{#if variant === 'full'}
-			<div class="-mx-8 -my-11 flex w-[528px] bg-black px-0 py-0 lg:px-[92px] lg:py-6">
+			<div class="flex bg-black p-0 md:max-w-[528px] lg:px-[92px] lg:py-6">
 				<img
 					class="banner-crowdfunding__illustration"
 					src="/images/home/support-us.jpg"
@@ -100,18 +100,22 @@
 
 <style lang="postcss">
 	.banner-crowdfunding {
-		@apply grid bg-[#A6EBD8];
+		@apply bg-[#A6EBD8];
 
 		&__root {
-			@apply relative mx-auto my-auto flex w-full max-w-[1280px] justify-between px-16 py-6;
+			@apply relative m-auto flex w-full max-w-[1280px] justify-center;
+
+			&--compact {
+				@apply p-4 md:px-16 md:py-6;
+			}
 
 			&--full {
-				@apply flex gap-6 px-6 py-11;
+				@apply flex flex-col md:flex-row;
 			}
 		}
 
 		&__illustration {
-			@apply m-auto h-[175px] w-[345px];
+			@apply m-auto max-w-[345px];
 		}
 
 		&__heading {
@@ -119,22 +123,26 @@
 		}
 
 		&__content-group {
-			@apply flex;
+			@apply flex flex-col gap-4;
 
 			&--compact {
-				@apply w-full justify-between;
+				@apply w-full justify-between md:flex-row;
 			}
 
 			&--full {
-				@apply flex-col gap-y-6;
+				@apply md:gap-6;
 			}
 		}
 
 		&__content {
-			@apply flex gap-x-4 pl-6;
+			@apply flex gap-x-4;
 
 			&--compact {
-				@apply w-full;
+				@apply w-full md:items-center;
+			}
+
+			&--full {
+				@apply my-auto flex-col p-4 md:p-6;
 			}
 		}
 
@@ -149,18 +157,14 @@
 		}
 
 		&__emoji {
-			@apply my-auto flex text-[46px];
+			@apply flex text-[46px];
 		}
 
 		&__cta-wrapper {
-			@apply flex;
+			@apply flex justify-end;
 
 			&--compact {
 				@apply my-auto h-fit;
-			}
-
-			&--full {
-				@apply justify-end;
 			}
 		}
 	}
