@@ -64,7 +64,7 @@
 				}) as PoliticianSummaryGroupBy);
 
 	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
-		(name ? `${group.name}-${name}` : group.name).replaceAll(' ', '-');
+		`${group.name}-${name || NON_PARTISAN}`.replaceAll(' ', '-');
 
 	let memberListSectionRef: HTMLElement;
 
