@@ -18,6 +18,8 @@
 	import type { PoliticianSummaryGroupBy } from './+page.server';
 	import { GroupByOption } from '$models/assembly';
 
+	const NON_PARTISAN = 'ไม่สังกัดพรรค';
+
 	export let data;
 	$: ({ assembly, groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } = data);
 	$: currentPath = groupByTabs.find(({ isActive }) => isActive)?.path ?? '';
@@ -62,7 +64,7 @@
 				}) as PoliticianSummaryGroupBy);
 
 	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
-		(name ? `${group.name}-${name}` : group.name).replaceAll(' ', '-');
+		`${group.name}-${name || NON_PARTISAN}`.replaceAll(' ', '-');
 
 	let memberListSectionRef: HTMLElement;
 
@@ -172,7 +174,7 @@
 														/>
 													{/if}
 													<span class="mr-auto">
-														{name}
+														{name || NON_PARTISAN}
 													</span>
 													<span class="text-gray-60">{members.length}</span>
 												</a>
@@ -231,7 +233,7 @@
 								id={getSubgroupHeadingId(group, subGroupName)}
 								class="heading-compact-02 mb-2 flex items-baseline gap-2 border-b border-solid border-b-gray-30 p-4 font-semibold"
 							>
-								{subGroupName}
+								{subGroupName || NON_PARTISAN}
 								<span class="body-01 text-gray-60"
 									>{members.length} {currentPath === GroupByOption.Province ? 'เขต' : 'คน'}</span
 								>
