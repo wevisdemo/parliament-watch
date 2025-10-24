@@ -17,6 +17,8 @@
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { groups } from 'd3';
 
+	type PartyRole = 'หัวหน้าพรรคการเมือง' | 'สมาชิกพรรคการเมือง';
+
 	export let data;
 
 	$: ({ politician, agreedVoting, disagreedVoting, votingAbsentStats } = data);
@@ -24,14 +26,26 @@
 	$: partyMemberships = politician.memberships.filter(
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	);
-	$: currentParty = partyMemberships.find((m) => !m.end_date)?.posts[0].organizations[0];
+	$: currentMembership = partyMemberships.find(isCurrent);
+	$: currentPartyRole = currentMembership?.posts[0].role as PartyRole;
+	$: currentParty = currentMembership?.posts[0].organizations[0];
 	$: membershipInEachParties = groups(partyMemberships, (m) => m.posts[0].organizations[0].name);
 	$: assemblyMemberships = politician.memberships.filter(
 		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 	);
-	$: currentAssemblyMemberships = assemblyMemberships.filter((m) => !m.end_date);
+	$: currentAssemblyMemberships = assemblyMemberships.filter(isCurrent);
+
+	const roleAliases = {
+		หัวหน้าพรรคการเมือง: 'หัวหน้า',
+		สมาชิกพรรคการเมือง: 'สมาชิก'
+	} satisfies Record<PartyRole, string>;
 
 	let currentNavElementIndex = 0;
+
+	function isCurrent({ end_date }: { end_date: string | null }): boolean {
+		return end_date === null;
+	}
+
 	onMount(() => {
 		if (window.matchMedia('(min-width: 672px)').matches) {
 			const scroller = scrollama();
@@ -78,7 +92,7 @@
 				</h1>
 				<PositionStatus
 					isActive={currentAssemblyMemberships.some(
-						(m) => !m.end_date && !m.posts[0].organizations[0].dissolution_date
+						(m) => isCurrent(m) && !m.posts[0].organizations[0].dissolution_date
 					)}
 				/>
 				{#if currentAssemblyMemberships.length}
@@ -91,6 +105,10 @@
 								<a class="text-black" href="/">{post.organizations[0].name}</a>
 							</li>
 						{/each}
+						<li>
+							{roleAliases[currentPartyRole]}
+							พรรค{currentParty?.name}
+						</li>
 					</ul>
 				{/if}
 			</div>
