@@ -105,10 +105,12 @@
 								<a class="text-black" href="/">{post.organizations[0].name}</a>
 							</li>
 						{/each}
-						<li>
-							{roleAliases[currentPartyRole]}
-							พรรค{currentParty?.name}
-						</li>
+						{#if roleAliases[currentPartyRole] && currentParty?.name}
+							<li>
+								{roleAliases[currentPartyRole]}
+								พรรค{currentParty?.name}
+							</li>
+						{/if}
 					</ul>
 				{/if}
 			</div>
