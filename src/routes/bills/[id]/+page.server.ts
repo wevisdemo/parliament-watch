@@ -5,6 +5,7 @@ import { countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { groupVotesByAffiliation } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { createSeo } from '$lib/seo';
+import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
 import type { Bill } from '$models/bill';
 import { BillEventType, type BillEvent } from '$models/bill-event';
 import type { Politician } from '$models/politician';
@@ -62,14 +63,19 @@ export async function load({ params }) {
 	});
 
 	const relatedVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
-		voteEvents.map(async (voteEvent) => ({
-			...voteEvent,
-			date: voteEvent.start_date,
-			votesByGroup: groupVotesByAffiliation(await queryPoliticiansVote(voteEvent)).map((aff) => ({
+		voteEvents.map(async (voteEvent) => {
+			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
+			const groups = groupedVotes.map((aff) => ({
 				name: aff.name,
-				options: countVotesInEachOption(aff.votes)
-			}))
-		}))
+				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
+			}));
+
+			return {
+				...voteEvent,
+				date: voteEvent.start_date,
+				votesSummary: buildVotesSummary({ groups, result: voteEvent.result })
+			};
+		})
 	);
 
 	// TODO: workaround to temporary match old sheet politician id with new politician politigraph id

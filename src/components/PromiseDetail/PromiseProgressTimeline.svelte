@@ -1,7 +1,9 @@
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
 	import { formatThaiDate } from '$lib/date-parser';
+	import { buildVotesSummary } from '$lib/vote-summary';
 	import type { GlobalEvent } from '$models/global-event';
+	import type { CustomVoteOption, DefaultVoteOption } from '$models/voting';
 	import { PromiseStatus, type Promise } from '$models/promise';
 	import { Bullhorn, CheckmarkFilled } from 'carbon-icons-svelte';
 	import { twMerge } from 'tailwind-merge';
@@ -13,19 +15,18 @@
 		return b.date > a.date ? 1 : -1;
 	});
 
-	const sumObj = (obj: Record<string, number>) => {
-		return Object.values(obj).reduce((acc, value) => acc + value, 0);
-	};
+	const resolveOptionLabel = (option: DefaultVoteOption | CustomVoteOption | string) =>
+		typeof option === 'string' ? option : option.label;
 
-	const highlightedVoteByGroups = (resultsByAffiliation: any[], key: string) => {
-		return resultsByAffiliation.map((res) => {
-			return {
-				name: res.name,
-				count: res.resultSummary[key],
-				total: sumObj(res.resultSummary)
-			};
+	const toVotesSummary = (summary: NonNullable<Promise['progresses'][number]['votingSummary']>) =>
+		buildVotesSummary({
+			groups: summary.resultsByAffiliation.map(({ name, resultSummary }) => ({
+				name,
+				resultSummary
+			})),
+			optionOrder: summary.voteOptions?.map(resolveOptionLabel),
+			result: summary.result
 		});
-	};
 </script>
 
 {#each timeline as event, index}
@@ -103,11 +104,13 @@
 					{/if}
 				</div>
 				{#if isProgress && event.votingSummary}
+					{@const votesSummary = toVotesSummary(event.votingSummary)}
 					<VoteCard
 						id={event.votingSummary.id}
 						title={event.votingSummary.title || ''}
 						date={event.votingSummary.date.toISOString()}
 						result={event.votingSummary.result}
+						{votesSummary}
 						class="mb-4"
 					/>
 				{/if}
