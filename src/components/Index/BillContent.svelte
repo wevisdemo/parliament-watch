@@ -121,6 +121,6 @@
 	</div>
 
 	<Button href="/bills" kind="secondary" icon={ArrowRight} class="w-full max-w-none">
-		ดูร่างกฏหมายทั้งหมด
+		ดูร่างกฎหมายทั้งหมด
 	</Button>
 {/if}

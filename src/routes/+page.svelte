@@ -109,9 +109,9 @@
 	class="bg-ui-01"
 >
 	<span slot="description"
-		>ติดตามร่างกฏหมายที่เกี่ยวข้องกับชีวิตคุณ สำเร็จ หรือติดค้างอยู่ที่ขั้นตอนไหน<br />
+		>ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ สำเร็จ หรือติดค้างอยู่ที่ขั้นตอนไหน<br />
 		<a href="/legislative-process" class="mt-1 flex"
-			>รัฐออกกฏหมายอย่างไร? <ArrowRight class="ml-1" /></a
+			>รัฐออกกฎหมายอย่างไร? <ArrowRight class="ml-1" /></a
 		></span
 	>
 	<BillContent {billByCategoryAndStatus} />

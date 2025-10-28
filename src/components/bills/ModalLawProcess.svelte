@@ -20,7 +20,7 @@
 	{...$trigger}
 	use:trigger
 >
-	มีขั้นตอนอะไรบ้างกว่าจะผ่านกฏหมายสำเร็จ?
+	มีขั้นตอนอะไรบ้างกว่าจะผ่านกฎหมายสำเร็จ?
 </button>
 
 <div {...$portalled} use:portalled>
@@ -40,7 +40,7 @@
 			transition:fly={{ y: -24, duration: 240, easing: entranceExpressive }}
 		>
 			<div class="flex items-start justify-between gap-4 p-4">
-				<h2 {...$title} use:title class="heading-03">ขั้นตอนการผ่านกฏหมาย</h2>
+				<h2 {...$title} use:title class="heading-03">ขั้นตอนการผ่านกฎหมาย</h2>
 				<button {...$close} use:close><Close width="20" height="20" /></button>
 			</div>
 			<!-- TODO: write descriptive alt text -->
