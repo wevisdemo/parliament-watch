@@ -164,7 +164,7 @@
 		<div class="mx-auto w-full max-w-[800px] px-10 py-10 md:py-20">
 			<h1 class="fluid-heading-05">ร่างกฎหมายกลายเป็นกฎหมายได้อย่างไร</h1>
 			<p>
-				<span class="font-bold text-text-primary">อัพเดตล่าสุด :</span>
+				<span class="font-bold text-text-primary">อัปเดตล่าสุด :</span>
 				<span class="text-helper-text-01">{dayjs(new Date()).format('DD MMM BBBB')}</span>
 			</p>
 		</div>
