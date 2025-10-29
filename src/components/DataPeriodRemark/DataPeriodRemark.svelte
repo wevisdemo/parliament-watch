@@ -15,6 +15,6 @@
 			>{formatDate(new Date('2019-03-24'))} - {formatDate(new Date())}</span
 		>
 	{:else}
-		อัพเดตข้อมูล: {formatDate(new Date())}
+		อัปเดตข้อมูล: {formatDate(new Date())}
 	{/if}
 </p>

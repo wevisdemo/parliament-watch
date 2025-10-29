@@ -91,7 +91,7 @@
 <div class="bg-teal-80">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-10">
 		<h2 class="fluid-heading-03 text-white">
-			{data.latestEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฏหมาย
+			{data.latestEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
 		</h2>
 		<Carousel>
 			{#each data.latestEnactedBills as bill (bill.id)}
