@@ -76,7 +76,7 @@ export function buildVotesSummary({
 }: BuildVotesSummaryOptions): VotesSummary {
 	const canonicalOrder = deriveOptionOrder(groups, optionOrder);
 	const groupSummaries = groups.map((group) => normalizeGroup(group, canonicalOrder));
-	const total = groupSummaries.reduce((sum, { total }) => sum + total, 0);
+	const total = groupSummaries.reduce((sum, group) => sum + group.total, 0);
 	const totalsByOption = aggregateTotals(groupSummaries, canonicalOrder);
 	const overall = canonicalOrder.map((option) =>
 		buildSlice(option, totalsByOption.get(option) ?? 0, total)

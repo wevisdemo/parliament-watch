@@ -47,16 +47,6 @@
 		[DefaultVoteOption.Absent]: 'text-gray-50'
 	};
 
-	export let date: string;
-	export let title: string;
-	export let id: string;
-	export let result: string | null;
-	export let votesSummary: VotesSummary | null = null;
-	export let isFullWidth = false;
-
-	let className = '';
-	export { className as class };
-
 	const EMPTY_SUMMARY: VotesSummary = {
 		total: 0,
 		optionOrder: [],
@@ -66,9 +56,15 @@
 		groups: []
 	};
 
-	let summary: VotesSummary = EMPTY_SUMMARY;
-	let highlight: VotesSummaryHighlight | null = summary.highlight;
-	let highlightOptionName: string | null = summary.highlight?.option ?? null;
+	export let date: string;
+	export let title: string;
+	export let id: string;
+	export let result: string | null;
+	export let votesSummary: VotesSummary | null = EMPTY_SUMMARY;
+	export let isFullWidth = false;
+
+	let className = '';
+	export { className as class };
 
 	$: summary = votesSummary ?? EMPTY_SUMMARY;
 	$: highlight = summary.highlight;

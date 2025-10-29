@@ -152,7 +152,7 @@ export async function load() {
 	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
 		voteEvents.map(async (voteEvent) => {
 			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
-			const groups = groupedVotes.map((aff) => ({
+			const mappedGroups = groupedVotes.map((aff) => ({
 				name: aff.name,
 				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
 			}));
@@ -160,7 +160,7 @@ export async function load() {
 			return {
 				...voteEvent,
 				date: voteEvent.start_date,
-				votesSummary: buildVotesSummary({ groups, result: voteEvent.result })
+				votesSummary: buildVotesSummary({ groups: mappedGroups, result: voteEvent.result })
 			};
 		})
 	);
