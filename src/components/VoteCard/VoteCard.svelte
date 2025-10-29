@@ -7,7 +7,7 @@
 	import { twMerge } from 'tailwind-merge';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VoteStackedBar from '$components/VoteStackedBar/VoteStackedBar.svelte';
-	import { type VotesSummary, type VotesSummaryHighlight } from '$lib/vote-summary';
+	import type { VotesSummary } from '$lib/vote-summary';
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
@@ -70,12 +70,6 @@
 	$: highlight = summary.highlight;
 	$: highlightOptionName = highlight?.option ?? null;
 	$: totalVotesCount = summary.total;
-	$: highlightPercentage = highlight
-		? percentageFormatter.format(highlight.percentage * 100)
-		: null;
-	$: highlightTextColor = highlightOptionName
-		? highlightColorLookup[highlightOptionName] ?? 'text-text-01'
-		: 'text-text-01';
 	$: theme = CARD_THEMES[result as DefaultVotingResult] || CANDIDATE_CARD_THEME;
 
 	const formatCount = (value: number) => numberFormatter.format(value);
@@ -96,8 +90,8 @@
 <a
 	href="/votings/{id}"
 	class={twMerge(
-		'border-transparent relative flex min-h-[19rem] flex-col gap-y-3 whitespace-pre-wrap rounded-md border p-4 transition-colors',
-		isFullWidth ? 'w-full' : 'w-72 md:w-[22rem]',
+		'border-transparent relative flex min-h-[19rem] flex-col gap-y-3 whitespace-pre-wrap p-4 transition-colors',
+		isFullWidth ? 'w-full' : 'w-72',
 		theme.bg,
 		theme.hoveredBg,
 		className
@@ -110,24 +104,9 @@
 		<VotingResultTag {result} />
 	</div>
 	<h3 class="fluid-heading-03 line-clamp-4 text-text-01">{title}</h3>
-	{#if totalVotesCount > 0 && highlight}
-		<div class="mt-1 flex flex-col gap-0.5">
-			<div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-				<span class={twMerge('fluid-heading-04', highlightTextColor)}>{highlightPercentage}%</span>
-				<span class="fluid-heading-04 text-text-01">{highlight.label}</span>
-			</div>
-			<p class="body-compact-01 text-text-02">
-				{formatCount(highlight.count)} / {formatCount(totalVotesCount)}
-			</p>
-		</div>
-	{/if}
-	<VoteStackedBar
-		segments={summary.overall}
-		total={summary.total}
-		highlightOption={highlightOptionName}
-		class="mt-2"
-	/>
-	<div class="mt-3 flex flex-col gap-2 text-text-01">
+	<VoteStackedBar segments={summary.overall} total={summary.total} class="mt-2" />
+	<hr class="border border-ui-03" />
+	<div class="flex flex-col gap-2 text-text-01">
 		{#if highlight}
 			<div class="flex items-center justify-between">
 				<span class="body-01">
@@ -139,13 +118,15 @@
 			</div>
 		{/if}
 		{#if summary.groups.length}
-			<ul class="list-disc space-y-1 pl-4">
+			<ul class="list-disc pl-4">
 				{#each highlightGroups() as group (group.name)}
-					<li class="flex items-center justify-between gap-4">
-						<span class="body-01">{group.name}</span>
-						<span class="body-01 text-text-02">
-							{formatCount(group.highlightCount)} / {formatCount(group.total)}
-						</span>
+					<li class="body-compact-01 leading-3">
+						<div class="flex items-center justify-between gap-4">
+							<span>{group.name}</span>
+							<span class="text-text-02">
+								{formatCount(group.highlightCount)} / {formatCount(group.total)}
+							</span>
+						</div>
 					</li>
 				{/each}
 			</ul>

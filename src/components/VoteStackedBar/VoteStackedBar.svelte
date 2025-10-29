@@ -17,7 +17,6 @@
 
 	export let segments: VoteOptionSlice[] = [];
 	export let total = 0;
-	export let highlightOption: string | null = null;
 	export let className = '';
 	export { className as class };
 
@@ -30,10 +29,7 @@
 </script>
 
 <div
-	class={twMerge(
-		'flex h-5 w-full items-stretch overflow-hidden rounded-full bg-gray-20',
-		className
-	)}
+	class={twMerge('flex h-5 w-full items-stretch overflow-hidden bg-gray-20', className)}
 	role="img"
 	aria-label={total ? accessibleLabel : 'ไม่มีข้อมูลคะแนนเสียง'}
 >
@@ -43,13 +39,7 @@
 		{#each segments as segment (segment.option)}
 			{#if segment.count > 0}
 				<div
-					class={twMerge(
-						'flex-1 transition-all',
-						getColorClass(segment.option),
-						highlightOption === segment.option
-							? 'ring-2 ring-white ring-offset-1 ring-offset-gray-20'
-							: ''
-					)}
+					class={twMerge('flex-1 rounded-sm transition-all', getColorClass(segment.option))}
 					style={`flex-grow: ${segment.count}; flex-basis: 0;`}
 					aria-label={`${segment.label} ${numberFormatter.format(segment.percentage * 100)}%`}
 				/>
