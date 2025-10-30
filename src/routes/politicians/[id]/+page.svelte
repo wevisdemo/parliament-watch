@@ -26,19 +26,14 @@
 	$: partyMemberships = politician.memberships.filter(
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	);
-	$: currentMembership = partyMemberships.find(isCurrent);
-	$: currentPartyRole = currentMembership?.posts[0].role as PartyRole;
-	$: currentParty = currentMembership?.posts[0].organizations[0];
+	$: currentPartyMembership = partyMemberships.find(isCurrent);
+	$: currentPartyRole = currentPartyMembership?.posts[0].role as PartyRole;
+	$: currentParty = currentPartyMembership?.posts[0].organizations[0];
 	$: membershipInEachParties = groups(partyMemberships, (m) => m.posts[0].organizations[0].name);
 	$: assemblyMemberships = politician.memberships.filter(
 		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 	);
 	$: currentAssemblyMemberships = assemblyMemberships.filter(isCurrent);
-
-	const roleAliases = {
-		หัวหน้าพรรคการเมือง: 'หัวหน้า',
-		สมาชิกพรรคการเมือง: 'สมาชิก'
-	} satisfies Record<PartyRole, string>;
 
 	let currentNavElementIndex = 0;
 
@@ -105,9 +100,9 @@
 								<a class="text-black" href="/">{post.organizations[0].name}</a>
 							</li>
 						{/each}
-						{#if roleAliases[currentPartyRole] && currentParty?.name}
+						{#if currentParty?.name}
 							<li>
-								{roleAliases[currentPartyRole]}
+								{currentPartyRole}
 								พรรค{currentParty?.name}
 							</li>
 						{/if}
