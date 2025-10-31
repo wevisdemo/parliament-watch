@@ -17,8 +17,6 @@
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { groups } from 'd3';
 
-	type PartyRole = 'หัวหน้าพรรคการเมือง' | 'สมาชิกพรรคการเมือง';
-
 	export let data;
 
 	$: ({ politician, agreedVoting, disagreedVoting, votingAbsentStats } = data);
@@ -27,7 +25,7 @@
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	);
 	$: currentPartyMembership = partyMemberships.find(isCurrent);
-	$: currentPartyRole = currentPartyMembership?.posts[0].role as PartyRole;
+	$: currentPartyRole = currentPartyMembership?.posts[0].role;
 	$: currentParty = currentPartyMembership?.posts[0].organizations[0];
 	$: membershipInEachParties = groups(partyMemberships, (m) => m.posts[0].organizations[0].name);
 	$: assemblyMemberships = politician.memberships.filter(
