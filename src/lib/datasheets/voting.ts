@@ -188,16 +188,7 @@ export function getVoteResultsByPerson(
 	}, []);
 }
 
-export function getWinningOption(result: string) {
-	switch (result) {
-		case DefaultVotingResult.Passed:
-			return DefaultVoteOption.Agreed;
-		case DefaultVotingResult.Failed:
-			return DefaultVoteOption.Disagreed;
-		default:
-			return result;
-	}
-}
+export { getWinningOption } from '$lib/vote-summary';
 
 export function getSortedUniqueVoteOptions(
 	list: { voteOption: DefaultVoteOption | CustomVoteOption | string }[]

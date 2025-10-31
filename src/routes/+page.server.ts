@@ -10,6 +10,7 @@ import { fetchBills, fetchPromises } from '$lib/datasheets';
 import { graphql } from '$lib/politigraph';
 import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
+import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
 import { BillStatus } from '$models/bill';
 import { PromiseStatus } from '$models/promise';
 import type { PromisesByStatus } from './promises/+page.server';
@@ -149,14 +150,19 @@ export async function load() {
 	});
 
 	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
-		voteEvents.map(async (voteEvent) => ({
-			...voteEvent,
-			date: voteEvent.start_date,
-			votesByGroup: groupVotesByAffiliation(await queryPoliticiansVote(voteEvent)).map((aff) => ({
+		voteEvents.map(async (voteEvent) => {
+			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
+			const mappedGroups = groupedVotes.map((aff) => ({
 				name: aff.name,
-				options: countVotesInEachOption(aff.votes)
-			}))
-		}))
+				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
+			}));
+
+			return {
+				...voteEvent,
+				date: voteEvent.start_date,
+				votesSummary: buildVotesSummary({ groups: mappedGroups, result: voteEvent.result })
+			};
+		})
 	);
 
 	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(

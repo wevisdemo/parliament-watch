@@ -3,10 +3,11 @@
 	import type { ComponentProps } from 'svelte';
 	import VoteCard from './VoteCard.svelte';
 	import type { Hst } from '@histoire/plugin-svelte';
+	import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
 
 	export let Hst: Hst;
 
-	const votesByGroup: ComponentProps<VoteCard>['votesByGroup'] = [
+	const sampleGroups = [
 		{
 			name: 'สส.ฝ่ายรัฐบาล',
 			options: [
@@ -48,21 +49,29 @@
 		}
 	];
 
-	const passedVoting: ComponentProps<VoteCard> = {
+	const resultSummaries = sampleGroups.map((group) => ({
+		name: group.name,
+		resultSummary: optionsArrayToResultSummary(group.options)
+	}));
+
+	const createVoteCardProps = (props: ComponentProps<VoteCard>) => ({
+		...props,
+		votesSummary: buildVotesSummary({ groups: resultSummaries, result: props.result })
+	});
+
+	const passedVoting = createVoteCardProps({
 		id: '1',
 		date: '2023-08-31',
 		title: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
-		result: DefaultVotingResult.Passed,
-		votesByGroup: votesByGroup
-	};
+		result: DefaultVotingResult.Passed
+	});
 
-	const failedVoting: ComponentProps<VoteCard> = {
+	const failedVoting = createVoteCardProps({
 		id: '2',
 		date: '2023-09-01',
 		title: 'ร่าง พ.ร.บ.สุราก้าวหน้า (ส่งไป ครม.)',
-		result: DefaultVotingResult.Failed,
-		votesByGroup: votesByGroup
-	};
+		result: DefaultVotingResult.Failed
+	});
 
 	const dictVoteCardProps: Record<DefaultVotingResult, ComponentProps<VoteCard>> = {
 		[DefaultVotingResult.Passed]: passedVoting,
@@ -74,13 +83,12 @@
 
 	$: isCandidateResult = 'candidate' === (result as string);
 	$: voting = dictVoteCardProps[result] || candidateVoteCardProps;
-	$: candidateVoteCardProps = {
+	$: candidateVoteCardProps = createVoteCardProps({
 		id: '3',
 		date: '2023-09-02T17:00:00.000Z',
 		title: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-		result: candidateName || 'Mr. Candidate Krub',
-		votesByGroup
-	} satisfies ComponentProps<VoteCard>;
+		result: candidateName || 'Mr. Candidate Krub'
+	});
 </script>
 
 <Hst.Story title="VoteCard">
@@ -103,6 +111,6 @@
 
 		<p>Example Props:</p>
 		<Hst.Json title="Example `voting` Prop" bind:value={voting} />
-		<Hst.Json title="Example `highlightedVoteByGroups` Prop" bind:value={voting.votesByGroup} />
+		<Hst.Json title="Example `votesSummary` Prop" bind:value={voting.votesSummary} />
 	</svelte:fragment>
 </Hst.Story>
