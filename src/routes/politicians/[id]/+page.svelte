@@ -24,14 +24,21 @@
 	$: partyMemberships = politician.memberships.filter(
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	);
-	$: currentParty = partyMemberships.find((m) => !m.end_date)?.posts[0].organizations[0];
+	$: currentPartyMembership = partyMemberships.find(isCurrent);
+	$: currentPartyRole = currentPartyMembership?.posts[0].role;
+	$: currentParty = currentPartyMembership?.posts[0].organizations[0];
 	$: membershipInEachParties = groups(partyMemberships, (m) => m.posts[0].organizations[0].name);
 	$: assemblyMemberships = politician.memberships.filter(
 		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 	);
-	$: currentAssemblyMemberships = assemblyMemberships.filter((m) => !m.end_date);
+	$: currentAssemblyMemberships = assemblyMemberships.filter(isCurrent);
 
 	let currentNavElementIndex = 0;
+
+	function isCurrent({ end_date }: { end_date: string | null }): boolean {
+		return end_date === null;
+	}
+
 	onMount(() => {
 		if (window.matchMedia('(min-width: 672px)').matches) {
 			const scroller = scrollama();
@@ -78,7 +85,7 @@
 				</h1>
 				<PositionStatus
 					isActive={currentAssemblyMemberships.some(
-						(m) => !m.end_date && !m.posts[0].organizations[0].dissolution_date
+						(m) => isCurrent(m) && !m.posts[0].organizations[0].dissolution_date
 					)}
 				/>
 				{#if currentAssemblyMemberships.length}
@@ -91,6 +98,12 @@
 								<a class="text-black" href="/">{post.organizations[0].name}</a>
 							</li>
 						{/each}
+						{#if currentParty?.name}
+							<li>
+								{currentPartyRole}
+								พรรค{currentParty?.name}
+							</li>
+						{/if}
 					</ul>
 				{/if}
 			</div>
