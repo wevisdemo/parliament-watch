@@ -29,29 +29,17 @@
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import { BillProposerType, BillStatus } from '$models/bill';
+	import { billStatusList, billStatusProperty } from '$lib/politigraph/bill/status';
+	import type { BillStatus } from '$lib/politigraph/genql';
+	import { BillProposerType } from '$models/bill';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import DocumentUnknown from 'carbon-icons-svelte/lib/DocumentUnknown.svelte';
 
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;
 
-	const HEADER_STYLE: Record<BillStatus, string> = {
-		[BillStatus.InProgress]: 'bg-yellow-20 text-text-10',
-		[BillStatus.Enacted]: 'bg-teal-80 text-text-04',
-		[BillStatus.Rejected]: 'bg-red-80 text-text-04',
-		[BillStatus.Merged]: 'bg-purple-80 text-text-04'
-	};
-
-	const BAR_STYLE: Record<BillStatus, string> = {
-		[BillStatus.InProgress]: 'bg-yellow-20',
-		[BillStatus.Enacted]: 'bg-teal-80',
-		[BillStatus.Rejected]: 'bg-red-80',
-		[BillStatus.Merged]: 'bg-purple-80'
-	};
-
-	$: headerStyle = 'status' in bill ? HEADER_STYLE[bill.status] : 'border';
-	$: barStyle = 'status' in bill ? BAR_STYLE[bill.status] : 'bg-ui-04';
+	$: headerStyle = 'status' in bill ? billStatusProperty[bill.status].colorClass : 'border';
+	$: barStyle = 'status' in bill ? billStatusProperty[bill.status].colorClass : 'bg-ui-04';
 
 	let billParams: [string, string];
 	$: billParams =
@@ -81,7 +69,7 @@
 			</div>
 		{:else}
 			<h3 class="heading-02 mb-3 w-fit rounded-full px-2 py-1 {headerStyle}">
-				{'status' in bill ? bill.status : bill.category}
+				{'status' in bill ? billStatusProperty[bill.status].label : bill.category}
 			</h3>
 		{/if}
 		<p class="mb-3 flex items-center gap-1">
@@ -90,7 +78,7 @@
 		</p>
 		{#if 'proposerType' in bill}
 			<ul>
-				{#each [BillStatus.InProgress, BillStatus.Enacted, BillStatus.Rejected, BillStatus.Merged] as status}
+				{#each billStatusList as status (status)}
 					{@const relatedBillCount = bill.countByStatus[status] || 0}
 					{#if relatedBillCount > 0}
 						<li class="mb-2">
@@ -99,7 +87,7 @@
 								<span class="label-01">{status}</span>
 							</span>
 							<div
-								class="h-1 {BAR_STYLE[status]}"
+								class="h-1 {barStyle}"
 								style:width="{bill.count ? (relatedBillCount / bill.count) * 100 : 0}%"
 							/>
 						</li>
@@ -124,7 +112,7 @@
 		<div class="card-body body-01 flex-1 bg-ui-01 p-6 pt-3">
 			<span class="mb-1 block text-text-03">เช่น</span>
 			<ul class="body-compact-01 mb-3 ml-[2.1ch] flex list-outside list-disc flex-col gap-1">
-				{#each bill.samples as sample}
+				{#each bill.samples as sample (sample.id)}
 					<li>
 						<a href="/bills/{sample.id}" class="text-gray-100 underline">{sample.nickname}</a>
 					</li>
