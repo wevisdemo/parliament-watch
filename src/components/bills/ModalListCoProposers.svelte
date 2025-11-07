@@ -4,7 +4,7 @@
 	import CoProposer from './CoProposer.svelte';
 	import type { ComponentProps } from 'svelte';
 
-	export let coProposedByPoliticians: ComponentProps<CoProposer>['politician'][];
+	export let coProposedByPoliticians: Omit<ComponentProps<CoProposer>, 'index'>[];
 </script>
 
 {#if $showModalListCoProposer}
@@ -30,8 +30,8 @@
 				</div>
 				<div class="flex flex-col pb-5 pl-8 pr-5">
 					<table class="w-full">
-						{#each coProposedByPoliticians as politician, i}
-							<CoProposer index={i + 1} {politician} />
+						{#each coProposedByPoliticians as { politician, partyLogo }, i (politician.id)}
+							<CoProposer index={i + 1} {politician} {partyLogo} />
 						{/each}
 					</table>
 				</div>
