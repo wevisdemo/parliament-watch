@@ -1,25 +1,12 @@
-import {
-	ALL_CATEGORY_KEY,
-	MAX_BILL_BY_STATUS,
-	type BillByCategoryAndStatus,
-	type BillCategoryWithStatus
-} from '$components/Index/BillContent.svelte';
 import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import { fetchBills, fetchPromises } from '$lib/datasheets';
 import { graphql } from '$lib/politigraph';
 import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
-import { BillStatus } from '$models/bill';
-import { PromiseStatus } from '$models/promise';
-import type { PromisesByStatus } from './promises/+page.server';
-import { groups, rollup } from 'd3-array';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
-const MAX_ENACTED_BILL = 10;
-const MAX_PROMISES_SAMPLE = 3;
 
 const CHUAN_ID = '891ea463-c463-4f76-840d-e7d24a97d70c';
 const BANYAT_ID = 'e26bbc32-f2d5-41f1-8006-2ea439576771';
@@ -40,9 +27,6 @@ interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCa
 }
 
 export async function load() {
-	const bills = await fetchBills();
-	const promises = await fetchPromises();
-
 	const highlightPoliticians = (
 		await graphql.query({
 			people: {
@@ -165,64 +149,39 @@ export async function load() {
 		})
 	);
 
-	const billByCategoryAndStatus: BillByCategoryAndStatus = rollup(
-		bills.flatMap(({ categories, ...rest }) =>
-			categories.map((category) => ({ category, categories, ...rest }))
-		),
-		(billsByCategory): BillCategoryWithStatus => ({
-			count: billsByCategory.length,
-			billsByStatus: rollup(
-				billsByCategory,
-				(billsByStatus) => ({
-					samples: billsByStatus.slice(
-						0,
-						billsByStatus[0].status === BillStatus.Enacted ? MAX_ENACTED_BILL : MAX_BILL_BY_STATUS
-					),
-					count: billsByStatus.length
-				}),
-				(bill) => bill.status
-			)
-		}),
-		(bill) => bill.category
-	);
-
-	billByCategoryAndStatus.set(ALL_CATEGORY_KEY, {
-		count: bills.length,
-		billsByStatus: rollup(
-			bills,
-			(billsByStatus) => ({
-				samples: billsByStatus.slice(
-					0,
-					billsByStatus[0].status === BillStatus.Enacted ? MAX_ENACTED_BILL : MAX_BILL_BY_STATUS
-				),
-				count: billsByStatus.length
-			}),
-			(bill) => bill.status
+	const billCategories = [
+		...new Set(
+			(
+				await graphql.query({
+					bills: {
+						categories: true
+					}
+				})
+			).bills.flatMap((bill) => bill.categories ?? [])
 		)
-	});
+	].sort((a, z) => a.localeCompare(z));
 
-	const promiseSummary = {
-		total: promises.length,
-		byStatus: groups(
-			promises.filter((p) =>
-				[PromiseStatus.inProgress, PromiseStatus.fulfilled, PromiseStatus.unhonored].includes(
-					p.status
-				)
-			),
-			(p) => p.status
-		).map<PromisesByStatus>(([status, promisesByStatus]) => ({
-			status,
-			samples: promisesByStatus
-				.slice(0, MAX_PROMISES_SAMPLE)
-				.map(({ id, statements }) => ({ id, statements })),
-			count: promisesByStatus.length
-		}))
-	};
+	// const promiseSummary = {
+	// 	total: promises.length,
+	// 	byStatus: groups(
+	// 		promises.filter((p) =>
+	// 			[PromiseStatus.inProgress, PromiseStatus.fulfilled, PromiseStatus.unhonored].includes(
+	// 				p.status
+	// 			)
+	// 		),
+	// 		(p) => p.status
+	// 	).map<PromisesByStatus>(([status, promisesByStatus]) => ({
+	// 		status,
+	// 		samples: promisesByStatus
+	// 			.slice(0, MAX_PROMISES_SAMPLE)
+	// 			.map(({ id, statements }) => ({ id, statements })),
+	// 		count: promisesByStatus.length
+	// 	}))
+	// };
 
 	return {
 		highlightedPoliticians,
 		latestVoteEvents,
-		billByCategoryAndStatus,
-		promiseSummary
+		billCategories
 	};
 }
