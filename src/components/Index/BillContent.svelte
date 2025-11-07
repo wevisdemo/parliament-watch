@@ -5,15 +5,13 @@
 	import Carousel from './Carousel.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
 	import { graphql } from '$lib/politigraph';
-	import { BillStatus } from '$models/bill';
 	import type { Bill } from '$lib/politigraph/genql';
 	import { onMount } from 'svelte';
+	import { billStatusList } from '$lib/politigraph/bill/status';
 
 	const ALL_CATEGORY_KEY = 'ทุกหมวด';
 	const MAX_BILL_BY_STATUS = 3;
 	const MAX_ENACTED_BILL = 10;
-
-	const billStatusList = Object.values(BillStatus);
 
 	export let billCategories: string[] = [];
 
@@ -25,7 +23,7 @@
 	>[] = [];
 
 	$: lastEnactedBills = billsInSelectedCategory
-		.filter((bill) => bill.status === BillStatus.Enacted)
+		.filter((bill) => bill.status === 'ENFORCED')
 		.slice(0, MAX_ENACTED_BILL);
 
 	onMount(() => {
@@ -149,7 +147,7 @@
 						{id}
 						nickname={nickname ?? title}
 						title={nickname ? title : null}
-						status={BillStatus.Enacted}
+						status="ENFORCED"
 						proposedOn={proposal_date ? new Date(proposal_date) : null}
 					/>
 				{/each}
