@@ -1,21 +1,18 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { DocumentMultiple_02, Information, Link, OpenPanelTop } from 'carbon-icons-svelte';
+	import { Link } from 'carbon-icons-svelte';
+	import { groups } from 'd3';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	// import Tooltip from '$components/Assemblies/Tooltip.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
-	import { BillProposerType, BillStatus } from '$models/bill';
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import { showModalListCoProposer } from '$components/bills/store';
 	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
 	import CoProposer from '$components/bills/CoProposer.svelte';
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
-	import Progress from '$components/bills/Progress.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 
@@ -23,17 +20,10 @@
 
 	export let data;
 
-	const {
-		bill,
-		mergedBills,
-		events,
-		mergedIntoBill,
-		mergedIntoBillLatestEvent,
-		relatedVoteEvents
-	} = data;
+	const { bill, proposer, coProposers } = data;
 
-	const tooltipText =
-		'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
+	// const tooltipText =
+	// 	'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
 
 	const MAX_DISPLAY_COPROPOSER = 8;
 
@@ -43,26 +33,21 @@
 		day: 'numeric'
 	};
 
-	$: proposedOn = bill.proposedOn.toLocaleDateString('th-TH', dateTimeFormat);
+	$: displayName = bill.nickname || bill.title;
 
-	const groupBy = <T, K extends string>(arr: T[], groupFn: (element: T) => K): Record<K, T[]> =>
-		arr.reduce(
-			(r, v, _i, _a, k = groupFn(v)) => ((r[k] || (r[k] = [])).push(v), r),
-			{} as Record<K, T[]>
-		);
+	$: proposedOn =
+		bill.proposal_date && new Date(bill.proposal_date).toLocaleDateString('th-TH', dateTimeFormat);
 
-	$: partiesCoProposed = bill.coProposedByPoliticians
-		? groupBy(
-				bill.coProposedByPoliticians,
-				(politician) => ('party' in politician && politician.party?.name) || NO_PARTY_FOUND_LABEL
-			)
-		: null;
+	// TODO: Bill Events
+	// $: dayElapsed =
+	// 	bill.proposal_date &&
+	// 	dayjs(
+	// 		bill.status === 'ENFORCED'
+	// 			? new Date()
+	// 			: bill.events.find(({ start_date }) => start_date)?.date || new Date()
+	// 	).diff(bill.proposal_date, 'days');
 
-	$: dayElapsed = dayjs(
-		bill.status === BillStatus.InProgress
-			? new Date()
-			: events.find(({ date }) => date)?.date || new Date()
-	).diff(bill.proposedOn, 'days');
+	$: partiesCoProposed = groups(coProposers, ({ party }) => party?.name);
 
 	let innerWidth = 0;
 </script>
@@ -76,21 +61,24 @@
 	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
 	<BreadcrumbItem href="/bills">ร่างกฎหมายในสภา</BreadcrumbItem>
 	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage
-		>{trimBreadcrumbTitle(bill.nickname)}</BreadcrumbItem
+		>{trimBreadcrumbTitle(displayName)}</BreadcrumbItem
 	>
 </Breadcrumb>
 
 <div class="mx-auto flex w-full max-w-[1200px] flex-col">
 	<section class="px-4 py-8 md:px-16 md:py-12">
 		<div class="flex flex-col gap-1">
-			<h1 class="fluid-heading-05 text-text-primary">{bill.nickname}</h1>
-			<p class="text-text-02">
-				<b>ชื่อทางการ</b>
-				{bill.title}
-			</p>
+			<h1 class="fluid-heading-05 text-text-primary">{displayName}</h1>
+			{#if bill.nickname}
+				<p class="text-text-02">
+					<b>ชื่อทางการ</b>
+					{bill.title}
+				</p>
+			{/if}
 			<div class="-ml-1 flex items-center gap-1 font-bold">
 				<BillStatusTag isLarge status={bill.status} />
-				<b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b>
+				<!-- TODO: Bill Events -->
+				<!-- <b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b> -->
 			</div>
 		</div>
 		<div class="mt-7 flex flex-col gap-8 md:flex-row md:gap-16">
@@ -103,23 +91,30 @@
 					<div>
 						<b>เสนอโดย</b>
 						<Proposer
-							proposer={bill.proposedLedByPolitician ??
-								bill.proposedByAssembly ??
-								bill.proposedByPeople}
+							proposer={'assemblyMembership' in proposer
+								? {
+										id: proposer.id,
+										name: proposer.name,
+										image: proposer.image,
+										assemblyPost: proposer.assemblyMembership?.posts[0]?.label,
+										assembly: proposer.assemblyMembership?.posts[0]?.organizations[0],
+										partyName: proposer.partyMembership?.posts[0]?.organizations[0]?.name
+									}
+								: proposer}
 						/>
 					</div>
 				</div>
 				<hr class="border-gray-30" />
-				{#if bill.description}
+				{#if bill.text}
 					<div>
 						<b>สรุปเนื้อหา</b>
-						<p class="whitespace-pre-wrap">{bill.description}</p>
+						<p class="whitespace-pre-wrap">{bill.text}</p>
 					</div>
 				{/if}
-				{#if bill.categories.length > 0}
+				{#if bill.categories?.length}
 					<div class="flex gap-2">
 						<b>หมวด</b>
-						{#each bill.categories as category}
+						{#each bill.categories as category (category)}
 							<BillCategoryTag label={category} />
 						{/each}
 					</div>
@@ -181,12 +176,7 @@
 				<LinkTable
 					title="ลิงก์ที่เกี่ยวข้อง"
 					icon={Link}
-					links={[
-						...(bill.attachment
-							? [{ label: bill.attachment.label, url: bill.attachment.url }]
-							: []),
-						{ label: 'เว็บไซต์แหล่งข้อมูลต้นทาง', url: bill.lisUrl, icon: OpenPanelTop }
-					]}
+					links={bill.links.map(({ url, note }) => ({ url, label: note ?? url }))}
 				/>
 				<DataPeriodRemark />
 				<Share label="แชร์หน้านี้" />
@@ -194,8 +184,9 @@
 		</div>
 	</section>
 
-	{#if bill.proposerType === BillProposerType.Politician && bill.proposedLedByPolitician && bill.coProposedByPoliticians}
-		{@const { id, name, image, party, assembly } = bill.proposedLedByPolitician}
+	{#if 'assemblyMembership' in proposer && coProposers.length}
+		{@const { id, name, image, assemblyMembership, partyMembership } = proposer}
+		{@const party = partyMembership?.posts[0]?.organizations[0]}
 
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
@@ -210,53 +201,51 @@
 							avatar={image ?? undefined}
 							partyName={party?.name}
 							partyLogo={party?.image ?? undefined}
-							role={assembly?.postLabel}
+							role={assemblyMembership?.posts?.[0]?.label}
 						/>
 					</div>
 					<div class="flex flex-col gap-3 md:w-full">
 						<p class="body-02 text-text-02">
 							<b class="handing-02 text-text-primary">ผู้ร่วมเสนอ</b>
-							{bill.coProposedByPoliticians.length} คน
+							{coProposers.length} คน
 						</p>
 						<div class="flex flex-col flex-wrap gap-3 px-3 md:flex-row">
-							{#if partiesCoProposed}
-								{#each Object.entries(partiesCoProposed) as [name, politicians] (name)}
-									<CoPartyProposer
-										party={'party' in politicians[0] ? politicians[0].party : undefined}
-										politicianCount={politicians.length}
-									/>
-								{/each}
-							{/if}
+							{#each partiesCoProposed as [partyName, politicians] (partyName)}
+								<CoPartyProposer
+									party={politicians[0].party ?? { name: NO_PARTY_FOUND_LABEL }}
+									politicianCount={politicians.length}
+								/>
+							{/each}
 						</div>
 						<div class="flex flex-col gap-2 px-5">
 							<p class="label-01 mr-2 text-text-02">เรียงตามตัวอักษร</p>
-							{#if bill.coProposedByPoliticians.length > 0}
-								<div class="relative flex flex-col">
-									<table class="w-full">
-										{#each bill.coProposedByPoliticians.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i}
-											<CoProposer
-												index={i + 1}
-												{politician}
-												partyLogo={'party' in politician ? politician.party?.image : null}
-											/>
-										{/each}
-									</table>
 
-									{#if bill.coProposedByPoliticians.length > MAX_DISPLAY_COPROPOSER}
-										<div
-											class="absolute bottom-0 h-12 w-full"
-											style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
+							<div class="relative flex flex-col">
+								<table class="w-full">
+									{#each coProposers.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i (politician.id)}
+										<CoProposer index={i + 1} {politician} partyLogo={politician.party?.image} />
+									{/each}
+								</table>
+								{#if coProposers.length > MAX_DISPLAY_COPROPOSER}
+									<div
+										class="absolute bottom-0 h-12 w-full"
+										style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
+									>
+										<button
+											on:click={() => {
+												$showModalListCoProposer = true;
+											}}
+											class="body-01 absolute bottom-0 text-link-01 underline">ดูทั้งหมด</button
 										>
-											<button
-												on:click={() => {
-													$showModalListCoProposer = true;
-												}}
-												class="body-01 absolute bottom-0 text-link-01 underline">ดูทั้งหมด</button
-											>
-										</div>{/if}
-								</div>
-							{/if}
-							<ModalListCoProposers coProposedByPoliticians={bill.coProposedByPoliticians} />
+									</div>
+								{/if}
+							</div>
+							<ModalListCoProposers
+								coProposedByPoliticians={coProposers.map(({ party: coParty, ...politician }) => ({
+									politician,
+									partyLogo: coParty?.image
+								}))}
+							/>
 						</div>
 						<div />
 					</div>
@@ -265,7 +254,8 @@
 		</section>
 	{/if}
 
-	{#if events.length > 0}
+	<!-- TODO: Bill Events -->
+	<!-- {#if events.length > 0}
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
 				<h1 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h1>
@@ -307,5 +297,5 @@
 				</div>
 			</div>
 		</section>
-	{/if}
+	{/if} -->
 </div>
