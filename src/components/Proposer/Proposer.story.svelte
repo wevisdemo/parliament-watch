@@ -18,9 +18,8 @@
 				image: 'https://via.placeholder.com/64',
 				assembly: {
 					id: 'สภาผู้แทนราษฎร-26',
-					abbreviation: 'ส.ส.',
-					term: 26,
-					startedAt: new Date('01/01/2023')
+					name: 'ส.ส. ชุดที่ 26',
+					founding_date: new Date('01/01/2023')
 				},
 				partyName: 'ก้าวไกล'
 			}}
@@ -31,9 +30,8 @@
 			{orientation}
 			proposer={{
 				id: 'คณะรัฐมนตรี-64',
-				abbreviation: 'ครม.',
-				term: 64,
-				startedAt: new Date('04/09/2024')
+				name: 'ครม. 64',
+				founding_date: new Date('04/09/2024')
 			}}
 		/>
 	</Hst.Variant>
@@ -42,9 +40,8 @@
 			{orientation}
 			proposer={{
 				id: 'สภาผู้แทนราษฎร-26',
-				abbreviation: 'สส.',
-				term: 26,
-				startedAt: new Date('01/01/2023')
+				name: 'สส. 26',
+				founding_date: new Date('01/01/2023')
 			}}
 		/>
 	</Hst.Variant>
@@ -52,7 +49,7 @@
 		<Proposer
 			{orientation}
 			proposer={{
-				ledBy: 'นายยิ่งชีพ',
+				name: 'นายยิ่งชีพ',
 				signatoryCount: 150000
 			}}
 		/>

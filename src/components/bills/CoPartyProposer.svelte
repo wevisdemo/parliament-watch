@@ -4,7 +4,7 @@
 		| {
 				id?: string;
 				name: string;
-				logo?: string;
+				image?: string | null;
 		  }
 		| undefined = undefined;
 </script>
@@ -14,11 +14,10 @@
 		class="flex items-center justify-center overflow-hidden rounded-full border border-gray-30"
 		style="width: 24px; height: 24px;"
 	>
-		<img src={party?.logo || '/images/politicians/_placeholder.webp'} alt="" />
+		<img src={party?.image || '/images/politicians/_placeholder.webp'} alt="" />
 	</div>
 	<div class="flex">
 		{#if party?.id}
-			<!-- TODO: link to party when implemented -->
 			<p>พรรค{party?.name}</p>
 		{:else}
 			<p>ไม่พบข้อมูลพรรค</p>
