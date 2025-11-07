@@ -13,6 +13,7 @@
 	export let options: KeenSliderOptions<object, object, KeenSliderHooks> | undefined = undefined;
 	export let arrowLeftClass = '';
 	export let arrowRightClass = '';
+	export let hideNavigation = false;
 
 	let elCarousel: HTMLElement;
 	let slider: KeenSliderInstance;
@@ -69,7 +70,7 @@
 	<div bind:this={elCarousel} class="keen-slider">
 		<slot />
 	</div>
-	{#if !disableLeft}
+	{#if !hideNavigation && !disableLeft}
 		<button
 			type="button"
 			class={twMerge('absolute left-0 top-1/2 -translate-y-1/2 xl:-left-6', arrowLeftClass)}
@@ -80,7 +81,7 @@
 			aria-label="เลื่อนทางซ้าย"><ChevronLeft width="48" height="48" /></button
 		>
 	{/if}
-	{#if !disableRight}
+	{#if !hideNavigation && !disableRight}
 		<button
 			type="button"
 			class={twMerge('absolute right-0 top-1/2 -translate-y-1/2 xl:-right-6', arrowRightClass)}
