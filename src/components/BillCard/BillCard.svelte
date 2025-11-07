@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import { BillStatus } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
+	import type { BillStatus } from '$lib/politigraph/genql';
 	// import Proposer from '$components/Proposer/Proposer.svelte';
 
 	export let id: string;

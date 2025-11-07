@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import LawStatusCard from './LawStatusCard.svelte';
-	import { BillStatus } from '$models/bill';
+	import type { BillStatus } from '$lib/politigraph/genql';
 	export let Hst: Hst;
 
 	const bill = {
-		status: BillStatus.InProgress,
+		status: 'IN_PROGRESS' as BillStatus,
 		samples: [
 			{ id: '1', nickname: 'ร่าง พ.ร.บ. สุราก้าวหน้า' },
 			{ id: '2', nickname: 'ร่าง พ.ร.บ. การจัดสรรที่ดิน' },
