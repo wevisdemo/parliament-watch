@@ -6,7 +6,8 @@
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
-	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
+	import LinksCell from '$components/DataPage/LinksCell.svelte';
+	import { billStatusProperty } from '$lib/politigraph/bill/status.js';
 	import { onMount } from 'svelte';
 	let cmpDataPage: DataPage;
 
@@ -30,15 +31,15 @@
 	];
 
 	$: getProposerName = (): Choice[] => {
-		const peopleOptions = filterOptions.proposerNames.map((name) => ({
+		const peopleOptions = filterOptions.proposerPeople.map((name) => ({
 			id: name,
 			text: name,
 			disabled: false
 		}));
 
-		const cabinetOptions = filterOptions.proposerCabinet.map((cabinet) => ({
-			id: cabinet.id,
-			text: cabinet.name,
+		const cabinetOptions = filterOptions.proposerCabinets.map((name) => ({
+			id: name,
+			text: name,
 			disabled: false
 		}));
 
@@ -59,8 +60,8 @@
 		{
 			key: 'filterStatus',
 			legend: 'สถานะ',
-			choices: filterOptions.status.map((status) => ({
-				label: status,
+			choices: filterOptions.statuses.map((status) => ({
+				label: billStatusProperty[status].label,
 				value: status
 			}))
 		},
@@ -75,7 +76,7 @@
 		{
 			key: 'filterProposerType',
 			legend: 'ประเภทผู้เสนอ',
-			choices: filterOptions.billProposerType.map((proposer) => ({
+			choices: filterOptions.proposerTypes.map((proposer) => ({
 				label: proposer,
 				value: proposer
 			}))
@@ -93,17 +94,13 @@
 			: bills
 					.filter((bill) => {
 						if (
-							'filterProposerName' in selectedComboboxValue &&
-							![
-								bill.proposedLedByPeopleName,
-								bill.proposedLedByPoliticianName,
-								bill.proposedByAssembly?.id
-							].includes(selectedComboboxValue.filterProposerName as string | undefined)
+							selectedComboboxValue.filterProposerName &&
+							bill.proposer.name !== selectedComboboxValue.filterProposerName
 						)
 							return;
 
 						const search = searchQuery.trim();
-						if (search && !bill.title.includes(search) && !bill.nickname.includes(search)) return;
+						if (search && !bill.title.includes(search) && !bill.nickname?.includes(search)) return;
 
 						const { filterEra, filterStatus, filterCategory, filterProposerType } =
 							selectedCheckboxValue;
@@ -118,18 +115,18 @@
 					})
 					.map((bill) => ({
 						id: bill.id,
-						proposedOn: bill.proposedOn,
+						proposedOn: bill.proposal_date,
 						titleColumn: {
 							id: bill.id,
 							title: bill.title
 						},
 						status: bill.status,
-						attachment: bill.attachment
+						links: bill.links
 					}));
 
 	onMount(() => {
 		const status = $page.url.searchParams.get('status');
-		if (status && (filterOptions.status as string[]).includes(status)) {
+		if (status && (filterOptions.statuses as string[]).includes(status)) {
 			selectedCheckboxValue.filterStatus = [status];
 		}
 
@@ -139,7 +136,7 @@
 		}
 
 		const proposerType = $page.url.searchParams.get('proposertype');
-		if (proposerType && (filterOptions.billProposerType as string[]).includes(proposerType)) {
+		if (proposerType && (filterOptions.proposerTypes as string[]).includes(proposerType)) {
 			selectedCheckboxValue.filterProposerType = [proposerType];
 		}
 
@@ -167,7 +164,7 @@
 		{ key: 'proposedOn', value: 'วันที่เสนอ' },
 		{ key: 'titleColumn', value: 'ชื่อร่าง' },
 		{ key: 'status', value: 'สถานะ' },
-		{ key: 'attachment', value: 'เอกสาร' }
+		{ key: 'links', value: 'ลิงก์' }
 	]}
 	downloadSize="lg"
 	downloadLinks={[{ label: 'ร่างกฎหมายในสภา', url: '/files/download/bills.csv' }]}
@@ -197,9 +194,7 @@
 		{:else if cellKey === 'status'}
 			<BillStatusTag class="m-0" status={cellValue} isLarge />
 		{:else if cellValue}
-			<a href={cellValue.url} title={cellValue.label} target="_blank" rel="noopener noreferrer">
-				<DocumentPdf />
-			</a>
+			<LinksCell {cellValue} />
 		{/if}
 	</svelte:fragment>
 </DataPage>
