@@ -119,8 +119,8 @@ export async function load({ params }) {
 		}
 	});
 
-	const proposer =
-		creators[0]?.__typename === 'Organization'
+	const proposer = creators[0]
+		? creators[0]?.__typename === 'Organization'
 			? creators[0]
 			: people_signature_count
 				? {
@@ -138,7 +138,8 @@ export async function load({ params }) {
 						partyMembership: creators[0].memberships.find(
 							(m) => m.posts[0]?.organizations[0]?.classification === 'POLITICAL_PARTY'
 						)
-					};
+					}
+		: undefined;
 
 	return {
 		bill,

@@ -91,7 +91,7 @@
 					<div>
 						<b>เสนอโดย</b>
 						<Proposer
-							proposer={'assemblyMembership' in proposer
+							proposer={proposer && 'assemblyMembership' in proposer
 								? {
 										id: proposer.id,
 										name: proposer.name,
@@ -184,7 +184,7 @@
 		</div>
 	</section>
 
-	{#if 'assemblyMembership' in proposer && coProposers.length}
+	{#if proposer && 'assemblyMembership' in proposer && coProposers.length}
 		{@const { id, name, image, assemblyMembership, partyMembership } = proposer}
 		{@const party = partyMembership?.posts[0]?.organizations[0]}
 
