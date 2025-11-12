@@ -1,98 +1,113 @@
 import type { CheckboxFilterChoice } from '$components/DataPage/DataPage.svelte';
-import { fetchAssemblies, fetchBills } from '$lib/datasheets';
+import { graphql } from '$lib/politigraph';
+import { billStatusList } from '$lib/politigraph/bill/status';
+import type { BillStatus } from '$lib/politigraph/genql';
 import { createSeo } from '$lib/seo';
-import { AssemblyName } from '$models/assembly';
-import { BillProposerType, BillStatus, type Bill } from '$models/bill';
+import { BillProposerType } from '$models/bill';
 import dayjs from 'dayjs';
 
 const OTHER_CATEGORY_KEY = 'อื่นๆ';
 
 interface FilterOptions {
 	mpAssemblies: CheckboxFilterChoice[];
-	status: BillStatus[];
+	statuses: BillStatus[];
 	categories: string[];
-	billProposerType: BillProposerType[];
-	proposerNames: string[];
-	proposerCabinet: proposerCabinetType[];
-}
-
-interface BillSummary
-	extends Pick<
-		Bill,
-		| 'id'
-		| 'title'
-		| 'nickname'
-		| 'proposedOn'
-		| 'categories'
-		| 'status'
-		| 'proposerType'
-		| 'proposedByAssembly'
-		| 'proposedLedByPolitician'
-		| 'proposedByPeople'
-		| 'attachment'
-	> {
-	purposedAtMpAssemblyId: string;
-	proposedLedByPoliticianName?: string;
-	proposedLedByPeopleName?: string;
-}
-
-interface proposerCabinetType {
-	name: string;
-	id: string;
+	proposerTypes: BillProposerType[];
+	proposerPeople: string[];
+	proposerCabinets: string[];
 }
 
 export async function load() {
-	const assemblies = (await fetchAssemblies()).filter(
-		({ name }) => name === AssemblyName.Representatives
-	);
+	const data = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
+				},
+				sort: [{ founding_date: 'DESC' }]
+			},
+			id: true,
+			name: true,
+			founding_date: true,
+			dissolution_date: true
+		},
+		bills: {
+			__args: {
+				sort: [{ proposal_date: 'DESC' }]
+			},
+			id: true,
+			title: true,
+			nickname: true,
+			status: true,
+			proposal_date: true,
+			categories: true,
+			links: {
+				url: true,
+				note: true
+			},
+			creators: {
+				__typename: true,
+				on_Organization: {
+					name: true
+				},
+				on_Person: {
+					name: true
+				}
+			},
+			people_signature_count: true
+		}
+	});
 
-	const bills: BillSummary[] = (await fetchBills()).map((bill) => {
-		const proposedDate = dayjs(bill.proposedOn);
+	const assemblies = data.organizations;
+
+	const bills = data.bills.map(({ creators, people_signature_count, ...bill }) => {
+		const proposedDate = dayjs(bill.proposal_date);
 
 		return {
 			...bill,
-			categories: bill.categories.length > 0 ? bill.categories : [OTHER_CATEGORY_KEY],
+			categories: bill.categories?.length ? bill.categories : [OTHER_CATEGORY_KEY],
 			purposedAtMpAssemblyId:
 				assemblies.find(
-					({ startedAt, endedAt }) =>
-						proposedDate.isAfter(startedAt) && (!endedAt || proposedDate.isBefore(endedAt))
+					({ founding_date, dissolution_date }) =>
+						proposedDate.isAfter(founding_date) &&
+						(!dissolution_date || proposedDate.isBefore(dissolution_date))
 				)?.id || OTHER_CATEGORY_KEY,
-			proposedLedByPoliticianName: bill.proposedLedByPolitician
-				? `${bill.proposedLedByPolitician.firstname} ${bill.proposedLedByPolitician.lastname}`
-				: undefined,
-			proposedLedByPeopleName: bill.proposedByPeople?.ledBy
+			proposerType: !creators[0]
+				? BillProposerType.Unknown
+				: creators[0].__typename === 'Organization'
+					? BillProposerType.Assembly
+					: people_signature_count
+						? BillProposerType.People
+						: BillProposerType.Politician,
+			proposer: creators.at(0) ?? { __typename: null, name: OTHER_CATEGORY_KEY }
 		};
 	});
 
-	const billStatuses = Object.values(BillStatus).filter((status) =>
+	const billStatuses = billStatusList.filter((status) =>
 		bills.some((bill) => bill.status === status)
 	);
 
-	const billProposerTypes = Object.values(BillProposerType).filter((proposerType) =>
+	const proposerTypes = Object.values(BillProposerType).filter((proposerType) =>
 		bills.some((bill) => bill.proposerType === proposerType)
 	);
 
-	const proposerNames = [
+	const proposerPeople = [
 		...new Set(
 			bills
-				.filter((bill) => bill.proposedLedByPeopleName || bill.proposedLedByPoliticianName)
-				.map(
-					(bill) => bill.proposedLedByPeopleName || bill.proposedLedByPoliticianName
-				) as string[] /* either of pplName or polName will be present, so it will be a `string` */
+				.filter((bill) => bill.proposer.__typename === 'Person')
+				.map((bill) => bill.proposer.name)
 		)
 	].sort((a, z) => a.localeCompare(z));
 
-	const proposerCabinet = bills
-		.filter(
-			(bill) => bill.proposerType === BillProposerType.Assembly && bill.purposedAtMpAssemblyId
+	const proposerCabinets = [
+		...new Set(
+			bills
+				.filter((bill) => bill.proposer.__typename === 'Organization')
+				.map((bill) => bill.proposer.name)
 		)
-		.map((bill) => ({
-			name: `คณะรัฐมนตรี ชุดที่ ${bill.proposedByAssembly!.term} (${bill.proposedByAssembly!.startedAt.getFullYear() + 543})`,
-			id: bill.proposedByAssembly!.id
-		}))
-		.filter((cabinet, index, self) => index === self.findIndex((t) => t.id === cabinet.id));
+	].sort((a, z) => a.localeCompare(z));
 
-	const categories = [...new Set(bills.flatMap((bill) => bill.categories))].sort((a, z) =>
+	const categories = [...new Set(bills.flatMap((bill) => bill.categories ?? []))].sort((a, z) =>
 		a.localeCompare(z)
 	);
 
@@ -103,10 +118,10 @@ export async function load() {
 
 	const mpAssemblies: CheckboxFilterChoice[] = assemblies
 		.filter(({ id }) => bills.some((bill) => bill.purposedAtMpAssemblyId === id))
-		.sort((a, z) => z.startedAt.getTime() - a.startedAt.getTime())
+		.sort((a, z) => (z.founding_date ?? '').localeCompare(a.founding_date ?? ''))
 		.map((assembly) => ({
-			label: `${assembly.name}ชุดที่ ${assembly.term} (${formatThaiYear(assembly.startedAt)} - ${
-				formatThaiYear(assembly?.endedAt) ?? 'ปัจจุบัน'
+			label: `${assembly.name} (${formatThaiYear(assembly.founding_date)} - ${
+				formatThaiYear(assembly?.dissolution_date) ?? 'ปัจจุบัน'
 			})`,
 			value: assembly.id
 		}));
@@ -120,11 +135,11 @@ export async function load() {
 
 	const filterOptions: FilterOptions = {
 		mpAssemblies,
-		status: billStatuses,
+		statuses: billStatuses,
 		categories,
-		billProposerType: billProposerTypes,
-		proposerNames,
-		proposerCabinet
+		proposerTypes,
+		proposerPeople,
+		proposerCabinets
 	};
 
 	return {
@@ -136,7 +151,7 @@ export async function load() {
 	};
 }
 
-function formatThaiYear(date?: Date) {
+function formatThaiYear(date: string | null) {
 	if (!date) return;
-	return date.toLocaleString('th-TH', { year: 'numeric' });
+	return new Date(date).toLocaleString('th-TH', { year: 'numeric' });
 }
