@@ -5,13 +5,12 @@
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import { DefaultVoteOption } from '$models/voting.js';
 	import { InlineNotification } from 'carbon-components-svelte';
-	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
-	import NotebookReference from 'carbon-icons-svelte/lib/NotebookReference.svelte';
 	import { onMount } from 'svelte';
 	import type {
 		CheckboxFilterGroup,
 		SelectedCheckboxValueType
 	} from '$components/DataPage/DataPage.svelte';
+	import LinksCell from '$components/DataPage/LinksCell.svelte';
 
 	export let data;
 	const { politician, filterOptions, votes } = data;
@@ -139,18 +138,7 @@
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
 		{:else if cellKey === 'links'}
-			{#if cellValue.length > 0}
-				<div class="flex flex-row gap-2">
-					{#each cellValue as { note, url } (note)}
-						<a href={url} target="_blank" rel="noopener noreferrer" title={note}
-							><svelte:component this={url.includes('.pdf') ? DocumentPdf : NotebookReference}
-							></svelte:component><span class="sr-only">{note}</span></a
-						>
-					{/each}
-				</div>
-			{:else}
-				-
-			{/if}
+			<LinksCell {cellValue} />
 		{:else}
 			{cellValue}
 		{/if}
