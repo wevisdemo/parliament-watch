@@ -5,9 +5,14 @@
 	import Carousel from './Carousel.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
 	import { graphql } from '$lib/politigraph';
-	import type { Bill } from '$lib/politigraph/genql';
+	import type { Bill, BillsConnection } from '$lib/politigraph/genql';
 	import { onMount } from 'svelte';
 	import { billStatusList } from '$lib/politigraph/bill/status';
+
+	interface BillSummary {
+		billsConnection: Pick<BillsConnection, 'totalCount'>;
+		bills: Pick<Bill, 'id' | 'title' | 'nickname'>[];
+	}
 
 	const ALL_CATEGORY_KEY = 'ทุกหมวด';
 	const MAX_BILL_BY_STATUS = 3;
@@ -17,14 +22,8 @@
 
 	let selectedCategory: string = ALL_CATEGORY_KEY;
 	let isLoading = true;
-	let billsInSelectedCategory: Pick<
-		Bill,
-		'id' | 'title' | 'nickname' | 'status' | 'proposal_date'
-	>[] = [];
-
-	$: lastEnactedBills = billsInSelectedCategory
-		.filter((bill) => bill.status === 'ENFORCED')
-		.slice(0, MAX_ENACTED_BILL);
+	let billSummaryByStatus: BillSummary[] = [];
+	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'status' | 'proposal_date'>[] = [];
 
 	onMount(() => {
 		loadBills();
@@ -33,27 +32,54 @@
 	async function loadBills(category?: string) {
 		isLoading = true;
 
-		billsInSelectedCategory = (
-			await graphql.query({
-				bills: {
-					__args: {
-						...(category
-							? {
-									where: {
-										categories_INCLUDES: category
-									}
-								}
-							: {}),
-						sort: [{ proposal_date: 'DESC' }]
+		billSummaryByStatus = await Promise.all(
+			billStatusList.map((status) => {
+				const where = {
+					status_EQ: status,
+					...(category
+						? {
+								categories_INCLUDES: category
+							}
+						: {})
+				};
+
+				return graphql.query({
+					billsConnection: {
+						__args: { where },
+						totalCount: true
 					},
-					id: true,
-					title: true,
-					nickname: true,
-					status: true,
-					proposal_date: true
+					bills: {
+						__args: { where, sort: [{ proposal_date: 'DESC' }], limit: MAX_BILL_BY_STATUS },
+						id: true,
+						title: true,
+						nickname: true
+					}
+				});
+			})
+		);
+
+		lastEnactedBills = (
+			await graphql.query({
+				billEnforceEvents: {
+					__args: {
+						where: {
+							NOT: { start_date_EQ: null }
+							// TODO: filter bill category
+						},
+						sort: [{ start_date: 'DESC' }],
+						limit: MAX_ENACTED_BILL
+					},
+					motions: {
+						on_Bill: {
+							id: true,
+							title: true,
+							nickname: true,
+							proposal_date: true
+						}
+					}
 				}
 			})
-		).bills;
+		).billEnforceEvents.map((event) => event.motions[0]);
 
 		isLoading = false;
 	}
@@ -62,6 +88,11 @@
 		selectedCategory = category;
 		loadBills(category === ALL_CATEGORY_KEY ? undefined : category);
 	}
+
+	$: totalCount = billSummaryByStatus.reduce(
+		(sum, byStatus) => sum + byStatus.billsConnection.totalCount,
+		0
+	);
 </script>
 
 <div class="relative flex flex-col gap-6">
@@ -89,38 +120,37 @@
 			</div>
 		</div>
 
-		{#key selectedCategory}
-			<Carousel
-				options={{
-					breakpoints: {
-						'(min-width: 672px)': {
-							slides: {
-								perView: 3,
-								spacing: 12
+		{#if billSummaryByStatus.length}
+			{#key selectedCategory}
+				<Carousel
+					options={{
+						breakpoints: {
+							'(min-width: 672px)': {
+								slides: {
+									perView: 3,
+									spacing: 12
+								}
 							}
 						}
-					}
-				}}
-				hideNavigation={isLoading}
-			>
-				{#each billStatusList as status (status)}
-					{@const bills = billsInSelectedCategory
-						.filter((bill) => bill.status === status)
-						.map(({ id, nickname, title }) => ({
-							id,
-							nickname: nickname ?? title ?? ''
-						}))}
-					<LawStatusCard
-						totalCount={billsInSelectedCategory.length}
-						bill={{
-							status,
-							samples: bills.slice(0, MAX_BILL_BY_STATUS),
-							count: bills.length
-						}}
-					/>
-				{/each}
-			</Carousel>
-		{/key}
+					}}
+					hideNavigation={isLoading}
+				>
+					{#each billStatusList as status, i (status)}
+						<LawStatusCard
+							{totalCount}
+							bill={{
+								status,
+								samples: billSummaryByStatus[i].bills.map(({ id, nickname, title }) => ({
+									id,
+									nickname: nickname ?? title ?? ''
+								})),
+								count: billSummaryByStatus[i].billsConnection.totalCount
+							}}
+						/>
+					{/each}
+				</Carousel>
+			{/key}
+		{/if}
 	</div>
 
 	{#if lastEnactedBills.length}

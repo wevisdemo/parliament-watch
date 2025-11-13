@@ -154,6 +154,11 @@ export async function load() {
 			(
 				await graphql.query({
 					bills: {
+						__args: {
+							where: {
+								NOT: { categories_EQ: null }
+							}
+						},
 						categories: true
 					}
 				})
