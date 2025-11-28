@@ -179,7 +179,7 @@
 							{id}
 							nickname={nickname ?? title}
 							title={nickname ? title : null}
-							status="ENFORCED"
+							status="ENACTED"
 							proposedOn={proposal_date ? new Date(proposal_date) : null}
 						/>
 					{/each}
