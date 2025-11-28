@@ -1,4 +1,4 @@
-import type { BillStatus } from './bill';
+import type { BillStatus } from '$lib/politigraph/genql';
 import type { PromiseStatus } from './promise';
 
 export enum SearchIndexCategory {
