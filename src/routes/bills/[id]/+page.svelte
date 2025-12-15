@@ -2,6 +2,7 @@
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import { Link } from 'carbon-icons-svelte';
 	import { groups } from 'd3';
+	import dayjs from 'dayjs';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	// import Tooltip from '$components/Assemblies/Tooltip.svelte';
@@ -15,12 +16,14 @@
 	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
+	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
+	import Progress from '$components/bills/Progress.svelte';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
 	export let data;
 
-	const { bill, proposer, coProposers } = data;
+	const { bill, proposer, coProposers, events } = data;
 
 	// const tooltipText =
 	// 	'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
@@ -38,14 +41,11 @@
 	$: proposedOn =
 		bill.proposal_date && new Date(bill.proposal_date).toLocaleDateString('th-TH', dateTimeFormat);
 
-	// TODO: Bill Events
-	// $: dayElapsed =
-	// 	bill.proposal_date &&
-	// 	dayjs(
-	// 		bill.status === 'ENFORCED'
-	// 			? new Date()
-	// 			: bill.events.find(({ start_date }) => start_date)?.date || new Date()
-	// 	).diff(bill.proposal_date, 'days');
+	$: dayElapsed =
+		bill.proposal_date &&
+		dayjs(
+			bill.status === 'IN_PROGRESS' ? undefined : events.find((event) => event.date)?.date
+		).diff(bill.proposal_date, 'days');
 
 	$: partiesCoProposed = groups(coProposers, ({ party }) => party?.name);
 
@@ -77,8 +77,7 @@
 			{/if}
 			<div class="-ml-1 flex items-center gap-1 font-bold">
 				<BillStatusTag isLarge status={bill.status} />
-				<!-- TODO: Bill Events -->
-				<!-- <b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b> -->
+				<b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b>
 			</div>
 		</div>
 		<div class="mt-7 flex flex-col gap-8 md:flex-row md:gap-16">
@@ -255,7 +254,7 @@
 	{/if}
 
 	<!-- TODO: Bill Events -->
-	<!-- {#if events.length > 0}
+	{#if events.length > 0}
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
 				<h1 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h1>
@@ -273,29 +272,17 @@
 					<ol
 						class="relative ml-2 border border-b-[transparent] border-e-[transparent] border-t-[transparent]"
 					>
-						{#each events.slice(0, events.length - 1) as event}
-							<Progress
-								{event}
-								{tooltipText}
-								{relatedVoteEvents}
-								{mergedIntoBill}
-								{mergedIntoBillLatestEvent}
-							/>
+						{#each events.slice(0, events.length - 1) as event, i (i)}
+							<Progress {...event} />
 						{/each}
 					</ol>
 					<div>
 						<ol class="relative ml-2">
-							<Progress
-								event={events[events.length - 1]}
-								{tooltipText}
-								{relatedVoteEvents}
-								{mergedIntoBill}
-								{mergedIntoBillLatestEvent}
-							/>
+							<Progress {...events[events.length - 1]} />
 						</ol>
 					</div>
 				</div>
 			</div>
 		</section>
-	{/if} -->
+	{/if}
 </div>
