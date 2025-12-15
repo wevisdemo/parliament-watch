@@ -5,9 +5,9 @@
 	import { Button } from 'carbon-components-svelte';
 	// import BillCard from '$components/BillCard/BillCard.svelte';
 	// import type { ComponentProps } from 'svelte';
-	import type { Bill, Link } from '$lib/politigraph/genql';
+	import type { Link, BillEvent } from '$lib/politigraph/genql';
 
-	export let type: Bill['bill_events'][number]['__typename'];
+	export let type: BillEvent['__typename'];
 	export let title: string;
 	export let description: string;
 	export let date: string | null;

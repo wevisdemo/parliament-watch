@@ -23,7 +23,7 @@
 	let selectedCategory: string = ALL_CATEGORY_KEY;
 	let isLoading = true;
 	let billSummaryByStatus: BillSummary[] = [];
-	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'status' | 'proposal_date'>[] = [];
+	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'>[] = [];
 
 	onMount(() => {
 		loadBills();
@@ -60,7 +60,7 @@
 
 		lastEnactedBills = (
 			await graphql.query({
-				billEnforceEvents: {
+				billEnactEvents: {
 					__args: {
 						where: {
 							NOT: { start_date_EQ: null }
@@ -69,17 +69,15 @@
 						sort: [{ start_date: 'DESC' }],
 						limit: MAX_ENACTED_BILL
 					},
-					motions: {
-						on_Bill: {
-							id: true,
-							title: true,
-							nickname: true,
-							proposal_date: true
-						}
+					bills: {
+						id: true,
+						title: true,
+						nickname: true,
+						proposal_date: true
 					}
 				}
 			})
-		).billEnforceEvents.map((event) => event.motions[0]);
+		).billEnactEvents.map((event) => event.bills[0]);
 
 		isLoading = false;
 	}
