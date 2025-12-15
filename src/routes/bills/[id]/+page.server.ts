@@ -175,9 +175,11 @@ export async function load({ params }) {
 			people_signature_count: true,
 			bill_events: {
 				__typename: true,
-				id: true,
-				start_date: true,
-				description: true,
+				on_Event: {
+					id: true,
+					start_date: true,
+					description: true
+				},
 				on_BillVoteEvent: {
 					classification: true
 				},
@@ -187,9 +189,11 @@ export async function load({ params }) {
 				on_BillRoyalAssentEvent: {
 					result: true
 				},
-				links: {
-					note: true,
-					url: true
+				on_BillEnactEvent: {
+					links: {
+						note: true,
+						url: true
+					}
 				}
 			}
 		}
