@@ -13,6 +13,8 @@
 
 	export let data;
 
+	$: ({ totalCount, byStatus, byProposerType, lastEnactedBills } = data);
+
 	let searchResults: SearchResults | null;
 </script>
 
@@ -39,7 +41,6 @@
 			bind:searchResults
 		/>
 		{#if searchResults}
-			<!-- TODO: Link Bills to Explore Page -->
 			<SearchResult {searchResults} class="absolute left-0 z-10 w-full" />
 		{/if}
 	</div>
@@ -63,27 +64,28 @@
 				}
 			}}
 		>
-			{#each data.byStatus as bill (bill.status)}
-				<LawStatusCard totalCount={data.totalCount} {bill} />
+			{#each byStatus as bill (bill.status)}
+				<LawStatusCard {totalCount} {bill} />
 			{/each}
 		</Carousel>
 	</section>
-	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+	<!-- TODO: until we have a protocol to maintain bill category data -->
+	<!-- <section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<header>
 			<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
 			<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
 		</header>
 		<Carousel>
-			{#each data.byCategory as bill}
-				<LawStatusCard totalCount={data.totalCount} {bill} />
+			{#each byCategory as bill}
+				<LawStatusCard totalCount={totalCount} {bill} />
 			{/each}
 		</Carousel>
-	</section>
+	</section> -->
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
 		<Carousel>
-			{#each data.byProposerType as bill (bill.proposerType)}
-				<LawStatusCard totalCount={data.totalCount} {bill} />
+			{#each byProposerType as bill (bill.proposerType)}
+				<LawStatusCard {totalCount} {bill} />
 			{/each}
 		</Carousel>
 	</section>
@@ -91,11 +93,19 @@
 <div class="bg-teal-80">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-10">
 		<h2 class="fluid-heading-03 text-white">
-			{data.latestEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
+			{lastEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
 		</h2>
 		<Carousel>
-			{#each data.latestEnactedBills as bill (bill.id)}
-				<BillCard class="keen-slider__slide min-w-72" orientation="portrait" {...bill} />
+			{#each lastEnactedBills as { title, nickname, proposal_date, ...bill } (bill.id)}
+				<BillCard
+					class="keen-slider__slide min-w-72"
+					orientation="portrait"
+					{...bill}
+					nickname={nickname ? nickname : title}
+					title={nickname ? title : null}
+					proposedOn={new Date(proposal_date ?? '')}
+					status="ENACTED"
+				/>
 			{/each}
 		</Carousel>
 	</section>
