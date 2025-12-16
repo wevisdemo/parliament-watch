@@ -1,4 +1,3 @@
-import { BillStatus } from '$models/bill';
 import type { SearchIndexes } from '$models/search';
 import { DefaultVotingResult } from '$models/voting';
 
@@ -29,37 +28,37 @@ export const searchIndexes: SearchIndexes = {
 		{
 			id: '1',
 			name: 'ร่าง พ.ร.บ.สุราก้าวหน้า',
-			status: BillStatus.Rejected
+			status: 'REJECTED'
 		},
 		{
 			id: '2',
 			name: 'ร่าง พ.ร.บ.งบประมาณรายจ่ายประจําปี 2566',
-			status: BillStatus.InProgress
+			status: 'MERGED'
 		},
 		{
 			id: '3',
 			name: 'ร่าง พ.ร.บ.สมรสเท่าเทียม',
-			status: BillStatus.InProgress
+			status: 'MERGED'
 		},
 		{
 			id: '4',
 			name: 'ร่าง พ.ร.บ.แก้กฎหมายค้ามนุษย์',
-			status: BillStatus.Enacted
+			status: 'ENACTED'
 		},
 		{
 			id: '5',
 			name: 'ร่าง พ.ร.บ.ควบคุมการครอบครองอาวุธปืน',
-			status: BillStatus.Rejected
+			status: 'REJECTED'
 		},
 		{
 			id: '6',
 			name: 'ร่าง พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล',
-			status: BillStatus.InProgress
+			status: 'MERGED'
 		},
 		{
 			id: '7',
 			name: 'ร่าง พ.ร.บ.คุ้มครองสิทธิผู้บริโภค',
-			status: BillStatus.Enacted
+			status: 'ENACTED'
 		}
 	],
 	billProposers: [

@@ -2,7 +2,6 @@
 	import type { Hst } from '@histoire/plugin-svelte';
 	import ResultItem from './ResultItem.svelte';
 	import type { SearchResultItem } from '$models/search';
-	import { BillStatus } from '$models/bill';
 	import { DefaultVotingResult } from '$models/voting';
 	export let Hst: Hst;
 
@@ -18,7 +17,7 @@
 		},
 		{
 			title: 'Heading and billStatus',
-			item: { heading: 'ชื่อกฎหมาย', billStatus: BillStatus.InProgress, url: '' }
+			item: { heading: 'ชื่อกฎหมาย', billStatus: 'IN_PROGRESS', url: '' }
 		},
 		{
 			title: 'Heading and voteResult',

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import BillStatusTag from './BillStatusTag.svelte';
-	import { BillStatus } from '$models/bill';
 	export let Hst: Hst;
 
 	let isLarge = false;
@@ -13,17 +12,17 @@
 		type: 'grid'
 	}}
 >
-	<Hst.Variant title="BillStatus.InProgress">
-		<BillStatusTag {isLarge} status={BillStatus.InProgress} />
+	<Hst.Variant title="IN_PROGRESS">
+		<BillStatusTag {isLarge} status="IN_PROGRESS" />
 	</Hst.Variant>
-	<Hst.Variant title="BillStatus.Enacted">
-		<BillStatusTag {isLarge} status={BillStatus.Enacted} />
+	<Hst.Variant title="ENACTED">
+		<BillStatusTag {isLarge} status="ENACTED" />
 	</Hst.Variant>
-	<Hst.Variant title="BillStatus.Rejected">
-		<BillStatusTag {isLarge} status={BillStatus.Rejected} />
+	<Hst.Variant title="REJECTED">
+		<BillStatusTag {isLarge} status="REJECTED" />
 	</Hst.Variant>
-	<Hst.Variant title="BillStatus.Merged">
-		<BillStatusTag {isLarge} status={BillStatus.Merged} />
+	<Hst.Variant title="MERGED">
+		<BillStatusTag {isLarge} status="MERGED" />
 	</Hst.Variant>
 	<svelte:fragment slot="controls">
 		<Hst.Checkbox title="isLarge" bind:value={isLarge} />
