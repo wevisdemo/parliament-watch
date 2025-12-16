@@ -12,9 +12,9 @@
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
 	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
-	import { BillStatus } from '$models/bill';
 	import { onMount } from 'svelte';
 	import scrollama from 'scrollama';
+	import { enumBillStatus } from '$lib/politigraph/genql/schema.js';
 
 	export let data;
 
@@ -57,7 +57,7 @@
 
 	const billStatuses = [
 		{
-			billStatus: BillStatus.InProgress,
+			billStatus: enumBillStatus.IN_PROGRESS,
 			billAmount: 'xxxx',
 			descriptionTitle: 'ร่างกฎหมายอยู่ในขั้นตอนใดขั้นตอนหนึ่ง ได้แก่',
 			descriptionList: [
@@ -72,7 +72,7 @@
 			class: 'bg-yellow-10'
 		},
 		{
-			billStatus: BillStatus.Enacted,
+			billStatus: enumBillStatus.ENACTED,
 			billAmount: 'xxxx',
 			descriptionTitle: 'บังคับใช้เมื่อ',
 			descriptionList: ['พระมหากษัตริย์ลงพระปรมาภิไธย', 'ประกาศบนราชกิจจานุเบกษา'],
@@ -81,7 +81,7 @@
 			class: 'bg-teal-10'
 		},
 		{
-			billStatus: BillStatus.Rejected,
+			billStatus: enumBillStatus.REJECTED,
 			billAmount: 'xxxx',
 			descriptionTitle: 'ตัวอย่างสาเหตุที่ทำให้กฎหมายตกไป',
 			descriptionList: [
@@ -96,7 +96,7 @@
 			class: 'bg-red-10'
 		},
 		{
-			billStatus: BillStatus.Merged,
+			billStatus: enumBillStatus.MERGED,
 			billAmount: 'xxxx',
 			descriptionTitle:
 				'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด',
@@ -288,7 +288,7 @@
 						</p>
 					</div>
 					<div class="flex flex-col gap-4">
-						{#each data.legislations as legislation}
+						{#each data.legislations as legislation, i (i)}
 							<Collapsible {legislation} />
 						{/each}
 					</div>
@@ -305,7 +305,7 @@
 
 					<h3 class="fluid-heading-03 my-4">สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท</h3>
 					<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-						{#each billStatuses as billStatus}
+						{#each billStatuses as billStatus (billStatus.billStatus)}
 							<BillStatusCard {...billStatus} />
 						{/each}
 					</div>
@@ -814,12 +814,12 @@
 					</h2>
 					<hr />
 					<div class="flex flex-col gap-2 py-4">
-						{#each data.dutySection.representatives as section, i}
+						{#each data.dutySection.representatives as section, i (i)}
 							<h3 class="fluid-heading-03" id={section.heading}>
 								{i + 1}. {section.heading}
 							</h3>
 							<ul>
-								{#each section.details as duty}
+								{#each section.details as duty (duty)}
 									<li>{duty}</li>
 								{/each}
 							</ul>
@@ -832,12 +832,12 @@
 					</h2>
 					<hr />
 					<div class="flex flex-col gap-2 py-4">
-						{#each data.dutySection.senates as section, i}
+						{#each data.dutySection.senates as section, i (i)}
 							<h3 class="fluid-heading-03" id={section.heading}>
 								{i + 1}. {section.heading}
 							</h3>
 							<ul>
-								{#each section.details as duty}
+								{#each section.details as duty (duty)}
 									<li>{duty}</li>
 								{/each}
 							</ul>
@@ -851,12 +851,12 @@
 					<hr />
 					<p class="pt-4">รัฐสภาจะประชุมร่วมกันได้ต้องเป็นไปตามที่กำหนดไว้ในมาตรา</p>
 					<div class="flex flex-col gap-2 py-4">
-						{#each data.dutySection.both as section, i}
+						{#each data.dutySection.both as section, i (i)}
 							<h3 class="fluid-heading-03" id={section.heading}>
 								{i + 1}. {section.heading}
 							</h3>
 							<ul>
-								{#each section.details as duty}
+								{#each section.details as duty (duty)}
 									<li>{duty}</li>
 								{/each}
 							</ul>

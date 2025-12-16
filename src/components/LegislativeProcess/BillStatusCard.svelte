@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { BillStatus } from '$models/bill';
 	import { twMerge } from 'tailwind-merge';
 	import BillStatusTag from '../BillStatusTag/BillStatusTag.svelte';
+	import type { BillStatus } from '$lib/politigraph/genql';
 
 	export let billStatus: BillStatus;
 	// export let billAmount: string;
@@ -29,7 +29,7 @@
 		<div class="mt-2 text-sm font-normal">
 			{descriptionTitle}
 			<ul class="px-4">
-				{#each descriptionList as list}
+				{#each descriptionList as list, i (i)}
 					<li class="list-disc">{list}</li>
 				{/each}
 			</ul>

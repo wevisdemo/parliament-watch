@@ -2,7 +2,6 @@
 	import type { Hst } from '@histoire/plugin-svelte';
 	import SearchResult from './SearchResult.svelte';
 	import type { SearchResults } from '$models/search';
-	import { BillStatus } from '$models/bill';
 	import { DefaultVotingResult } from '$models/voting';
 	import { PromiseStatus } from '$models/promise';
 	export let Hst: Hst;
@@ -22,11 +21,11 @@
 			{ heading: 'สุชาติ ชมกลิ่น', description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ', url: '#d' }
 		],
 		bills: [
-			{ heading: 'ร่าง พ.ร.บ.สุราก้าวหน้า', billStatus: BillStatus.InProgress, url: '#e' },
-			{ heading: 'ร่าง พ.ร.บ.สุขภาพจิต', billStatus: BillStatus.Merged, url: '#f' },
-			{ heading: 'ร่าง พ.ร.บ.สุขภาพแห่งชาติ', billStatus: BillStatus.Rejected, url: '#g' },
-			{ heading: 'ร่าง พ.ร.บ.สุขาภิบาล', billStatus: BillStatus.Rejected, url: '#h' },
-			{ heading: 'ร่าง พ.ร.บ.สุสานและฌาปนสถาน', billStatus: BillStatus.Enacted, url: '#i' }
+			{ heading: 'ร่าง พ.ร.บ.สุราก้าวหน้า', billStatus: 'IN_PROGRESS', url: '#e' },
+			{ heading: 'ร่าง พ.ร.บ.สุขภาพจิต', billStatus: 'MERGED', url: '#f' },
+			{ heading: 'ร่าง พ.ร.บ.สุขภาพแห่งชาติ', billStatus: 'REJECTED', url: '#g' },
+			{ heading: 'ร่าง พ.ร.บ.สุขาภิบาล', billStatus: 'REJECTED', url: '#h' },
+			{ heading: 'ร่าง พ.ร.บ.สุสานและฌาปนสถาน', billStatus: 'ENACTED', url: '#i' }
 		],
 		votings: [
 			{
