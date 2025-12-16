@@ -23,6 +23,7 @@
 <script lang="ts">
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import { BillProposerType } from '$models/bill';
 	import dayjs from 'dayjs';
 	import 'dayjs/locale/th';
 	import buddhistEra from 'dayjs/plugin/buddhistEra';
@@ -43,7 +44,7 @@
 
 <div class="flex items-center {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
 	{#if proposer === undefined}
-		<p class="text-sm text-gray-60">ไม่พบข้อมูล</p>
+		<p class="text-sm text-gray-60">{BillProposerType.Unknown}</p>
 	{:else if 'founding_date' in proposer}
 		<!-- Assembly -->
 		{@const { id, name, founding_date } = proposer}

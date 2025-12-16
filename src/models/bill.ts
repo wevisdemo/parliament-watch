@@ -31,7 +31,7 @@ export enum BillProposerType {
 	Politician = 'สมาชิกรัฐสภา',
 	Assembly = 'คณะรัฐมนตรี',
 	People = 'ประชาชน',
-	Unknown = 'ไม่พบข้อมูล'
+	Unknown = 'อื่นๆ / ไม่พบข้อมูล'
 }
 
 export interface PeopleProposer {
