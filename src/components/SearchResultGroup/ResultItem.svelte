@@ -33,7 +33,7 @@
 						<VotingResultTag result={item.voteResult} />
 					{/if}
 					{#if item.proposedBillsCount}
-						<p class="label-02 text-text-02">{item.proposedBillsCount} ร่าง</p>
+						<p class="label-02 text-text-02">({item.proposedBillsCount} ร่าง)</p>
 					{/if}
 					{#if item.promiseStatus}
 						<PromiseStatusTag status={item.promiseStatus} />

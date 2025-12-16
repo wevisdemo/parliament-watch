@@ -27,7 +27,7 @@ export interface SearchIndexes {
 	}[];
 	[SearchIndexCategory.BillProposers]?: {
 		name: string;
-		description: string;
+		description?: string;
 		proposedBillsCount: number;
 	}[];
 	[SearchIndexCategory.Promises]?: {
