@@ -65,14 +65,15 @@
 				value: status
 			}))
 		},
-		{
-			key: 'filterCategory',
-			legend: 'หมวดกฎหมาย (1 ฉบับ มีได้มากกว่า 1 หมวด)',
-			choices: filterOptions.categories.map((category) => ({
-				label: category,
-				value: category
-			}))
-		},
+		// TODO: until we have a protocol to maintain bill category data
+		// {
+		// 	key: 'filterCategory',
+		// 	legend: 'หมวดกฎหมาย (1 ฉบับ มีได้มากกว่า 1 หมวด)',
+		// 	choices: filterOptions.categories.map((category) => ({
+		// 		label: category,
+		// 		value: category
+		// 	}))
+		// },
 		{
 			key: 'filterProposerType',
 			legend: 'ประเภทผู้เสนอ',
@@ -109,7 +110,8 @@
 							bill.purposedAtMpAssemblyId &&
 							filterEra.includes(bill.purposedAtMpAssemblyId) &&
 							filterStatus.includes(bill.status) &&
-							filterCategory.some((category) => bill.categories.includes(category as string)) &&
+							// TODO: until we have a protocol to maintain bill category data
+							// filterCategory.some((category) => bill.categories.includes(category as string)) &&
 							filterProposerType.includes(bill.proposerType)
 						);
 					})
