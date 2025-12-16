@@ -136,17 +136,20 @@
 					hideNavigation={isLoading}
 				>
 					{#each billStatusList as status, i (status)}
-						<LawStatusCard
-							{totalCount}
-							bill={{
-								status,
-								samples: billSummaryByStatus[i].bills.map(({ id, nickname, title }) => ({
-									id,
-									nickname: nickname ?? title ?? ''
-								})),
-								count: billSummaryByStatus[i].billsConnection.totalCount
-							}}
-						/>
+						{@const { bills, billsConnection } = billSummaryByStatus[i]}
+						{#if bills.length}
+							<LawStatusCard
+								{totalCount}
+								bill={{
+									status,
+									samples: bills.map(({ id, nickname, title }) => ({
+										id,
+										nickname: nickname ?? title ?? ''
+									})),
+									count: billsConnection.totalCount
+								}}
+							/>
+						{/if}
 					{/each}
 				</Carousel>
 			{/key}
