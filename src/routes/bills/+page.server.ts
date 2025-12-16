@@ -21,7 +21,9 @@ export async function load() {
 		})
 	).billsConnection.totalCount;
 
-	const byStatus: BillsByStatus[] = await queryBillSummaryByStatus();
+	const byStatus: BillsByStatus[] = (await queryBillSummaryByStatus()).filter(
+		(group) => group.count
+	);
 
 	// TODO: until we have a protocol to maintain bill category data
 	const byCategory: BillsByCategory[] = [];
