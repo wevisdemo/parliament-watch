@@ -101,22 +101,24 @@
 	{/if}
 
 	<div class="relative flex flex-col gap-4">
-		<div class="flex flex-col gap-2 md:flex-row">
-			<h3 class="fluid-heading-04 text-nowrap">เลือกดู</h3>
-			<div class="flex flex-row flex-wrap items-center gap-1">
-				{#each [ALL_CATEGORY_KEY, ...billCategories] as category (category)}
-					<button
-						class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {category ===
-						selectedCategory
-							? 'bg-gray-80 text-white'
-							: 'text-gray-80 hover:bg-gray-20'}"
-						on:click={() => selectCategory(category)}
-					>
-						{category}
-					</button>
-				{/each}
+		{#if billCategories.length}
+			<div class="flex flex-col gap-2 md:flex-row">
+				<h3 class="fluid-heading-04 text-nowrap">เลือกดู</h3>
+				<div class="flex flex-row flex-wrap items-center gap-1">
+					{#each [ALL_CATEGORY_KEY, ...billCategories] as category (category)}
+						<button
+							class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {category ===
+							selectedCategory
+								? 'bg-gray-80 text-white'
+								: 'text-gray-80 hover:bg-gray-20'}"
+							on:click={() => selectCategory(category)}
+						>
+							{category}
+						</button>
+					{/each}
+				</div>
 			</div>
-		</div>
+		{/if}
 
 		{#if billSummaryByStatus.length}
 			{#key selectedCategory}

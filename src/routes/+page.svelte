@@ -61,6 +61,7 @@
 				title="การเสนอกฎหมาย"
 				description="อยู่ระหว่างการปรับปรุงข้อมูล"
 				icon={LawIcon}
+				href="#bill"
 			/>
 			<SectionMenuItem
 				title="คำสัญญาทางการเมือง"
