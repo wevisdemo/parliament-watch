@@ -97,7 +97,28 @@ export async function GET({ params }) {
 		}
 
 		case SearchIndexCategory.BillProposers: {
-			return createJSONFileResponse([]);
+			const { people } = await graphql.query({
+				people: {
+					__args: {
+						where: {
+							proposed_motions_SOME: { NOT: { id_EQ: null } }
+						}
+					},
+					name: true,
+					proposed_motionsConnection: {
+						totalCount: true
+					}
+				}
+			});
+
+			const indexes: SearchIndexes['billProposers'] = people.map(
+				({ name, proposed_motionsConnection }) => ({
+					name,
+					proposedBillsCount: proposed_motionsConnection.totalCount
+				})
+			);
+
+			return createJSONFileResponse(indexes);
 		}
 
 		case SearchIndexCategory.Votings: {
