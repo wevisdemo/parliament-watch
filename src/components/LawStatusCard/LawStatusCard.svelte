@@ -81,13 +81,14 @@
 				{#each billStatusList as status (status)}
 					{@const relatedBillCount = bill.countByStatus[status] || 0}
 					{#if relatedBillCount > 0}
+						{@const { label, colorClass } = billStatusProperty[status]}
 						<li class="mb-2">
 							<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
 								<span class="heading-01">{relatedBillCount}</span>
-								<span class="label-01">{status}</span>
+								<span class="label-01">{label}</span>
 							</span>
 							<div
-								class="h-1 {barStyle}"
+								class="h-1 {colorClass ?? barStyle}"
 								style:width="{bill.count ? (relatedBillCount / bill.count) * 100 : 0}%"
 							/>
 						</li>

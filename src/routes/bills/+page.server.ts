@@ -3,77 +3,144 @@ import type {
 	BillsByProposerType,
 	BillsByStatus
 } from '$components/LawStatusCard/LawStatusCard.svelte';
-import { fetchBills } from '$lib/datasheets';
+import { graphql } from '$lib/politigraph';
+import { billStatusList } from '$lib/politigraph/bill/status';
+import type { BillWhere, Bill } from '$lib/politigraph/genql';
 import { createSeo } from '$lib/seo';
-import { BillProposerType, BillStatus, type Bill } from '$models/bill';
-import { rollup } from 'd3';
+import { BillProposerType } from '$models/bill';
 
 const BILL_SAMPLE_LIMIT = 3;
 const LATEST_ENACTED_BILL_LIMIT = 10;
 
 export async function load() {
-	const bills = (await fetchBills()).sort(
-		(a, z) => z.proposedOn.getTime() - a.proposedOn.getTime()
-	);
-
-	const totalCount = bills.length;
-
-	const byStatus: BillsByStatus[] = Object.values(BillStatus)
-		.map((status) => {
-			const relatedBills = bills.filter((bill) => bill.status === status);
-			return {
-				status,
-				samples: relatedBills.slice(0, BILL_SAMPLE_LIMIT),
-				count: relatedBills.length
-			};
+	const totalCount = (
+		await graphql.query({
+			billsConnection: {
+				totalCount: true
+			}
 		})
-		.filter(({ count }) => count > 0);
+	).billsConnection.totalCount;
 
-	const byCategory: BillsByCategory[] = [
-		...rollup(
-			bills.flatMap(({ categories, ...rest }) =>
-				categories.map((category) => ({ category, ...rest }))
-			),
-			(group) => ({
-				category: group[0].category,
-				samples: group.slice(0, BILL_SAMPLE_LIMIT),
-				count: group.length
-			}),
-			(bill) => bill.category
-		).values()
-	].sort((a, z) => z.count - a.count);
+	const byStatus: BillsByStatus[] = await queryBillSummaryByStatus();
 
-	const byProposerType: BillsByProposerType[] = Object.values(BillProposerType)
-		.map((proposerType) => {
-			const relatedBills = bills.filter((bill) => bill.proposerType === proposerType);
-			const statusGroup = rollup(
-				relatedBills,
-				(group) => group.length,
-				(bill) => bill.status
-			);
+	// TODO: until we have a protocol to maintain bill category data
+	const byCategory: BillsByCategory[] = [];
 
-			return {
-				proposerType,
-				samples: relatedBills.slice(0, BILL_SAMPLE_LIMIT),
-				count: relatedBills.length,
-				countByStatus: Object.fromEntries(statusGroup) as BillsByProposerType['countByStatus']
-			};
+	const byProposerType: BillsByProposerType[] = [
+		{
+			proposerType: BillProposerType.Politician,
+			...(await queryBillSummaryByProposerType({
+				creators_SOME: {
+					Person: {
+						memberships_SOME: {
+							posts_SOME: {
+								organizations_SOME: {
+									classification_IN: ['HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
+								}
+							}
+						}
+					}
+				}
+			}))
+		},
+		{
+			proposerType: BillProposerType.Assembly,
+			...(await queryBillSummaryByProposerType({
+				creators_SOME: {
+					Organization: {
+						classification_EQ: 'CABINET'
+					}
+				}
+			}))
+		},
+		{
+			proposerType: BillProposerType.Unknown,
+			...(await queryBillSummaryByProposerType({
+				creators_NONE: {
+					Organization: { NOT: { id_EQ: null } },
+					Person: { NOT: { id_EQ: null } }
+				}
+			}))
+		}
+	];
+
+	const lastEnactedBills = (
+		await graphql.query({
+			billEnactEvents: {
+				__args: {
+					where: {
+						NOT: { start_date_EQ: null }
+					},
+					sort: [{ start_date: 'DESC' }],
+					limit: LATEST_ENACTED_BILL_LIMIT
+				},
+				bills: {
+					id: true,
+					title: true,
+					nickname: true,
+					proposal_date: true
+				}
+			}
 		})
-		.filter(({ count }) => count > 0);
-
-	// TODO: use bill events
-	const latestEnactedBills: Bill[] = bills
-		.filter(({ status }) => status === BillStatus.Enacted)
-		.slice(0, LATEST_ENACTED_BILL_LIMIT);
+	).billEnactEvents.map((event) => event.bills[0]);
 
 	return {
 		totalCount,
 		byStatus,
 		byCategory,
 		byProposerType,
-		latestEnactedBills,
+		lastEnactedBills,
 		seo: createSeo({
 			title: 'สำรวจร่างกฎหมายในสภา'
 		})
 	};
+}
+
+function queryBillSummaryByStatus(andWhere: BillWhere = {}) {
+	return Promise.all(
+		billStatusList.map(async (status) => {
+			const where = {
+				...andWhere,
+				status_EQ: status
+			};
+			const { bills, billsConnection } = await graphql.query({
+				billsConnection: {
+					__args: { where },
+					totalCount: true
+				},
+				bills: {
+					__args: { where, sort: [{ proposal_date: 'DESC' }], limit: BILL_SAMPLE_LIMIT },
+					id: true,
+					title: true,
+					nickname: true
+				}
+			});
+
+			return {
+				status,
+				samples: bills.map(setBillNicknameFromTitleAsFallback),
+				count: billsConnection.totalCount
+			};
+		})
+	);
+}
+
+async function queryBillSummaryByProposerType(where?: BillWhere) {
+	const byStatus = await queryBillSummaryByStatus(where);
+
+	return {
+		samples: byStatus.flatMap(({ samples }) => samples).slice(0, BILL_SAMPLE_LIMIT),
+		count: byStatus.reduce((sum, { count }) => sum + count, 0),
+		countByStatus: Object.fromEntries(
+			byStatus.map(({ status, count }) => [status, count])
+		) as BillsByProposerType['countByStatus']
+	};
+}
+
+function setBillNicknameFromTitleAsFallback({
+	id,
+	title,
+	nickname
+}: Pick<Bill, 'id' | 'title' | 'nickname'>) {
+	return { id, nickname: nickname || title };
 }
