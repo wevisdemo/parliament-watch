@@ -4,8 +4,6 @@
 	import FooterContact from './FooterContact.svelte';
 	import FooterMenuGroup from './FooterMenuGroup.svelte';
 	import { menuList } from '$components/NavigationBar/NavigationBar.svelte';
-
-	menuList;
 </script>
 
 <div class="flex flex-col items-center gap-4 bg-white px-6 py-8 text-sm md:px-12 lg:px-16">
@@ -53,27 +51,23 @@
 	</div>
 </div>
 <div class="bg-black px-6 py-8 text-white md:px-12 lg:px-16">
-	<div
-		class="grid grid-cols-1 gap-y-4 border-0 border-b border-solid border-ui-04 pb-4 text-gray-30 md:grid-cols-4 md:gap-y-4 lg:grid-cols-6 lg:gap-x-6"
-	>
-		<div class="row-span-2">
+	<div class="flex flex-col gap-6 border-0 border-b border-solid border-ui-04 md:flex-row">
+		<div class="min-w-[120px] flex-1">
 			<img width="120px" height="34px" src="/images/logo/pw-short-white.png" alt="logo short" />
 		</div>
-		{#each menuList as { label, icon, subs, url }}
-			<FooterMenuGroup title={label} menuItems={subs} {url}>
-				<svelte:fragment slot="titleIcon">
-					<svelte:component this={icon} class="text-inverse-link" />
-				</svelte:fragment>
-			</FooterMenuGroup>
-		{/each}
-		<!-- NOTE - This is for justifying the contact in LG size.
-		When the nav links are back to normal, these should be removed -->
-		<div class="hidden lg:block" />
-		<div class="hidden lg:block" />
-		<FooterContact />
+		<div class="flex flex-row flex-wrap gap-6 pb-4 text-gray-30">
+			{#each menuList as { label, icon, subs, url } (label)}
+				<FooterMenuGroup title={label} menuItems={subs} {url}>
+					<svelte:fragment slot="titleIcon">
+						<svelte:component this={icon} class="text-inverse-link" />
+					</svelte:fragment>
+				</FooterMenuGroup>
+			{/each}
+			<FooterContact />
+		</div>
 	</div>
+
 	<div class="mt-4 flex flex-col md:flex-row md:justify-between">
-		<div>&copy; Parliament Watch 2023</div>
-		<!-- <div class="text-gray-30">นโยบายความปลอดภัย | Privacy Policy</div> -->
+		<div>&copy; Parliament Watch {new Date().getFullYear()}</div>
 	</div>
 </div>
