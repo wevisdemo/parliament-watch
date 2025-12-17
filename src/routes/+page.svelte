@@ -9,7 +9,7 @@
 	import ContentSection from '$components/Index/ContentSection.svelte';
 	import { SearchIndexCategory } from '$models/search.js';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
+	// import PromiseIcon from '$components/icons/PromiseIcon.svelte';
 	import CrowdfundingBanner from '$components/CrowdfundingBanner/CrowdfundingBanner.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillContent from '$components/Index/BillContent.svelte';
@@ -63,11 +63,11 @@
 				icon={LawIcon}
 				href="#bill"
 			/>
-			<SectionMenuItem
+			<!-- <SectionMenuItem
 				title="คำสัญญาทางการเมือง"
 				description="อยู่ระหว่างการปรับปรุงข้อมูล"
 				icon={PromiseIcon}
-			/>
+			/> -->
 		</menu>
 	</nav>
 </div>

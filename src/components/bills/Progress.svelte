@@ -50,10 +50,10 @@
 				<VoteCard isFullWidth {...voting} />
 			</div> -->
 		{#if type === 'BillEnactEvent' && links.length}
-			<div class="flex-1 pt-5">
+			<div class="pt-5">
 				<RoyalGazette />
 				<Button
-					class="ml-0.5 mt-1"
+					class="mt-1 w-full"
 					href={links[0].url}
 					target="_blank"
 					kind="tertiary"

@@ -103,7 +103,9 @@
 						/>
 					</div>
 				</div>
-				<hr class="border-gray-30" />
+				{#if bill.text || bill.categories?.length}
+					<hr class="border-gray-30" />
+				{/if}
 				{#if bill.text}
 					<div>
 						<b>สรุปเนื้อหา</b>
