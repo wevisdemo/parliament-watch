@@ -71,12 +71,16 @@ export async function load({ params }) {
 				name,
 				subgroups: group.subgroups.map((subGroup) => ({
 					name: subGroup.name,
-					members: subGroup.members.map(getPoliticianSummary)
+					members: subGroup.members.map((member) =>
+						getPoliticianSummary(member, assembly.dissolution_date)
+					)
 				}))
 			}))
 		: (groups as PoliticianGroup[]).map(({ name, ...group }) => ({
 				name,
-				members: group.members.map(getPoliticianSummary)
+				members: group.members.map((member) =>
+					getPoliticianSummary(member, assembly.dissolution_date)
+				)
 			}));
 
 	return {
@@ -96,29 +100,35 @@ export async function load({ params }) {
 	};
 }
 
-function getPoliticianSummary({ id, name, image, memberships }: AssemblyMember) {
+function getPoliticianSummary(
+	{ id, name, image, memberships }: AssemblyMember,
+	dissolutionDate: string | null
+) {
 	const partyMembership = memberships.find(
 		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 	);
 	const assemblyMembership = memberships.find(
 		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 	);
-	const isActive = true;
 
 	return {
 		id,
 		name,
 		avatar: image ?? undefined,
-		isActive: !assemblyMembership?.end_date,
+		isActive:
+			!assemblyMembership?.end_date ||
+			(!!dissolutionDate && assemblyMembership.end_date.localeCompare(dissolutionDate) >= 0),
 		partyName: partyMembership?.posts[0].organizations[0].name,
 		partyLogo: partyMembership?.posts[0].organizations[0].image ?? undefined,
-		role: !isActive
-			? 'พ้นสภาพก่อนสภาหมดอายุ'
-			: assemblyMembership?.list_number
-				? `บัญชีรายชื่อ ลำดับ ${assemblyMembership?.list_number}`
-				: assemblyMembership?.province && assemblyMembership.district_number
-					? `${assemblyMembership?.province} เขต ${assemblyMembership.district_number}`
-					: assemblyMembership?.label,
+		role:
+			assemblyMembership?.end_date &&
+			(!dissolutionDate || assemblyMembership.end_date.localeCompare(dissolutionDate) < 0)
+				? 'พ้นสภาพก่อนสภาหมดอายุ'
+				: assemblyMembership?.list_number
+					? `บัญชีรายชื่อ ลำดับ ${assemblyMembership?.list_number}`
+					: assemblyMembership?.province && assemblyMembership.district_number
+						? `${assemblyMembership?.province} เขต ${assemblyMembership.district_number}`
+						: assemblyMembership?.label,
 		candidateType: assemblyMembership?.list_number
 			? 'บัญชีรายชื่อ'
 			: assemblyMembership?.province && assemblyMembership.district_number
