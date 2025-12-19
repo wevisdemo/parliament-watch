@@ -248,7 +248,7 @@
 					>
 					<Button
 						class="min-w-0 flex-[2_2_0%] pr-4"
-						kind={'tertiary' || 'secondary'}
+						kind="tertiary"
 						on:click={() => filterTickAll()}>เลือกทั้งหมด</Button
 					>
 					<Button

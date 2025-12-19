@@ -35,7 +35,7 @@
 			break;
 		default:
 			tagColorClass = 'bg-purple-70';
-			tagBgOpacity = voteOption?.colorIntensity * 0.7 + 0.3 ?? 1;
+			tagBgOpacity = voteOption?.colorIntensity ? voteOption.colorIntensity * 0.7 + 0.3 : 1;
 			if (tagBgOpacity > 0.45) tagColorClass += ' text-white';
 			label = voteOption?.label ?? '';
 	}
