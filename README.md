@@ -15,6 +15,7 @@ Citizens are watching
   - [Front-end](#front-end)
   - [Local development](#local-development)
   - [Deployment pipeline](#deployment-pipeline)
+- [💾 Data Source](#-data-source)
 - [🪄 Useful Commands](#-useful-commands)
   - [Start SvelteKit](#start-sveltekit)
   - [Start Histoire](#start-histoire)
@@ -26,11 +27,7 @@ Citizens are watching
   - [Colors](#colors)
   - [Components](#components)
   - [Icons](#icons)
-- [💾 Data Pipeline](#-data-pipeline)
-  - [Migrating away from: Google Sheets](#migrating-away-from-google-sheets)
-  - [Migrating to: Politigraph](#migrating-to-politigraph)
 - [🤝 Contributing Guideline](#-contributing-guideline)
-- [📜 License](#-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -47,7 +44,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 | Production            | https://parliamentwatch.wevis.info     |
 | Staging (main branch) | ~~https://parliament-watch.pages.dev~~ |
 
-**Currently pausing due to the backend migration**
+**Currently pause staging due to the backend migration**
 
 ## 🍱 Tech Stack
 
@@ -73,6 +70,21 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 - **Staging**: ~~Each push will trigger the [Github Actions Workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy on [Cloudflare Pages](https://pages.cloudflare.com). Can also be triggered manually.~~ We are pausing staging CI/CD pipeline in GitHub Action due to the failed build during new data backend migration.
 - **Production**: The [Github Actions Workflow](.github/workflows/staging.yml) can only be manually triggered to download the latest build artifact and upload to our server through SSH.
+
+## 💾 Data Source
+
+Parliament Watch fetch data from [Politigraph](https://politigraph.wevis.info), a civic-initiated open API for Thai political data. We use [GenQL](https://genql.dev) to generate type-safe GraphQL client, communicating with [Politigraph GraphQL endpoint](https://politigraph.wevis.info/graphql)
+
+```mermaid
+flowchart TD
+    B[Politigraph's GraphQL] --> |fetched by| C(GenQL's generated client)
+    C --> |used in| D(Svelte's routes)
+    D --> |Svelte SSR| E(dev/prod website)
+    C --> |used in| G(Scheduled GitHub Action)
+    F(External data source) --> |fetched by| G
+    G --> |build| H(JSON on GitHub Page)
+    H --> |fetched by| E(SvelteKit SSR Website)
+```
 
 ## 🪄 Useful Commands
 
@@ -152,58 +164,6 @@ The project design system is based on Carbon Design System v10 with some modific
 - We have custom icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also available in Histoire)
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
 
-## 💾 Data Pipeline
-
-We are migrating away from Google Sheets to our new political GraphQL service called ["Politigraph"](https://politigraph.wevis.info). The data that are completely migrated are:
-
-- [x] Politicians
-- [x] Political Parties
-- [x] Assemblies
-- [x] Vote Events
-- [ ] Bills
-- [ ] Promises
-
-### Migrating away from: Google Sheets
-
-Data is pre-process server-side during the Static Site Generation (SSG) build step as following
-
-```mermaid
-flowchart TD
-    B[Google Sheets] --> |Fetched, validated, parsed| C(Sheethuahua)
-    C --> |used in| D(Svelte's routes)
-    D --> |Svelte SSR/SSG| E(dev/prod website)
-    C --> |used in| G(Scheduled GitHub Action)
-    F(External data source) --> |fetched by| G
-    G --> |build| H(JSON on GitHub Page)
-    H --> |fetched by| E(GitHub Page)
-```
-
-- Original data is available at our public [Google Sheets](https://docs.google.com/spreadsheets/d/1SbX2kgAGsslbhGuB-EI_YdSAnIt3reU1_OEtWmDVOVk/edit?usp=sharing)
-- [lib/datasheets](src/lib/datasheets/index.ts) provides functions using [Sheethuahua](https://punchupworld.github.io/sheethuahua/) to fetch, validate, and parse data from Google Sheets.
-- The [src/models](src/models) contains ER Diagram and other TypeScript's interfaces.
-- Some data, such as politician ranking from external source, will be updated periodically through [scheduled GitHub Action](.github/workflows/update-ranking.yml) to reduce unnecessary build-time. The output JSON data is [served through GitHub Pages](https://wevisdemo.github.io/parliament-watch/politician-ranking.json) and can be fetched from the client-side.
-
-### Migrating to: Politigraph
-
-[Politigraph](https://politigraph.wevis.info) is a Thai politics graph database using GraphQL and Neo4j. Fully migrated to this will allow us to run Parliament Watch in SSR mode, requesting data from Politigraph in real-time.
-
-```mermaid
-flowchart TD
-    B[Politigraph's GraphQL] --> |fetched by| C(GenQL's generated client)
-    C --> |used in| D(Svelte's routes)
-    D --> |Svelte SSR| E(dev/prod website)
-    C --> |used in| G(Scheduled GitHub Action)
-    F(External data source) --> |fetched by| G
-    G --> |build| H(JSON on GitHub Page)
-    H --> |fetched by| E(SvelteKit SSR Website)
-```
-
-- We use [GenQL](https://genql.dev) to generate type-safe GraphQL client, communicating with [Politigraph](https://politigraph.wevis.info) GraphQL endpoint
-
 ## 🤝 Contributing Guideline
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md)
-
-## 📜 License
-
-Our team is committed to developing all projects as Open Source and releasing data as Open Data under the [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) license. This means the work can be used, adapted, and built upon, but it must not be used for commercial purposes or profit-making. Credit must be given to the original creators, and any derivative work must be shared under the same license as the original. WeVis Ltd. and Punch Up Ltd. are the joint licensors of this license.
