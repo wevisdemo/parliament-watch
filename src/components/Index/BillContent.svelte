@@ -5,7 +5,7 @@
 	import Carousel from './Carousel.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
 	import { graphql } from '$lib/politigraph';
-	import type { Bill, BillsConnection } from '$lib/politigraph/genql';
+	import type { Bill, BillsConnection, BillWhere } from '$lib/politigraph/genql';
 	import { onMount } from 'svelte';
 	import { billStatusList } from '$lib/politigraph/bill/status';
 
@@ -34,7 +34,7 @@
 
 		billSummaryByStatus = await Promise.all(
 			billStatusList.map((status) => {
-				const where = {
+				const where: BillWhere = {
 					status_EQ: status,
 					...(category
 						? {
