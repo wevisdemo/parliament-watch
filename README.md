@@ -61,7 +61,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 ### Local development
 
-- [Yarn v1](https://classic.yarnpkg.com) as a package manager
+- [pnpm](https://pnpm.io) as a package manager
 - Husky and lint-staged will
   - Lint (ESLint) and format (Prettier) code before committing
   - Validate that commit message is aligned with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
@@ -81,7 +81,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 Start the project in development mode
 
 ```bash
-yarn dev
+pnpm run dev
 ```
 
 ### Start Histoire
@@ -89,7 +89,7 @@ yarn dev
 to see/develop custom components from Histoire's stories
 
 ```bash
-yarn story:dev
+pnpm run story:dev
 ```
 
 ### Generate a new component
@@ -97,7 +97,7 @@ yarn story:dev
 For a shared component
 
 ```bash
-yarn gen:component
+pnpm run gen:component
 ```
 
 _src/components/ComponentName/_ directory will be created with the following files:
@@ -123,7 +123,7 @@ Server-side logging for data warning and SvelteKit error can be enabled via envi
 
 ## 🍭 Design System
 
-The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with SCSS in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `yarn sass:build` command.
+The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with SCSS in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `pnpm run sass:build` command.
 
 ### Typography
 
@@ -141,10 +141,10 @@ The project design system is based on Carbon Design System v10 with some modific
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com)
 - We have custom shared component available in [src/components/](src/components/).
-  - To see shared components' story, open Histoire in local with `yarn story:dev`
+  - To see shared components' story, open Histoire in local with `pnpm run story:dev`
 - If the component is not yet developed:
   - If the component is used by only a specific route, create it in _src/components/route-name-and-sub-route-if-exist/_
-  - If the component is shared, run `yarn gen:component` to generate a new component. Don't forget to update a story file for the component documentation.
+  - If the component is shared, run `pnpm run gen:component` to generate a new component. Don't forget to update a story file for the component documentation.
 
 ### Icons
 

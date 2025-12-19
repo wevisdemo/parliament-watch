@@ -25,11 +25,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'yarn'
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-scripts
+        run: pnpm i --prod --frozen-lockfile --ignore-scripts
       - name: Test
-        run: yarn test
+        run: pnpm run test
       - name: Set up rsync
         id: rsync
         uses: GuillaumeFalourd/setup-rsync@v1.2
@@ -48,14 +51,14 @@ jobs:
       - name: Start Politigraph services
         run: cd politigraph && docker compose -f compose.server.yml up -d neo4j nuxt && cd ..
       - name: Build static site
-        run: yarn build
+        run: pnpm run build
         env:
           PUBLIC_POLITIGRAPH_ENDPOINT: http://localhost:3000/graphql
       - name: Stop Politigraph services
         run: cd politigraph && docker compose -f compose.server.yml down && cd ..
       - name: Build Histoire
         continue-on-error: true
-        run: yarn story:build
+        run: pnpm run story:build
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:

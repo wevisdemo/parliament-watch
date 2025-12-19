@@ -12,15 +12,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'yarn'
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --ignore-scripts
+        run: pnpm i --prod --frozen-lockfile --ignore-scripts
       - name: Test
-        run: yarn test
+        run: pnpm run test
       - name: Generate GraphQL client
-        run: yarn gen:graphql
+        run: pnpm run gen:graphql
       - name: Fetch politician ranking data
-        run: yarn update:politician-ranking
+        run: pnpm run update:politician-ranking
       - name: Deploy to Github Page
         uses: JamesIves/github-pages-deploy-action@v4
         with:
