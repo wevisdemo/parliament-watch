@@ -4,6 +4,7 @@ import type {
 	BillsByStatus
 } from '$components/LawStatusCard/LawStatusCard.svelte';
 import { graphql } from '$lib/politigraph';
+import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillWhere, Bill } from '$lib/politigraph/genql';
 import { createSeo } from '$lib/seo';
@@ -86,12 +87,31 @@ export async function load() {
 		})
 	).billEnactEvents.map((event) => event.bills[0]);
 
+	const lastEnactedBillProposers = (
+		await Promise.all(
+			lastEnactedBills.map(({ id, proposal_date }) =>
+				graphql.query({
+					bills: {
+						__args: {
+							where: {
+								id_EQ: id
+							},
+							limit: 1
+						},
+						...createBillFieldsForProposer(proposal_date)
+					}
+				})
+			)
+		)
+	).map(({ bills }) => getBillProposer(bills[0]));
+
 	return {
 		totalCount,
 		byStatus,
 		byCategory,
 		byProposerType,
 		lastEnactedBills,
+		lastEnactedBillProposers,
 		seo: createSeo({
 			title: 'สำรวจร่างกฎหมายในสภา'
 		})

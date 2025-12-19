@@ -6,9 +6,10 @@
 	import { Button, InlineLoading } from 'carbon-components-svelte';
 	import { graphql } from '$lib/politigraph';
 	import type { Bill, BillsConnection, BillWhere } from '$lib/politigraph/genql';
-	import { onMount } from 'svelte';
+	import { onMount, type ComponentProps } from 'svelte';
 	import { billStatusList } from '$lib/politigraph/bill/status';
-
+	import Proposer from '$components/Proposer/Proposer.svelte';
+	import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 	interface BillSummary {
 		billsConnection: Pick<BillsConnection, 'totalCount'>;
 		bills: Pick<Bill, 'id' | 'title' | 'nickname'>[];
@@ -24,6 +25,7 @@
 	let isLoading = true;
 	let billSummaryByStatus: BillSummary[] = [];
 	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'>[] = [];
+	let lastEnactedBillProposers: ComponentProps<Proposer>['proposer'][] = [];
 
 	onMount(() => {
 		loadBills();
@@ -78,6 +80,24 @@
 				}
 			})
 		).billEnactEvents.map((event) => event.bills[0]);
+
+		lastEnactedBillProposers = (
+			await Promise.all(
+				lastEnactedBills.map(({ id, proposal_date }) =>
+					graphql.query({
+						bills: {
+							__args: {
+								where: {
+									id_EQ: id
+								},
+								limit: 1
+							},
+							...createBillFieldsForProposer(proposal_date)
+						}
+					})
+				)
+			)
+		).map(({ bills }) => getBillProposer(bills[0]));
 
 		isLoading = false;
 	}
@@ -175,7 +195,7 @@
 
 			{#key selectedCategory + isLoading}
 				<Carousel hideNavigation={isLoading}>
-					{#each lastEnactedBills as { id, title, nickname, proposal_date } (id)}
+					{#each lastEnactedBills as { id, title, nickname, proposal_date }, i (id)}
 						<BillCard
 							class="keen-slider__slide min-w-72"
 							orientation="portrait"
@@ -184,6 +204,7 @@
 							title={nickname ? title : null}
 							status="ENACTED"
 							proposedOn={proposal_date ? new Date(proposal_date) : null}
+							proposer={lastEnactedBillProposers[i]}
 						/>
 					{/each}
 				</Carousel>

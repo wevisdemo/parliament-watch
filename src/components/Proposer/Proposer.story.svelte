@@ -21,7 +21,9 @@
 					name: 'ส.ส. ชุดที่ 26',
 					founding_date: new Date('01/01/2023')
 				},
-				partyName: 'ก้าวไกล'
+				party: {
+					name: 'ก้าวไกล'
+				}
 			}}
 		/>
 	</Hst.Variant>

@@ -1,4 +1,5 @@
 import { graphql } from '$lib/politigraph';
+import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer.js';
 import type { Event, VoteEventType } from '$lib/politigraph/genql/schema.js';
 import { createSeo } from '$lib/seo';
 import { error } from '@sveltejs/kit';
@@ -102,47 +103,7 @@ export async function load({ params }) {
 				},
 				limit: 1
 			},
-			creators: {
-				__typename: true,
-				on_Organization: {
-					id: true,
-					name: true,
-					founding_date: true
-				},
-				on_Person: {
-					id: true,
-					name: true,
-					image: true,
-					memberships: {
-						__args: {
-							where: {
-								start_date_LTE: bill.proposal_date,
-								OR: [{ end_date_EQ: null }, { end_date_GTE: bill.proposal_date }],
-								posts_SOME: {
-									organizations_SOME: {
-										classification_IN: [
-											'CABINET',
-											'HOUSE_OF_REPRESENTATIVE',
-											'HOUSE_OF_SENATE',
-											'POLITICAL_PARTY'
-										]
-									}
-								}
-							}
-						},
-						posts: {
-							label: true,
-							organizations: {
-								id: true,
-								classification: true,
-								name: true,
-								image: true,
-								founding_date: true
-							}
-						}
-					}
-				}
-			},
+			...createBillFieldsForProposer(bill.proposal_date),
 			co_proposers: {
 				__args: {
 					sort: [{ firstname: 'ASC', lastname: 'ASC' }]
@@ -172,7 +133,6 @@ export async function load({ params }) {
 					}
 				}
 			},
-			people_signature_count: true,
 			bill_events: {
 				__typename: true,
 				on_Event: {
@@ -199,27 +159,7 @@ export async function load({ params }) {
 		}
 	});
 
-	const proposer = creators[0]
-		? creators[0]?.__typename === 'Organization'
-			? creators[0]
-			: people_signature_count
-				? {
-						id: creators[0].id,
-						name: creators[0].name,
-						signatoryCount: people_signature_count
-					}
-				: {
-						id: creators[0].id,
-						name: creators[0].name,
-						image: creators[0].image,
-						assemblyMembership: creators[0].memberships.find(
-							(m) => m.posts[0]?.organizations[0]?.classification !== 'POLITICAL_PARTY'
-						),
-						partyMembership: creators[0].memberships.find(
-							(m) => m.posts[0]?.organizations[0]?.classification === 'POLITICAL_PARTY'
-						)
-					}
-		: undefined;
+	const proposer = getBillProposer({ creators, people_signature_count });
 
 	const events = bill_events
 		.map((event) => ({

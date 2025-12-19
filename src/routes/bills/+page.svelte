@@ -13,7 +13,7 @@
 
 	export let data;
 
-	$: ({ totalCount, byStatus, byProposerType, lastEnactedBills } = data);
+	$: ({ totalCount, byStatus, byProposerType, lastEnactedBills, lastEnactedBillProposers } = data);
 
 	let searchResults: SearchResults | null;
 </script>
@@ -96,7 +96,7 @@
 			{lastEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
 		</h2>
 		<Carousel>
-			{#each lastEnactedBills as { title, nickname, proposal_date, ...bill } (bill.id)}
+			{#each lastEnactedBills as { title, nickname, proposal_date, ...bill }, i (bill.id)}
 				<BillCard
 					class="keen-slider__slide min-w-72"
 					orientation="portrait"
@@ -105,6 +105,7 @@
 					title={nickname ? title : null}
 					proposedOn={new Date(proposal_date ?? '')}
 					status="ENACTED"
+					proposer={lastEnactedBillProposers[i]}
 				/>
 			{/each}
 		</Carousel>

@@ -89,18 +89,7 @@
 					</div>
 					<div>
 						<b>เสนอโดย</b>
-						<Proposer
-							proposer={proposer && 'assemblyMembership' in proposer
-								? {
-										id: proposer.id,
-										name: proposer.name,
-										image: proposer.image,
-										assemblyPost: proposer.assemblyMembership?.posts[0]?.label,
-										assembly: proposer.assemblyMembership?.posts[0]?.organizations[0],
-										partyName: proposer.partyMembership?.posts[0]?.organizations[0]?.name
-									}
-								: proposer}
-						/>
+						<Proposer {proposer} />
 					</div>
 				</div>
 				{#if bill.text || bill.categories?.length}
@@ -185,9 +174,8 @@
 		</div>
 	</section>
 
-	{#if proposer && 'assemblyMembership' in proposer && coProposers.length}
-		{@const { id, name, image, assemblyMembership, partyMembership } = proposer}
-		{@const party = partyMembership?.posts[0]?.organizations[0]}
+	{#if proposer && 'assembly' in proposer}
+		{@const { id, name, image, assemblyPost, party } = proposer}
 
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
@@ -202,60 +190,60 @@
 							avatar={image ?? undefined}
 							partyName={party?.name}
 							partyLogo={party?.image ?? undefined}
-							role={assemblyMembership?.posts?.[0]?.label}
+							role={assemblyPost}
 						/>
 					</div>
-					<div class="flex flex-col gap-3 md:w-full">
-						<p class="body-02 text-text-02">
-							<b class="handing-02 text-text-primary">ผู้ร่วมเสนอ</b>
-							{coProposers.length} คน
-						</p>
-						<div class="flex flex-col flex-wrap gap-3 px-3 md:flex-row">
-							{#each partiesCoProposed as [partyName, politicians] (partyName)}
-								<CoPartyProposer
-									party={politicians[0].party ?? { name: NO_PARTY_FOUND_LABEL }}
-									politicianCount={politicians.length}
-								/>
-							{/each}
-						</div>
-						<div class="flex flex-col gap-2 px-5">
-							<p class="label-01 mr-2 text-text-02">เรียงตามตัวอักษร</p>
-
-							<div class="relative flex flex-col">
-								<table class="w-full">
-									{#each coProposers.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i (politician.id)}
-										<CoProposer index={i + 1} {politician} partyLogo={politician.party?.image} />
-									{/each}
-								</table>
-								{#if coProposers.length > MAX_DISPLAY_COPROPOSER}
-									<div
-										class="absolute bottom-0 h-12 w-full"
-										style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
-									>
-										<button
-											on:click={() => {
-												$showModalListCoProposer = true;
-											}}
-											class="body-01 absolute bottom-0 text-link-01 underline">ดูทั้งหมด</button
-										>
-									</div>
-								{/if}
+					{#if coProposers.length}
+						<div class="flex flex-col gap-3 md:w-full">
+							<p class="body-02 text-text-02">
+								<b class="handing-02 text-text-primary">ผู้ร่วมเสนอ</b>
+								{coProposers.length} คน
+							</p>
+							<div class="flex flex-col flex-wrap gap-3 px-3 md:flex-row">
+								{#each partiesCoProposed as [partyName, politicians] (partyName)}
+									<CoPartyProposer
+										party={politicians[0].party ?? { name: NO_PARTY_FOUND_LABEL }}
+										politicianCount={politicians.length}
+									/>
+								{/each}
 							</div>
-							<ModalListCoProposers
-								coProposedByPoliticians={coProposers.map(({ party: coParty, ...politician }) => ({
-									politician,
-									partyLogo: coParty?.image
-								}))}
-							/>
+							<div class="flex flex-col gap-2 px-5">
+								<p class="label-01 mr-2 text-text-02">เรียงตามตัวอักษร</p>
+
+								<div class="relative flex flex-col">
+									<table class="w-full">
+										{#each coProposers.slice(0, MAX_DISPLAY_COPROPOSER) as politician, i (politician.id)}
+											<CoProposer index={i + 1} {politician} partyLogo={politician.party?.image} />
+										{/each}
+									</table>
+									{#if coProposers.length > MAX_DISPLAY_COPROPOSER}
+										<div
+											class="absolute bottom-0 h-12 w-full"
+											style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
+										>
+											<button
+												on:click={() => {
+													$showModalListCoProposer = true;
+												}}
+												class="body-01 absolute bottom-0 text-link-01 underline">ดูทั้งหมด</button
+											>
+										</div>
+									{/if}
+								</div>
+								<ModalListCoProposers
+									coProposedByPoliticians={coProposers.map(({ party: coParty, ...politician }) => ({
+										politician,
+										partyLogo: coParty?.image
+									}))}
+								/>
+							</div>
 						</div>
-						<div />
-					</div>
+					{/if}
 				</div>
 			</div>
 		</section>
 	{/if}
 
-	<!-- TODO: Bill Events -->
 	{#if events.length > 0}
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">

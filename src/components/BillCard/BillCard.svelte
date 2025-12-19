@@ -3,14 +3,15 @@
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import { twMerge } from 'tailwind-merge';
 	import type { BillStatus } from '$lib/politigraph/genql';
-	// import Proposer from '$components/Proposer/Proposer.svelte';
+	import Proposer from '$components/Proposer/Proposer.svelte';
+	import type { ComponentProps } from 'svelte';
 
 	export let id: string;
 	export let nickname: string | null;
 	export let title: string | null;
 	export let proposedOn: Date | null;
 	export let status: BillStatus;
-
+	export let proposer: ComponentProps<Proposer>['proposer'] = undefined;
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 	export let currentState: string | undefined = undefined;
 	export let daySinceProposed: number | undefined = undefined;
@@ -38,8 +39,8 @@
 		{#if title}
 			<p class="text-sm text-text-02"><span class="mr-1 font-bold">ชื่อทางการ</span>{title}</p>
 		{/if}
-		<!-- <p class="font-semibold">เสนอโดย</p>
-		<Proposer proposer={getProposerFromBill(bill)} /> -->
+		<p class="font-semibold">เสนอโดย</p>
+		<Proposer {proposer} {orientation} />
 	</div>
 
 	<div

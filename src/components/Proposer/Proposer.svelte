@@ -1,25 +1,3 @@
-<script context="module" lang="ts">
-	export type PoliticianProposer = {
-		id: string;
-		name: string;
-		image?: string | null;
-		assemblyPost?: string;
-		assembly?: AssemblyProposer;
-		partyName?: string;
-	};
-
-	export type AssemblyProposer = {
-		id: string;
-		name: string;
-		founding_date: Date | string | null;
-	};
-
-	export type PeopleProposer = {
-		name: string;
-		signatoryCount: number;
-	};
-</script>
-
 <script lang="ts">
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
@@ -30,6 +8,28 @@
 
 	dayjs.extend(buddhistEra);
 	dayjs.locale('th');
+
+	interface PoliticianProposer {
+		id: string;
+		name: string;
+		image?: string | null;
+		assemblyPost?: string;
+		assembly?: AssemblyProposer;
+		party?: {
+			name: string;
+		};
+	}
+
+	interface AssemblyProposer {
+		id: string;
+		name: string;
+		founding_date: Date | string | null;
+	}
+
+	interface PeopleProposer {
+		name: string;
+		signatoryCount: number;
+	}
 
 	export let proposer: PoliticianProposer | AssemblyProposer | PeopleProposer | undefined =
 		undefined;
@@ -42,7 +42,7 @@
 	}
 </script>
 
-<div class="flex items-center {isLandscape ? 'flex-col gap-x-2 md:flex-row' : 'flex-col'}">
+<div class="flex {isLandscape ? 'flex-col gap-2 md:flex-row' : 'flex-col gap-1'}">
 	{#if proposer === undefined}
 		<p class="text-sm text-gray-60">{BillProposerType.Unknown}</p>
 	{:else if 'founding_date' in proposer}
@@ -71,7 +71,7 @@
 		</p>
 	{:else}
 		<!-- Politicians -->
-		{@const { id, name, image, assemblyPost, assembly, partyName } = proposer}
+		{@const { id, name, image, assemblyPost, assembly, party } = proposer}
 		<figure class="h-6 w-6 shrink-0 overflow-hidden rounded-full bg-gray-20">
 			<img
 				src={image || '/images/politicians/_placeholder.webp'}
@@ -93,8 +93,8 @@
 				</a>
 			{/if}
 		</p>
-		{#if partyName}
-			<p class="text-sm text-gray-60">พรรค{partyName}</p>
+		{#if party}
+			<p class="text-sm text-gray-60">พรรค{party.name}</p>
 		{/if}
 	{/if}
 </div>
