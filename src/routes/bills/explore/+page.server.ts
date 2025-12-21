@@ -1,7 +1,7 @@
 import type { CheckboxFilterChoice } from '$components/DataPage/DataPage.svelte';
-import { graphql } from '$lib/politigraph';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillStatus } from '$lib/politigraph/genql';
+import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { BillProposerType } from '$models/bill';
 import dayjs from 'dayjs';

@@ -10,23 +10,24 @@ Citizens are watching
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [⭐ Goal](#-goal)
-- [🌎 Environments](#-environments)
+- [🌎 Deployment](#-deployment)
 - [🍱 Tech Stack](#-tech-stack)
   - [Front-end](#front-end)
   - [Local development](#local-development)
-  - [Deployment pipeline](#deployment-pipeline)
+  - [CI/CD pipeline](#cicd-pipeline)
 - [💾 Data Source](#-data-source)
+- [🗃️ Directory Structure](#-directory-structure)
 - [🪄 Useful Commands](#-useful-commands)
   - [Start SvelteKit](#start-sveltekit)
   - [Start Histoire](#start-histoire)
   - [Generate a new component](#generate-a-new-component)
   - [Log](#log)
-- [🗃️ Directory Structure](#-directory-structure)
 - [🍭 Design System](#-design-system)
   - [Typography](#typography)
   - [Colors](#colors)
   - [Components](#components)
   - [Icons](#icons)
+- [Environment Variables](#environment-variables)
 - [🤝 Contributing Guideline](#-contributing-guideline)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -37,7 +38,7 @@ We want to record and visualise the Thai parliament information including politi
 
 This project can be seen as a renovated combination of [They Work for Us](https://github.com/wevisdemo/they-work-for-us), [Law Watch](https://github.com/wevisdemo/law-watch), and [Promise Tracker](https://github.com/wevisdemo/promise-tracker) which aim to support several election eras.
 
-## 🌎 Environments
+## 🌎 Deployment
 
 | Name                  | URL                                    |
 | --------------------- | -------------------------------------- |
@@ -66,7 +67,7 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 - For VSCode user, format on save is enabled and [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when open the project.
 - [Hygen](http://www.hygen.io) for a code generation
 
-### Deployment pipeline
+### CI/CD pipeline
 
 - **Staging**: ~~Each push will trigger the [Github Actions Workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy on [Cloudflare Pages](https://pages.cloudflare.com). Can also be triggered manually.~~ We are pausing staging CI/CD pipeline in GitHub Action due to the failed build during new data backend migration.
 - **Production**: The [Github Actions Workflow](.github/workflows/staging.yml) can only be manually triggered to download the latest build artifact and upload to our server through SSH.
@@ -85,6 +86,18 @@ flowchart TD
     G --> |build| H(JSON on GitHub Page)
     H --> |fetched by| E(SvelteKit SSR Website)
 ```
+
+## 🗃️ Directory Structure
+
+- **/\_templates** Hygen's code generation templates
+- **/.husky** Husky's git hooks
+- **/src** main source codes
+  - **/components** Svelte's components
+  - **/mocks** Mock data, while we still don't have backend
+  - **/models** Main data structure defined with TypeScript interface
+  - **/routes** Sveltekit's routes
+  - **/styles** Stylesheets, including custom Carbon Design System, tailwind and fonts
+- **/static** static assets such as logos
 
 ## 🪄 Useful Commands
 
@@ -121,18 +134,6 @@ _src/components/ComponentName/_ directory will be created with the following fil
 
 Server-side logging for data warning and SvelteKit error can be enabled via environment variable `process.env.LOG_TARGET` by setting it to `stdout` or `file`. More details in [logger.ts](src/lib/logger.ts).
 
-## 🗃️ Directory Structure
-
-- **/\_templates** Hygen's code generation templates
-- **/.husky** Husky's git hooks
-- **/src** main source codes
-  - **/components** Svelte's components
-  - **/mocks** Mock data, while we still don't have backend
-  - **/models** Main data structure defined with TypeScript interface
-  - **/routes** Sveltekit's routes
-  - **/styles** Stylesheets, including custom Carbon Design System, tailwind and fonts
-- **/static** static assets such as logos
-
 ## 🍭 Design System
 
 The project design system is based on Carbon Design System v10 with some modification. Custom theme is defined with SCSS in [src/styles/carbon/](src/styles/carbon/). To reduce overhead on development, we compile Carbon related stylesheet into _src/styles/carbon/precompiled.css_ with `pnpm run sass:build` command.
@@ -163,6 +164,15 @@ The project design system is based on Carbon Design System v10 with some modific
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
 - We have custom icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also available in Histoire)
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
+
+## Environment Variables
+
+You can custom Politigraph GraphQL endpoint by setting these environment variables. (Default to `https://politigraph.wevis.info/graphql`)
+
+```env
+PUBLIC_POLITIGRAPH_URL="Used on client-side"
+SERVER_POLITIGRAPH_URL="Used on server-side"
+```
 
 ## 🤝 Contributing Guideline
 

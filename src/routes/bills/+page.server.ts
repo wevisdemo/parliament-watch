@@ -3,10 +3,10 @@ import type {
 	BillsByProposerType,
 	BillsByStatus
 } from '$components/LawStatusCard/LawStatusCard.svelte';
-import { graphql } from '$lib/politigraph';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillWhere, Bill } from '$lib/politigraph/genql';
+import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { BillProposerType } from '$models/bill';
 

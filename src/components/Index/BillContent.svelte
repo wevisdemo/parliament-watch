@@ -4,7 +4,7 @@
 	import { ArrowRight, Close } from 'carbon-icons-svelte';
 	import Carousel from './Carousel.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import { graphql } from '$lib/politigraph';
+	import { graphql } from '$lib/politigraph/client';
 	import type { Bill, BillsConnection, BillWhere } from '$lib/politigraph/genql';
 	import { onMount, type ComponentProps } from 'svelte';
 	import { billStatusList } from '$lib/politigraph/bill/status';

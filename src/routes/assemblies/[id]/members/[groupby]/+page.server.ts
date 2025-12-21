@@ -1,10 +1,10 @@
-import { graphql } from '$lib/politigraph';
 import {
 	getMemberGroup,
 	type PoliticianSubGroup,
 	type PoliticianGroup
 } from '$lib/politigraph/assembly/groupby';
 import { queryAssemblyMembers, type AssemblyMember } from '$lib/politigraph/assembly/member';
+import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { GroupByOption } from '$models/assembly';
 import { error } from '@sveltejs/kit';

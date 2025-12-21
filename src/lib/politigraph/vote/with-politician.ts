@@ -1,5 +1,5 @@
 import { AssemblyPartyGroup } from '$models/assembly';
-import { graphql } from '..';
+import { graphql } from '../server';
 
 const NO_INFO_LABEL = 'ไม่พบข้อมูล';
 
@@ -101,14 +101,14 @@ export async function queryPoliticiansVote(voteEvent: {
 		);
 		const party = partyMembership?.posts[0].organizations[0];
 		const partySide = party
-			? partySideMap.get(party.id) ?? inferPartySideFromOrganization(party)
+			? (partySideMap.get(party.id) ?? inferPartySideFromOrganization(party))
 			: undefined;
 
 		return {
 			id: id,
 			option: option,
 			politician: {
-				name: politician ? politician.name : voter_name ?? '',
+				name: politician ? politician.name : (voter_name ?? ''),
 				id: politician?.id
 			},
 			party: party

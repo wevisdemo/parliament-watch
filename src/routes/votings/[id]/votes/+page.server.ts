@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph/index';
+import { graphql } from '$lib/politigraph/server';
 import {
 	queryPoliticiansVote,
 	sortPoliticiansVoteByDominantGroup

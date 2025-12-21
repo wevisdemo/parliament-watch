@@ -1,6 +1,6 @@
-import { graphql } from '$lib/politigraph';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer.js';
 import type { Event, VoteEventType } from '$lib/politigraph/genql/schema.js';
+import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { error } from '@sveltejs/kit';
 

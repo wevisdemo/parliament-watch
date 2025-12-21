@@ -7,7 +7,7 @@ import { join } from 'path';
 const OUT_DIR = './out';
 
 const graphql = createClient({
-	url: process.env.PUBLIC_POLITIGRAPH_ENDPOINT || 'https://politigraph.wevis.info/graphql'
+	url: process.env.SERVER_POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql'
 });
 
 async function writePoliticianRankingFile() {

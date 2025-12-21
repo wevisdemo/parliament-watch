@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph';
+import { graphql } from '$lib/politigraph/server';
 import { countVotesInEachOption, groupVotesByAffiliation } from '$lib/politigraph/vote/group.js';
 import {
 	queryPoliticiansVote,

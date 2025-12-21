@@ -1,6 +1,6 @@
 import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import { graphql } from '$lib/politigraph';
+import { graphql } from '$lib/politigraph/server';
 import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';

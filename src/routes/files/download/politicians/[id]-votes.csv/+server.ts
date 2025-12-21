@@ -1,5 +1,5 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { graphql } from '$lib/politigraph';
+import { graphql } from '$lib/politigraph/server';
 
 export const prerender = true;
 

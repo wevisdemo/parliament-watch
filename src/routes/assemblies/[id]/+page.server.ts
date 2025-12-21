@@ -1,5 +1,4 @@
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
-import { graphql } from '$lib/politigraph';
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
 import {
@@ -7,6 +6,7 @@ import {
 	parseMemberWithAssemblyRoles,
 	type AssemblyMember
 } from '$lib/politigraph/assembly/member';
+import { graphql } from '$lib/politigraph/server';
 import { countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { groupVotesByAffiliation } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';

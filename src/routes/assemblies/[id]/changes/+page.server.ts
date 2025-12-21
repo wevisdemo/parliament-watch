@@ -1,9 +1,9 @@
-import { graphql } from '$lib/politigraph';
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import {
 	queryAssemblyMembers,
 	parseMemberWithAssemblyRoles
 } from '$lib/politigraph/assembly/member';
+import { graphql } from '$lib/politigraph/server';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {

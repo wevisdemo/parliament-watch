@@ -1,6 +1,6 @@
 import { createCsvFileResponse } from '$lib/csv';
-import { graphql } from '$lib/politigraph';
 import type { VoteEvent } from '$lib/politigraph/genql/schema';
+import { graphql } from '$lib/politigraph/server';
 import { error } from '@sveltejs/kit';
 
 export const prerender = true;
