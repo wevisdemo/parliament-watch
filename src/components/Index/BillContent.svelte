@@ -15,13 +15,53 @@
 		bills: Pick<Bill, 'id' | 'title' | 'nickname'>[];
 	}
 
+	type MpTerm = {
+		name: string;
+		custom_name?: string;
+		founding_date: string | null;
+		dissolution_date: string | null;
+		term: number | null;
+	};
+
+	let mpterm_display_name = (mp: MpTerm) => {
+		const s = `สส. ชุดที่ ${mp.term}`;
+
+		const toBE2Digits = (year?: number) =>
+			year ? ((year + 543) % 100).toString().padStart(2, '0') : undefined;
+
+		const foundingYear = mp.founding_date
+			? toBE2Digits(new Date(mp.founding_date).getFullYear())
+			: undefined;
+		const dissolutionYear = mp.dissolution_date
+			? toBE2Digits(new Date(mp.dissolution_date).getFullYear())
+			: undefined;
+
+		if (!foundingYear && !dissolutionYear) return s;
+		if (!foundingYear && dissolutionYear) return `${s} (ก่อนปี ${dissolutionYear})`;
+		if (foundingYear && dissolutionYear) return `${s} (ปี ${foundingYear} - ${dissolutionYear})`;
+		if (foundingYear && !dissolutionYear) return `${s} (ปี ${foundingYear} - ปัจจุบัน)`;
+
+		return s;
+	};
+
+	export let billCategories: string[] = [];
+	export let mpTerms: MpTerm[] = [];
+
 	const ALL_CATEGORY_KEY = 'ทุกหมวด';
+	const OTHER_TERM_KEY: MpTerm = {
+		name: 'other_terms',
+		custom_name: 'สส. ชุดอื่น ๆ (ก่อนปี 62)',
+		founding_date: null,
+		dissolution_date: '2019-03-24',
+		term: 0
+	};
 	const MAX_BILL_BY_STATUS = 3;
 	const MAX_ENACTED_BILL = 10;
 
-	export let billCategories: string[] = [];
+	let all_mp_choices = [...mpTerms, OTHER_TERM_KEY];
 
 	let selectedCategory: string = ALL_CATEGORY_KEY;
+	let selectedMpTerm: string = mpTerms.length > 0 ? mpTerms[0].name : '';
 	let isLoading = true;
 	let billSummaryByStatus: BillSummary[] = [];
 	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'>[] = [];
@@ -34,18 +74,25 @@
 		loadBills();
 	});
 
-	async function loadBills(category?: string) {
+	async function loadBills(category?: string, mpTerm?: string) {
 		isLoading = true;
+
+		let query_category = category == ALL_CATEGORY_KEY ? undefined : category;
+
+		let date_from = all_mp_choices.find((mp) => mp?.name === mpTerm)?.founding_date;
+		let date_until = all_mp_choices.find((mp) => mp?.name === mpTerm)?.dissolution_date;
 
 		billSummaryByStatus = await Promise.all(
 			displayedStatuses.map((status) => {
 				const where: BillWhere = {
 					status_EQ: status,
-					...(category
-						? {
-								categories_INCLUDES: category
-							}
-						: {})
+					...(query_category && {
+						categories_INCLUDES: category
+					}),
+					...(mpTerm && {
+						...(date_from && { proposal_date_GTE: date_from }),
+						...(date_until && { proposal_date_LTE: date_until })
+					})
 				};
 
 				return graphql.query({
@@ -107,7 +154,12 @@
 
 	function selectCategory(category: string) {
 		selectedCategory = category;
-		loadBills(category === ALL_CATEGORY_KEY ? undefined : category);
+		loadBills(selectedCategory, selectedMpTerm);
+	}
+
+	function selectMpTerm(mpterm: string) {
+		selectedMpTerm = mpterm;
+		loadBills(selectedCategory, selectedMpTerm);
 	}
 
 	$: totalCount = billSummaryByStatus.reduce(
@@ -139,6 +191,27 @@
 							{category}
 						</button>
 					{/each}
+				</div>
+			</div>
+		{/if}
+
+		{#if mpTerms.length}
+			<div>
+				<div class="flex flex-col gap-2 md:flex-row">
+					<h3 class="fluid-heading-04 text-nowrap">เลือกสมัย</h3>
+					<div class="flex flex-row flex-wrap items-center gap-1">
+						{#each [...mpTerms, OTHER_TERM_KEY] as mpterm (mpterm.name)}
+							<button
+								class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {mpterm.name ===
+								selectedMpTerm
+									? 'bg-gray-80 text-white'
+									: 'text-gray-80 hover:bg-gray-20'}"
+								on:click={() => selectMpTerm(mpterm.name)}
+							>
+								{mpterm.custom_name ? mpterm.custom_name : mpterm_display_name(mpterm)}
+							</button>
+						{/each}
+					</div>
 				</div>
 			</div>
 		{/if}

@@ -166,6 +166,26 @@ export async function load() {
 		)
 	].sort((a, z) => a.localeCompare(z));
 
+	const mpTerms = (
+		await graphql.query({
+			organizations: {
+				__args: {
+					where: {
+						classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
+					}
+				},
+				name: true,
+				term: true,
+				founding_date: true,
+				dissolution_date: true
+			}
+		})
+	).organizations
+		.filter((org) => org.name != null)
+		.sort(
+			(a, z) => new Date(z.founding_date ?? 0).getTime() - new Date(a.founding_date ?? 0).getTime()
+		);
+
 	// const promiseSummary = {
 	// 	total: promises.length,
 	// 	byStatus: groups(
@@ -187,6 +207,7 @@ export async function load() {
 	return {
 		highlightedPoliticians,
 		latestVoteEvents,
-		billCategories
+		billCategories,
+		mpTerms
 	};
 }
