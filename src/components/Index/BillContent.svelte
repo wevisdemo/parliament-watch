@@ -27,6 +27,9 @@
 	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'>[] = [];
 	let lastEnactedBillProposers: ComponentProps<Proposer>['proposer'][] = [];
 
+	// TODO: We didn't handle MERGED status in Politigraph yet
+	const displayedStatuses = billStatusList.filter((status) => status !== 'MERGED');
+
 	onMount(() => {
 		loadBills();
 	});
@@ -35,7 +38,7 @@
 		isLoading = true;
 
 		billSummaryByStatus = await Promise.all(
-			billStatusList.map((status) => {
+			displayedStatuses.map((status) => {
 				const where: BillWhere = {
 					status_EQ: status,
 					...(category
@@ -155,7 +158,7 @@
 					}}
 					hideNavigation={isLoading}
 				>
-					{#each billStatusList as status, i (status)}
+					{#each displayedStatuses as status, i (status)}
 						{@const { bills, billsConnection } = billSummaryByStatus[i]}
 						{#if bills.length}
 							<LawStatusCard
