@@ -30,6 +30,9 @@
 				year: '2-digit'
 			})
 		: 'ปัจจุบัน';
+
+	const getAssemblyPath = (assembly: AvailableAssembly) =>
+		assembly ? `/assemblies/${assembly.id}/${linkPostfix}` : '';
 </script>
 
 <div
@@ -38,7 +41,7 @@
 	<div class="w-full max-w-[900px]">
 		<div class="flex flex-col md:flex-row">
 			<h2 class="fluid-heading-05">{name}</h2>
-			<AssemblyIdRunner {term} startedYear={startedAt} {availableAssemblies} {linkPostfix} />
+			<AssemblyIdRunner {term} startedYear={startedAt} {availableAssemblies} {getAssemblyPath} />
 		</div>
 		{#if showStatus}
 			<div class="flex items-center">

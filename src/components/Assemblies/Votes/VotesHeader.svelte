@@ -7,6 +7,9 @@
 	export let term: number;
 	export let startedYear: Date;
 	export let availableAssemblies: AvailableAssembly[];
+
+	const getAssemblyPath = (assembly: AvailableAssembly) =>
+		assembly ? `/assemblies/${assembly.id}/votes` : '';
 </script>
 
 <div
@@ -15,7 +18,7 @@
 	<div class="flex w-full max-w-[900px] items-center">
 		<div class="flex flex-col md:flex-row">
 			<h2 class="fluid-heading-04">{name}</h2>
-			<AssemblyIdRunner {term} {startedYear} {availableAssemblies} linkPostfix="votes" />
+			<AssemblyIdRunner {term} {startedYear} {availableAssemblies} {getAssemblyPath} />
 		</div>
 	</div>
 </div>
