@@ -42,7 +42,6 @@
 	<Header
 		id={assembly.id}
 		name={assembly.name.split(' ')[0]}
-		term={assembly.term ?? 0}
 		startedAt={assembly.founding_date ? new Date(assembly.founding_date) : new Date()}
 		endedAt={assembly.dissolution_date ? new Date(assembly.dissolution_date) : undefined}
 		description={assembly.description}
