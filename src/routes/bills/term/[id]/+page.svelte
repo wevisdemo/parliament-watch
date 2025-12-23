@@ -29,7 +29,7 @@
 	let searchResults: SearchResults | null;
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
-		assembly ? `/bills/mp_term/${assembly.id}` : '';
+		assembly ? `/bills/term/${assembly.id}` : '';
 </script>
 
 <Breadcrumb
@@ -62,18 +62,16 @@
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
 </section>
 
-{#if thisTerm}
-	<section class="h-[60px] bg-ui-03 px-4">
-		<div class="mx-auto flex h-full max-w-[1280px] items-center justify-center">
-			<AssemblyIdRunner
-				term={thisTerm.term || 0}
-				startedYear={new Date(thisTerm.founding_date || 0)}
-				availableAssemblies={allMpTerms}
-				{getAssemblyPath}
-			/>
-		</div>
-	</section>
-{/if}
+<section class="h-[60px] bg-ui-03 px-4">
+	<div class="mx-auto flex h-full max-w-[1280px] items-center justify-center">
+		<AssemblyIdRunner
+			term={thisTerm.term || 0}
+			startedYear={new Date(thisTerm.founding_date || 0)}
+			availableAssemblies={allMpTerms}
+			{getAssemblyPath}
+		/>
+	</div>
+</section>
 
 <div class="bg-ui-01">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">

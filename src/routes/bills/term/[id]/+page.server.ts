@@ -9,6 +9,7 @@ import type { BillWhere, Bill } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { BillProposerType } from '$models/bill';
+import { error } from '@sveltejs/kit';
 
 const BILL_SAMPLE_LIMIT = 3;
 const LATEST_ENACTED_BILL_LIMIT = 10;
@@ -20,7 +21,8 @@ export async function load({ params }) {
 				__args: {
 					where: {
 						classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
-					}
+					},
+					sort: [{ founding_date: 'DESC' }]
 				},
 				id: true,
 				term: true,
@@ -28,18 +30,17 @@ export async function load({ params }) {
 				dissolution_date: true
 			}
 		})
-	).organizations
-		.filter((org) => org.id != null)
-		.sort(
-			(a, z) => new Date(z.founding_date ?? 0).getTime() - new Date(a.founding_date ?? 0).getTime()
-		);
+	).organizations;
 
-	const thisTerm = allMpTerms.find((mp) => mp.id === params.id) ?? allMpTerms[0];
-	// TODO: redirect instead of default to first ?
+	const thisTerm = allMpTerms.find((mp) => mp.id === params.id);
+
+	if (!thisTerm) {
+		throw error(404, 'Term not found');
+	}
 
 	const billWhereTerm: BillWhere = {
-		...(thisTerm && thisTerm.founding_date && { proposal_date_GTE: thisTerm.founding_date }),
-		...(thisTerm && thisTerm.dissolution_date && { proposal_date_LTE: thisTerm.dissolution_date })
+		...(thisTerm.founding_date && { proposal_date_GTE: thisTerm.founding_date }),
+		...(thisTerm.dissolution_date && { proposal_date_LTE: thisTerm.dissolution_date })
 	};
 
 	const totalCount = (
