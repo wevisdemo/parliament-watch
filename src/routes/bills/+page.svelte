@@ -47,6 +47,7 @@
 	</div>
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
 </section>
+
 <div class="bg-ui-01">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
 		<NavigationTab
