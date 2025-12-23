@@ -40,6 +40,8 @@
 			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term}`;
 		} else if (yearString) {
 			displayString = `ปี ${yearString}`;
+		} else {
+			displayString = '-';
 		}
 	}
 </script>
