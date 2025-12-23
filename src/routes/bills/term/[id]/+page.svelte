@@ -8,15 +8,29 @@
 	import { SearchIndexCategory, type SearchResults } from '$models/search';
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import LawIcom from '../../components/icons/LawIcon.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
+	import AssemblyIdRunner, {
+		type AvailableAssembly
+	} from '$components/Assemblies/AssemblyIdRunner.svelte';
 
 	export let data;
 
-	$: ({ totalCount, byStatus, byProposerType, lastEnactedBills, lastEnactedBillProposers } = data);
+	$: ({
+		allMpTerms,
+		thisTerm,
+		totalCount,
+		byStatus,
+		byProposerType,
+		lastEnactedBills,
+		lastEnactedBillProposers
+	} = data);
 
 	let searchResults: SearchResults | null;
+
+	const getAssemblyPath = (assembly: AvailableAssembly) =>
+		assembly ? `/bills/term/${assembly.id}` : '';
 </script>
 
 <Breadcrumb
@@ -27,10 +41,11 @@
 	<BreadcrumbItem href="/bills" isCurrentPage>ร่างกฎหมายในสภา</BreadcrumbItem>
 </Breadcrumb>
 <header class="flex flex-col items-center gap-2 px-4 py-10 text-center">
-	<LawIcom width="36" height="36" />
+	<LawIcon width="36" height="36" />
 	<h1 class="fluid-heading-05 text-balance">สำรวจร่างกฎหมายในสภา</h1>
 	<DataPeriodRemark withStartDate />
 </header>
+
 <section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
 	<h2 class="fluid-heading-03">ค้นด้วยชื่อ</h2>
 	<div class="relative">
@@ -46,6 +61,19 @@
 		{/if}
 	</div>
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
+</section>
+
+<section class="h-[60px] bg-ui-03 px-4">
+	<div class="mx-auto flex h-full max-w-[1280px] items-center justify-center">
+		<AssemblyIdRunner
+			overwriteDisplayString={thisTerm.id == 'other_terms_before_25'
+				? 'ชุดอื่น ๆ | ก่อน 2562'
+				: undefined}
+			id={thisTerm.id}
+			availableAssemblies={allMpTerms}
+			{getAssemblyPath}
+		/>
+	</div>
 </section>
 
 <div class="bg-ui-01">
@@ -64,22 +92,24 @@
 			<h2 class="fluid-heading-03">สำรวจตามสถานะ</h2>
 			<ModalLawProcess class="text-right" />
 		</header>
-		<Carousel
-			options={{
-				breakpoints: {
-					'(min-width: 672px)': {
-						slides: {
-							perView: 3,
-							spacing: 12
+		{#key thisTerm.id}
+			<Carousel
+				options={{
+					breakpoints: {
+						'(min-width: 672px)': {
+							slides: {
+								perView: 3,
+								spacing: 12
+							}
 						}
 					}
-				}
-			}}
-		>
-			{#each byStatus as bill (bill.status)}
-				<LawStatusCard {totalCount} {bill} showDescription />
-			{/each}
-		</Carousel>
+				}}
+			>
+				{#each byStatus as bill (bill.status)}
+					<LawStatusCard {totalCount} {bill} showDescription />
+				{/each}
+			</Carousel>
+		{/key}
 	</section>
 	<!-- TODO: until we have a protocol to maintain bill category data -->
 	<!-- <section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
@@ -95,11 +125,13 @@
 			</section> -->
 	<section id="proposer" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
-		<Carousel>
-			{#each byProposerType as bill (bill.proposerType)}
-				<LawStatusCard {totalCount} {bill} />
-			{/each}
-		</Carousel>
+		{#key thisTerm.id}
+			<Carousel>
+				{#each byProposerType as bill (bill.proposerType)}
+					<LawStatusCard {totalCount} {bill} />
+				{/each}
+			</Carousel>
+		{/key}
 	</section>
 </div>
 <div class="bg-teal-80">
@@ -107,21 +139,23 @@
 		<h2 class="fluid-heading-03 text-white">
 			{lastEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
 		</h2>
-		<Carousel>
-			{#each lastEnactedBills as { title, nickname, proposal_date, enact_date, ...bill }, i (bill.id)}
-				<BillCard
-					class="keen-slider__slide min-w-72"
-					orientation="portrait"
-					{...bill}
-					nickname={nickname ? nickname : title}
-					title={nickname ? title : null}
-					proposedOn={new Date(proposal_date ?? '')}
-					enactedOn={new Date(enact_date ?? '')}
-					status="ENACTED"
-					proposer={lastEnactedBillProposers[i]}
-				/>
-			{/each}
-		</Carousel>
+		{#key thisTerm.id}
+			<Carousel>
+				{#each lastEnactedBills as { title, nickname, proposal_date, enact_date, ...bill }, i (bill.id)}
+					<BillCard
+						class="keen-slider__slide min-w-72"
+						orientation="portrait"
+						{...bill}
+						nickname={nickname ? nickname : title}
+						title={nickname ? title : null}
+						proposedOn={new Date(proposal_date ?? '')}
+						enactedOn={new Date(enact_date ?? '')}
+						status="ENACTED"
+						proposer={lastEnactedBillProposers[i]}
+					/>
+				{/each}
+			</Carousel>
+		{/key}
 	</section>
 </div>
 <div class="px-4 pb-20 pt-6">
