@@ -77,6 +77,7 @@ export async function load() {
 					sort: [{ start_date: 'DESC' }],
 					limit: LATEST_ENACTED_BILL_LIMIT
 				},
+				start_date: true,
 				bills: {
 					id: true,
 					title: true,
@@ -85,7 +86,7 @@ export async function load() {
 				}
 			}
 		})
-	).billEnactEvents.map((event) => event.bills[0]);
+	).billEnactEvents.map(({ start_date, bills }) => ({ start_date, ...bills[0] }));
 
 	const lastEnactedBillProposers = (
 		await Promise.all(
