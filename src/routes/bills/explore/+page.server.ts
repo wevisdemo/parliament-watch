@@ -1,4 +1,5 @@
 import type { CheckboxFilterChoice } from '$components/DataPage/DataPage.svelte';
+import { formatYearRange } from '$lib/date-parser';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillStatus } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
@@ -120,9 +121,7 @@ export async function load() {
 		.filter(({ id }) => bills.some((bill) => bill.purposedAtMpAssemblyId === id))
 		.sort((a, z) => (z.founding_date ?? '').localeCompare(a.founding_date ?? ''))
 		.map((assembly) => ({
-			label: `${assembly.name} (${formatThaiYear(assembly.founding_date)} - ${
-				formatThaiYear(assembly?.dissolution_date) ?? 'ปัจจุบัน'
-			})`,
+			label: `${assembly.name} (${formatYearRange(assembly.founding_date, assembly.dissolution_date)})`,
 			value: assembly.id
 		}));
 
@@ -149,9 +148,4 @@ export async function load() {
 			title: 'สำรวจร่างกฎหมายในสภาแบบละเอียด'
 		})
 	};
-}
-
-function formatThaiYear(date: string | null) {
-	if (!date) return;
-	return new Date(date).toLocaleString('th-TH', { year: 'numeric' });
 }

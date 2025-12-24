@@ -16,6 +16,7 @@
 	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { groups } from 'd3';
+	import { formatDateRange } from '$lib/date-parser.js';
 
 	export let data;
 
@@ -228,16 +229,7 @@
 										{post.organizations[0].name}
 									</a>
 									<span class="body-compact-02 text-gray-60">
-										({new Date(start_date).toLocaleDateString('th-TH', {
-											month: 'short',
-											year: '2-digit'
-										})}
-										- {end_date
-											? new Date(end_date).toLocaleDateString('th-TH', {
-													month: 'short',
-													year: '2-digit'
-												})
-											: 'ปัจจุบัน'})
+										({formatDateRange(start_date, end_date, { shortMonth: true, hideDate: true })})
 									</span>
 								</li>
 							{/each}

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { formatThaiDate, type TimeLine, getDateData, compareDate } from './TimeLine';
+	import { type TimeLine, getDateData } from './TimeLine';
 	import { ChevronLeft, ChevronRight } from 'carbon-icons-svelte';
 	import TimeItem from './TimeItem.svelte';
 	import Tooltip from '../Tooltip.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
-	import { shortMonthNames } from '$lib/date-parser';
+	import { formatThaiDate, sameDate, shortMonthNames } from '$lib/date-parser';
 	import { afterUpdate, onMount, tick } from 'svelte';
 
 	export let timeLineData: TimeLine[];
@@ -58,23 +58,23 @@
 				<ChevronLeft size={32} />
 			</button>
 		</div>
-		{#each dateData as year}
-			{#each year.months as month}
+		{#each dateData as year (year)}
+			{#each year.months as month (month)}
 				<div class="relative z-[0]">
 					<p class="label-01 absolute bottom-0 -mb-7 w-12 text-text-02">
 						{shortMonthNames[month.id]}
 						{month.id === 0 ? (year.year + 543).toString().slice(-2) : ''}
 					</p>
 				</div>
-				{#each month.days as day}
-					{@const isSelectedDate = compareDate(day.date, selectedDate)}
+				{#each month.days as day (day)}
+					{@const isSelectedDate = sameDate(day.date, selectedDate)}
 					{#if day.event}
 						<div class="relative z-[0]">
 							<div
 								class="absolute left-1 -mt-14 h-full border-l border-dashed border-black px-1 text-text-02"
 							>
 								<p class="label-01 w-fit min-w-[60px] text-text-01">
-									{formatThaiDate(day.date)}
+									{formatThaiDate(day.date, { shortMonth: true, shortYear: true })}
 								</p>
 								<p class="label-01">{day.event}</p>
 							</div>

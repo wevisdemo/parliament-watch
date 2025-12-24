@@ -4,6 +4,7 @@
 	import Share from '$components/Share/Share.svelte';
 	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import { formatDateRange } from '$lib/date-parser';
 
 	export let availableAssemblies: AvailableAssembly[] = [];
 
@@ -18,18 +19,6 @@
 	export let showRemark = true;
 
 	$: isActive = !endedAt;
-	$: startedAtThaiFormat = startedAt.toLocaleDateString('th-TH', {
-		day: 'numeric',
-		month: 'short',
-		year: '2-digit'
-	});
-	$: endedAtThaiFormat = endedAt
-		? endedAt.toLocaleDateString('th-TH', {
-				day: 'numeric',
-				month: 'short',
-				year: '2-digit'
-			})
-		: 'ปัจจุบัน';
 </script>
 
 <div
@@ -44,7 +33,7 @@
 			<div class="flex items-center">
 				<Tag type={isActive ? 'cyan' : 'warm-gray'}>{isActive ? 'อยูในวาระ' : 'หมดวาระ'}</Tag>
 				<p class="body-01 ml-[8px]">
-					{startedAtThaiFormat}{endedAt ? ` - ${endedAtThaiFormat}` : ''}
+					{formatDateRange(startedAt, endedAt, { shortMonth: true, shortYear: true })}
 				</p>
 			</div>
 		{/if}

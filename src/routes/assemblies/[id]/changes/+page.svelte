@@ -7,8 +7,7 @@
 	import TimeLineArea from '$components/Assemblies/CabinetChanges/TimeLineArea.svelte';
 	import { group } from 'd3';
 	import ChangeModal from '$components/Assemblies/CabinetChanges/ChangeModal.svelte';
-	import { isDateInRange } from '$components/Assemblies/CabinetChanges/TimeLine.js';
-	import { formatThaiDate } from '$lib/date-parser';
+	import { formatThaiDate, isDateInRange } from '$lib/date-parser';
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 
 	export let data;
