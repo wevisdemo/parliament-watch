@@ -11,7 +11,7 @@
 	<div class="flex flex-row gap-2 text-text-03">
 		<Quotes class="text-2xl" size={20} />
 		<span>
-			คำชี้แจงจากพรรค{partyName} ({formatThaiDate(clarificationAnswer.date, true)})
+			คำชี้แจงจากพรรค{partyName} ({formatThaiDate(clarificationAnswer.date, { shortMonth: true })})
 		</span>
 	</div>
 	<div class="flex flex-row gap-2">

@@ -1,16 +1,11 @@
 <script lang="ts">
 	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
 	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
-	import dayjs from 'dayjs';
-	import 'dayjs/locale/th';
-	import buddhistEra from 'dayjs/plugin/buddhistEra';
 	import { twMerge } from 'tailwind-merge';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VoteStackedBar from '$components/VoteStackedBar/VoteStackedBar.svelte';
 	import type { VotesSummary } from '$lib/vote-summary';
-
-	dayjs.extend(buddhistEra);
-	dayjs.locale('th');
+	import { formatThaiDate } from '$lib/date-parser';
 
 	interface VoteCardTheme {
 		bg: string;
@@ -81,7 +76,7 @@
 			name: group.name,
 			total: group.total,
 			highlightCount: highlightOptionName
-				? group.options.find((option) => option.option === highlightOptionName)?.count ?? 0
+				? (group.options.find((option) => option.option === highlightOptionName)?.count ?? 0)
 				: 0
 		}));
 	};
@@ -99,7 +94,7 @@
 >
 	<div class="flex items-start justify-between gap-2">
 		<p class="body-compact-01 text-text-02">
-			{dayjs(date).format('D MMM BB')}
+			{formatThaiDate(date, { shortMonth: true, shortYear: true })}
 		</p>
 		<VotingResultTag {result} />
 	</div>

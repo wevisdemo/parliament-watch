@@ -20,6 +20,7 @@
 	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import { formatThaiDate } from '$lib/date-parser.js';
 
 	export let data;
 
@@ -39,13 +40,6 @@
 	interface AnchorElement extends HTMLElement {
 		offsetTop: number;
 		offsetHeight: number;
-	}
-
-	function formatDate(date: string) {
-		return Intl.DateTimeFormat('th', {
-			dateStyle: 'medium',
-			calendar: 'buddhist'
-		}).format(new Date(date));
 	}
 
 	function getVoteColor(option: DefaultVoteOption | CustomVoteOption | string): {
@@ -208,7 +202,7 @@
 					{#if voteEvent.start_date}
 						<div>
 							<p class="heading-01">วันที่</p>
-							<p class="body-01">{formatDate(voteEvent.start_date)}</p>
+							<p class="body-01">{formatThaiDate(voteEvent.start_date)}</p>
 						</div>
 					{/if}
 					{#if meetingType}

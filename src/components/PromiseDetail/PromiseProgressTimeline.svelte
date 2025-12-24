@@ -80,7 +80,7 @@
 			<div class="flex flex-1 flex-col gap-6 md:flex-row">
 				<div class="mb-4 flex flex-1 flex-col gap-2">
 					<div class={twMerge('body-01', !isProgress && 'text-text-02')}>
-						{formatThaiDate(event.date, true)}
+						{formatThaiDate(event.date, { shortMonth: true })}
 					</div>
 					<div class={twMerge('heading-02', !isProgress && 'text-text-02')}>
 						{event.title}

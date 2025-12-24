@@ -11,23 +11,17 @@
 		SelectedCheckboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
+	import { formatYearRange } from '$lib/date-parser.js';
 
 	export let data;
 	const { politician, filterOptions, votes } = data;
-
-	const formatThaiYear = (date: string | null) => {
-		if (!date) return;
-		return new Date(date).toLocaleString('th-TH', { year: 'numeric' });
-	};
 
 	const checkboxFilterList: CheckboxFilterGroup[] = [
 		{
 			key: 'filterAssembly',
 			legend: 'สมัยการทำงาน',
 			choices: filterOptions.assemblies.map((assembly) => ({
-				label: `${assembly.name} (${formatThaiYear(assembly.founding_date)} - ${
-					formatThaiYear(assembly.dissolution_date) ?? 'ปัจจุบัน'
-				})`,
+				label: `${assembly.name} (${formatYearRange(assembly.founding_date, assembly.dissolution_date, { shortMonth: true })})`,
 				value: assembly.id
 			}))
 		},
