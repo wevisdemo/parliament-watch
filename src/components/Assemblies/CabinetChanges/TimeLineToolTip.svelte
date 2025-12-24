@@ -1,15 +1,16 @@
 <script lang="ts">
+	import { formatThaiDate, sameDate } from '$lib/date-parser';
 	import SquareIcon from './SquareIcon.svelte';
-	import { compareDate, formatThaiDate, type TimeLine } from './TimeLine';
+	import { type TimeLine } from './TimeLine';
 
 	export let day: TimeLine;
 	export let selectedDate: Date;
 </script>
 
 <div class="label-01 flex flex-col items-start justify-center">
-	{#if compareDate(day.date, selectedDate)}
+	{#if sameDate(day.date, selectedDate)}
 		<div class="text-text-03">
-			{formatThaiDate(day.date)}
+			{formatThaiDate(day.date, { shortMonth: true, shortYear: true })}
 		</div>
 		{#if !day.in && !day.out}
 			<div class="flex items-center gap-1 text-text-04">ไม่มีการปรับ</div>
@@ -29,7 +30,7 @@
 		{/if}
 	{:else}
 		<div class="text-black">
-			{formatThaiDate(day.date)}
+			{formatThaiDate(day.date, { shortMonth: true, shortYear: true })}
 		</div>
 		{#if day.in}
 			<div class="text-text-02">
