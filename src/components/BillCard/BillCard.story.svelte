@@ -5,7 +5,7 @@
 
 	export let Hst: Hst;
 
-	let orientation: 'landscape' | 'portrait' = 'landscape';
+	let orientation: 'landscape' | 'portrait' = 'portrait';
 	let isFullWidth = false;
 </script>
 

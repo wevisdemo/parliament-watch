@@ -14,7 +14,7 @@
 	export let startedOn: Date | null = null;
 	export let status: BillStatus;
 	export let proposer: ComponentProps<Proposer>['proposer'] = undefined;
-	export let orientation: 'landscape' | 'portrait' = 'landscape';
+	export let orientation: 'landscape' | 'portrait' = 'portrait';
 	export let isFullWidth = false;
 	let className = '';
 	export { className as class };
