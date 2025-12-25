@@ -16,7 +16,7 @@
 
 	export let data;
 
-	$: ({ highlightedPoliticians, latestVoteEvents, billCategories, mpTerms } = data);
+	$: ({ highlightedPoliticians, latestVoteEvents, billCategories, mpTermChoices } = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -117,7 +117,7 @@
 			>รัฐออกกฎหมายอย่างไร? <ArrowRight class="ml-1" /></a
 		></span
 	>
-	<BillContent {billCategories} {mpTerms} />
+	<BillContent {billCategories} {mpTermChoices} />
 </ContentSection>
 
 <!-- <ContentSection

@@ -15,53 +15,21 @@
 		bills: Pick<Bill, 'id' | 'title' | 'nickname'>[];
 	}
 
-	type MpTerm = {
-		name: string;
-		custom_name?: string;
-		founding_date: string | null;
-		dissolution_date: string | null;
-		term: number | null;
-	};
-
-	let mpterm_display_name = (mp: MpTerm) => {
-		const s = `สส. ชุดที่ ${mp.term}`;
-
-		const toBE2Digits = (year?: number) =>
-			year ? ((year + 543) % 100).toString().padStart(2, '0') : undefined;
-
-		const foundingYear = mp.founding_date
-			? toBE2Digits(new Date(mp.founding_date).getFullYear())
-			: undefined;
-		const dissolutionYear = mp.dissolution_date
-			? toBE2Digits(new Date(mp.dissolution_date).getFullYear())
-			: undefined;
-
-		if (!foundingYear && !dissolutionYear) return s;
-		if (!foundingYear && dissolutionYear) return `${s} (ก่อนปี ${dissolutionYear})`;
-		if (foundingYear && dissolutionYear) return `${s} (ปี ${foundingYear} - ${dissolutionYear})`;
-		if (foundingYear && !dissolutionYear) return `${s} (ปี ${foundingYear} - ปัจจุบัน)`;
-
-		return s;
-	};
-
 	export let billCategories: string[] = [];
-	export let mpTerms: MpTerm[] = [];
+	export let mpTermChoices: {
+		id: string;
+		value: string;
+		founding_date?: string;
+		dissolution_date?: string;
+	}[] = [];
 
 	const ALL_CATEGORY_KEY = 'ทุกหมวด';
-	const OTHER_TERM_KEY: MpTerm = {
-		name: 'other_terms',
-		custom_name: 'สส. ชุดอื่น ๆ (ก่อนปี 62)',
-		founding_date: null,
-		dissolution_date: '2019-03-24',
-		term: 0
-	};
 	const MAX_BILL_BY_STATUS = 3;
 	const MAX_ENACTED_BILL = 10;
 
-	let all_mp_choices = [...mpTerms, OTHER_TERM_KEY];
+	let selectedCategory = ALL_CATEGORY_KEY;
+	$: selectedMpTermId = mpTermChoices[0].id ?? '';
 
-	let selectedCategory: string = ALL_CATEGORY_KEY;
-	let selectedMpTerm: string = mpTerms.length > 0 ? mpTerms[0].name : '';
 	let isLoading = true;
 	let billSummaryByStatus: BillSummary[] = [];
 	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'>[] = [];
@@ -71,27 +39,25 @@
 	const displayedStatuses = billStatusList.filter((status) => status !== 'MERGED');
 
 	onMount(() => {
-		loadBills();
+		loadBills(selectedCategory, selectedMpTermId);
 	});
 
-	async function loadBills(category?: string, mpTerm?: string) {
+	async function loadBills(category: string, mpTermId: string) {
 		isLoading = true;
 
-		let query_category = category == ALL_CATEGORY_KEY ? undefined : category;
-
-		let date_from = all_mp_choices.find((mp) => mp?.name === mpTerm)?.founding_date;
-		let date_until = all_mp_choices.find((mp) => mp?.name === mpTerm)?.dissolution_date;
+		const queryCategory = category == ALL_CATEGORY_KEY ? undefined : category;
+		const queryTerm = mpTermChoices.find((mp) => mp.id === mpTermId);
 
 		billSummaryByStatus = await Promise.all(
 			displayedStatuses.map((status) => {
 				const where: BillWhere = {
 					status_EQ: status,
-					...(query_category && {
+					...(queryCategory && {
 						categories_INCLUDES: category
 					}),
-					...(mpTerm && {
-						...(date_from && { proposal_date_GTE: date_from }),
-						...(date_until && { proposal_date_LTE: date_until })
+					...(queryTerm?.founding_date && { proposal_date_GTE: queryTerm.founding_date }),
+					...(queryTerm?.dissolution_date && {
+						proposal_date_LTE: queryTerm.dissolution_date
 					})
 				};
 
@@ -154,12 +120,12 @@
 
 	function selectCategory(category: string) {
 		selectedCategory = category;
-		loadBills(selectedCategory, selectedMpTerm);
+		loadBills(selectedCategory, selectedMpTermId);
 	}
 
-	function selectMpTerm(mpterm: string) {
-		selectedMpTerm = mpterm;
-		loadBills(selectedCategory, selectedMpTerm);
+	function selectMpTerm(mptermId: string) {
+		selectedMpTermId = mptermId;
+		loadBills(selectedCategory, selectedMpTermId);
 	}
 
 	$: totalCount = billSummaryByStatus.reduce(
@@ -195,20 +161,20 @@
 			</div>
 		{/if}
 
-		{#if mpTerms.length}
+		{#if mpTermChoices.length}
 			<div>
 				<div class="flex flex-col gap-2 md:flex-row">
 					<h3 class="fluid-heading-04 text-nowrap">เลือกสมัย</h3>
 					<div class="flex flex-row flex-wrap items-center gap-1">
-						{#each [...mpTerms, OTHER_TERM_KEY] as mpterm (mpterm.name)}
+						{#each mpTermChoices as mpterm (mpterm.id)}
 							<button
-								class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {mpterm.name ===
-								selectedMpTerm
+								class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {mpterm.id ===
+								selectedMpTermId
 									? 'bg-gray-80 text-white'
 									: 'text-gray-80 hover:bg-gray-20'}"
-								on:click={() => selectMpTerm(mpterm.name)}
+								on:click={() => selectMpTerm(mpterm.id)}
 							>
-								{mpterm.custom_name ? mpterm.custom_name : mpterm_display_name(mpterm)}
+								{mpterm.value}
 							</button>
 						{/each}
 					</div>
