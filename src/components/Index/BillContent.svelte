@@ -15,13 +15,23 @@
 		bills: Pick<Bill, 'id' | 'title' | 'nickname'>[];
 	}
 
+	export let billCategories: string[] = [];
+	export let mpTermChoices: {
+		id: string;
+		value: string;
+		founding_date?: string;
+		dissolution_date?: string;
+	}[] = [];
+
 	const ALL_CATEGORY_KEY = 'ทุกหมวด';
 	const MAX_BILL_BY_STATUS = 3;
 	const MAX_ENACTED_BILL = 10;
 
-	export let billCategories: string[] = [];
+	let selectedCategory = ALL_CATEGORY_KEY;
 
-	let selectedCategory: string = ALL_CATEGORY_KEY;
+	let selectedMpTermId = '';
+	$: selectedMpTermId = mpTermChoices[0].id ?? '';
+
 	let isLoading = true;
 	let billSummaryByStatus: BillSummary[] = [];
 	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'>[] = [];
@@ -31,21 +41,26 @@
 	const displayedStatuses = billStatusList.filter((status) => status !== 'MERGED');
 
 	onMount(() => {
-		loadBills();
+		loadBills(selectedCategory, selectedMpTermId);
 	});
 
-	async function loadBills(category?: string) {
+	async function loadBills(category: string, mpTermId: string) {
 		isLoading = true;
+
+		const queryCategory = category == ALL_CATEGORY_KEY ? undefined : category;
+		const queryTerm = mpTermChoices.find((mp) => mp.id === mpTermId);
 
 		billSummaryByStatus = await Promise.all(
 			displayedStatuses.map((status) => {
 				const where: BillWhere = {
 					status_EQ: status,
-					...(category
-						? {
-								categories_INCLUDES: category
-							}
-						: {})
+					...(queryCategory && {
+						categories_INCLUDES: category
+					}),
+					...(queryTerm?.founding_date && { proposal_date_GTE: queryTerm.founding_date }),
+					...(queryTerm?.dissolution_date && {
+						proposal_date_LTE: queryTerm.dissolution_date
+					})
 				};
 
 				return graphql.query({
@@ -107,7 +122,12 @@
 
 	function selectCategory(category: string) {
 		selectedCategory = category;
-		loadBills(category === ALL_CATEGORY_KEY ? undefined : category);
+		loadBills(selectedCategory, selectedMpTermId);
+	}
+
+	function selectMpTerm(mptermId: string) {
+		selectedMpTermId = mptermId;
+		loadBills(selectedCategory, selectedMpTermId);
 	}
 
 	$: totalCount = billSummaryByStatus.reduce(
@@ -139,6 +159,27 @@
 							{category}
 						</button>
 					{/each}
+				</div>
+			</div>
+		{/if}
+
+		{#if mpTermChoices.length}
+			<div>
+				<div class="flex flex-col gap-2 md:flex-row">
+					<h3 class="fluid-heading-04 text-nowrap">เลือกสมัย</h3>
+					<div class="flex flex-row flex-wrap items-center gap-1">
+						{#each mpTermChoices as mpterm (mpterm.id)}
+							<button
+								class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {mpterm.id ===
+								selectedMpTermId
+									? 'bg-gray-80 text-white'
+									: 'text-gray-80 hover:bg-gray-20'}"
+								on:click={() => selectMpTerm(mpterm.id)}
+							>
+								{mpterm.value}
+							</button>
+						{/each}
+					</div>
 				</div>
 			</div>
 		{/if}
