@@ -8,14 +8,28 @@
 	import { SearchIndexCategory, type SearchResults } from '$models/search';
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import LawIcom from '../../components/icons/LawIcon.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import AssemblyIdRunner, {
+		type AvailableAssembly
+	} from '$components/Assemblies/AssemblyIdRunner.svelte';
 
 	export let data;
 
-	$: ({ totalCount, byStatus, byProposerType, lastEnactedBills, lastEnactedBillProposers } = data);
+	$: ({
+		allMpTerms,
+		thisTerm,
+		totalCount,
+		byStatus,
+		byProposerType,
+		lastEnactedBills,
+		lastEnactedBillProposers
+	} = data);
 
 	let searchResults: SearchResults | null;
+
+	const getAssemblyPath = (assembly: AvailableAssembly) =>
+		assembly ? `/bills/term/${assembly.id}` : '';
 </script>
 
 <Breadcrumb
@@ -26,10 +40,11 @@
 	<BreadcrumbItem href="/bills" isCurrentPage>ร่างกฎหมายในสภา</BreadcrumbItem>
 </Breadcrumb>
 <header class="flex flex-col items-center gap-2 px-4 py-10 text-center">
-	<LawIcom width="36" height="36" />
+	<LawIcon width="36" height="36" />
 	<h1 class="fluid-heading-05 text-balance">สำรวจร่างกฎหมายในสภา</h1>
 	<DataPeriodRemark withStartDate />
 </header>
+
 <section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
 	<h2 class="fluid-heading-03">ค้นด้วยชื่อ</h2>
 	<div class="relative">
@@ -46,6 +61,18 @@
 	</div>
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
 </section>
+
+<section class="h-[60px] bg-ui-03 px-4">
+	<div class="mx-auto flex h-full max-w-[1280px] items-center justify-center">
+		<AssemblyIdRunner
+			term={thisTerm.term || 0}
+			startedYear={new Date(thisTerm.founding_date || 0)}
+			availableAssemblies={allMpTerms}
+			{getAssemblyPath}
+		/>
+	</div>
+</section>
+
 <div class="bg-ui-01">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<header class="flex flex-col flex-wrap items-start justify-between md:flex-row">

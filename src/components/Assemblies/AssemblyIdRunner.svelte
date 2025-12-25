@@ -17,13 +17,13 @@
 	export let term: number;
 	export let startedYear: Date;
 	export let availableAssemblies: AvailableAssembly[] = [];
-	export let linkPostfix = '';
+	export let getAssemblyPath;
 
 	$: formattedYear = dayjs(startedYear).format('BBBB');
 
 	$: getSameAssemblyPathFromDifferentTerm = (newTerm: number) => {
 		const assembly = availableAssemblies.find((assembly) => assembly.term === newTerm);
-		return assembly ? `/assemblies/${assembly.id}${linkPostfix ? `/${linkPostfix}` : ''}` : '';
+		return getAssemblyPath(assembly);
 	};
 
 	$: nextUrl = getSameAssemblyPathFromDifferentTerm(term + 1);
