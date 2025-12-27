@@ -128,7 +128,7 @@
 		href="/bills/explore"
 		class="fluid-heading-04 mx-auto flex w-full max-w-[1280px] items-end justify-between gap-4 bg-blue-60 p-4 text-white hover:bg-blue-70 focus:bg-blue-70"
 	>
-		<span>ดูร่างกฎหมายทั้งหมดในสภา</span>
+		<span>ดูร่างกฎหมายทั้งหมดในสภาแบบละเอียด</span>
 		<ArrowRight />
 	</a>
 </div>

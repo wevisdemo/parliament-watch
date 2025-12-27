@@ -28,6 +28,12 @@
 			legend: 'ชื่อผู้เสนอ',
 			placeholder: 'เลือกชื่อผู้เสนอ',
 			choices: getProposerName()
+		},
+		{
+			key: 'filterPartyName',
+			legend: 'พรรคการเมือง',
+			placeholder: 'เลือกพรรคการเมืองที่เสนอ',
+			choices: getPartyName()
 		}
 	];
 
@@ -50,6 +56,17 @@
 			{ id: 'section1', text: 'คณะรัฐมนตรี', disabled: true },
 			...cabinetOptions
 		];
+	};
+
+	$: getPartyName = (): Choice[] => {
+		const partyOptions = filterOptions.proposerParties.map((party) => ({
+			id: party.id as string,
+			text: party.text,
+			imageSrc: party.imageSrc,
+			disabled: false
+		}));
+
+		return [...partyOptions];
 	};
 
 	$: checkboxFilterList = [
@@ -100,6 +117,53 @@
 							bill.proposer.name !== selectedComboboxValue.filterProposerName
 						)
 							return;
+
+						if (selectedComboboxValue.filterPartyName) {
+							const proposerParties =
+								bill.proposer.__typename == 'Person'
+									? new Set(
+											bill.proposer.memberships
+												.filter((membership) =>
+													bill.proposal_date != null
+														? membership.start_date <= bill.proposal_date &&
+															bill.proposal_date <= (membership.end_date ?? '2100-01-01')
+														: true
+												)
+												.flatMap((membership) =>
+													membership.posts
+														.flatMap((post) => post.organizations)
+														.filter((org) => org.classification == 'POLITICAL_PARTY')
+														.map((org) => org.name)
+												)
+										)
+									: new Set();
+
+							const coProposerParties = new Set(
+								bill.co_proposers.flatMap((co_proposers) =>
+									co_proposers.memberships
+										.filter((membership) =>
+											bill.proposal_date != null
+												? membership.start_date <= bill.proposal_date &&
+													bill.proposal_date <= (membership.end_date ?? '2100-01-01')
+												: true
+										)
+										.flatMap((membership) =>
+											membership.posts
+												.flatMap((post) => post.organizations)
+												.filter((org) => org.classification == 'POLITICAL_PARTY')
+												.map((org) => org.name)
+										)
+								)
+							);
+
+							if (
+								!proposerParties
+									.union(coProposerParties)
+									.has(selectedComboboxValue.filterPartyName as string)
+							) {
+								return;
+							}
+						}
 
 						const search = searchQuery.trim();
 						if (search && !bill.title.includes(search) && !bill.nickname?.includes(search)) return;
@@ -177,8 +241,8 @@
 >
 	<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 		<div class="flex-1">
-			<h1 class="fluid-heading-03">สำรวจร่างกฎหมายในสภา</h1>
-			<p class="body-01">สำรวจแบบละเอียด</p>
+			<h1 class="fluid-heading-03">สำรวจร่างกฎหมายในสภาแบบละเอียด</h1>
+			<p class="body-01">ผลลัพธ์จากเงื่อนไขการกรอง: {filteredData.length} ร่าง</p>
 		</div>
 	</div>
 	<svelte:fragment slot="table" let:cellKey let:cellValue>

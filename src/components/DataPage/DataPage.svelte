@@ -18,6 +18,7 @@
 	export interface ComboboxFilterChoice {
 		id: string | number;
 		text: string;
+		imageSrc?: string;
 	}
 
 	export interface ComboboxFilterGroup {
@@ -222,7 +223,19 @@
 								disabled={!renderCombobox}
 								selectedId={comboboxInternal[optionGroup.key]}
 								{shouldFilterItem}
-							/>
+								let:item
+							>
+								<div class="flex">
+									{#if item.imageSrc}
+										<img
+											src={item.imageSrc}
+											alt={item.text}
+											style="width: 16px; height: 16px; border-radius: 50%; margin-right: 8px;"
+										/>
+									{/if}
+									{item.text}
+								</div>
+							</ComboBox>
 						</div>
 					{/each}
 					{#each checkboxFilterList as optionGroup, idx (optionGroup.key)}

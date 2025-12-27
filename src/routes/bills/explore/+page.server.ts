@@ -1,4 +1,7 @@
-import type { CheckboxFilterChoice } from '$components/DataPage/DataPage.svelte';
+import type {
+	CheckboxFilterChoice,
+	ComboboxFilterChoice
+} from '$components/DataPage/DataPage.svelte';
 import { formatYearRange } from '$lib/date';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillStatus } from '$lib/politigraph/genql';
@@ -16,6 +19,7 @@ interface FilterOptions {
 	proposerTypes: BillProposerType[];
 	proposerPeople: string[];
 	proposerCabinets: string[];
+	proposerParties: ComboboxFilterChoice[];
 }
 
 export async function load() {
@@ -23,14 +27,16 @@ export async function load() {
 		organizations: {
 			__args: {
 				where: {
-					classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
+					classification_IN: ['HOUSE_OF_REPRESENTATIVE', 'POLITICAL_PARTY']
 				},
 				sort: [{ founding_date: 'DESC' }]
 			},
 			id: true,
 			name: true,
 			founding_date: true,
-			dissolution_date: true
+			dissolution_date: true,
+			classification: true,
+			image: true
 		},
 		bills: {
 			__args: {
@@ -52,14 +58,50 @@ export async function load() {
 					name: true
 				},
 				on_Person: {
-					name: true
+					name: true,
+					memberships: {
+						start_date: true,
+						end_date: true,
+						posts: {
+							start_date: true,
+							end_date: true,
+							label: true,
+							organizations: {
+								name: true,
+								classification: true,
+								founding_date: true,
+								dissolution_date: true
+							}
+						}
+					}
+				}
+			},
+			co_proposers: {
+				name: true,
+				memberships: {
+					start_date: true,
+					end_date: true,
+					posts: {
+						start_date: true,
+						end_date: true,
+						label: true,
+						organizations: {
+							name: true,
+							classification: true,
+							founding_date: true,
+							dissolution_date: true
+						}
+					}
 				}
 			},
 			people_signature_count: true
 		}
 	});
 
-	const assemblies = data.organizations;
+	const assemblies = data.organizations.filter(
+		(org) => org.classification == 'HOUSE_OF_REPRESENTATIVE'
+	);
+	const parties = data.organizations.filter((org) => org.classification == 'POLITICAL_PARTY');
 
 	const bills = data.bills.map(({ creators, people_signature_count, ...bill }) => {
 		const proposedDate = dayjs(bill.proposal_date);
@@ -80,7 +122,7 @@ export async function load() {
 					: people_signature_count
 						? BillProposerType.People
 						: BillProposerType.Politician,
-			proposer: creators.at(0) ?? { __typename: null, name: OTHER_CATEGORY_KEY }
+			proposer: creators.at(0) ?? { __typename: null, name: OTHER_CATEGORY_KEY, memberships: [] }
 		};
 	});
 
@@ -107,6 +149,16 @@ export async function load() {
 				.map((bill) => bill.proposer.name)
 		)
 	].sort((a, z) => a.localeCompare(z));
+
+	const proposerParties: ComboboxFilterChoice[] = [
+		...new Set(
+			parties.map((party) => ({
+				id: party.name,
+				text: party.name,
+				imageSrc: party.image ?? '/images/politicians/_placeholder.webp'
+			}))
+		)
+	].sort((a, z) => a.text.localeCompare(z.text));
 
 	const categories = [...new Set(bills.flatMap((bill) => bill.categories ?? []))].sort((a, z) =>
 		a.localeCompare(z)
@@ -138,7 +190,8 @@ export async function load() {
 		categories,
 		proposerTypes,
 		proposerPeople,
-		proposerCabinets
+		proposerCabinets,
+		proposerParties
 	};
 
 	return {
