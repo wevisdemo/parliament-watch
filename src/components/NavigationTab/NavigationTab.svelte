@@ -1,24 +1,17 @@
 <script lang="ts">
-	type TabId =
-		| 'summary' // for assemblies
-		| 'members' // for assemblies
-		| 'latest-votes' // for assemblies
-		| 'role-change' // for assemblies
-		| 'latest-bills' // for assemblies
-		| 'status' // for bill
-		| 'proposer' // for bill
-		| 'party'; // for bill
+	type AlignSide = 'left' | 'center' | 'right';
 
 	interface Tab {
-		id: TabId;
+		id: string;
 		label: string;
 		disabled?: boolean;
 		show?: number | boolean;
 	}
 
 	export let tabs: Tab[];
+	export let align: AlignSide = 'left';
 
-	let activeTab: TabId;
+	let activeTab: string;
 
 	$: {
 		if (tabs.length) {
@@ -26,7 +19,7 @@
 		}
 	}
 
-	const onClickTab = (tab: TabId) => {
+	const onClickTab = (tab: string) => {
 		document.getElementById(tab)?.scrollIntoView({
 			behavior: 'smooth'
 		});
@@ -37,7 +30,7 @@
 <div class="flex w-full">
 	{#each tabs.filter((tab) => tab.show) as { id, label, disabled } (id)}
 		<button
-			class={activeTab === id ? 'tab-active' : 'tab-inactive'}
+			class={activeTab === id ? `tab-active text-${align}` : `tab-inactive text-${align}`}
 			on:click={() => onClickTab(id)}
 			{disabled}
 		>
@@ -48,7 +41,7 @@
 
 <style lang="postcss">
 	button {
-		@apply w-full border-b-[2px] border-solid px-[16px] py-[11px] text-left text-[14px];
+		@apply w-full border-b-[2px] border-solid px-[16px] py-[11px] text-[14px];
 	}
 
 	button[disabled]:hover {

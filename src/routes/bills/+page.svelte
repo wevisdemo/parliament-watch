@@ -50,6 +50,7 @@
 <div class="bg-ui-01">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
 		<NavigationTab
+			align="center"
 			tabs={[
 				{ id: 'status', label: 'สถานะ', show: true },
 				{ id: 'proposer', label: 'ผู้เสนอ', show: true },
