@@ -10,7 +10,7 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import BillNavigationTab from '$components/bills/BillNavigationTab.svelte';
+	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
 
 	export let data;
 
@@ -49,11 +49,11 @@
 </section>
 <div class="bg-ui-01">
 	<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
-		<BillNavigationTab
+		<NavigationTab
 			tabs={[
-				{ id: 'status', label: 'สถานะ' },
-				{ id: 'proposer', label: 'ผู้เสนอ' },
-				{ id: 'party', label: 'พรรคการเมือง', disabled: true }
+				{ id: 'status', label: 'สถานะ', show: true },
+				{ id: 'proposer', label: 'ผู้เสนอ', show: true },
+				{ id: 'party', label: 'พรรคการเมือง', disabled: true, show: true }
 			]}
 		/>
 	</section>
