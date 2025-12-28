@@ -31,7 +31,6 @@
 			class={activeTab === id ? 'tab-active' : 'tab-inactive'}
 			on:click={() => onClickTab(id)}
 			{disabled}
-			style="text-align:center"
 		>
 			{label}
 		</button>
@@ -40,11 +39,11 @@
 
 <style lang="postcss">
 	button {
-		@apply w-full border-b-[2px] border-solid px-[16px] py-[11px] text-left text-[14px];
+		@apply w-full border-b-[2px] border-solid px-[16px] py-[11px] text-center text-[14px];
 	}
 
 	button[disabled]:hover {
-		cursor: not-allowed;
+		@apply cursor-not-allowed;
 	}
 
 	.tab-active {
