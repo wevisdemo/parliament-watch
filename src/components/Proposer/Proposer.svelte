@@ -49,7 +49,7 @@
 		<!-- Assembly -->
 		{@const { id, name, founding_date } = proposer}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
-			<PoliticianIcon class="stroke-white" size={16} />
+			<PoliticianIcon class="fill-white" size={16} />
 		</div>
 		<a href="/assemblies/{id}" class="text-sm text-black underline">
 			{name}
@@ -61,7 +61,7 @@
 		<!-- People -->
 		{@const { name, signatoryCount } = proposer}
 		<div class="flex h-6 w-6 items-center justify-center rounded-full bg-black">
-			<PeopleIcon class="stroke-white" size={16} />
+			<PeopleIcon class="fill-white" size={16} />
 		</div>
 		<p class="text-sm text-black">
 			{name}
