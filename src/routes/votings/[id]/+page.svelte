@@ -235,9 +235,7 @@
 					<p class="heading-01 mt-4 mb-1">ดูเส้นทางของร่างกฎหมายนี้</p>
 					<BillCard
 						class="w-full md:w-auto"
-						bill={relatedBill}
-						currentState={relatedBill.status}
-						daySinceProposed={getDiffDays(relatedBill.proposedOn)}
+						{...relatedBill}
 					/>
 				{/if} -->
 			</div>
