@@ -25,9 +25,7 @@
 <div
 	class={twMerge(
 		'group relative flex border-2 border-white bg-white text-black hover:border-ui-04 hover:bg-ui-03',
-		isLandscape
-			? 'max-w-[640px] flex-col gap-x-6 gap-y-4 md:flex-row md:gap-y-0'
-			: 'max-w-[288px] flex-col gap-y-4 pt-6',
+		isLandscape ? 'max-w-[640px] flex-col gap-x-6 md:flex-row' : 'max-w-[288px] flex-col',
 		isFullWidth ? 'w-full max-w-none' : '',
 		className
 	)}
