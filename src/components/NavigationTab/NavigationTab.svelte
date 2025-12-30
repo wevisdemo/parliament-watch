@@ -13,6 +13,12 @@
 
 	let activeTab: string;
 
+	const alignMapping = {
+		left: 'text-left',
+		center: 'text-center',
+		right: 'text-right'
+	};
+
 	$: {
 		if (tabs.length) {
 			activeTab = tabs[0].id;
@@ -30,7 +36,7 @@
 <div class="flex w-full">
 	{#each tabs.filter((tab) => tab.show) as { id, label, disabled } (id)}
 		<button
-			class={activeTab === id ? `tab-active text-${align}` : `tab-inactive text-${align}`}
+			class="{alignMapping[align]} {activeTab === id ? 'tab-active' : 'tab-inactive'}"
 			on:click={() => onClickTab(id)}
 			{disabled}
 		>
