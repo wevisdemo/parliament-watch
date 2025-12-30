@@ -96,7 +96,7 @@
 			{lastEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
 		</h2>
 		<Carousel>
-			{#each lastEnactedBills as { title, nickname, proposal_date, start_date, ...bill }, i (bill.id)}
+			{#each lastEnactedBills as { title, nickname, proposal_date, enact_date, ...bill }, i (bill.id)}
 				<BillCard
 					class="keen-slider__slide min-w-72"
 					orientation="portrait"
@@ -104,7 +104,7 @@
 					nickname={nickname ? nickname : title}
 					title={nickname ? title : null}
 					proposedOn={new Date(proposal_date ?? '')}
-					startedOn={new Date(start_date ?? '')}
+					enactedOn={new Date(enact_date ?? '')}
 					status="ENACTED"
 					proposer={lastEnactedBillProposers[i]}
 				/>

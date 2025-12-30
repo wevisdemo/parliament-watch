@@ -24,8 +24,9 @@
 	let selectedCategory: string = ALL_CATEGORY_KEY;
 	let isLoading = true;
 	let billSummaryByStatus: BillSummary[] = [];
-	let lastEnactedBills: (Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'> &
-		Pick<BillEnactEvent, 'start_date'>)[] = [];
+	let lastEnactedBills: (Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'> & {
+		enact_date: BillEnactEvent['start_date'];
+	})[] = [];
 	let lastEnactedBillProposers: ComponentProps<Proposer>['proposer'][] = [];
 
 	// TODO: We didn't handle MERGED status in Politigraph yet
@@ -84,7 +85,7 @@
 					}
 				}
 			})
-		).billEnactEvents.map(({ start_date, bills }) => ({ start_date, ...bills[0] }));
+		).billEnactEvents.map(({ start_date, bills }) => ({ enact_date: start_date, ...bills[0] }));
 
 		lastEnactedBillProposers = (
 			await Promise.all(
@@ -200,7 +201,7 @@
 
 			{#key selectedCategory + isLoading}
 				<Carousel hideNavigation={isLoading}>
-					{#each lastEnactedBills as { id, title, nickname, proposal_date, start_date }, i (id)}
+					{#each lastEnactedBills as { id, title, nickname, proposal_date, enact_date }, i (id)}
 						<BillCard
 							class="keen-slider__slide min-w-72"
 							orientation="portrait"
@@ -208,7 +209,7 @@
 							nickname={nickname ?? title}
 							title={nickname ? title : null}
 							status="ENACTED"
-							startedOn={start_date ? new Date(start_date) : null}
+							enactedOn={enact_date ? new Date(enact_date) : null}
 							proposedOn={proposal_date ? new Date(proposal_date) : null}
 							proposer={lastEnactedBillProposers[i]}
 						/>

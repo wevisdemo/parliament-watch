@@ -11,7 +11,7 @@
 	export let nickname: string | null;
 	export let title: string | null;
 	export let proposedOn: Date | null;
-	export let startedOn: Date | null = null;
+	export let enactedOn: Date | null = null;
 	export let status: BillStatus;
 	export let proposer: ComponentProps<Proposer>['proposer'] = undefined;
 	export let orientation: 'landscape' | 'portrait' = 'portrait';
@@ -72,12 +72,12 @@
 					</div>
 				{/if}
 
-				{#if startedOn}
+				{#if enactedOn}
 					<div class="flex w-full flex-row items-center justify-between">
 						<p class="text-sm font-semibold">วันที่ออกเป็นกม.</p>
 
 						<p class="text-sm">
-							{startedOn.toLocaleDateString('th-TH', {
+							{enactedOn.toLocaleDateString('th-TH', {
 								day: 'numeric',
 								month: 'short',
 								year: '2-digit'
@@ -86,10 +86,10 @@
 					</div>
 				{/if}
 
-				{#if proposedOn && startedOn}
+				{#if proposedOn && enactedOn}
 					<div class="">
 						<p class="text-right text-sm font-semibold text-support-04">
-							ใช้เวลา {dayjs(startedOn).diff(proposedOn, 'd')} วัน
+							ใช้เวลา {dayjs(enactedOn).diff(proposedOn, 'd')} วัน
 						</p>
 					</div>
 				{/if}

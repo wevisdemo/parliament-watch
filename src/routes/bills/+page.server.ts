@@ -86,7 +86,7 @@ export async function load() {
 				}
 			}
 		})
-	).billEnactEvents.map(({ start_date, bills }) => ({ start_date, ...bills[0] }));
+	).billEnactEvents.map(({ start_date, bills }) => ({ enact_date: start_date, ...bills[0] }));
 
 	const lastEnactedBillProposers = (
 		await Promise.all(
