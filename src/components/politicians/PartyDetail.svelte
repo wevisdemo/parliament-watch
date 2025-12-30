@@ -16,7 +16,7 @@
 	<!-- TODO: add links -->
 	<span class="text-black">{party}</span>
 	<span class="text-gray-60">
-		({formatDateRange(partyFrom, partyTo, { shortMonth: true, hideDate: true, shortYear: true })})
+		({formatDateRange(partyFrom, partyTo, { shortMonth: true, hideDay: true, shortYear: true })})
 	</span>
 	<span class="label-01 block">
 		ตำแหน่ง :
@@ -26,7 +26,7 @@
 				<span class="text-gray-60">
 					({formatDateRange(start_date, end_date, {
 						shortMonth: true,
-						hideDate: true,
+						hideDay: true,
 						shortYear: true
 					})})
 				</span>{idx !== memberships.length - 1 ? ',' : ''}

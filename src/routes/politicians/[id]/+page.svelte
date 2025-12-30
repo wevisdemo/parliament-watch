@@ -229,7 +229,7 @@
 										{post.organizations[0].name}
 									</a>
 									<span class="body-compact-02 text-gray-60">
-										({formatDateRange(start_date, end_date, { shortMonth: true, hideDate: true })})
+										({formatDateRange(start_date, end_date, { shortMonth: true, hideDay: true })})
 									</span>
 								</li>
 							{/each}

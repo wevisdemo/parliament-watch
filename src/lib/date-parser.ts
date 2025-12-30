@@ -63,45 +63,41 @@ export function parseThaiDate(dateString: string): Date {
 	return new Date(+year - 543, monthIndex, +day);
 }
 
-export const sameDate = (date1: Date, date2: Date) => {
-	return (
-		date1.getFullYear() === date2.getFullYear() &&
-		date1.getMonth() === date2.getMonth() &&
-		date1.getDate() === date2.getDate()
-	);
-};
+export const getStartOfDay = (date: Date) =>
+	new Date(date.getFullYear(), date.getMonth(), date.getDate());
+export const isSameDate = (date1: Date, date2: Date) =>
+	getStartOfDay(date1).getTime() == getStartOfDay(date2).getTime();
+export const isDatetimeInRange = (date: Date, minDate: Date, maxDate: Date) =>
+	minDate <= date && date <= maxDate;
+export const isDateInRange = (date: Date, minDate: Date, maxDate: Date) =>
+	isDatetimeInRange(getStartOfDay(date), getStartOfDay(minDate), getStartOfDay(maxDate));
 
-export const isDateInRange = (date: Date, minDate: Date, maxDate: Date): boolean => {
-	const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-	const minDateOnly = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-	const maxDateOnly = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
-	return dateOnly >= minDateOnly && dateOnly <= maxDateOnly;
-};
-
+type DateConstructor = ConstructorParameters<typeof Date>[0];
 type FormatOptions = {
-	hideDate?: boolean;
+	hideDay?: boolean;
 	hideMonth?: boolean;
 	shortMonth?: boolean;
 	shortYear?: boolean;
 };
 
-export function formatThaiDate(date: Date | string, options?: FormatOptions): string {
+export function formatThaiDate(date: DateConstructor, options?: FormatOptions): string {
+	const dt = new Date(date);
 	if (options?.hideMonth) {
 		// return only year
-		const thaiYear = new Date(date).getFullYear() + 543;
-		return options?.shortYear ? String(thaiYear).slice(-2) : String(thaiYear);
+		const thaiYear = String(dt.getFullYear() + 543);
+		return options?.shortYear ? thaiYear.slice(-2) : thaiYear;
 	}
 
-	return new Date(date).toLocaleDateString('th-TH', {
-		...(options?.hideDate ? {} : { day: 'numeric' }),
+	return dt.toLocaleDateString('th-TH', {
+		...(options?.hideDay ? {} : { day: 'numeric' }),
 		month: options?.shortMonth ? 'short' : 'long',
 		year: options?.shortYear ? '2-digit' : 'numeric'
 	});
 }
 
 export function formatDateRange(
-	dateStart: Date | string | null | undefined,
-	dateEnd: Date | string | null | undefined,
+	dateStart?: DateConstructor | null,
+	dateEnd?: DateConstructor | null,
 	options?: FormatOptions
 ): string | undefined {
 	const startStr = dateStart ? formatThaiDate(dateStart, options ?? {}) : undefined;
@@ -111,7 +107,6 @@ export function formatDateRange(
 	if (!startStr && !endStr) return undefined;
 	if (!startStr && endStr) return `${isYearMode ? 'ก่อนปี' : 'ก่อน'} ${endStr}`;
 	if (startStr && !endStr) return `${startStr} - ปัจจุบัน`;
-
 	if (startStr == endStr) return `${startStr}`;
 	return `${startStr} - ${endStr}`;
 }
@@ -121,8 +116,8 @@ export function formatThaiYear(date: Date | string, options?: FormatOptions): st
 }
 
 export function formatYearRange(
-	dateStart: Date | string | null | undefined,
-	dateEnd: Date | string | null | undefined,
+	dateStart?: DateConstructor | null,
+	dateEnd?: DateConstructor | null,
 	options?: FormatOptions
 ): string | undefined {
 	return formatDateRange(dateStart, dateEnd, { ...options, hideMonth: true });

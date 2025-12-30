@@ -1,4 +1,4 @@
-import { isDateInRange, sameDate, shortMonthNames } from '$lib/date-parser';
+import { isDateInRange, isSameDate, shortMonthNames } from '$lib/date-parser';
 
 export interface TimeLine {
 	date: Date;
@@ -29,7 +29,7 @@ export const getDateData = (
 				if (!isDateInRange(date, minDate, maxDate)) {
 					continue;
 				}
-				const dataInDay = data.find((d) => sameDate(d.date, date)) || {
+				const dataInDay = data.find((d) => isSameDate(d.date, date)) || {
 					date: date,
 					in: 0,
 					out: 0

@@ -1,11 +1,12 @@
 import {
 	parseThaiDate,
 	formatThaiDate,
-	sameDate,
-	isDateInRange,
-	formatDateRange
+	isSameDate,
+	isDatetimeInRange,
+	formatDateRange,
+	getStartOfDay
 } from '../date-parser';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('parse and format Thai date', () => {
 	describe('parse', () => {
@@ -56,7 +57,7 @@ describe('parse and format Thai date', () => {
 		it('should format hide day', () => {
 			const date = new Date(2012, 10, 25);
 			const expectedDateString = 'พฤศจิกายน 2555';
-			const formattedDate = formatThaiDate(date, { hideDate: true });
+			const formattedDate = formatThaiDate(date, { hideDay: true });
 			expect(formattedDate).toEqual(expectedDateString);
 		});
 
@@ -79,30 +80,69 @@ describe('parse and format Thai date', () => {
 	});
 });
 
-describe('sameDate checks if two datetime are in same day', () => {
+describe('getStartOfDay discards the time part', () => {
+	const cases = [
+		new Date(2024, 0, 1, 23, 59, 59, 999),
+		new Date(2024, 5, 10, 15, 30, 45, 123),
+		new Date(2024, 11, 31, 0, 0, 1, 1),
+		new Date(2023, 2, 28, 12, 0, 0, 0)
+	];
+
+	for (const input of cases) {
+		it(`discards time for ${input.toISOString()}`, () => {
+			const result = getStartOfDay(input);
+			expect(result.getFullYear()).toBe(input.getFullYear());
+			expect(result.getMonth()).toBe(input.getMonth());
+			expect(result.getDate()).toBe(input.getDate());
+			expect(result.getHours()).toBe(0);
+			expect(result.getMinutes()).toBe(0);
+			expect(result.getSeconds()).toBe(0);
+			expect(result.getMilliseconds()).toBe(0);
+		});
+	}
+
+	for (const input of cases) {
+		it('does not mutate the original date', () => {
+			const date = new Date(2024, 5, 10, 15, 30);
+			getStartOfDay(date);
+			expect(date == input);
+		});
+	}
+});
+
+describe('isSameDate checks if two datetime are in same day', () => {
 	it('returns true for same Y/M/D', () => {
-		expect(sameDate(new Date('2024-01-01T00:00:00'), new Date('2024-01-01T23:59:59'))).toBe(true);
+		expect(isSameDate(new Date('2025-05-05T00:00:00'), new Date('2025-05-05T00:00:00'))).toBe(true);
+		expect(isSameDate(new Date('2021-02-01T00:00:00'), new Date('2021-02-01T23:59:59'))).toBe(true);
+		expect(isSameDate(new Date('2024-01-01T22:11:23'), new Date('2024-01-01T23:59:59'))).toBe(true);
 	});
 
 	it('returns false for different dates', () => {
-		expect(sameDate(new Date('2024-01-01'), new Date('2024-01-02'))).toBe(false);
+		expect(isSameDate(new Date('2024-01-01T00:00:00'), new Date('2024-01-02T00:00:00'))).toBe(
+			false
+		);
+		expect(isSameDate(new Date('2025-01-01T00:00:00'), new Date('2025-02-01T00:00:00'))).toBe(
+			false
+		);
+		expect(isSameDate(new Date('2026-01-01'), new Date('2027-01-01'))).toBe(false);
 	});
 });
 
-describe('isDateInRange checks date in range', () => {
-	const min = new Date('2024-01-01');
-	const max = new Date('2024-01-31');
+describe('isDatetimeInRange checks date in range', () => {
+	const min = new Date('2024-01-01T00:00:00');
+	const max = new Date('2024-01-31T05:34:56');
 
-	it('includes boundary dates', () => {
-		expect(isDateInRange(new Date('2024-01-01'), min, max)).toBe(true);
-		expect(isDateInRange(new Date('2024-01-02'), min, max)).toBe(true);
-		expect(isDateInRange(new Date('2024-01-05'), min, max)).toBe(true);
-		expect(isDateInRange(new Date('2024-01-31'), min, max)).toBe(true);
+	it('includes boundary dates and time', () => {
+		expect(isDatetimeInRange(new Date('2024-01-01T00:00:00'), min, max)).toBe(true);
+		expect(isDatetimeInRange(new Date('2024-01-05'), min, max)).toBe(true);
+		expect(isDatetimeInRange(new Date('2024-01-20'), min, max)).toBe(true);
+		expect(isDatetimeInRange(new Date('2024-01-31T05:34:56'), min, max)).toBe(true);
 	});
 
-	it('excludes dates outside range', () => {
-		expect(isDateInRange(new Date('2023-12-31'), min, max)).toBe(false);
-		expect(isDateInRange(new Date('2024-02-01'), min, max)).toBe(false);
+	it('excludes datetime outside range', () => {
+		expect(isDatetimeInRange(new Date('2023-12-31T23:59:59'), min, max)).toBe(false);
+		expect(isDatetimeInRange(new Date('2024-01-31T05:34:57'), min, max)).toBe(false);
+		expect(isDatetimeInRange(new Date('2024-02-03'), min, max)).toBe(false);
 	});
 });
 
@@ -118,12 +158,12 @@ describe('format Thai date ranges', () => {
 	});
 
 	it('formats full range', () => {
-		expect(formatDateRange('2024-01-01', '2024-12-31', { hideDate: true })).toBe(
+		expect(formatDateRange('2024-01-01', '2024-12-31', { hideDay: true })).toBe(
 			'มกราคม 2567 - ธันวาคม 2567'
 		);
 	});
 
 	it('formats full range discard empty range', () => {
-		expect(formatDateRange('2024-12-01', '2024-12-31', { hideDate: true })).toBe('ธันวาคม 2567');
+		expect(formatDateRange('2024-12-01', '2024-12-31', { hideDay: true })).toBe('ธันวาคม 2567');
 	});
 });

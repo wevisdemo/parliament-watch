@@ -2,7 +2,7 @@
 	import { type TimeLine, getDateData } from './TimeLine';
 	import TimeItem from './TimeItem.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
-	import { shortMonthNames, sameDate } from '$lib/date-parser';
+	import { shortMonthNames, isSameDate } from '$lib/date-parser';
 
 	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;
@@ -26,11 +26,11 @@
 				</div>
 			</div>
 			{#each month.days as day (day)}
-				<div class="{sameDate(selectedDate, day.date) ? 'sticky bottom-0 top-0' : ''} flex">
+				<div class="{isSameDate(selectedDate, day.date) ? 'sticky bottom-0 top-0' : ''} flex">
 					<div class="flex w-[65px] flex-none flex-col">
 						<TimeItem {day} {selectedDate} {max} {handleSelectDate} align="vertical" />
 					</div>
-					{#if sameDate(selectedDate, day.date)}
+					{#if isSameDate(selectedDate, day.date)}
 						<div class="z-1000 relative flex grow justify-between">
 							<div class="w-full border-t-[0.4px]" />
 							<div class="absolute right-0 w-fit rounded-sm bg-interactive-02 px-4 py-2">

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate, sameDate } from '$lib/date-parser';
+	import { formatThaiDate, isSameDate } from '$lib/date-parser';
 	import SquareIcon from './SquareIcon.svelte';
 	import { type TimeLine } from './TimeLine';
 
@@ -8,7 +8,7 @@
 </script>
 
 <div class="label-01 flex flex-col items-start justify-center">
-	{#if sameDate(day.date, selectedDate)}
+	{#if isSameDate(day.date, selectedDate)}
 		<div class="text-text-03">
 			{formatThaiDate(day.date, { shortMonth: true, shortYear: true })}
 		</div>
