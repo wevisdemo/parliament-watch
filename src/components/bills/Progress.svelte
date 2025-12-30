@@ -68,10 +68,8 @@
 				<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
 				<div class="w-full rounded-sm border border-gray-20">
 					<BillCard
-						orientation="portrait"
 						{...mergedIntoBill}
 						isFullWidth={true}
-						currentState={mergedIntoBillLatestEvent ? event.title : ''}
 					/>
 				</div>
 				<div class="text-text-02">
