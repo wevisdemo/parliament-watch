@@ -48,17 +48,21 @@
 		const queryCategory = category == ALL_CATEGORY_KEY ? undefined : category;
 		const queryTerm = mpTermChoices.find((mp) => mp.id === mpTermId);
 
+		const billConditions: BillWhere = {
+			...(queryCategory && {
+				categories_INCLUDES: category
+			}),
+			...(queryTerm?.founding_date && { proposal_date_GTE: queryTerm.founding_date }),
+			...(queryTerm?.dissolution_date && {
+				proposal_date_LTE: queryTerm.dissolution_date
+			})
+		};
+
 		billSummaryByStatus = await Promise.all(
 			displayedStatuses.map((status) => {
 				const where: BillWhere = {
 					status_EQ: status,
-					...(queryCategory && {
-						categories_INCLUDES: category
-					}),
-					...(queryTerm?.founding_date && { proposal_date_GTE: queryTerm.founding_date }),
-					...(queryTerm?.dissolution_date && {
-						proposal_date_LTE: queryTerm.dissolution_date
-					})
+					...billConditions
 				};
 
 				return graphql.query({
@@ -81,8 +85,8 @@
 				billEnactEvents: {
 					__args: {
 						where: {
-							NOT: { start_date_EQ: null }
-							// TODO: filter bill category
+							NOT: { start_date_EQ: null },
+							bills_ALL: billConditions
 						},
 						sort: [{ start_date: 'DESC' }],
 						limit: MAX_ENACTED_BILL
