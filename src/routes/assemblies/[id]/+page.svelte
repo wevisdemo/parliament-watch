@@ -12,7 +12,7 @@
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
-	import NavigationTab from '$components/Assemblies/NavigationTab.svelte';
+	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
 
 	export let data;
 

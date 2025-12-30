@@ -10,6 +10,7 @@
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcom from '../../components/icons/LawIcon.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
 
 	export let data;
 
@@ -47,7 +48,17 @@
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
 </section>
 <div class="bg-ui-01">
-	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+	<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
+		<NavigationTab
+			align="center"
+			tabs={[
+				{ id: 'status', label: 'สถานะ', show: true },
+				{ id: 'proposer', label: 'ผู้เสนอ', show: true },
+				{ id: 'party', label: 'พรรคการเมือง', disabled: true, show: true }
+			]}
+		/>
+	</section>
+	<section id="status" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<header class="flex flex-col flex-wrap items-start justify-between md:flex-row">
 			<h2 class="fluid-heading-03">สำรวจตามสถานะ</h2>
 			<ModalLawProcess class="text-right" />
@@ -71,17 +82,17 @@
 	</section>
 	<!-- TODO: until we have a protocol to maintain bill category data -->
 	<!-- <section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
-		<header>
-			<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
-			<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
-		</header>
-		<Carousel>
-			{#each byCategory as bill}
-				<LawStatusCard totalCount={totalCount} {bill} />
-			{/each}
-		</Carousel>
-	</section> -->
-	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+				<header>
+					<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
+					<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
+				</header>
+				<Carousel>
+					{#each byCategory as bill}
+						<LawStatusCard totalCount={totalCount} {bill} />
+					{/each}
+				</Carousel>
+			</section> -->
+	<section id="proposer" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
 		<Carousel>
 			{#each byProposerType as bill (bill.proposerType)}
