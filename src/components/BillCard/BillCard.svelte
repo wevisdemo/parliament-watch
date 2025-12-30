@@ -30,7 +30,7 @@
 		className
 	)}
 >
-	<div class={twMerge('space-y-1', isLandscape ? 'w-full md:w-2/3' : 'w-full', 'p-4 pt-6')}>
+	<div class={twMerge('space-y-1', isLandscape ? 'w-full flex-1 md:w-1/2' : 'w-full', 'p-4 pt-6')}>
 		<a href="/bills/{id}" class="block after:absolute after:inset-0 after:content-['']">
 			<h3 class="fluid-heading-03 text-text-01">{nickname}</h3>
 		</a>
@@ -41,10 +41,10 @@
 
 	<div
 		class="flex w-full flex-1 justify-between {isLandscape
-			? 'flex-col gap-x-6 gap-y-4 md:w-1/3 md:flex-row md:gap-y-0'
+			? 'flex-col gap-y-4 md:w-1/2 md:max-w-[288px] md:flex-row md:gap-y-0'
 			: 'flex-col gap-y-4'} bg-ui-01 group-hover:bg-ui-03"
 	>
-		<div class="flex flex-col gap-4 p-4 pb-0">
+		<div class="flex w-full flex-col gap-4 p-4 {isLandscape ? '' : 'pb-0'}">
 			<div class="flex flex-col gap-1">
 				<p class="font-semibold">เสนอโดย</p>
 				<Proposer {proposer} {orientation} />
@@ -96,7 +96,7 @@
 			</div>
 		</div>
 
-		<div class="p-4">
+		<div class="p-4 {isLandscape ? 'absolute right-0 top-0' : ''}">
 			<ArrowRight class="ml-auto text-gray-100" />
 		</div>
 	</div>
