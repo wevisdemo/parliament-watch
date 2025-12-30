@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isSameDate } from '$lib/date-parser';
+	import { isSameDate } from '$lib/date';
 	import type { TimeLine } from './TimeLine.ts';
 
 	export let day: TimeLine;

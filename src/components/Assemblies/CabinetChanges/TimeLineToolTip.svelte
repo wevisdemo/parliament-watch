@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate, isSameDate } from '$lib/date-parser';
+	import { formatThaiDate, isSameDate } from '$lib/date';
 	import SquareIcon from './SquareIcon.svelte';
 	import { type TimeLine } from './TimeLine';
 

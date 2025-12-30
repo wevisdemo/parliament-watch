@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate } from '$lib/date-parser';
+	import { formatThaiDate } from '$lib/date';
 	import type { PromiseClarificationLog } from '$models/promise';
 	import PromiseClarificationAnswer from './PromiseClarificationAnswer.svelte';
 

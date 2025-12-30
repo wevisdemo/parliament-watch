@@ -1,6 +1,6 @@
 <script lang="ts">
 	import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	import { formatThaiDate } from '$lib/date-parser';
+	import { formatThaiDate } from '$lib/date';
 	import { buildVotesSummary } from '$lib/vote-summary';
 	import type { GlobalEvent } from '$models/global-event';
 	import type { CustomVoteOption, DefaultVoteOption } from '$models/voting';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatDateRange } from '$lib/date-parser';
+	import { formatDateRange } from '$lib/date';
 	import type { Membership, Post } from '$lib/politigraph/genql';
 	export let party: string;
 

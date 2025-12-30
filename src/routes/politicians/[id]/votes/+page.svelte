@@ -11,7 +11,7 @@
 		SelectedCheckboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
-	import { formatYearRange } from '$lib/date-parser.js';
+	import { formatYearRange } from '$lib/date.js';
 
 	export let data;
 	const { politician, filterOptions, votes } = data;

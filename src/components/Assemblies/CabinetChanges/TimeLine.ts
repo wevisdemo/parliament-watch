@@ -1,4 +1,4 @@
-import { isDateInRange, isSameDate, shortMonthNames } from '$lib/date-parser';
+import { isDateInRange, isSameDate, shortMonthNames } from '$lib/date';
 
 export interface TimeLine {
 	date: Date;

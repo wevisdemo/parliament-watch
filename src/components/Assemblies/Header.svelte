@@ -4,7 +4,7 @@
 	import Share from '$components/Share/Share.svelte';
 	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import { formatDateRange } from '$lib/date-parser';
+	import { formatDateRange } from '$lib/date';
 
 	export let availableAssemblies: AvailableAssembly[] = [];
 

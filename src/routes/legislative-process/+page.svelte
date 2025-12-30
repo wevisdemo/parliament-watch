@@ -13,7 +13,7 @@
 	import { onMount } from 'svelte';
 	import scrollama from 'scrollama';
 	import { enumBillStatus } from '$lib/politigraph/genql/schema.js';
-	import { formatThaiDate } from '$lib/date-parser.js';
+	import { formatThaiDate } from '$lib/date.js';
 
 	export let data;
 

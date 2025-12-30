@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate } from '$lib/date-parser';
+	import { formatThaiDate } from '$lib/date';
 	import type { Announcement } from '$models/announcement';
 	import CheckmarkFilledIcon from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';

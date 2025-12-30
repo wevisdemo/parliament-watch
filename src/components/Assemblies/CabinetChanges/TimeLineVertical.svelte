@@ -2,7 +2,7 @@
 	import { type TimeLine, getDateData } from './TimeLine';
 	import TimeItem from './TimeItem.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
-	import { shortMonthNames, isSameDate } from '$lib/date-parser';
+	import { shortMonthNames, isSameDate } from '$lib/date';
 
 	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;

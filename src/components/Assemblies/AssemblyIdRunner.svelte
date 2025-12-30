@@ -7,7 +7,7 @@
 
 <script lang="ts">
 	import AngleRightIcon from '$components/icons/AngleRightIcon.svelte';
-	import { formatThaiYear } from '$lib/date-parser';
+	import { formatThaiYear } from '$lib/date';
 
 	export let term: number;
 	export let startedYear: Date;

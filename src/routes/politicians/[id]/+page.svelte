@@ -16,7 +16,7 @@
 	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { groups } from 'd3';
-	import { formatDateRange } from '$lib/date-parser.js';
+	import { formatDateRange } from '$lib/date.js';
 
 	export let data;
 

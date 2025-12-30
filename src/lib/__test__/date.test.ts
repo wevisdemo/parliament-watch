@@ -5,7 +5,7 @@ import {
 	isDatetimeInRange,
 	formatDateRange,
 	getStartOfDay
-} from '../date-parser';
+} from '../date';
 import { describe, expect, it } from 'vitest';
 
 describe('parse and format Thai date', () => {

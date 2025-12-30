@@ -4,7 +4,7 @@
 	import TimeItem from './TimeItem.svelte';
 	import Tooltip from '../Tooltip.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
-	import { formatThaiDate, isSameDate, shortMonthNames } from '$lib/date-parser';
+	import { formatThaiDate, isSameDate, shortMonthNames } from '$lib/date';
 	import { afterUpdate, onMount, tick } from 'svelte';
 
 	export let timeLineData: TimeLine[];

@@ -5,7 +5,7 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VoteStackedBar from '$components/VoteStackedBar/VoteStackedBar.svelte';
 	import type { VotesSummary } from '$lib/vote-summary';
-	import { formatThaiDate } from '$lib/date-parser';
+	import { formatThaiDate } from '$lib/date';
 
 	interface VoteCardTheme {
 		bg: string;

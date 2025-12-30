@@ -20,7 +20,7 @@
 	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { formatThaiDate } from '$lib/date-parser.js';
+	import { formatThaiDate } from '$lib/date.js';
 
 	export let data;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import { formatDateRange, formatThaiDate } from '$lib/date-parser';
+	import { formatDateRange, formatThaiDate } from '$lib/date';
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 
 	interface CabinetSummary {

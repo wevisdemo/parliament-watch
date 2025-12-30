@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import { formatThaiYear } from '$lib/date-parser';
+	import { formatThaiYear } from '$lib/date';
 	import { BillProposerType } from '$models/bill';
 
 	interface PoliticianProposer {

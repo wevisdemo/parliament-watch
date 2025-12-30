@@ -1,5 +1,5 @@
 import type { CheckboxFilterChoice } from '$components/DataPage/DataPage.svelte';
-import { formatYearRange } from '$lib/date-parser';
+import { formatYearRange } from '$lib/date';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillStatus } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
