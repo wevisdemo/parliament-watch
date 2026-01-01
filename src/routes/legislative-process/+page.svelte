@@ -1,5 +1,4 @@
 <script lang="ts">
-	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
 	import Collapsible from '$components/LegislativeProcess/Collapsible.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';

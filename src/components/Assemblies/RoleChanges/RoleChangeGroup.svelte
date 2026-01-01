@@ -2,15 +2,10 @@
 	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 	import RoleChangeItem from './RoleChangeItem.svelte';
 	import type { RoleChange } from '$lib/politigraph/assembly/change';
+	import { formatThaiDate } from '$lib/date';
 
 	export let changeData: RoleChange[];
 	export let selectedDate: Date | undefined;
-	const formatDate = (date: Date) =>
-		date.toLocaleDateString('th-TH', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric'
-		});
 
 	$: isFocus =
 		selectedDate &&
@@ -27,7 +22,7 @@
 	>
 		<div class="flex items-center gap-2 {!isFocus ? 'text-text-01' : ''}">
 			<Calendar />
-			<p class="label-01">{formatDate(changeData[0].date)}</p>
+			<p class="label-01">{formatThaiDate(changeData[0].date, { shortMonth: true })}</p>
 		</div>
 		<p class="heading-compact-01 {!isFocus ? 'text-text-02' : ''}">
 			ปรับ {changeData.length} ตำแหน่ง

@@ -18,6 +18,7 @@
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import Progress from '$components/bills/Progress.svelte';
+	import { formatThaiDate } from '$lib/date.js';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
@@ -30,16 +31,10 @@
 
 	const MAX_DISPLAY_COPROPOSER = 8;
 
-	const dateTimeFormat: Intl.DateTimeFormatOptions = {
-		year: '2-digit',
-		month: 'short',
-		day: 'numeric'
-	};
-
 	$: displayName = bill.nickname || bill.title;
 
 	$: proposedOn =
-		bill.proposal_date && new Date(bill.proposal_date).toLocaleDateString('th-TH', dateTimeFormat);
+		bill.proposal_date && formatThaiDate(bill.proposal_date, { shortMonth: true, shortYear: true });
 
 	$: dayElapsed =
 		bill.proposal_date &&

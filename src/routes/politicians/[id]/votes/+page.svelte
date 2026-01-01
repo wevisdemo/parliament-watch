@@ -11,7 +11,7 @@
 		SelectedCheckboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
-	import { formatYearRange } from '$lib/date.js';
+	import { formatThaiDate, formatYearRange } from '$lib/date.js';
 
 	export let data;
 	const { politician, filterOptions, votes } = data;
@@ -118,11 +118,7 @@
 	/>
 	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
 		{#if cellKey === 'date'}
-			{new Date(cellValue).toLocaleDateString('th-TH', {
-				day: 'numeric',
-				month: 'short',
-				year: '2-digit'
-			})}
+			{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 		{:else if cellKey === 'name'}
 			<a class="text-text-01 hover:text-interactive-01 hover:underline" href="/votings/{row.id}"
 				>{cellValue}</a
