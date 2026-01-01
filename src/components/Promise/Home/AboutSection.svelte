@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import { formatDateRange, formatThaiDate } from '$lib/date';
+	import { formatDateRange, formatThaiDate, formatThaiYear } from '$lib/date';
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 
 	interface CabinetSummary {
@@ -79,9 +79,9 @@
 				{#if cabinet.founding_date}
 					<div>
 						<span class="heading-01">เริ่มวาระ</span>
-						<span class="body-01 text-text-04"
-							>{formatThaiDate(new Date(cabinet.founding_date), { shortMonth: true })}</span
-						>
+						<span class="body-01 text-text-04">
+							{formatThaiDate(cabinet.founding_date, { shortMonth: true })}
+						</span>
 					</div>
 				{/if}
 				<p class="body-01 text-text-04">
@@ -105,7 +105,7 @@
 		<div class="flex flex-col gap-2 border-t border-ui-04 pt-3">
 			<p class="label-01 text-text-03">
 				รัฐบาลชุดที่ผ่านมาในสมัยการเลือกตั้ง {previousCabinet.founding_date
-					? new Date(previousCabinet.founding_date).getFullYear() + 543
+					? formatThaiYear(previousCabinet.founding_date)
 					: ''}
 			</p>
 			<ul class="list-disc">

@@ -21,7 +21,7 @@
 				<div class="absolute -ml-7 w-6 text-text-02">
 					<p class="label-01">{shortMonthNames[month.id]}</p>
 					<p class="label-01">
-						{month.id === 0 ? (year.year + 543).toString().slice(-2) : ''}
+						{month.id === 0 ? year.year.toString().slice(-2) : ''}
 					</p>
 				</div>
 			</div>

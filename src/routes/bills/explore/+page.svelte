@@ -7,6 +7,7 @@
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
+	import { formatThaiDate } from '$lib/date.js';
 	import { billStatusProperty } from '$lib/politigraph/bill/status.js';
 	import { onMount } from 'svelte';
 	let cmpDataPage: DataPage;
@@ -183,11 +184,7 @@
 	<svelte:fragment slot="table" let:cellKey let:cellValue>
 		{#if cellKey === 'proposedOn'}
 			<div class="body-compact-01 whitespace-nowrap text-gray-60">
-				{new Date(cellValue).toLocaleString('th-TH', {
-					day: 'numeric',
-					month: 'short',
-					year: '2-digit'
-				})}
+				{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 			</div>
 		{:else if cellKey === 'titleColumn'}
 			<a class="text-text-01 underline hover:text-interactive-01" href="/bills/{cellValue.id}"

@@ -63,7 +63,7 @@
 				<div class="relative z-[0]">
 					<p class="label-01 absolute bottom-0 -mb-7 w-12 text-text-02">
 						{shortMonthNames[month.id]}
-						{month.id === 0 ? (year.year + 543).toString().slice(-2) : ''}
+						{month.id === 0 ? year.year.toString().slice(-2) : ''}
 					</p>
 				</div>
 				{#each month.days as day (day)}

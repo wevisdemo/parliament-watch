@@ -2,6 +2,7 @@
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import { DataTable } from 'carbon-components-svelte';
 	import type { BillSummary } from '../../routes/assemblies/[id]/+page.server';
+	import { formatThaiDate } from '$lib/date';
 	export let latestBills: BillSummary[];
 
 	$: sortByProposedOn = latestBills.sort(
@@ -19,13 +20,9 @@
 >
 	<svelte:fragment slot="cell" let:cell let:row>
 		{#if cell.key === 'proposedOn'}
-			<span class="text-gray-60"
-				>{new Date(cell.value).toLocaleString('th-TH', {
-					day: 'numeric',
-					month: 'short',
-					year: '2-digit'
-				})}</span
-			>
+			<span class="text-gray-60">
+				{formatThaiDate(cell.value, { shortMonth: true, shortYear: true })}
+			</span>
 		{:else if cell.key === 'nickname'}
 			<a
 				href="/bills/{row.id}"
