@@ -6,6 +6,7 @@
 	// import BillCard from '$components/BillCard/BillCard.svelte';
 	// import type { ComponentProps } from 'svelte';
 	import type { Link, BillEvent } from '$lib/politigraph/genql';
+	import { formatThaiDate } from '$lib/date';
 
 	export let type: BillEvent['__typename'];
 	export let title: string;
@@ -16,12 +17,6 @@
 	// export let voteEvent: ComponentProps<VoteCard>;
 	// export let mergedIntoBill: Bill | undefined;
 	// export let mergedIntoBillLatestEvent: Event | undefined;
-
-	const dateTimeFormat: Intl.DateTimeFormatOptions = {
-		year: '2-digit',
-		month: 'short',
-		day: 'numeric'
-	};
 </script>
 
 <li class="-mt-1 mb-10 ms-4">
@@ -31,7 +26,7 @@
 		<div class="ml-1 flex w-full max-w-md flex-col md:pr-6">
 			{#if date}
 				<p>
-					{new Date(date).toLocaleDateString('th-TH', dateTimeFormat)}
+					{formatThaiDate(date, { shortMonth: true, shortYear: true })}
 				</p>
 			{/if}
 			<div>

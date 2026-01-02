@@ -6,6 +6,7 @@
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import type { ComponentProps } from 'svelte';
 	import dayjs from 'dayjs';
+	import { formatThaiDate } from '$lib/date';
 
 	export let id: string;
 	export let nickname: string | null;
@@ -63,11 +64,7 @@
 						<p class="text-sm font-semibold">วันที่เสนอ</p>
 
 						<p class="text-sm">
-							{proposedOn.toLocaleDateString('th-TH', {
-								day: 'numeric',
-								month: 'short',
-								year: '2-digit'
-							})}
+							{formatThaiDate(proposedOn, { shortMonth: true, shortYear: true })}
 						</p>
 					</div>
 				{/if}
@@ -77,11 +74,7 @@
 						<p class="text-sm font-semibold">วันที่ออกเป็นกม.</p>
 
 						<p class="text-sm">
-							{enactedOn.toLocaleDateString('th-TH', {
-								day: 'numeric',
-								month: 'short',
-								year: '2-digit'
-							})}
+							{formatThaiDate(enactedOn, { shortMonth: true, shortYear: true })}
 						</p>
 					</div>
 				{/if}

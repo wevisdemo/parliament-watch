@@ -1,7 +1,4 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
-	import buddhistEra from 'dayjs/plugin/buddhistEra';
-	import 'dayjs/locale/th';
 	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
 	import Collapsible from '$components/LegislativeProcess/Collapsible.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
@@ -15,11 +12,9 @@
 	import { onMount } from 'svelte';
 	import scrollama from 'scrollama';
 	import { enumBillStatus } from '$lib/politigraph/genql/schema.js';
+	import { formatThaiDate } from '$lib/date.js';
 
 	export let data;
-
-	dayjs.extend(buddhistEra);
-	dayjs.locale('th');
 
 	const sections = [
 		{
@@ -165,7 +160,7 @@
 			<h1 class="fluid-heading-05">ร่างกฎหมายกลายเป็นกฎหมายได้อย่างไร</h1>
 			<p>
 				<span class="font-bold text-text-primary">อัปเดตล่าสุด :</span>
-				<span class="text-helper-text-01">{dayjs(new Date()).format('DD MMM BBBB')}</span>
+				<span class="text-helper-text-01">{formatThaiDate(new Date(), { shortMonth: true })}</span>
 			</p>
 		</div>
 	</header>
@@ -249,8 +244,8 @@
 						<li>
 							<strong>การพิจารณาร่างกฎหมายโดยรัฐสภา</strong> ร่างกฎหมายจะถูกพิจารณาโดยสมาชิกสภาผู้เแทนราษฎร
 							(สส.) และสมาชิกวุฒิสภา (สว.) ตามลำดับ การพิจารณาของแต่ละสภาจะมี 3 วาระเท่ากัน แต่มีเงื่อนไขและรายละเอียดในการพิจารณาที่แตกต่างกัน
-							ทั้งนี้ ในการพิจารณาร่างกฎหมายบางประเภท จะใช้การประชุมร่วมกันของทั้งสองสภาในการพิจารณา
-							เช่น การพิจารณา ร่าง พ.ร.ป.
+							ทั้งนี้ ในการพิจารณาร่างกฎหมายบางประเภท จะใช้การประชุมร่วมกันของทั้งสองสภาในการพิจารณา เช่น
+							การพิจารณา ร่าง พ.ร.ป.
 						</li>
 						<li>
 							<strong>ร่างกฎหมายกลายเป็นกฎหมายโดยสมบูรณ์์</strong> เมื่อร่างกฎหมายไม่ขัดต่อรัฐธรรมนูญ

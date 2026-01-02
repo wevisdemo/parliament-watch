@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { type TimeLine, getDateData, compareDate } from './TimeLine';
+	import { type TimeLine, getDateData } from './TimeLine';
 	import TimeItem from './TimeItem.svelte';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
-	import { shortMonthNames } from '$lib/date-parser';
+	import { shortMonthNames, isSameDate } from '$lib/date';
 
 	export let timeLineData: TimeLine[];
 	export let selectedDate: Date;
@@ -15,22 +15,22 @@
 </script>
 
 <div class="no-scrollbar relative flex h-full flex-col overflow-y-auto px-[44px]">
-	{#each dateData as year}
-		{#each year.months as month}
+	{#each dateData as year (year)}
+		{#each year.months as month (month)}
 			<div>
 				<div class="absolute -ml-7 w-6 text-text-02">
 					<p class="label-01">{shortMonthNames[month.id]}</p>
 					<p class="label-01">
-						{month.id === 0 ? (year.year + 543).toString().slice(-2) : ''}
+						{month.id === 0 ? year.year.toString().slice(-2) : ''}
 					</p>
 				</div>
 			</div>
-			{#each month.days as day}
-				<div class="{compareDate(selectedDate, day.date) ? 'sticky bottom-0 top-0' : ''} flex">
+			{#each month.days as day (day)}
+				<div class="{isSameDate(selectedDate, day.date) ? 'sticky bottom-0 top-0' : ''} flex">
 					<div class="flex w-[65px] flex-none flex-col">
 						<TimeItem {day} {selectedDate} {max} {handleSelectDate} align="vertical" />
 					</div>
-					{#if compareDate(selectedDate, day.date)}
+					{#if isSameDate(selectedDate, day.date)}
 						<div class="z-1000 relative flex grow justify-between">
 							<div class="w-full border-t-[0.4px]" />
 							<div class="absolute right-0 w-fit rounded-sm bg-interactive-02 px-4 py-2">

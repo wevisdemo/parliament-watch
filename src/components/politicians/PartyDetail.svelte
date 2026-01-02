@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { formatDateRange } from '$lib/date';
 	import type { Membership, Post } from '$lib/politigraph/genql';
 	export let party: string;
 
@@ -14,35 +15,21 @@
 <li>
 	<!-- TODO: add links -->
 	<span class="text-black">{party}</span>
-	<span class="text-gray-60"
-		>({partyFrom
-			? new Date(partyFrom).toLocaleDateString('th-TH', {
-					month: 'short',
-					year: '2-digit'
-				})
-			: 'ปัจจุบัน'} - {partyTo
-			? new Date(partyTo).toLocaleDateString('th-TH', {
-					month: 'short',
-					year: '2-digit'
-				})
-			: 'ปัจจุบัน'})</span
-	>
+	<span class="text-gray-60">
+		({formatDateRange(partyFrom, partyTo, { shortMonth: true, hideDay: true, shortYear: true })})
+	</span>
 	<span class="label-01 block">
 		ตำแหน่ง :
 		{#each memberships as { posts: [post], start_date, end_date }, idx (idx)}
 			<span>
 				{post.role}
-				<span class="text-gray-60"
-					>({new Date(start_date).toLocaleDateString('th-TH', {
-						month: 'short',
-						year: '2-digit'
-					})} - {end_date
-						? new Date(end_date).toLocaleDateString('th-TH', {
-								month: 'short',
-								year: '2-digit'
-							})
-						: 'ปัจจุบัน'})</span
-				>{idx !== memberships.length - 1 ? ',' : ''}
+				<span class="text-gray-60">
+					({formatDateRange(start_date, end_date, {
+						shortMonth: true,
+						hideDay: true,
+						shortYear: true
+					})})
+				</span>{idx !== memberships.length - 1 ? ',' : ''}
 			</span>
 		{/each}
 	</span>

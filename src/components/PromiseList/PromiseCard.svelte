@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate } from '$lib/date-parser';
+	import { formatThaiDate } from '$lib/date';
 	import Quotes from 'carbon-icons-svelte/lib/Quotes.svelte';
 	import { PromiseStatus } from '$models/promise';
 

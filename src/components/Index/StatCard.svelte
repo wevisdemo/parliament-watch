@@ -18,6 +18,7 @@
 
 <script lang="ts">
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
+	import { formatThaiDate } from '$lib/date';
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import { twMerge } from 'tailwind-merge';
 
@@ -72,7 +73,7 @@
 				previousMonthDate.setDate(0);
 				return (
 					'ครั้ง ในเดือน ' +
-					previousMonthDate.toLocaleDateString('th-TH', { month: 'short', year: '2-digit' })
+					formatThaiDate(previousMonthDate, { hideDay: true, shortMonth: true, shortYear: true })
 				);
 			}
 			default:

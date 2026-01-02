@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate } from '$lib/date-parser';
+	import { formatThaiDate } from '$lib/date';
 	import type { PromiseClarificationLog } from '$models/promise';
 	import PromiseClarificationAnswer from './PromiseClarificationAnswer.svelte';
 
@@ -26,7 +26,7 @@
 			{#each clarificationLogs as clarificationLog}
 				<li>
 					<div>
-						<span>{formatThaiDate(clarificationLog.date, true)}</span>
+						<span>{formatThaiDate(clarificationLog.date, { shortMonth: true })}</span>
 						<span class="text-text-01">{clarificationLog.title}</span>
 						{#if clarificationLog.answer}
 							<PromiseClarificationAnswer

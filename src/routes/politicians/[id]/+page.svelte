@@ -16,6 +16,7 @@
 	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import { groups } from 'd3';
+	import { formatDateRange, formatThaiDate } from '$lib/date.js';
 
 	export let data;
 
@@ -146,9 +147,9 @@
 						{/if}
 						{#if politician.birth_date}
 							{' '}<span class="heading-02">วันเกิด</span>
-							{' '}{new Date(politician.birth_date).toLocaleDateString('th-TH', {
-								dateStyle: 'long'
-							})} ({dayjs().diff(politician.birth_date, 'years')} ปี)
+							{' '}
+							{formatThaiDate(politician.birth_date)}
+							({dayjs().diff(politician.birth_date, 'years')} ปี)
 						{/if}
 					</p>
 
@@ -228,16 +229,7 @@
 										{post.organizations[0].name}
 									</a>
 									<span class="body-compact-02 text-gray-60">
-										({new Date(start_date).toLocaleDateString('th-TH', {
-											month: 'short',
-											year: '2-digit'
-										})}
-										- {end_date
-											? new Date(end_date).toLocaleDateString('th-TH', {
-													month: 'short',
-													year: '2-digit'
-												})
-											: 'ปัจจุบัน'})
+										({formatDateRange(start_date, end_date, { shortMonth: true, hideDay: true })})
 									</span>
 								</li>
 							{/each}

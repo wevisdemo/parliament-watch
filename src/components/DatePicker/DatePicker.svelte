@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatThaiDate, longMonthNames, parseThaiDate, shortMonthNames } from '$lib/date-parser';
+	import { formatThaiDate, longMonthNames, parseThaiDate, shortMonthNames } from '$lib/date';
 	import { DatePicker, DatePickerInput } from 'carbon-components-svelte';
 
 	export let handleSelectDate: (date: Date) => void;

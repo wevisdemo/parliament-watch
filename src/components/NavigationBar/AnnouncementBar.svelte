@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { formatThaiDate } from '$lib/date';
 	import type { Announcement } from '$models/announcement';
 	import CheckmarkFilledIcon from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';
@@ -44,30 +45,22 @@
 	function dateStringBuilder(dateStart?: Date, dateEnd?: Date) {
 		if (dateStart && dateEnd) {
 			if (dateStart?.getTime() === dateEnd?.getTime()) {
-				return dateConvertor(dateStart);
+				return formatThaiDate(dateStart);
 			}
 			if (dateStart.getFullYear() == dateEnd.getFullYear()) {
-				const thStartDate = dateConvertor(dateStart);
+				const thStartDate = formatThaiDate(dateStart);
 				const thStartDateArray = thStartDate.split(' ');
-				return `${thStartDateArray[0]} ${thStartDateArray[1]} - ${dateConvertor(dateEnd)}`;
+				return `${thStartDateArray[0]} ${thStartDateArray[1]} - ${formatThaiDate(dateEnd)}`;
 			}
 
-			return `${dateConvertor(dateStart)} - ${dateConvertor(dateEnd)}`;
+			return `${formatThaiDate(dateStart)} - ${formatThaiDate(dateEnd)}`;
 		} else if (dateStart) {
-			return `${dateConvertor(dateStart)}`;
+			return `${formatThaiDate(dateStart)}`;
 		} else if (dateEnd) {
-			return `${dateConvertor(dateEnd)}`;
+			return `${formatThaiDate(dateEnd)}`;
 		} else {
 			return '';
 		}
-	}
-
-	function dateConvertor(date: Date) {
-		const convertedDate = Intl.DateTimeFormat('th', {
-			dateStyle: 'medium',
-			calendar: 'buddhist'
-		}).format(date);
-		return convertedDate;
 	}
 
 	function scrollEventHandler(ev: Event) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { compareDate } from './TimeLine';
+	import { isSameDate } from '$lib/date';
 	import type { TimeLine } from './TimeLine.ts';
 
 	export let day: TimeLine;
@@ -15,7 +15,7 @@
 	on:click={() => handleSelectDate(day.date)}
 	class="flex items-center border-[0.4px] border-ui-01 bg-ui-02 hover:border-ui-03 hover:bg-ui-03
 				{isHorizontal ? 'h-full w-[8px] flex-col' : 'h-[8px]'}
-        {compareDate(day.date, selectedDate) ? 'border-ui-05 bg-ui-03' : ''}"
+        {isSameDate(day.date, selectedDate) ? 'border-ui-05 bg-ui-03' : ''}"
 >
 	<div class="flex {isHorizontal ? 'h-1/2 w-full items-end' : 'h-full w-1/2 justify-end'}">
 		<div

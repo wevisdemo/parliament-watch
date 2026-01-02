@@ -1,4 +1,4 @@
-import { shortMonthNames } from '$lib/date-parser';
+import { isDateInRange, isSameDate, shortMonthNames } from '$lib/date';
 
 export interface TimeLine {
 	date: Date;
@@ -6,29 +6,6 @@ export interface TimeLine {
 	out: number;
 	event?: string;
 }
-
-export const compareDate = (date1: Date, date2: Date) => {
-	return (
-		date1.getFullYear() === date2.getFullYear() &&
-		date1.getMonth() === date2.getMonth() &&
-		date1.getDate() === date2.getDate()
-	);
-};
-
-export const formatThaiDate = (date: Date): string => {
-	const day = date.getDate();
-	const month = shortMonthNames[date.getMonth()];
-	const year = (date.getFullYear() + 543).toString().slice(-2);
-
-	return `${day} ${month} ${year}`;
-};
-
-export const isDateInRange = (date: Date, minDate: Date, maxDate: Date): boolean => {
-	const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-	const minDateOnly = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
-	const maxDateOnly = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
-	return dateOnly >= minDateOnly && dateOnly <= maxDateOnly;
-};
 
 export const getDateData = (
 	data: TimeLine[],
@@ -52,7 +29,7 @@ export const getDateData = (
 				if (!isDateInRange(date, minDate, maxDate)) {
 					continue;
 				}
-				const dataInDay = data.find((d) => compareDate(d.date, date)) || {
+				const dataInDay = data.find((d) => isSameDate(d.date, date)) || {
 					date: date,
 					in: 0,
 					out: 0
@@ -66,7 +43,7 @@ export const getDateData = (
 			});
 		}
 		calendar.push({
-			year: year,
+			year: year + 543,
 			months: monthsInYear.filter((month) => month.days.length > 0)
 		});
 	}

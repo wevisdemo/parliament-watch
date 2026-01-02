@@ -1,13 +1,8 @@
 <script lang="ts">
 	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import { formatThaiYear } from '$lib/date';
 	import { BillProposerType } from '$models/bill';
-	import dayjs from 'dayjs';
-	import 'dayjs/locale/th';
-	import buddhistEra from 'dayjs/plugin/buddhistEra';
-
-	dayjs.extend(buddhistEra);
-	dayjs.locale('th');
 
 	interface PoliticianProposer {
 		id: string;
@@ -36,10 +31,6 @@
 	export let orientation: 'landscape' | 'portrait' = 'landscape';
 
 	$: isLandscape = orientation === 'landscape';
-
-	function getBudistYear(date: string | Date) {
-		return dayjs(date).format('BBBB');
-	}
 </script>
 
 <div class="flex {isLandscape ? 'flex-col gap-2 md:flex-row' : 'flex-col gap-1'}">
@@ -54,7 +45,7 @@
 		<a href="/assemblies/{id}" class="text-sm text-black underline">
 			{name}
 			{#if founding_date}
-				({getBudistYear(founding_date)})
+				({formatThaiYear(founding_date)})
 			{/if}
 		</a>
 	{:else if 'signatoryCount' in proposer}
@@ -88,7 +79,7 @@
 				<a href="/assemblies/{assembly.id}" class="text-sm text-black underline">
 					{assemblyPost || assembly.name}
 					{#if assembly.founding_date}
-						({getBudistYear(assembly.founding_date)})
+						({formatThaiYear(assembly.founding_date)})
 					{/if}
 				</a>
 			{/if}

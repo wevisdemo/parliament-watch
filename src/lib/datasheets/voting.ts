@@ -1,3 +1,4 @@
+import { formatThaiDate } from '$lib/date';
 import { logger } from '$lib/logger';
 import { AssemblyName, type Assembly } from '$models/assembly';
 import type { Party } from '$models/party';
@@ -118,7 +119,7 @@ export function groupVoteByAffiliations(
 							{
 								politicianId: politician.id,
 								votingNickname: voting.nickname,
-								votingDate: voting.date.toLocaleDateString()
+								votingDate: formatThaiDate(voting.date)
 							},
 							'Could not find politician party on the voting day'
 						);
