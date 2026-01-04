@@ -76,7 +76,7 @@
 			}}
 		>
 			{#each byStatus as bill (bill.status)}
-				<LawStatusCard {totalCount} {bill} />
+				<LawStatusCard {totalCount} {bill} showDescription={true} />
 			{/each}
 		</Carousel>
 	</section>
