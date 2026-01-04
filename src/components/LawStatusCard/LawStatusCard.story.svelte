@@ -2,9 +2,10 @@
 	import type { Hst } from '@histoire/plugin-svelte';
 	import LawStatusCard from './LawStatusCard.svelte';
 	import type { BillStatus } from '$lib/politigraph/genql';
+	import type { BillProposerType } from '$models/bill';
 	export let Hst: Hst;
 
-	const bill = {
+	const billByStatus = {
 		status: 'IN_PROGRESS' as BillStatus,
 		samples: [
 			{ id: '1', nickname: 'ร่าง พ.ร.บ. สุราก้าวหน้า' },
@@ -13,8 +14,47 @@
 		],
 		count: 225
 	};
+	const emptyBillByStatus = { ...billByStatus, samples: [], count: 0 };
+
+	const billByProposerType = {
+		proposerType: 'สมาชิกรัฐสภา' as BillProposerType,
+		samples: [
+			{ id: '1', nickname: 'ร่าง พ.ร.บ. สุราก้าวหน้า' },
+			{ id: '2', nickname: 'ร่าง พ.ร.บ. การจัดสรรที่ดิน' },
+			{ id: '3', nickname: 'ร่าง พ.ร.บ. กำหนดระยะเวลาดำเนินงานในกระบวนการยุติธรรม' }
+		],
+		count: 225,
+		countByStatus: {
+			IN_PROGRESS: 14,
+			MERGED: 42,
+			ENACTED: 108,
+			REJECTED: 61
+		}
+	};
+	const emptyBillByProposerType = {
+		...billByProposerType,
+		samples: [],
+		count: 0,
+		countByStatus: {
+			IN_PROGRESS: 0,
+			MERGED: 0,
+			ENACTED: 0,
+			REJECTED: 0
+		}
+	};
 </script>
 
 <Hst.Story title="LawStatusCard">
-	<LawStatusCard totalCount={900} {bill} />
+	<Hst.Variant title="Status (Empty)">
+		<LawStatusCard totalCount={900} bill={emptyBillByStatus} />
+	</Hst.Variant>
+	<Hst.Variant title="Status (Normal)">
+		<LawStatusCard totalCount={900} bill={billByStatus} />
+	</Hst.Variant>
+	<Hst.Variant title="Proposer Type (Empty)">
+		<LawStatusCard totalCount={900} bill={emptyBillByProposerType} />
+	</Hst.Variant>
+	<Hst.Variant title="Proposer Type (Normal)">
+		<LawStatusCard totalCount={900} bill={billByProposerType} />
+	</Hst.Variant>
 </Hst.Story>
