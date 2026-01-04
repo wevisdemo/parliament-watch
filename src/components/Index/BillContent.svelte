@@ -31,6 +31,7 @@
 	$: selectedMpTermId = mpTermChoices[0].id ?? '';
 
 	let isLoading = true;
+	let carousalKey = '';
 	let billSummaryByStatus: BillSummary[] = [];
 	let lastEnactedBills: Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'>[] = [];
 	let lastEnactedBillProposers: ComponentProps<Proposer>['proposer'][] = [];
@@ -120,6 +121,7 @@
 		).map(({ bills }) => getBillProposer(bills[0]));
 
 		isLoading = false;
+		carousalKey = selectedMpTermId + selectedCategory;
 	}
 
 	function selectCategory(category: string) {
@@ -187,7 +189,7 @@
 		{/if}
 
 		{#if billSummaryByStatus.length}
-			{#key selectedCategory}
+			{#key carousalKey}
 				<Carousel
 					options={{
 						breakpoints: {
@@ -239,7 +241,7 @@
 				{/if}
 			</div>
 
-			{#key selectedCategory + isLoading}
+			{#key carousalKey}
 				<Carousel hideNavigation={isLoading}>
 					{#each lastEnactedBills as { id, title, nickname, proposal_date }, i (id)}
 						<BillCard
