@@ -85,7 +85,7 @@
 				<div class="mb-3 text-xs text-text-01 {bill.count > 0 ? 'h-24' : ''}">
 					<p class="text-xs text-text-01">{statusProperty.description}</p>
 					{#if statusProperty.examples !== undefined}
-						<ul class="list-outside list-disc pl-3">
+						<ul class="list-outside list-disc pl-4">
 							{#each statusProperty.examples as example (example)}
 								<li>{example}</li>
 							{/each}
