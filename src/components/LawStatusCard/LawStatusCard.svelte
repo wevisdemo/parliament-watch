@@ -82,7 +82,7 @@
 			</h3>
 			{#if 'status' in bill && showDescription}
 				{@const statusProperty = billStatusProperty[bill.status]}
-				<div class="mb-3 h-24 text-xs text-text-01">
+				<div class="mb-3 text-xs text-text-01 {bill.count > 0 ? 'h-24' : ''}">
 					<p class="text-xs text-text-01">{statusProperty.description}</p>
 					{#if statusProperty.examples !== undefined}
 						<ul class="list-outside list-disc pl-3">
@@ -150,7 +150,7 @@
 			>
 		</div>
 	{:else}
-		<div class="card-body body-01 flex-1 bg-ui-01 p-6 pt-3">
+		<div class="card-body body-01 flex flex-1 items-center justify-center bg-ui-01 p-6 pt-3">
 			<p class="label-01 w-full text-center text-gray-60">
 				{#if 'proposerType' in bill}
 					ไม่พบร่างกฎหมายจากผู้เสนอนี้
