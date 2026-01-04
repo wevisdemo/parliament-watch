@@ -111,7 +111,7 @@
 							maximumFractionDigits: 2
 						})}%</span
 					>
-					<span>ของทั้งหมดที่เข้าสภา</span>
+					<span>ของทั้งหมดในสภาชุดนี้</span>
 				</p>
 				<div class="h-2 bg-ui-01">
 					<div class="h-full {barStyle}" style:width="{(bill.count / totalCount) * 100}%" />
