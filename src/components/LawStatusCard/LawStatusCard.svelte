@@ -37,6 +37,7 @@
 
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;
+	export let showDescription = false;
 
 	$: headerStyle =
 		bill.count > 0
@@ -79,6 +80,19 @@
 			<h3 class="heading-02 mb-3 w-fit rounded-full px-2 py-1 {headerStyle}">
 				{'status' in bill ? billStatusProperty[bill.status].label : bill.category}
 			</h3>
+			{#if 'status' in bill && showDescription}
+				{@const statusProperty = billStatusProperty[bill.status]}
+				<div class="mb-3 h-24 text-xs text-text-01">
+					<p class="text-xs text-text-01">{statusProperty.description}</p>
+					{#if statusProperty.examples !== undefined}
+						<ul class="list-outside list-disc pl-3">
+							{#each statusProperty.examples as example (example)}
+								<li>{example}</li>
+							{/each}
+						</ul>
+					{/if}
+				</div>
+			{/if}
 		{/if}
 		{#if bill.count > 0}
 			<p class="mb-3 flex items-center gap-1">

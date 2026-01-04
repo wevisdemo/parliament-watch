@@ -6,7 +6,6 @@
 	export let Hst: Hst;
 
 	const billByStatus = {
-		status: 'IN_PROGRESS' as BillStatus,
 		samples: [
 			{ id: '1', nickname: 'ร่าง พ.ร.บ. สุราก้าวหน้า' },
 			{ id: '2', nickname: 'ร่าง พ.ร.บ. การจัดสรรที่ดิน' },
@@ -42,14 +41,17 @@
 			REJECTED: 0
 		}
 	};
+
+	let status: BillStatus = 'IN_PROGRESS';
+	let showDescription = true;
 </script>
 
 <Hst.Story title="LawStatusCard">
 	<Hst.Variant title="Status (Empty)">
-		<LawStatusCard totalCount={900} bill={emptyBillByStatus} />
+		<LawStatusCard totalCount={900} bill={{ ...emptyBillByStatus, status }} {showDescription} />
 	</Hst.Variant>
 	<Hst.Variant title="Status (Normal)">
-		<LawStatusCard totalCount={900} bill={billByStatus} />
+		<LawStatusCard totalCount={900} bill={{ ...billByStatus, status }} {showDescription} />
 	</Hst.Variant>
 	<Hst.Variant title="Proposer Type (Empty)">
 		<LawStatusCard totalCount={900} bill={emptyBillByProposerType} />
@@ -57,4 +59,13 @@
 	<Hst.Variant title="Proposer Type (Normal)">
 		<LawStatusCard totalCount={900} bill={billByProposerType} />
 	</Hst.Variant>
+
+	<svelte:fragment slot="controls">
+		<Hst.Select
+			bind:value={status}
+			title="status"
+			options={['IN_PROGRESS', 'MERGED', 'ENACTED', 'REJECTED']}
+		/>
+		<Hst.Checkbox bind:value={showDescription} title="showDescription" />
+	</svelte:fragment>
 </Hst.Story>
