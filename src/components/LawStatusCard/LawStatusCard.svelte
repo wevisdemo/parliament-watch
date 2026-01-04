@@ -38,8 +38,14 @@
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;
 
-	$: headerStyle = 'status' in bill ? billStatusProperty[bill.status].colorClass : 'border';
+	$: headerStyle =
+		bill.count > 0
+			? 'status' in bill
+				? billStatusProperty[bill.status].colorClass
+				: 'border'
+			: 'bg-ui-04 text-white';
 	$: barStyle = 'status' in bill ? billStatusProperty[bill.status].colorClass : 'bg-ui-04';
+	$: headerBackgroundColor = bill.count > 0 ? 'bg-white' : 'bg-ui-01';
 
 	let billParams: [string, string];
 	$: billParams =
@@ -50,8 +56,10 @@
 				: ['proposertype', bill.proposerType];
 </script>
 
-<article class="keen-slider__slide body-01 flex min-w-[288px] max-w-[288px] flex-col bg-white">
-	<header class="p-6">
+<article
+	class="keen-slider__slide body-01 flex min-w-[288px] max-w-[288px] flex-col border-2 border-white bg-ui-01"
+>
+	<header class="p-6 {headerBackgroundColor}">
 		{#if 'proposerType' in bill}
 			<div class="mb-3 flex items-center gap-1">
 				<div class="h-6 w-6 rounded-full bg-black p-1 text-white">
@@ -72,41 +80,43 @@
 				{'status' in bill ? billStatusProperty[bill.status].label : bill.category}
 			</h3>
 		{/if}
-		<p class="mb-3 flex items-center gap-1">
-			<span class="fluid-heading-05">{bill.count}</span>
-			<span>ฉบับ</span>
-		</p>
-		{#if 'proposerType' in bill}
-			<ul>
-				{#each billStatusList as status (status)}
-					{@const relatedBillCount = bill.countByStatus[status] || 0}
-					{#if relatedBillCount > 0}
-						{@const { label, colorClass } = billStatusProperty[status]}
-						<li class="mb-2">
-							<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
-								<span class="heading-01">{relatedBillCount}</span>
-								<span class="label-01">{label}</span>
-							</span>
-							<div
-								class="h-1 {colorClass ?? barStyle}"
-								style:width="{bill.count ? (relatedBillCount / bill.count) * 100 : 0}%"
-							/>
-						</li>
-					{/if}
-				{/each}
-			</ul>
-		{:else}
-			<p class="label-01 mb-[2px] text-gray-60">
-				<span class="heading-01 mr-[2px]"
-					>{((bill.count / totalCount) * 100).toLocaleString('th-TH', {
-						maximumFractionDigits: 2
-					})}%</span
-				>
-				<span>ของทั้งหมดที่เข้าสภา</span>
+		{#if bill.count > 0}
+			<p class="mb-3 flex items-center gap-1">
+				<span class="fluid-heading-05">{bill.count}</span>
+				<span>ฉบับ</span>
 			</p>
-			<div class="h-2 bg-ui-01">
-				<div class="h-full {barStyle}" style:width="{(bill.count / totalCount) * 100}%" />
-			</div>
+			{#if 'proposerType' in bill}
+				<ul>
+					{#each billStatusList as status (status)}
+						{@const relatedBillCount = bill.countByStatus[status] || 0}
+						{#if relatedBillCount > 0}
+							{@const { label, colorClass } = billStatusProperty[status]}
+							<li class="mb-2">
+								<span class="mb-[2px] flex items-center gap-[2px] text-gray-60">
+									<span class="heading-01">{relatedBillCount}</span>
+									<span class="label-01">{label}</span>
+								</span>
+								<div
+									class="h-1 {colorClass ?? barStyle}"
+									style:width="{bill.count ? (relatedBillCount / bill.count) * 100 : 0}%"
+								/>
+							</li>
+						{/if}
+					{/each}
+				</ul>
+			{:else}
+				<p class="label-01 mb-[2px] text-gray-60">
+					<span class="heading-01 mr-[2px]"
+						>{((bill.count / totalCount) * 100).toLocaleString('th-TH', {
+							maximumFractionDigits: 2
+						})}%</span
+					>
+					<span>ของทั้งหมดที่เข้าสภา</span>
+				</p>
+				<div class="h-2 bg-ui-01">
+					<div class="h-full {barStyle}" style:width="{(bill.count / totalCount) * 100}%" />
+				</div>
+			{/if}
 		{/if}
 	</header>
 	{#if bill.count > 0}
@@ -125,14 +135,17 @@
 				><span>ดูทั้งหมด</span><ArrowRight /></a
 			>
 		</div>
+	{:else}
+		<div class="card-body body-01 flex-1 bg-ui-01 p-6 pt-3">
+			<p class="label-01 w-full text-center text-gray-60">
+				{#if 'proposerType' in bill}
+					ไม่พบร่างกฎหมายจากผู้เสนอนี้
+				{:else if 'status' in bill}
+					ไม่พบร่างกฎหมายในสถานะนี้
+				{:else}
+					ไม่พบร่างกฎหมายที่เกี่ยวข้อง
+				{/if}
+			</p>
+		</div>
 	{/if}
 </article>
-
-<style>
-	.card-body {
-		box-shadow:
-			inset -2px 0 0 #fff,
-			inset 2px 0 0 #fff,
-			inset 0 -2px 0 #fff;
-	}
-</style>
