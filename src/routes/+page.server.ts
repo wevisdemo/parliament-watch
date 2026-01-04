@@ -26,6 +26,28 @@ interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCa
 	cabinetTerms: number[];
 }
 
+const getMpTermDisplayName = (mp: any) => {
+	// to be removed by #226
+	const s = `สส. ชุดที่ ${mp.term}`;
+
+	const toBE2Digits = (year?: number) =>
+		year ? ((year + 543) % 100).toString().padStart(2, '0') : undefined;
+
+	const foundingYear = mp.founding_date
+		? toBE2Digits(new Date(mp.founding_date).getFullYear())
+		: undefined;
+	const dissolutionYear = mp.dissolution_date
+		? toBE2Digits(new Date(mp.dissolution_date).getFullYear())
+		: undefined;
+
+	if (!foundingYear && !dissolutionYear) return s;
+	if (!foundingYear && dissolutionYear) return `${s} (ก่อนปี ${dissolutionYear})`;
+	if (foundingYear && dissolutionYear) return `${s} (ปี ${foundingYear} - ${dissolutionYear})`;
+	if (foundingYear && !dissolutionYear) return `${s} (ปี ${foundingYear} - ปัจจุบัน)`;
+
+	return s;
+};
+
 export async function load() {
 	const highlightPoliticians = (
 		await graphql.query({
@@ -166,6 +188,41 @@ export async function load() {
 		)
 	].sort((a, z) => a.localeCompare(z));
 
+	const mpTermChoices = (
+		await graphql.query({
+			organizations: {
+				__args: {
+					where: {
+						classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
+					},
+					sort: [{ founding_date: 'DESC' }]
+				},
+				id: true,
+				name: true,
+				term: true,
+				founding_date: true,
+				dissolution_date: true
+			}
+		})
+	).organizations
+		.filter((org) => org.founding_date)
+		.map((org) => {
+			return {
+				id: org.id,
+				founding_date: org.founding_date ?? undefined,
+				dissolution_date: org.dissolution_date ?? undefined,
+				value: getMpTermDisplayName(org)
+			};
+		})
+		.concat([
+			{
+				id: 'other_terms',
+				value: 'สส. ชุดอื่น ๆ (ก่อนปี 62)',
+				founding_date: '',
+				dissolution_date: '2019-03-23'
+			}
+		]);
+
 	// const promiseSummary = {
 	// 	total: promises.length,
 	// 	byStatus: groups(
@@ -187,6 +244,7 @@ export async function load() {
 	return {
 		highlightedPoliticians,
 		latestVoteEvents,
-		billCategories
+		billCategories,
+		mpTermChoices
 	};
 }
