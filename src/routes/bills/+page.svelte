@@ -14,7 +14,14 @@
 
 	export let data;
 
-	$: ({ totalCount, byStatus, byProposerType, lastEnactedBills, lastEnactedBillProposers } = data);
+	$: ({
+		totalCount,
+		byStatus,
+		byProposerType,
+		byParty,
+		lastEnactedBills,
+		lastEnactedBillProposers
+	} = data);
 
 	let searchResults: SearchResults | null;
 </script>
@@ -54,7 +61,7 @@
 			tabs={[
 				{ id: 'status', label: 'สถานะ', show: true },
 				{ id: 'proposer', label: 'ผู้เสนอ', show: true },
-				{ id: 'party', label: 'พรรคการเมือง', disabled: true, show: true }
+				{ id: 'party', label: 'พรรคการเมือง', show: true }
 			]}
 		/>
 	</section>
@@ -96,6 +103,14 @@
 		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
 		<Carousel>
 			{#each byProposerType as bill (bill.proposerType)}
+				<LawStatusCard {totalCount} {bill} />
+			{/each}
+		</Carousel>
+	</section>
+	<section id="party" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+		<h2 class="fluid-heading-03">สำรวจตามพรรคการเมือง</h2>
+		<Carousel>
+			{#each byParty as bill (bill.party)}
 				<LawStatusCard {totalCount} {bill} />
 			{/each}
 		</Carousel>
