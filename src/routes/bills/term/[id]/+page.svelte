@@ -23,6 +23,7 @@
 		thisTerm,
 		totalCount,
 		byStatus,
+		byParty,
 		byProposerType,
 		lastEnactedBills,
 		lastEnactedBillProposers
@@ -84,7 +85,7 @@
 			tabs={[
 				{ id: 'status', label: 'สถานะ', show: true },
 				{ id: 'proposer', label: 'ผู้เสนอ', show: true },
-				{ id: 'party', label: 'พรรคการเมือง', disabled: true, show: true }
+				{ id: 'party', label: 'พรรคการเมือง', show: true }
 			]}
 		/>
 	</section>
@@ -133,6 +134,14 @@
 				{/each}
 			</Carousel>
 		{/key}
+	</section>
+	<section id="party" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+		<h2 class="fluid-heading-03">สำรวจตามพรรคการเมือง</h2>
+		<Carousel>
+			{#each byParty as bill (bill.party)}
+				<LawStatusCard {totalCount} {bill} />
+			{/each}
+		</Carousel>
 	</section>
 </div>
 <div class="bg-teal-80">

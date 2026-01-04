@@ -1,7 +1,8 @@
 import type {
 	BillsByCategory,
 	BillsByProposerType,
-	BillsByStatus
+	BillsByStatus,
+	BillsByParty
 } from '$components/LawStatusCard/LawStatusCard.svelte';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
@@ -107,6 +108,46 @@ export async function load({ params }) {
 		}
 	];
 
+	const parties = (
+		await graphql.query({
+			organizations: {
+				__args: {
+					where: {
+						classification_EQ: 'POLITICAL_PARTY'
+					},
+					sort: [{ founding_date: 'DESC' }]
+				},
+				name: true,
+				image: true
+			}
+		})
+	).organizations;
+
+	const byParty: BillsByParty[] = (
+		await Promise.all(
+			parties.map(async (party) => {
+				return {
+					party: party.name,
+					imageSrc: party.image ?? '/images/politicians/_placeholder.webp',
+					...(await queryBillSummaryByProposerType({
+						creators_SOME: {
+							Person: {
+								memberships_SOME: {
+									posts_SOME: {
+										organizations_SOME: {
+											name_EQ: party.name,
+											classification_EQ: 'POLITICAL_PARTY'
+										}
+									}
+								}
+							}
+						}
+					}))
+				};
+			})
+		)
+	).sort((a, z) => z.count - a.count);
+
 	const lastEnactedBills = (
 		await graphql.query({
 			billEnactEvents: {
@@ -154,6 +195,7 @@ export async function load({ params }) {
 		byStatus,
 		byCategory,
 		byProposerType,
+		byParty,
 		lastEnactedBills,
 		lastEnactedBillProposers,
 		seo: createSeo({
