@@ -163,19 +163,17 @@
 				>
 					{#each displayedStatuses as status, i (status)}
 						{@const { bills, billsConnection } = billSummaryByStatus[i]}
-						{#if bills.length}
-							<LawStatusCard
-								{totalCount}
-								bill={{
-									status,
-									samples: bills.map(({ id, nickname, title }) => ({
-										id,
-										nickname: nickname ?? title ?? ''
-									})),
-									count: billsConnection.totalCount
-								}}
-							/>
-						{/if}
+						<LawStatusCard
+							{totalCount}
+							bill={{
+								status,
+								samples: bills.map(({ id, nickname, title }) => ({
+									id,
+									nickname: nickname ?? title ?? ''
+								})),
+								count: billsConnection.totalCount
+							}}
+						/>
 					{/each}
 				</Carousel>
 			{/key}
