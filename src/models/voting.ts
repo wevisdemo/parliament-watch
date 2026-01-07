@@ -29,16 +29,16 @@ export enum DefaultVotingResult {
 export enum DefaultVoteOption {
 	Agreed = 'เห็นด้วย',
 	Disagreed = 'ไม่เห็นด้วย',
-	Novote = 'งดออกเสียง',
-	Abstain = 'ไม่ลงคะแนนเสียง',
+	Abstain = 'งดออกเสียง',
+	Novote = 'ไม่ลงคะแนนเสียง',
 	Absent = 'ลา / ขาดลงมติ'
 }
 
 export const defaultVoteOptions: string[] = [
 	DefaultVoteOption.Agreed,
 	DefaultVoteOption.Disagreed,
-	DefaultVoteOption.Novote,
 	DefaultVoteOption.Abstain,
+	DefaultVoteOption.Novote,
 	DefaultVoteOption.Absent
 ];
 

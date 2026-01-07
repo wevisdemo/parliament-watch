@@ -754,7 +754,7 @@
 						<div class="flex gap-4">
 							<VotingOptionTag voteOption={DefaultVoteOption.Agreed} />
 							<VotingOptionTag voteOption={DefaultVoteOption.Disagreed} />
-							<VotingOptionTag voteOption={DefaultVoteOption.Novote} />
+							<VotingOptionTag voteOption={DefaultVoteOption.Abstain} />
 						</div>
 						<p>
 							หาก สส.หรือ สว.ไม่ได้แสดงเจตจำนงด้วยเหตุผลด้านการขาดการประชุมหรือไม่ได้ลงคะแนนเสียง
@@ -762,7 +762,7 @@
 						</p>
 						<div class="flex gap-2">
 							<div class="flex basis-2/5 flex-col gap-2">
-								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Abstain} />
+								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Novote} />
 								<ul>
 									<li class="list-inside list-disc">สมาชิกอยู่ในองค์ประชุม แต่ไม่ลงมติ</li>
 									<li class="list-inside list-disc">

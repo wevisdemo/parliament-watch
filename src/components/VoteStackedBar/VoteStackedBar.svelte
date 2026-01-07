@@ -6,8 +6,8 @@
 	const optionColorClass: Record<string, string> = {
 		[DefaultVoteOption.Agreed]: 'bg-teal-50',
 		[DefaultVoteOption.Disagreed]: 'bg-red-50',
-		[DefaultVoteOption.Novote]: 'bg-gray-70',
-		[DefaultVoteOption.Abstain]: 'bg-gray-50',
+		[DefaultVoteOption.Abstain]: 'bg-gray-70',
+		[DefaultVoteOption.Novote]: 'bg-gray-50',
 		[DefaultVoteOption.Absent]: 'bg-gray-30'
 	};
 

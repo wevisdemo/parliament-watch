@@ -36,8 +36,8 @@ export const fetchVotings = withCache('Votings', async (): Promise<Voting[]> => 
 		voteOptions: [
 			DefaultVoteOption.Agreed,
 			DefaultVoteOption.Disagreed,
-			DefaultVoteOption.Novote,
 			DefaultVoteOption.Abstain,
+			DefaultVoteOption.Novote,
 			DefaultVoteOption.Absent
 		] as Voting['voteOptions']
 	}));

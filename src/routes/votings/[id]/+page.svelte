@@ -52,9 +52,9 @@
 					return { className: 'bg-teal-40' };
 				case DefaultVoteOption.Disagreed:
 					return { className: 'bg-red-50 text-white' };
-				case DefaultVoteOption.Novote:
-					return { className: 'bg-gray-80 text-white' };
 				case DefaultVoteOption.Abstain:
+					return { className: 'bg-gray-80 text-white' };
+				case DefaultVoteOption.Novote:
 					return { className: 'bg-gray-50' };
 				case DefaultVoteOption.Absent:
 					return { className: 'bg-gray-20' };
@@ -114,8 +114,8 @@
 		[DefaultVoteOption.Agreed]: 'text-teal-50',
 		[DefaultVotingResult.Failed]: 'text-red-50',
 		[DefaultVoteOption.Disagreed]: 'text-red-50',
-		[DefaultVoteOption.Novote]: 'gray-80',
-		[DefaultVoteOption.Abstain]: 'gray-50',
+		[DefaultVoteOption.Abstain]: 'gray-80',
+		[DefaultVoteOption.Novote]: 'gray-50',
 		[DefaultVoteOption.Absent]: 'gray-20'
 	};
 

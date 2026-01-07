@@ -15,11 +15,11 @@
 	<Hst.Variant title={'DefaultVoteOption.Disagreed'}>
 		<VotingOptionTag voteOption={DefaultVoteOption.Disagreed} />
 	</Hst.Variant>
-	<Hst.Variant title={'DefaultVoteOption.Novote'}>
-		<VotingOptionTag voteOption={DefaultVoteOption.Novote} />
-	</Hst.Variant>
 	<Hst.Variant title={'DefaultVoteOption.Abstain'}>
 		<VotingOptionTag voteOption={DefaultVoteOption.Abstain} />
+	</Hst.Variant>
+	<Hst.Variant title={'DefaultVoteOption.Novote'}>
+		<VotingOptionTag voteOption={DefaultVoteOption.Novote} />
 	</Hst.Variant>
 	<Hst.Variant title={'DefaultVoteOption.Absent'}>
 		<VotingOptionTag voteOption={DefaultVoteOption.Absent} />

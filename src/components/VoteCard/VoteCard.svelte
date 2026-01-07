@@ -37,8 +37,8 @@
 	const highlightColorLookup: Record<string, string> = {
 		[DefaultVoteOption.Agreed]: 'text-teal-70',
 		[DefaultVoteOption.Disagreed]: 'text-red-70',
-		[DefaultVoteOption.Novote]: 'text-gray-80',
-		[DefaultVoteOption.Abstain]: 'text-gray-60',
+		[DefaultVoteOption.Abstain]: 'text-gray-80',
+		[DefaultVoteOption.Novote]: 'text-gray-60',
 		[DefaultVoteOption.Absent]: 'text-gray-50'
 	};
 

@@ -21,12 +21,12 @@
 			label = DefaultVoteOption.Disagreed;
 			tagColorClass = 'bg-red-50 text-white';
 			break;
-		case DefaultVoteOption.Novote:
-			label = DefaultVoteOption.Novote;
-			tagColorClass = 'bg-gray-80 text-white';
-			break;
 		case DefaultVoteOption.Abstain:
 			label = DefaultVoteOption.Abstain;
+			tagColorClass = 'bg-gray-80 text-white';
+			break;
+		case DefaultVoteOption.Novote:
+			label = DefaultVoteOption.Novote;
 			tagColorClass = 'bg-gray-50 text-white';
 			break;
 		case DefaultVoteOption.Absent:
