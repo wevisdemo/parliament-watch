@@ -59,7 +59,7 @@
 			/>
 			<SectionMenuItem
 				title="การเสนอกฎหมาย"
-				description="อยู่ระหว่างการปรับปรุงข้อมูล"
+				description="ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ"
 				icon={LawIcon}
 				href="#bill"
 			/>
