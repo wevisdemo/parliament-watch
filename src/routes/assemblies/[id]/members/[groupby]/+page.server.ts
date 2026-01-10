@@ -3,7 +3,11 @@ import {
 	type PoliticianSubGroup,
 	type PoliticianGroup
 } from '$lib/politigraph/assembly/groupby';
-import { queryAssemblyMembers, type AssemblyMember } from '$lib/politigraph/assembly/member';
+import {
+	getAvailableAssemblies,
+	queryAssemblyMembers,
+	type AssemblyMember
+} from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { GroupByOption } from '$models/assembly';
@@ -48,22 +52,11 @@ export async function load({ params }) {
 	const isSenates = assembly.classification === 'HOUSE_OF_SENATE';
 	const isCabinet = assembly.classification === 'CABINET';
 
-	const { organizations: availableAssemblies } = await graphql.query({
-		organizations: {
-			__args: {
-				where: {
-					classification_EQ: assembly.classification
-				}
-			},
-			id: true,
-			term: true
-		}
+	const availableAssemblies = await getAvailableAssemblies({
+		classification: assembly.classification
 	});
-
 	const members = await queryAssemblyMembers(assembly);
-
 	const groups = getMemberGroup(members, params.groupby as GroupByOption, isSenates, isCabinet);
-
 	const isDataHasSubgroup = 'subgroups' in groups[0];
 
 	const transformedGroup: PoliticianSummaryGroupBy = isDataHasSubgroup
