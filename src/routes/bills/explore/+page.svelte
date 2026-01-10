@@ -118,52 +118,11 @@
 						)
 							return;
 
-						if (selectedComboboxValue.filterPartyName) {
-							const proposerParties =
-								bill.proposer.__typename == 'Person'
-									? new Set(
-											bill.proposer.memberships
-												.filter((membership) =>
-													bill.proposal_date != null
-														? membership.start_date <= bill.proposal_date &&
-															bill.proposal_date <= (membership.end_date ?? '2100-01-01')
-														: true
-												)
-												.flatMap((membership) =>
-													membership.posts
-														.flatMap((post) => post.organizations)
-														.filter((org) => org.classification == 'POLITICAL_PARTY')
-														.map((org) => org.name)
-												)
-										)
-									: new Set();
-
-							const coProposerParties = new Set(
-								bill.co_proposers.flatMap((co_proposers) =>
-									co_proposers.memberships
-										.filter((membership) =>
-											bill.proposal_date != null
-												? membership.start_date <= bill.proposal_date &&
-													bill.proposal_date <= (membership.end_date ?? '2100-01-01')
-												: true
-										)
-										.flatMap((membership) =>
-											membership.posts
-												.flatMap((post) => post.organizations)
-												.filter((org) => org.classification == 'POLITICAL_PARTY')
-												.map((org) => org.name)
-										)
-								)
-							);
-
-							if (
-								!proposerParties
-									.union(coProposerParties)
-									.has(selectedComboboxValue.filterPartyName as string)
-							) {
-								return;
-							}
-						}
+						if (
+							selectedComboboxValue.filterPartyName &&
+							!bill.proposerParties.has(selectedComboboxValue.filterPartyName as string)
+						)
+							return;
 
 						const search = searchQuery.trim();
 						if (search && !bill.title.includes(search) && !bill.nickname?.includes(search)) return;

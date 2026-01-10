@@ -27,16 +27,14 @@ export async function load() {
 		organizations: {
 			__args: {
 				where: {
-					classification_IN: ['HOUSE_OF_REPRESENTATIVE', 'POLITICAL_PARTY']
+					classification_IN: ['HOUSE_OF_REPRESENTATIVE']
 				},
 				sort: [{ founding_date: 'DESC' }]
 			},
 			id: true,
 			name: true,
 			founding_date: true,
-			dissolution_date: true,
-			classification: true,
-			image: true
+			dissolution_date: true
 		},
 		bills: {
 			__args: {
@@ -60,17 +58,20 @@ export async function load() {
 				on_Person: {
 					name: true,
 					memberships: {
+						__args: {
+							where: {
+								posts_SOME: {
+									organizations_SOME: {
+										classification_EQ: 'POLITICAL_PARTY'
+									}
+								}
+							}
+						},
 						start_date: true,
 						end_date: true,
 						posts: {
-							start_date: true,
-							end_date: true,
-							label: true,
 							organizations: {
-								name: true,
-								classification: true,
-								founding_date: true,
-								dissolution_date: true
+								id: true
 							}
 						}
 					}
@@ -79,17 +80,20 @@ export async function load() {
 			co_proposers: {
 				name: true,
 				memberships: {
+					__args: {
+						where: {
+							posts_SOME: {
+								organizations_SOME: {
+									classification_EQ: 'POLITICAL_PARTY'
+								}
+							}
+						}
+					},
 					start_date: true,
 					end_date: true,
 					posts: {
-						start_date: true,
-						end_date: true,
-						label: true,
 						organizations: {
-							name: true,
-							classification: true,
-							founding_date: true,
-							dissolution_date: true
+							id: true
 						}
 					}
 				}
@@ -98,13 +102,39 @@ export async function load() {
 		}
 	});
 
-	const assemblies = data.organizations.filter(
-		(org) => org.classification == 'HOUSE_OF_REPRESENTATIVE'
-	);
-	const parties = data.organizations.filter((org) => org.classification == 'POLITICAL_PARTY');
+	const assemblies = data.organizations;
 
-	const bills = data.bills.map(({ creators, people_signature_count, ...bill }) => {
+	const bills = data.bills.map(({ creators, co_proposers, people_signature_count, ...bill }) => {
 		const proposedDate = dayjs(bill.proposal_date);
+		const proposer = creators.at(0) ?? {
+			__typename: null,
+			name: OTHER_CATEGORY_KEY,
+			memberships: []
+		};
+		const proposerParty =
+			proposer.__typename == 'Person'
+				? proposer.memberships
+						.find(
+							({ start_date, end_date }) =>
+								proposedDate.isAfter(start_date) && (!end_date || proposedDate.isBefore(end_date))
+						)
+						?.posts.flatMap((post) => post.organizations.at(0)?.id)
+						.at(0)
+				: null;
+
+		const coProposerParties = new Set(
+			co_proposers.flatMap((co_proposer) =>
+				co_proposer.memberships
+					.filter(
+						(membership) =>
+							proposedDate.isAfter(membership.start_date) &&
+							(!membership.end_date || proposedDate.isBefore(membership.end_date))
+					)
+					.flatMap((membership) =>
+						membership.posts.flatMap((post) => post.organizations).map((org) => org.id)
+					)
+			)
+		);
 
 		return {
 			...bill,
@@ -122,7 +152,8 @@ export async function load() {
 					: people_signature_count
 						? BillProposerType.People
 						: BillProposerType.Politician,
-			proposer: creators.at(0) ?? { __typename: null, name: OTHER_CATEGORY_KEY, memberships: [] }
+			proposer: proposer,
+			proposerParties: proposerParty ? coProposerParties.add(proposerParty) : coProposerParties
 		};
 	});
 
@@ -150,12 +181,26 @@ export async function load() {
 		)
 	].sort((a, z) => a.localeCompare(z));
 
+	const eligibleParties = await graphql.query({
+		organizations: {
+			__args: {
+				where: {
+					id_IN: [...bills.flatMap((bill) => bill.proposerParties).reduce((acc, s) => acc.union(s))]
+				},
+				sort: [{ founding_date: 'DESC' }]
+			},
+			id: true,
+			name: true,
+			image: true
+		}
+	});
+
 	const proposerParties: ComboboxFilterChoice[] = [
 		...new Set(
-			parties.map((party) => ({
-				id: party.name,
+			eligibleParties.organizations.map((party) => ({
+				id: party.id,
 				text: party.name,
-				imageSrc: party.image ?? '/images/politicians/_placeholder.webp'
+				imageSrc: party.image ?? '/images/parties/_placeholder.webp'
 			}))
 		)
 	].sort((a, z) => a.text.localeCompare(z.text));
