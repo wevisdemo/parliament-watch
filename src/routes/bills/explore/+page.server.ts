@@ -27,7 +27,7 @@ export async function load() {
 		organizations: {
 			__args: {
 				where: {
-					classification_IN: ['HOUSE_OF_REPRESENTATIVE']
+					classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
 				},
 				sort: [{ founding_date: 'DESC' }]
 			},
