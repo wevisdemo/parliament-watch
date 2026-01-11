@@ -15,9 +15,10 @@
 		CheckboxFilterChoice['value'][]
 	>;
 
-	export interface ComboboxFilterChoice {
+	export interface ComboboxFilterChoice extends ComboBoxItem {
 		id: string | number;
 		text: string;
+		imageSrc?: string;
 	}
 
 	export interface ComboboxFilterGroup {
@@ -46,6 +47,7 @@
 		Pagination,
 		Search
 	} from 'carbon-components-svelte';
+	import type { ComboBoxItem } from 'carbon-components-svelte/src/ComboBox/ComboBox.svelte';
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
@@ -54,6 +56,10 @@
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
 		return item.text.toLowerCase().includes(value.toLowerCase());
+	}
+
+	function hasImageSrc(item: ComboBoxItem): item is ComboboxFilterChoice {
+		return 'imageSrc' in item;
 	}
 
 	// Just props
@@ -222,7 +228,19 @@
 								disabled={!renderCombobox}
 								selectedId={comboboxInternal[optionGroup.key]}
 								{shouldFilterItem}
-							/>
+								let:item
+							>
+								<div class="flex">
+									{#if hasImageSrc(item)}
+										<img
+											src={item.imageSrc}
+											alt={item.text}
+											style="width: 16px; height: 16px; border-radius: 50%; margin-right: 8px;"
+										/>
+									{/if}
+									{item.text}
+								</div>
+							</ComboBox>
 						</div>
 					{/each}
 					{#each checkboxFilterList as optionGroup, idx (optionGroup.key)}
