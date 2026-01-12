@@ -152,7 +152,7 @@ export async function load() {
 					: people_signature_count
 						? BillProposerType.People
 						: BillProposerType.Politician,
-			proposer: proposer,
+			proposer,
 			proposerParties: proposerParty ? coProposerParties.add(proposerParty) : coProposerParties
 		};
 	});
@@ -186,8 +186,7 @@ export async function load() {
 			__args: {
 				where: {
 					id_IN: [...bills.flatMap((bill) => bill.proposerParties).reduce((acc, s) => acc.union(s))]
-				},
-				sort: [{ founding_date: 'DESC' }]
+				}
 			},
 			id: true,
 			name: true,
