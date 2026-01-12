@@ -40,7 +40,7 @@
 		bill.proposal_date &&
 		dayjs(
 			bill.status === 'IN_PROGRESS' ? undefined : events.find((event) => event.date)?.date
-		).diff(bill.proposal_date, 'days');
+		).diff(bill.proposal_date, 'days') + 1;
 
 	$: partiesCoProposed = groups(coProposers, ({ party }) => party?.name);
 

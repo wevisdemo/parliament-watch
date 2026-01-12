@@ -82,7 +82,7 @@
 				{#if proposedOn && enactedOn}
 					<div class="">
 						<p class="text-right text-sm font-semibold text-support-04">
-							ใช้เวลา {dayjs(enactedOn).diff(proposedOn, 'd')} วัน
+							ใช้เวลา {dayjs(enactedOn).diff(proposedOn, 'd') + 1} วัน
 						</p>
 					</div>
 				{/if}
