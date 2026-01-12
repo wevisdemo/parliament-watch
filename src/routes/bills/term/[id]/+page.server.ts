@@ -9,6 +9,7 @@ import type { BillWhere, Bill } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { BillProposerType } from '$models/bill';
+import { MP_OTHER_TERMS } from '../../../../constants/bills';
 import { error } from '@sveltejs/kit';
 
 const BILL_SAMPLE_LIMIT = 3;
@@ -17,10 +18,10 @@ const LATEST_ENACTED_BILL_LIMIT = 10;
 export async function load({ params }) {
 	const allMpTerms = [
 		{
-			id: 'other_terms_before_25',
-			founding_date: null,
-			dissolution_date: '2019-03-23',
-			term: null
+			id: MP_OTHER_TERMS.id,
+			term: null,
+			founding_date: '',
+			dissolution_date: MP_OTHER_TERMS.dissolution_date
 		},
 		...(
 			await graphql.query({

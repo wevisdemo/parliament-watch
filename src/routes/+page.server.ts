@@ -4,6 +4,7 @@ import { graphql } from '$lib/politigraph/server';
 import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
+import { MP_OTHER_TERMS } from '../constants/bills';
 import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
@@ -216,10 +217,10 @@ export async function load() {
 		})
 		.concat([
 			{
-				id: 'other_terms',
-				value: 'สส. ชุดอื่น ๆ (ก่อนปี 62)',
+				id: MP_OTHER_TERMS.id,
 				founding_date: '',
-				dissolution_date: '2019-03-23'
+				dissolution_date: MP_OTHER_TERMS.dissolution_date,
+				value: 'สส. ชุดอื่น ๆ (ก่อนปี 62)'
 			}
 		]);
 
