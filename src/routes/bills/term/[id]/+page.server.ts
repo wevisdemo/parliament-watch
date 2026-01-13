@@ -12,9 +12,11 @@ import { createSeo } from '$lib/seo';
 import { BillProposerType } from '$models/bill';
 import { MP_OTHER_TERMS } from '../../../../constants/bills';
 import { error } from '@sveltejs/kit';
+import dayjs from 'dayjs';
 
 const BILL_SAMPLE_LIMIT = 3;
 const LATEST_ENACTED_BILL_LIMIT = 10;
+const OTHER_CATEGORY_KEY = 'อื่นๆ';
 
 export async function load({ params }) {
 	const allMpTerms = [
@@ -108,45 +110,150 @@ export async function load({ params }) {
 		}
 	];
 
-	const parties = (
+	const billsInTerm = (
 		await graphql.query({
-			organizations: {
-				__args: {
-					where: {
-						classification_EQ: 'POLITICAL_PARTY'
-					},
-					sort: [{ founding_date: 'DESC' }]
-				},
-				name: true,
-				image: true
-			}
-		})
-	).organizations;
-
-	const byParty: BillsByParty[] = (
-		await Promise.all(
-			parties.map(async (party) => {
-				return {
-					party: party.name,
-					imageSrc: party.image ?? '/images/politicians/_placeholder.webp',
-					...(await queryBillSummaryByProposerType({
-						creators_SOME: {
-							Person: {
-								memberships_SOME: {
+			bills: {
+				__args: { where: billWhereTerm },
+				id: true,
+				title: true,
+				nickname: true,
+				status: true,
+				proposal_date: true,
+				creators: {
+					on_Person: {
+						name: true,
+						memberships: {
+							__args: {
+								where: {
 									posts_SOME: {
 										organizations_SOME: {
-											name_EQ: party.name,
 											classification_EQ: 'POLITICAL_PARTY'
 										}
 									}
 								}
+							},
+							start_date: true,
+							end_date: true,
+							posts: {
+								organizations: {
+									id: true
+								}
 							}
 						}
-					}))
-				};
+					}
+				},
+				co_proposers: {
+					name: true,
+					memberships: {
+						__args: {
+							where: {
+								posts_SOME: {
+									organizations_SOME: {
+										classification_EQ: 'POLITICAL_PARTY'
+									}
+								}
+							}
+						},
+						start_date: true,
+						end_date: true,
+						posts: {
+							organizations: {
+								id: true
+							}
+						}
+					}
+				}
+			}
+		})
+	).bills;
+
+	const billsWithParty = billsInTerm.flatMap(({ creators, co_proposers, ...bill }) => {
+		const proposedDate = dayjs(bill.proposal_date);
+		const proposer = creators.at(0) ?? {
+			__typename: null,
+			name: OTHER_CATEGORY_KEY,
+			memberships: []
+		};
+		const proposerParty =
+			proposer.__typename == 'Person'
+				? proposer.memberships
+						.find(
+							({ start_date, end_date }) =>
+								proposedDate.isAfter(start_date) && (!end_date || proposedDate.isBefore(end_date))
+						)
+						?.posts.flatMap((post) => post.organizations.at(0)?.id)
+						.at(0)
+				: null;
+
+		const coProposerParties = new Set(
+			co_proposers.flatMap((co_proposer) =>
+				co_proposer.memberships
+					.filter(
+						(membership) =>
+							proposedDate.isAfter(membership.start_date) &&
+							(!membership.end_date || proposedDate.isBefore(membership.end_date))
+					)
+					.flatMap((membership) =>
+						membership.posts.flatMap((post) => post.organizations).map((org) => org.id)
+					)
+			)
+		);
+
+		const proposerParties = proposerParty
+			? coProposerParties.add(proposerParty)
+			: coProposerParties;
+		return [...proposerParties].map((party) => {
+			return { ...bill, party };
+		});
+	});
+
+	const billsGroupedByParty = Object.groupBy(billsWithParty, (bill) => bill.party);
+
+	const partiesLogo = new Map(
+		(
+			await graphql.query({
+				organizations: {
+					__args: {
+						where: {
+							id_IN: Object.entries(billsGroupedByParty).map(([party]) => party)
+						},
+						sort: [{ founding_date: 'DESC' }]
+					},
+					id: true,
+					image: true
+				}
 			})
-		)
-	).sort((a, z) => z.count - a.count);
+		).organizations.map(({ id, image }) => {
+			return [id, image];
+		})
+	);
+
+	const byParty: BillsByParty[] = Object.entries(billsGroupedByParty)
+		.map(([party, billsInParty]) => {
+			const samples = (billsInParty || [])
+				.map(setBillNicknameFromTitleAsFallback)
+				.flatMap(({ id, nickname }) => {
+					return { id, nickname: nickname ?? '' };
+				})
+				.slice(0, BILL_SAMPLE_LIMIT);
+
+			const groupedByStatus = Object.groupBy(billsInParty || [], (bill) => bill.status);
+			const countByStatus = Object.fromEntries(
+				Object.entries(groupedByStatus).map(([type, itemsInGroup]) => [type, itemsInGroup.length])
+			) as BillsByProposerType['countByStatus'];
+
+			const summary = {
+				samples,
+				count: billsInParty?.length ?? 0,
+				countByStatus
+			};
+			return {
+				party,
+				imageSrc: partiesLogo.get(party) ?? '/images/parties/_placeholder.webp',
+				...summary
+			};
+		})
+		.sort((a, z) => z.count - a.count);
 
 	const lastEnactedBills = (
 		await graphql.query({
