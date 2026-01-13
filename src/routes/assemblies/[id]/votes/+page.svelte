@@ -64,12 +64,7 @@
 	bind:searchQuery
 	bind:selectedCheckboxValue
 >
-	<VotesHeader
-		name={assembly.name}
-		term={assembly.term ?? 0}
-		startedYear={assembly.founding_date ? new Date(assembly.founding_date) : new Date()}
-		{availableAssemblies}
-	/>
+	<VotesHeader name={assembly.name} id={assembly.id} {availableAssemblies} />
 
 	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
 		{#if cellKey === 'date'}

@@ -4,7 +4,8 @@ import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
 import {
 	queryAssemblyMembers,
 	parseMemberWithAssemblyRoles,
-	type AssemblyMember
+	type AssemblyMember,
+	getAvailableAssemblies
 } from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/server';
 import { countVotesInEachOption } from '$lib/politigraph/vote/group';
@@ -65,18 +66,9 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const { organizations: availableAssemblies } = await graphql.query({
-		organizations: {
-			__args: {
-				where: {
-					classification_EQ: assembly.classification
-				}
-			},
-			id: true,
-			term: true
-		}
+	const availableAssemblies = await getAvailableAssemblies({
+		classification: assembly.classification
 	});
-
 	const members = await queryAssemblyMembers(assembly);
 
 	const isSenates = assembly.classification === 'HOUSE_OF_SENATE';

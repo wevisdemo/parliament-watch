@@ -8,6 +8,26 @@ import type { ComponentProps } from 'svelte';
 export type AssemblyMember = Awaited<ReturnType<typeof queryAssemblyMembers>>[number];
 export type MainMember = ComponentProps<CabinetMembers & MainMembers>['members'];
 
+export async function getAvailableAssemblies({
+	classification
+}: Pick<Organization, 'classification'>) {
+	return (
+		await graphql.query({
+			organizations: {
+				__args: {
+					where: {
+						classification_EQ: classification
+					},
+					sort: [{ founding_date: 'ASC' }]
+				},
+				id: true,
+				term: true,
+				founding_date: true
+			}
+		})
+	).organizations;
+}
+
 export async function queryAssemblyMembers({
 	id,
 	classification,

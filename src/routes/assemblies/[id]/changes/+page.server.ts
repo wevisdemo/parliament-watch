@@ -1,7 +1,8 @@
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import {
 	queryAssemblyMembers,
-	parseMemberWithAssemblyRoles
+	parseMemberWithAssemblyRoles,
+	getAvailableAssemblies
 } from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/server';
 import { error } from '@sveltejs/kit';
@@ -31,16 +32,8 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const { organizations: availableAssemblies } = await graphql.query({
-		organizations: {
-			__args: {
-				where: {
-					classification_EQ: assembly.classification
-				}
-			},
-			id: true,
-			term: true
-		}
+	const availableAssemblies = await getAvailableAssemblies({
+		classification: assembly.classification
 	});
 
 	const members = await queryAssemblyMembers(assembly);

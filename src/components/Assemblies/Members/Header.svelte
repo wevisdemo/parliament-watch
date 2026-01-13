@@ -5,12 +5,13 @@
 	import AssemblyIdRunner, { type AvailableAssembly } from '../AssemblyIdRunner.svelte';
 
 	export let id: string;
-	export let term: number;
 	export let name: string;
-	export let startedAt: Date;
 	export let availableAssemblies: AvailableAssembly[];
 
 	export let searchQuery = '';
+
+	const getAssemblyPath = (assembly: AvailableAssembly) =>
+		assembly ? `/assemblies/${assembly.id}/members` : '';
 </script>
 
 <Breadcrumb
@@ -27,12 +28,7 @@
 	<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 		<div class="flex flex-1 flex-wrap items-center gap-x-4">
 			<h1 class="fluid-heading-04" style="text-wrap:balance">รายชื่อ{name}</h1>
-			<AssemblyIdRunner
-				{term}
-				startedYear={startedAt}
-				{availableAssemblies}
-				linkPostfix="members"
-			/>
+			<AssemblyIdRunner {id} {availableAssemblies} {getAssemblyPath} />
 		</div>
 		<div class="flex flex-col gap-2 rounded-sm border border-solid border-ui-03 p-3 md:self-end">
 			<div class="flex items-center gap-1">

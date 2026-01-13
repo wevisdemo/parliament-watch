@@ -1,3 +1,4 @@
+import { getAvailableAssemblies } from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { DefaultVotingResult, RESULT_CONFIRMATION_PENDING } from '$models/voting';
@@ -25,16 +26,11 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const { organizations: availableAssemblies, voteEvents } = await graphql.query({
-		organizations: {
-			__args: {
-				where: {
-					classification_EQ: assembly.classification
-				}
-			},
-			id: true,
-			term: true
-		},
+	const availableAssemblies = await getAvailableAssemblies({
+		classification: assembly.classification
+	});
+
+	const { voteEvents } = await graphql.query({
 		voteEvents: {
 			__args: {
 				where: {

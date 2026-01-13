@@ -10,7 +10,6 @@
 
 	export let id: string;
 	export let name: string;
-	export let term: number;
 	export let startedAt: Date;
 	export let endedAt: Date | undefined;
 	export let description: string | null;
@@ -19,6 +18,9 @@
 	export let showRemark = true;
 
 	$: isActive = !endedAt;
+
+	const getAssemblyPath = (assembly: AvailableAssembly) =>
+		assembly ? `/assemblies/${assembly.id}/${linkPostfix}` : '';
 </script>
 
 <div
@@ -27,7 +29,7 @@
 	<div class="w-full max-w-[900px]">
 		<div class="flex flex-col md:flex-row">
 			<h2 class="fluid-heading-05">{name}</h2>
-			<AssemblyIdRunner {term} startedYear={startedAt} {availableAssemblies} {linkPostfix} />
+			<AssemblyIdRunner {id} {availableAssemblies} {getAssemblyPath} />
 		</div>
 		{#if showStatus}
 			<div class="flex items-center">
