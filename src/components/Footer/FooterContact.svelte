@@ -33,15 +33,12 @@
 				</a>
 			</div>
 			<div class="mr-3">
-				<a
-					href="https://github.com/wevisdemo/parliament-watch"
-					class="text-gray-30 hover:text-gray-10"
-				>
+				<a href="https://www.instagram.com/wevisdemo/" class="text-gray-30 hover:text-gray-10">
 					<InstagramIcon size={32} />
 				</a>
 			</div>
 			<div class="mr-3">
-				<a href="https://twitter.com/wevisdemo" class="text-gray-30 hover:text-gray-10">
+				<a href="https://x.com/wevisdemo" class="text-gray-30 hover:text-gray-10">
 					<XIcon size={32} />
 				</a>
 			</div>

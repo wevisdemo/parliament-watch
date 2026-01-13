@@ -82,13 +82,12 @@
 					และร่างกฎหมายแต่ละฉบับกำลังถูกพิจารณาอยู่ในขั้นตอนใด
 				</li>
 				<li>
-					<strong>การทำงานของสมาชิกรัฐสภารายบุคคล</strong> ว่าเป็นใคร ทำหน้าที่อะไร เคยให้คำสัญญาอะไรไว้กับประชาชน
-					และเสนอโหวตประเด็นใดในสภาไปแล้วบ้าง เพื่อเปลี่ยนข้อมูลที่เป็นของเราทุกคน ให้อยู่ในรูปแบบที่เข้าถึงและเข้าใจได้ง่ายขึ้น
+					<strong>การลงมติ</strong> ว่ามีวาระอะไรที่เกิดขึ้นการบ้างในการประชุมสภา การลงมติเป็นขั้นตอนสำคัญของกระบวนการพิจารณาร่างกฎหมาย
+					และเป็นหน้าที่โดยตรงของสมาชิกรัฐสภาทุกคน
 				</li>
 				<li>
-					<strong>การติดตามความสำเร็จของนโยบายของพรรคการเมือง</strong>
-					เพื่อดูว่าคำสัญญาหรือนโยบายที่หาเสียงที่ให้ไว้ในช่วงเลือกตั้ง เมื่อผ่านช่วงเวลาการทำงานในรัฐสภา
-					(หรือทำเนียบ) ไปแล้ว สามารถทำได้จริงมากน้อยแค่ไหน
+					<strong>การทำงานของสมาชิกรัฐสภารายบุคคล</strong> ว่าเป็นใคร ทำหน้าที่อะไร เคยให้คำสัญญาอะไรไว้กับประชาชน
+					และเสนอโหวตประเด็นใดในสภาไปแล้วบ้าง เพื่อเปลี่ยนข้อมูลที่เป็นของเราทุกคน ให้อยู่ในรูปแบบที่เข้าถึงและเข้าใจได้ง่ายขึ้น
 				</li>
 			</ul>
 			<h3 id="ทีมงานร่วมพัฒนา" class="fluid-heading-03 mt-2">ทีมงานร่วมพัฒนา</h3>
@@ -149,12 +148,6 @@
 					Meetup เพื่อดำเนินโครงการ
 				</p>
 			</div>
-			<div class="mt-2 flex flex-wrap gap-2">
-				<Button href="https://wevis.info/downloads">ดาวน์โหลดข้อมูล</Button>
-				<Button kind="tertiary" href="https://airtable.com/shryu4errnlj1LWsM"
-					>เสนอแนะเพิ่มเติม</Button
-				>
-			</div>
 		</section>
 		<section class="flex flex-col gap-2 py-6 md:py-9">
 			<h2 id="เกี่ยวกับข้อมูลในเว็บไซต์" class="fluid-heading-04">เกี่ยวกับข้อมูลในเว็บไซต์</h2>
@@ -174,7 +167,7 @@
 				ไม่สามารถรับผิดชอบต่อผลกระทบใดๆ หากมีข้อมูลที่ผิดพลาดหรือไม่อัปเดตล่าสุด
 				หากมีข้อสงสัยต้องการสอบถามเพิ่มเติม
 				ประสงค์แจ้งเปลี่ยนแปลงหรือเพิ่มเติมข้อมูลเพื่อความถูกต้อง หรือมีข้อเสนอแนะใดๆ
-				สามารถติดต่อได้ที่ <strong class="font-normal text-blue-60">team@punchup.world</strong>
+				สามารถติดต่อได้ที่ <strong class="font-normal text-blue-60">team@wevis.info</strong>
 			</p>
 		</section>
 		<section class="flex flex-col gap-2 py-6 md:py-9">
@@ -200,13 +193,6 @@
 				<a href="https://wevis.info/" target="_blank" rel="nofollow noopener noreferrer"
 					>wevis.info</a
 				> มาตลอดหลายปี โดยเปิดพื้นที่ให้บุคคลและองค์กร ทั้งภาครัฐและเอกชน สามารถเข้ามามีส่วนร่วมในการพัฒนาแต่ละโปรเจกต์ได้
-			</p>
-			<p>
-				ปัจจุบัน WeVis ทำงานร่วมกับ <a
-					href="https://punchup.world/"
-					target="_blank"
-					rel="nofollow noopener noreferrer">Punch Up</a
-				> ซึ่งเป็นสตูดิโอผลิตงาน Data Storytelling ที่สื่อสารเรื่องราวด้วยชุดข้อมูลในประเด็นต่างๆ ที่นอกเหนือไปจากประเด็นทางการเมือง
 			</p>
 			<h3 id="What-We-Do" class="fluid-heading-03 mt-2">What We Do</h3>
 			<p>
@@ -237,8 +223,10 @@
 				และสามารถติดตามผลงานของ WeVis ได้ทุกช่องทาง Social Media
 			</p>
 			<div class="mt-2 flex flex-wrap items-center gap-2">
-				<Button class="w-full max-w-max" href="https://bit.ly/wevisfeedback"
-					>พบข้อผิดพลาดหรือมีไอเดีย? บอกเราเลย</Button
+				<Button
+					class="w-full max-w-max"
+					href="https://airtable.com/shryu4errnlj1LWsM"
+					target="_blank">พบข้อผิดพลาดหรือมีไอเดีย? บอกเราเลย</Button
 				>
 				<ul class="flex items-center gap-2">
 					<li>
@@ -263,7 +251,7 @@
 					</li>
 					<li>
 						<a
-							href="https://github.com/wevisdemo/parliament-watch"
+							href="https://www.instagram.com/wevisdemo/"
 							target="_blank"
 							rel="nofollow noopener noreferrer"
 							aria-label="Instagram"
@@ -273,7 +261,7 @@
 					</li>
 					<li>
 						<a
-							href="https://twitter.com/wevisdemo"
+							href="https://x.com/wevisdemo"
 							target="_blank"
 							rel="nofollow noopener noreferrer"
 							aria-label="X"
