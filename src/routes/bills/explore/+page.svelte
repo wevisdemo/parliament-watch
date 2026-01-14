@@ -170,6 +170,11 @@
 		if (proposerNameParam) {
 			cmpDataPage.setCombobox('filterProposerName', proposerNameParam);
 		}
+
+		const partyParam = $page.url.searchParams.get('party');
+		if (partyParam) {
+			cmpDataPage.setCombobox('filterPartyName', partyParam);
+		}
 	});
 </script>
 

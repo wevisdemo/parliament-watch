@@ -137,11 +137,13 @@
 	</section>
 	<section id="party" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<h2 class="fluid-heading-03">สำรวจตามพรรคการเมือง</h2>
-		<Carousel>
-			{#each byParty as bill (bill.party)}
-				<LawStatusCard {totalCount} {bill} />
-			{/each}
-		</Carousel>
+		{#key thisTerm.id}
+			<Carousel>
+				{#each byParty as bill (bill.party)}
+					<LawStatusCard {totalCount} {bill} />
+				{/each}
+			</Carousel>
+		{/key}
 	</section>
 </div>
 <div class="bg-teal-80">
