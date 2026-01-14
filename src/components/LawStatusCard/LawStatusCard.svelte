@@ -23,6 +23,16 @@
 			[status in BillStatus]: number;
 		};
 	}
+
+	export interface BillsByParty {
+		party: string;
+		imageSrc: string;
+		samples: BillSample[];
+		count: number;
+		countByStatus: {
+			[status in BillStatus]: number;
+		};
+	}
 </script>
 
 <script lang="ts">
@@ -36,7 +46,7 @@
 	import DocumentUnknown from 'carbon-icons-svelte/lib/DocumentUnknown.svelte';
 
 	export let totalCount: number;
-	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType;
+	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType | BillsByParty;
 	export let showDescription = false;
 
 	$: headerStyle =
@@ -54,7 +64,9 @@
 			? ['status', bill.status]
 			: 'category' in bill
 				? ['category', bill.category]
-				: ['proposertype', bill.proposerType];
+				: 'proposerType' in bill
+					? ['proposerType', bill.proposerType]
+					: ['party', bill.party];
 </script>
 
 <article
@@ -75,6 +87,13 @@
 					{/if}
 				</div>
 				<h3 class="heading-02">{bill.proposerType}</h3>
+			</div>
+		{:else if 'party' in bill}
+			<div class="mb-3 flex items-center gap-1">
+				<div class="h-6 w-6 rounded-full bg-white p-1 text-white">
+					<img src={bill.imageSrc} alt={bill.party} />
+				</div>
+				<h3 class="heading-02">{bill.party}</h3>
 			</div>
 		{:else}
 			<h3 class="heading-02 mb-3 w-fit rounded-full px-2 py-1 {headerStyle}">
@@ -99,7 +118,7 @@
 				<span class="fluid-heading-05">{bill.count}</span>
 				<span>ฉบับ</span>
 			</p>
-			{#if 'proposerType' in bill}
+			{#if 'proposerType' in bill || 'party' in bill}
 				<ul>
 					{#each billStatusList as status (status)}
 						{@const relatedBillCount = bill.countByStatus[status] || 0}
