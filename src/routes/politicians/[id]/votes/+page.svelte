@@ -120,8 +120,10 @@
 		{#if cellKey === 'date'}
 			{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 		{:else if cellKey === 'name'}
-			<a class="text-text-01 hover:text-interactive-01 hover:underline" href="/votings/{row.id}"
-				>{cellValue}</a
+			<a
+				class="text-text-01 hover:text-interactive-01 hover:underline"
+				href="/votings/{row.id}"
+				target="_blank">{cellValue}</a
 			>
 		{:else if cellKey === 'option'}
 			<VotingOptionTag voteOption={cellValue} />

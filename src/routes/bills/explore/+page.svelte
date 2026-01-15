@@ -215,8 +215,10 @@
 				{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 			</div>
 		{:else if cellKey === 'titleColumn'}
-			<a class="text-text-01 underline hover:text-interactive-01" href="/bills/{cellValue.id}"
-				>{cellValue.title}</a
+			<a
+				class="text-text-01 underline hover:text-interactive-01"
+				href="/bills/{cellValue.id}"
+				target="_blank">{cellValue.title}</a
 			>
 		{:else if cellKey === 'status'}
 			<BillStatusTag class="m-0" status={cellValue} isLarge />
