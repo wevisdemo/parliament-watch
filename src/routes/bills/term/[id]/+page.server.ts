@@ -4,6 +4,7 @@ import type {
 	BillsByStatus,
 	BillsByParty
 } from '$components/LawStatusCard/LawStatusCard.svelte';
+import { getInvolvedPartyIdSet } from '$lib/politigraph/bill/party';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillWhere, Bill } from '$lib/politigraph/genql';
@@ -12,11 +13,9 @@ import { createSeo } from '$lib/seo';
 import { BillProposerType } from '$models/bill';
 import { MP_OTHER_TERMS } from '../../../../constants/bills';
 import { error } from '@sveltejs/kit';
-import dayjs from 'dayjs';
 
 const BILL_SAMPLE_LIMIT = 3;
 const LATEST_ENACTED_BILL_LIMIT = 10;
-const OTHER_CATEGORY_KEY = 'อื่นๆ';
 
 export async function load({ params }) {
 	const allMpTerms = [
@@ -167,45 +166,11 @@ export async function load({ params }) {
 		})
 	).bills;
 
-	const billsWithParty = billsInTerm.flatMap(({ creators, co_proposers, ...bill }) => {
-		const proposedDate = dayjs(bill.proposal_date);
-		const proposer = creators.at(0) ?? {
-			__typename: null,
-			name: OTHER_CATEGORY_KEY,
-			memberships: []
-		};
-		const proposerParty =
-			proposer.__typename == 'Person'
-				? proposer.memberships
-						.find(
-							({ start_date, end_date }) =>
-								proposedDate.isAfter(start_date) && (!end_date || proposedDate.isBefore(end_date))
-						)
-						?.posts.flatMap((post) => post.organizations.at(0)?.id)
-						.at(0)
-				: null;
-
-		const coProposerParties = new Set(
-			co_proposers.flatMap((co_proposer) =>
-				co_proposer.memberships
-					.filter(
-						(membership) =>
-							proposedDate.isAfter(membership.start_date) &&
-							(!membership.end_date || proposedDate.isBefore(membership.end_date))
-					)
-					.flatMap((membership) =>
-						membership.posts.flatMap((post) => post.organizations).map((org) => org.id)
-					)
-			)
-		);
-
-		const proposerParties = proposerParty
-			? coProposerParties.add(proposerParty)
-			: coProposerParties;
-		return [...proposerParties].map((party) => {
+	const billsWithParty = billsInTerm.flatMap(({ creators, co_proposers, ...bill }) =>
+		[...getInvolvedPartyIdSet({ creators, co_proposers, ...bill })].map((party) => {
 			return { ...bill, party };
-		});
-	});
+		})
+	);
 
 	const billsGroupedByParty = Object.groupBy(billsWithParty, (bill) => bill.party);
 

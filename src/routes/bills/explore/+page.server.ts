@@ -3,6 +3,7 @@ import type {
 	ComboboxFilterChoice
 } from '$components/DataPage/DataPage.svelte';
 import { formatYearRange } from '$lib/date';
+import { getInvolvedPartyIdSet } from '$lib/politigraph/bill/party';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillStatus } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
@@ -104,37 +105,8 @@ export async function load() {
 
 	const assemblies = data.organizations;
 
-	const bills = data.bills.map(({ creators, co_proposers, people_signature_count, ...bill }) => {
+	const bills = data.bills.map(({ people_signature_count, ...bill }) => {
 		const proposedDate = dayjs(bill.proposal_date);
-		const proposer = creators.at(0) ?? {
-			__typename: null,
-			name: OTHER_CATEGORY_KEY,
-			memberships: []
-		};
-		const proposerParty =
-			proposer.__typename == 'Person'
-				? proposer.memberships
-						.find(
-							({ start_date, end_date }) =>
-								proposedDate.isAfter(start_date) && (!end_date || proposedDate.isBefore(end_date))
-						)
-						?.posts.flatMap((post) => post.organizations.at(0)?.id)
-						.at(0)
-				: null;
-
-		const coProposerParties = new Set(
-			co_proposers.flatMap((co_proposer) =>
-				co_proposer.memberships
-					.filter(
-						(membership) =>
-							proposedDate.isAfter(membership.start_date) &&
-							(!membership.end_date || proposedDate.isBefore(membership.end_date))
-					)
-					.flatMap((membership) =>
-						membership.posts.flatMap((post) => post.organizations).map((org) => org.id)
-					)
-			)
-		);
 
 		return {
 			...bill,
@@ -145,15 +117,19 @@ export async function load() {
 						proposedDate.isAfter(founding_date) &&
 						(!dissolution_date || proposedDate.isBefore(dissolution_date))
 				)?.id || OTHER_CATEGORY_KEY,
-			proposerType: !creators[0]
+			proposerType: !bill.creators[0]
 				? BillProposerType.Unknown
-				: creators[0].__typename === 'Organization'
+				: bill.creators[0].__typename === 'Organization'
 					? BillProposerType.Assembly
 					: people_signature_count
 						? BillProposerType.People
 						: BillProposerType.Politician,
-			proposer,
-			proposerParties: proposerParty ? coProposerParties.add(proposerParty) : coProposerParties
+			proposer: bill.creators[0] ?? {
+				__typename: null,
+				name: OTHER_CATEGORY_KEY,
+				memberships: []
+			},
+			proposerParties: getInvolvedPartyIdSet(bill, proposedDate)
 		};
 	});
 
