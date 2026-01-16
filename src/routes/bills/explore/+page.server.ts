@@ -9,12 +9,13 @@ import type { BillStatus } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { BillProposerType } from '$models/bill';
+import { MP_OTHER_TERMS } from '../../../constants/bills';
 import dayjs from 'dayjs';
 
 const OTHER_CATEGORY_KEY = 'อื่นๆ';
 
 interface FilterOptions {
-	mpAssemblies: CheckboxFilterChoice[];
+	representativeTerms: CheckboxFilterChoice[];
 	statuses: BillStatus[];
 	categories: string[];
 	proposerTypes: BillProposerType[];
@@ -116,7 +117,7 @@ export async function load() {
 					({ founding_date, dissolution_date }) =>
 						proposedDate.isAfter(founding_date) &&
 						(!dissolution_date || proposedDate.isBefore(dissolution_date))
-				)?.id || OTHER_CATEGORY_KEY,
+				)?.id || MP_OTHER_TERMS.id,
 			proposerType: !bill.creators[0]
 				? BillProposerType.Unknown
 				: bill.creators[0].__typename === 'Organization'
@@ -189,7 +190,7 @@ export async function load() {
 		categories.push(OTHER_CATEGORY_KEY);
 	}
 
-	const mpAssemblies: CheckboxFilterChoice[] = assemblies
+	const representativeTerms: CheckboxFilterChoice[] = assemblies
 		.filter(({ id }) => bills.some((bill) => bill.purposedAtMpAssemblyId === id))
 		.sort((a, z) => (z.founding_date ?? '').localeCompare(a.founding_date ?? ''))
 		.map((assembly) => ({
@@ -197,15 +198,15 @@ export async function load() {
 			value: assembly.id
 		}));
 
-	if (bills.some((bill) => bill.purposedAtMpAssemblyId === OTHER_CATEGORY_KEY)) {
-		mpAssemblies.push({
+	if (bills.some((bill) => bill.purposedAtMpAssemblyId === MP_OTHER_TERMS.id)) {
+		representativeTerms.push({
 			label: 'สภาผู้แทนราษฎรชุดอื่นๆ (ก่อนชุดที่ 25)',
-			value: OTHER_CATEGORY_KEY
+			value: MP_OTHER_TERMS.id
 		});
 	}
 
 	const filterOptions: FilterOptions = {
-		mpAssemblies,
+		representativeTerms,
 		statuses: billStatuses,
 		categories,
 		proposerTypes,

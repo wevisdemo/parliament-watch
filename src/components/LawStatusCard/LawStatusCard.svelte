@@ -48,6 +48,7 @@
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType | BillsByParty;
 	export let showDescription = false;
+	export let exploreLinkExtraParams: Record<string, string> = {};
 
 	$: headerStyle =
 		bill.count > 0
@@ -58,15 +59,16 @@
 	$: barStyle = 'status' in bill ? billStatusProperty[bill.status].colorClass : 'bg-ui-04';
 	$: headerBackgroundColor = bill.count > 0 ? 'bg-white' : 'bg-ui-01';
 
-	let billParams: [string, string];
-	$: billParams =
-		'status' in bill
-			? ['status', bill.status]
+	$: exploreParams = new URLSearchParams({
+		...exploreLinkExtraParams,
+		...('status' in bill
+			? { status: bill.status }
 			: 'category' in bill
-				? ['category', bill.category]
+				? { category: bill.category }
 				: 'proposerType' in bill
-					? ['proposerType', bill.proposerType]
-					: ['party', bill.party];
+					? { proposertype: bill.proposerType }
+					: { party: bill.party })
+	});
 </script>
 
 <article
@@ -163,7 +165,7 @@
 				{/each}
 			</ul>
 			<a
-				href="/bills/explore?{billParams[0]}={encodeURIComponent(billParams[1])}"
+				href="/bills/explore?{exploreParams.toString()}"
 				class="helper-text-01 flex items-center gap-1 text-link-01 underline"
 				><span>ดูทั้งหมด</span><ArrowRight /></a
 			>

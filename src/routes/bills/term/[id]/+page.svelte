@@ -33,6 +33,8 @@
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
 		assembly ? `/bills/term/${assembly.id}` : '';
+
+	$: exploreLinkExtraParams = { term: thisTerm.id };
 </script>
 
 <Breadcrumb
@@ -108,7 +110,7 @@
 				}}
 			>
 				{#each byStatus as bill (bill.status)}
-					<LawStatusCard {totalCount} {bill} showDescription />
+					<LawStatusCard {totalCount} {bill} showDescription {exploreLinkExtraParams} />
 				{/each}
 			</Carousel>
 		{/key}
@@ -121,7 +123,7 @@
 				</header>
 				<Carousel>
 					{#each byCategory as bill}
-						<LawStatusCard totalCount={totalCount} {bill} />
+						<LawStatusCard totalCount={totalCount} {bill} {exploreLinkExtraParams} />
 					{/each}
 				</Carousel>
 			</section> -->
@@ -130,7 +132,7 @@
 		{#key thisTerm.id}
 			<Carousel>
 				{#each byProposerType as bill (bill.proposerType)}
-					<LawStatusCard {totalCount} {bill} />
+					<LawStatusCard {totalCount} {bill} {exploreLinkExtraParams} />
 				{/each}
 			</Carousel>
 		{/key}
@@ -140,7 +142,7 @@
 		{#key thisTerm.id}
 			<Carousel>
 				{#each byParty as bill (bill.party)}
-					<LawStatusCard {totalCount} {bill} />
+					<LawStatusCard {totalCount} {bill} {exploreLinkExtraParams} />
 				{/each}
 			</Carousel>
 		{/key}

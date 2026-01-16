@@ -71,9 +71,9 @@
 
 	$: checkboxFilterList = [
 		{
-			key: 'filterEra',
+			key: 'filterTerm',
 			legend: 'สมัยที่เสนอ',
-			choices: filterOptions.mpAssemblies
+			choices: filterOptions.representativeTerms
 		},
 		{
 			key: 'filterStatus',
@@ -127,12 +127,12 @@
 						const search = searchQuery.trim();
 						if (search && !bill.title.includes(search) && !bill.nickname?.includes(search)) return;
 
-						const { filterEra, filterStatus, filterCategory, filterProposerType } =
+						const { filterTerm, filterStatus, filterCategory, filterProposerType } =
 							selectedCheckboxValue;
 
 						return (
 							bill.purposedAtMpAssemblyId &&
-							filterEra.includes(bill.purposedAtMpAssemblyId) &&
+							filterTerm.includes(bill.purposedAtMpAssemblyId) &&
 							filterStatus.includes(bill.status) &&
 							// TODO: until we have a protocol to maintain bill category data
 							// filterCategory.some((category) => bill.categories.includes(category as string)) &&
@@ -151,6 +151,11 @@
 					}));
 
 	onMount(() => {
+		const term = $page.url.searchParams.get('term');
+		if (term && filterOptions.representativeTerms.find((rep) => rep.value === term)) {
+			selectedCheckboxValue.filterTerm = [term];
+		}
+
 		const status = $page.url.searchParams.get('status');
 		if (status && (filterOptions.statuses as string[]).includes(status)) {
 			selectedCheckboxValue.filterStatus = [status];

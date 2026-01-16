@@ -44,20 +44,41 @@
 
 	let status: BillStatus = 'IN_PROGRESS';
 	let showDescription = true;
+	let exploreLinkExtraParams = {};
 </script>
 
 <Hst.Story title="LawStatusCard">
 	<Hst.Variant title="Status (Empty)">
-		<LawStatusCard totalCount={900} bill={{ ...emptyBillByStatus, status }} {showDescription} />
+		<LawStatusCard
+			totalCount={900}
+			bill={{ ...emptyBillByStatus, status }}
+			{showDescription}
+			{exploreLinkExtraParams}
+		/>
 	</Hst.Variant>
 	<Hst.Variant title="Status (Normal)">
-		<LawStatusCard totalCount={900} bill={{ ...billByStatus, status }} {showDescription} />
+		<LawStatusCard
+			totalCount={900}
+			bill={{ ...billByStatus, status }}
+			{showDescription}
+			{exploreLinkExtraParams}
+		/>
 	</Hst.Variant>
 	<Hst.Variant title="Proposer Type (Empty)">
-		<LawStatusCard totalCount={900} bill={emptyBillByProposerType} />
+		<LawStatusCard
+			totalCount={900}
+			bill={emptyBillByProposerType}
+			{showDescription}
+			{exploreLinkExtraParams}
+		/>
 	</Hst.Variant>
 	<Hst.Variant title="Proposer Type (Normal)">
-		<LawStatusCard totalCount={900} bill={billByProposerType} />
+		<LawStatusCard
+			totalCount={900}
+			bill={billByProposerType}
+			{showDescription}
+			{exploreLinkExtraParams}
+		/>
 	</Hst.Variant>
 
 	<svelte:fragment slot="controls">
@@ -67,5 +88,6 @@
 			options={['IN_PROGRESS', 'MERGED', 'ENACTED', 'REJECTED']}
 		/>
 		<Hst.Checkbox bind:value={showDescription} title="showDescription" />
+		<Hst.Json bind:value={exploreLinkExtraParams} title="exploreLinkExtraParams" />
 	</svelte:fragment>
 </Hst.Story>
