@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Tag } from 'carbon-components-svelte';
+
 	type AlignSide = 'left' | 'center' | 'right';
 
 	interface Tab {
@@ -6,6 +8,7 @@
 		label: string;
 		disabled?: boolean;
 		show?: number | boolean;
+		tag?: string;
 	}
 
 	export let tabs: Tab[];
@@ -34,13 +37,18 @@
 </script>
 
 <div class="flex w-full">
-	{#each tabs.filter((tab) => tab.show) as { id, label, disabled } (id)}
+	{#each tabs.filter((tab) => tab.show) as { id, label, disabled, tag } (id)}
 		<button
-			class="{alignMapping[align]} {activeTab === id ? 'tab-active' : 'tab-inactive'}"
+			class="flex flex-row items-center justify-center gap-1 {alignMapping[align]} {activeTab === id
+				? 'tab-active'
+				: 'tab-inactive'}"
 			on:click={() => onClickTab(id)}
 			{disabled}
 		>
-			{label}
+			<span>{label}</span>
+			{#if tag}
+				<Tag size="sm" type="blue">{tag}</Tag>
+			{/if}
 		</button>
 	{/each}
 </div>

@@ -87,7 +87,7 @@
 			tabs={[
 				{ id: 'status', label: 'สถานะ', show: true },
 				{ id: 'proposer', label: 'ผู้เสนอ', show: true },
-				{ id: 'party', label: 'พรรคการเมือง', show: true }
+				{ id: 'party', label: 'พรรคการเมือง', tag: 'มาใหม่!', show: true }
 			]}
 		/>
 	</section>
