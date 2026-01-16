@@ -139,6 +139,12 @@
 	</section>
 	<section id="party" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
 		<h2 class="fluid-heading-03">สำรวจตามพรรคการเมือง</h2>
+		<p class="body-01">
+			ทั้งหมด <span class="font-bold">{byParty.length} พรรคการเมือง</span> (ในกรณีที่พรรคเปลี่ยนชื่อ
+			ระบบจะนับเป็นคนละพรรค) <br />
+			ร่างกฎหมายในส่วนนี้จะนับเฉพาะฉบับที่เสนอโดยสมาชิกสภาผู้แทนราษฎร โดย 1 ฉบับสามารถเสนอโดยสมาชิกได้มากกว่า
+			1 พรรค
+		</p>
 		{#key thisTerm.id}
 			<Carousel>
 				{#each byParty as bill (bill.party)}
