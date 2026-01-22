@@ -4,16 +4,10 @@
 	import { ArrowRight, Close } from 'carbon-icons-svelte';
 	import Carousel from './Carousel.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import { graphql } from '$lib/politigraph/client';
-	import type { Bill, BillEnactEvent, BillsConnection, BillWhere } from '$lib/politigraph/genql';
-	import { onMount, type ComponentProps } from 'svelte';
+	import { onMount } from 'svelte';
 	import { billStatusList } from '$lib/politigraph/bill/status';
-	import Proposer from '$components/Proposer/Proposer.svelte';
-	import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
-	interface BillSummary {
-		billsConnection: Pick<BillsConnection, 'totalCount'>;
-		bills: Pick<Bill, 'id' | 'title' | 'nickname'>[];
-	}
+	import { ALL_CATEGORY_KEY } from '../../constants/bills';
+	import type { BillOverviewData } from '../../routes/files/bills-overview/[repId]/[category].json/+server';
 
 	export let billCategories: string[] = [];
 	export let mpTermChoices: {
@@ -23,105 +17,30 @@
 		dissolution_date?: string;
 	}[] = [];
 
-	const ALL_CATEGORY_KEY = 'ทุกหมวด';
-	const MAX_BILL_BY_STATUS = 3;
-	const MAX_ENACTED_BILL = 10;
-
 	let selectedCategory = ALL_CATEGORY_KEY;
-	$: selectedMpTermId = mpTermChoices[0].id ?? '';
+	let selectedMpTermId = mpTermChoices[0].id ?? '';
 
 	let isLoading = true;
 	let carousalKey = '';
-	let billSummaryByStatus: BillSummary[] = [];
-	let lastEnactedBills: (Pick<Bill, 'id' | 'title' | 'nickname' | 'proposal_date'> & {
-		enact_date: BillEnactEvent['start_date'];
-	})[] = [];
-	let lastEnactedBillProposers: ComponentProps<Proposer>['proposer'][] = [];
+	let billOverview: BillOverviewData = {
+		billSummaryByStatuses: [],
+		lastEnactedBills: [],
+		lastEnactedBillProposers: []
+	};
 
 	// TODO: We didn't handle MERGED status in Politigraph yet
 	const displayedStatuses = billStatusList.filter((status) => status !== 'MERGED');
 
 	onMount(() => {
-		loadBills(selectedCategory, selectedMpTermId);
+		loadBillOverviewData();
 	});
 
-	async function loadBills(category: string, mpTermId: string) {
+	async function loadBillOverviewData() {
 		isLoading = true;
 
-		const queryCategory = category == ALL_CATEGORY_KEY ? undefined : category;
-		const queryTerm = mpTermChoices.find((mp) => mp.id === mpTermId);
-
-		const billConditions: BillWhere = {
-			...(queryCategory && {
-				categories_INCLUDES: category
-			}),
-			...(queryTerm?.founding_date && { proposal_date_GTE: queryTerm.founding_date }),
-			...(queryTerm?.dissolution_date && {
-				proposal_date_LTE: queryTerm.dissolution_date
-			})
-		};
-
-		billSummaryByStatus = await Promise.all(
-			displayedStatuses.map((status) => {
-				const where: BillWhere = {
-					status_EQ: status,
-					...billConditions
-				};
-
-				return graphql.query({
-					billsConnection: {
-						__args: { where },
-						totalCount: true
-					},
-					bills: {
-						__args: { where, sort: [{ proposal_date: 'DESC' }], limit: MAX_BILL_BY_STATUS },
-						id: true,
-						title: true,
-						nickname: true
-					}
-				});
-			})
-		);
-
-		lastEnactedBills = (
-			await graphql.query({
-				billEnactEvents: {
-					__args: {
-						where: {
-							NOT: { start_date_EQ: null },
-							bills_ALL: billConditions
-						},
-						sort: [{ start_date: 'DESC' }],
-						limit: MAX_ENACTED_BILL
-					},
-					start_date: true,
-					bills: {
-						id: true,
-						title: true,
-						nickname: true,
-						proposal_date: true
-					}
-				}
-			})
-		).billEnactEvents.map(({ start_date, bills }) => ({ enact_date: start_date, ...bills[0] }));
-
-		lastEnactedBillProposers = (
-			await Promise.all(
-				lastEnactedBills.map(({ id, proposal_date }) =>
-					graphql.query({
-						bills: {
-							__args: {
-								where: {
-									id_EQ: id
-								},
-								limit: 1
-							},
-							...createBillFieldsForProposer(proposal_date)
-						}
-					})
-				)
-			)
-		).map(({ bills }) => getBillProposer(bills[0]));
+		billOverview = (await (
+			await fetch(`/files/bills-overview/${selectedMpTermId}/${selectedCategory}.json`)
+		).json()) as BillOverviewData;
 
 		isLoading = false;
 		carousalKey = selectedMpTermId + selectedCategory;
@@ -129,15 +48,15 @@
 
 	function selectCategory(category: string) {
 		selectedCategory = category;
-		loadBills(selectedCategory, selectedMpTermId);
+		loadBillOverviewData();
 	}
 
 	function selectMpTerm(mptermId: string) {
 		selectedMpTermId = mptermId;
-		loadBills(selectedCategory, selectedMpTermId);
+		loadBillOverviewData();
 	}
 
-	$: totalCount = billSummaryByStatus.reduce(
+	$: totalCount = billOverview.billSummaryByStatuses.reduce(
 		(sum, byStatus) => sum + byStatus.billsConnection.totalCount,
 		0
 	);
@@ -151,11 +70,11 @@
 	{/if}
 
 	<div class="relative flex flex-col gap-4">
-		{#if billCategories.length}
+		{#if billCategories.length > 1}
 			<div class="flex flex-col gap-2 md:flex-row">
 				<h3 class="fluid-heading-04 text-nowrap">เลือกดู</h3>
 				<div class="flex flex-row flex-wrap items-center gap-1">
-					{#each [ALL_CATEGORY_KEY, ...billCategories] as category (category)}
+					{#each billCategories as category (category)}
 						<button
 							class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {category ===
 							selectedCategory
@@ -191,7 +110,7 @@
 			</div>
 		{/if}
 
-		{#if billSummaryByStatus.length}
+		{#if billOverview.billSummaryByStatuses.length}
 			{#key carousalKey}
 				<Carousel
 					options={{
@@ -207,7 +126,7 @@
 					hideNavigation={isLoading}
 				>
 					{#each displayedStatuses as status, i (status)}
-						{@const { bills, billsConnection } = billSummaryByStatus[i]}
+						{@const { bills, billsConnection } = billOverview.billSummaryByStatuses[i]}
 						<LawStatusCard
 							{totalCount}
 							bill={{
@@ -225,10 +144,10 @@
 		{/if}
 	</div>
 
-	{#if lastEnactedBills.length}
+	{#if billOverview.lastEnactedBills.length}
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-row flex-wrap items-center gap-1">
-				<h3 class="heading-02">{lastEnactedBills.length} ฉบับล่าสุดที่ได้บังคับใช้</h3>
+				<h3 class="heading-02">{billOverview.lastEnactedBills.length} ฉบับล่าสุดที่ได้บังคับใช้</h3>
 				{#if selectedCategory !== ALL_CATEGORY_KEY}
 					<span class="body-02">ในหมวด</span>
 					<div
@@ -244,7 +163,7 @@
 
 			{#key carousalKey}
 				<Carousel hideNavigation={isLoading}>
-					{#each lastEnactedBills as { id, title, nickname, proposal_date, enact_date }, i (id)}
+					{#each billOverview.lastEnactedBills as { id, title, nickname, proposal_date, enact_date }, i (id)}
 						<BillCard
 							class="keen-slider__slide min-w-72"
 							orientation="portrait"
@@ -254,7 +173,7 @@
 							status="ENACTED"
 							enactedOn={enact_date ? new Date(enact_date) : null}
 							proposedOn={proposal_date ? new Date(proposal_date) : null}
-							proposer={lastEnactedBillProposers[i]}
+							proposer={billOverview.lastEnactedBillProposers[i] ?? undefined}
 						/>
 					{/each}
 				</Carousel>
