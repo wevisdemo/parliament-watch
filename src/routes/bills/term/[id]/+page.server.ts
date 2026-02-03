@@ -302,35 +302,32 @@ export async function load({ params }) {
 
 function queryBillSummaryByStatus(andWhere: BillWhere = {}) {
 	return Promise.all(
-		billStatusList
-			// TODO: We didn't handle MERGED status in Politigraph yet
-			.filter((status) => status !== 'MERGED')
-			.map(async (status) => {
-				const where = {
-					...andWhere,
-					status: {
-						eq: status
-					}
-				};
-				const { bills, billsConnection } = await graphql.query({
-					billsConnection: {
-						__args: { where },
-						totalCount: true
-					},
-					bills: {
-						__args: { where, sort: [{ proposal_date: 'DESC' }], limit: BILL_SAMPLE_LIMIT },
-						id: true,
-						title: true,
-						nickname: true
-					}
-				});
+		billStatusList.map(async (status) => {
+			const where = {
+				...andWhere,
+				status: {
+					eq: status
+				}
+			};
+			const { bills, billsConnection } = await graphql.query({
+				billsConnection: {
+					__args: { where },
+					totalCount: true
+				},
+				bills: {
+					__args: { where, sort: [{ proposal_date: 'DESC' }], limit: BILL_SAMPLE_LIMIT },
+					id: true,
+					title: true,
+					nickname: true
+				}
+			});
 
-				return {
-					status,
-					samples: bills.map(setBillNicknameFromTitleAsFallback),
-					count: billsConnection.totalCount
-				};
-			})
+			return {
+				status,
+				samples: bills.map(setBillNicknameFromTitleAsFallback),
+				count: billsConnection.totalCount
+			};
+		})
 	);
 }
 

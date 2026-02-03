@@ -28,9 +28,6 @@
 		lastEnactedBillProposers: []
 	};
 
-	// TODO: We didn't handle MERGED status in Politigraph yet
-	const displayedStatuses = billStatusList.filter((status) => status !== 'MERGED');
-
 	onMount(() => {
 		loadBillOverviewData();
 	});
@@ -125,7 +122,7 @@
 					}}
 					hideNavigation={isLoading}
 				>
-					{#each displayedStatuses as status, i (status)}
+					{#each billStatusList as status, i (status)}
 						{@const { bills, billsConnection } = billOverview.billSummaryByStatuses[i]}
 						<LawStatusCard
 							{totalCount}

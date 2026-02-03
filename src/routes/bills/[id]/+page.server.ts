@@ -160,6 +160,23 @@ export async function load({ params }) {
 						note: true,
 						url: true
 					}
+				},
+				on_BillMergeEvent: {
+					start_date: true,
+					main_bill_id: true,
+					bills: {
+						id: true,
+						title: true,
+						nickname: true,
+						creators: {
+							on_Person: {
+								name: true
+							},
+							on_Organization: {
+								name: true
+							}
+						}
+					}
 				}
 			}
 		}
@@ -201,6 +218,13 @@ export async function load({ params }) {
 				: eventDefaultSortPriority.indexOf(z.type) - eventDefaultSortPriority.indexOf(a.type)
 		);
 
+	const mergeEvent = bill_events.find((e) => e.__typename === 'BillMergeEvent');
+	const mergeEventBills = mergeEvent?.bills.map((b) => ({
+		id: b.id,
+		name: b.nickname ?? b.title,
+		proposedBy: b.creators[0]?.name
+	}));
+
 	return {
 		bill,
 		proposer,
@@ -208,6 +232,15 @@ export async function load({ params }) {
 			...politician,
 			party: memberships[0]?.posts[0]?.organizations[0]
 		})),
+		mergeDetail:
+			mergeEvent && mergeEventBills
+				? {
+						mainBill: mergeEventBills.find((b) => b.id === mergeEvent.main_bill_id),
+						otherBills: mergeEventBills.filter(
+							(b) => b.id !== bill.id && b.id !== mergeEvent.main_bill_id
+						)
+					}
+				: null,
 		events,
 		seo: createSeo({
 			title: bill.nickname ?? bill.title

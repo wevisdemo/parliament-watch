@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { Link } from 'carbon-icons-svelte';
+	import { DocumentMultiple_02, Information, Link } from 'carbon-icons-svelte';
 	import { groups } from 'd3';
 	import dayjs from 'dayjs';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
-	// import Tooltip from '$components/Assemblies/Tooltip.svelte';
+	import Tooltip from '$components/Assemblies/Tooltip.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Proposer from '$components/Proposer/Proposer.svelte';
@@ -24,10 +24,7 @@
 
 	export let data;
 
-	const { bill, proposer, coProposers, events } = data;
-
-	// const tooltipText =
-	// 	'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด';
+	const { bill, proposer, coProposers, events, mergeDetail } = data;
 
 	const MAX_DISPLAY_COPROPOSER = 8;
 
@@ -104,58 +101,60 @@
 						{/each}
 					</div>
 				{/if}
-				<!-- TODO: No merged bill data yet -->
-				<!-- {#if mergedBills?.length > 0}
-					<div>
+				{#if mergeDetail}
+					{@const { mainBill, otherBills } = mergeDetail}
+					{@const isMainBill = mainBill?.id === bill.id}
+					<div class="rounded-sm border border-support-04 bg-purple-10 p-3">
 						<div class="flex items-center gap-1">
 							<DocumentMultiple_02 size={24} color="#2600A3" />
-							<span>
-								<b>ร่างกฎหมาย {mergedBills.length} ฉบับ ที่ถูกนำมารวมกับร่างนี้</b>
+							<div class="flex flex-row items-start gap-1">
+								<span class="flex-1">
+									{#if isMainBill}
+										<b
+											>มีร่างกฎหมายอื่นๆ {mergeDetail.otherBills.length} ฉบับ ที่ถูกนำมารวมกับร่างนี้</b
+										>
+									{:else}
+										<b>ถูกรวมเข้ากับร่างกฏหมายอื่น</b>
+									{/if}
+								</span>
+
 								<Tooltip
-									class="absolute ml-1 mt-0.5"
-									{tooltipText}
+									class="mt-[3px]"
+									tooltipText="ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด"
 									direction="top"
 									align={innerWidth <= 500 ? (innerWidth <= 366 ? 'center' : 'end') : 'center'}
 								>
 									<Information color="#525252" />
 								</Tooltip>
-							</span>
+							</div>
 						</div>
-						<ul class="ml-8 mt-1 list-disc">
-							{#each mergedBills as mergedBill}
-								<li>
-									<u>{mergedBill.nickname}</u>
-									<br />
-									<span class="text-text-02"
-										>โดย
-										{#if mergedBill.proposerType === BillProposerType.Politician && mergedBill.proposedLedByPolitician}
-											{@const matchedParty = getMatchedParty(mergedBill.proposedLedByPolitician)}
-											{mergedBill.proposedLedByPolitician.firstname +
-											' ' +
-											mergedBill.proposedLedByPolitician.lastname +
-											' ' +
-											getCurrentRoles(mergedBill.proposedLedByPolitician) +
-											' ' +
-											matchedParty
-												? `พรรค${matchedParty?.name}`
-												: ''}
-										{:else if mergedBill.proposerType === BillProposerType.Assembly && mergedBill.proposedByAssembly}
-											{mergedBill.proposedByAssembly.abbreviation
-												? mergedBill.proposedByAssembly.name
-												: mergedBill.proposedByAssembly.abbreviation} ชุดที่
-											{mergedBill.proposedByAssembly.term}
-										{:else if mergedBill.proposerType === BillProposerType.People && mergedBill.proposedByPeople}
-											{mergedBill.proposedByPeople.ledBy +
-												' และประชาชน' +
-												mergedBill.proposedByPeople.signatoryCount +
-												' คน'}
-										{/if}
-									</span>
-								</li>
-							{/each}
-						</ul>
+						{#if !isMainBill && mainBill}
+							<a class="text-sm text-black" href="/bills/{mainBill.id}"
+								>{mainBill.name}
+								{#if mainBill.proposedBy}
+									{' '}<span class="text-gray-60">เสนอโดย {mainBill.proposedBy}</span>
+								{/if}
+							</a>
+						{:else}
+							{#if !isMainBill && !mainBill}
+								<span class="text-sm text-gray-60"
+									>กำลังอยู่ระหว่างการตรวจสอบว่าร่างใดเป็นร่างหลัก</span
+								>
+							{/if}
+							<ul class="ml-8 mt-1 list-disc">
+								{#each otherBills as { id, name, proposedBy } (id)}
+									<li>
+										<a class="text-sm text-black" href="/bills/{id}"
+											>{name}{#if proposedBy}
+												{' '}<span class="text-gray-60">เสนอโดย {proposedBy}</span>
+											{/if}</a
+										>
+									</li>
+								{/each}
+							</ul>
+						{/if}
 					</div>
-				{/if} -->
+				{/if}
 			</div>
 			<div class="flex flex-col gap-2 md:w-56">
 				<LinkTable
