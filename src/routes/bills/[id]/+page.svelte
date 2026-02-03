@@ -69,7 +69,9 @@
 			{/if}
 			<div class="-ml-1 flex items-center gap-1 font-bold">
 				<BillStatusTag isLarge status={bill.status} />
-				<b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b>
+				{#if dayElapsed && bill.status !== 'MERGED'}
+					<b class="text-support-04">ใช้เวลา {dayElapsed} วัน</b>
+				{/if}
 			</div>
 		</div>
 		<div class="mt-7 flex flex-col gap-8 md:flex-row md:gap-16">
