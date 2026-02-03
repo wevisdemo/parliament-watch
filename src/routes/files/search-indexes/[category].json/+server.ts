@@ -16,15 +16,21 @@ export async function GET({ params }) {
 					memberships: {
 						__args: {
 							where: {
-								end_date_EQ: null,
-								posts_ALL: {
-									organizations_ALL: {
-										classification_IN: [
-											'CABINET',
-											'HOUSE_OF_REPRESENTATIVE',
-											'HOUSE_OF_SENATE',
-											'POLITICAL_PARTY'
-										]
+								end_date: { eq: null },
+								posts: {
+									some: {
+										organizations: {
+											some: {
+												classification: {
+													in: [
+														'CABINET',
+														'HOUSE_OF_REPRESENTATIVE',
+														'HOUSE_OF_SENATE',
+														'POLITICAL_PARTY'
+													]
+												}
+											}
+										}
 									}
 								}
 							}
@@ -101,7 +107,9 @@ export async function GET({ params }) {
 				people: {
 					__args: {
 						where: {
-							proposed_motions_SOME: { NOT: { id_EQ: null } }
+							proposed_motions: {
+								some: { NOT: { id: { eq: null } } }
+							}
 						}
 					},
 					name: true,

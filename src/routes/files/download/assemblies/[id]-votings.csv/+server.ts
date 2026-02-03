@@ -12,7 +12,7 @@ export async function GET({ params }) {
 		organizations: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				}
 			},
 			events: {

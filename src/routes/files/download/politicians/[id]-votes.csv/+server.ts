@@ -8,8 +8,10 @@ export async function GET({ params }) {
 		votes: {
 			__args: {
 				where: {
-					voters_ALL: {
-						id_EQ: params.id
+					voters: {
+						some: {
+							id: { eq: params.id }
+						}
 					}
 				}
 			},

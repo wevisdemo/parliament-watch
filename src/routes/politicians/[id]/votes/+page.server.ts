@@ -9,7 +9,7 @@ export async function load({ params }) {
 	} = await graphql.query({
 		people: {
 			__args: {
-				where: { id_EQ: params.id }
+				where: { id: { eq: params.id } }
 			},
 			id: true,
 			prefix: true,
@@ -25,12 +25,18 @@ export async function load({ params }) {
 		votes: {
 			__args: {
 				where: {
-					voters_ALL: {
-						id_EQ: politician.id
+					voters: {
+						some: {
+							id: { eq: politician.id }
+						}
 					},
-					vote_events_ALL: {
-						organizations_ALL: {
-							classification_IN: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
+					vote_events: {
+						some: {
+							organizations: {
+								some: {
+									classification: { in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE'] }
+								}
+							}
 						}
 					}
 				}

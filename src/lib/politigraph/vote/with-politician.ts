@@ -13,8 +13,10 @@ export async function queryPoliticiansVote(voteEvent: {
 		votes: {
 			__args: {
 				where: {
-					vote_events_ALL: {
-						id_EQ: voteEvent.id
+					vote_events: {
+						some: {
+							id: { eq: voteEvent.id }
+						}
 					}
 				}
 			},
@@ -25,14 +27,18 @@ export async function queryPoliticiansVote(voteEvent: {
 				memberships: {
 					__args: {
 						where: {
-							start_date_LTE: voteEvent.start_date,
-							OR: [{ end_date_EQ: null }, { end_date_GTE: voteEvent.start_date }],
-							posts_ALL: {
-								organizations_ALL: {
-									OR: [
-										{ id_IN: voteEvent.organizations.map((o) => o.id) },
-										{ classification_EQ: 'POLITICAL_PARTY' }
-									]
+							start_date: { lte: voteEvent.start_date },
+							OR: [{ end_date: { eq: null } }, { end_date: { gte: voteEvent.start_date } }],
+							posts: {
+								some: {
+									organizations: {
+										some: {
+											OR: [
+												{ id: { in: voteEvent.organizations.map((o) => o.id) } },
+												{ classification: { eq: 'POLITICAL_PARTY' } }
+											]
+										}
+									}
 								}
 							}
 						}
@@ -62,15 +68,24 @@ export async function queryPoliticiansVote(voteEvent: {
 		posts: {
 			__args: {
 				where: {
-					organizations_ALL: {
-						classification_EQ: 'CABINET',
-						founding_date_LTE: voteEvent.start_date,
-						OR: [{ dissolution_date_EQ: null }, { dissolution_date_GTE: voteEvent.end_date }]
+					organizations: {
+						some: {
+							classification: { eq: 'CABINET' },
+							founding_date: { lte: voteEvent.start_date },
+							OR: [
+								{ dissolution_date: { eq: null } },
+								{ dissolution_date: { gte: voteEvent.end_date } }
+							]
+						}
 					},
-					memberships_ALL: {
-						members_ALL: {
-							Organization: {
-								classification_EQ: 'POLITICAL_PARTY'
+					memberships: {
+						some: {
+							members: {
+								some: {
+									Organization: {
+										classification: { eq: 'POLITICAL_PARTY' }
+									}
+								}
 							}
 						}
 					}

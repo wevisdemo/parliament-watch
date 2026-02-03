@@ -15,7 +15,7 @@ export async function load({ params }) {
 		organizations: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				}
 			},
 			classification: true,

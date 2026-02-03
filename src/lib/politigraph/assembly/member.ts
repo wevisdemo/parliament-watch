@@ -16,7 +16,7 @@ export async function getAvailableAssemblies({
 			organizations: {
 				__args: {
 					where: {
-						classification_EQ: classification
+						classification: { eq: classification }
 					},
 					sort: [{ founding_date: 'ASC' }]
 				},
@@ -38,7 +38,7 @@ export async function queryAssemblyMembers({
 		organizations: {
 			__args: {
 				where: {
-					classification_EQ: classification
+					classification: { eq: classification }
 				}
 			},
 			id: true,
@@ -47,10 +47,16 @@ export async function queryAssemblyMembers({
 		people: {
 			__args: {
 				where: {
-					memberships_SOME: {
-						posts_ALL: {
-							organizations_ALL: {
-								id_EQ: id
+					memberships: {
+						some: {
+							posts: {
+								some: {
+									organizations: {
+										some: {
+											id: { eq: id }
+										}
+									}
+								}
 							}
 						}
 					}
@@ -67,20 +73,28 @@ export async function queryAssemblyMembers({
 					where: {
 						OR: [
 							{
-								posts_ALL: {
-									organizations_ALL: {
-										id_EQ: id
+								posts: {
+									some: {
+										organizations: {
+											some: {
+												id: { eq: id }
+											}
+										}
 									}
 								}
 							},
 							{
-								posts_ALL: {
-									organizations_ALL: {
-										classification_EQ: 'POLITICAL_PARTY'
+								posts: {
+									some: {
+										organizations: {
+											some: {
+												classification: { eq: 'POLITICAL_PARTY' }
+											}
+										}
 									}
 								},
-								OR: [{ end_date_EQ: null }, { end_date_GTE: founding_date }],
-								...(dissolution_date ? { start_date_LTE: dissolution_date } : {})
+								OR: [{ end_date: { eq: null } }, { end_date: { gte: founding_date } }],
+								...(dissolution_date ? { start_date: { lte: dissolution_date } } : {})
 							}
 						]
 					},
@@ -103,17 +117,21 @@ export async function queryAssemblyMembers({
 						memberships: {
 							__args: {
 								where: {
-									posts_ALL: {
-										role_STARTS_WITH: 'พรรคฝ่าย',
-										organizations_ALL: {
-											classification_EQ: 'CABINET',
-											...(dissolution_date
-												? {
-														founding_date_LTE: dissolution_date
-													}
-												: {
-														dissolution_date_EQ: null
-													})
+									posts: {
+										some: {
+											role: { startsWith: 'พรรคฝ่าย' },
+											organizations: {
+												some: {
+													classification: { eq: 'CABINET' },
+													...(dissolution_date
+														? {
+																founding_date: { lte: dissolution_date }
+															}
+														: {
+																dissolution_date: { eq: null }
+															})
+												}
+											}
 										}
 									}
 								},

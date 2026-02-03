@@ -29,7 +29,7 @@ export async function load() {
 		organizations: {
 			__args: {
 				where: {
-					classification_IN: ['CABINET']
+					classification: { in: ['CABINET'] }
 				},
 				sort: [
 					{
@@ -45,9 +45,11 @@ export async function load() {
 			posts: {
 				__args: {
 					where: {
-						role_CONTAINS: 'รัฐมนตรี',
-						membershipsAggregate: {
-							count_GT: 0
+						role: { contains: 'รัฐมนตรี' },
+						membershipsConnection: {
+							aggregate: {
+								count: { nodes: { gt: 0 } }
+							}
 						}
 					}
 				},
@@ -60,10 +62,12 @@ export async function load() {
 							memberships: {
 								__args: {
 									where: {
-										end_date_EQ: null,
-										posts_SOME: {
-											organizations_SOME: {
-												classification_EQ: 'POLITICAL_PARTY'
+										end_date: { eq: null },
+										posts: {
+											some: {
+												organizations: {
+													some: { classification: { eq: 'POLITICAL_PARTY' } }
+												}
 											}
 										}
 									}

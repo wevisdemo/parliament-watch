@@ -14,7 +14,7 @@ export async function GET({ params }) {
 		voteEvents: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				}
 			},
 			id: true,

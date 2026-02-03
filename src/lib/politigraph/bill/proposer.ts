@@ -18,16 +18,22 @@ export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 				memberships: {
 					__args: {
 						where: {
-							start_date_LTE: proposalDate,
-							OR: [{ end_date_EQ: null }, { end_date_GTE: proposalDate }],
-							posts_SOME: {
-								organizations_SOME: {
-									classification_IN: [
-										'CABINET',
-										'HOUSE_OF_REPRESENTATIVE',
-										'HOUSE_OF_SENATE',
-										'POLITICAL_PARTY'
-									]
+							start_date: { lte: proposalDate },
+							OR: [{ end_date: { eq: null } }, { end_date: { gte: proposalDate } }],
+							posts: {
+								some: {
+									organizations: {
+										some: {
+											classification: {
+												in: [
+													'CABINET',
+													'HOUSE_OF_REPRESENTATIVE',
+													'HOUSE_OF_SENATE',
+													'POLITICAL_PARTY'
+												]
+											}
+										}
+									}
 								}
 							}
 						}

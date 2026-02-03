@@ -8,7 +8,7 @@ export async function load() {
 				__args: {
 					sort: [{ founding_date: 'DESC' }],
 					where: {
-						classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
+						classification: { eq: 'HOUSE_OF_REPRESENTATIVE' }
 					},
 					limit: 1
 				},

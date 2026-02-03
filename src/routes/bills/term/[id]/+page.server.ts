@@ -29,7 +29,7 @@ export async function load({ params }) {
 			await graphql.query({
 				organizations: {
 					__args: {
-						where: { classification_EQ: 'HOUSE_OF_REPRESENTATIVE' },
+						where: { classification: { eq: 'HOUSE_OF_REPRESENTATIVE' } },
 						sort: [{ founding_date: 'ASC' }]
 					},
 					id: true,
@@ -48,8 +48,8 @@ export async function load({ params }) {
 	}
 
 	const billWhereTerm: BillWhere = {
-		...(thisTerm.founding_date && { proposal_date_GTE: thisTerm.founding_date }),
-		...(thisTerm.dissolution_date && { proposal_date_LTE: thisTerm.dissolution_date })
+		...(thisTerm.founding_date && { proposal_date: { gte: thisTerm.founding_date } }),
+		...(thisTerm.dissolution_date && { proposal_date: { lte: thisTerm.dissolution_date } })
 	};
 
 	const totalCount = (
@@ -73,12 +73,20 @@ export async function load({ params }) {
 			proposerType: BillProposerType.Politician,
 			...(await queryBillSummaryByProposerType({
 				...billWhereTerm,
-				creators_SOME: {
-					Person: {
-						memberships_SOME: {
-							posts_SOME: {
-								organizations_SOME: {
-									classification_IN: ['HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
+				creators: {
+					some: {
+						Person: {
+							memberships: {
+								some: {
+									posts: {
+										some: {
+											organizations: {
+												some: {
+													classification: { in: ['HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE'] }
+												}
+											}
+										}
+									}
 								}
 							}
 						}
@@ -90,9 +98,11 @@ export async function load({ params }) {
 			proposerType: BillProposerType.Assembly,
 			...(await queryBillSummaryByProposerType({
 				...billWhereTerm,
-				creators_SOME: {
-					Organization: {
-						classification_EQ: 'CABINET'
+				creators: {
+					some: {
+						Organization: {
+							classification: { eq: 'CABINET' }
+						}
 					}
 				}
 			}))
@@ -101,9 +111,11 @@ export async function load({ params }) {
 			proposerType: BillProposerType.Unknown,
 			...(await queryBillSummaryByProposerType({
 				...billWhereTerm,
-				creators_NONE: {
-					Organization: { NOT: { id_EQ: null } },
-					Person: { NOT: { id_EQ: null } }
+				creators: {
+					none: {
+						Organization: { NOT: { id: { eq: null } } },
+						Person: { NOT: { id: { eq: null } } }
+					}
 				}
 			}))
 		}
@@ -124,9 +136,13 @@ export async function load({ params }) {
 						memberships: {
 							__args: {
 								where: {
-									posts_SOME: {
-										organizations_SOME: {
-											classification_EQ: 'POLITICAL_PARTY'
+									posts: {
+										some: {
+											organizations: {
+												some: {
+													classification: { eq: 'POLITICAL_PARTY' }
+												}
+											}
 										}
 									}
 								}
@@ -146,9 +162,15 @@ export async function load({ params }) {
 					memberships: {
 						__args: {
 							where: {
-								posts_SOME: {
-									organizations_SOME: {
-										classification_EQ: 'POLITICAL_PARTY'
+								posts: {
+									some: {
+										organizations: {
+											some: {
+												classification: {
+													eq: 'POLITICAL_PARTY'
+												}
+											}
+										}
 									}
 								}
 							}
@@ -180,7 +202,7 @@ export async function load({ params }) {
 				organizations: {
 					__args: {
 						where: {
-							id_IN: Object.entries(billsGroupedByParty).map(([party]) => party)
+							id: { in: Object.entries(billsGroupedByParty).map(([party]) => party) }
 						},
 						sort: [{ founding_date: 'DESC' }]
 					},
@@ -225,8 +247,10 @@ export async function load({ params }) {
 			billEnactEvents: {
 				__args: {
 					where: {
-						NOT: { start_date_EQ: null },
-						bills_SOME: billWhereTerm
+						NOT: { start_date: { eq: null } },
+						bills: {
+							some: billWhereTerm
+						}
 					},
 					sort: [{ start_date: 'DESC' }],
 					limit: LATEST_ENACTED_BILL_LIMIT
@@ -249,7 +273,7 @@ export async function load({ params }) {
 					bills: {
 						__args: {
 							where: {
-								id_EQ: id
+								id: { eq: id }
 							},
 							limit: 1
 						},
@@ -284,7 +308,9 @@ function queryBillSummaryByStatus(andWhere: BillWhere = {}) {
 			.map(async (status) => {
 				const where = {
 					...andWhere,
-					status_EQ: status
+					status: {
+						eq: status
+					}
 				};
 				const { bills, billsConnection } = await graphql.query({
 					billsConnection: {

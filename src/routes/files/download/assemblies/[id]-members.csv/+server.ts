@@ -10,7 +10,7 @@ export async function GET({ params }) {
 		organizations: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				}
 			},
 			dissolution_date: true
@@ -21,8 +21,10 @@ export async function GET({ params }) {
 		posts: {
 			__args: {
 				where: {
-					organizations_ALL: {
-						id_EQ: params.id
+					organizations: {
+						some: {
+							id: { eq: params.id }
+						}
 					}
 				}
 			},
@@ -41,18 +43,22 @@ export async function GET({ params }) {
 						memberships: {
 							__args: {
 								where: {
-									posts_ALL: {
-										organizations_ALL: {
-											classification_EQ: 'POLITICAL_PARTY'
+									posts: {
+										some: {
+											organizations: {
+												some: {
+													classification: { eq: 'POLITICAL_PARTY' }
+												}
+											}
 										}
 									},
 									...(dissolution_date
 										? {
-												start_date_LTE: dissolution_date,
-												OR: [{ end_date_GTE: dissolution_date }, { end_date_EQ: null }]
+												start_date: { lte: dissolution_date },
+												OR: [{ end_date: { gte: dissolution_date } }, { end_date: { eq: null } }]
 											}
 										: {
-												end_date_EQ: null
+												end_date: { eq: null }
 											})
 								},
 								sort: [{ start_date: 'DESC' }],

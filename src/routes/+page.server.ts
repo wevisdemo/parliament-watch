@@ -36,7 +36,7 @@ export async function load() {
 			people: {
 				__args: {
 					where: {
-						id_IN: [CHUAN_ID, BANYAT_ID]
+						id: { in: [CHUAN_ID, BANYAT_ID] }
 					}
 				},
 				id: true,
@@ -45,15 +45,21 @@ export async function load() {
 				memberships: {
 					__args: {
 						where: {
-							end_date_EQ: null,
-							posts_ALL: {
-								organizations_ALL: {
-									classification_IN: [
-										'CABINET',
-										'HOUSE_OF_REPRESENTATIVE',
-										'HOUSE_OF_SENATE',
-										'POLITICAL_PARTY'
-									]
+							end_date: { eq: null },
+							posts: {
+								some: {
+									organizations: {
+										some: {
+											classification: {
+												in: [
+													'CABINET',
+													'HOUSE_OF_REPRESENTATIVE',
+													'HOUSE_OF_SENATE',
+													'POLITICAL_PARTY'
+												]
+											}
+										}
+									}
 								}
 							}
 						}

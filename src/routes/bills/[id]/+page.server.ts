@@ -71,7 +71,7 @@ export async function load({ params }) {
 		bills: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				},
 				limit: 1
 			},
@@ -99,7 +99,7 @@ export async function load({ params }) {
 		bills: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				},
 				limit: 1
 			},
@@ -113,11 +113,17 @@ export async function load({ params }) {
 				memberships: {
 					__args: {
 						where: {
-							start_date_LTE: bill.proposal_date,
-							OR: [{ end_date_EQ: null }, { end_date_GTE: bill.proposal_date }],
-							posts_SOME: {
-								organizations_SOME: {
-									classification_EQ: 'POLITICAL_PARTY'
+							start_date: { lte: bill.proposal_date },
+							OR: [{ end_date: { eq: null } }, { end_date: { gte: bill.proposal_date } }],
+							posts: {
+								some: {
+									organizations: {
+										some: {
+											classification: {
+												eq: 'POLITICAL_PARTY'
+											}
+										}
+									}
 								}
 							}
 						},

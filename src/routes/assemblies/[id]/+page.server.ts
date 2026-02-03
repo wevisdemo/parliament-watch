@@ -48,7 +48,7 @@ export async function load({ params }) {
 		organizations: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				},
 				limit: 1
 			},
@@ -187,8 +187,10 @@ export async function load({ params }) {
 				voteEvents: {
 					__args: {
 						where: {
-							organizations_SOME: {
-								id_EQ: params.id
+							organizations: {
+								some: {
+									id: { eq: params.id }
+								}
 							}
 						},
 						sort: [{ start_date: 'DESC' }],

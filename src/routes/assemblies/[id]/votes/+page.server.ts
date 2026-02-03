@@ -11,7 +11,7 @@ export async function load({ params }) {
 		organizations: {
 			__args: {
 				where: {
-					id_EQ: params.id
+					id: { eq: params.id }
 				}
 			},
 			classification: true,
@@ -34,8 +34,10 @@ export async function load({ params }) {
 		voteEvents: {
 			__args: {
 				where: {
-					organizations_SOME: {
-						id_EQ: assembly.id
+					organizations: {
+						some: {
+							id: { eq: assembly.id }
+						}
 					}
 				},
 				sort: [

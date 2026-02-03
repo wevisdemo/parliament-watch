@@ -22,7 +22,7 @@ export async function load({ params }) {
 	} = await graphql.query({
 		people: {
 			__args: {
-				where: { id_EQ: params.id }
+				where: { id: { eq: params.id } }
 			},
 			id: true,
 			prefix: true,
@@ -41,14 +41,20 @@ export async function load({ params }) {
 			memberships: {
 				__args: {
 					where: {
-						posts_ALL: {
-							organizations_ALL: {
-								classification_IN: [
-									'CABINET',
-									'HOUSE_OF_REPRESENTATIVE',
-									'HOUSE_OF_SENATE',
-									'POLITICAL_PARTY'
-								]
+						posts: {
+							some: {
+								organizations: {
+									some: {
+										classification: {
+											in: [
+												'CABINET',
+												'HOUSE_OF_REPRESENTATIVE',
+												'HOUSE_OF_SENATE',
+												'POLITICAL_PARTY'
+											]
+										}
+									}
+								}
 							}
 						}
 					},
@@ -72,8 +78,12 @@ export async function load({ params }) {
 		votes: {
 			__args: {
 				where: {
-					voters_ALL: {
-						id_EQ: params.id
+					voters: {
+						some: {
+							id: {
+								eq: params.id
+							}
+						}
 					}
 				}
 			},
@@ -98,7 +108,7 @@ export async function load({ params }) {
 		votesConnection: {
 			__args: {
 				where: {
-					option_EQ: DefaultVoteOption.Absent
+					option: { eq: DefaultVoteOption.Absent }
 				}
 			},
 			aggregate: {

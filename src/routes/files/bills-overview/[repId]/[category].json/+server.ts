@@ -41,7 +41,7 @@ async function getBillOverviewData({ repId, category }: { repId: string; categor
 						organizations: {
 							__args: {
 								where: {
-									id_EQ: repId
+									id: { eq: repId }
 								}
 							},
 							founding_date: true,
@@ -52,20 +52,20 @@ async function getBillOverviewData({ repId, category }: { repId: string; categor
 
 	const billConditions: BillWhere = {
 		...(queryCategory && {
-			categories_INCLUDES: category
+			categories: { includes: category }
 		}),
 		...(queryRepresentative?.founding_date && {
-			proposal_date_GTE: queryRepresentative.founding_date
+			proposal_date: { gte: queryRepresentative.founding_date }
 		}),
 		...(queryRepresentative?.dissolution_date && {
-			proposal_date_LTE: queryRepresentative.dissolution_date
+			proposal_date: { lte: queryRepresentative.dissolution_date }
 		})
 	};
 
 	const billSummaryByStatuses = await Promise.all(
 		billStatusList.map((status) => {
 			const where: BillWhere = {
-				status_EQ: status,
+				status: { eq: status },
 				...billConditions
 			};
 
@@ -89,8 +89,10 @@ async function getBillOverviewData({ repId, category }: { repId: string; categor
 			billEnactEvents: {
 				__args: {
 					where: {
-						NOT: { start_date_EQ: null },
-						bills_ALL: billConditions
+						NOT: { start_date: { eq: null } },
+						bills: {
+							some: billConditions
+						}
 					},
 					sort: [{ start_date: 'DESC' }],
 					limit: MAX_ENACTED_BILL
@@ -113,7 +115,7 @@ async function getBillOverviewData({ repId, category }: { repId: string; categor
 					bills: {
 						__args: {
 							where: {
-								id_EQ: id
+								id: { eq: id }
 							},
 							limit: 1
 						},

@@ -11,7 +11,7 @@ export async function getBillCategoryOptions() {
 					bills: {
 						__args: {
 							where: {
-								NOT: { categories_EQ: null }
+								NOT: { categories: { eq: null } }
 							}
 						},
 						categories: true
@@ -28,7 +28,7 @@ export async function getRepresentativeTermOptions() {
 			organizations: {
 				__args: {
 					where: {
-						classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
+						classification: { eq: 'HOUSE_OF_REPRESENTATIVE' }
 					},
 					sort: [{ founding_date: 'DESC' }]
 				},

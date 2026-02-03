@@ -29,7 +29,7 @@ export async function load() {
 		organizations: {
 			__args: {
 				where: {
-					classification_EQ: 'HOUSE_OF_REPRESENTATIVE'
+					classification: { eq: 'HOUSE_OF_REPRESENTATIVE' }
 				},
 				sort: [{ founding_date: 'DESC' }]
 			},
@@ -62,9 +62,15 @@ export async function load() {
 					memberships: {
 						__args: {
 							where: {
-								posts_SOME: {
-									organizations_SOME: {
-										classification_EQ: 'POLITICAL_PARTY'
+								posts: {
+									some: {
+										organizations: {
+											some: {
+												classification: {
+													eq: 'POLITICAL_PARTY'
+												}
+											}
+										}
 									}
 								}
 							}
@@ -84,9 +90,15 @@ export async function load() {
 				memberships: {
 					__args: {
 						where: {
-							posts_SOME: {
-								organizations_SOME: {
-									classification_EQ: 'POLITICAL_PARTY'
+							posts: {
+								some: {
+									organizations: {
+										some: {
+											classification: {
+												eq: 'POLITICAL_PARTY'
+											}
+										}
+									}
 								}
 							}
 						}
@@ -162,7 +174,9 @@ export async function load() {
 		organizations: {
 			__args: {
 				where: {
-					id_IN: [...bills.flatMap((bill) => bill.proposerParties).reduce((acc, s) => acc.union(s))]
+					id: {
+						in: [...bills.flatMap((bill) => bill.proposerParties).reduce((acc, s) => acc.union(s))]
+					}
 				}
 			},
 			id: true,
