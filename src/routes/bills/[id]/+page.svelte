@@ -24,7 +24,7 @@
 
 	export let data;
 
-	const { bill, proposer, coProposers, events, mergeDetail } = data;
+	$: ({ bill, proposer, coProposers, events, mergeDetail } = data);
 
 	const MAX_DISPLAY_COPROPOSER = 8;
 
