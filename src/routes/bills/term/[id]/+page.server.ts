@@ -48,8 +48,10 @@ export async function load({ params }) {
 	}
 
 	const billWhereTerm: BillWhere = {
-		...(thisTerm.founding_date && { proposal_date: { gte: thisTerm.founding_date } }),
-		...(thisTerm.dissolution_date && { proposal_date: { lte: thisTerm.dissolution_date } })
+		proposal_date: {
+			...(thisTerm.founding_date && { gte: thisTerm.founding_date }),
+			...(thisTerm.dissolution_date && { lte: thisTerm.dissolution_date })
+		}
 	};
 
 	const totalCount = (

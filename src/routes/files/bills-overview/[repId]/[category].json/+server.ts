@@ -54,12 +54,10 @@ async function getBillOverviewData({ repId, category }: { repId: string; categor
 		...(queryCategory && {
 			categories: { includes: category }
 		}),
-		...(queryRepresentative?.founding_date && {
-			proposal_date: { gte: queryRepresentative.founding_date }
-		}),
-		...(queryRepresentative?.dissolution_date && {
-			proposal_date: { lte: queryRepresentative.dissolution_date }
-		})
+		proposal_date: {
+			...(queryRepresentative.founding_date && { gte: queryRepresentative.founding_date }),
+			...(queryRepresentative.dissolution_date && { lte: queryRepresentative.dissolution_date })
+		}
 	};
 
 	const billSummaryByStatuses = await Promise.all(
