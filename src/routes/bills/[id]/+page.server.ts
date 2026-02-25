@@ -94,7 +94,7 @@ export async function load({ params }) {
 	}
 
 	const {
-		bills: [{ creators, co_proposers, people_signature_count, bill_events }]
+		bills: [{ creators, co_creators, people_signature_count, events }]
 	} = await graphql.query({
 		bills: {
 			__args: {
@@ -104,7 +104,7 @@ export async function load({ params }) {
 				limit: 1
 			},
 			...createBillFieldsForProposer(bill.proposal_date),
-			co_proposers: {
+			co_creators: {
 				__args: {
 					sort: [{ firstname: 'ASC', lastname: 'ASC' }]
 				},
@@ -139,7 +139,7 @@ export async function load({ params }) {
 					}
 				}
 			},
-			bill_events: {
+			events: {
 				__typename: true,
 				on_Event: {
 					id: true,
@@ -184,7 +184,7 @@ export async function load({ params }) {
 
 	const proposer = getBillProposer({ creators, people_signature_count });
 
-	const events = bill_events
+	const parsedEvents = events
 		.map((event) => ({
 			type: event.__typename,
 			title:
@@ -218,7 +218,7 @@ export async function load({ params }) {
 				: eventDefaultSortPriority.indexOf(z.type) - eventDefaultSortPriority.indexOf(a.type)
 		);
 
-	const mergeEvent = bill_events.find((e) => e.__typename === 'BillMergeEvent');
+	const mergeEvent = events.find((e) => e.__typename === 'BillMergeEvent');
 	const mergeEventBills = mergeEvent?.bills.map((b) => ({
 		id: b.id,
 		name: b.nickname ?? b.title,
@@ -228,7 +228,7 @@ export async function load({ params }) {
 	return {
 		bill,
 		proposer,
-		coProposers: co_proposers.map(({ memberships, ...politician }) => ({
+		coProposers: co_creators.map(({ memberships, ...politician }) => ({
 			...politician,
 			party: memberships[0]?.posts[0]?.organizations[0]
 		})),
@@ -241,7 +241,7 @@ export async function load({ params }) {
 						)
 					}
 				: null,
-		events,
+		events: parsedEvents,
 		seo: createSeo({
 			title: bill.nickname ?? bill.title
 		})

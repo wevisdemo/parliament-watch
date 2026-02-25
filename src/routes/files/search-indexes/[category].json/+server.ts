@@ -107,22 +107,22 @@ export async function GET({ params }) {
 				people: {
 					__args: {
 						where: {
-							proposed_motions: {
+							created_motions: {
 								some: { NOT: { id: { eq: null } } }
 							}
 						}
 					},
 					name: true,
-					proposed_motionsConnection: {
+					created_motionsConnection: {
 						totalCount: true
 					}
 				}
 			});
 
 			const indexes: SearchIndexes['billProposers'] = people.map(
-				({ name, proposed_motionsConnection }) => ({
+				({ name, created_motionsConnection }) => ({
 					name,
-					proposedBillsCount: proposed_motionsConnection.totalCount
+					proposedBillsCount: created_motionsConnection.totalCount
 				})
 			);
 

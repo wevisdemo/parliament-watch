@@ -27,7 +27,7 @@ export async function GET() {
 					name: true
 				}
 			},
-			co_proposers: {
+			co_creators: {
 				name: true
 			}
 			// TODO: has people signatory data
@@ -36,10 +36,10 @@ export async function GET() {
 	});
 
 	return createCsvFileResponse(
-		bills.map(({ creators, links, co_proposers, ...bill }) => ({
+		bills.map(({ creators, links, co_creators, ...bill }) => ({
 			...bill,
 			mainProposer: creators[0]?.name,
-			coProposers: co_proposers.map((person) => person.name),
+			coProposers: co_creators.map((person) => person.name),
 			links: links.map((link) => link.url)
 		}))
 	);

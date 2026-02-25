@@ -85,7 +85,7 @@ export async function load() {
 					}
 				}
 			},
-			co_proposers: {
+			co_creators: {
 				name: true,
 				memberships: {
 					__args: {

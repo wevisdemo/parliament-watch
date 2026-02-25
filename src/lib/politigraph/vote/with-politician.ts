@@ -61,7 +61,7 @@ export async function queryPoliticiansVote(voteEvent: {
 					}
 				}
 			},
-			voter_name: true,
+			voter_name_raw: true,
 			voter_party: true,
 			option: true
 		},
@@ -106,7 +106,7 @@ export async function queryPoliticiansVote(voteEvent: {
 		posts.flatMap((p) => p.memberships.map((m) => [m.members[0].id, p.role]))
 	);
 
-	return votes.map(({ id, option, voter_name, voter_party, voters: [politician] }) => {
+	return votes.map(({ id, option, voter_name_raw, voter_party, voters: [politician] }) => {
 		const partyMembership = politician?.memberships.find(
 			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
 		);
@@ -123,7 +123,7 @@ export async function queryPoliticiansVote(voteEvent: {
 			id: id,
 			option: option,
 			politician: {
-				name: politician ? politician.name : (voter_name ?? ''),
+				name: politician ? politician.name : (voter_name_raw ?? ''),
 				id: politician?.id
 			},
 			party: party

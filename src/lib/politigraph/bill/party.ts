@@ -3,7 +3,7 @@ import dayjs, { type Dayjs } from 'dayjs';
 
 interface BillInput extends Pick<Bill, 'proposal_date'> {
 	creators: BillProposerInput[];
-	co_proposers: BillProposerInput[];
+	co_creators: BillProposerInput[];
 }
 
 interface BillProposerInput {
@@ -20,7 +20,7 @@ interface MembershipInput extends Pick<Membership, 'start_date' | 'end_date'> {
 
 export function getInvolvedPartyIdSet(bill: BillInput, proposedDate = dayjs(bill.proposal_date)) {
 	const involvedParties = new Set(
-		bill.co_proposers
+		bill.co_creators
 			.map((co_proposer) => getOrgIdFromMembershipOnDate(co_proposer.memberships, proposedDate))
 			.filter((id) => id !== undefined)
 	);

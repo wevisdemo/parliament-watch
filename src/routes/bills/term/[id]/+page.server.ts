@@ -159,7 +159,7 @@ export async function load({ params }) {
 						}
 					}
 				},
-				co_proposers: {
+				co_creators: {
 					name: true,
 					memberships: {
 						__args: {
@@ -190,8 +190,8 @@ export async function load({ params }) {
 		})
 	).bills;
 
-	const billsWithParty = billsInTerm.flatMap(({ creators, co_proposers, ...bill }) =>
-		[...getInvolvedPartyIdSet({ creators, co_proposers, ...bill })].map((party) => {
+	const billsWithParty = billsInTerm.flatMap(({ creators, co_creators, ...bill }) =>
+		[...getInvolvedPartyIdSet({ creators, co_creators, ...bill })].map((party) => {
 			return { ...bill, party };
 		})
 	);
