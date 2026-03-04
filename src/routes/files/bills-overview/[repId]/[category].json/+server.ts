@@ -6,7 +6,7 @@ import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/b
 import { billStatusList } from '$lib/politigraph/bill/status';
 import { graphql } from '$lib/politigraph/client';
 import type { BillWhere } from '$lib/politigraph/genql';
-import { ALL_CATEGORY_KEY, MP_OTHER_TERMS } from '../../../../../constants/bills';
+import { ALL_CATEGORY_KEY } from '../../../../../constants/bills';
 
 const MAX_BILL_BY_STATUS = 3;
 const MAX_ENACTED_BILL = 10;
@@ -33,31 +33,11 @@ export async function GET({ params }) {
 async function getBillOverviewData({ repId, category }: { repId: string; category: string }) {
 	const queryCategory = category === ALL_CATEGORY_KEY ? undefined : category;
 
-	const queryRepresentative =
-		repId === MP_OTHER_TERMS.id
-			? MP_OTHER_TERMS
-			: (
-					await graphql.query({
-						organizations: {
-							__args: {
-								where: {
-									id: { eq: repId }
-								}
-							},
-							founding_date: true,
-							dissolution_date: true
-						}
-					})
-				).organizations[0];
-
 	const billConditions: BillWhere = {
 		...(queryCategory && {
 			categories: { includes: category }
 		}),
-		proposal_date: {
-			...(queryRepresentative.founding_date && { gte: queryRepresentative.founding_date }),
-			...(queryRepresentative.dissolution_date && { lte: queryRepresentative.dissolution_date })
-		}
+		organizations: { some: { id: { eq: repId } } }
 	};
 
 	const billSummaryByStatuses = await Promise.all(

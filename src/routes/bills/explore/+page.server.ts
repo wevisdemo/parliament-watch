@@ -9,7 +9,6 @@ import type { BillStatus } from '$lib/politigraph/genql';
 import { type BillCreatorType, enumBillCreatorType } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
-import { MP_OTHER_TERMS } from '../../../constants/bills';
 import dayjs from 'dayjs';
 
 const OTHER_CATEGORY_KEY = 'อื่นๆ';
@@ -48,6 +47,9 @@ export async function load() {
 			status: true,
 			proposal_date: true,
 			categories: true,
+			organizations: {
+				id: true
+			},
 			links: {
 				url: true,
 				note: true
@@ -112,25 +114,17 @@ export async function load() {
 						}
 					}
 				}
-			},
-			people_signature_count: true
+			}
 		}
 	});
 
-	const assemblies = data.organizations;
-
-	const bills = data.bills.map(({ people_signature_count, ...bill }) => {
+	const bills = data.bills.map((bill) => {
 		const proposedDate = dayjs(bill.proposal_date);
 
 		return {
 			...bill,
 			categories: bill.categories?.length ? bill.categories : [OTHER_CATEGORY_KEY],
-			purposedAtMpAssemblyId:
-				assemblies.find(
-					({ founding_date, dissolution_date }) =>
-						proposedDate.isAfter(founding_date) &&
-						(!dissolution_date || proposedDate.isBefore(dissolution_date))
-				)?.id || MP_OTHER_TERMS.id,
+			purposedAtMpAssemblyId: bill.organizations[0]?.id,
 			proposerType: bill.creator_type,
 			proposer: bill.creators[0] ?? {
 				__typename: null,
@@ -199,20 +193,13 @@ export async function load() {
 		categories.push(OTHER_CATEGORY_KEY);
 	}
 
-	const representativeTerms: CheckboxFilterChoice[] = assemblies
+	const representativeTerms: CheckboxFilterChoice[] = data.organizations
 		.filter(({ id }) => bills.some((bill) => bill.purposedAtMpAssemblyId === id))
 		.sort((a, z) => (z.founding_date ?? '').localeCompare(a.founding_date ?? ''))
 		.map((assembly) => ({
 			label: `${assembly.name} (${formatYearRange(assembly.founding_date, assembly.dissolution_date)})`,
 			value: assembly.id
 		}));
-
-	if (bills.some((bill) => bill.purposedAtMpAssemblyId === MP_OTHER_TERMS.id)) {
-		representativeTerms.push({
-			label: 'สภาผู้แทนราษฎรชุดอื่นๆ (ก่อนชุดที่ 25)',
-			value: MP_OTHER_TERMS.id
-		});
-	}
 
 	const filterOptions: FilterOptions = {
 		representativeTerms,

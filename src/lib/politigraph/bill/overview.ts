@@ -1,5 +1,5 @@
 import { formatDateRange } from '$lib/date';
-import { ALL_CATEGORY_KEY, MP_OTHER_TERMS } from '../../../constants/bills';
+import { ALL_CATEGORY_KEY } from '../../../constants/bills';
 import { graphql } from '../client';
 
 export async function getBillCategoryOptions() {
@@ -48,13 +48,5 @@ export async function getRepresentativeTermOptions() {
 				dissolution_date: org.dissolution_date ?? undefined,
 				value: `สส. ชุดที่ ${org.term} (ปี ${formatDateRange(org.founding_date, org.dissolution_date, { hideMonth: true, shortYear: true })})`
 			};
-		})
-		.concat([
-			{
-				id: MP_OTHER_TERMS.id,
-				founding_date: '',
-				dissolution_date: MP_OTHER_TERMS.dissolution_date,
-				value: 'สส. ชุดอื่น ๆ (ก่อนปี 62)'
-			}
-		]);
+		});
 }

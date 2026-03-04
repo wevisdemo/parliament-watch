@@ -11,35 +11,26 @@ import type { BillWhere, Bill } from '$lib/politigraph/genql';
 import { enumBillCreatorType } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
-import { MP_OTHER_TERMS } from '../../../../constants/bills';
 import { error } from '@sveltejs/kit';
 
 const BILL_SAMPLE_LIMIT = 3;
 const LATEST_ENACTED_BILL_LIMIT = 10;
 
 export async function load({ params }) {
-	const allMpTerms = [
-		{
-			id: MP_OTHER_TERMS.id,
-			term: null,
-			founding_date: '',
-			dissolution_date: MP_OTHER_TERMS.dissolution_date
-		},
-		...(
-			await graphql.query({
-				organizations: {
-					__args: {
-						where: { classification: { eq: 'HOUSE_OF_REPRESENTATIVE' } },
-						sort: [{ founding_date: 'ASC' }]
-					},
-					id: true,
-					term: true,
-					founding_date: true,
-					dissolution_date: true
-				}
-			})
-		).organizations
-	];
+	const allMpTerms = (
+		await graphql.query({
+			organizations: {
+				__args: {
+					where: { classification: { eq: 'HOUSE_OF_REPRESENTATIVE' } },
+					sort: [{ founding_date: 'ASC' }]
+				},
+				id: true,
+				term: true,
+				founding_date: true,
+				dissolution_date: true
+			}
+		})
+	).organizations;
 
 	const thisTerm = allMpTerms.find((mp) => mp.id === params.id);
 
@@ -48,9 +39,10 @@ export async function load({ params }) {
 	}
 
 	const billWhereTerm: BillWhere = {
-		proposal_date: {
-			...(thisTerm.founding_date && { gte: thisTerm.founding_date }),
-			...(thisTerm.dissolution_date && { lte: thisTerm.dissolution_date })
+		organizations: {
+			some: {
+				id: { eq: thisTerm.id }
+			}
 		}
 	};
 

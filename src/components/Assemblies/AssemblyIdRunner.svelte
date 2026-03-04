@@ -13,7 +13,6 @@
 	export let id: string;
 	export let availableAssemblies: AvailableAssembly[] = [];
 	export let getAssemblyPath: (_: AvailableAssembly) => string;
-	export let overwriteDisplayString: string | undefined = undefined;
 
 	$: currentIndex = Array.isArray(availableAssemblies)
 		? availableAssemblies.findIndex((assembly) => assembly.id === id)
@@ -32,9 +31,7 @@
 
 	let displayString = '-';
 	$: {
-		if (overwriteDisplayString) {
-			displayString = overwriteDisplayString;
-		} else if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null && yearString) {
+		if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null && yearString) {
 			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term} | ${yearString}`;
 		} else if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null) {
 			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term}`;

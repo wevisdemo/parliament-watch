@@ -14,7 +14,6 @@
 	import AssemblyIdRunner, {
 		type AvailableAssembly
 	} from '$components/Assemblies/AssemblyIdRunner.svelte';
-	import { MP_OTHER_TERMS } from '../../../../constants/bills.js';
 
 	export let data;
 
@@ -69,14 +68,7 @@
 
 <section class="h-[60px] bg-ui-03 px-4">
 	<div class="mx-auto flex h-full max-w-[1280px] items-center justify-center">
-		<AssemblyIdRunner
-			overwriteDisplayString={thisTerm.id == MP_OTHER_TERMS.id
-				? 'ชุดอื่น ๆ | ก่อน 2562'
-				: undefined}
-			id={thisTerm.id}
-			availableAssemblies={allMpTerms}
-			{getAssemblyPath}
-		/>
+		<AssemblyIdRunner id={thisTerm.id} availableAssemblies={allMpTerms} {getAssemblyPath} />
 	</div>
 </section>
 
