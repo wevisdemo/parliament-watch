@@ -94,7 +94,7 @@ export async function load({ params }) {
 	}
 
 	const {
-		bills: [{ creators, co_creators, people_signature_count, events }]
+		bills: [{ creator_type, creators, co_creators, people_signature_count, events }]
 	} = await graphql.query({
 		bills: {
 			__args: {
@@ -182,7 +182,7 @@ export async function load({ params }) {
 		}
 	});
 
-	const proposer = getBillProposer({ creators, people_signature_count });
+	const proposer = getBillProposer({ creator_type, creators, people_signature_count });
 
 	const parsedEvents = events
 		.map((event) => ({

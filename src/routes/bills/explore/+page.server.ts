@@ -6,9 +6,9 @@ import { formatYearRange } from '$lib/date';
 import { getInvolvedPartyIdSet } from '$lib/politigraph/bill/party';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillStatus } from '$lib/politigraph/genql';
+import { type BillCreatorType, enumBillCreatorType } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
-import { BillProposerType } from '$models/bill';
 import { MP_OTHER_TERMS } from '../../../constants/bills';
 import dayjs from 'dayjs';
 
@@ -18,7 +18,7 @@ interface FilterOptions {
 	representativeTerms: CheckboxFilterChoice[];
 	statuses: BillStatus[];
 	categories: string[];
-	proposerTypes: BillProposerType[];
+	proposerTypes: BillCreatorType[];
 	proposerPeople: string[];
 	proposerCabinets: string[];
 	proposerParties: ComboboxFilterChoice[];
@@ -52,6 +52,7 @@ export async function load() {
 				url: true,
 				note: true
 			},
+			creator_type: true,
 			creators: {
 				__typename: true,
 				on_Organization: {
@@ -130,13 +131,7 @@ export async function load() {
 						proposedDate.isAfter(founding_date) &&
 						(!dissolution_date || proposedDate.isBefore(dissolution_date))
 				)?.id || MP_OTHER_TERMS.id,
-			proposerType: !bill.creators[0]
-				? BillProposerType.Unknown
-				: bill.creators[0].__typename === 'Organization'
-					? BillProposerType.Assembly
-					: people_signature_count
-						? BillProposerType.People
-						: BillProposerType.Politician,
+			proposerType: bill.creator_type,
 			proposer: bill.creators[0] ?? {
 				__typename: null,
 				name: OTHER_CATEGORY_KEY,
@@ -150,7 +145,7 @@ export async function load() {
 		bills.some((bill) => bill.status === status)
 	);
 
-	const proposerTypes = Object.values(BillProposerType).filter((proposerType) =>
+	const proposerTypes = Object.values(enumBillCreatorType).filter((proposerType) =>
 		bills.some((bill) => bill.proposerType === proposerType)
 	);
 

@@ -1,5 +1,5 @@
 import { enumBillStatus } from '$lib/politigraph/genql';
-import { BillProposerType } from '$models/bill';
+import { enumBillCreatorType } from '$lib/politigraph/genql';
 import { movingForwardPolitician } from './politician';
 
 export const inProgressBill = {
@@ -12,7 +12,7 @@ export const inProgressBill = {
 	status: enumBillStatus.IN_PROGRESS,
 	proposedOn: new Date('2023-07-13'),
 	categories: ['สิ่งแวดล้อม', 'ขนส่งมวลชน'],
-	proposerType: BillProposerType.Politician,
+	proposerType: enumBillCreatorType.POLITICIAN,
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
 	attachment: {
@@ -33,7 +33,7 @@ export const enactedBill = {
 	categories: ['สิ่งแวดล้อม', 'ขนส่งมวลชน'],
 	proposedOn: new Date('2022-07-13'),
 	enactedOn: new Date('2023-07-13'),
-	proposerType: BillProposerType.Politician,
+	proposerType: enumBillCreatorType.POLITICIAN,
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
 	attachment: {
@@ -52,7 +52,7 @@ export const promiseRelatedBill = {
 	status: enumBillStatus.IN_PROGRESS,
 	categories: ['เศรษฐกิจ'],
 	proposedOn: new Date('2023-10-04'),
-	proposerType: BillProposerType.Politician,
+	proposerType: enumBillCreatorType.POLITICIAN,
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
 	attachment: {
@@ -72,7 +72,7 @@ export const promiseFulfilledBill = {
 	categories: ['สังคม'],
 	proposedOn: new Date('2023-10-04'),
 	enactedOn: new Date('2024-04-30'),
-	proposerType: BillProposerType.Politician,
+	proposerType: enumBillCreatorType.POLITICIAN,
 	proposedLedByPolitician: movingForwardPolitician,
 	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
 	attachment: {

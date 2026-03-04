@@ -8,9 +8,9 @@ import { getInvolvedPartyIdSet } from '$lib/politigraph/bill/party';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import type { BillWhere, Bill } from '$lib/politigraph/genql';
+import { enumBillCreatorType } from '$lib/politigraph/genql';
 import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
-import { BillProposerType } from '$models/bill';
 import { MP_OTHER_TERMS } from '../../../../constants/bills';
 import { error } from '@sveltejs/kit';
 
@@ -70,58 +70,15 @@ export async function load({ params }) {
 	// TODO: until we have a protocol to maintain bill category data
 	const byCategory: BillsByCategory[] = [];
 
-	const byProposerType: BillsByProposerType[] = [
-		{
-			proposerType: BillProposerType.Politician,
+	const byProposerType: BillsByProposerType[] = await Promise.all(
+		Object.values(enumBillCreatorType).map(async (proposerType) => ({
+			proposerType,
 			...(await queryBillSummaryByProposerType({
 				...billWhereTerm,
-				creators: {
-					some: {
-						Person: {
-							memberships: {
-								some: {
-									posts: {
-										some: {
-											organizations: {
-												some: {
-													classification: { in: ['HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE'] }
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+				creator_type: { eq: proposerType }
 			}))
-		},
-		{
-			proposerType: BillProposerType.Assembly,
-			...(await queryBillSummaryByProposerType({
-				...billWhereTerm,
-				creators: {
-					some: {
-						Organization: {
-							classification: { eq: 'CABINET' }
-						}
-					}
-				}
-			}))
-		},
-		{
-			proposerType: BillProposerType.Unknown,
-			...(await queryBillSummaryByProposerType({
-				...billWhereTerm,
-				creators: {
-					none: {
-						Organization: { NOT: { id: { eq: null } } },
-						Person: { NOT: { id: { eq: null } } }
-					}
-				}
-			}))
-		}
-	];
+		}))
+	);
 
 	const billsInTerm = (
 		await graphql.query({

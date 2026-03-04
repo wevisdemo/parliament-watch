@@ -19,6 +19,7 @@ export async function GET() {
 			links: {
 				url: true
 			},
+			creator_type: true,
 			creators: {
 				on_Organization: {
 					name: true
@@ -38,8 +39,8 @@ export async function GET() {
 	return createCsvFileResponse(
 		bills.map(({ creators, links, co_creators, ...bill }) => ({
 			...bill,
-			mainProposer: creators[0]?.name,
-			coProposers: co_creators.map((person) => person.name),
+			main_proposer: creators[0]?.name,
+			co_proposers: co_creators.map((person) => person.name),
 			links: links.map((link) => link.url)
 		}))
 	);

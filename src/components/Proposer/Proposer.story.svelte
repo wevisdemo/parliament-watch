@@ -2,6 +2,7 @@
 	import type { Hst } from '@histoire/plugin-svelte';
 	import Proposer from './Proposer.svelte';
 	import type { ComponentProps } from 'svelte';
+	import { enumBillCreatorType } from '$lib/politigraph/genql';
 
 	let orientation: ComponentProps<Proposer>['orientation'] = 'landscape';
 
@@ -13,6 +14,7 @@
 		<Proposer
 			{orientation}
 			proposer={{
+				type: enumBillCreatorType.POLITICIAN,
 				id: 'พริษฐ์-วัชรสินธุ',
 				name: 'พริษฐ์ วัชรสินธุ',
 				image: 'https://via.placeholder.com/64',
@@ -31,6 +33,7 @@
 		<Proposer
 			{orientation}
 			proposer={{
+				type: enumBillCreatorType.ASSEMBLY,
 				id: 'คณะรัฐมนตรี-64',
 				name: 'ครม. 64',
 				founding_date: new Date('04/09/2024')
@@ -41,6 +44,7 @@
 		<Proposer
 			{orientation}
 			proposer={{
+				type: enumBillCreatorType.ASSEMBLY,
 				id: 'สภาผู้แทนราษฎร-26',
 				name: 'สส. 26',
 				founding_date: new Date('01/01/2023')
@@ -51,6 +55,7 @@
 		<Proposer
 			{orientation}
 			proposer={{
+				type: enumBillCreatorType.PEOPLE,
 				name: 'นายยิ่งชีพ',
 				signatoryCount: 150000
 			}}

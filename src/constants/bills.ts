@@ -1,3 +1,5 @@
+import { enumBillCreatorType } from '$lib/politigraph/genql';
+
 export const MP_OTHER_TERMS = {
 	id: 'MP_OTHER_TERMS_ID',
 	value: 'สส. ชุดอื่น ๆ (ก่อนปี 62)',
@@ -7,3 +9,10 @@ export const MP_OTHER_TERMS = {
 };
 
 export const ALL_CATEGORY_KEY = 'ทุกหมวด';
+
+export const CREATOR_TYPE_LABEL = {
+	[enumBillCreatorType.POLITICIAN]: 'นักการเมือง',
+	[enumBillCreatorType.ASSEMBLY]: 'คณะรัฐมนตรี',
+	[enumBillCreatorType.PEOPLE]: 'ประชาชน',
+	[enumBillCreatorType.UNKNOWN]: 'อื่นๆ / ไม่พบข้อมูล'
+};

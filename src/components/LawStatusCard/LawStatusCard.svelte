@@ -16,7 +16,7 @@
 	}
 
 	export interface BillsByProposerType {
-		proposerType: BillProposerType;
+		proposerType: BillCreatorType;
 		samples: BillSample[];
 		count: number;
 		countByStatus: {
@@ -41,9 +41,10 @@
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import { billStatusList, billStatusProperty } from '$lib/politigraph/bill/status';
 	import type { BillStatus } from '$lib/politigraph/genql';
-	import { BillProposerType } from '$models/bill';
+	import type { BillCreatorType } from '$lib/politigraph/genql';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import DocumentUnknown from 'carbon-icons-svelte/lib/DocumentUnknown.svelte';
+	import { CREATOR_TYPE_LABEL } from '../../constants/bills';
 
 	export let totalCount: number;
 	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType | BillsByParty;
@@ -78,17 +79,17 @@
 		{#if 'proposerType' in bill}
 			<div class="mb-3 flex items-center gap-1">
 				<div class="h-6 w-6 rounded-full bg-black p-1 text-white">
-					{#if bill.proposerType === BillProposerType.Politician}
+					{#if bill.proposerType === 'POLITICIAN'}
 						<GeneralIcon />
-					{:else if bill.proposerType === BillProposerType.People}
+					{:else if bill.proposerType === 'PEOPLE'}
 						<PeopleIcon />
-					{:else if bill.proposerType === BillProposerType.Assembly}
+					{:else if bill.proposerType === 'ASSEMBLY'}
 						<PoliticianIcon />
 					{:else}
 						<DocumentUnknown />
 					{/if}
 				</div>
-				<h3 class="heading-02">{bill.proposerType}</h3>
+				<h3 class="heading-02">{CREATOR_TYPE_LABEL[bill.proposerType]}</h3>
 			</div>
 		{:else if 'party' in bill}
 			<div class="mb-3 flex items-center gap-1">

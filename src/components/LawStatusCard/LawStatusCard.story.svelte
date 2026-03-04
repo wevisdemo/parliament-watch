@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Hst } from '@histoire/plugin-svelte';
 	import LawStatusCard from './LawStatusCard.svelte';
-	import type { BillStatus } from '$lib/politigraph/genql';
-	import type { BillProposerType } from '$models/bill';
+	import { enumBillCreatorType, type BillStatus } from '$lib/politigraph/genql';
 	export let Hst: Hst;
 
 	const billByStatus = {
@@ -16,7 +15,7 @@
 	const emptyBillByStatus = { ...billByStatus, samples: [], count: 0 };
 
 	const billByProposerType = {
-		proposerType: 'สมาชิกรัฐสภา' as BillProposerType,
+		proposerType: enumBillCreatorType.POLITICIAN,
 		samples: [
 			{ id: '1', nickname: 'ร่าง พ.ร.บ. สุราก้าวหน้า' },
 			{ id: '2', nickname: 'ร่าง พ.ร.บ. การจัดสรรที่ดิน' },

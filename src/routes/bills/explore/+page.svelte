@@ -10,6 +10,7 @@
 	import { formatThaiDate } from '$lib/date.js';
 	import { billStatusProperty } from '$lib/politigraph/bill/status.js';
 	import { onMount } from 'svelte';
+	import { CREATOR_TYPE_LABEL } from '../../../constants/bills.js';
 	let cmpDataPage: DataPage;
 
 	export let data;
@@ -96,7 +97,7 @@
 			key: 'filterProposerType',
 			legend: 'ประเภทผู้เสนอ',
 			choices: filterOptions.proposerTypes.map((proposer) => ({
-				label: proposer,
+				label: CREATOR_TYPE_LABEL[proposer],
 				value: proposer
 			}))
 		}
