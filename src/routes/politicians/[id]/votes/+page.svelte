@@ -4,7 +4,6 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import { DefaultVoteOption } from '$models/voting.js';
-	import { InlineNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import type {
 		CheckboxFilterGroup,
@@ -12,6 +11,7 @@
 	} from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import { formatThaiDate, formatYearRange } from '$lib/date.js';
+	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
 
 	export let data;
 	const { politician, filterOptions, votes } = data;
@@ -110,12 +110,7 @@
 			>{politician.prefix} {politician.name}</a
 		>
 	</h1>
-	<InlineNotification
-		class="m-0 min-w-0 max-w-none"
-		lowContrast
-		kind="info"
-		subtitle="การประเมินพฤติกรรมการลงมติ จะพิจารณาเพียงชื่อมติไม่ได้ ควรศึกษาเนื้อหาของมตินั้นๆ ประกอบด้วย"
-	/>
+	<VoteWarningNotification />
 	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
 		{#if cellKey === 'date'}
 			{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}

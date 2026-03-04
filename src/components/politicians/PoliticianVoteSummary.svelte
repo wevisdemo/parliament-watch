@@ -19,8 +19,9 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
 	import Section from '$components/politicians/Section.svelte';
-	import { Button, InlineNotification } from 'carbon-components-svelte';
+	import { Button } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import VoteWarningNotification from './VoteWarningNotification.svelte';
 
 	export let politicianId: string;
 	export let politicianFirstname: string;
@@ -35,13 +36,7 @@
 
 <Section id="votes" title="ประวัติการลงมติ">
 	<Vote slot="icon" size="32" />
-	<InlineNotification
-		slot="header-extension"
-		class="m-0 mt-1 min-w-0"
-		lowContrast
-		kind="info"
-		subtitle="การประเมินพฤติกรรมการลงมติ จะพิจารณาเพียงชื่อมติไม่ได้ ควรศึกษาเนื้อหาของมตินั้นๆ ประกอบด้วย"
-	/>
+	<VoteWarningNotification />
 	<div class="flex flex-col gap-6">
 		<div class="flex flex-col gap-2">
 			<h3 class="body-02 bg-teal-40 px-2 py-1">
@@ -122,18 +117,47 @@
 					3
 				)}%)
 			</p>
-			<div class="label-01 text-gray-60">
-				หมายเหตุ :
+			<div class="label-01 flex flex-col gap-1 text-gray-60">
+				<span class="label-02 font-bold">ข้อควรระวังก่อนนำข้อมูลไปใช้</span>
 				<ol class="ml-4 list-decimal">
 					<li>
-						การขาดลงมติ เกิดจากหลายสาเหตุ เช่น ติดประชุมอื่น ติดภารกิจสำคัญ เจ็บป่วย
-						จึงอาจไม่ได้สะท้อนความไม่รับผิดชอบเสมอไป
+						การขาดลงมติ (หน่วย = มติ) ไม่เท่ากับการขาดประชุม (หน่วย = ครั้ง)
+						<ul class="ml-4 list-disc">
+							<li>
+								เนื่องจากการประชุม 1 ครั้งอาจมีการลงมติมากกว่า 1 มติ
+								และในปัจจุบันสภายังไม่มีการเปิดเผยข้อมูลการเข้าประชุมของสมาชิกสู่สาธารณะ
+							</li>
+						</ul>
 					</li>
 					<li>
-						ฐานข้อมูลครอบคลุมจำนวนมติ ตั้งแต่สภาชุดที่ 25 ถึงปัจจุบัน
-						ส่งผลให้การคำนวณสัดส่วนและค่ากลางของการขาดลงมติรวมข้อมูลย้อนหลังด้วย
+						การขาดลงมติอาจเกิดจากหลายสาเหตุ
+						<ul class="ml-4 list-disc">
+							<li>
+								เช่น ติดประชุมอื่น ติดภารกิจสำคัญ หรือเจ็บป่วย
+								โดยที่ปัจจุบันสภายังไม่มีการเปิดเผยข้อมูลใบลาของสมาชิก
+								ข้อมูลการขาดลงมติเพียงอย่างเดียวจึงไม่สามารถสะท้อนความรับผิดชอบในการทำงานได้ทั้งหมด
+							</li>
+						</ul>
+					</li>
+					<li>
+						จำนวนมติในฐานข้อมูลน้อยกว่ามติที่มีการโหวตจริง
+						<ul class="ml-4 list-disc">
+							<li>
+								เนื่องจากข้อมูลผลโหวตรายคนจากเว็บไซต์ต้นทาง (<a
+									href="http://msbis.parliament.go.th/"
+									class="underline">msbis.parliament.go.th</a
+								>) มักเผยแพร่ไม่ครบหรือไม่ทันทีหลังการโหวต
+								และฐานข้อมูลนี้ไม่รวมการลงมติร่างกฎหมายวาระ 2 ซึ่งเป็นการลงมติรายมาตราที่มีจำนวนมาก
+							</li>
+						</ul>
 					</li>
 				</ol>
+				<span
+					>ดูรายละเอียดเพิ่มเติม<a
+						href="https://parliamentwatch.wevis.info/about#เกี่ยวกับข้อมูลในเว็บไซต์"
+						class="underline">ที่นี่</a
+					></span
+				>
 			</div>
 			<a
 				href="/politicians/{politicianId}/votes?votetype=absent"
