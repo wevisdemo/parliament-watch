@@ -35,21 +35,17 @@
 
 	export interface SearchQueryStateConfig {
 		param?: string;
-		legacyParams?: string[];
 	}
 
 	export interface CheckboxListQueryStateConfig {
 		mode: 'list';
 		param?: string;
-		legacyParams?: string[];
 	}
 
 	export interface CheckboxFlagsQueryStateConfig {
 		mode: 'flags';
 		paramsByValue: Record<string, string>;
 		fallbackParam?: string;
-		legacyParamsByValue?: Record<string, string>;
-		legacyFallbackParams?: string[];
 	}
 
 	export type CheckboxQueryStateConfig =
@@ -58,7 +54,6 @@
 
 	export interface ComboboxQueryStateConfig {
 		param?: string;
-		legacyParams?: string[];
 	}
 
 	export interface DataPageQueryStateConfig {
@@ -78,6 +73,7 @@
 		type QueryParamValue,
 		type QueryStateConfig
 	} from '$lib/query-state';
+	import { createDebouncedSync } from '$lib/query-state-sync';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -94,7 +90,7 @@
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import { get } from 'svelte/store';
-	import { onMount, tick, type ComponentProps } from 'svelte';
+	import { onDestroy, onMount, tick, type ComponentProps } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -133,6 +129,7 @@
 	export let selectedCheckboxValue: SelectedCheckboxValueType = Object.fromEntries(
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
+	// Opt-in URL sync config for query-driven filter persistence.
 	export let queryStateConfig: DataPageQueryStateConfig | undefined = undefined;
 	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
 	export let downloadLinks: ComponentProps<LinkTable>['links'] = [];
@@ -168,6 +165,9 @@
 	let showFilter = true;
 	let isMobile = false;
 	let hydratedQueryState = false;
+	let previousSearchQuery = '';
+	let previousNonSearchSyncSignature = '';
+	const SEARCH_QUERY_SYNC_DEBOUNCE_MS = 300;
 
 	const getCheckboxChoices = (): Record<string, QueryParamValue[]> =>
 		Object.fromEntries(
@@ -195,6 +195,37 @@
 		)
 	});
 
+	const getNonSearchSyncSignature = () =>
+		JSON.stringify({ selectedCheckboxValue, selectedComboboxValue });
+
+	const syncUrlQueryState = () => {
+		if (!queryStateConfig) return;
+
+		const config = normalizeQueryStateConfig();
+		const currentUrl = get(page).url;
+		const encoded = encodeQueryState({
+			baseSearchParams: currentUrl.searchParams,
+			config,
+			searchQuery,
+			selectedCheckboxValue,
+			selectedComboboxValue,
+			checkboxChoices: getCheckboxChoices()
+		});
+		const nextSearch = encoded.toString();
+		const currentSearch = currentUrl.searchParams.toString();
+		if (nextSearch === currentSearch) return;
+
+		const nextUrl = `${currentUrl.pathname}${nextSearch ? `?${nextSearch}` : ''}${currentUrl.hash}`;
+		goto(nextUrl, {
+			replaceState: true,
+			noScroll: true,
+			keepFocus: true,
+			invalidateAll: false
+		});
+	};
+
+	const debouncedSearchSync = createDebouncedSync(syncUrlQueryState, SEARCH_QUERY_SYNC_DEBOUNCE_MS);
+
 	onMount(() => {
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		isMobile = !showFilter;
@@ -220,7 +251,13 @@
 			if (value !== undefined) setCombobox(groupKey, String(value));
 		}
 
+		previousSearchQuery = searchQuery;
+		previousNonSearchSyncSignature = getNonSearchSyncSignature();
 		hydratedQueryState = true;
+	});
+
+	onDestroy(() => {
+		debouncedSearchSync.cancel();
 	});
 
 	let previousFromTop = 0;
@@ -246,27 +283,14 @@
 	export let unit = 'มติ';
 
 	$: if (hydratedQueryState && queryStateConfig) {
-		const config = normalizeQueryStateConfig();
-		const currentUrl = $page.url;
-		const encoded = encodeQueryState({
-			baseSearchParams: currentUrl.searchParams,
-			config,
-			searchQuery,
-			selectedCheckboxValue,
-			selectedComboboxValue,
-			checkboxChoices: getCheckboxChoices()
-		});
-
-		const nextSearch = encoded.toString();
-		const currentSearch = currentUrl.searchParams.toString();
-		if (nextSearch !== currentSearch) {
-			const nextUrl = `${currentUrl.pathname}${nextSearch ? `?${nextSearch}` : ''}${currentUrl.hash}`;
-			goto(nextUrl, {
-				replaceState: true,
-				noScroll: true,
-				keepFocus: true,
-				invalidateAll: false
-			});
+		const currentNonSearchSyncSignature = getNonSearchSyncSignature();
+		if (currentNonSearchSyncSignature !== previousNonSearchSyncSignature) {
+			previousNonSearchSyncSignature = currentNonSearchSyncSignature;
+			previousSearchQuery = searchQuery;
+			debouncedSearchSync.flush();
+		} else if (searchQuery !== previousSearchQuery) {
+			previousSearchQuery = searchQuery;
+			debouncedSearchSync.schedule();
 		}
 	}
 </script>
