@@ -42,6 +42,25 @@
 		}
 	];
 
+	const queryStateConfig = {
+		search: { param: 'q' },
+		checkbox: {
+			filterPosition: {
+				mode: 'list' as const,
+				param: 'position'
+			},
+			filterVoteType: {
+				mode: 'list' as const,
+				param: 'voteType'
+			}
+		},
+		combobox: {
+			filterComboboxType: {
+				param: 'party'
+			}
+		}
+	};
+
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
 	let selectedComboboxValue: SelectedComboboxValueType;
@@ -76,6 +95,7 @@
 	searchPlaceholder="ชื่อ-นามสกุล"
 	{comboboxFilterList}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'politician', value: 'ชื่อ-นามสกุล' },
