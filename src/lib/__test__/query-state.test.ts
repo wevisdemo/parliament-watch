@@ -135,4 +135,26 @@ describe('query-state codec', () => {
 		expect(reEncoded.has('search')).toBe(true);
 		expect(reEncoded.has('votetype')).toBe(true);
 	});
+
+	it('falls back to default checkbox selection when params are unknown', () => {
+		const config: QueryStateConfig = {
+			checkbox: {
+				filterResult: {
+					mode: 'flags',
+					paramsByValue: { ผ่าน: 'pass', ไม่ผ่าน: 'notPass' },
+					fallbackParam: 'result'
+				}
+			}
+		};
+		const checkboxChoices = { filterResult: ['ผ่าน', 'ไม่ผ่าน', 'รอตรวจสอบ'] };
+
+		const decoded = decodeQueryState({
+			searchParams: new URLSearchParams('result=ไม่รู้จัก'),
+			config,
+			checkboxChoices,
+			comboboxChoices: {}
+		});
+
+		expect(decoded.selectedCheckboxValue.filterResult).toEqual([]);
+	});
 });
