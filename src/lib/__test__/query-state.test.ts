@@ -98,42 +98,31 @@ describe('query-state codec', () => {
 		expect(decoded.selectedCheckboxValue.filterResult).toEqual(['ไม่ผ่าน', 'รอตรวจสอบ']);
 	});
 
-	it('reads legacy params and normalizes to canonical shape', () => {
+	it('encodes canonical params and does not emit legacy keys', () => {
 		const config: QueryStateConfig = {
-			search: { param: 'q', legacyParams: ['search'] },
+			search: { param: 'q' },
 			checkbox: {
 				filterVoteType: {
 					mode: 'list',
-					param: 'voteType',
-					legacyParams: ['votetype']
+					param: 'voteType'
 				}
 			}
 		};
 		const checkboxChoices = { filterVoteType: ['เห็นด้วย', 'ไม่เห็นด้วย', 'ลา / ขาดลงมติ'] };
 
-		const decoded = decodeQueryState({
-			searchParams: new URLSearchParams('search=ทดสอบ&votetype=ลา%20/%20ขาดลงมติ'),
-			config,
-			checkboxChoices,
-			comboboxChoices: {}
-		});
-
-		expect(decoded.searchQuery).toBe('ทดสอบ');
-		expect(decoded.selectedCheckboxValue.filterVoteType).toEqual(['ลา / ขาดลงมติ']);
-
 		const reEncoded = encodeQueryState({
-			baseSearchParams: new URLSearchParams('search=ทดสอบ&votetype=ลา%20/%20ขาดลงมติ'),
+			baseSearchParams: new URLSearchParams(),
 			config,
-			searchQuery: decoded.searchQuery,
-			selectedCheckboxValue: decoded.selectedCheckboxValue,
+			searchQuery: 'ทดสอบ',
+			selectedCheckboxValue: { filterVoteType: ['ลา / ขาดลงมติ'] },
 			selectedComboboxValue: {},
 			checkboxChoices
 		});
 
 		expect(reEncoded.get('q')).toBe('ทดสอบ');
 		expect(reEncoded.getAll('voteType')).toEqual(['ลา / ขาดลงมติ']);
-		expect(reEncoded.has('search')).toBe(true);
-		expect(reEncoded.has('votetype')).toBe(true);
+		expect(reEncoded.has('search')).toBe(false);
+		expect(reEncoded.has('votetype')).toBe(false);
 	});
 
 	it('falls back to default checkbox selection when params are unknown', () => {
