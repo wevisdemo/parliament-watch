@@ -35,6 +35,22 @@
 		}
 	];
 
+	const queryStateConfig = {
+		search: {
+			param: 'q'
+		},
+		checkbox: {
+			filterAssembly: {
+				mode: 'list' as const,
+				param: 'assembly'
+			},
+			filterVoteType: {
+				mode: 'list' as const,
+				param: 'voteType'
+			}
+		}
+	};
+
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
 
@@ -90,6 +106,7 @@
 		{ url: `/politicians/${politician.id}/votes`, label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
