@@ -2,28 +2,23 @@ export type QueryParamValue = string | number | boolean;
 
 export interface SearchQueryConfig {
 	param?: string;
-	legacyParams?: string[];
 }
 
 export interface CheckboxListQueryConfig {
 	mode: 'list';
 	param?: string;
-	legacyParams?: string[];
 }
 
 export interface CheckboxFlagsQueryConfig {
 	mode: 'flags';
 	paramsByValue: Record<string, string>;
 	fallbackParam?: string;
-	legacyParamsByValue?: Record<string, string>;
-	legacyFallbackParams?: string[];
 }
 
 export type CheckboxQueryConfig = CheckboxListQueryConfig | CheckboxFlagsQueryConfig;
 
 export interface ComboboxQueryConfig {
 	param?: string;
-	legacyParams?: string[];
 }
 
 export interface QueryStateConfig {
@@ -83,14 +78,8 @@ const dedupeValues = (values: QueryParamValue[]) => {
 	return output;
 };
 
-const collectListParamValues = (
-	searchParams: URLSearchParams,
-	param: string,
-	legacyParams: string[] = []
-) => dedupeValues([param, ...legacyParams].flatMap((key) => searchParams.getAll(key)));
-
-const hasAnyParam = (searchParams: URLSearchParams, params: string[]) =>
-	params.some((param) => searchParams.has(param));
+const collectListParamValues = (searchParams: URLSearchParams, param: string) =>
+	dedupeValues(searchParams.getAll(param));
 
 export function encodeQueryState({
 	baseSearchParams,
@@ -157,11 +146,7 @@ export function decodeQueryState({
 	comboboxChoices
 }: DecodeQueryStateInput): DecodeQueryStateResult {
 	const searchParam = config.search?.param ?? DEFAULT_SEARCH_PARAM;
-	const searchLegacyParams = config.search?.legacyParams ?? [];
-	const searchQuery = [searchParam, ...searchLegacyParams]
-		.map((param) => searchParams.get(param))
-		.find((value) => value !== null)
-		?.trim();
+	const searchQuery = searchParams.get(searchParam)?.trim();
 
 	const selectedCheckboxValue: Record<string, QueryParamValue[]> = {};
 	for (const [groupKey, choices] of Object.entries(checkboxChoices)) {
@@ -171,14 +156,10 @@ export function decodeQueryState({
 		if (groupConfig.mode === 'flags') {
 			const flagValues = Object.keys(groupConfig.paramsByValue);
 			const canonicalFlagParams = Object.values(groupConfig.paramsByValue);
-			const legacyFlagParams = Object.values(groupConfig.legacyParamsByValue ?? {});
-			const fallbackParams = [
-				...(groupConfig.fallbackParam ? [groupConfig.fallbackParam] : []),
-				...(groupConfig.legacyFallbackParams ?? [])
-			];
-			const relevantParams = [...canonicalFlagParams, ...legacyFlagParams, ...fallbackParams];
+			const fallbackParams = groupConfig.fallbackParam ? [groupConfig.fallbackParam] : [];
+			const relevantParams = [...canonicalFlagParams, ...fallbackParams];
 
-			if (!hasAnyParam(searchParams, relevantParams)) {
+			if (!relevantParams.some((param) => searchParams.has(param))) {
 				selectedCheckboxValue[groupKey] = choices;
 				continue;
 			}
@@ -186,10 +167,7 @@ export function decodeQueryState({
 			const selectedValues: QueryParamValue[] = [];
 			for (const value of flagValues) {
 				const canonicalParam = groupConfig.paramsByValue[value];
-				const legacyParam = groupConfig.legacyParamsByValue?.[value];
-				const valueParam =
-					isTruthyParam(searchParams.get(canonicalParam)) ||
-					(legacyParam ? isTruthyParam(searchParams.get(legacyParam)) : false);
+				const valueParam = isTruthyParam(searchParams.get(canonicalParam));
 				if (!valueParam) continue;
 				const mapped = lookup.get(value);
 				if (mapped !== undefined) selectedValues.push(mapped);
@@ -206,7 +184,7 @@ export function decodeQueryState({
 		}
 
 		const listParam = groupConfig.param ?? groupKey;
-		const listValues = collectListParamValues(searchParams, listParam, groupConfig.legacyParams);
+		const listValues = collectListParamValues(searchParams, listParam);
 		if (listValues.length === 0) {
 			selectedCheckboxValue[groupKey] = choices;
 			continue;
@@ -222,9 +200,7 @@ export function decodeQueryState({
 		const lookup = valueLookup(choices);
 		const groupConfig = config.combobox?.[groupKey] ?? { param: groupKey };
 		const param = groupConfig.param ?? groupKey;
-		const value = [param, ...(groupConfig.legacyParams ?? [])]
-			.map((key) => searchParams.get(key))
-			.find((candidate) => candidate !== null);
+		const value = searchParams.get(param);
 		selectedComboboxValue[groupKey] =
 			value === null || value === undefined ? undefined : lookup.get(value);
 	}
