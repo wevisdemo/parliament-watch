@@ -32,10 +32,52 @@
 		ComboboxFilterGroup['key'],
 		ComboboxFilterChoice['id'] | undefined
 	>;
+
+	export interface SearchQueryStateConfig {
+		param?: string;
+		legacyParams?: string[];
+	}
+
+	export interface CheckboxListQueryStateConfig {
+		mode: 'list';
+		param?: string;
+		legacyParams?: string[];
+	}
+
+	export interface CheckboxFlagsQueryStateConfig {
+		mode: 'flags';
+		paramsByValue: Record<string, string>;
+		fallbackParam?: string;
+		legacyParamsByValue?: Record<string, string>;
+		legacyFallbackParams?: string[];
+	}
+
+	export type CheckboxQueryStateConfig =
+		| CheckboxListQueryStateConfig
+		| CheckboxFlagsQueryStateConfig;
+
+	export interface ComboboxQueryStateConfig {
+		param?: string;
+		legacyParams?: string[];
+	}
+
+	export interface DataPageQueryStateConfig {
+		search?: SearchQueryStateConfig;
+		checkbox?: Record<CheckboxFilterGroup['key'], CheckboxQueryStateConfig>;
+		combobox?: Record<ComboboxFilterGroup['key'], ComboboxQueryStateConfig>;
+	}
 </script>
 
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
+	import {
+		decodeQueryState,
+		encodeQueryState,
+		type QueryParamValue,
+		type QueryStateConfig
+	} from '$lib/query-state';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -51,6 +93,7 @@
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
+	import { get } from 'svelte/store';
 	import { onMount, tick, type ComponentProps } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
@@ -90,6 +133,7 @@
 	export let selectedCheckboxValue: SelectedCheckboxValueType = Object.fromEntries(
 		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 	);
+	export let queryStateConfig: DataPageQueryStateConfig | undefined = undefined;
 	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
 	export let downloadLinks: ComponentProps<LinkTable>['links'] = [];
 
@@ -123,10 +167,60 @@
 	let comboboxInternal: Record<string, string> = {};
 	let showFilter = true;
 	let isMobile = false;
+	let hydratedQueryState = false;
+
+	const getCheckboxChoices = (): Record<string, QueryParamValue[]> =>
+		Object.fromEntries(
+			checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
+		);
+
+	const getComboboxChoices = (): Record<string, QueryParamValue[]> =>
+		Object.fromEntries(
+			comboboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.id)])
+		);
+
+	const normalizeQueryStateConfig = (): QueryStateConfig => ({
+		search: queryStateConfig?.search,
+		checkbox: Object.fromEntries(
+			checkboxFilterList.map((group) => [
+				group.key,
+				queryStateConfig?.checkbox?.[group.key] ?? { mode: 'list', param: group.key }
+			])
+		),
+		combobox: Object.fromEntries(
+			comboboxFilterList.map((group) => [
+				group.key,
+				queryStateConfig?.combobox?.[group.key] ?? { param: group.key }
+			])
+		)
+	});
 
 	onMount(() => {
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		isMobile = !showFilter;
+		if (!queryStateConfig) return;
+
+		const config = normalizeQueryStateConfig();
+		const {
+			searchQuery: decodedSearchQuery,
+			selectedCheckboxValue: decodedCheckboxValue,
+			selectedComboboxValue: decodedComboboxValue
+		} = decodeQueryState({
+			searchParams: get(page).url.searchParams,
+			config,
+			defaultSearchQuery: searchQuery,
+			checkboxChoices: getCheckboxChoices(),
+			comboboxChoices: getComboboxChoices()
+		});
+
+		searchQuery = decodedSearchQuery;
+		selectedCheckboxValue = decodedCheckboxValue as SelectedCheckboxValueType;
+		selectedComboboxValue = decodedComboboxValue as SelectedComboboxValueType;
+		for (const [groupKey, value] of Object.entries(decodedComboboxValue)) {
+			if (value !== undefined) setCombobox(groupKey, String(value));
+		}
+
+		hydratedQueryState = true;
 	});
 
 	let previousFromTop = 0;
@@ -150,6 +244,31 @@
 	};
 
 	export let unit = 'มติ';
+
+	$: if (hydratedQueryState && queryStateConfig) {
+		const config = normalizeQueryStateConfig();
+		const currentUrl = $page.url;
+		const encoded = encodeQueryState({
+			baseSearchParams: currentUrl.searchParams,
+			config,
+			searchQuery,
+			selectedCheckboxValue,
+			selectedComboboxValue,
+			checkboxChoices: getCheckboxChoices()
+		});
+
+		const nextSearch = encoded.toString();
+		const currentSearch = currentUrl.searchParams.toString();
+		if (nextSearch !== currentSearch) {
+			const nextUrl = `${currentUrl.pathname}${nextSearch ? `?${nextSearch}` : ''}${currentUrl.hash}`;
+			goto(nextUrl, {
+				replaceState: true,
+				noScroll: true,
+				keepFocus: true,
+				invalidateAll: false
+			});
+		}
+	}
 </script>
 
 <svelte:window on:scroll|passive={scrollEventHandler} />
