@@ -5,6 +5,11 @@
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
+	import {
+		buildVoteQueryStateConfig,
+		comboboxQueryConfig,
+		listCheckboxQueryConfig
+	} from '$lib/query-state-config.js';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 
 	export let data;
@@ -42,24 +47,15 @@
 		}
 	];
 
-	const queryStateConfig = {
-		search: { param: 'q' },
+	const queryStateConfig = buildVoteQueryStateConfig({
 		checkbox: {
-			filterPosition: {
-				mode: 'list' as const,
-				param: 'position'
-			},
-			filterVoteType: {
-				mode: 'list' as const,
-				param: 'voteType'
-			}
+			filterPosition: listCheckboxQueryConfig('position'),
+			filterVoteType: listCheckboxQueryConfig('voteType')
 		},
 		combobox: {
-			filterComboboxType: {
-				param: 'party'
-			}
+			filterComboboxType: comboboxQueryConfig('party')
 		}
-	};
+	});
 
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;

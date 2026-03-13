@@ -5,6 +5,7 @@
 	import VotesHeader from '$components/Assemblies/Votes/VotesHeader.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import { formatThaiDate } from '$lib/date.js';
+	import { buildVoteQueryStateConfig, flagsCheckboxQueryConfig } from '$lib/query-state-config.js';
 	import { DefaultVotingResult } from '$models/voting.js';
 
 	export let data;
@@ -22,19 +23,19 @@
 		}
 	];
 
-	const queryStateConfig = {
-		search: { param: 'q' },
+	const queryStateConfig = buildVoteQueryStateConfig({
 		checkbox: {
-			filterResult: {
-				mode: 'flags' as const,
-				paramsByValue: {
+			filterResult: flagsCheckboxQueryConfig(
+				{
 					[DefaultVotingResult.Passed]: 'pass',
 					[DefaultVotingResult.Failed]: 'notPass'
 				},
-				fallbackParam: 'result'
-			}
+				{
+					fallbackParam: 'result'
+				}
+			)
 		}
-	};
+	});
 
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
