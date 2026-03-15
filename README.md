@@ -27,6 +27,7 @@ Citizens are watching
   - [Colors](#colors)
   - [Components](#components)
   - [Icons](#icons)
+- [🔎 Query State Conventions](#-query-state-conventions)
 - [Environment Variables](#environment-variables)
 - [🤝 Contributing Guideline](#-contributing-guideline)
 
@@ -164,6 +165,16 @@ The project design system is based on Carbon Design System v10 with some modific
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com)
 - We have custom icon available in [src/components/icons](src/components/icons), using the same props as Carbon's icon. (Also available in Histoire)
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
+
+## 🔎 Query State Conventions
+
+- Canonical search param is `q`.
+- For checkbox filters:
+  - Use `list` mode when one param should hold selected values (e.g. `voteType=...`).
+  - Use `flags` mode when values should be readable booleans (e.g. `pass=true` + `notPass=true`).
+  - If `flags` mode has additional future values, store them in `fallbackParam` as repeated list values.
+- Query state is canonical-only: pages should read and write only canonical keys.
+- Prefer shared builders from [src/lib/query-state-config.ts](src/lib/query-state-config.ts) instead of inlining config objects in each page.
 
 ## Environment Variables
 

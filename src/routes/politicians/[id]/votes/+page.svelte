@@ -1,16 +1,14 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { DefaultVoteOption } from '$models/voting.js';
-	import { onMount } from 'svelte';
 	import type {
 		CheckboxFilterGroup,
 		SelectedCheckboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import { formatThaiDate, formatYearRange } from '$lib/date.js';
+	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state-config.js';
 	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
 
 	export let data;
@@ -34,6 +32,13 @@
 			}))
 		}
 	];
+
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterAssembly: listCheckboxQueryConfig('assembly'),
+			filterVoteType: listCheckboxQueryConfig('voteType')
+		}
+	});
 
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
@@ -63,20 +68,6 @@
 						result,
 						links
 					}));
-
-	onMount(() => {
-		switch ($page.url.searchParams.get('votetype')) {
-			case 'agreed':
-				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Agreed];
-				break;
-			case 'disagreed':
-				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Disagreed];
-				break;
-			case 'absent':
-				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Absent];
-				break;
-		}
-	});
 </script>
 
 <DataPage
@@ -90,6 +81,7 @@
 		{ url: `/politicians/${politician.id}/votes`, label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
