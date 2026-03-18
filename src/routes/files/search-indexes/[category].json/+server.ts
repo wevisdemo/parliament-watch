@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';
 import { error } from '@sveltejs/kit';
 

@@ -7,7 +7,7 @@ import {
 	type AssemblyMember,
 	getAvailableAssemblies
 } from '$lib/politigraph/assembly/member';
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { groupVotesByAffiliation } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';

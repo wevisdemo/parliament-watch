@@ -1,5 +1,5 @@
 import { getAvailableAssemblies } from '$lib/politigraph/assembly/member';
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { createSeo } from '$lib/seo';
 import { DefaultVotingResult, RESULT_CONFIRMATION_PENDING } from '$models/voting';
 import { error } from '@sveltejs/kit';

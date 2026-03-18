@@ -4,7 +4,7 @@ import {
 	getBillCategoryOptions,
 	getRepresentativeTermOptions
 } from '$lib/politigraph/bill/overview';
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';

@@ -8,7 +8,7 @@ import {
 	queryAssemblyMembers,
 	type AssemblyMember
 } from '$lib/politigraph/assembly/member';
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { createSeo } from '$lib/seo';
 import { GroupByOption } from '$models/assembly';
 import { error } from '@sveltejs/kit';

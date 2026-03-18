@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { createSeo } from '$lib/seo';
 import { defaultVoteOptions } from '$models/voting';
 import { error } from '@sveltejs/kit';

@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
 import { error } from '@sveltejs/kit';
 

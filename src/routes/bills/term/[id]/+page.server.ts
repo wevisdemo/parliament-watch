@@ -7,9 +7,9 @@ import type {
 import { getInvolvedPartyIdSet } from '$lib/politigraph/bill/party';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
+import { graphql } from '$lib/politigraph/client';
 import type { BillWhere, Bill } from '$lib/politigraph/genql';
 import { enumBillCreatorType } from '$lib/politigraph/genql';
-import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import { error } from '@sveltejs/kit';
 
