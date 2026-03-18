@@ -1,5 +1,5 @@
 import { fetchPromises } from '$lib/datasheets';
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { PromiseStatus, type Promise, type PromiseSummary } from '$models/promise';
 import { groups } from 'd3';
 

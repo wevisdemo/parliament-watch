@@ -1,4 +1,4 @@
-import { graphql } from '$lib/politigraph/server';
+import { graphql } from '$lib/politigraph/client';
 import { redirect } from '@sveltejs/kit';
 
 export async function load() {

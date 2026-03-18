@@ -5,9 +5,9 @@ import type {
 import { formatYearRange } from '$lib/date';
 import { getInvolvedPartyIdSet } from '$lib/politigraph/bill/party';
 import { billStatusList } from '$lib/politigraph/bill/status';
+import { graphql } from '$lib/politigraph/client';
 import type { BillStatus } from '$lib/politigraph/genql';
 import { type BillCreatorType, enumBillCreatorType } from '$lib/politigraph/genql';
-import { graphql } from '$lib/politigraph/server';
 import { createSeo } from '$lib/seo';
 import dayjs from 'dayjs';
 

@@ -1,5 +1,5 @@
 import { AssemblyPartyGroup } from '$models/assembly';
-import { graphql } from '../server';
+import { graphql } from '../client';
 
 const NO_INFO_LABEL = 'ไม่พบข้อมูล';
 
