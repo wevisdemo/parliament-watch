@@ -6,7 +6,7 @@
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import { SearchIndexCategory, type SearchResults } from '$models/search';
-	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
+	import { Breadcrumb, BreadcrumbItem, Button, Search } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
@@ -32,6 +32,10 @@
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
 		assembly ? `/bills/term/${assembly.id}` : '';
+
+	$: currentTermIndex = allMpTerms.findIndex((assembly) => assembly.id === thisTerm.id);
+	$: previousTermHref =
+		currentTermIndex > 0 ? `/bills/term/${allMpTerms[currentTermIndex - 1].id}` : '';
 
 	$: exploreLinkExtraParams = { term: thisTerm.id };
 </script>
@@ -72,104 +76,119 @@
 	</div>
 </section>
 
-<div class="bg-ui-01">
-	<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
-		<NavigationTab
-			align="center"
-			tabs={[
-				{ id: 'status', label: 'สถานะ', show: true },
-				{ id: 'proposer', label: 'ผู้เสนอ', show: true },
-				{ id: 'party', label: 'พรรคการเมือง', tag: 'มาใหม่!', show: true }
-			]}
-		/>
-	</section>
-	<section id="status" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
-		<header class="flex flex-col flex-wrap items-start justify-between md:flex-row">
-			<h2 class="fluid-heading-03">สำรวจตามสถานะ</h2>
-			<ModalLawProcess class="text-right" />
-		</header>
-		{#key thisTerm.id}
-			<Carousel
-				options={{
-					breakpoints: {
-						'(min-width: 672px)': {
-							slides: {
-								perView: 3,
-								spacing: 12
+{#if totalCount > 0}
+	<div class="bg-ui-01">
+		<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
+			<NavigationTab
+				align="center"
+				tabs={[
+					{ id: 'status', label: 'สถานะ', show: true },
+					{ id: 'proposer', label: 'ผู้เสนอ', show: true },
+					{ id: 'party', label: 'พรรคการเมือง', tag: 'มาใหม่!', show: byParty.length > 0 }
+				]}
+			/>
+		</section>
+		<section id="status" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+			<header class="flex flex-col flex-wrap items-start justify-between md:flex-row">
+				<h2 class="fluid-heading-03">สำรวจตามสถานะ</h2>
+				<ModalLawProcess class="text-right" />
+			</header>
+			{#key thisTerm.id}
+				<Carousel
+					options={{
+						breakpoints: {
+							'(min-width: 672px)': {
+								slides: {
+									perView: 3,
+									spacing: 12
+								}
 							}
 						}
-					}
-				}}
-			>
-				{#each byStatus as bill (bill.status)}
-					<LawStatusCard {totalCount} {bill} showDescription {exploreLinkExtraParams} />
-				{/each}
-			</Carousel>
-		{/key}
-	</section>
-	<!-- TODO: until we have a protocol to maintain bill category data -->
-	<!-- <section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
-				<header>
-					<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
-					<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
-				</header>
-				<Carousel>
-					{#each byCategory as bill}
-						<LawStatusCard totalCount={totalCount} {bill} {exploreLinkExtraParams} />
+					}}
+				>
+					{#each byStatus as bill (bill.status)}
+						<LawStatusCard {totalCount} {bill} showDescription {exploreLinkExtraParams} />
 					{/each}
 				</Carousel>
-			</section> -->
-	<section id="proposer" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
-		<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
-		{#key thisTerm.id}
-			<Carousel>
-				{#each byProposerType as bill (bill.proposerType)}
-					<LawStatusCard {totalCount} {bill} {exploreLinkExtraParams} />
-				{/each}
-			</Carousel>
-		{/key}
-	</section>
-	<section id="party" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
-		<h2 class="fluid-heading-03">สำรวจตามพรรคการเมือง</h2>
-		<p class="body-01">
-			ทั้งหมด <span class="font-bold">{byParty.length} พรรคการเมือง</span> (ในกรณีที่พรรคเปลี่ยนชื่อ
-			ระบบจะนับเป็นคนละพรรค) <br />
-			ร่างกฎหมายในส่วนนี้จะนับเฉพาะฉบับที่เสนอโดยสมาชิกสภาผู้แทนราษฎร โดย 1 ฉบับสามารถเสนอโดยสมาชิกได้มากกว่า
-			1 พรรค
-		</p>
-		{#key thisTerm.id}
-			<Carousel>
-				{#each byParty as bill (bill.party)}
-					<LawStatusCard {totalCount} {bill} {exploreLinkExtraParams} />
-				{/each}
-			</Carousel>
-		{/key}
-	</section>
-</div>
-<div class="bg-teal-80">
-	<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-10">
-		<h2 class="fluid-heading-03 text-white">
-			{lastEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
-		</h2>
-		{#key thisTerm.id}
-			<Carousel>
-				{#each lastEnactedBills as { title, nickname, proposal_date, enact_date, ...bill }, i (bill.id)}
-					<BillCard
-						class="keen-slider__slide min-w-72"
-						orientation="portrait"
-						{...bill}
-						nickname={nickname ? nickname : title}
-						title={nickname ? title : null}
-						proposedOn={new Date(proposal_date ?? '')}
-						enactedOn={new Date(enact_date ?? '')}
-						status="ENACTED"
-						proposer={lastEnactedBillProposers[i]}
-					/>
-				{/each}
-			</Carousel>
-		{/key}
-	</section>
-</div>
+			{/key}
+		</section>
+		<!-- TODO: until we have a protocol to maintain bill category data -->
+		<!-- <section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+					<header>
+						<h2 class="fluid-heading-03">สำรวจตามหมวด</h2>
+						<p class="body-01">ร่างกฎหมาย 1 ฉบับมีได้มากกว่า 1 หมวด</p>
+					</header>
+					<Carousel>
+						{#each byCategory as bill}
+							<LawStatusCard totalCount={totalCount} {bill} {exploreLinkExtraParams} />
+						{/each}
+					</Carousel>
+				</section> -->
+		<section id="proposer" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+			<h2 class="fluid-heading-03">สำรวจตามประเภทผู้เสนอ</h2>
+			{#key thisTerm.id}
+				<Carousel>
+					{#each byProposerType as bill (bill.proposerType)}
+						<LawStatusCard {totalCount} {bill} {exploreLinkExtraParams} />
+					{/each}
+				</Carousel>
+			{/key}
+		</section>
+		{#if byParty.length}
+			<section id="party" class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-6">
+				<h2 class="fluid-heading-03">สำรวจตามพรรคการเมือง</h2>
+				<p class="body-01">
+					ทั้งหมด <span class="font-bold">{byParty.length} พรรคการเมือง</span>
+					(ในกรณีที่พรรคเปลี่ยนชื่อ ระบบจะนับเป็นคนละพรรค) <br />
+					ร่างกฎหมายในส่วนนี้จะนับเฉพาะฉบับที่เสนอโดยสมาชิกสภาผู้แทนราษฎร โดย 1 ฉบับสามารถเสนอโดยสมาชิกได้มากกว่า
+					1 พรรค
+				</p>
+				{#key thisTerm.id}
+					<Carousel>
+						{#each byParty as bill (bill.party)}
+							<LawStatusCard {totalCount} {bill} {exploreLinkExtraParams} />
+						{/each}
+					</Carousel>
+				{/key}
+			</section>
+		{/if}
+	</div>
+{:else}
+	<div
+		class="mx-auto mt-6 flex max-w-[1280px] flex-col items-center gap-3 border border-dashed border-gray-40 px-4 py-24 text-center"
+	>
+		<p class="body-02 text-gray-60">ยังไม่มีข้อมูลใน สส. ชุดนี้</p>
+		{#if previousTermHref}
+			<Button kind="ghost" size="small" href={previousTermHref}>ดูข้อมูลของ สส. ชุดก่อนหน้า</Button>
+		{/if}
+	</div>
+{/if}
+{#if lastEnactedBills.length}
+	<div class="bg-teal-80">
+		<section class="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-10">
+			<h2 class="fluid-heading-03 text-white">
+				{lastEnactedBills.length} ฉบับล่าสุดที่ได้ออกเป็นกฎหมาย
+			</h2>
+			{#key thisTerm.id}
+				<Carousel>
+					{#each lastEnactedBills as { title, nickname, proposal_date, enact_date, ...bill }, i (bill.id)}
+						<BillCard
+							class="keen-slider__slide min-w-72"
+							orientation="portrait"
+							{...bill}
+							nickname={nickname ? nickname : title}
+							title={nickname ? title : null}
+							proposedOn={new Date(proposal_date ?? '')}
+							enactedOn={new Date(enact_date ?? '')}
+							status="ENACTED"
+							proposer={lastEnactedBillProposers[i]}
+						/>
+					{/each}
+				</Carousel>
+			{/key}
+		</section>
+	</div>
+{/if}
 <div class="px-4 pb-20 pt-6">
 	<a
 		href="/bills/explore"

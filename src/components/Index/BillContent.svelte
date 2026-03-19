@@ -53,6 +53,18 @@
 		loadBillOverviewData();
 	}
 
+	function selectPreviousMpTerm() {
+		const currentIndex = mpTermChoices.findIndex((mpterm) => mpterm.id === selectedMpTermId);
+		const previousMpTerm = mpTermChoices[currentIndex + 1];
+
+		if (previousMpTerm) {
+			selectMpTerm(previousMpTerm.id);
+		}
+	}
+
+	$: hasPreviousMpTerm =
+		mpTermChoices[mpTermChoices.findIndex((mpterm) => mpterm.id === selectedMpTermId) + 1] != null;
+
 	$: totalCount = billOverview.billSummaryByStatuses.reduce(
 		(sum, byStatus) => sum + byStatus.billsConnection.totalCount,
 		0
@@ -107,7 +119,7 @@
 			</div>
 		{/if}
 
-		{#if billOverview.billSummaryByStatuses.length}
+		{#if billOverview.billSummaryByStatuses.length && billOverview.billSummaryByStatuses.some((s) => s.bills.length)}
 			{#key carousalKey}
 				<Carousel
 					options={{
@@ -138,13 +150,26 @@
 					{/each}
 				</Carousel>
 			{/key}
+		{:else}
+			<div
+				class="flex flex-col items-center gap-3 border border-dashed border-gray-40 px-4 py-24 text-center"
+			>
+				<p class="body-02 text-gray-60">ยังไม่มีข้อมูลใน สส. ชุดนี้</p>
+				{#if hasPreviousMpTerm}
+					<Button kind="ghost" size="small" on:click={selectPreviousMpTerm}>
+						ดูข้อมูลของ สส. ชุดก่อนหน้า
+					</Button>
+				{/if}
+			</div>
 		{/if}
 	</div>
 
 	{#if billOverview.lastEnactedBills.length}
 		<div class="flex flex-col gap-4">
 			<div class="flex flex-row flex-wrap items-center gap-1">
-				<h3 class="heading-02">{billOverview.lastEnactedBills.length} ฉบับล่าสุดที่ได้บังคับใช้</h3>
+				<h3 class="heading-02">
+					{billOverview.lastEnactedBills.length} ฉบับล่าสุดที่ได้บังคับใช้
+				</h3>
 				{#if selectedCategory !== ALL_CATEGORY_KEY}
 					<span class="body-02">ในหมวด</span>
 					<div
