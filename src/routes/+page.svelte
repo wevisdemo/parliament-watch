@@ -16,7 +16,13 @@
 
 	export let data;
 
-	$: ({ highlightedPoliticians, latestVoteEvents, billCategories, mpTermChoices } = data);
+	$: ({
+		highlightedPoliticians,
+		latestVoteEvents,
+		billCategories,
+		mpTermChoices,
+		latestAssemblyLabels
+	} = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -86,7 +92,12 @@
 		>รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
 		ประวัติทางการเมือง ไปจนถึงผลงานในสภา</span
 	>
-	<PoliticianContent {highlightedPoliticians} />
+	<PoliticianContent
+		{highlightedPoliticians}
+		representativeLabel={latestAssemblyLabels.representative}
+		senateLabel={latestAssemblyLabels.senate}
+		cabinetLabel={latestAssemblyLabels.cabinet}
+	/>
 </ContentSection>
 
 <ContentSection
@@ -100,7 +111,11 @@
 	<span slot="description"
 		>ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ</span
 	>
-	<VotingContent {latestVoteEvents} />
+	<VotingContent
+		{latestVoteEvents}
+		representativeVotesLabel={latestAssemblyLabels.representativeVotes}
+		senateVotesLabel={latestAssemblyLabels.senateVotes}
+	/>
 </ContentSection>
 
 <ContentSection

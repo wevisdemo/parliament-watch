@@ -1,21 +1,8 @@
-import { graphql } from '$lib/politigraph/client';
+import { getLatestTerm } from '$lib/politigraph/assembly/term';
 import { redirect } from '@sveltejs/kit';
 
 export async function load() {
-	const latestMpTerm = (
-		await graphql.query({
-			organizations: {
-				__args: {
-					sort: [{ founding_date: 'DESC' }],
-					where: {
-						classification: { eq: 'HOUSE_OF_REPRESENTATIVE' }
-					},
-					limit: 1
-				},
-				id: true
-			}
-		})
-	).organizations[0];
+	const latestMpTerm = await getLatestTerm('HOUSE_OF_REPRESENTATIVE');
 
 	if (!latestMpTerm) {
 		throw redirect(301, '/');

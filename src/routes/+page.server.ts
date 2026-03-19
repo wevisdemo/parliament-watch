@@ -1,5 +1,6 @@
 import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
 import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { getLatestTerm } from '$lib/politigraph/assembly/term';
 import {
 	getBillCategoryOptions,
 	getRepresentativeTermOptions
@@ -30,7 +31,23 @@ interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCa
 	cabinetTerms: number[];
 }
 
+function buildAssemblyLabel(
+	title: string,
+	shortTitle: string | undefined,
+	term: number | null | undefined
+) {
+	const displayTitle = shortTitle ? `${title} (${shortTitle})` : title;
+
+	return term ? `${displayTitle} ชุดที่ ${term} (ชุดปัจจุบัน)` : `${displayTitle} ชุดปัจจุบัน`;
+}
+
 export async function load() {
+	const [latestRepresentativeTerm, latestSenateTerm, latestCabinetTerm] = await Promise.all([
+		getLatestTerm('HOUSE_OF_REPRESENTATIVE'),
+		getLatestTerm('HOUSE_OF_SENATE'),
+		getLatestTerm('CABINET')
+	]);
+
 	const highlightPoliticians = (
 		await graphql.query({
 			people: {
@@ -161,6 +178,25 @@ export async function load() {
 
 	const billCategories = await getBillCategoryOptions();
 	const mpTermChoices = await getRepresentativeTermOptions();
+	const latestAssemblyLabels = {
+		representative: buildAssemblyLabel(
+			'สมาชิกสภาผู้แทนราษฎร',
+			'สส.',
+			latestRepresentativeTerm?.term
+		),
+		senate: buildAssemblyLabel('สมาชิกวุฒิสภา', 'สว.', latestSenateTerm?.term),
+		cabinet: buildAssemblyLabel('คณะรัฐมนตรี', 'ครม.', latestCabinetTerm?.term),
+		representativeVotes: `ดูการลงมติของ ${buildAssemblyLabel(
+			'สมาชิกสภาผู้แทนราษฎร',
+			'สส.',
+			latestRepresentativeTerm?.term
+		)}`,
+		senateVotes: `ดูการลงมติของ ${buildAssemblyLabel(
+			'สมาชิกวุฒิสภา',
+			'สว.',
+			latestSenateTerm?.term
+		)}`
+	};
 
 	// const promiseSummary = {
 	// 	total: promises.length,
@@ -184,6 +220,7 @@ export async function load() {
 		highlightedPoliticians,
 		latestVoteEvents,
 		billCategories,
-		mpTermChoices
+		mpTermChoices,
+		latestAssemblyLabels
 	};
 }

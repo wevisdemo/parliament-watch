@@ -6,6 +6,8 @@
 	import { ArrowRight } from 'carbon-icons-svelte';
 
 	export let latestVoteEvents: ComponentProps<VoteCard>[];
+	export let representativeVotesLabel: string;
+	export let senateVotesLabel: string;
 </script>
 
 <div>
@@ -18,19 +20,19 @@
 </div>
 <div class="flex flex-col gap-[6px]">
 	<Button
-		href="/assemblies/สภาผู้แทนราษฎร-26/votes"
+		href="/assemblies/latest/representative/votes"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		ดูการลงมติของสมาชิกสภาผู้แทนราษฎร (สส.) ชุดที่ 26 (ชุดปัจจุบัน)
+		{representativeVotesLabel}
 	</Button>
 	<Button
-		href="/assemblies/วุฒิสภา-13/votes"
+		href="/assemblies/latest/senate/votes"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		ดูการลงมติของสมาชิกวุฒิสภา (สว.) ชุดที่ 13 (ชุดปัจจุบัน)
+		{senateVotesLabel}
 	</Button>
 </div>
