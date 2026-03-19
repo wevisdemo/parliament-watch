@@ -12,17 +12,17 @@
 			subs: [
 				{
 					label: 'สภาผู้แทนราษฎร',
-					url: '/assemblies/สภาผู้แทนราษฎร-26',
+					url: '/assemblies/latest/representative',
 					type: MenuTypes.link
 				},
-				{ label: 'วุฒิสภา', url: '/assemblies/วุฒิสภา-13', type: MenuTypes.link },
-				{ label: 'คณะรัฐมนตรี', url: '/assemblies/คณะรัฐมนตรี-65', type: MenuTypes.link }
+				{ label: 'วุฒิสภา', url: '/assemblies/latest/senate', type: MenuTypes.link },
+				{ label: 'คณะรัฐมนตรี', url: '/assemblies/latest/cabinet', type: MenuTypes.link }
 			]
 		},
 		{
 			label: 'การลงมติ',
 			icon: VoteIcon,
-			url: '/assemblies/สภาผู้แทนราษฎร-26/votes',
+			url: '/assemblies/latest/representative/votes',
 			type: MenuTypes.both
 		},
 		{

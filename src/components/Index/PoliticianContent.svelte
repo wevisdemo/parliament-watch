@@ -11,6 +11,9 @@
 	}
 
 	export let highlightedPoliticians: ComponentProps<StatCard>[];
+	export let representativeLabel: string;
+	export let senateLabel: string;
+	export let cabinetLabel: string;
 
 	async function getExternalHighlightedPoliticians(): Promise<ComponentProps<StatCard>[]> {
 		const { politicianWithMostWikipediaVisit, updatedAt } = await fetchExternalPoliticianRanking();
@@ -42,29 +45,29 @@
 </div>
 <div class="flex flex-col gap-[6px]">
 	<Button
-		href="/assemblies/สภาผู้แทนราษฎร-26"
+		href="/assemblies/latest/representative"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		สมาชิกสภาผู้แทนราษฎร (สส.) ชุดที่ 26 (ชุดปัจจุบัน)
+		{representativeLabel}
 	</Button>
 
 	<Button
-		href="/assemblies/วุฒิสภา-13"
+		href="/assemblies/latest/senate"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		สมาชิกวุฒิสภา (สว.) ชุดที่ 13 (ชุดปัจจุบัน)
+		{senateLabel}
 	</Button>
 
 	<Button
-		href="/assemblies/คณะรัฐมนตรี-65"
+		href="/assemblies/latest/cabinet"
 		kind="secondary"
 		icon={ArrowRight}
 		class="w-full max-w-none"
 	>
-		คณะรัฐมนตรี ชุดที่ 65 (ชุดปัจจุบัน)
+		{cabinetLabel}
 	</Button>
 </div>
