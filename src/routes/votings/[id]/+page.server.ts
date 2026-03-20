@@ -107,7 +107,6 @@ export async function load({ params }) {
 		results: [...customOptionResults, ...defaultOptionResults],
 		resultsByAffiliation,
 		votes,
-		customOptionResults,
 		seo: createSeo({
 			title: `การลงมติ ${voteEvent.nickname || voteEvent.title}`
 		})

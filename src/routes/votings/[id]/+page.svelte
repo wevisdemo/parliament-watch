@@ -24,7 +24,7 @@
 
 	export let data;
 
-	$: ({ voteEvent, results, customOptionResults, resultsByAffiliation, votes } = data);
+	$: ({ voteEvent, results, resultsByAffiliation, votes } = data);
 
 	enum Menu {
 		Summary = 'summary',
@@ -214,7 +214,7 @@
 					<div>
 						<p class="heading-01">องค์ประชุม</p>
 						<ul class="body-01">
-							{#each voteEvent.organizations as { id, name }}
+							{#each voteEvent.organizations as { id, name } (id)}
 								<li><a href="/assemblies/{id}">{name}</a></li>
 							{/each}
 						</ul>
@@ -307,7 +307,7 @@
 							<p class="heading-02">สมาชิกสภา</p>
 							<p class="body-02">{votes.length}</p>
 						</div>
-						{#each results as { option, total }}
+						{#each results as { option, total } (typeof option === 'string' ? option : option.label)}
 							{@const { className, style } = getVoteColor(option)}
 							<div class="flex items-center gap-x-1">
 								<div class="h-4 w-4 rounded-sm {className}" {style} />
@@ -320,7 +320,7 @@
 					</div>
 				</div>
 				<div class="my-2 flex h-[50px] w-full">
-					{#each results as { option, total }}
+					{#each results as { option, total } (typeof option === 'string' ? option : option.label)}
 						{@const { className, style } = getVoteColor(option)}
 						{#if total}
 							<VoteChartTooltip
@@ -370,7 +370,7 @@
 					<p class="label-01 mt-1">*หมายเหตุ: ข้อมูลสังกัด ยึดตามวันที่ลงมติ</p>
 				</div>
 				<div class="mb-10 mt-4 flex w-full flex-col gap-x-8 md:flex-row">
-					{#each resultsByAffiliation as result}
+					{#each resultsByAffiliation as result (result.name)}
 						<AffiliationResult
 							{...result}
 							affiliationPercent={(result.count / maxAffiliationVote) * 100}
@@ -419,7 +419,7 @@
 						</div>
 					</div>
 					{#if voterSearchResult.length}
-						{#each voterSearchResult as { politician, role, party, option }}
+						{#each voterSearchResult as { politician, role, party, option } (politician.id)}
 							{@const voteOption = results.find((result) =>
 								typeof result.option === 'string'
 									? option === result.option
