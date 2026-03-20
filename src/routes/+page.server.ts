@@ -38,7 +38,7 @@ function buildAssemblyLabel(
 ) {
 	const displayTitle = shortTitle ? `${title} (${shortTitle})` : title;
 
-	return term ? `${displayTitle} ชุดที่ ${term} (ชุดปัจจุบัน)` : `${displayTitle} ชุดปัจจุบัน`;
+	return term ? `${displayTitle} ชุดที่ ${term} (ชุดล่าสุด)` : `${displayTitle} ชุดล่าสุด`;
 }
 
 export async function load() {
