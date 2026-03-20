@@ -1,4 +1,3 @@
-import { AssemblyPartyGroup } from '$models/assembly';
 import { graphql } from '../client';
 
 const NO_INFO_LABEL = 'ไม่พบข้อมูล';
@@ -74,7 +73,7 @@ export async function queryPoliticiansVote(voteEvent: {
 							founding_date: { lte: voteEvent.start_date },
 							OR: [
 								{ dissolution_date: { eq: null } },
-								{ dissolution_date: { gte: voteEvent.end_date } }
+								{ dissolution_date: { gte: voteEvent.start_date } }
 							]
 						}
 					},
@@ -92,6 +91,11 @@ export async function queryPoliticiansVote(voteEvent: {
 				}
 			},
 			role: true,
+			organizations: {
+				name: true,
+				founding_date: true,
+				dissolution_date: true
+			},
 			memberships: {
 				members: {
 					on_Organization: {
@@ -115,9 +119,6 @@ export async function queryPoliticiansVote(voteEvent: {
 			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 		);
 		const party = partyMembership?.posts[0].organizations[0];
-		const partySide = party
-			? (partySideMap.get(party.id) ?? inferPartySideFromOrganization(party))
-			: undefined;
 
 		return {
 			id: id,
@@ -132,7 +133,7 @@ export async function queryPoliticiansVote(voteEvent: {
 							party.name ??
 							(voter_party?.startsWith('พรรค') ? voter_party.replace('พรรค', '') : undefined),
 						image: party.image ?? undefined,
-						side: partySide
+						side: party && partySideMap.get(party.id)
 					}
 				: undefined,
 			role: assemblyRole
@@ -140,27 +141,6 @@ export async function queryPoliticiansVote(voteEvent: {
 				: NO_INFO_LABEL
 		};
 	});
-}
-
-function inferPartySideFromOrganization(organization?: {
-	id?: string;
-	memberships?: { posts?: { role?: string }[] }[];
-}) {
-	if (!organization?.memberships) return undefined;
-
-	for (const membership of organization.memberships) {
-		for (const post of membership.posts ?? []) {
-			const role = post.role ?? '';
-			if (role.endsWith(AssemblyPartyGroup.Opposition)) {
-				return AssemblyPartyGroup.Opposition;
-			}
-			if (role.endsWith(AssemblyPartyGroup.Government)) {
-				return AssemblyPartyGroup.Government;
-			}
-		}
-	}
-
-	return undefined;
 }
 
 type VoteWithPolitician = Awaited<ReturnType<typeof queryPoliticiansVote>>[number];
