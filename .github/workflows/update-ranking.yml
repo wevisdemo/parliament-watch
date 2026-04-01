@@ -4,24 +4,24 @@ on:
   schedule:
     - cron: '0 0 1 * *'
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      - uses: actions/checkout@v5
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           cache: true
+      - name: Use Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
       - name: Install dependencies
         run: pnpm i --prod --frozen-lockfile --ignore-scripts
-      - name: Test
-        run: pnpm run test
       - name: Generate GraphQL client
         run: pnpm run gen:graphql
+      - name: Test
+        run: pnpm run test run
       - name: Fetch politician ranking data
         run: pnpm run update:politician-ranking
       - name: Deploy to Github Page
