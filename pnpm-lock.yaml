@@ -8,31 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@wevisdemo/ui':
-        specifier: ^7.0.2
-        version: 7.0.2
-      d3:
-        specifier: ^7.8.5
-        version: 7.9.0
-      dayjs:
-        specifier: ^1.11.10
-        version: 1.11.19
-      fastest-levenshtein:
-        specifier: ^1.0.16
-        version: 1.0.16
-      keen-slider:
-        specifier: ^6.8.6
-        version: 6.8.6
-      scrollama:
-        specifier: ^3.2.0
-        version: 3.2.0
-    devDependencies:
-      '@commitlint/cli':
-        specifier: ^17.7.0
-        version: 17.8.1
-      '@commitlint/config-conventional':
-        specifier: ^17.7.0
-        version: 17.8.1
       '@genql/cli':
         specifier: ^6.3.3
         version: 6.3.3(enquirer@2.4.1)
@@ -51,21 +26,9 @@ importers:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.0.0
         version: 3.1.2(svelte@4.2.20)(vite@5.4.21(@types/node@20.5.1)(sass@1.77.2))
-      '@trivago/prettier-plugin-sort-imports':
-        specifier: ^4.3.0
-        version: 4.3.0(prettier@3.7.4)
-      '@types/d3':
-        specifier: ^7.4.1
-        version: 7.4.3
-      '@types/md5':
-        specifier: ^2.3.5
-        version: 2.3.6
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^5.45.0
-        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
-      '@typescript-eslint/parser':
-        specifier: ^5.45.0
-        version: 5.62.0(eslint@8.57.1)(typescript@5.9.3)
+      '@wevisdemo/ui':
+        specifier: ^7.0.2
+        version: 7.0.2
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.22(postcss@8.5.6)
@@ -78,30 +41,21 @@ importers:
       carbon-icons-svelte:
         specifier: ^12.5.0
         version: 12.20.0
-      doctoc:
-        specifier: ^2.2.1
-        version: 2.2.1
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.1
-      eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.2(eslint@8.57.1)
-      eslint-plugin-svelte:
-        specifier: ^2.35.1
-        version: 2.46.1(eslint@8.57.1)(svelte@4.2.20)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.9.3))
+      d3:
+        specifier: ^7.8.5
+        version: 7.9.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.19
+      fastest-levenshtein:
+        specifier: ^1.0.16
+        version: 1.0.16
       histoire:
         specifier: ^0.17.14
         version: 0.17.17(@types/node@20.5.1)(sass@1.77.2)(vite@5.4.21(@types/node@20.5.1)(sass@1.77.2))
-      husky:
-        specifier: ^8.0.3
-        version: 8.0.3
-      hygen:
-        specifier: ^6.2.11
-        version: 6.2.11
-      lint-staged:
-        specifier: ^13.2.3
-        version: 13.3.0(enquirer@2.4.1)
+      keen-slider:
+        specifier: ^6.8.6
+        version: 6.8.6
       pino:
         specifier: ^8.19.0
         version: 8.21.0
@@ -111,30 +65,18 @@ importers:
       postcss:
         specifier: ^8.4.27
         version: 8.5.6
-      prettier:
-        specifier: ^3.2.5
-        version: 3.7.4
-      prettier-plugin-svelte:
-        specifier: ^3.2.2
-        version: 3.4.0(prettier@3.7.4)(svelte@4.2.20)
-      prettier-plugin-tailwindcss:
-        specifier: ^0.7.2
-        version: 0.7.2(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.7.4))(prettier-plugin-svelte@3.4.0(prettier@3.7.4)(svelte@4.2.20))(prettier@3.7.4)
       sass:
         specifier: ^1.67.0
         version: 1.77.2
+      scrollama:
+        specifier: ^3.2.0
+        version: 3.2.0
       sheethuahua:
         specifier: ^3.1.0
         version: 3.2.0
       svelte:
         specifier: ^4.2.12
         version: 4.2.20
-      svelte-check:
-        specifier: ^3.6.6
-        version: 3.8.6(postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.9.3)))(postcss@8.5.6)(sass@1.77.2)(svelte@4.2.20)
-      svelte-eslint-parser:
-        specifier: ^1.4.1
-        version: 1.4.1(svelte@4.2.20)
       tailwind-merge:
         specifier: ^2.1.0
         version: 2.6.0
@@ -159,6 +101,64 @@ importers:
       vitest:
         specifier: ^1.0.0
         version: 1.6.1(@types/node@20.5.1)(jsdom@20.0.3)(sass@1.77.2)
+    devDependencies:
+      '@commitlint/cli':
+        specifier: ^17.7.0
+        version: 17.8.1
+      '@commitlint/config-conventional':
+        specifier: ^17.7.0
+        version: 17.8.1
+      '@trivago/prettier-plugin-sort-imports':
+        specifier: ^4.3.0
+        version: 4.3.0(prettier@3.7.4)
+      '@types/d3':
+        specifier: ^7.4.1
+        version: 7.4.3
+      '@types/md5':
+        specifier: ^2.3.5
+        version: 2.3.6
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^5.45.0
+        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^5.45.0
+        version: 5.62.0(eslint@8.57.1)(typescript@5.9.3)
+      doctoc:
+        specifier: ^2.2.1
+        version: 2.2.1
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.1
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.2(eslint@8.57.1)
+      eslint-plugin-svelte:
+        specifier: ^2.35.1
+        version: 2.46.1(eslint@8.57.1)(svelte@4.2.20)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.9.3))
+      husky:
+        specifier: ^8.0.3
+        version: 8.0.3
+      hygen:
+        specifier: ^6.2.11
+        version: 6.2.11
+      lint-staged:
+        specifier: ^13.2.3
+        version: 13.3.0(enquirer@2.4.1)
+      prettier:
+        specifier: ^3.2.5
+        version: 3.7.4
+      prettier-plugin-svelte:
+        specifier: ^3.2.2
+        version: 3.4.0(prettier@3.7.4)(svelte@4.2.20)
+      prettier-plugin-tailwindcss:
+        specifier: ^0.7.2
+        version: 0.7.2(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.7.4))(prettier-plugin-svelte@3.4.0(prettier@3.7.4)(svelte@4.2.20))(prettier@3.7.4)
+      svelte-check:
+        specifier: ^3.6.6
+        version: 3.8.6(postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.9.3)))(postcss@8.5.6)(sass@1.77.2)(svelte@4.2.20)
+      svelte-eslint-parser:
+        specifier: ^1.4.1
+        version: 1.4.1(svelte@4.2.20)
 
 packages:
 
