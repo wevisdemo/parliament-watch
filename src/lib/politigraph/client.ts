@@ -4,9 +4,13 @@ import { generateQueryOp, type Client } from './genql';
 const GRAPHQL_URL =
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	env.SERVER_POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql';
+	env.POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql';
 
-const RATE_LIMIT = 3;
+const RATE_LIMIT =
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	env.POLITIGRAPH_REQUEST_PER_SECOND || 3;
+
 const INTERVAL_MS = 1000;
 const BATCH_TIMEOUT_MS = 200;
 const MAX_BATCH_SIZE = 5;

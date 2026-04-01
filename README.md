@@ -170,8 +170,7 @@ The project design system is based on Carbon Design System v10 with some modific
 You can custom Politigraph GraphQL endpoint by setting these environment variables. (Default to `https://politigraph.wevis.info/graphql`)
 
 ```env
-PUBLIC_POLITIGRAPH_URL="Used on client-side"
-SERVER_POLITIGRAPH_URL="Used on server-side"
+POLITIGRAPH_URL="GraphQL endpoint URL"
 ```
 
 ## 🤝 Contributing Guideline
