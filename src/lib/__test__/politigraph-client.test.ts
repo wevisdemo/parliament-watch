@@ -2,7 +2,8 @@ import { graphql } from '../politigraph/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$env/static/private', () => ({
-	SERVER_POLITIGRAPH_URL: 'http://test/graphql'
+	POLITIGRAPH_URL: 'http://test/graphql',
+	POLITIGRAPH_REQUEST_PER_SECOND: 3
 }));
 
 vi.mock('../politigraph/genql', () => ({
