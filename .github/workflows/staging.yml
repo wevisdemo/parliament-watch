@@ -1,13 +1,12 @@
 name: Build and deploy to staging
 on:
-  # push:
-  #   branches: ['main', '**/main']
-  #   paths-ignore:
-  #     - '**/README.md'
-  #     - '**/CONTRIBUTING.md'
-  #     - '.github/ISSUE_TEMPLATE/**'
-  #     - '.github/workflows/production.yml'
-  #     - '.github/workflows/update-ranking.yml'
+  push:
+    branches: ['main', '**/main']
+    paths-ignore:
+      - '**/*.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/production.yml'
+      - '.github/workflows/update-ranking.yml'
   workflow_dispatch:
 jobs:
   build:
@@ -21,42 +20,41 @@ jobs:
           echo "Set artifact name as ${ARTIFACT}"
       - name: Checkout repository
         uses: actions/checkout@v5
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
       - name: Install pnpm
         uses: pnpm/action-setup@v5
         with:
           cache: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
       - name: Install dependencies
         run: pnpm i --prod --frozen-lockfile --ignore-scripts
+      - name: Add runner IP to Cloudflare list
+        run: node --import tsx scripts/cloudflare/add-runner-ip.ts
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_RUNNER_IP_LIST_ID: ${{ secrets.CLOUDFLARE_RUNNER_IP_LIST_ID }}
+      - name: Generate GraphQL client
+        run: pnpm run gen:graphql
       - name: Test
         run: pnpm run test
-      - name: Set up rsync
-        id: rsync
-        uses: GuillaumeFalourd/setup-rsync@v1.2
-        with:
-          ssh_key: ${{ secrets.SSH_KEY }}
-      - name: Register Politigraph host and key
-        run: |
-          mkdir ~/.ssh
-          ssh-keyscan ${{ secrets.POLITIGRAPH_SSH_HOST }} > ~/.ssh/known_hosts
-          eval $(ssh-agent)
-          ssh-add ${{ steps.rsync.outputs.ssh_key_path }}
-      - name: Pull latest Politigraph snapshot
-        run: |
-          rsync -azvP bot@${{ secrets.POLITIGRAPH_SSH_HOST }}:${{ secrets.POLITIGRAPH_SSH_PATH }}/* ./politigraph
-          docker load --input ./politigraph/politigraph-image.tar.gz
-      - name: Start Politigraph services
-        run: cd politigraph && docker compose -f compose.server.yml up -d neo4j nuxt && cd ..
       - name: Build static site
         run: pnpm run build
-      - name: Stop Politigraph services
-        run: cd politigraph && docker compose -f compose.server.yml down && cd ..
+        env:
+          POLITIGRAPH_URL: https://politigraph.wevis.info/graphql
+          POLITIGRAPH_REQUEST_PER_SECOND: 10
       - name: Build Histoire
         continue-on-error: true
         run: pnpm run story:build
+      - name: Remove runner IP from Cloudflare list
+        if: always()
+        run: node --import tsx scripts/cloudflare/remove-runner-ip.ts
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_RUNNER_IP_LIST_ID: ${{ secrets.CLOUDFLARE_RUNNER_IP_LIST_ID }}
       - name: Upload build artifact
         uses: actions/upload-artifact@v6
         with:
