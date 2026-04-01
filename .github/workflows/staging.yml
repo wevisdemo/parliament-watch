@@ -20,13 +20,13 @@ jobs:
           echo "ARTIFACT=${ARTIFACT}" >> $GITHUB_ENV
           echo "Set artifact name as ${ARTIFACT}"
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           cache: true
       - name: Install dependencies
@@ -58,7 +58,7 @@ jobs:
         continue-on-error: true
         run: pnpm run story:build
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.ARTIFACT }}
           path: build/*
@@ -76,7 +76,7 @@ jobs:
           echo "ARTIFACT=${ARTIFACT}" >> $GITHUB_ENV
           echo "Set artifact name as ${ARTIFACT}"
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ env.ARTIFACT }}
       - name: Publish to Cloudflare Pages
