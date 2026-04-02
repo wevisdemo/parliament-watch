@@ -44,7 +44,7 @@ jobs:
         run: pnpm run build
         env:
           POLITIGRAPH_URL: https://politigraph.wevis.info/graphql
-          POLITIGRAPH_REQUEST_PER_SECOND: 10
+          POLITIGRAPH_REQUEST_PER_SECOND: 25
       - name: Build Histoire
         continue-on-error: true
         run: pnpm run story:build
