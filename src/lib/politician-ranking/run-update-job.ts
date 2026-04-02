@@ -1,4 +1,5 @@
 import { createClient } from '$lib/politigraph/genql';
+import { queryAllPeople } from '$lib/politigraph/people';
 import { OUT_FILE, type ExternalPoliticianRanking } from '.';
 import { getPoliticianWithMostViewLastMonth } from './wikipedia';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
@@ -13,20 +14,23 @@ const graphql = createClient({
 async function writePoliticianRankingFile() {
 	console.info('Fetching politicians...');
 
-	const { people } = await graphql.query({
-		people: {
-			__args: {
-				where: {
-					memberships: {
-						some: {
-							end_date: { eq: null },
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
-											}
+	const people = await queryAllPeople(
+		{
+			id: true,
+			name: true
+		},
+		{
+			client: graphql,
+			where: {
+				memberships: {
+					some: {
+						end_date: { eq: null },
+						posts: {
+							some: {
+								organizations: {
+									some: {
+										classification: {
+											in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
 										}
 									}
 								}
@@ -34,11 +38,9 @@ async function writePoliticianRankingFile() {
 						}
 					}
 				}
-			},
-			id: true,
-			name: true
+			}
 		}
-	});
+	);
 
 	console.info('Fetching wikipedia views...');
 	const politicianWithMostWikipediaVisit = await getPoliticianWithMostViewLastMonth(people);

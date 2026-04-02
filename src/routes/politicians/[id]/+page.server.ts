@@ -4,6 +4,7 @@ import type {
 } from '$components/politicians/PoliticianVoteSummary.svelte';
 import { graphql } from '$lib/politigraph/client';
 import type { Vote, VoteEvent } from '$lib/politigraph/genql/schema';
+import { queryAllPeople } from '$lib/politigraph/people';
 import { createSeo } from '$lib/seo';
 import { DefaultVoteOption } from '$models/voting';
 import { error } from '@sveltejs/kit';
@@ -11,7 +12,7 @@ import { error } from '@sveltejs/kit';
 const MAX_LATEST_VOTE = 5;
 
 export async function entries() {
-	return (await graphql.query({ people: { id: true } })).people;
+	return queryAllPeople({ id: true });
 }
 
 export async function load({ params }) {

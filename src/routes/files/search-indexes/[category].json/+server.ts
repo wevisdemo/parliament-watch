@@ -1,4 +1,5 @@
 import { graphql } from '$lib/politigraph/client';
+import { queryAllPeople } from '$lib/politigraph/people';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';
 import { error } from '@sveltejs/kit';
 
@@ -9,40 +10,38 @@ export const entries = () => Object.values(SearchIndexCategory).map((category) =
 export async function GET({ params }) {
 	switch (params.category) {
 		case SearchIndexCategory.Politicians: {
-			const { people } = await graphql.query({
-				people: {
-					id: true,
-					name: true,
-					memberships: {
-						__args: {
-							where: {
-								end_date: { eq: null },
-								posts: {
-									some: {
-										organizations: {
-											some: {
-												classification: {
-													in: [
-														'CABINET',
-														'HOUSE_OF_REPRESENTATIVE',
-														'HOUSE_OF_SENATE',
-														'POLITICAL_PARTY'
-													]
-												}
+			const people = await queryAllPeople({
+				id: true,
+				name: true,
+				memberships: {
+					__args: {
+						where: {
+							end_date: { eq: null },
+							posts: {
+								some: {
+									organizations: {
+										some: {
+											classification: {
+												in: [
+													'CABINET',
+													'HOUSE_OF_REPRESENTATIVE',
+													'HOUSE_OF_SENATE',
+													'POLITICAL_PARTY'
+												]
 											}
 										}
 									}
 								}
 							}
-						},
-						label: true,
-						posts: {
-							organizations: {
-								classification: true,
-								name: true,
-								abbreviation: true,
-								term: true
-							}
+						}
+					},
+					label: true,
+					posts: {
+						organizations: {
+							classification: true,
+							name: true,
+							abbreviation: true,
+							term: true
 						}
 					}
 				}
@@ -103,21 +102,21 @@ export async function GET({ params }) {
 		}
 
 		case SearchIndexCategory.BillProposers: {
-			const { people } = await graphql.query({
-				people: {
-					__args: {
-						where: {
-							created_motions: {
-								some: { NOT: { id: { eq: null } } }
-							}
-						}
-					},
+			const people = await queryAllPeople(
+				{
 					name: true,
 					created_motionsConnection: {
 						totalCount: true
 					}
+				},
+				{
+					where: {
+						created_motions: {
+							some: { NOT: { id: { eq: null } } }
+						}
+					}
 				}
-			});
+			);
 
 			const indexes: SearchIndexes['billProposers'] = people.map(
 				({ name, created_motionsConnection }) => ({
