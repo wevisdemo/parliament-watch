@@ -40,10 +40,10 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 ## 🌎 Deployment
 
-| Name                  | URL                                    |
-| --------------------- | -------------------------------------- |
-| Production            | https://parliamentwatch.wevis.info     |
-| Staging (main branch) | ~~https://parliament-watch.pages.dev~~ |
+| Name                  | URL                                |
+| --------------------- | ---------------------------------- |
+| Production            | https://parliamentwatch.wevis.info |
+| Staging (main branch) | https://parliament-watch.pages.dev |
 
 ## 🍱 Tech Stack
 
