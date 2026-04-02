@@ -45,9 +45,6 @@ jobs:
         env:
           POLITIGRAPH_URL: https://politigraph.wevis.info/graphql
           POLITIGRAPH_REQUEST_PER_SECOND: 25
-      - name: Build Histoire
-        continue-on-error: true
-        run: pnpm run story:build
       - name: Remove runner IP from Cloudflare list
         if: always()
         run: node --import tsx scripts/cloudflare/remove-runner-ip.ts
