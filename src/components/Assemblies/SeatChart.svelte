@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import * as d3 from 'd3';
 	import type { PartySeat, TooltipProp } from './shared';
 	import AssemblyTooltip from './AssemblyTooltip.svelte';
+
 	interface Point {
-		x: number;
-		y: number;
+		cx: number;
+		cy: number;
 		color: string;
 		title?: string;
 		additional?: string;
@@ -19,45 +18,62 @@
 	export let parties: PartySeat[] = [];
 	export let lineAmounts: number[] = [];
 
-	let component: HTMLDivElement | null = null;
-	let outerRadius = 0;
-	let circleDiameter = outerRadius / 2 / lineAmounts.length;
-	let gap = 0;
+	let clientWidth = 0;
 	let tooltipProp: TooltipProp | null = null;
 
-	const getIndexOfLine = (lineCals: LineCalculator[]) => {
-		const filledPercents = lineCals.map((lineCal) => lineCal.count / lineCal.total);
-		const minPercent = Math.min(...filledPercents);
+	$: outerRadius = Math.max(Math.min((clientWidth - 20) / 2, 224), 0);
+	$: circleDiameter = lineAmounts.length ? Math.max(4, outerRadius / 2 / lineAmounts.length) : 4;
+	$: gap =
+		lineAmounts.length > 1
+			? Math.max(
+					(outerRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
+					1
+				)
+			: 0;
 
-		const index = findLastIndex(filledPercents, (percent) => percent === minPercent);
-		return index;
-	};
+	$: points = ((): Point[] => {
+		if (!parties.length || !lineAmounts.length || outerRadius <= 0) {
+			return [];
+		}
 
-	const generateLineCals = () => {
-		const lineCals = lineAmounts.map((amount) => ({ total: amount, count: 0 }));
-		return lineCals;
-	};
+		const nextPoints: Point[] = [];
+		const lineAllocations = lineAmounts.map((amount) => ({ total: amount, count: 0 }));
 
-	const getPoints = (): Point[] => {
-		let points: Point[] = [];
-		let lineCals: LineCalculator[] = generateLineCals();
-		for (let party of parties) {
+		for (const party of parties) {
 			for (let i = 0; i < party.count; i++) {
-				let index = getIndexOfLine(lineCals);
-				let line = lineCals[index];
-				let radius = outerRadius - index * circleDiameter - index * gap;
-				points.push({
-					x: radius * Math.cos((line.count / (line.total - 1)) * Math.PI + Math.PI),
-					y: radius * Math.sin((line.count / (line.total - 1)) * Math.PI + Math.PI),
+				const index = getLeastFilledLineIndex(lineAllocations);
+				if (index < 0) continue;
+
+				const line = lineAllocations[index];
+				const radius = outerRadius - index * circleDiameter - index * gap;
+				const seatIndex = line.total > 1 ? line.count / (line.total - 1) : 0.5;
+				const angle = seatIndex * Math.PI + Math.PI;
+
+				nextPoints.push({
+					cx: radius * Math.cos(angle) + outerRadius + circleDiameter,
+					cy: radius * Math.sin(angle) + outerRadius + circleDiameter,
 					color: party.color,
 					additional: party.name,
-					title: party?.members?.[i].name
+					title: party.members?.[i]?.name
 				});
-				lineCals[index].count++;
+
+				lineAllocations[index].count++;
 			}
 		}
-		return points;
-	};
+
+		return nextPoints;
+	})();
+
+	function getLeastFilledLineIndex(lineAllocations: LineCalculator[]) {
+		const filledPercents = lineAllocations.map((lineAllocation) =>
+			lineAllocation.total > 0
+				? lineAllocation.count / lineAllocation.total
+				: Number.POSITIVE_INFINITY
+		);
+		const minPercent = Math.min(...filledPercents);
+
+		return findLastIndex(filledPercents, (percent) => percent === minPercent);
+	}
 
 	function findLastIndex<T>(
 		array: Array<T>,
@@ -70,71 +86,33 @@
 		return -1;
 	}
 
-	const getOuterRadius = () => {
-		const componentWidth = component?.clientWidth || 0;
-		return Math.min((componentWidth - 20) / 2, 224);
-	};
+	function setTooltipProperty(value: Point, event: MouseEvent | FocusEvent | KeyboardEvent): void {
+		const target = event.currentTarget as SVGCircleElement | null;
+		const rect = target?.getBoundingClientRect();
+		const x =
+			'pageX' in event && typeof event.pageX === 'number'
+				? event.pageX
+				: (rect?.left ?? 0) + (rect?.width ?? 0) / 2 + window.scrollX;
+		const y =
+			'pageY' in event && typeof event.pageY === 'number'
+				? event.pageY + 20
+				: (rect?.top ?? 0) + (rect?.height ?? 0) / 2 + window.scrollY + 20;
 
-	const redraw = () => {
-		const seatComponents = d3.selectAll('.seat');
-		seatComponents.remove();
-		setUpComponentENV();
-		draw();
-	};
-
-	const draw = () => {
-		const svg = d3.select('#half-circle-chart');
-		const points = getPoints();
-		points.forEach((value) => {
-			svg
-				.append('circle')
-				.attr('cx', value.x + outerRadius + circleDiameter)
-				.attr('cy', value.y + outerRadius + circleDiameter)
-				.attr('r', circleDiameter / 2)
-				.attr('fill', value.color)
-				.attr('class', 'seat')
-				.on('mouseover', (e) => setTooltipProperty(value, e))
-				.on('mouseout', () => {
-					tooltipProp = null;
-				});
-		});
-	};
-
-	const setUpComponentENV = () => {
-		outerRadius = getOuterRadius();
-		circleDiameter = Math.max(4, outerRadius / 2 / lineAmounts.length);
-		gap = Math.max(
-			(outerRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
-			1
-		);
-	};
-
-	const setTooltipProperty = (value: Point, event: MouseEvent): void => {
 		tooltipProp = {
 			title: value.title ?? '',
 			additional: value.additional ?? '',
-			x: event.pageX,
-			y: event.pageY + 20
+			x,
+			y
 		};
-	};
+	}
 
-	onMount(() => {
-		redraw();
-
-		window.addEventListener('resize', redraw);
-
-		return () => {
-			window.removeEventListener('resize', redraw);
-		};
-	});
-
-	$: if (component && parties && lineAmounts) {
-		redraw();
+	function clearTooltip() {
+		tooltipProp = null;
 	}
 </script>
 
 <div
-	bind:this={component}
+	bind:clientWidth
 	class="flex h-full w-full max-w-[calc(100vw-32px)] justify-center md:max-w-[448px]"
 >
 	<svg
@@ -142,7 +120,30 @@
 		width={(outerRadius + circleDiameter) * 2}
 		height={outerRadius + circleDiameter * 2}
 		class="transition-[height] duration-500 ease-in-out"
-	/>
+	>
+		{#each points as point, i (i)}
+			<circle
+				class="seat"
+				cx={point.cx}
+				cy={point.cy}
+				r={circleDiameter / 2}
+				fill={point.color}
+				role="button"
+				tabindex="0"
+				aria-label={point.title ? `${point.title}, ${point.additional}` : (point.additional ?? '')}
+				on:mouseover={(event) => setTooltipProperty(point, event)}
+				on:focus={(event) => setTooltipProperty(point, event)}
+				on:mouseout={clearTooltip}
+				on:blur={clearTooltip}
+				on:keydown={(event) => {
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();
+						setTooltipProperty(point, event);
+					}
+				}}
+			/>
+		{/each}
+	</svg>
 </div>
 
 <AssemblyTooltip {tooltipProp}></AssemblyTooltip>

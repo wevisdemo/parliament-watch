@@ -5,26 +5,33 @@
 
 	let halfDonuts = [
 		{
-			percent: 0,
-			color: '#3904E9'
+			percent: 15,
+			color: '#3904E9',
+			width: 144,
+			height: 72
 		},
 		{
 			percent: 50,
-			color: '#3904E9'
+			color: '#0F62FE',
+			width: 180,
+			height: 90
 		},
 		{
-			percent: 100,
-			color: '#3904E9'
+			percent: 85,
+			color: '#24A148',
+			width: 120,
+			height: 60
 		}
 	];
 </script>
 
 <Hst.Story title="Half Donut">
-	{#each halfDonuts as halfDonut}
+	{#each halfDonuts as halfDonut, i (i)}
 		<HalfDonut
-			id="demo-half-donut-{halfDonut.percent}"
 			percent={halfDonut.percent}
 			color={halfDonut.color}
+			width={halfDonut.width}
+			height={halfDonut.height}
 		/>
 	{/each}
 	<svelte:fragment slot="controls">

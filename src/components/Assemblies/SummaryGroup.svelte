@@ -52,13 +52,12 @@
 	</div>
 	{#if showHalfCircleChart}
 		<HalfDonutWrapper
-			chartId="summary-{groupBy}"
 			percent={getTopOfGroupsPercent(memberGroups)}
 			label={getTopOfGroups(memberGroups).name}
 		/>
 	{/if}
 	<div class="grid gap-[8px] {!showHalfCircleChart ? 'mt-2' : ''}">
-		{#each memberGroups as group}
+		{#each memberGroups as group (group.name)}
 			<div>
 				<div class="flex">
 					<p class="heading-01">{group.name}</p>
@@ -70,7 +69,7 @@
 					class="flex w-[--width] gap-x-[2px]"
 					style="--width:{getPercentWidth(group.total, memberGroups)}%;"
 				>
-					{#each getRenderPartyList(group.subgroups || []) as party}
+					{#each getRenderPartyList(group.subgroups || []) as party (party.name)}
 						<Badge
 							color={party.color}
 							title={party.name}
