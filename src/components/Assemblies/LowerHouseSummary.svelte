@@ -13,30 +13,30 @@
 
 <div class="grid">
 	<div class="space-y-[8px] md:space-y-[24px]">
-		{#each memberGroups as group}
+		{#each memberGroups as group (group.name)}
 			<div>
 				<div>
 					<span class="heading-compact-01">{group.name}</span>
 					<span class="body-compact-01 text-gray-60">{group.total} คน</span>
 				</div>
 				<div
-					class="flex w-[--width] gap-x-[4px]"
+					class="flex w-[--width] gap-x-[2px]"
 					style="--width:{getPercentWidth(group.total, memberGroups)}%"
 				>
-					{#each getTop5OfGroup(group.subgroups) as party}
+					{#each getTop5OfGroup(group.subgroups) as party (party.name)}
 						<Badge
 							color={party.color}
 							title={party.name}
-							subtitle={`${party.count} คน`}
+							subtitle="{party.count} คน"
 							size="l"
 							style="flex:{party.count} {party.count} 0%"
 						/>
 					{/each}
 				</div>
 				<div class="mt-[8px] flex flex-wrap gap-[4px]">
-					{#each group.subgroups || [] as party}
+					{#each group.subgroups || [] as party (party.name)}
 						<div class="mr-[8px] flex w-[152px] justify-between md:mr-[24px]">
-							<div class="flex items-center space-x-[4px]">
+							<div class="flex items-center space-x-[2px]">
 								<div
 									class="h-[8px] w-[8px] rounded-[100%]"
 									style="background-color: {party.color || '#8D8D8D'}"

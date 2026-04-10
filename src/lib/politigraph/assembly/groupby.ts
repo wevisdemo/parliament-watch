@@ -5,6 +5,16 @@ import type { AssemblyMember } from './member';
 import dayjs from 'dayjs';
 
 const UNKNOWN_LABEL = 'ไม่พบข้อมูล';
+const SEX_GROUP_ORDER = ['ชาย', 'หญิง', UNKNOWN_LABEL];
+const AGE_GROUP_ORDER = ['25-40 ปี', '41-55 ปี', '56-70 ปี', '71 ปีขึ้นไป', UNKNOWN_LABEL];
+const EDUCATION_GROUP_ORDER = [
+	'ต่ำกว่าปริญญาตรี',
+	'ปริญญาตรี',
+	'ปริญญาโท',
+	'ปริญญาเอก',
+	'สถาบันทหาร',
+	UNKNOWN_LABEL
+];
 
 const sexTranslationMap = new Map([
 	[enumGender.MALE, 'ชาย'],
@@ -29,6 +39,19 @@ export interface PoliticianSubGroup {
 }
 
 export type PoliticianGroupBy = PoliticianGroup[] | PoliticianSubGroup[];
+
+function sortGroupsByLabelOrder<M, T extends string>(
+	groups: [T, M[]][],
+	order: readonly T[] | readonly string[]
+): [T, M[]][] {
+	const orderMap = new Map(order.map((label, index) => [label, index]));
+
+	return [...groups].sort(([leftLabel], [rightLabel]) => {
+		const leftIndex = orderMap.get(leftLabel) ?? Number.MAX_SAFE_INTEGER;
+		const rightIndex = orderMap.get(rightLabel) ?? Number.MAX_SAFE_INTEGER;
+		return leftIndex - rightIndex;
+	});
+}
 
 export function getMemberGroup(
 	members: AssemblyMember[],
@@ -80,9 +103,12 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Sex: {
-			const membersGroupBySex = groupMembersBy(
-				members,
-				({ gender }) => (gender && sexTranslationMap.get(gender)) || UNKNOWN_LABEL
+			const membersGroupBySex = sortGroupsByLabelOrder(
+				groupMembersBy(
+					members,
+					({ gender }) => (gender && sexTranslationMap.get(gender)) || UNKNOWN_LABEL
+				),
+				SEX_GROUP_ORDER
 			);
 			return isCabinet
 				? membersGroupBySex.map(([sex, membersBySex]) => ({
@@ -98,17 +124,20 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Age: {
-			const membersGroupByAge = groupMembersBy(members, ({ birth_date }) => {
-				if (!birth_date) return UNKNOWN_LABEL;
+			const membersGroupByAge = sortGroupsByLabelOrder(
+				groupMembersBy(members, ({ birth_date }) => {
+					if (!birth_date) return UNKNOWN_LABEL;
 
-				const birthDate = dayjs(birth_date);
-				const age = dayjs().diff(birthDate, 'year');
+					const birthDate = dayjs(birth_date);
+					const age = dayjs().diff(birthDate, 'year');
 
-				if (age > 71) return '71 ปีขึ้นไป';
-				if (age > 55) return '56-70 ปี';
-				if (age > 40) return '41-55 ปี';
-				return '25-40 ปี';
-			});
+					if (age > 71) return '71 ปีขึ้นไป';
+					if (age > 55) return '56-70 ปี';
+					if (age > 40) return '41-55 ปี';
+					return '25-40 ปี';
+				}),
+				AGE_GROUP_ORDER
+			);
 			return isCabinet
 				? membersGroupByAge.map(([age, membersByAge]) => ({
 						name: age,
@@ -123,14 +152,17 @@ export function getMemberGroup(
 		}
 
 		case GroupByOption.Education: {
-			const membersGroupByEdu = groupMembersBy(members, ({ educations }) => {
-				if (!educations) return UNKNOWN_LABEL;
-				if (educations.includes('ปริญญาเอก')) return 'ปริญญาเอก';
-				if (educations.includes('ปริญญาโท')) return 'ปริญญาโท';
-				if (educations.includes('ปริญญาตรี')) return 'ปริญญาตรี';
-				if (educations.includes('ทหาร')) return 'สถาบันทหาร';
-				return 'ต่ำกว่าปริญญาตรี';
-			});
+			const membersGroupByEdu = sortGroupsByLabelOrder(
+				groupMembersBy(members, ({ educations }) => {
+					if (!educations) return UNKNOWN_LABEL;
+					if (educations.includes('ปริญญาเอก')) return 'ปริญญาเอก';
+					if (educations.includes('ปริญญาโท')) return 'ปริญญาโท';
+					if (educations.includes('ปริญญาตรี')) return 'ปริญญาตรี';
+					if (educations.includes('ทหาร')) return 'สถาบันทหาร';
+					return 'ต่ำกว่าปริญญาตรี';
+				}),
+				EDUCATION_GROUP_ORDER
+			);
 
 			return isCabinet
 				? membersGroupByEdu.map(([education, membersByEducation]) => ({

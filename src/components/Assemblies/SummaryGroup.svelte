@@ -62,12 +62,12 @@
 				<div class="flex">
 					<p class="heading-01">{group.name}</p>
 					<p class="body-compact-01 ml-[4px] text-gray-70">
-						{getRoundedPercent(group.total, getSumOfGroupsTotal(memberGroups))}%
+						{((group.total / getSumOfGroupsTotal(memberGroups)) * 100).toFixed(1)}%
 					</p>
 				</div>
 				<div
-					class="flex w-[--width] gap-x-[2px]"
-					style="--width:{getPercentWidth(group.total, memberGroups)}%;"
+					class="flex w-[--width] gap-x-[1px]"
+					style="--width:{Math.max(getPercentWidth(group.total, memberGroups), 1)}%;"
 				>
 					{#each getRenderPartyList(group.subgroups || []) as party (party.name)}
 						<Badge
