@@ -13,6 +13,7 @@
 	export let id: string;
 	export let availableAssemblies: AvailableAssembly[] = [];
 	export let getAssemblyPath: (_: AvailableAssembly) => string;
+	export let termPrefix = '';
 
 	$: currentIndex = Array.isArray(availableAssemblies)
 		? availableAssemblies.findIndex((assembly) => assembly.id === id)
@@ -50,7 +51,7 @@
 			class="ml-[0px] mr-[16px] w-[20px] rotate-180"
 		/>
 	</a>
-	<h3 class="fluid-heading-03">{displayString}</h3>
+	<h3 class="fluid-heading-03">{termPrefix} {displayString}</h3>
 	<a class={!nextUrl ? 'pointer-events-none cursor-none' : ''} href={nextUrl}>
 		<AngleRightIcon fill={!nextUrl ? '#16161640' : '#3904E9'} class="ml-[16px] mr-[0px] w-[20px]" />
 	</a>

@@ -72,7 +72,12 @@
 
 <section class="h-[60px] bg-ui-03 px-4">
 	<div class="mx-auto flex h-full max-w-[1280px] items-center justify-center">
-		<AssemblyIdRunner id={thisTerm.id} availableAssemblies={allMpTerms} {getAssemblyPath} />
+		<AssemblyIdRunner
+			id={thisTerm.id}
+			availableAssemblies={allMpTerms}
+			{getAssemblyPath}
+			termPrefix="สส."
+		/>
 	</div>
 </section>
 
