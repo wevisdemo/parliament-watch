@@ -16,8 +16,8 @@
 		}[];
 	}[];
 
-	export let affiliationPercent = 100;
-	export let isViewPercent: boolean;
+	export let maxComparableRowVote = 0;
+	export let isViewPercent = false;
 	export let resultColorLookup: Record<string, string | undefined>;
 	export let getOptionColor: (vote: string) => {
 		className: string;
@@ -35,6 +35,12 @@
 			maximumFractionDigits: 1
 		})}%`;
 	}
+
+	$: getBarWidthPercent = (total: number) => {
+		if (isViewPercent) return 100;
+		if (maxComparableRowVote <= 0) return 0;
+		return (total / maxComparableRowVote) * 100;
+	};
 
 	onMount(() => {
 		if (window.matchMedia(`(min-width: 672px)`).matches) {
@@ -93,7 +99,7 @@
 			<p class="heading-03">{highestVote.name}</p>
 		</div>
 		<div class="mt-1 flex items-center gap-x-3">
-			{#each allVotes as vote}
+			{#each allVotes as vote (vote.name)}
 				{@const { className, style } = getOptionColor(vote.name)}
 				<div class="flex items-center gap-x-1">
 					<div class="h-3 w-1 {className}" {style} />
@@ -103,8 +109,11 @@
 				</div>
 			{/each}
 		</div>
-		<div class="mt-1 flex h-[30px]" style:width="{affiliationPercent}%">
-			{#each allVotes as vote}
+		<div
+			class="mt-1 flex h-[30px] max-w-full flex-none"
+			style={`width: ${getBarWidthPercent(count)}%;`}
+		>
+			{#each allVotes as vote (vote.name)}
 				{#if count}
 					{@const { className, style } = getOptionColor(vote.name)}
 					<VoteChartTooltip
@@ -123,7 +132,7 @@
 			id={'aff-' + name.replace(/\s/g, '-')}
 			class="{isExpanded ? 'flex' : 'hidden'} mt-4 w-full flex-col gap-y-4 md:flex"
 		>
-			{#each parties as party}
+			{#each parties as party (party.name)}
 				<div class="flex items-start gap-x-1">
 					<img
 						class="h-8 w-8 rounded-full border border-gray-30"
@@ -140,7 +149,7 @@
 							</p>
 						</div>
 						<div class="mt-1 flex items-center gap-x-3">
-							{#each party.options as partyVote}
+							{#each party.options as partyVote (partyVote.name)}
 								{@const { className, style } = getOptionColor(partyVote.name)}
 								<div class="flex items-center gap-x-1">
 									<div class="h-3 w-1 {className}" {style} />
@@ -150,14 +159,17 @@
 								</div>
 							{/each}
 						</div>
-						<div class="mt-1 flex h-[20px] w-full">
-							{#each party.options as partyVote}
+						<div
+							class="mt-1 flex h-[20px] max-w-full flex-none"
+							style={`width: ${getBarWidthPercent(party.count)}%;`}
+						>
+							{#each party.options as partyVote (partyVote.name)}
 								{#if partyVote.count}
 									{@const { className, style } = getOptionColor(partyVote.name)}
 									<VoteChartTooltip
 										option={partyVote.name}
 										value={partyVote.count}
-										total={count}
+										total={party.count}
 										class={className}
 										{style}
 									/>

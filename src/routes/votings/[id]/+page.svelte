@@ -145,10 +145,14 @@
 					: null;
 	})();
 
-	$: maxAffiliationVote = resultsByAffiliation.reduce(
-		(max, { count }) => (count > max ? count : max),
-		resultsByAffiliation[0].count
-	);
+	$: maxComparableRowVote = resultsByAffiliation.reduce((max, affiliation) => {
+		const partyMax = affiliation.parties.reduce(
+			(partyMax, party) => (party.count > partyMax ? party.count : partyMax),
+			0
+		);
+
+		return Math.max(max, affiliation.count, partyMax);
+	}, 0);
 
 	$: voterSearchResult = searchQuery.trim()
 		? votes.filter((v) =>
@@ -373,7 +377,7 @@
 					{#each resultsByAffiliation as result (result.name)}
 						<AffiliationResult
 							{...result}
-							affiliationPercent={(result.count / maxAffiliationVote) * 100}
+							{maxComparableRowVote}
 							{isViewPercent}
 							{resultColorLookup}
 							getOptionColor={(label) =>
