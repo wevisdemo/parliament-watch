@@ -134,7 +134,7 @@
 			partyCount={membershipInEachParties.length}
 			agreedVoting={agreedVoting.total}
 			disagreedVoting={disagreedVoting.total}
-			absentTotal={votingAbsentStats.absentVoting}
+			absentTotal={votingAbsentStats.reduce((total, stat) => total + stat.absentVoting, 0)}
 		/>
 		<div class="flex w-full min-w-0 flex-1 flex-col gap-6">
 			<Section id="personal" title="ข้อมูลพื้นฐาน">
