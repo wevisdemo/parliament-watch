@@ -9,9 +9,13 @@
 	}
 
 	export interface VotingAbsentStats {
+		assemblyId: string;
+		assemblyName: string;
+		foundingDate: string | null;
+		dissolutionDate: string | null;
 		totalVoting: number;
 		absentVoting: number;
-		averageAbsentVoting: number;
+		averageAbsentVotingPercent: number;
 	}
 </script>
 
@@ -19,6 +23,7 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import Vote from '$components/icons/VoteIcon.svelte';
 	import Section from '$components/politicians/Section.svelte';
+	import { formatDateRange } from '$lib/date.js';
 	import { Button } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import VoteWarningNotification from './VoteWarningNotification.svelte';
@@ -27,11 +32,9 @@
 	export let politicianFirstname: string;
 	export let agreedVoting: VotingHistory;
 	export let disagreedVoting: VotingHistory;
-	export let votingAbsentStats: VotingAbsentStats;
+	export let votingAbsentStats: VotingAbsentStats[];
 
 	const safePercent = (n: number, outOf: number) => Math.round((n / (outOf || 1)) * 10000) / 100;
-
-	$: absentPercentage = safePercent(votingAbsentStats.absentVoting, votingAbsentStats.totalVoting);
 </script>
 
 <Section id="votes" title="ประวัติการลงมติ">
@@ -44,7 +47,6 @@
 					>เห็นด้วย</span
 				>
 			</h3>
-			<!-- TODO: add links -->
 			<ul class="body-01 ml-8 flex list-disc flex-col gap-2">
 				{#each agreedVoting.latest as voting, idx (idx)}
 					<li>
@@ -105,18 +107,31 @@
 		</div>
 		<div class="flex flex-col gap-2">
 			<h3 class="body-02 heading-02 bg-gray-20 px-2 py-1">การลา / ขาดลงมติ</h3>
-			<p class="body-02">
-				{politicianFirstname}ลา / ขาดลงมติในการลงมติ {votingAbsentStats.absentVoting} มติ ({absentPercentage}%)
-				จากทั้งหมด
-				{votingAbsentStats.totalVoting}
-				มติในฐานข้อมูล ซึ่ง{absentPercentage === votingAbsentStats.averageAbsentVoting
-					? 'เท่ากับ'
-					: absentPercentage < votingAbsentStats.averageAbsentVoting
-						? 'น้อยกว่า'
-						: 'มากกว่า'}ค่ากลางของสมาชิกในสภาทั้งหมด (ค่ากลาง = {votingAbsentStats.averageAbsentVoting.toPrecision(
-					3
-				)}%)
-			</p>
+			{#if votingAbsentStats.length > 0}
+				<ul class="body-02 ml-8 list-disc">
+					{#each votingAbsentStats as stat (stat.assemblyId)}
+						{@const absentPercentage = safePercent(stat.absentVoting, stat.totalVoting)}
+						<li>
+							<span class="underline">{stat.assemblyName}</span>
+							<span class="text-gray-60"
+								>({formatDateRange(stat.foundingDate, stat.dissolutionDate, {
+									shortMonth: true,
+									hideDay: true
+								})})</span
+							><br />
+							{politicianFirstname} ลา / ขาดลงมติ {stat.absentVoting} มติ จากทั้งหมด {stat.totalVoting}
+							มติของสภาชุดนี้ คิดเป็น {absentPercentage}% ซึ่ง{absentPercentage ===
+							stat.averageAbsentVotingPercent
+								? 'เท่ากับ'
+								: absentPercentage < stat.averageAbsentVotingPercent
+									? 'น้อยกว่า'
+									: 'มากกว่า'}ค่าเฉลี่ยของสมาชิกสภาชุดเดียวกัน (ค่าเฉลี่ย = {stat.averageAbsentVotingPercent.toPrecision(
+								2
+							)}%)
+						</li>
+					{/each}
+				</ul>
+			{/if}
 			<div class="label-01 flex flex-col gap-1 text-gray-60">
 				<span class="label-02 font-bold">ข้อควรระวังก่อนนำข้อมูลไปใช้</span>
 				<ol class="ml-4 list-decimal">
@@ -165,7 +180,9 @@
 				target="_blank"
 				rel="nofollow noopener noreferrer"
 			>
-				<span>ดู {votingAbsentStats.absentVoting} มติที่ขาด</span>
+				<span
+					>ดู {votingAbsentStats.reduce((total, stat) => total + stat.absentVoting, 0)} มติที่ขาด</span
+				>
 				<ArrowRight />
 			</a>
 		</div>
