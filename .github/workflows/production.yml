@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download build artifact
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v20
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: staging.yml
@@ -19,5 +19,5 @@ jobs:
           remote_user: bot
           remote_key: ${{ secrets.SSH_KEY }}
           remote_path: ${{ secrets.PRODUCTION_PATH }}
-          switches: -avzr --omit-dir-times --no-owner --no-group --no-perms --delete
+          switches: -azvP --chown=bot:deployer --chmod=g+w --delete
           path: ./
