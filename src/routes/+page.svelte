@@ -16,13 +16,7 @@
 
 	export let data;
 
-	$: ({
-		highlightedPoliticians,
-		latestVoteEvents,
-		billCategories,
-		mpTermChoices,
-		latestAssemblyLabels
-	} = data);
+	$: ({ highlightedPoliticians, billCategories, mpTermChoices, latestAssemblyLabels } = data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -112,7 +106,6 @@
 		>ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ</span
 	>
 	<VotingContent
-		{latestVoteEvents}
 		representativeVotesLabel={latestAssemblyLabels.representativeVotes}
 		senateVotesLabel={latestAssemblyLabels.senateVotes}
 	/>

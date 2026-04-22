@@ -99,22 +99,20 @@
 		{/if}
 
 		{#if mpTermChoices.length}
-			<div>
-				<div class="flex flex-col gap-2 md:flex-row">
-					<h3 class="fluid-heading-04 text-nowrap">เลือกสมัย</h3>
-					<div class="flex flex-row flex-wrap items-center gap-1">
-						{#each mpTermChoices as mpterm (mpterm.id)}
-							<button
-								class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {mpterm.id ===
-								selectedMpTermId
-									? 'bg-gray-80 text-white'
-									: 'text-gray-80 hover:bg-gray-20'}"
-								on:click={() => selectMpTerm(mpterm.id)}
-							>
-								{mpterm.value}
-							</button>
-						{/each}
-					</div>
+			<div class="flex flex-col gap-2 md:flex-row">
+				<h3 class="fluid-heading-04 text-nowrap">เลือกสมัย</h3>
+				<div class="flex flex-row flex-wrap items-center gap-1">
+					{#each mpTermChoices as mpterm (mpterm.id)}
+						<button
+							class="helper-text-02 rounded-full border border-gray-80 px-3 py-1 {mpterm.id ===
+							selectedMpTermId
+								? 'bg-gray-80 text-white'
+								: 'text-gray-80 hover:bg-gray-20'}"
+							on:click={() => selectMpTerm(mpterm.id)}
+						>
+							{mpterm.value}
+						</button>
+					{/each}
 				</div>
 			</div>
 		{/if}
