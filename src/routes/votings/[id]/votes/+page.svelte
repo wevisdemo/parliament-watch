@@ -5,6 +5,11 @@
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
+	import {
+		buildVoteQueryStateConfig,
+		comboboxQueryConfig,
+		listCheckboxQueryConfig
+	} from '$lib/query-state-config.js';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 
 	export let data;
@@ -42,6 +47,16 @@
 		}
 	];
 
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterPosition: listCheckboxQueryConfig('position'),
+			filterVoteType: listCheckboxQueryConfig('voteType')
+		},
+		combobox: {
+			filterComboboxType: comboboxQueryConfig('party')
+		}
+	});
+
 	let searchQuery = '';
 	let selectedCheckboxValue: SelectedCheckboxValueType;
 	let selectedComboboxValue: SelectedComboboxValueType;
@@ -76,6 +91,7 @@
 	searchPlaceholder="ชื่อ-นามสกุล"
 	{comboboxFilterList}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'politician', value: 'ชื่อ-นามสกุล' },
