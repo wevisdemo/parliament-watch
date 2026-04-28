@@ -78,6 +78,7 @@ export function getBillProposer<
 	}
 
 	if (creator_type === 'POLITICIAN') {
+		if (!creator) return undefined;
 		const assemblyMembership = creator.memberships.find(
 			(m) => m.posts[0]?.organizations[0]?.classification !== 'POLITICAL_PARTY'
 		);
