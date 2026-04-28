@@ -65,11 +65,13 @@
 				</div>
 			{/if}
 			{#if latestVoteEvents.length}
-				<Carousel>
-					{#each latestVoteEvents as voting (voting.id)}
-						<VoteCard class="keen-slider__slide" {...voting} />
-					{/each}
-				</Carousel>
+				{#key selectedStatus + isLoading}
+					<Carousel>
+						{#each latestVoteEvents as voting (voting.id)}
+							<VoteCard class="keen-slider__slide" {...voting} />
+						{/each}
+					</Carousel>
+				{/key}
 			{/if}
 		</div>
 	</div>
