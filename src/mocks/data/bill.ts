@@ -1,6 +1,11 @@
 import { enumBillStatus } from '$lib/politigraph/genql';
 import { enumBillCreatorType } from '$lib/politigraph/genql';
-import { movingForwardPolitician } from './politician';
+
+const mockPolitician = {
+	id: 'พริษฐ์-วัชรสินธุ',
+	firstname: 'พริษฐ์',
+	lastname: 'วัชรสินธุ'
+};
 
 export const inProgressBill = {
 	id: '1',
@@ -13,8 +18,8 @@ export const inProgressBill = {
 	proposedOn: new Date('2023-07-13'),
 	categories: ['สิ่งแวดล้อม', 'ขนส่งมวลชน'],
 	proposerType: enumBillCreatorType.POLITICIAN,
-	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
+	proposedLedByPolitician: mockPolitician,
+	coProposedByPoliticians: [mockPolitician.firstname, mockPolitician.firstname],
 	attachment: {
 		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'
@@ -34,8 +39,8 @@ export const enactedBill = {
 	proposedOn: new Date('2022-07-13'),
 	enactedOn: new Date('2023-07-13'),
 	proposerType: enumBillCreatorType.POLITICIAN,
-	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
+	proposedLedByPolitician: mockPolitician,
+	coProposedByPoliticians: [mockPolitician.firstname, mockPolitician.firstname],
 	attachment: {
 		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'

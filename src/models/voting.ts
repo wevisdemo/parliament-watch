@@ -1,5 +1,4 @@
 import type { Assembly } from './assembly';
-import type { Link } from './link';
 
 export interface Voting {
 	date: Date;
@@ -13,7 +12,6 @@ export interface Voting {
 	meetingType: string;
 	participatedAssemblies: Assembly[];
 	voteOptions: (DefaultVoteOption | CustomVoteOption | string)[];
-	files: Link[];
 }
 
 export interface CustomVoteOption {

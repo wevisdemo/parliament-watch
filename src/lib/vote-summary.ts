@@ -87,7 +87,7 @@ export function buildVotesSummary({
 	const highlight = highlightOption
 		? {
 				...buildSlice(highlightOption, totalsByOption.get(highlightOption) ?? 0, total),
-				source: highlightOverride ? highlightOverride.source ?? 'override' : 'result',
+				source: highlightOverride ? (highlightOverride.source ?? 'override') : 'result',
 				label: highlightOverride?.label ?? highlightOption
 			}
 		: null;
