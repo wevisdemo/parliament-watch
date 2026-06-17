@@ -115,6 +115,8 @@ To see and develop custom components from Histoire's stories.
 pnpm run story:dev
 ```
 
+Stories are also available on staging at https://parliament-watch.pages.dev/stories/.
+
 ### Generate a new component
 
 For a shared component
@@ -152,7 +154,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com).
 - We have custom shared components available in [src/components/](src/components/).
-  - To see the shared components' stories, open Histoire locally with `pnpm run story:dev`.
+  - To see the shared components' stories, open [Histoire on staging](https://parliament-watch.pages.dev/stories/) or run locally with `pnpm run story:dev`.
 - If the component is not yet developed:
   - If the component is used by only a specific route, create it in `/src/components/route-name-and-sub-route-if-exist/`.
   - If the component is shared, run `pnpm run gen:component` to generate a new component. Do not forget to update the story file for the component documentation.
