@@ -34,7 +34,7 @@ Citizens are watching.
 
 ## ⭐ Goal
 
-We want to record and visualise Thai parliament information, including politicians, assemblies, bills, voting processes, and promises.
+We want to record and visualise Thai parliament information, including politicians, assemblies, bills, and voting processes.
 
 This project can be seen as a renovated combination of [They Work for Us](https://github.com/wevisdemo/they-work-for-us), [Law Watch](https://github.com/wevisdemo/law-watch), and [Promise Tracker](https://github.com/wevisdemo/promise-tracker), which aim to support several election eras.
 

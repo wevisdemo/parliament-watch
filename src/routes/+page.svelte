@@ -9,7 +9,6 @@
 	import ContentSection from '$components/Index/ContentSection.svelte';
 	import { SearchIndexCategory } from '$models/search.js';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	// import PromiseIcon from '$components/icons/PromiseIcon.svelte';
 	import CrowdfundingBanner from '$components/CrowdfundingBanner/CrowdfundingBanner.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillContent from '$components/Index/BillContent.svelte';
@@ -63,11 +62,6 @@
 				icon={LawIcon}
 				href="#bill"
 			/>
-			<!-- <SectionMenuItem
-				title="คำสัญญาทางการเมือง"
-				description="อยู่ระหว่างการปรับปรุงข้อมูล"
-				icon={PromiseIcon}
-			/> -->
 		</menu>
 	</nav>
 </div>
@@ -127,21 +121,6 @@
 	>
 	<BillContent {billCategories} {mpTermChoices} />
 </ContentSection>
-
-<!-- <ContentSection
-	id="promise"
-	title="คำสัญญาทางการเมือง"
-	icon={PromiseIcon}
-	searchPlaceholder="ค้นหาด้วยคำสัญญา เช่น กระเป๋าเงินดิจิทัล"
-	searchCategories={[SearchIndexCategory.Promises]}
-	class="bg-ui-white"
->
-	<span slot="description"
-		>ทุกการเลือกตั้งมาพร้อมคำสัญญาจากพรรคการเมือง แต่พวกเขาทำได้จริงแค่ไหน
-		ข้อมูลได้ถูกรวบรวมไว้ให้คุณได้ติดตามและตรวจสอบความคืบหน้าได้ง่ายขึ้น</span
-	>
-	<PromiseContent {...promiseSummary} />
-</ContentSection> -->
 
 <CrowdfundingBanner variant="full" />
 

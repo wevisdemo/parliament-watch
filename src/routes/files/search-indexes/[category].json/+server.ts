@@ -152,10 +152,6 @@ export async function GET({ params }) {
 			return createJSONFileResponse(indexes);
 		}
 
-		case SearchIndexCategory.Promises: {
-			return createJSONFileResponse([]);
-		}
-
 		default:
 			error(404);
 	}

@@ -34,12 +34,6 @@
 				{ label: 'รัฐออกกฎหมายอย่างไร', url: '/legislative-process', type: MenuTypes.link }
 			]
 		},
-		// {
-		// 	label: 'คำสัญญาทางการเมือง',
-		// 	icon: PromiseIcon,
-		// 	url: '/promises',
-		// 	type: MenuTypes.both
-		// },
 		{
 			label: 'เกี่ยวกับเรา',
 			icon: WeVisIcon,
@@ -64,7 +58,6 @@
 	import SideMenuButton from './SideMenuButton.svelte';
 	import SideMenuList from './SideMenuList.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
-	// import PromiseIcon from '$components/icons/PromiseIcon.svelte';
 	import { setContext } from 'svelte';
 
 	let screenSize: number;

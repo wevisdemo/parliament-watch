@@ -64,8 +64,7 @@
 					categories={[
 						SearchIndexCategory.Politicians,
 						SearchIndexCategory.Votings,
-						SearchIndexCategory.Bills,
-						SearchIndexCategory.Promises
+						SearchIndexCategory.Bills
 					]}
 					name="navSearch"
 					type="text"

@@ -158,24 +158,6 @@ export async function load() {
 		)}`
 	};
 
-	// const promiseSummary = {
-	// 	total: promises.length,
-	// 	byStatus: groups(
-	// 		promises.filter((p) =>
-	// 			[PromiseStatus.inProgress, PromiseStatus.fulfilled, PromiseStatus.unhonored].includes(
-	// 				p.status
-	// 			)
-	// 		),
-	// 		(p) => p.status
-	// 	).map<PromisesByStatus>(([status, promisesByStatus]) => ({
-	// 		status,
-	// 		samples: promisesByStatus
-	// 			.slice(0, MAX_PROMISES_SAMPLE)
-	// 			.map(({ id, statements }) => ({ id, statements })),
-	// 		count: promisesByStatus.length
-	// 	}))
-	// };
-
 	return {
 		highlightedPoliticians,
 		billCategories,
