@@ -15,4 +15,7 @@ yarn.lock
 # Precompiled file
 src/styles/carbon/pre-compiled.css
 
+# Generated GraphQL client
+src/lib/politigraph/genql
+
 LICENSE
