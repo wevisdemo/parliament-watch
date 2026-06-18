@@ -1,21 +1,24 @@
 <script lang="ts">
-	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import StatCard, { HighlightedReason } from './StatCard.svelte';
 	import { fetchExternalPoliticianRanking } from '$lib/politician-ranking';
 	import Carousel from './Carousel.svelte';
+	import StatCard, { HighlightedReason, type StatCardProps } from './StatCard.svelte';
+	import { Button, InlineLoading } from 'carbon-components-svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import type { ComponentProps } from 'svelte';
 
-	interface MostVisitedInWikipediaLastMonthPolitician extends ComponentProps<StatCard> {
+	interface MostVisitedInWikipediaLastMonthPolitician extends StatCardProps {
 		updatedAt: Date;
 	}
 
-	export let highlightedPoliticians: ComponentProps<StatCard>[];
-	export let representativeLabel: string;
-	export let senateLabel: string;
-	export let cabinetLabel: string;
+	interface Props {
+		highlightedPoliticians: StatCardProps[];
+		representativeLabel: string;
+		senateLabel: string;
+		cabinetLabel: string;
+	}
 
-	async function getExternalHighlightedPoliticians(): Promise<ComponentProps<StatCard>[]> {
+	let { highlightedPoliticians, representativeLabel, senateLabel, cabinetLabel }: Props = $props();
+
+	async function getExternalHighlightedPoliticians(): Promise<StatCardProps[]> {
 		const { politicianWithMostWikipediaVisit, updatedAt } = await fetchExternalPoliticianRanking();
 
 		return [

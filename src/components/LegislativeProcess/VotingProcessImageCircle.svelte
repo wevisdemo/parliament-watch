@@ -1,8 +1,12 @@
 <script lang="ts">
-	export let src: string;
-	export let alt = '';
-	export let title: string;
-	export let description = '';
+	interface Props {
+		src: string;
+		alt?: string;
+		title: string;
+		description?: string;
+	}
+
+	let { src, alt = '', title, description = '' }: Props = $props();
 </script>
 
 <div class="max-w-[280px] flex-1">

@@ -1,38 +1,40 @@
 <script lang="ts">
+	import ChangeModal from '$components/Assemblies/CabinetChanges/ChangeModal.svelte';
+	import TimeLineArea from '$components/Assemblies/CabinetChanges/TimeLineArea.svelte';
 	import Header from '$components/Assemblies/Header.svelte';
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
+	import RoleChanges from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
+	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 	import DatePicker from '$components/DatePicker/DatePicker.svelte';
-	import RoleChanges from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
-	import TimeLineArea from '$components/Assemblies/CabinetChanges/TimeLineArea.svelte';
-	import { group } from 'd3';
-	import ChangeModal from '$components/Assemblies/CabinetChanges/ChangeModal.svelte';
 	import { formatThaiDate, isDateInRange } from '$lib/date';
-	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
+	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
+	import { group } from 'd3';
 
-	export let data;
+	let { data } = $props();
 	interface Tab {
 		id: number;
 		name: string;
 		comp: typeof CabinetMembers | typeof RoleChanges;
-		props?: any;
+		props?: Record<string, unknown>;
 	}
 
-	$: ({ assembly, availableAssemblies, cabinetPositions: cabinetMembers, changes } = data);
+	let { assembly, availableAssemblies, cabinetPositions: cabinetMembers, changes } = $derived(data);
 
-	$: selectedDate = assembly.endedAt || new Date();
+	let selectedDate = $derived(assembly.endedAt || new Date());
 	const handleSelectDate = (date: Date) => {
 		selectedDate = date;
 	};
 
-	$: membersAtSelectTime = cabinetMembers.filter(({ profile }) => {
-		const start = changes.find((c) => c.politician.id === profile.id && c.type === 'in')?.date;
-		const end = changes.find((c) => c.politician.id === profile.id && c.type === 'out')?.date;
+	let membersAtSelectTime = $derived(
+		cabinetMembers.filter(({ profile }) => {
+			const start = changes.find((c) => c.politician.id === profile.id && c.type === 'in')?.date;
+			const end = changes.find((c) => c.politician.id === profile.id && c.type === 'out')?.date;
 
-		return start && isDateInRange(selectedDate, start, end ?? new Date());
-	});
+			return start && isDateInRange(selectedDate, start, end ?? new Date());
+		})
+	);
 
-	$: tabs = [
+	let tabs = $derived([
 		{
 			id: 0,
 			name: 'รายชื่อรัฐมนตรีในเวลานั้น',
@@ -45,26 +47,29 @@
 			comp: RoleChanges,
 			props: { changes, selectedDate }
 		}
-	] as Tab[];
-	$: curIndexTab = 0;
+	] as Tab[]);
+	let curIndexTab = $state(0);
 
-	$: groupChangeData = group(changes, (d) => d?.date.toISOString());
-	$: timeLineData = Array.from(groupChangeData, ([date, value]) => ({
-		date: new Date(date),
-		in: value.filter((d) => d.type === 'in').length,
-		out: value.filter((d) => d.type === 'out').length
-	}));
+	let groupChangeData = $derived(group(changes, (d) => d?.date.toISOString()));
+	let timeLineData = $derived(
+		Array.from(groupChangeData, ([date, value]) => ({
+			date: new Date(date),
+			in: value.filter((d) => d.type === 'in').length,
+			out: value.filter((d) => d.type === 'out').length
+		}))
+	);
 
-	let openModal = false;
-	let innerWidth = 0;
-	$: isMD = innerWidth > 671;
-	let showSideNav = false;
+	let openModal = $state(false);
+	let innerWidth = $state(0);
+	let isMD = $derived(innerWidth > 671);
+	let showSideNav = $state(false);
 	let previousFromTop = 0;
 
-	let stickyElement: HTMLElement;
-	let isSticky = false;
+	let stickyElement: HTMLElement | undefined = $state();
+	let isSticky = $state(false);
 
 	const scrollEventHandler = () => {
+		if (!stickyElement) return;
 		const currentFromTop = window.scrollY;
 		showSideNav = currentFromTop <= previousFromTop;
 		previousFromTop = currentFromTop;
@@ -72,9 +77,11 @@
 		const rect = stickyElement.getBoundingClientRect();
 		isSticky = rect.top == 0 || (rect.top <= 48 && currentFromTop <= previousFromTop);
 	};
+
+	const SvelteComponent = $derived(tabs[curIndexTab].comp);
 </script>
 
-<svelte:window bind:innerWidth on:scroll={scrollEventHandler} />
+<svelte:window bind:innerWidth onscroll={scrollEventHandler} />
 <div class="px-[16px] md:px-[64px]">
 	<Breadcrumb
 		noTrailingSlash
@@ -135,7 +142,7 @@
 			</p>
 		</div>
 		<button
-			on:click={() => {
+			onclick={() => {
 				if (!isMD) openModal = true;
 			}}
 			class={isSticky && !isMD ? 'hidden' : ''}
@@ -149,7 +156,7 @@
 				class="heading-compact-01 w-full p-[16px] lg:w-fit {curIndexTab === tab.id
 					? 'border-t-2 border-t-interactive-01 bg-ui-background'
 					: 'border-t-2 border-t-ui-03 bg-ui-03 text-text-02'}"
-				on:click={() => (curIndexTab = tab.id)}
+				onclick={() => (curIndexTab = tab.id)}
 			>
 				{tab.name}
 			</button>
@@ -162,7 +169,7 @@
 		? 'py-[16px] md:py-[32px]'
 		: ''}"
 >
-	<svelte:component this={tabs[curIndexTab].comp} {...tabs[curIndexTab].props} />
+	<SvelteComponent {...tabs[curIndexTab].props} />
 </div>
 
 <BackToTopButton margin={0} />

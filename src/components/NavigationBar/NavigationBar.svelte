@@ -1,6 +1,6 @@
-<script context="module" lang="ts">
-	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+<script module lang="ts">
 	import LawIcon from '$components/icons/LawIcon.svelte';
+	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 
@@ -49,7 +49,6 @@
 
 <script lang="ts">
 	import { MenuTypes, type Menu } from '$models/menu';
-
 	import Banner from './Banner.svelte';
 	import MenuList from './MenuList.svelte';
 	import MenuPane from './MenuPane.svelte';
@@ -59,14 +58,17 @@
 	import SideMenuList from './SideMenuList.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
 	import { setContext } from 'svelte';
+	import { run } from 'svelte/legacy';
 
-	let screenSize: number;
+	let screenSize = $state(0);
 	let previousFromTop = 0;
-	let showHeader = true;
-	let sideNavActive = false;
-	let hideMainMenu = false;
+	let showHeader = $state(true);
+	let sideNavActive = $state(false);
+	let hideMainMenu = $state(false);
 
-	$: if (screenSize > 1056) sideNavActive = false;
+	run(() => {
+		if (screenSize > 1056) sideNavActive = false;
+	});
 
 	function scrollEventHandler() {
 		if (sideNavActive) return;
@@ -87,29 +89,26 @@
 	});
 </script>
 
-<svelte:window bind:innerWidth={screenSize} on:scroll={scrollEventHandler} />
+<svelte:window bind:innerWidth={screenSize} onscroll={scrollEventHandler} />
 
 <header class="z-50 h-12 w-full">
 	{#if showHeader}
 		<NavigationPane>
-			<svelte:fragment slot="leading">
-				<SideMenuButton
-					isActive={sideNavActive}
-					on:click={() => (sideNavActive = !sideNavActive)}
-				/>
+			{#snippet leading()}
+				<SideMenuButton isActive={sideNavActive} onclick={() => (sideNavActive = !sideNavActive)} />
 				<Banner />
-			</svelte:fragment>
-			<svelte:fragment slot="menu">
+			{/snippet}
+			{#snippet menu()}
 				<MenuPane hide={hideMainMenu}>
 					<MenuList {menuList} />
 				</MenuPane>
-			</svelte:fragment>
-			<svelte:fragment slot="trailing">
+			{/snippet}
+			{#snippet trailing()}
 				<SearchContainer
 					on:activate={() => (hideMainMenu = true)}
 					on:deactivate={() => (hideMainMenu = false)}
 				/>
-			</svelte:fragment>
+			{/snippet}
 		</NavigationPane>
 	{/if}
 </header>

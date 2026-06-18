@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export const MAX_LATEST_VOTE = 10;
 	export const VOTE_STATUSES = [
 		{ value: 'all', label: `${MAX_LATEST_VOTE} มติล่าสุด` },
@@ -8,18 +8,22 @@
 </script>
 
 <script lang="ts">
-	import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import { type ComponentProps, onMount } from 'svelte';
+	import VoteCard, { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 	import Carousel from './Carousel.svelte';
+	import { Button, InlineLoading } from 'carbon-components-svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
+	import { onMount } from 'svelte';
 
-	export let representativeVotesLabel: string;
-	export let senateVotesLabel: string;
+	interface Props {
+		representativeVotesLabel: string;
+		senateVotesLabel: string;
+	}
 
-	let isLoading = true;
-	let latestVoteEvents: ComponentProps<VoteCard>[] = [];
-	let selectedStatus: (typeof VOTE_STATUSES)[number]['value'] = 'all';
+	let { representativeVotesLabel, senateVotesLabel }: Props = $props();
+
+	let isLoading = $state(true);
+	let latestVoteEvents: VoteCardProps[] = $state([]);
+	let selectedStatus: (typeof VOTE_STATUSES)[number]['value'] = $state('all');
 
 	async function loadVoteEvents() {
 		isLoading = true;
@@ -51,7 +55,7 @@
 						selectedStatus
 							? 'bg-gray-80 text-white'
 							: 'text-gray-80 hover:bg-gray-20'}"
-						on:click={() => selectStatus(status.value)}
+						onclick={() => selectStatus(status.value)}
 					>
 						{status.label}
 					</button>

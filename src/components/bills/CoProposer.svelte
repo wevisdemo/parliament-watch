@@ -1,10 +1,14 @@
 <script lang="ts">
-	export let index: number;
-	export let politician: {
-		id?: string;
-		name: string;
-	};
-	export let partyLogo: string | null = null;
+	interface Props {
+		index: number;
+		politician: {
+			id?: string;
+			name: string;
+		};
+		partyLogo?: string | null;
+	}
+
+	let { index, politician, partyLogo = null }: Props = $props();
 </script>
 
 <tr>

@@ -1,7 +1,4 @@
-<script lang="ts">
-	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
-	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import { formatThaiYear } from '$lib/date';
+<script lang="ts" module>
 	import { enumBillCreatorType } from '$lib/politigraph/genql';
 
 	interface PoliticianProposer {
@@ -30,11 +27,22 @@
 		signatoryCount: number | null;
 	}
 
-	export let proposer: PoliticianProposer | AssemblyProposer | PeopleProposer | undefined =
-		undefined;
-	export let orientation: 'landscape' | 'portrait' = 'landscape';
+	export interface ProposerProps {
+		proposer?: PoliticianProposer | AssemblyProposer | PeopleProposer | undefined;
+		orientation?: 'landscape' | 'portrait';
+	}
 
-	$: isLandscape = orientation === 'landscape';
+	export type Proposer = PoliticianProposer | AssemblyProposer | PeopleProposer;
+</script>
+
+<script lang="ts">
+	import PeopleIcon from '$components/icons/PeopleIcon.svelte';
+	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
+	import { formatThaiYear } from '$lib/date';
+
+	let { proposer = undefined, orientation = 'landscape' }: ProposerProps = $props();
+
+	let isLandscape = $derived(orientation === 'landscape');
 </script>
 
 <div class="flex {isLandscape ? 'flex-col gap-2 md:flex-row' : 'flex-col gap-1'}">

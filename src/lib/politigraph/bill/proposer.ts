@@ -1,6 +1,5 @@
-import type Proposer from '$components/Proposer/Proposer.svelte';
+import type { ProposerProps } from '$components/Proposer/Proposer.svelte';
 import { type Bill, type BillGenqlSelection } from '../genql';
-import type { ComponentProps } from 'svelte';
 
 export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 	proposalDate: Bill['proposal_date']
@@ -60,11 +59,7 @@ export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 
 export function getBillProposer<
 	P extends Pick<Bill, 'creator_type' | 'creators' | 'people_signature_count'>
->({
-	creator_type,
-	creators: [creator],
-	people_signature_count
-}: P): ComponentProps<Proposer>['proposer'] {
+>({ creator_type, creators: [creator], people_signature_count }: P): ProposerProps['proposer'] {
 	if (creator_type === 'ASSEMBLY' && creator?.__typename === 'Organization') {
 		return { type: creator_type, ...creator };
 	}

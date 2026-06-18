@@ -3,10 +3,14 @@
 		type AvailableAssembly
 	} from '$components/Assemblies/AssemblyIdRunner.svelte';
 
-	export let name: string;
-	export let id: string;
-	export let voteCount: number;
-	export let availableAssemblies: AvailableAssembly[];
+	interface Props {
+		name: string;
+		id: string;
+		voteCount: number;
+		availableAssemblies: AvailableAssembly[];
+	}
+
+	let { name, id, voteCount, availableAssemblies }: Props = $props();
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
 		assembly ? `/assemblies/${assembly.id}/votes` : '';

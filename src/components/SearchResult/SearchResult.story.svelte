@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import SearchResult from './SearchResult.svelte';
 	import type { SearchResults } from '$models/search';
 	import { DefaultVotingResult } from '$models/voting';
-	export let Hst: Hst;
+	import SearchResult from './SearchResult.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 
 	const noResults: SearchResults = {};
 

@@ -2,11 +2,13 @@
 	import { Tag } from 'carbon-components-svelte';
 	import { twMerge } from 'tailwind-merge';
 
-	export let isLarge = false;
-	export let label: string;
+	interface Props {
+		isLarge?: boolean;
+		label: string;
+		class?: string;
+	}
 
-	let className = '';
-	export { className as class };
+	let { isLarge = false, label, class: className = '' }: Props = $props();
 </script>
 
 <Tag

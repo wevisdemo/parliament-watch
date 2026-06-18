@@ -1,18 +1,21 @@
 <script lang="ts">
+	import type { Legislation } from '../../routes/legislative-process/+page.server';
 	import { Link, Tile } from 'carbon-components-svelte';
 	import { Tag } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
-
+	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
 	import type { ComponentProps } from 'svelte';
-	import type { Legislation } from '../../routes/legislative-process/+page.server';
 
-	export let legislation: Legislation;
-	$: ({ consideredBy, details, endorsedBy, examples, presentedBy, steps, title, stepDescription } =
-		legislation);
+	interface Props {
+		legislation: Legislation;
+	}
 
-	let isOpen = false;
+	let { legislation }: Props = $props();
+	let { consideredBy, details, endorsedBy, examples, presentedBy, steps, title, stepDescription } =
+		$derived(legislation);
+
+	let isOpen = $state(false);
 
 	function toggle(event: MouseEvent) {
 		event.stopPropagation();
@@ -102,7 +105,7 @@
 	</div>
 
 	<button
-		on:click={toggle}
+		onclick={toggle}
 		class="h-12 w-full bg-[transparent] focus:outline-2 focus:-outline-offset-2 focus:outline-interactive-01"
 	>
 		<div class=" my-auto ml-auto w-12">

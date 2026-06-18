@@ -3,9 +3,13 @@
 	import Badge from './Badge.svelte';
 	import { getPercentWidth } from './shared';
 
-	export let data: MemberGroup[] = [];
+	interface Props {
+		data?: MemberGroup[];
+	}
 
-	$: memberGroups = data;
+	let { data = [] }: Props = $props();
+
+	let memberGroups = $derived(data);
 </script>
 
 <div class="flex flex-col gap-3">

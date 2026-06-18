@@ -1,41 +1,36 @@
 <script lang="ts">
-	/**
-	 * @event {null} open
-	 * @event {null} close
-	 */
-
-	/** Specify the tooltip text */
-	export let tooltipText = '';
-
-	/**
-	 * Set to `true` to open the tooltip
-	 */
-	export let open = false;
-
-	/**
-	 * Set the alignment of the tooltip relative to the icon
-	 * @type {"start" | "center" | "end"}
-	 */
-	export let align: 'start' | 'center' | 'end' = 'center';
-
-	/**
-	 * Set the direction of the tooltip relative to the icon
-	 * @type {"top" | "bottom"}
-	 */
-	export let direction: 'top' | 'bottom' = 'bottom';
-
-	/** Set an id for the tooltip div element */
-	export let id = 'ccs-' + Math.random().toString(36);
-
-	/** Obtain a reference to the button HTML element */
-	export let ref = null;
-
-	/** Style the tooltip */
-	export let tooltipStyle = '';
-
-	export let showAllTime = false;
-
 	import { createEventDispatcher } from 'svelte';
+	import { run, createBubbler, handlers } from 'svelte/legacy';
+
+	const bubble = createBubbler();
+
+	interface Props {
+		tooltipText?: string;
+		open?: boolean;
+		align?: 'start' | 'center' | 'end';
+		direction?: 'top' | 'bottom';
+		id?: string;
+		ref?: HTMLButtonElement | null;
+		tooltipStyle?: string;
+		showAllTime?: boolean;
+		children?: import('svelte').Snippet;
+		tooltip?: import('svelte').Snippet;
+		[key: string]: unknown;
+	}
+
+	let {
+		tooltipText = '',
+		open = $bindable(false),
+		align = 'center',
+		direction = 'bottom',
+		id = 'ccs-' + Math.random().toString(36),
+		ref = $bindable(null),
+		tooltipStyle = '',
+		showAllTime = false,
+		children,
+		tooltip,
+		...rest
+	}: Props = $props();
 
 	const dispatch = createEventDispatcher();
 
@@ -43,22 +38,23 @@
 
 	const show = () => (open = true);
 
-	$: dispatch(open ? 'open' : 'close');
+	run(() => {
+		dispatch(open ? 'open' : 'close');
+	});
 </script>
 
 <svelte:window
-	on:keydown={({ key }) => {
+	onkeydown={({ key }) => {
 		if (key === 'Escape') hide();
 	}}
 />
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
 	class:bx--tooltip--definition={true}
 	class:bx--tooltip--a11y={true}
-	{...$$restProps}
-	on:mouseenter={show}
-	on:mouseleave={hide}
+	{...rest}
+	onmouseenter={show}
+	onmouseleave={hide}
 >
 	<button
 		bind:this={ref}
@@ -76,18 +72,17 @@
 		class:bx--tooltip--align-end={align === 'end'}
 		style="width: 100%;"
 		class="cover"
-		on:click
-		on:mouseover
-		on:mouseenter
-		on:mouseleave
-		on:focus
-		on:focus={show}
-		on:blur={hide}
+		onclick={bubble('click')}
+		onmouseover={bubble('mouseover')}
+		onmouseenter={bubble('mouseenter')}
+		onmouseleave={bubble('mouseleave')}
+		onfocus={handlers(bubble('focus'), show)}
+		onblur={hide}
 	>
-		<slot />
+		{@render children?.()}
 	</button>
 	<div role="tooltip" {id} class="bx--assistive-text" style={tooltipStyle}>
-		<slot name="tooltip">{tooltipText}</slot>
+		{#if tooltip}{@render tooltip()}{:else}{tooltipText}{/if}
 	</div>
 </span>
 

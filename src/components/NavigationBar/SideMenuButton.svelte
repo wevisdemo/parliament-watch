@@ -1,13 +1,24 @@
 <script lang="ts">
-	import MenuIcon from 'carbon-icons-svelte/lib/Menu.svelte';
 	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';
+	import MenuIcon from 'carbon-icons-svelte/lib/Menu.svelte';
+	import { createBubbler } from 'svelte/legacy';
 
-	export let isActive = false;
+	const bubble = createBubbler();
+
+	interface Props {
+		isActive?: boolean;
+		onclick?: (e: MouseEvent) => void;
+	}
+
+	let { isActive = false, onclick }: Props = $props();
 </script>
 
 <button
 	class="justify-left flex cursor-pointer items-center border-0 bg-gray-100 p-0 pl-4 lg:hidden"
-	on:click
+	onclick={(e) => {
+		bubble('click')(e);
+		onclick?.(e);
+	}}
 >
 	{#if !isActive}
 		<MenuIcon fill="white" size={24} aria-label="Open Menu" />

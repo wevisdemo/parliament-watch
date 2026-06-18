@@ -1,20 +1,31 @@
 <script lang="ts">
-	import { Modal } from 'carbon-components-svelte';
-	import TimeLineVertical from './TimeLineVertical.svelte';
-	import type { TimeLine } from './TimeLine';
-	import SquareIcon from './SquareIcon.svelte';
 	import DatePicker from '$components/DatePicker/DatePicker.svelte';
+	import SquareIcon from './SquareIcon.svelte';
+	import type { TimeLine } from './TimeLine';
+	import TimeLineVertical from './TimeLineVertical.svelte';
+	import { Modal } from 'carbon-components-svelte';
 
-	export let timeLineData: TimeLine[];
-	export let selectedDate: Date;
-	export let startedAt: Date | undefined;
-	export let endedAt: Date | undefined;
-	export let handleSelectDate: (date: Date) => void;
+	interface Props {
+		timeLineData: TimeLine[];
+		selectedDate: Date;
+		startedAt: Date | undefined;
+		endedAt: Date | undefined;
+		handleSelectDate: (date: Date) => void;
+		open?: boolean;
+		onClose: () => void;
+	}
 
-	export let open = false;
-	export let onClose: () => void;
+	let {
+		timeLineData,
+		selectedDate,
+		startedAt,
+		endedAt,
+		handleSelectDate,
+		open = false,
+		onClose
+	}: Props = $props();
 
-	$: changeDate = selectedDate;
+	let changeDate = $derived(selectedDate);
 	const handleChangeDate = (date: Date) => {
 		changeDate = date;
 	};
@@ -38,16 +49,18 @@
 	secondaryButtonText="ยกเลิก"
 	on:click:button--secondary={handleClose}
 >
-	<div slot="heading">
-		<p class="heading-compact-01">การปรับเปลี่ยน</p>
-		<div class="label-01 mb-2 flex items-center gap-1">
-			<SquareIcon width={10} color="#00B9C4" />
-			<p class="mr-1">เข้า</p>
-			<SquareIcon width={10} color="#B12000" />
-			<p>ออก</p>
+	{#snippet heading()}
+		<div>
+			<p class="heading-compact-01">การปรับเปลี่ยน</p>
+			<div class="label-01 mb-2 flex items-center gap-1">
+				<SquareIcon width={10} color="#00B9C4" />
+				<p class="mr-1">เข้า</p>
+				<SquareIcon width={10} color="#B12000" />
+				<p>ออก</p>
+			</div>
+			<DatePicker selectedDate={changeDate} handleSelectDate={handleChangeDate} />
 		</div>
-		<DatePicker selectedDate={changeDate} handleSelectDate={handleChangeDate} />
-	</div>
+	{/snippet}
 	<TimeLineVertical
 		{timeLineData}
 		{startedAt}

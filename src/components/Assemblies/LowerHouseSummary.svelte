@@ -3,9 +3,13 @@
 	import Badge from './Badge.svelte';
 	import { getPercentWidth, type SubgroupSelected } from './shared';
 
-	export let data: MemberGroup[] = [];
+	interface Props {
+		data?: MemberGroup[];
+	}
 
-	$: memberGroups = data;
+	let { data = [] }: Props = $props();
+
+	let memberGroups = $derived(data);
 
 	const getTop5OfGroup = (parties: MemberGroup['subgroups'] = []): SubgroupSelected[] =>
 		[...parties].sort((a, b) => b.count - a.count).slice(0, 5);
@@ -40,7 +44,7 @@
 								<div
 									class="h-[8px] w-[8px] rounded-[100%]"
 									style="background-color: {party.color || '#8D8D8D'}"
-								/>
+								></div>
 								<span class="label-01">{party.name || 'ไม่สังกัดพรรค'}</span>
 							</div>
 							<span class="label-01 text-gray-60">{party.count}</span>

@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import LawStatusCard from './LawStatusCard.svelte';
 	import { enumBillCreatorType, type BillStatus } from '$lib/politigraph/genql';
-	export let Hst: Hst;
+	import LawStatusCard from './LawStatusCard.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 
 	const billByStatus = {
 		samples: [

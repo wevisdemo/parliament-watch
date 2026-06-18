@@ -2,15 +2,21 @@
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import Login from 'carbon-icons-svelte/lib/Login.svelte';
 	import Logout from 'carbon-icons-svelte/lib/Logout.svelte';
-	export let type: 'in' | 'out';
-	export let role: string;
-	export let partyLogo: string | null;
-	export let image: string | null;
-	export let name: string;
-	export let id: string;
 
-	$: statusStyle =
-		type === 'in' ? 'bg-teal-40 translate-x-[100%] rounded-r-[4px]' : 'bg-red-60 rounded-l-[4px]';
+	interface Props {
+		type: 'in' | 'out';
+		role: string;
+		partyLogo: string | null;
+		image: string | null;
+		name: string;
+		id: string;
+	}
+
+	let { type, role, partyLogo, image, name, id }: Props = $props();
+
+	let statusStyle = $derived(
+		type === 'in' ? 'bg-teal-40 translate-x-[100%] rounded-r-[4px]' : 'bg-red-60 rounded-l-[4px]'
+	);
 </script>
 
 <div class="flex gap-1 px-2">

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export enum HighlightedReason {
 		HighestAssetOwned = 'มีทรัพย์สินมากที่สุด',
 		HighestDebtOwned = 'มีหนี้สินมากที่สุด',
@@ -14,6 +14,21 @@
 		MostDiverseServedAsMinister = 'ได้ตำแหน่งรัฐมนตรีหลากหลายกระทรวงสุด',
 		MostVisitedInWikipediaLastMonth = 'ยอดเข้าชมประวัติใน Wikipedia มากสุดในเดือนที่แล้ว'
 	}
+
+	export interface StatCardProps {
+		class?: string;
+		reason: HighlightedReason;
+		value: number;
+		id: string;
+		name: string;
+		avatar: string;
+		label: string;
+		partyName?: string | undefined;
+		partyLogo?: string | undefined;
+		year?: number | undefined;
+		position?: string | undefined;
+		cabinetTerms?: number[] | undefined;
+	}
 </script>
 
 <script lang="ts">
@@ -22,27 +37,26 @@
 	import { ArrowRight } from 'carbon-icons-svelte';
 	import { twMerge } from 'tailwind-merge';
 
-	let className = '';
-	export { className as class };
-
-	export let reason: HighlightedReason;
-	export let value: number;
-	export let id: string;
-	export let name: string;
-	export let avatar: string;
-	export let label: string;
-	export let partyName: string | undefined = undefined;
-	export let partyLogo: string | undefined = undefined;
-
-	export let year: number | undefined = undefined;
-	export let position: string | undefined = undefined;
-	export let cabinetTerms: number[] | undefined = undefined;
+	let {
+		class: className = '',
+		reason,
+		value,
+		id,
+		name,
+		avatar,
+		label,
+		partyName = undefined,
+		partyLogo = undefined,
+		year = undefined,
+		position = undefined,
+		cabinetTerms = undefined
+	}: StatCardProps = $props();
 
 	const POSTFIX_LOOKUP: Record<string, string | undefined> = {
 		[HighlightedReason.HighestPartySwitching]: '(ข้อมูลย้อนหลังถึงปี 2562)'
 	};
 
-	$: postfix = POSTFIX_LOOKUP[reason] ?? '';
+	let postfix = $derived(POSTFIX_LOOKUP[reason] ?? '');
 
 	// Unit Lookup
 	const UNIT_LOOKUP: Record<string, string | undefined> = {
@@ -56,51 +70,55 @@
 		[HighlightedReason.MostDiverseServedAsMinister]: 'กระทรวง'
 	};
 
-	$: unit = (() => {
-		switch (reason) {
-			case HighlightedReason.LongestServedInPoliticalPositions:
-				if (year && position) {
-					return 'ปี (เป็น ' + position + ' ครั้งแรกในปี ' + year + ')';
+	let unit = $derived(
+		(() => {
+			switch (reason) {
+				case HighlightedReason.LongestServedInPoliticalPositions:
+					if (year && position) {
+						return 'ปี (เป็น ' + position + ' ครั้งแรกในปี ' + year + ')';
+					}
+					break;
+				case HighlightedReason.MostFrequentlyServedAsMinister:
+					if (cabinetTerms) {
+						return 'คณะ (ชุดที่ ' + cabinetTerms.join(', ') + ')';
+					}
+					break;
+				case HighlightedReason.MostVisitedInWikipediaLastMonth: {
+					const previousMonthDate = new Date();
+					previousMonthDate.setDate(0);
+					return (
+						'ครั้ง ในเดือน ' +
+						formatThaiDate(previousMonthDate, { hideDay: true, shortMonth: true, shortYear: true })
+					);
 				}
-				break;
-			case HighlightedReason.MostFrequentlyServedAsMinister:
-				if (cabinetTerms) {
-					return 'คณะ (ชุดที่ ' + cabinetTerms.join(', ') + ')';
-				}
-				break;
-			case HighlightedReason.MostVisitedInWikipediaLastMonth: {
-				const previousMonthDate = new Date();
-				previousMonthDate.setDate(0);
-				return (
-					'ครั้ง ในเดือน ' +
-					formatThaiDate(previousMonthDate, { hideDay: true, shortMonth: true, shortYear: true })
-				);
+				default:
+					return UNIT_LOOKUP[reason] ?? 'หน่วย';
 			}
-			default:
-				return UNIT_LOOKUP[reason] ?? 'หน่วย';
-		}
-	})();
+		})()
+	);
 
 	// Value Lookup
-	$: formattedValue = (() => {
-		switch (reason) {
-			case HighlightedReason.HighestAssetOwned:
-			case HighlightedReason.HighestDebtOwned:
-				return (value / 1_000_000).toLocaleString('th-TH', {
-					maximumFractionDigits: 2
-				});
-			case HighlightedReason.HighestAbsentRate:
-				return (
-					(value * 100).toLocaleString('th-TH', {
+	let formattedValue = $derived(
+		(() => {
+			switch (reason) {
+				case HighlightedReason.HighestAssetOwned:
+				case HighlightedReason.HighestDebtOwned:
+					return (value / 1_000_000).toLocaleString('th-TH', {
 						maximumFractionDigits: 2
-					}) + '%'
-				);
-			default:
-				return value.toLocaleString('th-TH', {
-					maximumFractionDigits: 2
-				});
-		}
-	})();
+					});
+				case HighlightedReason.HighestAbsentRate:
+					return (
+						(value * 100).toLocaleString('th-TH', {
+							maximumFractionDigits: 2
+						}) + '%'
+					);
+				default:
+					return value.toLocaleString('th-TH', {
+						maximumFractionDigits: 2
+					});
+			}
+		})()
+	);
 
 	// Description Lookup
 	const DESC_LOOKUP: Record<string, string | undefined> = {
@@ -115,7 +133,7 @@
 		[HighlightedReason.MostVisitedInWikipediaLastMonth]:
 			'ใช้ข้อมูลยอดเข้าชม (pageview) รวมทั้งเดือนจาก Wikipedia API'
 	};
-	$: description = DESC_LOOKUP[reason] ?? '';
+	let description = $derived(DESC_LOOKUP[reason] ?? '');
 </script>
 
 <article class={twMerge('flex flex-col', className)}>

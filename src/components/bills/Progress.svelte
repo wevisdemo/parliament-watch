@@ -1,20 +1,24 @@
 <script lang="ts">
-	// import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	import { ArrowRight, CheckmarkFilled, DocumentMultiple_02 } from 'carbon-icons-svelte';
-	import RoyalGazette from './RoyalGazette.svelte';
-	import { Button } from 'carbon-components-svelte';
+	// import VoteCard, { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
+	import { formatThaiDate } from '$lib/date';
 	// import BillCard from '$components/BillCard/BillCard.svelte';
 	// import type { ComponentProps } from 'svelte';
 	import type { Link, BillEvent } from '$lib/politigraph/genql';
-	import { formatThaiDate } from '$lib/date';
+	import RoyalGazette from './RoyalGazette.svelte';
+	import { Button } from 'carbon-components-svelte';
+	import { ArrowRight, CheckmarkFilled } from 'carbon-icons-svelte';
 
-	export let type: BillEvent['__typename'];
-	export let title: string;
-	export let description: string;
-	export let date: string | null;
-	export let links: Pick<Link, 'note' | 'url'>[];
-	// export let tooltipText: string;
-	// export let voteEvent: ComponentProps<VoteCard>;
+	interface Props {
+		type: BillEvent['__typename'];
+		title: string;
+		description: string;
+		date: string | null;
+		links: Pick<Link, 'note' | 'url'>[]; // export let tooltipText: string;
+	}
+
+	let { type, title, description, date, links }: Props = $props();
+
+	// export let voteEvent: VoteCardProps;
 	// export let mergedIntoBill: Bill | undefined;
 	// export let mergedIntoBillLatestEvent: Event | undefined;
 </script>

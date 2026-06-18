@@ -4,7 +4,11 @@
 	import type { SearchResultItem } from '$models/search';
 	import HighlightText from './HighlightText.svelte';
 
-	export let item: SearchResultItem;
+	interface Props {
+		item: SearchResultItem;
+	}
+
+	let { item }: Props = $props();
 </script>
 
 <a href={item.url} data-sveltekit-reload>

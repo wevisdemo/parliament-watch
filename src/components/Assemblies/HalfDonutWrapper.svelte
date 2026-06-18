@@ -1,7 +1,12 @@
 <script lang="ts">
 	import HalfDonut from './HalfDonut.svelte';
-	export let percent = 0;
-	export let label = '';
+
+	interface Props {
+		percent?: number;
+		label?: string;
+	}
+
+	let { percent = 0, label = '' }: Props = $props();
 </script>
 
 <div class="mx-auto grid w-fit gap-[4px] p-[8px] text-center">

@@ -1,8 +1,26 @@
 <script lang="ts">
-	export let size = 16;
-	export let title: string | undefined = undefined;
+	interface Props {
+		size?: number;
+		title?: string;
+		class?: string;
+		'aria-label'?: string;
+		'aria-labelledby'?: string;
+		tabindex?: string | number;
+		children?: import('svelte').Snippet;
+	}
 
-	$: labelled = $$props['aria-label'] || $$props['aria-labelledby'] || title;
+	let {
+		size = 16,
+		title,
+		class: className,
+		'aria-label': ariaLabel,
+		'aria-labelledby': ariaLabelledBy,
+		tabindex,
+		children,
+		...rest
+	}: Props = $props();
+
+	let labelled = $derived(ariaLabel || ariaLabelledBy || title);
 </script>
 
 <svg
@@ -14,9 +32,10 @@
 	height={size}
 	aria-hidden={labelled ? undefined : true}
 	role={labelled ? 'img' : undefined}
-	focusable={`${Number($$props['tabindex']) === 0}`}
-	{...$$restProps}
+	focusable={`${Number(tabindex) === 0}`}
+	{...rest}
+	class={className}
 >
 	{#if title}<title>{title}</title>{/if}
-	<slot />
+	{@render children?.()}
 </svg>

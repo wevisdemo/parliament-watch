@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { SideNav, SideNavItems, SideNavLink } from 'carbon-components-svelte';
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+		currentNavElementId: string;
+		sections: {
+			menu: string;
+			menuItem: { text: string }[];
+		}[];
+	}
 
-	export let currentNavElementId: string;
-	export let sections: {
-		menu: string;
-		menuItem: { text: string }[];
-	}[];
+	let { class: className = '', currentNavElementId, sections }: Props = $props();
 </script>
 
 <SideNav isOpen fixed class="relative z-0 {className}">

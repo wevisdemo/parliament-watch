@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Tag } from 'carbon-components-svelte';
+	import { run } from 'svelte/legacy';
 
 	type AlignSide = 'left' | 'center' | 'right';
 
@@ -11,10 +12,14 @@
 		tag?: string;
 	}
 
-	export let tabs: Tab[];
-	export let align: AlignSide = 'left';
+	interface Props {
+		tabs: Tab[];
+		align?: AlignSide;
+	}
 
-	let activeTab: string;
+	let { tabs, align = 'left' }: Props = $props();
+
+	let activeTab = $state('');
 
 	const alignMapping = {
 		left: 'text-left',
@@ -22,11 +27,11 @@
 		right: 'text-right'
 	};
 
-	$: {
+	run(() => {
 		if (tabs.length) {
 			activeTab = tabs[0].id;
 		}
-	}
+	});
 
 	const onClickTab = (tab: string) => {
 		document.getElementById(tab)?.scrollIntoView({
@@ -42,7 +47,7 @@
 			class="flex flex-row items-center justify-center gap-1 {alignMapping[align]} {activeTab === id
 				? 'tab-active'
 				: 'tab-inactive'}"
-			on:click={() => onClickTab(id)}
+			onclick={() => onClickTab(id)}
 			{disabled}
 		>
 			<span>{label}</span>

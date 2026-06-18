@@ -1,12 +1,11 @@
-import type MainMembers from '$components/Assemblies/MainMembers.svelte';
-import type CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
+import type { MainMembersProps } from '$components/Assemblies/MainMembers.svelte';
+import type { CabinetMembersProps } from '$components/CabinetMembers/CabinetMembers.svelte';
 import { graphql } from '$lib/politigraph/client';
 import type { Organization } from '$lib/politigraph/genql';
 import { noParty } from './groupby';
-import type { ComponentProps } from 'svelte';
 
 export type AssemblyMember = Awaited<ReturnType<typeof queryAssemblyMembers>>[number];
-export type MainMember = ComponentProps<CabinetMembers & MainMembers>['members'];
+export type MainMember = (MainMembersProps & CabinetMembersProps)['members'];
 
 export async function getAvailableAssemblies({
 	classification

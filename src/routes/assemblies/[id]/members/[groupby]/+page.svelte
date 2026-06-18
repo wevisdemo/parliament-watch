@@ -3,6 +3,8 @@
 	import Tab from '$components/Assemblies/Members/Tab.svelte';
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
+	import { GroupByOption } from '$models/assembly';
+	import type { PoliticianSummaryGroupBy } from './+page.server';
 	import {
 		Accordion,
 		AccordionItem,
@@ -15,22 +17,21 @@
 	import SearchLocate from 'carbon-icons-svelte/lib/SearchLocate.svelte';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
-	import type { PoliticianSummaryGroupBy } from './+page.server';
-	import { GroupByOption } from '$models/assembly';
 
 	const NON_PARTISAN = 'ไม่สังกัดพรรค';
 
-	export let data;
-	$: ({ assembly, groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } = data);
-	$: currentPath = groupByTabs.find(({ isActive }) => isActive)?.path ?? '';
+	let { data } = $props();
+	let { assembly, groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } =
+		$derived(data);
+	let currentPath = $derived(groupByTabs.find(({ isActive }) => isActive)?.path ?? '');
 
-	let showFilter = true;
-	let searchQuery = '';
-	let isByDistrict = true;
-	let isByPartylist = true;
+	let showFilter = $state(true);
+	let searchQuery = $state('');
+	let isByDistrict = $state(true);
+	let isByPartylist = $state(true);
 
-	$: formattedSearchQuery = searchQuery.trim();
-	$: filteredGroup =
+	let formattedSearchQuery = $derived(searchQuery.trim());
+	let filteredGroup = $derived(
 		formattedSearchQuery === '' && isByDistrict && isByPartylist
 			? groups
 			: (groups.map((group) => {
@@ -61,15 +62,16 @@
 							);
 						})
 					};
-				}) as PoliticianSummaryGroupBy);
+				}) as PoliticianSummaryGroupBy)
+	);
 
 	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
 		`${group.name}-${name || NON_PARTISAN}`.replaceAll(' ', '-');
 
-	let memberListSectionRef: HTMLElement;
+	let memberListSectionRef: HTMLElement | undefined = $state();
 
-	let isMobile = false;
-	let currentCategory = '';
+	let isMobile = $state(false);
+	let currentCategory = $state('');
 	onMount(() => {
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
 		isMobile = !showFilter;
@@ -78,6 +80,8 @@
 				groups[0],
 				'subgroups' in groups[0] ? groups[0].subgroups[0].name : ''
 			);
+
+			if (!memberListSectionRef) return;
 
 			const scroller = scrollama();
 
@@ -142,15 +146,17 @@
 						{#each filteredGroup as group (group.name)}
 							{#if 'subgroups' in group}
 								<AccordionItem open={currentPath === GroupByOption.Party}>
-									<span slot="title" class="font-semibold"
-										>{group.name}
-										{#if currentPath !== GroupByOption.Party && currentPath !== GroupByOption.Province}
-											<span class="font-normal text-gray-60"
-												>({group.subgroups
-													.map((e) => e.members.length)
-													.reduce((a, c) => a + c, 0)})</span
-											>
-										{/if}
+									<span slot="title">
+										<span class="font-semibold"
+											>{group.name}
+											{#if currentPath !== GroupByOption.Party && currentPath !== GroupByOption.Province}
+												<span class="font-normal text-gray-60"
+													>({group.subgroups
+														.map((e) => e.members.length)
+														.reduce((a, c) => a + c, 0)})</span
+												>
+											{/if}
+										</span>
 									</span>
 									<ul class="flex flex-col">
 										{#each group.subgroups as { name, members, icon } (name)}
@@ -160,8 +166,8 @@
 													class="body-01 flex items-center gap-2 px-4 py-2 text-gray-100 hover:bg-ui-03"
 													class:font-semibold={currentCategory ===
 														getSubgroupHeadingId(group, name)}
-													on:click={() => {
-														isMobile && (showFilter = false);
+													onclick={() => {
+														if (isMobile) showFilter = false;
 													}}
 												>
 													{#if icon}
@@ -196,8 +202,8 @@
 										href="#{getSubgroupHeadingId(group)}"
 										class="body-01 flex items-center gap-2 px-4 py-2 text-gray-100 hover:bg-ui-03"
 										class:font-semibold={currentCategory === getSubgroupHeadingId(group)}
-										on:click={() => {
-											isMobile && (showFilter = false);
+										onclick={() => {
+											if (isMobile) showFilter = false;
 										}}
 									>
 										{#if group.icon}
@@ -242,7 +248,7 @@
 								class="grid gap-y-2"
 								style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr));"
 							>
-								{#each members as { candidateType, ...member }, idx (member.id + idx)}
+								{#each members as member, idx (member.id + idx)}
 									<div class="heading-compact-01">
 										{#if isCabinet && member.assemblyRoleName}
 											{roleAbbreviated(member.assemblyRoleName)}

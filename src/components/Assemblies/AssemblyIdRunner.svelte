@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type AvailableAssembly = {
 		id: string;
 		term: number | null;
@@ -9,29 +9,41 @@
 <script lang="ts">
 	import AngleRightIcon from '$components/icons/AngleRightIcon.svelte';
 	import { formatThaiYear } from '$lib/date';
+	import { run } from 'svelte/legacy';
 
-	export let id: string;
-	export let availableAssemblies: AvailableAssembly[] = [];
-	export let getAssemblyPath: (_: AvailableAssembly) => string;
-	export let termPrefix = '';
+	interface Props {
+		id: string;
+		availableAssemblies?: AvailableAssembly[];
+		getAssemblyPath: (_: AvailableAssembly) => string;
+		termPrefix?: string;
+	}
 
-	$: currentIndex = Array.isArray(availableAssemblies)
-		? availableAssemblies.findIndex((assembly) => assembly.id === id)
-		: 0;
+	let { id, availableAssemblies = [], getAssemblyPath, termPrefix = '' }: Props = $props();
 
-	$: prevUrl = currentIndex > 0 ? getAssemblyPath(availableAssemblies[currentIndex - 1]) : null;
+	let currentIndex = $derived(
+		Array.isArray(availableAssemblies)
+			? availableAssemblies.findIndex((assembly) => assembly.id === id)
+			: 0
+	);
 
-	$: nextUrl =
+	let prevUrl = $derived(
+		currentIndex > 0 ? getAssemblyPath(availableAssemblies[currentIndex - 1]) : null
+	);
+
+	let nextUrl = $derived(
 		currentIndex < availableAssemblies.length - 1
 			? getAssemblyPath(availableAssemblies[currentIndex + 1])
-			: null;
+			: null
+	);
 
-	$: yearString = availableAssemblies[currentIndex]?.founding_date
-		? formatThaiYear(availableAssemblies[currentIndex]?.founding_date)
-		: null;
+	let yearString = $derived(
+		availableAssemblies[currentIndex]?.founding_date
+			? formatThaiYear(availableAssemblies[currentIndex]?.founding_date)
+			: null
+	);
 
-	let displayString = '-';
-	$: {
+	let displayString = $state('-');
+	run(() => {
 		if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null && yearString) {
 			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term} | ${yearString}`;
 		} else if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null) {
@@ -41,7 +53,7 @@
 		} else {
 			displayString = '-';
 		}
-	}
+	});
 </script>
 
 <div class="ml-[0px] flex items-center md:ml-[16px]">

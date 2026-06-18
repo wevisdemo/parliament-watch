@@ -1,16 +1,16 @@
 <script lang="ts">
-	import DataPage from '$components/DataPage/DataPage.svelte';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
-	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import VotesHeader from '$components/Assemblies/Votes/VotesHeader.svelte';
+	import DataPage from '$components/DataPage/DataPage.svelte';
+	import type { SelectedCheckboxValueType } from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { formatThaiDate } from '$lib/date.js';
 
-	export let data;
+	let { data } = $props();
 
-	$: ({ availableAssemblies, assembly, voteEvents, filterOptions } = data);
+	let { availableAssemblies, assembly, voteEvents, filterOptions } = $derived(data);
 
-	$: checkboxFilterList = [
+	let checkboxFilterList = $derived([
 		{
 			key: 'filterResult',
 			legend: 'ผลลัพธ์',
@@ -19,14 +19,14 @@
 				value: result
 			}))
 		}
-	];
+	]);
 
-	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let searchQuery = $state('');
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state({ filterResult: [] });
 
-	$: filteredData =
+	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
-		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: voteEvents
 					.filter(({ nickname, title, result }) => {
@@ -39,7 +39,8 @@
 						date: start_date,
 						name: nickname || title,
 						...rest
-					}));
+					}))
+	);
 </script>
 
 <DataPage
@@ -71,7 +72,7 @@
 		{availableAssemblies}
 	/>
 
-	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
+	{#snippet table({ cellKey, cellValue, row })}
 		{#if cellKey === 'date'}
 			<span class="body-01 text-gray-60">
 				{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
@@ -87,5 +88,5 @@
 		{:else}
 			{cellValue}
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </DataPage>

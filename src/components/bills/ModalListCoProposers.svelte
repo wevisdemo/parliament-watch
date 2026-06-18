@@ -1,17 +1,32 @@
 <script lang="ts">
 	import { showModalListCoProposer } from '$components/bills/store';
-	import CloseLarge from 'carbon-icons-svelte/lib/CloseLarge.svelte';
 	import CoProposer from './CoProposer.svelte';
+	import CloseLarge from 'carbon-icons-svelte/lib/CloseLarge.svelte';
 	import type { ComponentProps } from 'svelte';
 
-	export let coProposedByPoliticians: Omit<ComponentProps<CoProposer>, 'index'>[];
+	interface Props {
+		coProposedByPoliticians: Omit<ComponentProps<typeof CoProposer>, 'index'>[];
+	}
+
+	let { coProposedByPoliticians }: Props = $props();
+
+	const close = () => {
+		$showModalListCoProposer = false;
+	};
+
+	const handleBackdropClick = (event: MouseEvent) => {
+		if (event.target === event.currentTarget) {
+			close();
+		}
+	};
 </script>
 
 {#if $showModalListCoProposer}
-	<button
-		on:click|self={() => {
-			$showModalListCoProposer = false;
-		}}
+	<div
+		role="button"
+		tabindex="-1"
+		onclick={handleBackdropClick}
+		onkeydown={(e) => e.key === 'Escape' && close()}
 		class="model cursor-default px-5 pb-5 pt-10"
 	>
 		<div
@@ -20,7 +35,7 @@
 		>
 			<div class="flex items-start justify-between gap-5 p-4">
 				<h1 class="heading-03 text-start">รายชื่อผู้ร่วมเสนอกฎหมาย</h1>
-				<button on:click={() => ($showModalListCoProposer = false)}><CloseLarge /></button>
+				<button onclick={close}><CloseLarge /></button>
 			</div>
 			<div class="flex flex-col">
 				<div class="flex px-5 pb-2">
@@ -37,7 +52,7 @@
 				</div>
 			</div>
 		</div>
-	</button>
+	</div>
 {/if}
 
 <style>

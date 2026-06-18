@@ -1,19 +1,19 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
+	import FacebookIcon from './FacebookIcon.svelte';
 	import General from './GeneralIcon.svelte';
+	import GithubIcon from './GithubIcon.svelte';
+	import InstagramIcon from './InstagramIcon.svelte';
 	import Law from './LawIcon.svelte';
 	import MobileRotate from './MobileRotateIcon.svelte';
 	import People from './PeopleIcon.svelte';
+	import PoliticianChangeIcon from './PoliticianChangeIcon.svelte';
 	import Politician from './PoliticianIcon.svelte';
 	import Vote from './VoteIcon.svelte';
 	import WeVisIcon from './WeVisIcon.svelte';
-	import GithubIcon from './GithubIcon.svelte';
-	import FacebookIcon from './FacebookIcon.svelte';
-	import InstagramIcon from './InstagramIcon.svelte';
 	import XIcon from './XIcon.svelte';
-	import PoliticianChangeIcon from './PoliticianChangeIcon.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	export let Hst: Hst;
+	export let Hst: HstStory;
 
 	let size = 16;
 	let title = '';

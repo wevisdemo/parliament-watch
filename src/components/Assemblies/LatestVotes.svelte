@@ -1,11 +1,14 @@
 <script lang="ts">
+	import VoteCard, { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import VoteCard from '$components/VoteCard/VoteCard.svelte';
-	import type { ComponentProps } from 'svelte';
 
-	export let votes: ComponentProps<VoteCard>[] = [];
-	export let assemblyId: string;
+	interface Props {
+		votes?: VoteCardProps[];
+		assemblyId: string;
+	}
+
+	let { votes = [], assemblyId }: Props = $props();
 </script>
 
 <div class="py-[16px] md:py-[32px]">
@@ -13,7 +16,7 @@
 		<VoteIcon class="h-[32px] w-[32px]" />
 		<span class="fluid-heading-04 ml-[16px]">ผลการลงมติล่าสุด</span>
 	</div>
-	<div class="w-full border-b-[1px] border-solid border-gray-20" />
+	<div class="w-full border-b-[1px] border-solid border-gray-20"></div>
 	<div class="mt-[16px] flex flex-wrap justify-center gap-[8px] md:justify-start">
 		{#each votes as vote}
 			<VoteCard {...vote} />

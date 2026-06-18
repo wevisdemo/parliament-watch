@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let proposerComparisonTableData: { [key: string]: string }[];
+	interface Props {
+		proposerComparisonTableData: { [key: string]: string }[];
+	}
+
+	let { proposerComparisonTableData }: Props = $props();
 </script>
 
 {#if proposerComparisonTableData.length > 0}

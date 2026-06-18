@@ -1,11 +1,10 @@
 import { noParty } from './groupby';
 import type { AssemblyMember } from './member';
-import type { Person } from 'carbon-icons-svelte';
 
 export interface RoleChange {
 	date: Date;
 	type: 'in' | 'out';
-	politician: Pick<Person, 'id' | 'name' | 'image'> & {
+	politician: Pick<AssemblyMember, 'id' | 'name' | 'image'> & {
 		partyLogo: string | null;
 	};
 	role: string;

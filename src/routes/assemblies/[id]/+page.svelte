@@ -1,22 +1,22 @@
 <script lang="ts">
-	import RoleChangeLog from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
-	import PoliticianChangeIcon from '$components/icons/PoliticianChangeIcon.svelte';
 	import Header from '$components/Assemblies/Header.svelte';
-	import MainMembers from '$components/Assemblies/MainMembers.svelte';
-	import Summary from '$components/Assemblies/Summary.svelte';
-	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
-	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
-	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 	import LatestBills from '$components/Assemblies/LatestBills.svelte';
-	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import LawIcon from '$components/icons/LawIcon.svelte';
+	import LatestVotes from '$components/Assemblies/LatestVotes.svelte';
+	import MainMembers from '$components/Assemblies/MainMembers.svelte';
+	import RoleChangeLog from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
+	import Summary from '$components/Assemblies/Summary.svelte';
+	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
+	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
-	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
+	import PoliticianChangeIcon from '$components/icons/PoliticianChangeIcon.svelte';
+	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	$: ({
+	let {
 		availableAssemblies,
 		assembly,
 		isCabinet,
@@ -25,7 +25,7 @@
 		changes,
 		latestVoteEvents,
 		latestBills
-	} = data);
+	} = $derived(data);
 </script>
 
 <div class="px-[16px] md:px-[64px]">
@@ -76,7 +76,7 @@
 					<GeneralIcon class="h-[32px] w-[32px]" />
 					<span class="fluid-heading-04 ml-[16px]">สมาชิก</span>
 				</div>
-				<div class="w-full border-b-[1px] border-solid border-gray-20" />
+				<div class="w-full border-b-[1px] border-solid border-gray-20"></div>
 				<CabinetMembers members={mainPositions} />
 			{/if}
 			{#if !isCabinet}

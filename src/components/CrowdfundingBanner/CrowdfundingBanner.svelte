@@ -4,7 +4,11 @@
 
 	type BannerVariant = 'compact' | 'full';
 
-	export let variant: BannerVariant;
+	interface Props {
+		variant: BannerVariant;
+	}
+
+	let { variant }: Props = $props();
 	const variantClasses = {
 		root: {
 			compact: compactVariantBemClasses('root'),

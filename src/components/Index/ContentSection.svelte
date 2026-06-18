@@ -3,28 +3,45 @@
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
 	import type { SearchIndexCategory, SearchResults } from '$models/search';
 	import { Search } from 'carbon-components-svelte';
-	import type { ComponentType } from 'svelte';
+	import type { CarbonIconProps } from 'carbon-icons-svelte';
+	import type { Component } from 'svelte';
 
-	export let id: string;
-	export let title: string;
-	export let icon: ComponentType;
-	export let searchPlaceholder: string;
-	export let searchCategories: SearchIndexCategory[] = [];
-	let className = '';
-	export { className as class };
+	interface Props {
+		id: string;
+		title: string;
+		icon: Component<CarbonIconProps>;
+		searchPlaceholder: string;
+		searchCategories?: SearchIndexCategory[];
+		class?: string;
+		description?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+	}
 
-	let searchResults: SearchResults | null;
+	let {
+		id,
+		title,
+		icon,
+		searchPlaceholder,
+		searchCategories = [],
+		class: className = '',
+		description,
+		children
+	}: Props = $props();
+
+	let searchResults: SearchResults | null = $state(null);
+
+	const SvelteComponent = $derived(icon);
 </script>
 
 <section {id} class={className}>
 	<div class="mx-auto flex max-w-[1280px] flex-col gap-6 px-4 py-[72px] text-text-01">
 		<div class="flex flex-col items-start gap-2 md:flex-row">
 			<div class="flex items-center gap-2 md:flex-1">
-				<svelte:component this={icon} width="32" height="32" />
+				<SvelteComponent width="32" height="32" />
 				<h2 class="fluid-heading-05">{title}</h2>
 			</div>
 			<div class="body-01 flex items-center self-stretch md:flex-1">
-				<slot name="description" />
+				{@render description?.()}
 			</div>
 		</div>
 		{#if searchCategories.length > 0}
@@ -41,6 +58,6 @@
 				{/if}
 			</div>
 		{/if}
-		<slot />
+		{@render children?.()}
 	</div>
 </section>

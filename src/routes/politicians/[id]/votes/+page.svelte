@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import DataPage from '$components/DataPage/DataPage.svelte';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
-	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { DefaultVoteOption } from '$models/voting.js';
-	import { onMount } from 'svelte';
 	import type {
 		CheckboxFilterGroup,
 		SelectedCheckboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
-	import { formatThaiDate, formatYearRange } from '$lib/date.js';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
+	import { formatThaiDate, formatYearRange } from '$lib/date.js';
+	import { DefaultVoteOption } from '$models/voting.js';
+	import { onMount } from 'svelte';
 
-	export let data;
+	let { data } = $props();
 	const { politician, filterOptions, votes } = data;
 
 	const checkboxFilterList: CheckboxFilterGroup[] = [
@@ -35,12 +35,15 @@
 		}
 	];
 
-	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let searchQuery = $state('');
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state({
+		filterAssembly: [],
+		filterVoteType: []
+	});
 
-	$: filteredData =
+	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
-		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: votes
 					.filter(({ option, vote_events: [{ title, nickname, organizations }] }) => {
@@ -62,10 +65,11 @@
 						option,
 						result,
 						links
-					}));
+					}))
+	);
 
 	onMount(() => {
-		switch ($page.url.searchParams.get('votetype')) {
+		switch (page.url.searchParams.get('votetype')) {
 			case 'agreed':
 				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Agreed];
 				break;
@@ -111,7 +115,7 @@
 		>
 	</h1>
 	<VoteWarningNotification />
-	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
+	{#snippet table({ cellKey, cellValue, row })}
 		{#if cellKey === 'date'}
 			{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 		{:else if cellKey === 'name'}
@@ -129,5 +133,5 @@
 		{:else}
 			{cellValue}
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </DataPage>

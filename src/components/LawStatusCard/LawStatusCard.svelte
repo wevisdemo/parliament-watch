@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export interface BillSample {
 		id: string;
 		nickname: string;
@@ -42,34 +42,43 @@
 	import { billStatusList, billStatusProperty } from '$lib/politigraph/bill/status';
 	import type { BillStatus } from '$lib/politigraph/genql';
 	import type { BillCreatorType } from '$lib/politigraph/genql';
+	import { CREATOR_TYPE_LABEL } from '../../constants/bills';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import DocumentUnknown from 'carbon-icons-svelte/lib/DocumentUnknown.svelte';
-	import { CREATOR_TYPE_LABEL } from '../../constants/bills';
 
-	export let totalCount: number;
-	export let bill: BillsByStatus | BillsByCategory | BillsByProposerType | BillsByParty;
-	export let showDescription = false;
-	export let exploreLinkExtraParams: Record<string, string> = {};
+	interface Props {
+		totalCount: number;
+		bill: BillsByStatus | BillsByCategory | BillsByProposerType | BillsByParty;
+		showDescription?: boolean;
+		exploreLinkExtraParams?: Record<string, string>;
+	}
 
-	$: headerStyle =
+	let { totalCount, bill, showDescription = false, exploreLinkExtraParams = {} }: Props = $props();
+
+	let headerStyle = $derived(
 		bill.count > 0
 			? 'status' in bill
 				? billStatusProperty[bill.status].colorClass
 				: 'border'
-			: 'bg-ui-04 text-white';
-	$: barStyle = 'status' in bill ? billStatusProperty[bill.status].colorClass : 'bg-ui-04';
-	$: headerBackgroundColor = bill.count > 0 ? 'bg-white' : 'bg-ui-01';
+			: 'bg-ui-04 text-white'
+	);
+	let barStyle = $derived(
+		'status' in bill ? billStatusProperty[bill.status].colorClass : 'bg-ui-04'
+	);
+	let headerBackgroundColor = $derived(bill.count > 0 ? 'bg-white' : 'bg-ui-01');
 
-	$: exploreParams = new URLSearchParams({
-		...exploreLinkExtraParams,
-		...('status' in bill
-			? { status: bill.status }
-			: 'category' in bill
-				? { category: bill.category }
-				: 'proposerType' in bill
-					? { proposertype: bill.proposerType }
-					: { party: bill.party })
-	});
+	let exploreParams = $derived(
+		new URLSearchParams({
+			...exploreLinkExtraParams,
+			...('status' in bill
+				? { status: bill.status }
+				: 'category' in bill
+					? { category: bill.category }
+					: 'proposerType' in bill
+						? { proposertype: bill.proposerType }
+						: { party: bill.party })
+		})
+	);
 </script>
 
 <article
@@ -135,7 +144,7 @@
 								<div
 									class="h-1 {colorClass ?? barStyle}"
 									style:width="{bill.count ? (relatedBillCount / bill.count) * 100 : 0}%"
-								/>
+								></div>
 							</li>
 						{/if}
 					{/each}
@@ -150,7 +159,7 @@
 					<span>ของทั้งหมดในสภาชุดนี้</span>
 				</p>
 				<div class="h-2 bg-ui-01">
-					<div class="h-full {barStyle}" style:width="{(bill.count / totalCount) * 100}%" />
+					<div class="h-full {barStyle}" style:width="{(bill.count / totalCount) * 100}%"></div>
 				</div>
 			{/if}
 		{/if}
