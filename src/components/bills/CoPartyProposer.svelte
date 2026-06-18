@@ -1,12 +1,16 @@
 <script lang="ts">
-	export let politicianCount: number;
-	export let party:
-		| {
-				id?: string;
-				name: string;
-				image?: string | null;
-		  }
-		| undefined = undefined;
+	interface Props {
+		politicianCount: number;
+		party?:
+			| {
+					id?: string;
+					name: string;
+					image?: string | null;
+			  }
+			| undefined;
+	}
+
+	let { politicianCount, party = undefined }: Props = $props();
 </script>
 
 <div class="flex gap-2">

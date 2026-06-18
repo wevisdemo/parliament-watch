@@ -1,47 +1,49 @@
 <script lang="ts">
+	import Tooltip from '$components/Assemblies/Tooltip.svelte';
+	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
+	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
+	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
+	import Proposer from '$components/Proposer/Proposer.svelte';
+	import Share from '$components/Share/Share.svelte';
+	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
+	import CoProposer from '$components/bills/CoProposer.svelte';
+	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
+	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
+	import Progress from '$components/bills/Progress.svelte';
+	import { showModalListCoProposer } from '$components/bills/store';
+	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
+	import { formatThaiDate } from '$lib/date.js';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import { DocumentMultiple_02, Information, Link } from 'carbon-icons-svelte';
 	import { groups } from 'd3';
 	import dayjs from 'dayjs';
-	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
-	import Tooltip from '$components/Assemblies/Tooltip.svelte';
-	import Share from '$components/Share/Share.svelte';
-	import LinkTable from '$components/LinkTable/LinkTable.svelte';
-	import Proposer from '$components/Proposer/Proposer.svelte';
-	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import { showModalListCoProposer } from '$components/bills/store';
-	import ModalListCoProposers from '$components/bills/ModalListCoProposers.svelte';
-	import CoProposer from '$components/bills/CoProposer.svelte';
-	import CoPartyProposer from '$components/bills/CoPartyProposer.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
-	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
-	import Progress from '$components/bills/Progress.svelte';
-	import { formatThaiDate } from '$lib/date.js';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
 
-	export let data;
+	let { data } = $props();
 
-	$: ({ bill, proposer, coProposers, events, mergeDetail } = data);
+	let { bill, proposer, coProposers, events, mergeDetail } = $derived(data);
 
 	const MAX_DISPLAY_COPROPOSER = 8;
 
-	$: displayName = bill.nickname || bill.title;
+	let displayName = $derived(bill.nickname || bill.title);
 
-	$: proposedOn =
-		bill.proposal_date && formatThaiDate(bill.proposal_date, { shortMonth: true, shortYear: true });
+	let proposedOn = $derived(
+		bill.proposal_date && formatThaiDate(bill.proposal_date, { shortMonth: true, shortYear: true })
+	);
 
-	$: dayElapsed =
+	let dayElapsed = $derived(
 		bill.proposal_date &&
-		dayjs(
-			bill.status === 'IN_PROGRESS' ? undefined : events.find((event) => event.date)?.date
-		).diff(bill.proposal_date, 'days') + 1;
+			dayjs(
+				bill.status === 'IN_PROGRESS' ? undefined : events.find((event) => event.date)?.date
+			).diff(bill.proposal_date, 'days') + 1
+	);
 
-	$: partiesCoProposed = groups(coProposers, ({ party }) => party?.name);
+	let partiesCoProposed = $derived(groups(coProposers, ({ party }) => party?.name));
 
-	let innerWidth = 0;
+	let innerWidth = $state(0);
 </script>
 
 <svelte:window bind:innerWidth />
@@ -218,7 +220,7 @@
 											style="background: linear-gradient(0deg, #FFF 0%, rgba(255, 255, 255, 0.00) 100%);"
 										>
 											<button
-												on:click={() => {
+												onclick={() => {
 													$showModalListCoProposer = true;
 												}}
 												class="body-01 absolute bottom-0 text-link-01 underline">ดูทั้งหมด</button

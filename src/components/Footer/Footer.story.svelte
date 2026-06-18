@@ -1,7 +1,8 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
 	import Footer from './Footer.svelte';
-	export let Hst: Hst;
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 </script>
 
 <Hst.Story title="Footer">

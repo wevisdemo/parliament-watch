@@ -1,11 +1,10 @@
 import { MAX_LATEST_VOTE, VOTE_STATUSES } from '$components/Index/VotingContent.svelte';
-import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 import { graphql } from '$lib/politigraph/client';
 import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
 import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
 import type { RequestHandler } from './$types';
-import type { ComponentProps } from 'svelte';
 
 const VALID_STATUS_VALUES = VOTE_STATUSES.map((s) => s.value);
 
@@ -45,7 +44,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		}
 	});
 
-	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
+	const latestVoteEvents: VoteCardProps[] = await Promise.all(
 		voteEvents.map(async (voteEvent) => {
 			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
 			const mappedGroups = groupedVotes.map((aff) => ({
@@ -68,4 +67,4 @@ export const GET: RequestHandler = async ({ params }) => {
 	});
 };
 
-export type VoteEventOverviewData = ComponentProps<VoteCard>[];
+export type VoteEventOverviewData = VoteCardProps[];

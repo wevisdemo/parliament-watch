@@ -1,21 +1,27 @@
 <script lang="ts">
-	import { group } from 'd3';
-	import RoleChangeGroup from './RoleChangeGroup.svelte';
 	import type { RoleChange } from '$lib/politigraph/assembly/change';
+	import RoleChangeGroup from './RoleChangeGroup.svelte';
+	import { group } from 'd3';
 
-	export let changes: RoleChange[];
-	export let selectedDate: Date | undefined = undefined;
+	interface Props {
+		changes: RoleChange[];
+		selectedDate?: Date | undefined;
+	}
 
-	$: groupChangeData = group(changes, (d) => d?.date.toISOString());
-	$: convertAndSortChangeData = Array.from(groupChangeData, ([time, value]) => ({
-		time: new Date(time).getTime(),
-		value
-	}))
-		.sort((a, b) => b.time - a.time)
-		.filter((changeGroup) => {
-			if (!selectedDate) return true;
-			return changeGroup.time <= selectedDate?.getTime();
-		});
+	let { changes, selectedDate = undefined }: Props = $props();
+
+	let groupChangeData = $derived(group(changes, (d) => d?.date.toISOString()));
+	let convertAndSortChangeData = $derived(
+		Array.from(groupChangeData, ([time, value]) => ({
+			time: new Date(time).getTime(),
+			value
+		}))
+			.sort((a, b) => b.time - a.time)
+			.filter((changeGroup) => {
+				if (!selectedDate) return true;
+				return changeGroup.time <= selectedDate?.getTime();
+			})
+	);
 </script>
 
 <div>

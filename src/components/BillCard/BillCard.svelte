@@ -1,26 +1,40 @@
 <script lang="ts">
-	import { ArrowRight } from 'carbon-icons-svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import { twMerge } from 'tailwind-merge';
-	import type { BillStatus } from '$lib/politigraph/genql';
 	import Proposer from '$components/Proposer/Proposer.svelte';
-	import type { ComponentProps } from 'svelte';
-	import dayjs from 'dayjs';
 	import { formatThaiDate } from '$lib/date';
+	import type { BillStatus } from '$lib/politigraph/genql';
+	import { ArrowRight } from 'carbon-icons-svelte';
+	import dayjs from 'dayjs';
+	import type { ComponentProps } from 'svelte';
+	import { twMerge } from 'tailwind-merge';
 
-	export let id: string;
-	export let nickname: string | null;
-	export let title: string | null;
-	export let proposedOn: Date | null;
-	export let enactedOn: Date | null = null;
-	export let status: BillStatus;
-	export let proposer: ComponentProps<Proposer>['proposer'] = undefined;
-	export let orientation: 'landscape' | 'portrait' = 'portrait';
-	export let isFullWidth = false;
-	let className = '';
-	export { className as class };
+	interface Props {
+		id: string;
+		nickname: string | null;
+		title: string | null;
+		proposedOn: Date | null;
+		enactedOn?: Date | null;
+		status: BillStatus;
+		proposer?: ComponentProps<typeof Proposer>['proposer'];
+		orientation?: 'landscape' | 'portrait';
+		isFullWidth?: boolean;
+		class?: string;
+	}
 
-	$: isLandscape = orientation === 'landscape';
+	let {
+		id,
+		nickname,
+		title,
+		proposedOn,
+		enactedOn = null,
+		status,
+		proposer = undefined,
+		orientation = 'portrait',
+		isFullWidth = false,
+		class: className = ''
+	}: Props = $props();
+
+	let isLandscape = $derived(orientation === 'landscape');
 </script>
 
 <div

@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { formatThaiDate } from '$lib/date';
 
-	export let withStartDate = false;
+	interface Props {
+		withStartDate?: boolean;
+	}
+
+	let { withStartDate = false }: Props = $props();
 </script>
 
 <p class="helper-text-01 text-gray-60">

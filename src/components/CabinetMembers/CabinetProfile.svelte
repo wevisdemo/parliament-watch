@@ -2,13 +2,17 @@
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import { twMerge } from 'tailwind-merge';
 
-	export let id: string;
-	export let name: string;
-	export let avatar: string | undefined;
-	export let partyName: string | undefined;
-	export let partyLogo: string | undefined;
-	export let imgSize = 48;
-	export let partySize = 19;
+	interface Props {
+		id: string;
+		name: string;
+		avatar: string | undefined;
+		partyName: string | undefined;
+		partyLogo: string | undefined;
+		imgSize?: number;
+		partySize?: number;
+	}
+
+	let { id, name, avatar, partyName, partyLogo, imgSize = 48, partySize = 19 }: Props = $props();
 </script>
 
 <a

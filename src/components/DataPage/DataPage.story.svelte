@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
 	import DataPage, {
 		type SelectedComboboxValueType,
 		type CheckboxFilterGroup,
 		type ComboboxFilterGroup,
 		type SelectedCheckboxValueType
 	} from './DataPage.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	export let Hst: Hst;
+	let { Hst }: { Hst: HstStory } = $props();
 
 	let data = Array(102).fill``.map((_, i) => ({
 		name: 'Alvin Kiev',
@@ -57,14 +57,14 @@
 		{ key: 'direction', value: 'ทิศทางการลงมติ' }
 	];
 	let tablePageSize = 10;
-	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
-	let selectedComboboxValue: SelectedComboboxValueType;
+	let searchQuery = $state('');
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state({} as SelectedCheckboxValueType);
+	let selectedComboboxValue: SelectedComboboxValueType = $state({} as SelectedComboboxValueType);
 
-	$: filteredData =
+	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
-		selectedComboboxValue === undefined ||
-		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+			selectedComboboxValue === undefined ||
+			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: data.filter(
 					(e) =>
@@ -72,7 +72,8 @@
 						(selectedComboboxValue.filterComboboxType
 							? e.type === selectedComboboxValue.filterComboboxType
 							: true)
-				);
+				)
+	);
 	let unit = 'มติ';
 </script>
 
@@ -92,7 +93,7 @@
 			bind:selectedComboboxValue
 		>
 			<h1 class="fluid-heading-03">ประวัติการลงมติ</h1>
-			<svelte:fragment slot="table" let:cellKey let:cellValue>
+			{#snippet table({ cellKey, cellValue })}
 				{#if cellKey === 'direction'}
 					{#if cellValue}
 						<span class="rounded-full bg-teal-30 px-2 text-black">ตามเสียงส่วนใหญ่ในพรรค</span>
@@ -102,7 +103,7 @@
 				{:else}
 					{cellValue}
 				{/if}
-			</svelte:fragment>
+			{/snippet}
 		</DataPage>
 	</div>
 

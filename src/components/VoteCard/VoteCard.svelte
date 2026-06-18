@@ -1,11 +1,24 @@
-<script lang="ts">
-	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
-	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
-	import { twMerge } from 'tailwind-merge';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
-	import VoteStackedBar from '$components/VoteStackedBar/VoteStackedBar.svelte';
+<script lang="ts" module>
 	import type { VotesSummary } from '$lib/vote-summary';
+
+	export interface VoteCardProps {
+		date: string;
+		title: string;
+		id: string;
+		result: string | null;
+		votesSummary?: VotesSummary | null;
+		isFullWidth?: boolean;
+		class?: string;
+	}
+</script>
+
+<script lang="ts">
+	import VoteStackedBar from '$components/VoteStackedBar/VoteStackedBar.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { formatThaiDate } from '$lib/date';
+	import { DefaultVotingResult } from '$models/voting';
+	import DirectionStraightRight from 'carbon-icons-svelte/lib/DirectionStraightRight.svelte';
+	import { twMerge } from 'tailwind-merge';
 
 	interface VoteCardTheme {
 		bg: string;
@@ -28,19 +41,7 @@
 		hoveredBg: 'hover:bg-purple-20'
 	};
 
-	const percentageFormatter = new Intl.NumberFormat('th-TH', {
-		maximumFractionDigits: 0
-	});
-
 	const numberFormatter = new Intl.NumberFormat('th-TH');
-
-	const highlightColorLookup: Record<string, string> = {
-		[DefaultVoteOption.Agreed]: 'text-teal-70',
-		[DefaultVoteOption.Disagreed]: 'text-red-70',
-		[DefaultVoteOption.Abstain]: 'text-gray-80',
-		[DefaultVoteOption.Novote]: 'text-gray-60',
-		[DefaultVoteOption.Absent]: 'text-gray-50'
-	};
 
 	const EMPTY_SUMMARY: VotesSummary = {
 		total: 0,
@@ -51,21 +52,21 @@
 		groups: []
 	};
 
-	export let date: string;
-	export let title: string;
-	export let id: string;
-	export let result: string | null;
-	export let votesSummary: VotesSummary | null = EMPTY_SUMMARY;
-	export let isFullWidth = false;
+	let {
+		date,
+		title,
+		id,
+		result,
+		votesSummary = EMPTY_SUMMARY,
+		isFullWidth = false,
+		class: className = ''
+	}: VoteCardProps = $props();
 
-	let className = '';
-	export { className as class };
-
-	$: summary = votesSummary ?? EMPTY_SUMMARY;
-	$: highlight = summary.highlight;
-	$: highlightOptionName = highlight?.option ?? null;
-	$: totalVotesCount = summary.total;
-	$: theme = CARD_THEMES[result as DefaultVotingResult] || CANDIDATE_CARD_THEME;
+	let summary = $derived(votesSummary ?? EMPTY_SUMMARY);
+	let highlight = $derived(summary.highlight);
+	let highlightOptionName = $derived(highlight?.option ?? null);
+	let totalVotesCount = $derived(summary.total);
+	let theme = $derived(CARD_THEMES[result as DefaultVotingResult] || CANDIDATE_CARD_THEME);
 
 	const formatCount = (value: number) => numberFormatter.format(value);
 

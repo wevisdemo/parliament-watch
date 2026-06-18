@@ -2,19 +2,25 @@
 	import { Link } from 'carbon-components-svelte';
 	import { type OutboundLinkProps } from 'carbon-components-svelte/src/Link/OutboundLink.svelte';
 	import { type CarbonIconProps } from 'carbon-icons-svelte';
-	import type { SvelteComponent } from 'svelte';
+	import type { Component } from 'svelte';
 
-	export let icon: typeof SvelteComponent<CarbonIconProps> | undefined = undefined;
-	export let href: OutboundLinkProps['href'] = '#';
-	export let external = false;
+	interface Props {
+		icon?: Component<CarbonIconProps> | undefined;
+		href?: OutboundLinkProps['href'];
+		external?: boolean;
+		children?: import('svelte').Snippet;
+		[key: string]: unknown;
+	}
+
+	let { icon = undefined, href = '#', external = false, children, ...rest }: Props = $props();
 </script>
 
 <Link
-	{...$$restProps}
-	class="btn-cta bx--btn bx--btn--primary p-[14px] font-bold text-text-04 visited:text-white hover:!text-white hover:no-underline {$$restProps.class}"
+	{...rest}
+	class="btn-cta bx--btn bx--btn--primary p-[14px] font-bold text-text-04 visited:text-white hover:!text-white hover:no-underline {rest.class}"
 	{href}
 	{icon}
 	{...external && { target: '_blank', rel: 'nofollow noopener noreferrer' }}
 >
-	<slot />
+	{@render children?.()}
 </Link>

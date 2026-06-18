@@ -1,8 +1,10 @@
 <script>
 	import BaseSvg from './BaseSvg.svelte';
+	/** @type {{ [key: string]: any }} */
+	let { ...rest } = $props();
 </script>
 
-<BaseSvg viewBox="0 0 32 32" {...$$restProps}>
+<BaseSvg viewBox="0 0 32 32" {...rest}>
 	<path
 		d="M22.4056 11.0344C23.2009 11.0344 23.8456 10.3897 23.8456 9.5944C23.8456 8.79911 23.2009 8.1544 22.4056 8.1544C21.6103 8.1544 20.9656 8.79911 20.9656 9.5944C20.9656 10.3897 21.6103 11.0344 22.4056 11.0344Z"
 	/>

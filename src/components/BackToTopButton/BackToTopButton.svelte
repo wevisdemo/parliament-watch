@@ -1,18 +1,32 @@
 <script>
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
-	// All sizing props must be passed with numberic value.
-	export let size = 40;
-	export let padding = 12;
-	export let color = '';
-	export let bgColor = '';
-	export let border = 1;
-	export let borderRadius = 2;
-	export let margin = 20;
 	// The button will be visible when the user scrolls down
-	// by 'showAt' value.
-	export let showAt = 50;
+
+	/**
+	 * @typedef {Object} Props
+	 * @property {number} [size] - All sizing props must be passed with numberic value.
+	 * @property {number} [padding]
+	 * @property {string} [color]
+	 * @property {string} [bgColor]
+	 * @property {number} [border]
+	 * @property {number} [borderRadius]
+	 * @property {number} [margin]
+	 * @property {number} [showAt] - by 'showAt' value.
+	 */
+
+	/** @type {Props} */
+	let {
+		size = 40,
+		padding = 12,
+		color = '',
+		bgColor = '',
+		border = 1,
+		borderRadius = 2,
+		margin = 20,
+		showAt = 50
+	} = $props();
 
 	// '40' is default size of the button.
 	// So, we need to scale the icon according to the 'size' prop.
@@ -21,7 +35,7 @@
 	// (Default) minus value means the user has not scrolled yet.
 	// So, the button will be initially hide.
 	let scrollY = -1;
-	let show = false;
+	let show = $state(false);
 
 	function onScroll() {
 		// Set 'scrollY' value.
@@ -57,7 +71,7 @@
             --border-radius:{borderRadius}px;
             --margin:{margin}px;
             --scale: {scale}"
-		on:click={onClick}
+		onclick={onClick}
 		transition:fade
 	>
 		<div class="btn">
@@ -78,7 +92,7 @@
 {/if}
 
 <style lang="scss">
-	@import 'src/styles/carbon/theme.scss';
+	@import 'styles/carbon/theme.scss';
 
 	.back-to-top-button {
 		// Use 'fixed' position to make it stick to the bottom right of the page.

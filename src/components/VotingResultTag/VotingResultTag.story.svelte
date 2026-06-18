@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import VotingResultTag from './VotingResultTag.svelte';
 	import { DefaultVotingResult } from '$models/voting';
+	import VotingResultTag from './VotingResultTag.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	export let Hst: Hst;
+	export let Hst: HstStory;
 
 	let isLarge = false;
 	let customResult = '[ชื่อแคนดิเดต]ชนะ';

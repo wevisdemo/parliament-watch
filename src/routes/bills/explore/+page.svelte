@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import type {
 		SelectedCheckboxValueType,
@@ -9,13 +9,12 @@
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import { formatThaiDate } from '$lib/date.js';
 	import { billStatusProperty } from '$lib/politigraph/bill/status.js';
-	import { onMount } from 'svelte';
 	import { CREATOR_TYPE_LABEL } from '../../../constants/bills.js';
-	let cmpDataPage: DataPage;
+	import { onMount } from 'svelte';
 
-	export let data;
+	let cmpDataPage: DataPage | undefined = $state();
 
-	$: ({ filterOptions, bills } = data);
+	let { data } = $props();
 
 	interface Choice {
 		id: string;
@@ -23,22 +22,50 @@
 		disabled: boolean;
 	}
 
-	$: comboboxFilterList = [
-		{
-			key: 'filterProposerName',
-			legend: 'ชื่อผู้เสนอ',
-			placeholder: 'เลือกชื่อผู้เสนอ',
-			choices: getProposerName()
-		},
-		{
-			key: 'filterPartyName',
-			legend: 'พรรคการเมือง',
-			placeholder: 'เลือกพรรคการเมืองที่เสนอ',
-			choices: getPartyName()
-		}
-	];
+	let searchQuery = $state('');
+	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state({
+		filterTerm: [],
+		filterStatus: [],
+		filterCategory: [],
+		filterProposerType: []
+	});
 
-	$: getProposerName = (): Choice[] => {
+	onMount(() => {
+		if (!cmpDataPage) return;
+
+		const term = page.url.searchParams.get('term');
+		if (term && filterOptions.representativeTerms.find((rep) => rep.value === term)) {
+			selectedCheckboxValue.filterTerm = [term];
+		}
+
+		const status = page.url.searchParams.get('status');
+		if (status && (filterOptions.statuses as string[]).includes(status)) {
+			selectedCheckboxValue.filterStatus = [status];
+		}
+
+		const category = page.url.searchParams.get('category');
+		if (category && filterOptions.categories.includes(category)) {
+			selectedCheckboxValue.filterCategory = [category];
+		}
+
+		const proposerType = page.url.searchParams.get('proposertype');
+		if (proposerType && (filterOptions.proposerTypes as string[]).includes(proposerType)) {
+			selectedCheckboxValue.filterProposerType = [proposerType];
+		}
+
+		const proposerNameParam = page.url.searchParams.get('proposername');
+		if (proposerNameParam) {
+			cmpDataPage.setCombobox('filterProposerName', proposerNameParam);
+		}
+
+		const partyParam = page.url.searchParams.get('party');
+		if (partyParam) {
+			cmpDataPage.setCombobox('filterPartyName', partyParam);
+		}
+	});
+	let { filterOptions, bills } = $derived(data);
+	let getProposerName = $derived((): Choice[] => {
 		const peopleOptions = filterOptions.proposerPeople.map((name) => ({
 			id: name,
 			text: name,
@@ -57,9 +84,8 @@
 			{ id: 'section1', text: 'คณะรัฐมนตรี', disabled: true },
 			...cabinetOptions
 		];
-	};
-
-	$: getPartyName = (): Choice[] => {
+	});
+	let getPartyName = $derived((): Choice[] => {
 		const partyOptions = filterOptions.proposerParties.map((party) => ({
 			id: party.id as string,
 			text: party.text,
@@ -68,9 +94,22 @@
 		}));
 
 		return [...partyOptions];
-	};
-
-	$: checkboxFilterList = [
+	});
+	let comboboxFilterList = $derived([
+		{
+			key: 'filterProposerName',
+			legend: 'ชื่อผู้เสนอ',
+			placeholder: 'เลือกชื่อผู้เสนอ',
+			choices: getProposerName()
+		},
+		{
+			key: 'filterPartyName',
+			legend: 'พรรคการเมือง',
+			placeholder: 'เลือกพรรคการเมืองที่เสนอ',
+			choices: getPartyName()
+		}
+	]);
+	let checkboxFilterList = $derived([
 		{
 			key: 'filterTerm',
 			legend: 'สมัยที่เสนอ',
@@ -101,15 +140,10 @@
 				value: proposer
 			}))
 		}
-	];
-
-	let searchQuery = '';
-	let selectedComboboxValue: SelectedComboboxValueType;
-	let selectedCheckboxValue: SelectedCheckboxValueType;
-
-	$: filteredData =
+	]);
+	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
-		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: bills
 					.filter((bill) => {
@@ -128,8 +162,7 @@
 						const search = searchQuery.trim();
 						if (search && !bill.title.includes(search) && !bill.nickname?.includes(search)) return;
 
-						const { filterTerm, filterStatus, filterCategory, filterProposerType } =
-							selectedCheckboxValue;
+						const { filterTerm, filterStatus, filterProposerType } = selectedCheckboxValue;
 
 						return (
 							bill.purposedAtMpAssemblyId &&
@@ -149,39 +182,8 @@
 						},
 						status: bill.status,
 						links: bill.links
-					}));
-
-	onMount(() => {
-		const term = $page.url.searchParams.get('term');
-		if (term && filterOptions.representativeTerms.find((rep) => rep.value === term)) {
-			selectedCheckboxValue.filterTerm = [term];
-		}
-
-		const status = $page.url.searchParams.get('status');
-		if (status && (filterOptions.statuses as string[]).includes(status)) {
-			selectedCheckboxValue.filterStatus = [status];
-		}
-
-		const category = $page.url.searchParams.get('category');
-		if (category && filterOptions.categories.includes(category)) {
-			selectedCheckboxValue.filterCategory = [category];
-		}
-
-		const proposerType = $page.url.searchParams.get('proposertype');
-		if (proposerType && (filterOptions.proposerTypes as string[]).includes(proposerType)) {
-			selectedCheckboxValue.filterProposerType = [proposerType];
-		}
-
-		const proposerNameParam = $page.url.searchParams.get('proposername');
-		if (proposerNameParam) {
-			cmpDataPage.setCombobox('filterProposerName', proposerNameParam);
-		}
-
-		const partyParam = $page.url.searchParams.get('party');
-		if (partyParam) {
-			cmpDataPage.setCombobox('filterPartyName', partyParam);
-		}
-	});
+					}))
+	);
 </script>
 
 <DataPage
@@ -215,7 +217,7 @@
 			<p class="body-01">ผลลัพธ์จากเงื่อนไขการกรอง: {filteredData.length} ร่าง</p>
 		</div>
 	</div>
-	<svelte:fragment slot="table" let:cellKey let:cellValue>
+	{#snippet table({ cellKey, cellValue })}
 		{#if cellKey === 'proposedOn'}
 			<div class="body-compact-01 whitespace-nowrap text-gray-60">
 				{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
@@ -231,5 +233,5 @@
 		{:else if cellValue}
 			<LinksCell {cellValue} />
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </DataPage>

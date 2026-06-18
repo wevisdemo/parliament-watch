@@ -1,21 +1,22 @@
 <script lang="ts">
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
+	import CrowdfundingBanner from '$components/CrowdfundingBanner/CrowdfundingBanner.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import BillContent from '$components/Index/BillContent.svelte';
+	import ContentSection from '$components/Index/ContentSection.svelte';
+	import PoliticianContent from '$components/Index/PoliticianContent.svelte';
+	import SectionMenuItem from '$components/Index/SectionMenuItem.svelte';
+	import VotingContent from '$components/Index/VotingContent.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import PoliticianContent from '$components/Index/PoliticianContent.svelte';
-	import VotingContent from '$components/Index/VotingContent.svelte';
-	import SectionMenuItem from '$components/Index/SectionMenuItem.svelte';
-	import ContentSection from '$components/Index/ContentSection.svelte';
 	import { SearchIndexCategory } from '$models/search.js';
-	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import CrowdfundingBanner from '$components/CrowdfundingBanner/CrowdfundingBanner.svelte';
 	import { ArrowRight } from 'carbon-icons-svelte';
-	import BillContent from '$components/Index/BillContent.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	$: ({ highlightedPoliticians, billCategories, mpTermChoices, latestAssemblyLabels } = data);
+	let { highlightedPoliticians, billCategories, mpTermChoices, latestAssemblyLabels } =
+		$derived(data);
 </script>
 
 <div class="flex flex-col md:h-[calc(100lvh-48px)]">
@@ -76,10 +77,12 @@
 	searchCategories={[SearchIndexCategory.Politicians]}
 	class="bg-ui-01"
 >
-	<span slot="description"
-		>รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
-		ประวัติทางการเมือง ไปจนถึงผลงานในสภา</span
-	>
+	{#snippet description()}
+		<span
+			>รู้หน้า รู้ชื่อ แต่ไม่รู้จัก ลองค้นหาประวัติผู้แทนในสภาของเรากันดู มีตั้งแต่ข้อมูลพื้นฐาน
+			ประวัติทางการเมือง ไปจนถึงผลงานในสภา</span
+		>
+	{/snippet}
 	<PoliticianContent
 		{highlightedPoliticians}
 		representativeLabel={latestAssemblyLabels.representative}
@@ -96,9 +99,9 @@
 	searchCategories={[SearchIndexCategory.Votings]}
 	class="bg-white"
 >
-	<span slot="description"
-		>ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ</span
-	>
+	{#snippet description()}
+		<span>ใครหนุน ใครค้าน ดูการโหวตครั้งสำคัญในสภา พร้อมคำอธิบายแบบเข้าใจง่ายๆ</span>
+	{/snippet}
 	<VotingContent
 		representativeVotesLabel={latestAssemblyLabels.representativeVotes}
 		senateVotesLabel={latestAssemblyLabels.senateVotes}
@@ -113,12 +116,14 @@
 	searchCategories={[SearchIndexCategory.Bills]}
 	class="bg-ui-01"
 >
-	<span slot="description"
-		>ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ สำเร็จ หรือติดค้างอยู่ที่ขั้นตอนไหน<br />
-		<a href="/legislative-process" class="mt-1 flex"
-			>รัฐออกกฎหมายอย่างไร? <ArrowRight class="ml-1" /></a
-		></span
-	>
+	{#snippet description()}
+		<span
+			>ติดตามร่างกฎหมายที่เกี่ยวข้องกับชีวิตคุณ สำเร็จ หรือติดค้างอยู่ที่ขั้นตอนไหน<br />
+			<a href="/legislative-process" class="mt-1 flex"
+				>รัฐออกกฎหมายอย่างไร? <ArrowRight class="ml-1" /></a
+			></span
+		>
+	{/snippet}
 	<BillContent {billCategories} {mpTermChoices} />
 </ContentSection>
 

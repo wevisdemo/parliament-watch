@@ -1,11 +1,10 @@
-import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
+import { HighlightedReason, type StatCardProps } from '$components/Index/StatCard.svelte';
 import { getLatestTerm } from '$lib/politigraph/assembly/term';
 import {
 	getBillCategoryOptions,
 	getRepresentativeTermOptions
 } from '$lib/politigraph/bill/overview';
 import { graphql } from '$lib/politigraph/client';
-import type { ComponentProps } from 'svelte';
 
 const CHUAN_ID = '891ea463-c463-4f76-840d-e7d24a97d70c';
 const BANYAT_ID = 'e26bbc32-f2d5-41f1-8006-2ea439576771';
@@ -16,12 +15,12 @@ enum PoliticialPosition {
 	Cabinet = 'รัฐมนตรี'
 }
 
-interface LongestServedInPoliticalPositionsPolitician extends ComponentProps<StatCard> {
+interface LongestServedInPoliticalPositionsPolitician extends StatCardProps {
 	position: PoliticialPosition;
 	year: number;
 }
 
-interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCard> {
+interface MostFrequentlyServedAsMinisterPolitician extends StatCardProps {
 	cabinetTerms: number[];
 }
 
@@ -110,7 +109,7 @@ export async function load() {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const banyatBantadtan = highlightPoliticians.find((p) => p.id === BANYAT_ID)!;
 
-	const highlightedPoliticians: ComponentProps<StatCard>[] = [
+	const highlightedPoliticians: StatCardProps[] = [
 		{
 			reason: HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,

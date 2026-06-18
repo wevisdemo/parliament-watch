@@ -1,11 +1,18 @@
-<script lang="ts">
+<script lang="ts" module>
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
-	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
-	import { ArrowRight } from 'carbon-icons-svelte';
 	import type { ComponentProps } from 'svelte';
 
-	export let members: { assemblyRole: string; profile: ComponentProps<PoliticianProfile> }[] = [];
-	export let assemblyId: string;
+	export interface MainMembersProps {
+		members?: { assemblyRole: string; profile: ComponentProps<typeof PoliticianProfile> }[];
+		assemblyId: string;
+	}
+</script>
+
+<script lang="ts">
+	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
+	import { ArrowRight } from 'carbon-icons-svelte';
+
+	let { members = [], assemblyId }: MainMembersProps = $props();
 </script>
 
 <div class="py-[16px] md:py-[32px]">
@@ -13,7 +20,7 @@
 		<GeneralIcon class="h-[32px] w-[32px]" />
 		<span class="fluid-heading-04 ml-[16px]">สมาชิกหลัก</span>
 	</div>
-	<div class="w-full border-b-[1px] border-solid border-gray-20" />
+	<div class="w-full border-b-[1px] border-solid border-gray-20"></div>
 	<div class="mt-[16px] flex flex-wrap justify-center gap-[8px] md:justify-start">
 		{#each members as { assemblyRole, profile }}
 			<div class="w-[288px]">

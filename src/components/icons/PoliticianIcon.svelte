@@ -1,8 +1,10 @@
 <script>
 	import BaseSvg from './BaseSvg.svelte';
+	/** @type {{ [key: string]: any }} */
+	let { ...rest } = $props();
 </script>
 
-<BaseSvg {...$$restProps}>
+<BaseSvg {...rest}>
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"

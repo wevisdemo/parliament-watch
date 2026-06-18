@@ -1,11 +1,10 @@
-import type StatCard from '$components/Index/StatCard.svelte';
-import type { ComponentProps } from 'svelte';
+import type { StatCardProps } from '$components/Index/StatCard.svelte';
 
 export const OUT_FILE = 'politician-ranking.json';
 export const GITHUB_PAGE_URL = 'https://wevisdemo.github.io/parliament-watch/';
 
 export interface ExternalPoliticianRanking {
-	politicianWithMostWikipediaVisit: Omit<ComponentProps<StatCard>, 'reason'>;
+	politicianWithMostWikipediaVisit: Omit<StatCardProps, 'reason'>;
 	updatedAt: Date;
 }
 

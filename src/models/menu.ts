@@ -1,4 +1,4 @@
-import type { ComponentType } from 'svelte';
+import type { Component } from 'svelte';
 
 export enum MenuTypes {
 	root = 'root',
@@ -8,7 +8,7 @@ export enum MenuTypes {
 
 export interface Menu {
 	label: string;
-	icon?: ComponentType | null;
+	icon?: Component<Record<string, unknown>> | null;
 	url?: string;
 	type: MenuTypes;
 	subs?: Menu[];

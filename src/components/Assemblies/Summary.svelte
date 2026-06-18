@@ -4,10 +4,14 @@
 	import SummaryGroup from './SummaryGroup.svelte';
 	import SummaryTotal from './SummaryTotal.svelte';
 
-	export let summary: Summary;
-	export let houseLevel: string;
-	export let assemblyId: string;
-	$: isCabinet = houseLevel === 'cabinet';
+	interface Props {
+		summary: Summary;
+		houseLevel: string;
+		assemblyId: string;
+	}
+
+	let { summary, houseLevel, assemblyId }: Props = $props();
+	let isCabinet = $derived(houseLevel === 'cabinet');
 </script>
 
 <div class="grid gap-[16px] py-[16px] md:gap-[24px] md:py-[32px]">

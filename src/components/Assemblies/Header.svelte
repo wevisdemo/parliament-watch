@@ -1,23 +1,36 @@
 <script lang="ts">
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import Share from '$components/Share/Share.svelte';
+	import { formatDateRange } from '$lib/date';
+	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
 	import { Tag } from 'carbon-components-svelte';
 	import { Download, TableSplit } from 'carbon-icons-svelte';
-	import Share from '$components/Share/Share.svelte';
-	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import { formatDateRange } from '$lib/date';
 
-	export let availableAssemblies: AvailableAssembly[] = [];
+	interface Props {
+		availableAssemblies?: AvailableAssembly[];
+		id: string;
+		name: string;
+		startedAt: Date;
+		endedAt: Date | undefined;
+		description: string | null;
+		linkPostfix?: string;
+		showStatus?: boolean;
+		showRemark?: boolean;
+	}
 
-	export let id: string;
-	export let name: string;
-	export let startedAt: Date;
-	export let endedAt: Date | undefined;
-	export let description: string | null;
-	export let linkPostfix = '';
-	export let showStatus = true;
-	export let showRemark = true;
+	let {
+		availableAssemblies = [],
+		id,
+		name,
+		startedAt,
+		endedAt,
+		description,
+		linkPostfix = '',
+		showStatus = true,
+		showRemark = true
+	}: Props = $props();
 
-	$: isActive = !endedAt;
+	let isActive = $derived(!endedAt);
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
 		assembly ? `/assemblies/${assembly.id}/${linkPostfix}` : '';

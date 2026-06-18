@@ -3,10 +3,14 @@
 	import AssemblyTooltip from './AssemblyTooltip.svelte';
 	import type { CabinetSeat, TooltipProp } from './shared';
 
-	export let cabinets: CabinetSeat[];
-	export let role: CabinetSeat['role'];
+	interface Props {
+		cabinets: CabinetSeat[];
+		role: CabinetSeat['role'];
+	}
 
-	let tooltipProp: TooltipProp | null = null;
+	let { cabinets, role }: Props = $props();
+
+	let tooltipProp: TooltipProp | null = $state(null);
 
 	const showTooltip = (event: MouseEvent, member: AssemblyMember) => {
 		tooltipProp = {
@@ -31,8 +35,8 @@
 					role="tooltip"
 					class="dot"
 					style="background-color: {party.color || '#8D8D8D'};"
-					on:mouseenter={(e) => showTooltip(e, member)}
-					on:mouseleave={hideTooltip}
+					onmouseenter={(e) => showTooltip(e, member)}
+					onmouseleave={hideTooltip}
 				></div>
 			{/each}
 		{/each}

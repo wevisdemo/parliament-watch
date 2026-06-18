@@ -1,30 +1,28 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
+	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
+	import { formatThaiDate } from '$lib/date.js';
+	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
 		Button,
 		Modal,
 		Search,
-		Tag,
 		Toggle
 	} from 'carbon-components-svelte';
 	import { ArrowRight, Link } from 'carbon-icons-svelte';
+	import { onMount } from 'svelte';
 
-	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting';
-	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
-	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
-	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { formatThaiDate } from '$lib/date.js';
+	let { data } = $props();
 
-	export let data;
-
-	$: ({ voteEvent, results, resultsByAffiliation, votes } = data);
+	let { voteEvent, results, resultsByAffiliation, votes } = $derived(data);
 
 	enum Menu {
 		Summary = 'summary',
@@ -32,10 +30,10 @@
 		ByPerson = 'byPerson'
 	}
 
-	let open = false;
-	let selectedMenu = Menu.Summary;
-	let isViewPercent = false;
-	let searchQuery = '';
+	let open = $state(false);
+	let selectedMenu = $state(Menu.Summary);
+	let isViewPercent = $state(false);
+	let searchQuery = $state('');
 
 	interface AnchorElement extends HTMLElement {
 		offsetTop: number;
@@ -119,46 +117,54 @@
 		[DefaultVoteOption.Absent]: 'gray-20'
 	};
 
-	$: winningOption = (() => {
-		switch (voteEvent.result) {
-			case DefaultVotingResult.Passed:
-				return DefaultVoteOption.Agreed;
-			case DefaultVotingResult.Failed:
-				return DefaultVoteOption.Disagreed;
-			default:
-				return voteEvent.result;
-		}
-	})();
+	let winningOption = $derived(
+		(() => {
+			switch (voteEvent.result) {
+				case DefaultVotingResult.Passed:
+					return DefaultVoteOption.Agreed;
+				case DefaultVotingResult.Failed:
+					return DefaultVoteOption.Disagreed;
+				default:
+					return voteEvent.result;
+			}
+		})()
+	);
 
-	$: meetingType = (() => {
-		const hasSenate = voteEvent.organizations.some((o) => o.classification === 'HOUSE_OF_SENATE');
-		const hasRepresentative = voteEvent.organizations.some(
-			(o) => o.classification === 'HOUSE_OF_REPRESENTATIVE'
-		);
+	let meetingType = $derived(
+		(() => {
+			const hasSenate = voteEvent.organizations.some((o) => o.classification === 'HOUSE_OF_SENATE');
+			const hasRepresentative = voteEvent.organizations.some(
+				(o) => o.classification === 'HOUSE_OF_REPRESENTATIVE'
+			);
 
-		return hasSenate && hasRepresentative
-			? 'ประชุมร่วมกันของรัฐสภา'
-			: hasRepresentative
-				? 'ประชุมสภาผู้แทนราษฎร'
-				: hasSenate
-					? 'ประชุมวุฒิสภา'
-					: null;
-	})();
+			return hasSenate && hasRepresentative
+				? 'ประชุมร่วมกันของรัฐสภา'
+				: hasRepresentative
+					? 'ประชุมสภาผู้แทนราษฎร'
+					: hasSenate
+						? 'ประชุมวุฒิสภา'
+						: null;
+		})()
+	);
 
-	$: maxComparableRowVote = resultsByAffiliation.reduce((max, affiliation) => {
-		const partyMax = affiliation.parties.reduce(
-			(partyMax, party) => (party.count > partyMax ? party.count : partyMax),
-			0
-		);
+	let maxComparableRowVote = $derived(
+		resultsByAffiliation.reduce((max, affiliation) => {
+			const partyMax = affiliation.parties.reduce(
+				(maxPartyCount, party) => (party.count > maxPartyCount ? party.count : maxPartyCount),
+				0
+			);
 
-		return Math.max(max, affiliation.count, partyMax);
-	}, 0);
+			return Math.max(max, affiliation.count, partyMax);
+		}, 0)
+	);
 
-	$: voterSearchResult = searchQuery.trim()
-		? votes.filter((v) =>
-				v.politician.name.trim().toLowerCase().includes(searchQuery.trim().toLowerCase())
-			)
-		: votes;
+	let voterSearchResult = $derived(
+		searchQuery.trim()
+			? votes.filter((v) =>
+					v.politician.name.trim().toLowerCase().includes(searchQuery.trim().toLowerCase())
+				)
+			: votes
+	);
 </script>
 
 <div class="flex flex-col">
@@ -225,7 +231,7 @@
 					</div>
 				</div>
 				{#if voteEvent.description}
-					<div class="my-4 h-[1px] w-full bg-gray-20" />
+					<div class="my-4 h-[1px] w-full bg-gray-20"></div>
 					<p class="heading-01">สรุปเนื้อหา</p>
 					<p class="body-01">{voteEvent.description}</p>
 				{/if}
@@ -265,7 +271,7 @@
 						Menu.Summary
 							? 'border-blue-60 font-bold text-gray-100'
 							: 'border-gray-30 text-gray-60'}"
-						on:click={() => scrollTo(Menu.Summary)}
+						onclick={() => scrollTo(Menu.Summary)}
 					>
 						สรุป
 					</button>
@@ -274,7 +280,7 @@
 						Menu.ByParty
 							? 'border-blue-60 font-bold text-gray-100'
 							: 'border-gray-30 text-gray-60'}"
-						on:click={() => scrollTo(Menu.ByParty)}
+						onclick={() => scrollTo(Menu.ByParty)}
 					>
 						รายสังกัด
 					</button>
@@ -283,7 +289,7 @@
 						Menu.ByPerson
 							? 'border-blue-60 font-bold text-gray-100'
 							: 'border-gray-30 text-gray-60'}"
-						on:click={() => scrollTo(Menu.ByPerson)}
+						onclick={() => scrollTo(Menu.ByPerson)}
 					>
 						รายคน
 					</button>
@@ -314,7 +320,7 @@
 						{#each results as { option, total } (typeof option === 'string' ? option : option.label)}
 							{@const { className, style } = getVoteColor(option)}
 							<div class="flex items-center gap-x-1">
-								<div class="h-4 w-4 rounded-sm {className}" {style} />
+								<div class="h-4 w-4 rounded-sm {className}" {style}></div>
 								<p class="heading-02">
 									{typeof option === 'string' ? option : option.label}
 								</p>
@@ -352,7 +358,7 @@
 				</Modal>
 				<button
 					class="helper-text-01 mt-2 cursor-pointer self-start text-left text-blue-60 underline"
-					on:click={() => {
+					onclick={() => {
 						open = true;
 					}}
 				>

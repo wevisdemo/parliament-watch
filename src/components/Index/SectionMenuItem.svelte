@@ -1,11 +1,18 @@
 <script lang="ts">
 	import { ArrowDown } from 'carbon-icons-svelte';
-	import type { ComponentType } from 'svelte';
+	import type { CarbonIconProps } from 'carbon-icons-svelte';
+	import type { Component } from 'svelte';
 
-	export let title: string;
-	export let description: string;
-	export let href: string | undefined = undefined;
-	export let icon: ComponentType;
+	interface Props {
+		title: string;
+		description: string;
+		href?: string | undefined;
+		icon: Component<CarbonIconProps>;
+	}
+
+	let { title, description, href = undefined, icon }: Props = $props();
+
+	const SvelteComponent = $derived(icon);
 </script>
 
 <li class="flex w-full flex-1">
@@ -16,7 +23,7 @@
 			: 'opacity-50'}"
 		aria-disabled={!href}
 	>
-		<svelte:component this={icon} class="aspect-square h-auto w-6 md:w-8" />
+		<SvelteComponent class="aspect-square h-auto w-6 md:w-8" />
 		<span class="flex flex-1 flex-col gap-1">
 			<span class="fluid-heading-03">{title}</span>
 			<span>{description}</span>

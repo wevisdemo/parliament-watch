@@ -1,13 +1,16 @@
 <script lang="ts">
-	let className = '';
-	export { className as class };
-	export let style = '';
-	export let option: string;
-	export let value: number;
-	export let total: number;
+	interface Props {
+		class?: string;
+		style?: string;
+		option: string;
+		value: number;
+		total: number;
+	}
+
+	let { class: className = '', style = '', option, value, total }: Props = $props();
 
 	let id = 'ccs-' + Math.random().toString(36);
-	let open = false;
+	let open = $state(false);
 
 	const hide = () => (open = false);
 	const show = () => (open = true);
@@ -18,17 +21,17 @@
 </script>
 
 <svelte:window
-	on:keydown={({ key }) => {
+	onkeydown={({ key }) => {
 		if (key === 'Escape') hide();
 	}}
 />
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <span
 	class="bx--tooltip--definition bx--tooltip--a11y h-full rounded-sm {className}"
 	style="width:{getWidthPercent(value, total)}%; {style}"
-	on:mouseenter={show}
-	on:mouseleave={hide}
+	onmouseenter={show}
+	onmouseleave={hide}
 >
 	<button
 		type="button"
@@ -36,8 +39,8 @@
 		class="bx--tooltip--a11y bx--tooltip__trigger bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-center w-full !rounded-sm !border-none"
 		class:bx--tooltip--hidden={!open}
 		class:bx--tooltip--visible={open}
-		on:focus={show}
-		on:blur={hide}
-	/>
+		onfocus={show}
+		onblur={hide}
+	></button>
 	<div role="tooltip" {id} class="bx--assistive-text">{option} {value} คน</div>
 </span>

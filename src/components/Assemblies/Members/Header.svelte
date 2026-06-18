@@ -1,14 +1,17 @@
 <script lang="ts">
+	import AssemblyIdRunner, { type AvailableAssembly } from '../AssemblyIdRunner.svelte';
 	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
-	import AssemblyIdRunner, { type AvailableAssembly } from '../AssemblyIdRunner.svelte';
 
-	export let id: string;
-	export let name: string;
-	export let availableAssemblies: AvailableAssembly[];
+	interface Props {
+		id: string;
+		name: string;
+		availableAssemblies: AvailableAssembly[];
+		searchQuery?: string;
+	}
 
-	export let searchQuery = '';
+	let { id, name, availableAssemblies, searchQuery = $bindable('') }: Props = $props();
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
 		assembly ? `/assemblies/${assembly.id}/members` : '';

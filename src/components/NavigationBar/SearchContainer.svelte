@@ -12,11 +12,15 @@
 		deactivate: void;
 	}>();
 
-	export let activeSearch = false;
-	export let searchResults: SearchResults | null = null;
-	let searchInput: HTMLInputElement;
-	let searchValue = '';
-	let elContainer: HTMLDivElement;
+	interface Props {
+		activeSearch?: boolean;
+		searchResults?: SearchResults | null;
+	}
+
+	let { activeSearch = $bindable(false), searchResults = $bindable(null) }: Props = $props();
+	let searchInput: HTMLInputElement | undefined = $state();
+	let searchValue = $state('');
+	let elContainer: HTMLDivElement | undefined = $state();
 
 	function searchClickHandle() {
 		if (!activeSearch) {
@@ -31,6 +35,7 @@
 	}
 
 	function closeClickHandle(e: FocusEvent, force = false) {
+		if (!elContainer) return;
 		if (force || !elContainer.contains(e.relatedTarget as Node)) {
 			activeSearch = false;
 			searchValue = '';
@@ -40,13 +45,13 @@
 	}
 </script>
 
-<div bind:this={elContainer} on:focusout={closeClickHandle} class="absolute right-0" tabindex="-1">
+<div bind:this={elContainer} onfocusout={closeClickHandle} class="absolute right-0" tabindex="-1">
 	<div class="flex h-full {activeSearch ? 'bg-gray-90' : ''}">
 		<button
 			type="button"
 			form="top-search-input"
 			class="grid h-12 w-12 cursor-pointer place-content-center border-0 bg-white/0 text-white"
-			on:click={searchClickHandle}
+			onclick={searchClickHandle}
 		>
 			<SearchIcon />
 		</button>
@@ -55,7 +60,7 @@
 			<div
 				class="flex h-full"
 				transition:slide={{ axis: 'x', duration: 250 }}
-				on:introend={introEndHandler}
+				onintroend={introEndHandler}
 			>
 				<SearchInput
 					bind:ref={searchInput}
@@ -73,7 +78,7 @@
 				/>
 				<button
 					class="grid h-12 w-12 cursor-pointer place-content-center border-0 bg-white/0 text-white"
-					on:click={(e) => closeClickHandle(e, true)}
+					onclick={(e) => closeClickHandle(e, true)}
 				>
 					<CloseIcon />
 				</button>

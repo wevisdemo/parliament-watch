@@ -1,12 +1,17 @@
 <script lang="ts">
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import { DataTable } from 'carbon-components-svelte';
-	import type { BillSummary } from '../../routes/assemblies/[id]/+page.server';
 	import { formatThaiDate } from '$lib/date';
-	export let latestBills: BillSummary[];
+	import type { BillSummary } from '../../routes/assemblies/[id]/+page.server';
+	import { DataTable } from 'carbon-components-svelte';
 
-	$: sortByProposedOn = latestBills.sort(
-		(a, b) => new Date(b.proposedOn).getTime() - new Date(a.proposedOn).getTime()
+	interface Props {
+		latestBills: BillSummary[];
+	}
+
+	let { latestBills }: Props = $props();
+
+	let sortByProposedOn = $derived(
+		latestBills.sort((a, b) => new Date(b.proposedOn).getTime() - new Date(a.proposedOn).getTime())
 	);
 </script>
 
@@ -18,7 +23,7 @@
 	]}
 	rows={sortByProposedOn}
 >
-	<svelte:fragment slot="cell" let:cell let:row>
+	{#snippet cell({ cell, row })}
 		{#if cell.key === 'proposedOn'}
 			<span class="text-gray-60">
 				{formatThaiDate(cell.value, { shortMonth: true, shortYear: true })}
@@ -34,5 +39,5 @@
 		{:else}
 			{cell.value}
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </DataTable>

@@ -1,12 +1,11 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import Proposer from './Proposer.svelte';
-	import type { ComponentProps } from 'svelte';
 	import { enumBillCreatorType } from '$lib/politigraph/genql';
+	import Proposer, { type ProposerProps } from './Proposer.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	let orientation: ComponentProps<Proposer>['orientation'] = 'landscape';
+	let orientation: ProposerProps['orientation'] = 'landscape';
 
-	export let Hst: Hst;
+	let { Hst }: { Hst: HstStory } = $props();
 </script>
 
 <Hst.Story title="Proposer" layout={{ type: 'grid', width: 400 }}>

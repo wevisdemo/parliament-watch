@@ -1,33 +1,46 @@
-<script lang="ts">
-	import type { ComponentProps } from 'svelte';
+<script lang="ts" module>
 	import CabinetProfile from './CabinetProfile.svelte';
+	import type { ComponentProps } from 'svelte';
+
+	export interface CabinetMembersProps {
+		members?: { assemblyRole: string; profile: ComponentProps<typeof CabinetProfile> }[];
+	}
+</script>
+
+<script lang="ts">
 	import MinistryGroup from './MinistryGroup.svelte';
 
-	export let members: { assemblyRole: string; profile: ComponentProps<CabinetProfile> }[] = [];
+	let { members = [] }: CabinetMembersProps = $props();
 
-	$: ministries = Array.from(
-		new Set(
-			members.map((m) =>
-				m.assemblyRole
-					.replace('รัฐมนตรีว่าการ', '')
-					.replace('รัฐมนตรีช่วยว่าการ', '')
-					.replace('รัฐมนตรีประจำ', '')
-					.replace('รัฐมนตรีช่วยประจำ', '')
+	let ministries = $derived(
+		Array.from(
+			new Set(
+				members.map((m) =>
+					m.assemblyRole
+						.replace('รัฐมนตรีว่าการ', '')
+						.replace('รัฐมนตรีช่วยว่าการ', '')
+						.replace('รัฐมนตรีประจำ', '')
+						.replace('รัฐมนตรีช่วยประจำ', '')
+				)
 			)
-		)
-	).filter((r) => !['นายกรัฐมนตรี', 'รองนายกรัฐมนตรี'].includes(r));
+		).filter((r) => !['นายกรัฐมนตรี', 'รองนายกรัฐมนตรี'].includes(r))
+	);
 
-	$: primeMinister = members.find((m) => m.assemblyRole === 'นายกรัฐมนตรี');
-	$: deputyPrimeMinisterGroup = members.filter((m) => m.assemblyRole === 'รองนายกรัฐมนตรี');
+	let primeMinister = $derived(members.find((m) => m.assemblyRole === 'นายกรัฐมนตรี'));
+	let deputyPrimeMinisterGroup = $derived(
+		members.filter((m) => m.assemblyRole === 'รองนายกรัฐมนตรี')
+	);
 
-	$: ministryGroup = ministries
-		.map((ministry) => {
-			return {
-				name: ministry,
-				members: members.filter((m) => m.assemblyRole.includes(ministry))
-			};
-		})
-		.sort((a, b) => b.members.length - a.members.length);
+	let ministryGroup = $derived(
+		ministries
+			.map((ministry) => {
+				return {
+					name: ministry,
+					members: members.filter((m) => m.assemblyRole.includes(ministry))
+				};
+			})
+			.sort((a, b) => b.members.length - a.members.length)
+	);
 </script>
 
 <div class="py-[16px] md:py-[32px]">

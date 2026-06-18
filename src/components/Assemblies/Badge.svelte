@@ -1,15 +1,24 @@
 <script lang="ts">
-	import { twMerge } from 'tailwind-merge';
 	import Tooltip from './Tooltip.svelte';
+	import { twMerge } from 'tailwind-merge';
 
-	export let color = '#8D8D8D';
-	export let title = '';
-	export let subtitle = '';
-	export let size: 's' | 'l' = 's';
+	interface Props {
+		color?: string;
+		title?: string;
+		subtitle?: string;
+		size?: 's' | 'l';
+		class?: string;
+		style?: string;
+	}
 
-	let className = '';
-	export { className as class };
-	export let style = '';
+	let {
+		color = '#8D8D8D',
+		title = '',
+		subtitle = '',
+		size = 's',
+		class: className = '',
+		style = ''
+	}: Props = $props();
 </script>
 
 {#if subtitle === '' && title === ''}
@@ -18,7 +27,7 @@
 		style:--color={color || '#8D8D8D'}
 		{style}
 		aria-describedby="idTooltipTarget"
-	/>
+	></div>
 	<p class="flex flex-col items-center justify-center">
 		<span class="label-01 text-text-04">{title}</span>
 		<span class="label-01 text-text-03">{subtitle}</span>
@@ -29,10 +38,12 @@
 			class={twMerge('h-[8px] w-full bg-[--color]', size === 'l' && 'md:h-[16px]')}
 			style:--color={color || '#8D8D8D'}
 			aria-describedby="idTooltipTarget"
-		/>
-		<p slot="tooltip" class="flex flex-col items-center justify-center">
-			<span class="label-01 text-text-04">{title}</span>
-			<span class="label-01 text-text-03">{subtitle}</span>
-		</p>
+		></div>
+		{#snippet tooltip()}
+			<p class="flex flex-col items-center justify-center">
+				<span class="label-01 text-text-04">{title}</span>
+				<span class="label-01 text-text-03">{subtitle}</span>
+			</p>
+		{/snippet}
 	</Tooltip>
 {/if}

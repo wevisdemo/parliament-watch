@@ -1,17 +1,21 @@
 <script lang="ts">
-	import { type TimeLine, getDateData } from './TimeLine';
-	import TimeItem from './TimeItem.svelte';
-	import TimeLineToolTip from './TimeLineToolTip.svelte';
 	import { shortMonthNames, isSameDate } from '$lib/date';
+	import TimeItem from './TimeItem.svelte';
+	import { type TimeLine, getDateData } from './TimeLine';
+	import TimeLineToolTip from './TimeLineToolTip.svelte';
 
-	export let timeLineData: TimeLine[];
-	export let selectedDate: Date;
-	export let startedAt: Date | undefined;
-	export let endedAt: Date | undefined;
-	export let handleSelectDate: (date: Date) => void;
+	interface Props {
+		timeLineData: TimeLine[];
+		selectedDate: Date;
+		startedAt: Date | undefined;
+		endedAt: Date | undefined;
+		handleSelectDate: (date: Date) => void;
+	}
 
-	$: max = Math.max(...timeLineData.map((d) => Math.max(d.in, d.out)));
-	$: dateData = getDateData(timeLineData, startedAt, endedAt);
+	let { timeLineData, selectedDate, startedAt, endedAt, handleSelectDate }: Props = $props();
+
+	let max = $derived(Math.max(...timeLineData.map((d) => Math.max(d.in, d.out))));
+	let dateData = $derived(getDateData(timeLineData, startedAt, endedAt));
 </script>
 
 <div class="no-scrollbar relative flex h-full flex-col overflow-y-auto px-[44px]">
@@ -32,7 +36,7 @@
 					</div>
 					{#if isSameDate(selectedDate, day.date)}
 						<div class="z-1000 relative flex grow justify-between">
-							<div class="w-full border-t-[0.4px]" />
+							<div class="w-full border-t-[0.4px]"></div>
 							<div class="absolute right-0 w-fit rounded-sm bg-interactive-02 px-4 py-2">
 								<TimeLineToolTip {day} {selectedDate} />
 							</div>

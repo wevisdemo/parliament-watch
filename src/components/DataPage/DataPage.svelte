@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export interface CheckboxFilterChoice {
 		label: string;
 		value: string | number | boolean;
@@ -52,6 +52,7 @@
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import { onMount, tick, type ComponentProps } from 'svelte';
+	import { passive } from 'svelte/legacy';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -62,14 +63,6 @@
 		return 'imageSrc' in item;
 	}
 
-	// Just props
-	export let breadcrumbList: {
-		label: string;
-		url?: string;
-	}[];
-	export let searchPlaceholder = 'ชื่อมติ หรือ คำที่เกี่ยวข้อง';
-	export let comboboxFilterList: ComboboxFilterGroup[] = [];
-	export let checkboxFilterList: CheckboxFilterGroup[];
 	// Optimization Tips:
 	// | On the grounds that each checkbox group can cover 100% of data,
 	// | if some group of checkbox is empty, the result will be empty.
@@ -77,24 +70,9 @@
 	// ```
 	// Object.values(selectedCheckboxValue).some(e => e.length === 0) ? [] : filteredData;
 	// ```
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	export let filteredData: { id: any; [key: string]: any }[];
-	export let tableHeader: { key: string; value: string }[];
-	export let tablePageSize = 10;
-
-	// For binding
-	export let searchQuery = '';
-	export let selectedComboboxValue: SelectedComboboxValueType = Object.fromEntries(
-		comboboxFilterList.map((group) => [group.key, undefined])
-	);
-	export let selectedCheckboxValue: SelectedCheckboxValueType = Object.fromEntries(
-		checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
-	);
-	export let downloadSize: 'sm' | 'lg' | 'otherPossibleValue' = 'sm';
-	export let downloadLinks: ComponentProps<LinkTable>['links'] = [];
 
 	// Reactive
-	let tableCurrentPage = 1;
+	let tableCurrentPage = $state(1);
 
 	const filterTickAll = (value = true) => {
 		selectedComboboxValue = Object.fromEntries(
@@ -111,18 +89,9 @@
 		}
 	};
 
-	$: checkboxFilterListCount = Object.values(checkboxFilterList).flatMap(
-		({ choices }) => choices
-	).length;
-
-	$: isFilterNotDefault =
-		searchQuery ||
-		Object.values(selectedCheckboxValue).flat().length < checkboxFilterListCount ||
-		Object.values(selectedComboboxValue).some((e) => e !== undefined);
-
-	let comboboxInternal: Record<string, string> = {};
-	let showFilter = true;
-	let isMobile = false;
+	let comboboxInternal: Record<string, string> = $state({});
+	let showFilter = $state(true);
+	let isMobile = $state(false);
 
 	onMount(() => {
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
@@ -130,14 +99,14 @@
 	});
 
 	let previousFromTop = 0;
-	let showHeader = true;
+	let showHeader = $state(true);
 	function scrollEventHandler() {
 		const currentFromTop = window.scrollY;
 		showHeader = currentFromTop <= previousFromTop;
 		previousFromTop = currentFromTop;
 	}
 
-	let renderCombobox = true;
+	let renderCombobox = $state(true);
 	export const setCombobox = (key: string, value: string) => {
 		comboboxInternal[key] = value;
 
@@ -149,10 +118,64 @@
 		});
 	};
 
-	export let unit = 'มติ';
+	interface Props {
+		// Just props
+		breadcrumbList: {
+			label: string;
+			url?: string;
+		}[];
+		searchPlaceholder?: string;
+		comboboxFilterList?: ComboboxFilterGroup[];
+		checkboxFilterList: CheckboxFilterGroup[];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		filteredData: { id: any; [key: string]: any }[];
+		tableHeader: { key: string; value: string }[];
+		tablePageSize?: number;
+		// For binding
+		searchQuery?: string;
+		selectedComboboxValue?: SelectedComboboxValueType;
+		selectedCheckboxValue?: SelectedCheckboxValueType;
+		downloadSize?: 'sm' | 'lg' | 'otherPossibleValue';
+		downloadLinks?: ComponentProps<typeof LinkTable>['links'];
+		unit?: string;
+		children?: import('svelte').Snippet;
+		table?: import('svelte').Snippet<[{ cellKey: string; cellValue: unknown }]>;
+	}
+
+	let {
+		breadcrumbList,
+		searchPlaceholder = 'ชื่อมติ หรือ คำที่เกี่ยวข้อง',
+		comboboxFilterList = [],
+		checkboxFilterList,
+		filteredData,
+		tableHeader,
+		tablePageSize = 10,
+		searchQuery = $bindable(''),
+		selectedComboboxValue = $bindable(
+			Object.fromEntries(comboboxFilterList.map((group) => [group.key, undefined]))
+		),
+		selectedCheckboxValue = $bindable(
+			Object.fromEntries(
+				checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
+			)
+		),
+		downloadSize = 'sm',
+		downloadLinks = [],
+		unit = 'มติ',
+		children,
+		table
+	}: Props = $props();
+	let checkboxFilterListCount = $derived(
+		Object.values(checkboxFilterList).flatMap(({ choices }) => choices).length
+	);
+	let isFilterNotDefault = $derived(
+		searchQuery ||
+			Object.values(selectedCheckboxValue).flat().length < checkboxFilterListCount ||
+			Object.values(selectedComboboxValue).some((e) => e !== undefined)
+	);
 </script>
 
-<svelte:window on:scroll|passive={scrollEventHandler} />
+<svelte:window use:passive={['scroll', () => scrollEventHandler]} />
 
 <div class="flex min-h-screen flex-col">
 	<Breadcrumb
@@ -181,7 +204,7 @@
 	<header class="bg-ui-01 px-4 py-3 md:px-16">
 		<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 			<div class="flex-1">
-				<slot />
+				{@render children?.()}
 			</div>
 			<div class="p-3 {downloadSize === 'lg' ? 'md:w-[224px]' : 'md:w-auto'}">
 				<LinkTable links={downloadLinks} />
@@ -220,7 +243,7 @@
 					{#each comboboxFilterList as optionGroup (optionGroup.key)}
 						<div class="mb-8">
 							<ComboBox
-								titleText={optionGroup.legend}
+								labelText={optionGroup.legend}
 								placeholder={optionGroup.placeholder}
 								on:select={(e) => (selectedComboboxValue[optionGroup.key] = e.detail.selectedId)}
 								on:clear={() => (selectedComboboxValue[optionGroup.key] = undefined)}
@@ -228,18 +251,19 @@
 								disabled={!renderCombobox}
 								selectedId={comboboxInternal[optionGroup.key]}
 								{shouldFilterItem}
-								let:item
 							>
-								<div class="flex">
-									{#if hasImageSrc(item)}
-										<img
-											src={item.imageSrc}
-											alt={item.text}
-											style="width: 16px; height: 16px; border-radius: 50%; margin-right: 8px;"
-										/>
-									{/if}
-									{item.text}
-								</div>
+								{#snippet children({ item })}
+									<div class="flex">
+										{#if hasImageSrc(item)}
+											<img
+												src={item.imageSrc}
+												alt={item.text}
+												style="width: 16px; height: 16px; border-radius: 50%; margin-right: 8px;"
+											/>
+										{/if}
+										{item.text}
+									</div>
+								{/snippet}
 							</ComboBox>
 						</div>
 					{/each}
@@ -288,16 +312,16 @@
 					pageSize={tablePageSize}
 					page={tableCurrentPage}
 				>
-					<svelte:fragment slot="cell-header" let:header>
+					{#snippet cellHeader({ header })}
 						{#if header.key === 'files'}
 							<span>เอก<br class="md:hidden" />สาร</span>
 						{:else}
 							{header.value}
 						{/if}
-					</svelte:fragment>
-					<svelte:fragment slot="cell" let:cell let:row>
-						<slot name="table" cellKey={cell.key} cellValue={cell.value} {row} />
-					</svelte:fragment>
+					{/snippet}
+					{#snippet cell({ cell, row })}
+						{@render table?.({ cellKey: cell.key, cellValue: cell.value, row })}
+					{/snippet}
 				</DataTable>
 			</div>
 			{#if filteredData.length === 0}
@@ -307,7 +331,7 @@
 					ไม่พบข้อมูลที่ค้นหา
 				</div>
 			{/if}
-			<div class="flex-1" />
+			<div class="flex-1"></div>
 			<div class="sticky bottom-0">
 				{#if !showFilter}
 					<Button

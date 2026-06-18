@@ -1,20 +1,20 @@
 <script lang="ts">
-	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
-	import Collapsible from '$components/LegislativeProcess/Collapsible.svelte';
-	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
-	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
-	import VotingProcessImageCircle from '$components/LegislativeProcess/VotingProcessImageCircle.svelte';
 	import ComparisonTable from '$components/ComparisonTable/ComparisonTable.svelte';
+	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
+	import Collapsible from '$components/LegislativeProcess/Collapsible.svelte';
 	import ProcessCard from '$components/LegislativeProcess/ProcessCard.svelte';
 	import ProcessCardArrow from '$components/LegislativeProcess/ProcessCardArrow.svelte';
-	import BillStatusCard from '$components/LegislativeProcess/BillStatusCard.svelte';
-	import { onMount } from 'svelte';
-	import scrollama from 'scrollama';
-	import { enumBillStatus } from '$lib/politigraph/genql/schema.js';
+	import Sidebar from '$components/LegislativeProcess/Sidebar.svelte';
+	import VotingProcessImageCircle from '$components/LegislativeProcess/VotingProcessImageCircle.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { formatThaiDate } from '$lib/date.js';
+	import { enumBillStatus } from '$lib/politigraph/genql/schema.js';
+	import { DefaultVoteOption, DefaultVotingResult } from '$models/voting';
+	import scrollama from 'scrollama';
+	import { onMount } from 'svelte';
 
-	export let data;
+	let { data } = $props();
 
 	const sections = [
 		{
@@ -133,9 +133,10 @@
 		}
 	];
 
-	let bodyContainer: HTMLElement;
-	let currentNavElementId: string;
+	let bodyContainer: HTMLElement | undefined = $state();
+	let currentNavElementId = $state('');
 	onMount(() => {
+		if (!bodyContainer) return;
 		if (window.matchMedia('(min-width: 672px)').matches) {
 			const scroller = scrollama();
 
@@ -358,7 +359,7 @@
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-02">ร่างกฎหมายจะถูกนำไปพิจารณาวาระที่สอง</p>
 								</div>
-								<div class="vertical-gray-line" />
+								<div class="vertical-gray-line"></div>
 								<div class="w-full pl-2">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<p class="body-02">ร่างกฎหมายนั้นก็จะตกไปและไม่ถูกพิจารณาต่อ</p>
@@ -411,7 +412,7 @@
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-02">นำไปสู่การพิจารณาของ สว.</p>
 								</div>
-								<div class="vertical-gray-line" />
+								<div class="vertical-gray-line"></div>
 								<div class="w-full pl-2">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<p class="body-02">ร่างกฎหมายนั้นเป็นอันตกไป</p>
@@ -447,7 +448,7 @@
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-01">เตรียมนำร่างกฎหมายฯ <br /> เข้าสู่ขั้นตอนประกาศใช้</p>
 								</div>
-								<div class="vertical-gray-line" />
+								<div class="vertical-gray-line"></div>
 								<div class="w-full pt-2 md:w-4/12 md:px-2 md:pt-0">
 									<h5 class="heading-01">แก้ไขเพิ่มเติม</h5>
 									<p class="label-01 mb-2 mt-2 text-gray-60">
@@ -470,7 +471,7 @@
 										</li>
 									</ul>
 								</div>
-								<div class="vertical-gray-line" />
+								<div class="vertical-gray-line"></div>
 								<div class="w-full pt-2 md:w-4/12 md:px-2 md:pt-0">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<ul>
@@ -502,12 +503,12 @@
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
 									<p class="body-01">ถ้าไม่มีข้อความที่ขัดต่อรัฐธรรมนูญ</p>
 								</div>
-								<div class="vertical-gray-line" />
+								<div class="vertical-gray-line"></div>
 								<div class="w-full pt-2 md:w-4/12 md:pt-0">
 									<h5 class="heading-01 mb-2">แก้ไขเพิ่มเติม</h5>
 									<p class="body-01">ถ้ามีข้อความที่ขัดต่อรัฐธรรมนูญ</p>
 								</div>
-								<div class="vertical-gray-line" />
+								<div class="vertical-gray-line"></div>
 								<div class="w-full pt-2 md:w-4/12 md:pt-0">
 									<VotingResultTag class="m-0" result={DefaultVotingResult.Failed} />
 									<p class="body-01">ถ้ามีข้อความที่ขัดต่อรัฐธรรมนูญและเป็นสาระสำคัญของร่าง</p>
@@ -763,7 +764,7 @@
 						</p>
 						<div class="flex gap-2">
 							<div class="flex basis-2/5 flex-col gap-2">
-								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Novote} />
+								<VotingOptionTag class="w-fit" voteOption={DefaultVoteOption.Novote} />
 								<ul>
 									<li class="list-inside list-disc">สมาชิกอยู่ในองค์ประชุม แต่ไม่ลงมติ</li>
 									<li class="list-inside list-disc">
@@ -772,7 +773,7 @@
 								</ul>
 							</div>
 							<div class="flex basis-3/5 flex-col gap-2">
-								<VotingOptionTag class={'w-fit'} voteOption={DefaultVoteOption.Absent} />
+								<VotingOptionTag class="w-fit" voteOption={DefaultVoteOption.Absent} />
 								<ul>
 									<li class="list-inside list-disc">สมาชิกไม่ได้เข้าประชุม</li>
 									<li class="list-inside list-disc">จะไม่ถูกนับเป็นองค์ประชุม</li>
@@ -798,7 +799,7 @@
 							<strong>การลงมติในรูปแบบอื่นๆ ที่ต้องให้ความเห็นชอบบุคคล</strong> หากมีผู้ถูกเสนอชื่อมากกว่า
 							2 คนขึ้นไป เช่น มติการเลือกนายกรัฐมนตรี มติเลือกประธาน / รองประธานสภาฯ จะมีผลการลงมติเป็นการรับรองผู้ที่ได้รับการโหวตมากที่สุด
 						</p>
-						<VotingResultTag result={'บุคคลที่ได้รับการโหวตมากที่สุด'} class={'w-fit'} isLarge />
+						<VotingResultTag result="บุคคลที่ได้รับการโหวตมากที่สุด" class="w-fit" isLarge />
 					</div>
 				</div>
 			</section>
@@ -862,7 +863,7 @@
 				</div>
 			</section>
 		</div>
-		<div class="w-[250px]" />
+		<div class="w-[250px]"></div>
 	</main>
 </div>
 

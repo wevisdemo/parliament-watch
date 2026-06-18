@@ -1,5 +1,14 @@
 <script>
 	import { slide } from 'svelte/transition';
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('svelte').Snippet} [leading]
+	 * @property {import('svelte').Snippet} [menu]
+	 * @property {import('svelte').Snippet} [trailing]
+	 */
+
+	/** @type {Props} */
+	let { leading, menu, trailing } = $props();
 </script>
 
 <nav
@@ -7,12 +16,12 @@
 	transition:slide={{ duration: 350, axis: 'y' }}
 >
 	<div class="flex">
-		<slot name="leading" />
+		{@render leading?.()}
 	</div>
 	<div class="h-full">
-		<slot name="menu" />
+		{@render menu?.()}
 	</div>
 	<div class="ml-auto h-full">
-		<slot name="trailing" />
+		{@render trailing?.()}
 	</div>
 </nav>

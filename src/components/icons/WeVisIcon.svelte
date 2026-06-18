@@ -1,8 +1,10 @@
 <script>
 	import BaseSvg from './BaseSvg.svelte';
+	/** @type {{ [key: string]: any }} */
+	let { ...rest } = $props();
 </script>
 
-<BaseSvg {...$$restProps}>
+<BaseSvg {...rest}>
 	<g clip-path="url(#clip0_2129_157)">
 		<g clip-path="url(#clip1_2129_157)">
 			<path

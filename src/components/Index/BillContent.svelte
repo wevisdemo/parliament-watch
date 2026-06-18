@@ -1,32 +1,36 @@
 <script lang="ts">
 	import BillCard from '$components/BillCard/BillCard.svelte';
 	import LawStatusCard from '$components/LawStatusCard/LawStatusCard.svelte';
-	import { ArrowRight, Close } from 'carbon-icons-svelte';
-	import Carousel from './Carousel.svelte';
-	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import { onMount } from 'svelte';
 	import { billStatusList } from '$lib/politigraph/bill/status';
 	import { ALL_CATEGORY_KEY } from '../../constants/bills';
 	import type { BillOverviewData } from '../../routes/files/bills-overview/[repId]/[category].json/+server';
+	import Carousel from './Carousel.svelte';
+	import { Button, InlineLoading } from 'carbon-components-svelte';
+	import { ArrowRight, Close } from 'carbon-icons-svelte';
+	import { onMount } from 'svelte';
 
-	export let billCategories: string[] = [];
-	export let mpTermChoices: {
-		id: string;
-		value: string;
-		founding_date?: string;
-		dissolution_date?: string;
-	}[] = [];
+	interface Props {
+		billCategories?: string[];
+		mpTermChoices?: {
+			id: string;
+			value: string;
+			founding_date?: string;
+			dissolution_date?: string;
+		}[];
+	}
 
-	let selectedCategory = ALL_CATEGORY_KEY;
-	let selectedMpTermId = mpTermChoices[0].id ?? '';
+	let { billCategories = [], mpTermChoices = [] }: Props = $props();
 
-	let isLoading = true;
-	let carousalKey = '';
-	let billOverview: BillOverviewData = {
+	let selectedCategory = $state(ALL_CATEGORY_KEY);
+	let selectedMpTermId = $state(mpTermChoices[0].id ?? '');
+
+	let isLoading = $state(true);
+	let carousalKey = $state('');
+	let billOverview: BillOverviewData = $state({
 		billSummaryByStatuses: [],
 		lastEnactedBills: [],
 		lastEnactedBillProposers: []
-	};
+	});
 
 	onMount(() => {
 		loadBillOverviewData();
@@ -62,12 +66,15 @@
 		}
 	}
 
-	$: hasPreviousMpTerm =
-		mpTermChoices[mpTermChoices.findIndex((mpterm) => mpterm.id === selectedMpTermId) + 1] != null;
+	let hasPreviousMpTerm = $derived(
+		mpTermChoices[mpTermChoices.findIndex((mpterm) => mpterm.id === selectedMpTermId) + 1] != null
+	);
 
-	$: totalCount = billOverview.billSummaryByStatuses.reduce(
-		(sum, byStatus) => sum + byStatus.billsConnection.totalCount,
-		0
+	let totalCount = $derived(
+		billOverview.billSummaryByStatuses.reduce(
+			(sum, byStatus) => sum + byStatus.billsConnection.totalCount,
+			0
+		)
 	);
 </script>
 
@@ -89,7 +96,7 @@
 							selectedCategory
 								? 'bg-gray-80 text-white'
 								: 'text-gray-80 hover:bg-gray-20'}"
-							on:click={() => selectCategory(category)}
+							onclick={() => selectCategory(category)}
 						>
 							{category}
 						</button>
@@ -108,7 +115,7 @@
 							selectedMpTermId
 								? 'bg-gray-80 text-white'
 								: 'text-gray-80 hover:bg-gray-20'}"
-							on:click={() => selectMpTerm(mpterm.id)}
+							onclick={() => selectMpTerm(mpterm.id)}
 						>
 							{mpterm.value}
 						</button>
@@ -174,7 +181,7 @@
 						class="helper-text-02 flex flex-row items-center rounded-full border py-1 pl-3 pr-2 text-gray-80"
 					>
 						{selectedCategory}
-						<button class="hover:text-gray-60" on:click={() => selectCategory(ALL_CATEGORY_KEY)}
+						<button class="hover:text-gray-60" onclick={() => selectCategory(ALL_CATEGORY_KEY)}
 							><Close /></button
 						>
 					</div>

@@ -1,25 +1,34 @@
 <script lang="ts">
-	import { cubicOut } from 'svelte/easing';
-	import { tweened } from 'svelte/motion';
 	import { arc as d3Arc } from 'd3';
+	import { cubicOut } from 'svelte/easing';
+	import { run } from 'svelte/legacy';
+	import { tweened } from 'svelte/motion';
 
-	export let percent = 0;
-	export let color = '#3904E9';
-	export let width = 144;
-	export let height = 72;
+	interface Props {
+		percent?: number;
+		color?: string;
+		width?: number;
+		height?: number;
+	}
+
+	let { percent = 0, color = '#3904E9', width = 144, height = 72 }: Props = $props();
 
 	const animatedPercent = tweened(0, {
 		duration: 1000,
 		easing: cubicOut
 	});
 
-	$: arc = d3Arc<unknown, void>()
-		.innerRadius(height / 2)
-		.outerRadius(height)
-		.startAngle(-Math.PI / 2);
+	let arc = $derived(
+		d3Arc<unknown, void>()
+			.innerRadius(height / 2)
+			.outerRadius(height)
+			.startAngle(-Math.PI / 2)
+	);
 
-	$: roundedPercent = Math.round(percent);
-	$: animatedPercent.set(roundedPercent);
+	let roundedPercent = $derived(Math.round(percent));
+	run(() => {
+		animatedPercent.set(roundedPercent);
+	});
 </script>
 
 <svg {width} {height} viewBox="0 0 {width} {height}" aria-hidden="true">

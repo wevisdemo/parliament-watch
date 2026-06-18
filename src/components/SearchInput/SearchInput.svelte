@@ -1,23 +1,38 @@
 <script lang="ts">
+	import { search } from '$lib/search';
 	import { type SearchIndexes, type SearchResults, SearchIndexCategory } from '$models/search';
 	import { TextInput } from 'carbon-components-svelte';
-	import { search } from '$lib/search';
-	import type { ComponentType, SvelteComponent } from 'svelte';
+	import type { ComponentType } from 'svelte';
+	import { run } from 'svelte/legacy';
 
-	export let categories: SearchIndexCategory[] = Object.values(SearchIndexCategory);
-	export let searchResults: SearchResults | null;
-	export let searchValue: string | null = '';
-	export let ref: HTMLInputElement | null = null;
-	export let as: ComponentType<SvelteComponent> = TextInput;
-
-	let searchIndexes: SearchIndexes | null = null;
-
-	$: if (searchIndexes && searchValue?.trim()) {
-		searchResults = search(searchValue.trim(), searchIndexes);
-	} else {
-		searchResults = null;
-		searchValue = '';
+	interface Props {
+		categories?: SearchIndexCategory[];
+		searchResults: SearchResults | null;
+		searchValue?: string | null;
+		ref?: HTMLInputElement | null;
+		as?: ComponentType<Record<string, unknown>>;
+		[key: string]: unknown;
 	}
+
+	let {
+		categories = Object.values(SearchIndexCategory),
+		searchResults = $bindable(),
+		searchValue = $bindable(''),
+		ref = $bindable(null),
+		as = TextInput,
+		...rest
+	}: Props = $props();
+
+	let searchIndexes: SearchIndexes | null = $state(null);
+
+	run(() => {
+		if (searchIndexes && searchValue?.trim()) {
+			searchResults = search(searchValue.trim(), searchIndexes);
+		} else {
+			searchResults = null;
+			searchValue = '';
+		}
+	});
 
 	async function fetchIndexes() {
 		if (!searchIndexes) {
@@ -33,18 +48,19 @@
 			);
 		}
 	}
+
+	const SvelteComponent_1 = $derived(as);
 </script>
 
-<svelte:component
-	this={as}
+<SvelteComponent_1
 	bind:ref
 	bind:value={searchValue}
-	on:focus={fetchIndexes}
-	{...$$restProps}
-	on:change
-	on:input
-	on:keydown
-	on:keyup
-	on:blur
-	on:paste
+	onfocus={fetchIndexes}
+	{...rest}
+	onchange
+	oninput
+	onkeydown
+	onkeyup
+	onblur
+	onpaste
 />
