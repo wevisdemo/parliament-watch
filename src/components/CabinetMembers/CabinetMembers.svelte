@@ -54,7 +54,7 @@
 		<div class="flex flex-col items-center gap-[8px] md:gap-[16px]">
 			<p class="fluid-heading-03">รองนายกรัฐมนตรี</p>
 			<div class="flex flex-wrap justify-evenly gap-[2px]">
-				{#each deputyPrimeMinisterGroup as { profile }}
+				{#each deputyPrimeMinisterGroup as { profile } (profile.id)}
 					<CabinetProfile {...profile} />
 				{/each}
 			</div>
@@ -62,7 +62,7 @@
 		<div class="flex w-full flex-col items-center">
 			<p class="fluid-heading-03">รัฐมนตรีและรัฐมนตรีช่วยว่าการ</p>
 			<div class="mt-[16px] grid w-full grid-cols-1 gap-[16px] md:grid-cols-2 lg:grid-cols-3">
-				{#each ministryGroup as ministry}
+				{#each ministryGroup as ministry (ministry.name)}
 					<MinistryGroup title={ministry.name} members={ministry.members} />
 				{/each}
 			</div>

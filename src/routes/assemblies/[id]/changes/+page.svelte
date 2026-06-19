@@ -149,7 +149,7 @@
 		</button>
 	</div>
 	<div class="flex w-full lg:w-fit">
-		{#each tabs as tab}
+		{#each tabs as tab (tab.id)}
 			<button
 				class="heading-compact-01 w-full p-[16px] lg:w-fit {curIndexTab === tab.id
 					? 'border-t-2 border-t-interactive-01 bg-ui-background'

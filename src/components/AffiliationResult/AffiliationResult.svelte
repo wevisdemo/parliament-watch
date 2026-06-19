@@ -63,9 +63,9 @@
 		groups(
 			parties.flatMap((p) => p.options),
 			(v) => v.name
-		).map(([name, votes]) => ({
-			name,
-			count: votes.reduce((sum, { count }) => sum + count, 0)
+		).map(([optionName, votes]) => ({
+			name: optionName,
+			count: votes.reduce((sum, { count: optionCount }) => sum + optionCount, 0)
 		}))
 	);
 

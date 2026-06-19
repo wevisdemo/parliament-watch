@@ -40,7 +40,7 @@
 </script>
 
 <Hst.Story title="ResultItem" layout={{ type: 'grid', width: '350px' }}>
-	{#each resultItems as { title, item }}
+	{#each resultItems as { title, item } (title)}
 		<Hst.Variant {title}>
 			<ResultItem {item} />
 		</Hst.Variant>

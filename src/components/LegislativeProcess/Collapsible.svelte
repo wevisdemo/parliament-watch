@@ -40,7 +40,7 @@
 			<p>{details}</p>
 			<div class="flex flex-row items-center gap-1">
 				<strong class="mr-1 shrink-0 text-sm">เสนอโดย</strong>
-				{#each presentedBy as presenter}
+				{#each presentedBy as presenter (presenter)}
 					<div
 						class="flex flex-row items-baseline after:ml-1 after:content-['/'] last:after:content-none"
 					>
@@ -75,7 +75,7 @@
 				</div>
 				<div class="flex flex-col gap-y-2">
 					<strong>เริ่มต้น</strong>
-					{#each steps as step}
+					{#each steps as step (step)}
 						<div class="flex flex-row items-center gap-1">
 							<CheckmarkFilled size={24} class="fill-green-70" />
 							<hr class="width w-3 border-[1px]" />
@@ -91,7 +91,7 @@
 				<div class="flex flex-col gap-1">
 					<h4 class="font-semibold">ตัวอย่าง</h4>
 					<ul class="list-inside list-disc leading-tight">
-						{#each examples as example}
+						{#each examples as example (example.link)}
 							<li class="whitespace-nowrap">
 								<Link on:click={(event) => event.stopPropagation()} inline href={example.link}>
 									{example.description}

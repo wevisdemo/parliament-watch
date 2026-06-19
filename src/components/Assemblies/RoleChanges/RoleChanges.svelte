@@ -25,7 +25,7 @@
 </script>
 
 <div>
-	{#each convertAndSortChangeData as roleChanges}
+	{#each convertAndSortChangeData as roleChanges (roleChanges.time)}
 		{#if roleChanges}
 			<RoleChangeGroup changeData={roleChanges.value} {selectedDate} />
 		{/if}

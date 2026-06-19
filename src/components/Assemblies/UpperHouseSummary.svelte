@@ -13,7 +13,7 @@
 </script>
 
 <div class="flex flex-col gap-3">
-	{#each memberGroups as group}
+	{#each memberGroups as group (group.name)}
 		<div>
 			<div class="body-compact-01">
 				<span class="font-bold">{group.name}</span>

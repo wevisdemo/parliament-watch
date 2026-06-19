@@ -37,7 +37,7 @@
 		class="border-[1px] border-t-0
 		{isFocus ? ' border-interactive-02' : ' border-interactive-02/0'}"
 	>
-		{#each changeData as roleChangeData}
+		{#each changeData as roleChangeData (roleChangeData.politician.id)}
 			<RoleChangeItem
 				type={roleChangeData.type}
 				role={roleChangeData.role}

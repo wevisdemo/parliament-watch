@@ -12,7 +12,7 @@
 </script>
 
 <ul>
-	{#each menuList as menu}
+	{#each menuList as menu (menu.label)}
 		<li>
 			{#if menu.type === 'link' || menu.type === 'both'}
 				<SideMenuLink linkMenu={menu} />

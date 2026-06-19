@@ -29,8 +29,8 @@
 <div class="role">
 	<p class="heading-compact-01">{role}</p>
 	<div class="group-dot">
-		{#each cabinets.find((c) => role === c.role)?.parties || [] as party}
-			{#each party?.members ?? [] as member}
+		{#each cabinets.find((c) => role === c.role)?.parties || [] as party (party.name)}
+			{#each party?.members ?? [] as member (member.id)}
 				<div
 					role="tooltip"
 					class="dot"

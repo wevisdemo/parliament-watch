@@ -18,7 +18,7 @@
 	</div>
 	<div class="w-full border-b-[1px] border-solid border-gray-20"></div>
 	<div class="mt-[16px] flex flex-wrap justify-center gap-[8px] md:justify-start">
-		{#each votes as vote}
+		{#each votes as vote (vote.id)}
 			<VoteCard {...vote} />
 		{/each}
 		<a
