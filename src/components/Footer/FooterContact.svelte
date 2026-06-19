@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Email from 'carbon-icons-svelte/lib/Email.svelte';
-	import GithubIcon from '$components/icons/GithubIcon.svelte';
 	import FacebookIcon from '$components/icons/FacebookIcon.svelte';
+	import GithubIcon from '$components/icons/GithubIcon.svelte';
 	import InstagramIcon from '$components/icons/InstagramIcon.svelte';
 	import XIcon from '$components/icons/XIcon.svelte';
+	import Email from 'carbon-icons-svelte/lib/Email.svelte';
 </script>
 
 <div class="flex flex-col">

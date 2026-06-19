@@ -139,7 +139,11 @@
 		downloadLinks?: ComponentProps<typeof LinkTable>['links'];
 		unit?: string;
 		children?: import('svelte').Snippet;
-		table?: import('svelte').Snippet<[{ cellKey: string; cellValue: unknown }]>;
+		/* eslint-disable @typescript-eslint/no-explicit-any */
+		table?: import('svelte').Snippet<
+			[{ cellKey: string; cellValue: any; row: Record<string, any> }]
+		>;
+		/* eslint-enable @typescript-eslint/no-explicit-any */
 	}
 
 	let {

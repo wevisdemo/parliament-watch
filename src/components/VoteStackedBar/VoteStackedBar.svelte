@@ -23,10 +23,12 @@
 
 	let { segments = [], total = 0, class: className = '' }: Props = $props();
 
-	const accessibleLabel = segments
-		.filter((segment) => segment.count > 0)
-		.map((segment) => `${segment.label} ${numberFormatter.format(segment.percentage * 100)}%`)
-		.join(', ');
+	let accessibleLabel = $derived(
+		segments
+			.filter((segment) => segment.count > 0)
+			.map((segment) => `${segment.label} ${numberFormatter.format(segment.percentage * 100)}%`)
+			.join(', ')
+	);
 
 	const getColorClass = (option: string) => optionColorClass[option] ?? 'bg-purple-60';
 </script>

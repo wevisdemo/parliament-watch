@@ -2,7 +2,6 @@
 	import { search } from '$lib/search';
 	import { type SearchIndexes, type SearchResults, SearchIndexCategory } from '$models/search';
 	import { TextInput } from 'carbon-components-svelte';
-	import type { ComponentType } from 'svelte';
 	import { run } from 'svelte/legacy';
 
 	interface Props {
@@ -10,7 +9,9 @@
 		searchResults: SearchResults | null;
 		searchValue?: string | null;
 		ref?: HTMLInputElement | null;
-		as?: ComponentType<Record<string, unknown>>;
+		// Carbon components are typed as Svelte 4 classes; accept any component constructor
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		as?: any;
 		[key: string]: unknown;
 	}
 

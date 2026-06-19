@@ -14,9 +14,9 @@
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
-	const { politician, filterOptions, votes } = data;
+	let { politician, filterOptions, votes } = $derived(data);
 
-	const checkboxFilterList: CheckboxFilterGroup[] = [
+	let checkboxFilterList: CheckboxFilterGroup[] = $derived([
 		{
 			key: 'filterAssembly',
 			legend: 'สมัยการทำงาน',
@@ -33,7 +33,7 @@
 				value: type
 			}))
 		}
-	];
+	]);
 
 	let searchQuery = $state('');
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state({

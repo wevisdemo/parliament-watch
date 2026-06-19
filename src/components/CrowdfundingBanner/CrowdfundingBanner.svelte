@@ -69,7 +69,7 @@
 		{/if}
 		<div class={variantClasses.content[variant]}>
 			{#if variant === 'compact'}
-				<span class="banner-crowdfunding__emoji" aria-hidden>🥹</span>
+				<span class="banner-crowdfunding__emoji" aria-hidden="true">🥹</span>
 			{/if}
 			<div class={variantClasses.contentGroup[variant]}>
 				<div class={variantClasses.textContent[variant]}>

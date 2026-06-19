@@ -18,4 +18,6 @@ src/styles/carbon/pre-compiled.css
 # Generated GraphQL client
 src/lib/politigraph/genql
 
+.agents/skills
+
 LICENSE
