@@ -9,21 +9,25 @@
 
 	let { Hst }: { Hst: HstStory } = $props();
 
-	let data = Array(102).fill``.map((_, i) => ({
-		name: 'Alvin Kiev',
-		id: i,
-		type: ['A', 'B', 'C'][i % 3],
-		direction: i % 2 === 0
-	}));
+	let data = $state(
+		Array(102)
+			.fill('')
+			.map((_, i) => ({
+				name: 'Alvin Kiev',
+				id: i,
+				type: ['A', 'B', 'C'][i % 3],
+				direction: i % 2 === 0
+			}))
+	);
 	let breadcrumbList: {
 		label: string;
 		url: string;
-	}[] = [
+	}[] = $state([
 		{ url: '/', label: 'หน้าหลัก' },
 		{ url: '/votelog', label: 'ประวัติการลงมติ' }
-	];
-	let searchPlaceholder = 'ชื่อ-นามสกุล';
-	let comboboxFilterList: ComboboxFilterGroup[] = [
+	]);
+	let searchPlaceholder = $state('ชื่อ-นามสกุล');
+	let comboboxFilterList: ComboboxFilterGroup[] = $state([
 		{
 			key: 'filterComboboxType',
 			legend: 'กลุ่ม',
@@ -34,8 +38,8 @@
 				{ id: 'C', text: 'C' }
 			]
 		}
-	];
-	let checkboxFilterList: CheckboxFilterGroup[] = [
+	]);
+	let checkboxFilterList: CheckboxFilterGroup[] = $state([
 		{
 			key: 'filterVoteDirection',
 			legend: 'เงื่อนไขพิเศษ',
@@ -50,21 +54,19 @@
 				}
 			]
 		}
-	];
-	let tableHeader: { key: string; value: string }[] = [
+	]);
+	let tableHeader: { key: string; value: string }[] = $state([
 		{ key: 'name', value: 'ชื่อ' },
 		{ key: 'type', value: 'กลุ่ม' },
 		{ key: 'direction', value: 'ทิศทางการลงมติ' }
-	];
-	let tablePageSize = 10;
+	]);
+	let tablePageSize = $state(10);
 	let searchQuery = $state('');
-	let selectedCheckboxValue: SelectedCheckboxValueType = $state({} as SelectedCheckboxValueType);
-	let selectedComboboxValue: SelectedComboboxValueType = $state({} as SelectedComboboxValueType);
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state({});
+	let selectedComboboxValue: SelectedComboboxValueType = $state({});
 
 	let filteredData = $derived(
-		selectedCheckboxValue === undefined ||
-			selectedComboboxValue === undefined ||
-			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+		!selectedCheckboxValue.filterVoteDirection?.length || !selectedComboboxValue.filterComboboxType
 			? []
 			: data.filter(
 					(e) =>
@@ -74,7 +76,7 @@
 							: true)
 				)
 	);
-	let unit = 'มติ';
+	let unit = $state('มติ');
 </script>
 
 <Hst.Story title="DataPage" layout={{ type: 'single', iframe: true }}>
