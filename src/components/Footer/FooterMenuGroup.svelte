@@ -28,7 +28,7 @@
 		</div>
 	{/if}
 	<div class="flex flex-col">
-		{#each menuItems as menuItem}
+		{#each menuItems as menuItem (menuItem.label)}
 			<a href={menuItem.url} class="text-gray-30 no-underline hover:text-gray-10">
 				<div class="flex h-6 w-min flex-row items-center">
 					<span class="mr-2 whitespace-nowrap">{menuItem.label}</span>

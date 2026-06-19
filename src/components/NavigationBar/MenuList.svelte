@@ -14,7 +14,7 @@
 </script>
 
 <ul class={twMerge('flex items-center justify-start text-white', additionalClass)}>
-	{#each menuList as menu}
+	{#each menuList as menu (menu.label)}
 		{#if menu.type === 'link' || menu.type === 'both'}
 			<li class="w-full">
 				<MenuLink linkMenu={menu} />

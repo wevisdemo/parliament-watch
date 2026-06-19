@@ -22,7 +22,7 @@
 	</div>
 	<div class="w-full border-b-[1px] border-solid border-gray-20"></div>
 	<div class="mt-[16px] flex flex-wrap justify-center gap-[8px] md:justify-start">
-		{#each members as { assemblyRole, profile }}
+		{#each members as { assemblyRole, profile } (profile.id)}
 			<div class="w-[288px]">
 				<span class="heading-01">{assemblyRole}</span>
 				<PoliticianProfile {...profile} isLarge />

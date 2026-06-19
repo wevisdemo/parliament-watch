@@ -23,7 +23,7 @@
 	<div class="flex h-[34px] flex-none items-center bg-ui-01 px-[16px]">
 		<p class="heading-compact-01">{title}</p>
 	</div>
-	{#each minister as { profile }}
+	{#each minister as { profile } (profile.id)}
 		<div class="flex flex-col gap-[8px] px-[24px]">
 			<p class="heading-compact-01">รัฐมนตรี</p>
 			<div class="-mx-2">
@@ -34,7 +34,7 @@
 	{#if deputyMinister.length != 0}
 		<div class="flex flex-col px-[24px]">
 			<p class="heading-compact-01 mb-[8px]">รัฐมนตรีช่วยว่าการ</p>
-			{#each deputyMinister as { profile }}
+			{#each deputyMinister as { profile } (profile.id)}
 				<div class="-mx-2">
 					<PoliticianProfile {...profile} showAvatar={false} />
 				</div>

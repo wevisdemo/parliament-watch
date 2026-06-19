@@ -49,7 +49,7 @@
 
 <Hst.Story title="AnnouncementBar">
 	<Hst.Variant title="stacking">
-		{#each announcements as announcement}
+		{#each announcements as announcement, i (i)}
 			<AnnouncementBar {announcement} />
 		{/each}
 	</Hst.Variant>
