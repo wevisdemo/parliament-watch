@@ -28,11 +28,9 @@
 	},
 	"dependencies": {
 		"@genql/cli": "^6.3.3",
-		"@histoire/plugin-svelte": "^1.0.0-beta.1",
 		"@melt-ui/svelte": "^0.86.6",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.65.2",
-		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@wevisdemo/ui": "^7.0.2",
 		"autoprefixer": "^10.4.14",
 		"carbon-components": "^10.58.10",
@@ -42,7 +40,6 @@
 		"d3": "^7.8.5",
 		"dayjs": "^1.11.10",
 		"fastest-levenshtein": "^1.0.16",
-		"histoire": "^1.0.0-beta.1",
 		"keen-slider": "^6.8.6",
 		"pino": "^8.19.0",
 		"pino-pretty": "^10.3.1",
@@ -56,7 +53,6 @@
 		"tslib": "^2.4.1",
 		"tsx": "^4.7.0",
 		"typescript": "^5.0.0",
-		"vite": "^7.3.5",
 		"vite-plugin-devtools-json": "^1.0.0",
 		"vitest": "^4.1.9"
 	},
@@ -64,6 +60,8 @@
 		"@commitlint/cli": "^17.7.0",
 		"@commitlint/config-conventional": "^17.7.0",
 		"@eslint/js": "^8.57.1",
+		"@histoire/plugin-svelte": "https://pkg.pr.new/histoire-dev/histoire/@histoire/plugin-svelte@607e09e87a278ede3c5ce2f733c21c5f8e1545f9",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
 		"@types/d3": "^7.4.1",
 		"@types/md5": "^2.3.5",
@@ -75,6 +73,7 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^3.19.0",
 		"globals": "^17.6.0",
+		"histoire": "https://pkg.pr.new/histoire-dev/histoire/histoire@607e09e87a278ede3c5ce2f733c21c5f8e1545f9",
 		"husky": "^8.0.3",
 		"hygen": "^6.2.11",
 		"lint-staged": "^13.2.3",
@@ -83,7 +82,8 @@
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"svelte-check": "^4.6.0",
 		"svelte-eslint-parser": "^1.8.0",
-		"typescript-eslint": "^8.61.1"
+		"typescript-eslint": "^8.61.1",
+		"vite": "^8.0.16"
 	},
 	"packageManager": "pnpm@10.25.0"
 }

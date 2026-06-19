@@ -3,7 +3,7 @@
 	import Proposer, { type ProposerProps } from './Proposer.svelte';
 	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	let orientation: ProposerProps['orientation'] = 'landscape';
+	let orientation: ProposerProps['orientation'] = $state('landscape');
 
 	let { Hst }: { Hst: HstStory } = $props();
 </script>
