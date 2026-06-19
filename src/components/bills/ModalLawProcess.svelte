@@ -21,30 +21,30 @@
 <button
 	class={twMerge('helper-text-01 text-link-01 underline', className)}
 	{...$trigger}
-	use:$trigger
+	use:$trigger.action
 >
 	มีขั้นตอนอะไรบ้างกว่าจะผ่านกฎหมายสำเร็จ?
 </button>
 
-<div {...$portalled} use:$portalled>
+<div {...$portalled} use:$portalled.action>
 	{#if $open}
 		<div
 			{...$overlay}
-			use:$overlay
+			use:$overlay.action
 			class="fixed inset-0 z-40 bg-black/60"
 			transition:fade={{ duration: 240, easing: entranceExpressive }}
 		></div>
 		<div
 			{...$content}
-			use:$content
+			use:$content.action
 			class="fixed left-1/2 top-1/2 z-40 max-h-[620px] w-full
 			max-w-[380px] rounded-sm bg-white"
 			style="transform:translate(-50%,-50%)"
 			transition:fly={{ y: -24, duration: 240, easing: entranceExpressive }}
 		>
 			<div class="flex items-start justify-between gap-4 p-4">
-				<h2 {...$title} use:$title class="heading-03">ขั้นตอนการผ่านกฎหมาย</h2>
-				<button {...$close} use:$close><Close width="20" height="20" /></button>
+				<h2 {...$title} use:$title.action class="heading-03">ขั้นตอนการผ่านกฎหมาย</h2>
+				<button {...$close} use:$close.action><Close width="20" height="20" /></button>
 			</div>
 			<!-- TODO: write descriptive alt text -->
 			<img

@@ -29,7 +29,10 @@
 		class="fixed left-0 top-0 z-0 h-screen w-full overflow-hidden bg-white/50 backdrop-brightness-125"
 		class:hidden={!isActive}
 	>
-		<button class="h-screen w-screen cursor-default border-0 bg-white/0" onclick={backdropClick}
+		<button
+			class="h-screen w-screen cursor-default border-0 bg-white/0"
+			onclick={backdropClick}
+			aria-label="close menu"
 		></button>
 	</div>
 {/if}

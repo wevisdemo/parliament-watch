@@ -77,8 +77,6 @@
 		const rect = stickyElement.getBoundingClientRect();
 		isSticky = rect.top == 0 || (rect.top <= 48 && currentFromTop <= previousFromTop);
 	};
-
-	const SvelteComponent = $derived(tabs[curIndexTab].comp);
 </script>
 
 <svelte:window bind:innerWidth onscroll={scrollEventHandler} />
@@ -169,7 +167,11 @@
 		? 'py-[16px] md:py-[32px]'
 		: ''}"
 >
-	<SvelteComponent {...tabs[curIndexTab].props} />
+	{#if curIndexTab === 0}
+		<CabinetMembers members={membersAtSelectTime} />
+	{:else}
+		<RoleChanges {changes} {selectedDate} />
+	{/if}
 </div>
 
 <BackToTopButton margin={0} />

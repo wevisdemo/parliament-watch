@@ -32,7 +32,7 @@
 	 * - "warning" -- WarningAltFilled Icon
 	 * - "success" -- CheckmarkFilled Icon
 	 */
-	let iconType = announcement.iconType ?? 'info';
+	let iconType = $derived(announcement.iconType ?? 'info');
 	let isShown = $state(true);
 	let isScrollShown = $state(true);
 	let previousFromTop = 0;

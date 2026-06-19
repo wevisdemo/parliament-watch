@@ -22,7 +22,13 @@
 	let { billCategories = [], mpTermChoices = [] }: Props = $props();
 
 	let selectedCategory = $state(ALL_CATEGORY_KEY);
-	let selectedMpTermId = $state(mpTermChoices[0].id ?? '');
+	let selectedMpTermId = $state('');
+
+	$effect(() => {
+		if (selectedMpTermId === '' && mpTermChoices.length > 0) {
+			selectedMpTermId = mpTermChoices[0].id;
+		}
+	});
 
 	let isLoading = $state(true);
 	let carousalKey = $state('');
@@ -161,7 +167,7 @@
 			>
 				<p class="body-02 text-gray-60">ยังไม่มีข้อมูลใน สส. ชุดนี้</p>
 				{#if hasPreviousMpTerm}
-					<Button kind="ghost" size="small" on:click={selectPreviousMpTerm}>
+					<Button kind="ghost" size="small" onclick={selectPreviousMpTerm}>
 						ดูข้อมูลของ สส. ชุดก่อนหน้า
 					</Button>
 				{/if}

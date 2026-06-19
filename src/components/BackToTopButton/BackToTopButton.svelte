@@ -30,7 +30,7 @@
 
 	// '40' is default size of the button.
 	// So, we need to scale the icon according to the 'size' prop.
-	let scale = size / 40;
+	let scale = $derived(size / 40);
 
 	// (Default) minus value means the user has not scrolled yet.
 	// So, the button will be initially hide.
@@ -73,6 +73,7 @@
             --scale: {scale}"
 		onclick={onClick}
 		transition:fade
+		aria-label="back to top"
 	>
 		<div class="btn">
 			<svg

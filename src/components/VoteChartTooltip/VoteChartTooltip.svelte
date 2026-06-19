@@ -36,6 +36,7 @@
 	<button
 		type="button"
 		aria-describedby={id}
+		aria-label="{option} {value} คน"
 		class="bx--tooltip--a11y bx--tooltip__trigger bx--tooltip__trigger--definition bx--tooltip--top bx--tooltip--align-center w-full !rounded-sm !border-none"
 		class:bx--tooltip--hidden={!open}
 		class:bx--tooltip--visible={open}

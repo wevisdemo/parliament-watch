@@ -17,6 +17,7 @@
 
 <button
 	onclick={() => handleSelectDate(day.date)}
+	aria-label="select date"
 	class="flex items-center border-[0.4px] border-ui-01 bg-ui-02 hover:border-ui-03 hover:bg-ui-03
 				{isHorizontal ? 'h-full w-[8px] flex-col' : 'h-[8px]'}
         {isSameDate(day.date, selectedDate) ? 'border-ui-05 bg-ui-03' : ''}"
