@@ -16,6 +16,8 @@
 
 	let { data } = $props();
 
+	let { filterOptions, bills } = $derived(data);
+
 	interface Choice {
 		id: string;
 		text: string;
@@ -24,11 +26,23 @@
 
 	let searchQuery = $state('');
 	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
-	let selectedCheckboxValue: SelectedCheckboxValueType = $state({
-		filterTerm: [],
-		filterStatus: [],
-		filterCategory: [],
-		filterProposerType: []
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
+		(() => ({
+			filterTerm: filterOptions.representativeTerms.map((rep) => rep.value),
+			filterStatus: [...filterOptions.statuses],
+			filterCategory: [...filterOptions.categories],
+			filterProposerType: [...filterOptions.proposerTypes]
+		}))()
+	);
+
+	$effect(() => {
+		const defaultValue = {
+			filterTerm: filterOptions.representativeTerms.map((rep) => rep.value),
+			filterStatus: [...filterOptions.statuses],
+			filterCategory: [...filterOptions.categories],
+			filterProposerType: [...filterOptions.proposerTypes]
+		};
+		selectedCheckboxValue = defaultValue;
 	});
 
 	onMount(() => {
@@ -64,7 +78,6 @@
 			cmpDataPage.setCombobox('filterPartyName', partyParam);
 		}
 	});
-	let { filterOptions, bills } = $derived(data);
 	let getProposerName = $derived((): Choice[] => {
 		const peopleOptions = filterOptions.proposerPeople.map((name) => ({
 			id: name,

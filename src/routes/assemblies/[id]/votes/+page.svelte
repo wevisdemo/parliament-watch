@@ -22,7 +22,18 @@
 	]);
 
 	let searchQuery = $state('');
-	let selectedCheckboxValue: SelectedCheckboxValueType = $state({ filterResult: [] });
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
+		(() => ({
+			filterResult: [...filterOptions.result]
+		}))()
+	);
+
+	$effect(() => {
+		const defaultValue = {
+			filterResult: [...filterOptions.result]
+		};
+		selectedCheckboxValue = defaultValue;
+	});
 
 	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
