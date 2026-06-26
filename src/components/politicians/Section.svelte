@@ -13,7 +13,6 @@
 <section
 	{id}
 	class="politician-section body-02 flex w-full scroll-mt-4 flex-col gap-4 rounded-sm bg-white p-4 md:scroll-mt-8 md:p-8"
-	class:items-center={!headerExtension}
 >
 	<header class="flex gap-2">
 		{@render icon?.()}
