@@ -11,7 +11,6 @@
 	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
 	import { formatThaiDate, formatYearRange } from '$lib/date.js';
 	import { DefaultVoteOption } from '$models/voting.js';
-	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	let { politician, filterOptions, votes } = $derived(data);
@@ -36,9 +35,28 @@
 	]);
 
 	let searchQuery = $state('');
-	let selectedCheckboxValue: SelectedCheckboxValueType = $state({
-		filterAssembly: [],
-		filterVoteType: []
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
+		(() => ({
+			filterAssembly: filterOptions.assemblies.map((assembly) => assembly.id),
+			filterVoteType: [...filterOptions.voteOptions]
+		}))()
+	);
+
+	$effect(() => {
+		const voteTypeParam = page.url.searchParams.get('votetype');
+		const filterVoteType =
+			voteTypeParam === 'agreed'
+				? [DefaultVoteOption.Agreed]
+				: voteTypeParam === 'disagreed'
+					? [DefaultVoteOption.Disagreed]
+					: voteTypeParam === 'absent'
+						? [DefaultVoteOption.Absent]
+						: [...filterOptions.voteOptions];
+
+		selectedCheckboxValue = {
+			filterAssembly: filterOptions.assemblies.map((assembly) => assembly.id),
+			filterVoteType
+		};
 	});
 
 	let filteredData = $derived(
@@ -67,20 +85,6 @@
 						links
 					}))
 	);
-
-	onMount(() => {
-		switch (page.url.searchParams.get('votetype')) {
-			case 'agreed':
-				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Agreed];
-				break;
-			case 'disagreed':
-				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Disagreed];
-				break;
-			case 'absent':
-				selectedCheckboxValue.filterVoteType = [DefaultVoteOption.Absent];
-				break;
-		}
-	});
 </script>
 
 <DataPage

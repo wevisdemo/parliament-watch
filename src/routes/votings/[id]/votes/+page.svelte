@@ -9,16 +9,27 @@
 
 	let { data } = $props();
 
+	let { voteEvent, filterOptions, customVoteOptions, votes } = $derived(data);
+
 	let searchQuery = $state('');
-	let selectedCheckboxValue: SelectedCheckboxValueType = $state({
-		filterVoteType: [],
-		filterPosition: []
-	});
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
+		(() => ({
+			filterVoteType: [...filterOptions.voteOptions],
+			filterPosition: [...filterOptions.roles]
+		}))()
+	);
 	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
+
+	$effect(() => {
+		const defaultValue = {
+			filterVoteType: [...filterOptions.voteOptions],
+			filterPosition: [...filterOptions.roles]
+		};
+		selectedCheckboxValue = defaultValue;
+	});
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
-	let { voteEvent, filterOptions, customVoteOptions, votes } = $derived(data);
 	let comboboxFilterList = $derived([
 		{
 			key: 'filterComboboxType',
