@@ -53,15 +53,4 @@
 	const SvelteComponent_1 = $derived(as);
 </script>
 
-<SvelteComponent_1
-	bind:ref
-	bind:value={searchValue}
-	onfocus={fetchIndexes}
-	{...rest}
-	onchange
-	oninput
-	onkeydown
-	onkeyup
-	onblur
-	onpaste
-/>
+<SvelteComponent_1 bind:ref bind:value={searchValue} onfocus={fetchIndexes} {...rest} />

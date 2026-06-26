@@ -12,7 +12,7 @@
 </script>
 
 <span class={twMerge('highlighted-text', textClass)}>
-	{#each textList as text (text.text)}
+	{#each textList as text, idx (idx)}
 		{#if text.highlight}
 			<span class={textHighlightClass}>{text.text}</span>
 		{:else}
