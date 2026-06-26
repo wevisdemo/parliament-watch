@@ -18,7 +18,7 @@
 	}
 
 	let { activeSearch = $bindable(false), searchResults = $bindable(null) }: Props = $props();
-	let searchInput: HTMLInputElement | undefined = $state();
+	let searchInput: HTMLInputElement | null = $state(null);
 	let searchValue = $state('');
 	let elContainer: HTMLDivElement | undefined = $state();
 
