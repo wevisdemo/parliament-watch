@@ -24,14 +24,15 @@
 
 	let { voteEvent, results, resultsByAffiliation, votes } = $derived(data);
 
-	enum Menu {
-		Summary = 'summary',
-		ByParty = 'byParty',
-		ByPerson = 'byPerson'
-	}
+	const Menu = {
+		Summary: 'summary',
+		ByParty: 'byParty',
+		ByPerson: 'byPerson'
+	} as const;
+	type MenuValue = (typeof Menu)[keyof typeof Menu];
 
 	let open = $state(false);
-	let selectedMenu = $state(Menu.Summary);
+	let selectedMenu: MenuValue = $state(Menu.Summary);
 	let isViewPercent = $state(false);
 	let searchQuery = $state('');
 
@@ -79,7 +80,7 @@
 	}
 
 	function scrollTo(id: string) {
-		selectedMenu = id as Menu;
+		selectedMenu = id as MenuValue;
 		const el = document.getElementById(id);
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	}
@@ -95,7 +96,7 @@
 			const bottom = top + el.offsetHeight;
 
 			if (scrollY >= top && scrollY <= bottom) {
-				selectedMenu = el.id.replace('#', '') as Menu;
+				selectedMenu = el.id.replace('#', '') as MenuValue;
 				break;
 			}
 		}
@@ -429,7 +430,7 @@
 						</div>
 					</div>
 					{#if voterSearchResult.length}
-						{#each voterSearchResult as { politician, role, party, option } (politician.id)}
+						{#each voterSearchResult as { id, politician, role, party, option } (politician.id ?? id)}
 							{@const voteOption = results.find((result) =>
 								typeof result.option === 'string'
 									? option === result.option
