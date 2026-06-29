@@ -39,7 +39,7 @@ export async function getRunnerIp(): Promise<string> {
 }
 
 export function createClient(apiToken: string): Cloudflare {
-	return new Cloudflare({ apiToken });
+	return new Cloudflare({ apiToken, fetch: globalThis.fetch });
 }
 
 export async function waitForBulkOperation(
