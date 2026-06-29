@@ -34,7 +34,7 @@
 <script lang="ts">
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import { formatThaiDate } from '$lib/date';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	let {

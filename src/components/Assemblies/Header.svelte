@@ -4,7 +4,8 @@
 	import { formatDateRange } from '$lib/date';
 	import AssemblyIdRunner, { type AvailableAssembly } from './AssemblyIdRunner.svelte';
 	import { Tag } from 'carbon-components-svelte';
-	import { Download, TableSplit } from 'carbon-icons-svelte';
+	import Download from 'carbon-icons-svelte/lib/Download.svelte';
+	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 
 	interface Props {
 		availableAssemblies?: AvailableAssembly[];

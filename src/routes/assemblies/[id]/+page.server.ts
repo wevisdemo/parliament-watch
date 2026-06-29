@@ -16,7 +16,7 @@ import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summar
 import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
 import { error } from '@sveltejs/kit';
-import { interpolateRainbow } from 'd3';
+import { interpolateRainbow } from 'd3-scale-chromatic';
 import dayjs from 'dayjs';
 
 const MAX_LATEST_VOTE = 5;

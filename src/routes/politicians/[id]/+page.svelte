@@ -13,7 +13,7 @@
 	import SideNav from '$components/politicians/SideNav.svelte';
 	import { formatDateRange, formatThaiDate } from '$lib/date.js';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { groups } from 'd3';
+	import { groups } from 'd3-array';
 	import dayjs from 'dayjs';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';

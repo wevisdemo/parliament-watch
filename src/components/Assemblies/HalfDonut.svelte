@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { arc as d3Arc } from 'd3';
+	import { arc as d3Arc } from 'd3-shape';
 	import { cubicOut } from 'svelte/easing';
 	import { run } from 'svelte/legacy';
 	import { tweened } from 'svelte/motion';

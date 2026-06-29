@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { DocumentBlank } from 'carbon-icons-svelte';
 	import type { CarbonIconProps } from 'carbon-icons-svelte';
+	import DocumentBlank from 'carbon-icons-svelte/lib/DocumentBlank.svelte';
 	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';

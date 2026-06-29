@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
-	import { ArrowUpRight } from 'carbon-icons-svelte';
+	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 
 	interface Props {
 		title: string;

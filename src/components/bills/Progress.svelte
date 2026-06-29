@@ -6,7 +6,8 @@
 	import type { Link, BillEvent } from '$lib/politigraph/genql';
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
-	import { ArrowRight, CheckmarkFilled } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
 
 	interface Props {
 		type: BillEvent['__typename'];

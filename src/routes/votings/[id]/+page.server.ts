@@ -8,7 +8,7 @@ import { createSeo } from '$lib/seo';
 import type { Bill } from '$models/bill';
 import { DefaultVoteOption, defaultVoteOptions, type CustomVoteOption } from '$models/voting.js';
 import { error } from '@sveltejs/kit';
-import { groups } from 'd3';
+import { groups } from 'd3-array';
 
 export async function entries() {
 	return (await graphql.query({ voteEvents: { id: true } })).voteEvents;

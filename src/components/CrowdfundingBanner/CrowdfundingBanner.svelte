@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CtaButton from '$components/buttons/CtaButton.svelte';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	type BannerVariant = 'compact' | 'full';
 

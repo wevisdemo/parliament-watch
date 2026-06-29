@@ -1,4 +1,11 @@
 <script lang="ts" module>
+	interface ComboBoxItem {
+		id: string | number;
+		text: string;
+		disabled?: boolean;
+		icon?: unknown;
+	}
+
 	export interface CheckboxFilterChoice {
 		label: string;
 		value: string | number | boolean;
@@ -47,12 +54,10 @@
 		Pagination,
 		Search
 	} from 'carbon-components-svelte';
-	import type { ComboBoxItem } from 'carbon-components-svelte/src/ComboBox/ComboBox.svelte';
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import { onMount, tick, type ComponentProps } from 'svelte';
-	import { passive } from 'svelte/legacy';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -179,7 +184,7 @@
 	);
 </script>
 
-<svelte:window use:passive={['scroll', () => scrollEventHandler]} />
+<svelte:window onscroll={scrollEventHandler} />
 
 <div class="flex min-h-screen flex-col">
 	<Breadcrumb

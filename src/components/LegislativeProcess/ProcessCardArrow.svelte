@@ -1,5 +1,6 @@
 <script>
-	import { ArrowDown, ArrowRight } from 'carbon-icons-svelte';
+	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 </script>
 
 <div class="flex flex-row items-center justify-center md:flex-col">

@@ -17,7 +17,8 @@
 		Search,
 		Toggle
 	} from 'carbon-components-svelte';
-	import { ArrowRight, Link } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import Link from 'carbon-icons-svelte/lib/Link.svelte';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();

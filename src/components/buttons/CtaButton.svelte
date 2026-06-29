@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { Link } from 'carbon-components-svelte';
-	import { type OutboundLinkProps } from 'carbon-components-svelte/src/Link/OutboundLink.svelte';
-	import { type CarbonIconProps } from 'carbon-icons-svelte';
+	import type { CarbonIconProps } from 'carbon-icons-svelte';
 	import type { Component } from 'svelte';
 
 	interface Props {
 		icon?: Component<CarbonIconProps> | undefined;
-		href?: OutboundLinkProps['href'];
+		href?: string;
 		external?: boolean;
 		children?: import('svelte').Snippet;
 		[key: string]: unknown;

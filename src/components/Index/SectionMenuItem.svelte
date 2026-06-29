@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { ArrowDown } from 'carbon-icons-svelte';
 	import type { CarbonIconProps } from 'carbon-icons-svelte';
+	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import type { Component } from 'svelte';
 
 	interface Props {

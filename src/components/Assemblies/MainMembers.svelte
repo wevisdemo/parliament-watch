@@ -10,7 +10,7 @@
 
 <script lang="ts">
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	let { members = [], assemblyId }: MainMembersProps = $props();
 </script>
