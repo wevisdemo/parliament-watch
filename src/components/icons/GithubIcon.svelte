@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
 	import BaseSvg from './BaseSvg.svelte';
-	/** @type {{ [key: string]: any }} */
-	let { ...rest } = $props();
+	import type { ComponentProps } from 'svelte';
+
+	let props: ComponentProps<typeof BaseSvg> = $props();
 </script>
 
-<BaseSvg viewBox="0 0 32 32" {...rest}>
+<BaseSvg viewBox="0 0 32 32" {...props}>
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"

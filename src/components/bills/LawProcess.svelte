@@ -1,11 +1,11 @@
-<script>
-	/**
-	 * @typedef {Object} Props
-	 * @property {import('svelte').Snippet} [footer]
-	 */
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 
-	/** @type {Props} */
-	let { footer } = $props();
+	interface Props {
+		footer?: Snippet;
+	}
+
+	let { footer }: Props = $props();
 </script>
 
 <section>

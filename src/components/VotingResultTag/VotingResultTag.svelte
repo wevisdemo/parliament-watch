@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { DefaultVotingResult, RESULT_CONFIRMATION_PENDING } from '$models/voting';
-	import { run } from 'svelte/legacy';
 	import { twMerge } from 'tailwind-merge';
-
-	let tagColor = $state('bg-purple-70 text-text-04');
-	let label = $state('');
 
 	interface Props {
 		result: DefaultVotingResult | string | null;
@@ -16,21 +12,24 @@
 
 	let tagText = $derived(isLarge ? 'heading-compact-02' : 'label-01');
 	let tagContainer = $derived(isLarge ? 'px-2 py-[5px] rounded-3xl' : 'px-2 py-1 rounded-3xl');
-	run(() => {
+
+	let { tagColor, label } = $derived.by(() => {
 		switch (result) {
 			case DefaultVotingResult.Passed:
-				tagColor = 'bg-teal-30 text-text-01';
-				label = isLarge ? 'มติผ่าน' : DefaultVotingResult.Passed;
-				break;
+				return {
+					tagColor: 'bg-teal-30 text-text-01',
+					label: isLarge ? 'มติผ่าน' : DefaultVotingResult.Passed
+				};
 			case DefaultVotingResult.Failed:
-				tagColor = 'bg-red-30 text-text-01';
-				label = isLarge ? 'มติไม่ผ่าน' : DefaultVotingResult.Failed;
-				break;
+				return {
+					tagColor: 'bg-red-30 text-text-01',
+					label: isLarge ? 'มติไม่ผ่าน' : DefaultVotingResult.Failed
+				};
 			default:
-				// purple tag and white text
-				tagColor = 'bg-purple-70 text-text-04';
-				label = result ?? RESULT_CONFIRMATION_PENDING;
-				break;
+				return {
+					tagColor: 'bg-purple-70 text-text-04',
+					label: result ?? RESULT_CONFIRMATION_PENDING
+				};
 		}
 	});
 </script>

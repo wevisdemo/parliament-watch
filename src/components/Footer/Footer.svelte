@@ -75,12 +75,10 @@
 			<img width="120px" height="34px" src="/images/logo/pw-short-white.png" alt="logo short" />
 		</div>
 		<div class="flex flex-row flex-wrap gap-6 pb-4 text-gray-30">
-			{#each menuList as { label, icon, subs, url } (label)}
+			{#each menuList as { label, icon: Icon, subs, url } (label)}
 				<FooterMenuGroup title={label} menuItems={subs} {url}>
 					{#snippet titleIcon()}
-						{@const SvelteComponent = icon}
-
-						<SvelteComponent class="text-inverse-link" />
+						<Icon class="text-inverse-link" />
 					{/snippet}
 				</FooterMenuGroup>
 			{/each}

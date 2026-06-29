@@ -5,6 +5,7 @@
 	import { Search } from 'carbon-components-svelte';
 	import type { CarbonIconProps } from 'carbon-icons-svelte';
 	import type { Component } from 'svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		id: string;
@@ -13,14 +14,14 @@
 		searchPlaceholder: string;
 		searchCategories?: SearchIndexCategory[];
 		class?: string;
-		description?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		description?: Snippet;
+		children?: Snippet;
 	}
 
 	let {
 		id,
 		title,
-		icon,
+		icon: Icon,
 		searchPlaceholder,
 		searchCategories = [],
 		class: className = '',
@@ -29,15 +30,13 @@
 	}: Props = $props();
 
 	let searchResults: SearchResults | null = $state(null);
-
-	const SvelteComponent = $derived(icon);
 </script>
 
 <section {id} class={className}>
 	<div class="mx-auto flex max-w-[1280px] flex-col gap-6 px-4 py-[72px] text-text-01">
 		<div class="flex flex-col items-start gap-2 md:flex-row">
 			<div class="flex items-center gap-2 md:flex-1">
-				<SvelteComponent width="32" height="32" />
+				<Icon width="32" height="32" />
 				<h2 class="fluid-heading-05">{title}</h2>
 			</div>
 			<div class="body-01 flex items-center self-stretch md:flex-1">

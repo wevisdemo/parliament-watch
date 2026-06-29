@@ -143,7 +143,7 @@
 		<div class="flex w-full min-w-0 flex-1 flex-col gap-6">
 			<Section id="personal" title="ข้อมูลพื้นฐาน">
 				{#snippet icon()}
-					<General size="32" />
+					<General size={32} />
 				{/snippet}
 				<div>
 					<p>
@@ -221,7 +221,7 @@
 			</Section>
 			<Section id="politics" title="ประวัติทางการเมือง">
 				{#snippet icon()}
-					<Politician size="32" />
+					<Politician size={32} />
 				{/snippet}
 				{#snippet headerExtension()}
 					<p class="label-01 text-gray-60">หมายเหตุ : ข้อมูลย้อนหลังถึงปี 2562</p>

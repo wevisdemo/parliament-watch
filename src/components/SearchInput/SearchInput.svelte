@@ -2,7 +2,6 @@
 	import { search } from '$lib/search';
 	import { type SearchIndexes, type SearchResults, SearchIndexCategory } from '$models/search';
 	import { TextInput } from 'carbon-components-svelte';
-	import { run } from 'svelte/legacy';
 
 	interface Props {
 		categories?: SearchIndexCategory[];
@@ -20,13 +19,13 @@
 		searchResults = $bindable(),
 		searchValue = $bindable(''),
 		ref = $bindable(null),
-		as = TextInput,
+		as: AsComponent = TextInput,
 		...rest
 	}: Props = $props();
 
 	let searchIndexes: SearchIndexes | null = $state(null);
 
-	run(() => {
+	$effect(() => {
 		if (searchIndexes && searchValue?.trim()) {
 			searchResults = search(searchValue.trim(), searchIndexes);
 		} else {
@@ -49,8 +48,6 @@
 			);
 		}
 	}
-
-	const SvelteComponent_1 = $derived(as);
 </script>
 
-<SvelteComponent_1 bind:ref bind:value={searchValue} onfocus={fetchIndexes} {...rest} />
+<AsComponent bind:ref bind:value={searchValue} onfocus={fetchIndexes} {...rest} />

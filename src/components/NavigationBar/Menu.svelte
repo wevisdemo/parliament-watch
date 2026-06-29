@@ -6,11 +6,12 @@
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import type { Menu } from '$models/menu';
 	import ChevronDownIcon from 'carbon-icons-svelte/lib/ChevronDown.svelte';
+	import type { Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	interface Props {
 		menu: Menu;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let { menu, children }: Props = $props();

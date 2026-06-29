@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
-	/**
-	 * @typedef {Object} Props
-	 * @property {import('svelte').Snippet} [leading]
-	 * @property {import('svelte').Snippet} [menu]
-	 * @property {import('svelte').Snippet} [trailing]
-	 */
 
-	/** @type {Props} */
-	let { leading, menu, trailing } = $props();
+	interface Props {
+		leading?: Snippet;
+		menu?: Snippet;
+		trailing?: Snippet;
+	}
+
+	let { leading, menu, trailing }: Props = $props();
 </script>
 
 <nav

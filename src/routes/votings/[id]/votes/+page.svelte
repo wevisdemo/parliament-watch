@@ -14,22 +14,23 @@
 	let searchQuery = $state('');
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
 		(() => ({
-			filterVoteType: [...filterOptions.voteOptions],
-			filterPosition: [...filterOptions.roles]
+			filterVoteType: filterOptions.voteOptions,
+			filterPosition: filterOptions.roles
 		}))()
 	);
 	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
 
 	$effect(() => {
 		const defaultValue = {
-			filterVoteType: [...filterOptions.voteOptions],
-			filterPosition: [...filterOptions.roles]
+			filterVoteType: filterOptions.voteOptions,
+			filterPosition: filterOptions.roles
 		};
 		selectedCheckboxValue = defaultValue;
 	});
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
+
 	let comboboxFilterList = $derived([
 		{
 			key: 'filterComboboxType',
@@ -41,6 +42,7 @@
 			}))
 		}
 	]);
+
 	let checkboxFilterList = $derived([
 		{
 			key: 'filterPosition',
@@ -59,6 +61,7 @@
 			}))
 		}
 	]);
+
 	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
 			Object.values(selectedCheckboxValue).some((e) => e.length === 0)

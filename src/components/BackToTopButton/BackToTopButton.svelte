@@ -1,22 +1,22 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	// The button will be visible when the user scrolls down
 
-	/**
-	 * @typedef {Object} Props
-	 * @property {number} [size] - All sizing props must be passed with numberic value.
-	 * @property {number} [padding]
-	 * @property {string} [color]
-	 * @property {string} [bgColor]
-	 * @property {number} [border]
-	 * @property {number} [borderRadius]
-	 * @property {number} [margin]
-	 * @property {number} [showAt] - by 'showAt' value.
-	 */
+	interface Props {
+		// All sizing props must be passed with numeric value
+		size?: number;
+		padding?: number;
+		color?: string;
+		bgColor?: string;
+		border?: number;
+		borderRadius?: number;
+		margin?: number;
+		// Button becomes visible after scrolling this many pixels
+		showAt?: number;
+	}
 
-	/** @type {Props} */
 	let {
 		size = 40,
 		padding = 12,
@@ -26,7 +26,7 @@
 		borderRadius = 2,
 		margin = 20,
 		showAt = 50
-	} = $props();
+	}: Props = $props();
 
 	// '40' is default size of the button.
 	// So, we need to scale the icon according to the 'size' prop.

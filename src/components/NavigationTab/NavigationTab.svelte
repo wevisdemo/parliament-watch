@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Tag } from 'carbon-components-svelte';
-	import { run } from 'svelte/legacy';
 
 	type AlignSide = 'left' | 'center' | 'right';
 
@@ -27,7 +26,7 @@
 		right: 'text-right'
 	};
 
-	run(() => {
+	$effect(() => {
 		if (tabs.length) {
 			activeTab = tabs[0].id;
 		}

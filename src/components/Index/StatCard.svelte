@@ -1,19 +1,21 @@
 <script lang="ts" module>
-	export enum HighlightedReason {
-		HighestAssetOwned = 'มีทรัพย์สินมากที่สุด',
-		HighestDebtOwned = 'มีหนี้สินมากที่สุด',
-		HighestPartySwitching = 'ย้ายพรรคบ่อยที่สุด',
-		HighestAbsentRate = 'ขาดลงมติมากที่สุด',
-		HighestBillProposed = 'เสนอร่างกฎหมายเยอะที่สุด',
-		Youngest = 'อายุน้อยที่สุด',
+	export const HighlightedReason = {
+		HighestAssetOwned: 'มีทรัพย์สินมากที่สุด',
+		HighestDebtOwned: 'มีหนี้สินมากที่สุด',
+		HighestPartySwitching: 'ย้ายพรรคบ่อยที่สุด',
+		HighestAbsentRate: 'ขาดลงมติมากที่สุด',
+		HighestBillProposed: 'เสนอร่างกฎหมายเยอะที่สุด',
+		Youngest: 'อายุน้อยที่สุด',
 
 		// From other sources
-		LongestServedInPoliticalPositions = 'อยู่ในวงการมานานที่สุด',
-		MostFrequentlyElectedInConstituency = 'ได้รับเลือกตั้งระบบเขตบ่อยที่สุด',
-		MostFrequentlyServedAsMinister = 'ได้ตำแหน่งรัฐมนตรีบ่อยที่สุด',
-		MostDiverseServedAsMinister = 'ได้ตำแหน่งรัฐมนตรีหลากหลายกระทรวงสุด',
-		MostVisitedInWikipediaLastMonth = 'ยอดเข้าชมประวัติใน Wikipedia มากสุดในเดือนที่แล้ว'
-	}
+		LongestServedInPoliticalPositions: 'อยู่ในวงการมานานที่สุด',
+		MostFrequentlyElectedInConstituency: 'ได้รับเลือกตั้งระบบเขตบ่อยที่สุด',
+		MostFrequentlyServedAsMinister: 'ได้ตำแหน่งรัฐมนตรีบ่อยที่สุด',
+		MostDiverseServedAsMinister: 'ได้ตำแหน่งรัฐมนตรีหลากหลายกระทรวงสุด',
+		MostVisitedInWikipediaLastMonth: 'ยอดเข้าชมประวัติใน Wikipedia มากสุดในเดือนที่แล้ว'
+	} as const;
+
+	export type HighlightedReason = (typeof HighlightedReason)[keyof typeof HighlightedReason];
 
 	export interface StatCardProps {
 		class?: string;

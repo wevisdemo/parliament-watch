@@ -14,7 +14,8 @@
 		title: string;
 		description: string;
 		date: string | null;
-		links: Pick<Link, 'note' | 'url'>[]; // export let tooltipText: string;
+		links: Pick<Link, 'note' | 'url'>[];
+		// tooltipText: string;
 	}
 
 	let { type, title, description, date, links }: Props = $props();

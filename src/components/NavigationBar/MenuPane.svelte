@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	interface Props {
 		hide?: boolean;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let { hide = false, children }: Props = $props();

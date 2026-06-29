@@ -49,7 +49,7 @@
 
 <Section id="votes" title="ประวัติการลงมติ">
 	{#snippet icon()}
-		<Vote size="32" />
+		<Vote size={32} />
 	{/snippet}
 	<VoteWarningNotification />
 	<div class="flex flex-col gap-6">

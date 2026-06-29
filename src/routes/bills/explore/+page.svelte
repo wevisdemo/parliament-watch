@@ -29,18 +29,18 @@
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
 		(() => ({
 			filterTerm: filterOptions.representativeTerms.map((rep) => rep.value),
-			filterStatus: [...filterOptions.statuses],
-			filterCategory: [...filterOptions.categories],
-			filterProposerType: [...filterOptions.proposerTypes]
+			filterStatus: filterOptions.statuses,
+			filterCategory: filterOptions.categories,
+			filterProposerType: filterOptions.proposerTypes
 		}))()
 	);
 
 	$effect(() => {
 		const defaultValue = {
 			filterTerm: filterOptions.representativeTerms.map((rep) => rep.value),
-			filterStatus: [...filterOptions.statuses],
-			filterCategory: [...filterOptions.categories],
-			filterProposerType: [...filterOptions.proposerTypes]
+			filterStatus: filterOptions.statuses,
+			filterCategory: filterOptions.categories,
+			filterProposerType: filterOptions.proposerTypes
 		};
 		selectedCheckboxValue = defaultValue;
 	});
@@ -78,6 +78,7 @@
 			cmpDataPage.setCombobox('filterPartyName', partyParam);
 		}
 	});
+
 	let getProposerName = $derived((): Choice[] => {
 		const peopleOptions = filterOptions.proposerPeople.map((name) => ({
 			id: name,
@@ -98,6 +99,7 @@
 			...cabinetOptions
 		];
 	});
+
 	let getPartyName = $derived((): Choice[] => {
 		const partyOptions = filterOptions.proposerParties.map((party) => ({
 			id: party.id as string,
@@ -108,6 +110,7 @@
 
 		return [...partyOptions];
 	});
+
 	let comboboxFilterList = $derived([
 		{
 			key: 'filterProposerName',
@@ -122,6 +125,7 @@
 			choices: getPartyName()
 		}
 	]);
+
 	let checkboxFilterList = $derived([
 		{
 			key: 'filterTerm',
@@ -154,6 +158,7 @@
 			}))
 		}
 	]);
+
 	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
 			Object.values(selectedCheckboxValue).some((e) => e.length === 0)

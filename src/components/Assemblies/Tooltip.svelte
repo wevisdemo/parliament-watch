@@ -1,26 +1,27 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	import { run, createBubbler, handlers } from 'svelte/legacy';
-
-	const bubble = createBubbler();
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		tooltipText?: string;
 		open?: boolean;
+		onopen?: () => void;
+		onclose?: () => void;
 		align?: 'start' | 'center' | 'end';
 		direction?: 'top' | 'bottom';
 		id?: string;
 		ref?: HTMLButtonElement | null;
 		tooltipStyle?: string;
 		showAllTime?: boolean;
-		children?: import('svelte').Snippet;
-		tooltip?: import('svelte').Snippet;
+		children?: Snippet;
+		tooltip?: Snippet;
 		[key: string]: unknown;
 	}
 
 	let {
 		tooltipText = '',
 		open = $bindable(false),
+		onopen,
+		onclose,
 		align = 'center',
 		direction = 'bottom',
 		id = 'ccs-' + Math.random().toString(36),
@@ -32,14 +33,13 @@
 		...rest
 	}: Props = $props();
 
-	const dispatch = createEventDispatcher();
-
-	const hide = () => (open = false || showAllTime);
+	const hide = () => (open = showAllTime);
 
 	const show = () => (open = true);
 
-	run(() => {
-		dispatch(open ? 'open' : 'close');
+	$effect(() => {
+		if (open) onopen?.();
+		else onclose?.();
 	});
 </script>
 
@@ -72,11 +72,7 @@
 		class:bx--tooltip--align-end={align === 'end'}
 		style="width: 100%;"
 		class="cover"
-		onclick={bubble('click')}
-		onmouseover={bubble('mouseover')}
-		onmouseenter={bubble('mouseenter')}
-		onmouseleave={bubble('mouseleave')}
-		onfocus={handlers(bubble('focus'), show)}
+		onfocus={show}
 		onblur={hide}
 	>
 		{@render children?.()}

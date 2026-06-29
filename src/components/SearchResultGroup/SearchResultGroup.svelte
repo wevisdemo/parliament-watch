@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { SearchResultItem } from '$models/search';
 	import ResultItem from './ResultItem.svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		heading: string;
 		items: SearchResultItem[] | undefined;
-		icon?: import('svelte').Snippet;
+		icon?: Snippet;
 	}
 
 	let { heading, items, icon }: Props = $props();
