@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import type { Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	interface Props {
 		isActive?: boolean;
-		children?: import('svelte').Snippet;
+		onbackdropClick?: () => void;
+		children?: Snippet;
 	}
 
-	let { isActive = false, children }: Props = $props();
-	const dispatch = createEventDispatcher();
+	let { isActive = false, onbackdropClick, children }: Props = $props();
 
 	function backdropClick() {
-		dispatch('backdropClick');
+		onbackdropClick?.();
 	}
 </script>
 

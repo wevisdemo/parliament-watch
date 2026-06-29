@@ -57,6 +57,7 @@
 	import Filter from 'carbon-icons-svelte/lib/Filter.svelte';
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
+	import type { Snippet } from 'svelte';
 	import { onMount, tick, type ComponentProps } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
@@ -143,12 +144,9 @@
 		downloadSize?: 'sm' | 'lg' | 'otherPossibleValue';
 		downloadLinks?: ComponentProps<typeof LinkTable>['links'];
 		unit?: string;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 		/* eslint-disable @typescript-eslint/no-explicit-any */
-		table?: import('svelte').Snippet<
-			[{ cellKey: string; cellValue: any; row: Record<string, any> }]
-		>;
-		/* eslint-enable @typescript-eslint/no-explicit-any */
+		table?: Snippet<[{ cellKey: string; cellValue: any; row: Record<string, any> }]>;
 	}
 
 	let {

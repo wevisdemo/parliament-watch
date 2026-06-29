@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { DefaultVoteOption, type CustomVoteOption } from '$models/voting';
 	import { Tag } from 'carbon-components-svelte';
-	import { run } from 'svelte/legacy';
 	import { twMerge } from 'tailwind-merge';
 
 	interface Props {
@@ -11,37 +10,35 @@
 
 	let { voteOption, class: className = '' }: Props = $props();
 
-	let tagColorClass = $state('bg-purple-70');
-	let tagBgOpacity = $state(1);
-	let label = $state('');
-
-	run(() => {
+	let { tagColorClass, tagBgOpacity, label } = $derived.by(() => {
 		switch (voteOption) {
 			case DefaultVoteOption.Agreed:
-				label = DefaultVoteOption.Agreed;
-				tagColorClass = 'bg-teal-50';
-				break;
+				return { tagColorClass: 'bg-teal-50', tagBgOpacity: 1, label: DefaultVoteOption.Agreed };
 			case DefaultVoteOption.Disagreed:
-				label = DefaultVoteOption.Disagreed;
-				tagColorClass = 'bg-red-50 text-white';
-				break;
+				return {
+					tagColorClass: 'bg-red-50 text-white',
+					tagBgOpacity: 1,
+					label: DefaultVoteOption.Disagreed
+				};
 			case DefaultVoteOption.Abstain:
-				label = DefaultVoteOption.Abstain;
-				tagColorClass = 'bg-gray-80 text-white';
-				break;
+				return {
+					tagColorClass: 'bg-gray-80 text-white',
+					tagBgOpacity: 1,
+					label: DefaultVoteOption.Abstain
+				};
 			case DefaultVoteOption.Novote:
-				label = DefaultVoteOption.Novote;
-				tagColorClass = 'bg-gray-50 text-white';
-				break;
+				return {
+					tagColorClass: 'bg-gray-50 text-white',
+					tagBgOpacity: 1,
+					label: DefaultVoteOption.Novote
+				};
 			case DefaultVoteOption.Absent:
-				label = DefaultVoteOption.Absent;
-				tagColorClass = 'bg-gray-20';
-				break;
-			default:
-				tagColorClass = 'bg-purple-70';
-				tagBgOpacity = voteOption?.colorIntensity ? voteOption.colorIntensity * 0.7 + 0.3 : 1;
-				if (tagBgOpacity > 0.45) tagColorClass += ' text-white';
-				label = voteOption?.label ?? '';
+				return { tagColorClass: 'bg-gray-20', tagBgOpacity: 1, label: DefaultVoteOption.Absent };
+			default: {
+				const opacity = voteOption?.colorIntensity ? voteOption.colorIntensity * 0.7 + 0.3 : 1;
+				const colorClass = opacity > 0.45 ? 'bg-purple-70 text-white' : 'bg-purple-70';
+				return { tagColorClass: colorClass, tagBgOpacity: opacity, label: voteOption?.label ?? '' };
+			}
 		}
 	});
 </script>

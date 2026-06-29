@@ -1,10 +1,11 @@
 <script lang="ts">
 	import WeVisIcon from '$components/icons/WeVisIcon.svelte';
 	import type { Menu } from '$models/menu';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		menu: Menu;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let { menu, children }: Props = $props();

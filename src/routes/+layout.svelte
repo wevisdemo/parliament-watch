@@ -7,9 +7,10 @@
 	import '../styles/index.css';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let { children }: Props = $props();

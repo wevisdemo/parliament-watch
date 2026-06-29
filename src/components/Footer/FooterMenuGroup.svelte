@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
 	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		title: string;
 		url?: string | undefined;
 		menuItems?: Menu[];
-		titleIcon?: import('svelte').Snippet;
+		titleIcon?: Snippet;
 	}
 
 	let { title, url = undefined, menuItems = [], titleIcon }: Props = $props();

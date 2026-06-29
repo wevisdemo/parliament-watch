@@ -8,6 +8,7 @@
 	} from 'keen-slider';
 	import 'keen-slider/keen-slider.min.css';
 	import { onMount, tick } from 'svelte';
+	import type { Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	interface Props {
@@ -15,7 +16,7 @@
 		arrowLeftClass?: string;
 		arrowRightClass?: string;
 		hideNavigation?: boolean;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let {

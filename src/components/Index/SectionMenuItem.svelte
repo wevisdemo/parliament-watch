@@ -10,9 +10,7 @@
 		icon: Component<CarbonIconProps>;
 	}
 
-	let { title, description, href = undefined, icon }: Props = $props();
-
-	const SvelteComponent = $derived(icon);
+	let { title, description, href = undefined, icon: Icon }: Props = $props();
 </script>
 
 <li class="flex w-full flex-1">
@@ -23,7 +21,7 @@
 			: 'opacity-50'}"
 		aria-disabled={!href}
 	>
-		<SvelteComponent class="aspect-square h-auto w-6 md:w-8" />
+		<Icon class="aspect-square h-auto w-6 md:w-8" />
 		<span class="flex flex-1 flex-col gap-1">
 			<span class="fluid-heading-03">{title}</span>
 			<span>{description}</span>

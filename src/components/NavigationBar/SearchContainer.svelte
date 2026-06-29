@@ -4,20 +4,21 @@
 	import { SearchIndexCategory, type SearchResults } from '$models/search';
 	import CloseIcon from 'carbon-icons-svelte/lib/Close.svelte';
 	import SearchIcon from 'carbon-icons-svelte/lib/Search.svelte';
-	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
-
-	const dispatch = createEventDispatcher<{
-		activate: void;
-		deactivate: void;
-	}>();
 
 	interface Props {
 		activeSearch?: boolean;
 		searchResults?: SearchResults | null;
+		onactivate?: () => void;
+		ondeactivate?: () => void;
 	}
 
-	let { activeSearch = $bindable(false), searchResults = $bindable(null) }: Props = $props();
+	let {
+		activeSearch = $bindable(false),
+		searchResults = $bindable(null),
+		onactivate,
+		ondeactivate
+	}: Props = $props();
 	let searchInput: HTMLInputElement | null = $state(null);
 	let searchValue = $state('');
 	let elContainer: HTMLDivElement | undefined = $state();
@@ -25,7 +26,7 @@
 	function searchClickHandle() {
 		if (!activeSearch) {
 			activeSearch = true;
-			dispatch('activate');
+			onactivate?.();
 			searchInput?.focus();
 		}
 	}
@@ -40,7 +41,7 @@
 			activeSearch = false;
 			searchValue = '';
 			searchResults = null;
-			dispatch('deactivate');
+			ondeactivate?.();
 		}
 	}
 </script>

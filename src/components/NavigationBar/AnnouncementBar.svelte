@@ -88,7 +88,7 @@
 
 <svelte:window onscroll={scrollEventHandler} />
 {#if announcement && isShown && isScrollShown}
-	{@const SvelteComponent = iconMap[iconType]}
+	{@const Icon = iconMap[iconType]}
 	<div
 		class={twMerge(
 			topClass,
@@ -98,7 +98,7 @@
 		transition:slide={{ duration: 350, axis: 'y' }}
 	>
 		<div class="flex items-center pr-4">
-			<SvelteComponent size={20} />
+			<Icon size={20} />
 		</div>
 		<div class=" overflow-hidden text-ellipsis whitespace-nowrap">
 			<span class="font-semibold">{announcement.title ?? ''}</span>

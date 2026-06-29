@@ -2,12 +2,13 @@
 	import { Link } from 'carbon-components-svelte';
 	import type { CarbonIconProps } from 'carbon-icons-svelte';
 	import type { Component } from 'svelte';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		icon?: Component<CarbonIconProps> | undefined;
 		href?: string;
 		external?: boolean;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 		[key: string]: unknown;
 	}
 

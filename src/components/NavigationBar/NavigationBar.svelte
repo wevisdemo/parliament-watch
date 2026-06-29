@@ -58,7 +58,6 @@
 	import SideMenuList from './SideMenuList.svelte';
 	import SideMenuPane from './SideMenuPane.svelte';
 	import { setContext } from 'svelte';
-	import { run } from 'svelte/legacy';
 
 	let screenSize = $state(0);
 	let previousFromTop = 0;
@@ -66,7 +65,7 @@
 	let sideNavActive = $state(false);
 	let hideMainMenu = $state(false);
 
-	run(() => {
+	$effect(() => {
 		if (screenSize > 1056) sideNavActive = false;
 	});
 
@@ -105,15 +104,15 @@
 			{/snippet}
 			{#snippet trailing()}
 				<SearchContainer
-					on:activate={() => (hideMainMenu = true)}
-					on:deactivate={() => (hideMainMenu = false)}
+					onactivate={() => (hideMainMenu = true)}
+					ondeactivate={() => (hideMainMenu = false)}
 				/>
 			{/snippet}
 		</NavigationPane>
 	{/if}
 </header>
 
-<SideMenuPane isActive={sideNavActive} on:backdropClick={() => (sideNavActive = !sideNavActive)}>
+<SideMenuPane isActive={sideNavActive} onbackdropClick={() => (sideNavActive = !sideNavActive)}>
 	{#if sideNavActive}
 		<SideMenuList {menuList} />
 	{/if}

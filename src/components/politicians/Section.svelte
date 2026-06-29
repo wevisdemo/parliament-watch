@@ -1,10 +1,12 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	interface Props {
 		id: string;
 		title: string;
-		icon?: import('svelte').Snippet;
-		headerExtension?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		icon?: Snippet;
+		headerExtension?: Snippet;
+		children?: Snippet;
 	}
 
 	let { id, title, icon, headerExtension, children }: Props = $props();

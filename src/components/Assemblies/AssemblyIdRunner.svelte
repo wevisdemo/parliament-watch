@@ -9,7 +9,6 @@
 <script lang="ts">
 	import AngleRightIcon from '$components/icons/AngleRightIcon.svelte';
 	import { formatThaiYear } from '$lib/date';
-	import { run } from 'svelte/legacy';
 
 	interface Props {
 		id: string;
@@ -42,17 +41,14 @@
 			: null
 	);
 
-	let displayString = $state('-');
-	run(() => {
-		if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null && yearString) {
-			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term} | ${yearString}`;
-		} else if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null) {
-			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term}`;
-		} else if (yearString) {
-			displayString = `ปี ${yearString}`;
-		} else {
-			displayString = '-';
-		}
+	let displayString = $derived.by(() => {
+		const assembly = availableAssemblies[currentIndex];
+		const term = assembly?.term;
+		const hasTerm = currentIndex >= 0 && term != null;
+		if (hasTerm && yearString) return `ชุดที่ ${term} | ${yearString}`;
+		if (hasTerm) return `ชุดที่ ${term}`;
+		if (yearString) return `ปี ${yearString}`;
+		return '-';
 	});
 </script>
 
