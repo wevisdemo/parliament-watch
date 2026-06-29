@@ -3,7 +3,7 @@
 	import Proposer from '$components/Proposer/Proposer.svelte';
 	import { formatThaiDate } from '$lib/date';
 	import type { BillStatus } from '$lib/politigraph/genql';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import dayjs from 'dayjs';
 	import type { ComponentProps } from 'svelte';
 	import { twMerge } from 'tailwind-merge';

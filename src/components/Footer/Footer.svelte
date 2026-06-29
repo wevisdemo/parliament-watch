@@ -3,7 +3,7 @@
 	import WeVisText from '$components/icons/WeVisText.svelte';
 	import FooterContact from './FooterContact.svelte';
 	import FooterMenuGroup from './FooterMenuGroup.svelte';
-	import { ArrowUpRight } from 'carbon-icons-svelte';
+	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 </script>
 
 <div class="flex flex-col items-center gap-4 bg-white px-6 py-8 text-sm md:px-12 lg:px-16">

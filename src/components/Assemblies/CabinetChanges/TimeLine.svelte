@@ -4,7 +4,8 @@
 	import TimeItem from './TimeItem.svelte';
 	import { type TimeLine, getDateData } from './TimeLine';
 	import TimeLineToolTip from './TimeLineToolTip.svelte';
-	import { ChevronLeft, ChevronRight } from 'carbon-icons-svelte';
+	import ChevronLeft from 'carbon-icons-svelte/lib/ChevronLeft.svelte';
+	import ChevronRight from 'carbon-icons-svelte/lib/ChevronRight.svelte';
 	import { onMount, tick } from 'svelte';
 
 	interface Props {

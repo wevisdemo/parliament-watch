@@ -3,7 +3,7 @@
 	import Carousel from './Carousel.svelte';
 	import StatCard, { HighlightedReason, type StatCardProps } from './StatCard.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	interface MostVisitedInWikipediaLastMonthPolitician extends StatCardProps {
 		updatedAt: Date;

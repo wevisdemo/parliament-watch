@@ -1,7 +1,7 @@
 <script lang="ts">
 	import VoteCard, { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	interface Props {
 		votes?: VoteCardProps[];

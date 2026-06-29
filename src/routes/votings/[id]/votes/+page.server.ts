@@ -7,7 +7,7 @@ import { createSeo } from '$lib/seo';
 import type { CustomVoteOption } from '$models/voting';
 import { defaultVoteOptions } from '$models/voting';
 import { error } from '@sveltejs/kit';
-import { groups } from 'd3';
+import { groups } from 'd3-array';
 
 interface FilterOptions {
 	parties: string[];

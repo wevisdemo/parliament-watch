@@ -11,7 +11,7 @@
 	import VoteCard, { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 	import Carousel from './Carousel.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import { onMount } from 'svelte';
 
 	interface Props {

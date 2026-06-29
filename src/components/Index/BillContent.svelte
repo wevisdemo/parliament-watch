@@ -6,7 +6,8 @@
 	import type { BillOverviewData } from '../../routes/files/bills-overview/[repId]/[category].json/+server';
 	import Carousel from './Carousel.svelte';
 	import { Button, InlineLoading } from 'carbon-components-svelte';
-	import { ArrowRight, Close } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
+	import Close from 'carbon-icons-svelte/lib/Close.svelte';
 	import { onMount } from 'svelte';
 
 	interface Props {

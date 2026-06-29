@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { DocumentPdf, NotebookReference } from 'carbon-icons-svelte';
+	import DocumentPdf from 'carbon-icons-svelte/lib/DocumentPdf.svelte';
+	import NotebookReference from 'carbon-icons-svelte/lib/NotebookReference.svelte';
 
 	interface Props {
 		cellValue?: { note: string; url: string }[];

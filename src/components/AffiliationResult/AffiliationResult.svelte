@@ -1,7 +1,7 @@
 <script lang="ts">
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
-	import { ChevronDown } from 'carbon-icons-svelte';
-	import { groups } from 'd3';
+	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
+	import { groups } from 'd3-array';
 	import { onMount } from 'svelte';
 
 	interface Props {

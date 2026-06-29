@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { RoleChange } from '$lib/politigraph/assembly/change';
 	import RoleChangeGroup from './RoleChangeGroup.svelte';
-	import { group } from 'd3';
+	import { group } from 'd3-array';
 
 	interface Props {
 		changes: RoleChange[];

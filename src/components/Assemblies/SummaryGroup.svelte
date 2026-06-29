@@ -11,7 +11,7 @@
 		getTopOfGroupsPercent,
 		type SubgroupSelected
 	} from './shared';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	const MAX_GROUP_DISPLAY = 5;
 

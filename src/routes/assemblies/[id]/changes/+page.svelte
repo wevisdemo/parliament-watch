@@ -8,7 +8,7 @@
 	import DatePicker from '$components/DatePicker/DatePicker.svelte';
 	import { formatThaiDate, isDateInRange } from '$lib/date';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { group } from 'd3';
+	import { group } from 'd3-array';
 
 	let { data } = $props();
 	interface Tab {

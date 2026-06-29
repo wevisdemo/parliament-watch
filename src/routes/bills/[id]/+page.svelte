@@ -16,8 +16,10 @@
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 	import { formatThaiDate } from '$lib/date.js';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	import { DocumentMultiple_02, Information, Link } from 'carbon-icons-svelte';
-	import { groups } from 'd3';
+	import DocumentMultiple_02 from 'carbon-icons-svelte/lib/DocumentMultiple_02.svelte';
+	import Information from 'carbon-icons-svelte/lib/Information.svelte';
+	import Link from 'carbon-icons-svelte/lib/Link.svelte';
+	import { groups } from 'd3-array';
 	import dayjs from 'dayjs';
 
 	const NO_PARTY_FOUND_LABEL = 'ไม่พบข้อมูลพรรค';
