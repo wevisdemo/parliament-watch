@@ -49,6 +49,7 @@ jobs:
         run: pnpm run story:build
       - name: Remove runner IP from Cloudflare list
         if: always()
+        continue-on-error: true
         run: node --import tsx scripts/cloudflare/remove-runner-ip.ts
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
