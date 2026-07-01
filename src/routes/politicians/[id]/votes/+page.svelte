@@ -10,6 +10,7 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
 	import { formatThaiDate, formatYearRange } from '$lib/date.js';
+	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state-config.js';
 	import { DefaultVoteOption } from '$models/voting.js';
 
 	let { data } = $props();
@@ -33,6 +34,13 @@
 			}))
 		}
 	]);
+
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterAssembly: listCheckboxQueryConfig('assembly'),
+			filterVoteType: listCheckboxQueryConfig('voteType')
+		}
+	});
 
 	let searchQuery = $state('');
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
@@ -98,6 +106,7 @@
 		{ url: `/politicians/${politician.id}/votes`, label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },

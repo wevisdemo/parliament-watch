@@ -5,6 +5,8 @@
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { formatThaiDate } from '$lib/date.js';
+	import { buildVoteQueryStateConfig, flagsCheckboxQueryConfig } from '$lib/query-state-config.js';
+	import { DefaultVotingResult } from '$models/voting.js';
 
 	let { data } = $props();
 
@@ -20,6 +22,20 @@
 			}))
 		}
 	]);
+
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterResult: flagsCheckboxQueryConfig(
+				{
+					[DefaultVotingResult.Passed]: 'pass',
+					[DefaultVotingResult.Failed]: 'notPass'
+				},
+				{
+					fallbackParam: 'result'
+				}
+			)
+		}
+	});
 
 	let searchQuery = $state('');
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
@@ -63,6 +79,7 @@
 		{ label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
