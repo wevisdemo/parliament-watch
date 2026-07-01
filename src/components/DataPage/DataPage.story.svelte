@@ -1,29 +1,33 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
 	import DataPage, {
 		type SelectedComboboxValueType,
 		type CheckboxFilterGroup,
 		type ComboboxFilterGroup,
 		type SelectedCheckboxValueType
 	} from './DataPage.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	export let Hst: Hst;
+	let { Hst }: { Hst: HstStory } = $props();
 
-	let data = Array(102).fill``.map((_, i) => ({
-		name: 'Alvin Kiev',
-		id: i,
-		type: ['A', 'B', 'C'][i % 3],
-		direction: i % 2 === 0
-	}));
+	let data = $state(
+		Array(102)
+			.fill('')
+			.map((_, i) => ({
+				name: 'Alvin Kiev',
+				id: i,
+				type: ['A', 'B', 'C'][i % 3],
+				direction: i % 2 === 0
+			}))
+	);
 	let breadcrumbList: {
 		label: string;
 		url: string;
-	}[] = [
+	}[] = $state([
 		{ url: '/', label: 'หน้าหลัก' },
 		{ url: '/votelog', label: 'ประวัติการลงมติ' }
-	];
-	let searchPlaceholder = 'ชื่อ-นามสกุล';
-	let comboboxFilterList: ComboboxFilterGroup[] = [
+	]);
+	let searchPlaceholder = $state('ชื่อ-นามสกุล');
+	let comboboxFilterList: ComboboxFilterGroup[] = $state([
 		{
 			key: 'filterComboboxType',
 			legend: 'กลุ่ม',
@@ -34,8 +38,8 @@
 				{ id: 'C', text: 'C' }
 			]
 		}
-	];
-	let checkboxFilterList: CheckboxFilterGroup[] = [
+	]);
+	let checkboxFilterList: CheckboxFilterGroup[] = $state([
 		{
 			key: 'filterVoteDirection',
 			legend: 'เงื่อนไขพิเศษ',
@@ -50,21 +54,19 @@
 				}
 			]
 		}
-	];
-	let tableHeader: { key: string; value: string }[] = [
+	]);
+	let tableHeader: { key: string; value: string }[] = $state([
 		{ key: 'name', value: 'ชื่อ' },
 		{ key: 'type', value: 'กลุ่ม' },
 		{ key: 'direction', value: 'ทิศทางการลงมติ' }
-	];
-	let tablePageSize = 10;
-	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
-	let selectedComboboxValue: SelectedComboboxValueType;
+	]);
+	let tablePageSize = $state(10);
+	let searchQuery = $state('');
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state({});
+	let selectedComboboxValue: SelectedComboboxValueType = $state({});
 
-	$: filteredData =
-		selectedCheckboxValue === undefined ||
-		selectedComboboxValue === undefined ||
-		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+	let filteredData = $derived(
+		!selectedCheckboxValue.filterVoteDirection?.length || !selectedComboboxValue.filterComboboxType
 			? []
 			: data.filter(
 					(e) =>
@@ -72,8 +74,9 @@
 						(selectedComboboxValue.filterComboboxType
 							? e.type === selectedComboboxValue.filterComboboxType
 							: true)
-				);
-	let unit = 'มติ';
+				)
+	);
+	let unit = $state('มติ');
 </script>
 
 <Hst.Story title="DataPage" layout={{ type: 'single', iframe: true }}>
@@ -92,7 +95,7 @@
 			bind:selectedComboboxValue
 		>
 			<h1 class="fluid-heading-03">ประวัติการลงมติ</h1>
-			<svelte:fragment slot="table" let:cellKey let:cellValue>
+			{#snippet table({ cellKey, cellValue })}
 				{#if cellKey === 'direction'}
 					{#if cellValue}
 						<span class="rounded-full bg-teal-30 px-2 text-black">ตามเสียงส่วนใหญ่ในพรรค</span>
@@ -102,7 +105,7 @@
 				{:else}
 					{cellValue}
 				{/if}
-			</svelte:fragment>
+			{/snippet}
 		</DataPage>
 	</div>
 

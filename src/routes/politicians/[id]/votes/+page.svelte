@@ -1,20 +1,22 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import DataPage from '$components/DataPage/DataPage.svelte';
-	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
-	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import type {
 		CheckboxFilterGroup,
 		SelectedCheckboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
+	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
 	import { formatThaiDate, formatYearRange } from '$lib/date.js';
 	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state-config.js';
-	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
+	import { DefaultVoteOption } from '$models/voting.js';
 
-	export let data;
-	const { politician, filterOptions, votes } = data;
+	let { data } = $props();
+	let { politician, filterOptions, votes } = $derived(data);
 
-	const checkboxFilterList: CheckboxFilterGroup[] = [
+	let checkboxFilterList: CheckboxFilterGroup[] = $derived([
 		{
 			key: 'filterAssembly',
 			legend: 'สมัยการทำงาน',
@@ -31,7 +33,7 @@
 				value: type
 			}))
 		}
-	];
+	]);
 
 	const queryStateConfig = buildVoteQueryStateConfig({
 		checkbox: {
@@ -40,12 +42,34 @@
 		}
 	});
 
-	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
+	let searchQuery = $state('');
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
+		(() => ({
+			filterAssembly: filterOptions.assemblies.map((assembly) => assembly.id),
+			filterVoteType: [...filterOptions.voteOptions]
+		}))()
+	);
 
-	$: filteredData =
+	$effect(() => {
+		const voteTypeParam = page.url.searchParams.get('votetype');
+		const filterVoteType =
+			voteTypeParam === 'agreed'
+				? [DefaultVoteOption.Agreed]
+				: voteTypeParam === 'disagreed'
+					? [DefaultVoteOption.Disagreed]
+					: voteTypeParam === 'absent'
+						? [DefaultVoteOption.Absent]
+						: [...filterOptions.voteOptions];
+
+		selectedCheckboxValue = {
+			filterAssembly: filterOptions.assemblies.map((assembly) => assembly.id),
+			filterVoteType
+		};
+	});
+
+	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
-		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: votes
 					.filter(({ option, vote_events: [{ title, nickname, organizations }] }) => {
@@ -67,7 +91,8 @@
 						option,
 						result,
 						links
-					}));
+					}))
+	);
 </script>
 
 <DataPage
@@ -103,7 +128,7 @@
 		>
 	</h1>
 	<VoteWarningNotification />
-	<svelte:fragment slot="table" let:cellKey let:cellValue let:row>
+	{#snippet table({ cellKey, cellValue, row })}
 		{#if cellKey === 'date'}
 			{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 		{:else if cellKey === 'name'}
@@ -121,5 +146,5 @@
 		{:else}
 			{cellValue}
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </DataPage>

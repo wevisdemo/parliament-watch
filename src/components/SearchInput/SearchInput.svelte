@@ -1,23 +1,38 @@
 <script lang="ts">
+	import { search } from '$lib/search';
 	import { type SearchIndexes, type SearchResults, SearchIndexCategory } from '$models/search';
 	import { TextInput } from 'carbon-components-svelte';
-	import { search } from '$lib/search';
-	import type { ComponentType, SvelteComponent } from 'svelte';
 
-	export let categories: SearchIndexCategory[] = Object.values(SearchIndexCategory);
-	export let searchResults: SearchResults | null;
-	export let searchValue: string | null = '';
-	export let ref: HTMLInputElement | null = null;
-	export let as: ComponentType<SvelteComponent> = TextInput;
-
-	let searchIndexes: SearchIndexes | null = null;
-
-	$: if (searchIndexes && searchValue?.trim()) {
-		searchResults = search(searchValue.trim(), searchIndexes);
-	} else {
-		searchResults = null;
-		searchValue = '';
+	interface Props {
+		categories?: SearchIndexCategory[];
+		searchResults: SearchResults | null;
+		searchValue?: string | null;
+		ref?: HTMLInputElement | null;
+		// Carbon components are typed as Svelte 4 classes; accept any component constructor
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		as?: any;
+		[key: string]: unknown;
 	}
+
+	let {
+		categories = Object.values(SearchIndexCategory),
+		searchResults = $bindable(),
+		searchValue = $bindable(''),
+		ref = $bindable(null),
+		as: AsComponent = TextInput,
+		...rest
+	}: Props = $props();
+
+	let searchIndexes: SearchIndexes | null = $state(null);
+
+	$effect(() => {
+		if (searchIndexes && searchValue?.trim()) {
+			searchResults = search(searchValue.trim(), searchIndexes);
+		} else {
+			searchResults = null;
+			searchValue = '';
+		}
+	});
 
 	async function fetchIndexes() {
 		if (!searchIndexes) {
@@ -35,16 +50,4 @@
 	}
 </script>
 
-<svelte:component
-	this={as}
-	bind:ref
-	bind:value={searchValue}
-	on:focus={fetchIndexes}
-	{...$$restProps}
-	on:change
-	on:input
-	on:keydown
-	on:keyup
-	on:blur
-	on:paste
-/>
+<AsComponent bind:ref bind:value={searchValue} onfocus={fetchIndexes} {...rest} />

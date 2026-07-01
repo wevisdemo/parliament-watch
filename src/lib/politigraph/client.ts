@@ -1,15 +1,8 @@
-import * as env from '$env/static/private';
 import { generateQueryOp, type Client } from './genql';
 
-const GRAPHQL_URL =
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	env.POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql';
+const GRAPHQL_URL = process.env.POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql';
 
-const RATE_LIMIT =
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	env.POLITIGRAPH_REQUEST_PER_SECOND || 3;
+const RATE_LIMIT = Number(process.env.POLITIGRAPH_REQUEST_PER_SECOND) || 3;
 
 const INTERVAL_MS = 1000;
 const BATCH_TIMEOUT_MS = 200;

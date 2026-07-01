@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import SearchInput from './SearchInput.svelte';
-	import { SearchIndexCategory, type SearchResults } from '$models/search';
-	import { Button } from 'carbon-components-svelte';
 	import SearchResult from '$components/SearchResult/SearchResult.svelte';
+	import { SearchIndexCategory, type SearchResults } from '$models/search';
+	import SearchInput from './SearchInput.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+	import { Button } from 'carbon-components-svelte';
 
-	export let Hst: Hst;
+	export let Hst: HstStory;
 
 	let searchResults: SearchResults | null;
 	let fewerIndexesSearchResults: SearchResults | null;

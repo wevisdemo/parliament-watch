@@ -1,41 +1,46 @@
 <script lang="ts">
+	import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
+	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 	import Badge from './Badge.svelte';
 	import HalfDonutWrapper from './HalfDonutWrapper.svelte';
+	import Tooltip from './Tooltip.svelte';
 	import {
 		getPercentWidth,
-		getRoundedPercent,
 		getSumOfGroupsTotal,
 		getTopOfGroups,
 		getTopOfGroupsPercent,
 		type SubgroupSelected
 	} from './shared';
-	import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
-	import { ArrowRight } from 'carbon-icons-svelte';
-	import Tooltip from './Tooltip.svelte';
-	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	const MAX_GROUP_DISPLAY = 5;
 
-	export let groupBy: GroupByOption;
-	export let memberGroups: MemberGroup[];
-	export let assemblyId: string;
-	export let showHalfCircleChart = true;
+	interface Props {
+		groupBy: GroupByOption;
+		memberGroups: MemberGroup[];
+		assemblyId: string;
+		showHalfCircleChart?: boolean;
+	}
 
-	$: getRenderPartyList = (parties: MemberGroup['subgroups'] = []): SubgroupSelected[] => {
-		const result = [...parties].sort((a, b) => b.count - a.count).slice(0, MAX_GROUP_DISPLAY);
+	let { groupBy, memberGroups, assemblyId, showHalfCircleChart = true }: Props = $props();
 
-		if (parties.length > MAX_GROUP_DISPLAY) {
-			const otherCount = parties
-				.slice(MAX_GROUP_DISPLAY)
-				.reduce((acc, party) => acc + party.count, 0);
-			result.push({
-				name: 'อื่นๆ',
-				count: otherCount,
-				color: '#8D8D8D'
-			});
+	let getRenderPartyList = $derived(
+		(parties: MemberGroup['subgroups'] = []): SubgroupSelected[] => {
+			const result = [...parties].sort((a, b) => b.count - a.count).slice(0, MAX_GROUP_DISPLAY);
+
+			if (parties.length > MAX_GROUP_DISPLAY) {
+				const otherCount = parties
+					.slice(MAX_GROUP_DISPLAY)
+					.reduce((acc, party) => acc + party.count, 0);
+				result.push({
+					name: 'อื่นๆ',
+					count: otherCount,
+					color: '#8D8D8D'
+				});
+			}
+			return result;
 		}
-		return result;
-	};
+	);
 </script>
 
 <div class="m-auto flex h-full w-full min-w-[226px] flex-col bg-ui-01 p-[16px] text-black">
@@ -45,9 +50,11 @@
 			<a href="/assemblies/{assemblyId}/members/{groupBy}" class="hover:opacity-50">
 				<ArrowRight />
 			</a>
-			<p slot="tooltip">
-				<span class="label-01 text-text-04">ดูรายชื่อ</span>
-			</p>
+			{#snippet tooltip()}
+				<p>
+					<span class="label-01 text-text-04">ดูรายชื่อ</span>
+				</p>
+			{/snippet}
 		</Tooltip>
 	</div>
 	{#if showHalfCircleChart}

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { DefaultVoteOption } from '$models/voting';
 	import type { VoteOptionSlice } from '$lib/vote-summary';
+	import { DefaultVoteOption } from '$models/voting';
 	import { twMerge } from 'tailwind-merge';
 
 	const optionColorClass: Record<string, string> = {
@@ -15,15 +15,20 @@
 		maximumFractionDigits: 0
 	});
 
-	export let segments: VoteOptionSlice[] = [];
-	export let total = 0;
-	export let className = '';
-	export { className as class };
+	interface Props {
+		segments?: VoteOptionSlice[];
+		total?: number;
+		class?: string;
+	}
 
-	const accessibleLabel = segments
-		.filter((segment) => segment.count > 0)
-		.map((segment) => `${segment.label} ${numberFormatter.format(segment.percentage * 100)}%`)
-		.join(', ');
+	let { segments = [], total = 0, class: className = '' }: Props = $props();
+
+	let accessibleLabel = $derived(
+		segments
+			.filter((segment) => segment.count > 0)
+			.map((segment) => `${segment.label} ${numberFormatter.format(segment.percentage * 100)}%`)
+			.join(', ')
+	);
 
 	const getColorClass = (option: string) => optionColorClass[option] ?? 'bg-purple-60';
 </script>
@@ -34,7 +39,7 @@
 	aria-label={total ? accessibleLabel : 'ไม่มีข้อมูลคะแนนเสียง'}
 >
 	{#if total === 0}
-		<div class="h-full w-full bg-gray-30" />
+		<div class="h-full w-full bg-gray-30"></div>
 	{:else}
 		{#each segments as segment (segment.option)}
 			{#if segment.count > 0}
@@ -42,7 +47,7 @@
 					class={twMerge('flex-1 rounded-sm transition-all', getColorClass(segment.option))}
 					style={`flex-grow: ${segment.count}; flex-basis: 0;`}
 					aria-label={`${segment.label} ${numberFormatter.format(segment.percentage * 100)}%`}
-				/>
+				></div>
 			{:else}
 				<span class="sr-only">{segment.label} 0%</span>
 			{/if}

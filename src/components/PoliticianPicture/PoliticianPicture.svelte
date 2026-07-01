@@ -1,14 +1,25 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
 
-	let className = '';
-	export { className as class };
-	export let avatar = '/images/politicians/_placeholder.webp';
-	export let size: string | number = '40';
-	export let avatarClass = '';
-	export let partyLogo: string | undefined = undefined;
-	export let partySize: string | number = '16';
-	export let partyClass = '';
+	interface Props {
+		class?: string;
+		avatar?: string;
+		size?: string | number;
+		avatarClass?: string;
+		partyLogo?: string | undefined;
+		partySize?: string | number;
+		partyClass?: string;
+	}
+
+	let {
+		class: className = '',
+		avatar = '/images/politicians/_placeholder.webp',
+		size = '40',
+		avatarClass = '',
+		partyLogo = undefined,
+		partySize = '16',
+		partyClass = ''
+	}: Props = $props();
 </script>
 
 <div class={twMerge('relative w-fit', className)}>

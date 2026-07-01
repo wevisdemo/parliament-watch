@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import ResultItem from './ResultItem.svelte';
 	import type { SearchResultItem } from '$models/search';
 	import { DefaultVotingResult } from '$models/voting';
-	export let Hst: Hst;
+	import ResultItem from './ResultItem.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 
 	interface ResultItemType {
 		title: string;
@@ -39,7 +40,7 @@
 </script>
 
 <Hst.Story title="ResultItem" layout={{ type: 'grid', width: '350px' }}>
-	{#each resultItems as { title, item }}
+	{#each resultItems as { title, item } (title)}
 		<Hst.Variant {title}>
 			<ResultItem {item} />
 		</Hst.Variant>

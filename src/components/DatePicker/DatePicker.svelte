@@ -2,10 +2,14 @@
 	import { formatThaiDate, longMonthNames, parseThaiDate, shortMonthNames } from '$lib/date';
 	import { DatePicker, DatePickerInput } from 'carbon-components-svelte';
 
-	export let handleSelectDate: (date: Date) => void;
-	export let selectedDate: Date;
+	interface Props {
+		handleSelectDate: (date: Date) => void;
+		selectedDate: Date;
+	}
 
-	$: value = selectedDate ? formatThaiDate(selectedDate) : '';
+	let { handleSelectDate, selectedDate = $bindable() }: Props = $props();
+
+	let value = $derived(selectedDate ? formatThaiDate(selectedDate) : '');
 </script>
 
 <DatePicker

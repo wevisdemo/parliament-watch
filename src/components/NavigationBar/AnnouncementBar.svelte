@@ -6,23 +6,25 @@
 	import HelpFilledIcon from 'carbon-icons-svelte/lib/HelpFilled.svelte';
 	import InformationFilledIcon from 'carbon-icons-svelte/lib/InformationFilled.svelte';
 	import WarningAltFilledIcon from 'carbon-icons-svelte/lib/WarningAltFilled.svelte';
-
 	import { slide } from 'svelte/transition';
 	import { twMerge } from 'tailwind-merge';
 
-	/** A announcement object.
-	 * - title -- A title of announcement
-	 * - text (Required) --  A text of announcement
-	 * - dateStart --  A start date of announcement
-	 * - dateEnd --  A end date of announcement
-	 * - link --  A link of announcement
-	 */
-	export let announcement: Announcement;
+	interface Props {
+		/** A announcement object.
+		 * - title -- A title of announcement
+		 * - text (Required) --  A text of announcement
+		 * - dateStart --  A start date of announcement
+		 * - dateEnd --  A end date of announcement
+		 * - link --  A link of announcement
+		 */
+		announcement: Announcement;
+		/** Boolean value that activate/deactivate function to hide a announcement pane on scrolling down
+		 * - default value -- true
+		 */
+		hideOnScroll?: boolean;
+	}
 
-	/** Boolean value that activate/deactivate function to hide a announcement pane on scrolling down
-	 * - default value -- true
-	 */
-	export let hideOnScroll = true;
+	let { announcement, hideOnScroll = true }: Props = $props();
 
 	/** A type of leading icon
 	 * - "info" (default) -- InformationFilled Icon
@@ -30,11 +32,11 @@
 	 * - "warning" -- WarningAltFilled Icon
 	 * - "success" -- CheckmarkFilled Icon
 	 */
-	let iconType = announcement.iconType ?? 'info';
-	let isShown = true;
-	let isScrollShown = true;
+	let iconType = $derived(announcement.iconType ?? 'info');
+	let isShown = $state(true);
+	let isScrollShown = $state(true);
 	let previousFromTop = 0;
-	let topClass: 'top-12' | 'top-0' = 'top-12';
+	let topClass: 'top-12' | 'top-0' = $state('top-12');
 	const iconMap = {
 		info: InformationFilledIcon,
 		help: HelpFilledIcon,
@@ -63,7 +65,7 @@
 		}
 	}
 
-	function scrollEventHandler(ev: Event) {
+	function scrollEventHandler() {
 		const currentFromTop = window.scrollY;
 		if (currentFromTop > previousFromTop) {
 			//scrolling down
@@ -84,8 +86,9 @@
 	}
 </script>
 
-<svelte:window on:scroll={scrollEventHandler} />
+<svelte:window onscroll={scrollEventHandler} />
 {#if announcement && isShown && isScrollShown}
+	{@const Icon = iconMap[iconType]}
 	<div
 		class={twMerge(
 			topClass,
@@ -95,7 +98,7 @@
 		transition:slide={{ duration: 350, axis: 'y' }}
 	>
 		<div class="flex items-center pr-4">
-			<svelte:component this={iconMap[iconType]} size={20} />
+			<Icon size={20} />
 		</div>
 		<div class=" overflow-hidden text-ellipsis whitespace-nowrap">
 			<span class="font-semibold">{announcement.title ?? ''}</span>
@@ -114,7 +117,7 @@
 		<div class="pl-4 lg:pl-8">
 			<button
 				class="flex cursor-pointer border-0 bg-white/0 text-text-03 hover:text-white"
-				on:click={() => (isShown = false)}
+				onclick={() => (isShown = false)}
 				><CloseIcon size={24} />
 			</button>
 		</div>

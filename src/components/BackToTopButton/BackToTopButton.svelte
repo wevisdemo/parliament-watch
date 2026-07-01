@@ -1,27 +1,41 @@
-<script>
-	import { onDestroy, onMount } from 'svelte';
+<script lang="ts">
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
-	// All sizing props must be passed with numberic value.
-	export let size = 40;
-	export let padding = 12;
-	export let color = '';
-	export let bgColor = '';
-	export let border = 1;
-	export let borderRadius = 2;
-	export let margin = 20;
 	// The button will be visible when the user scrolls down
-	// by 'showAt' value.
-	export let showAt = 50;
+
+	interface Props {
+		// All sizing props must be passed with numeric value
+		size?: number;
+		padding?: number;
+		color?: string;
+		bgColor?: string;
+		border?: number;
+		borderRadius?: number;
+		margin?: number;
+		// Button becomes visible after scrolling this many pixels
+		showAt?: number;
+	}
+
+	let {
+		size = 40,
+		padding = 12,
+		color = '',
+		bgColor = '',
+		border = 1,
+		borderRadius = 2,
+		margin = 20,
+		showAt = 50
+	}: Props = $props();
 
 	// '40' is default size of the button.
 	// So, we need to scale the icon according to the 'size' prop.
-	let scale = size / 40;
+	let scale = $derived(size / 40);
 
 	// (Default) minus value means the user has not scrolled yet.
 	// So, the button will be initially hide.
 	let scrollY = -1;
-	let show = false;
+	let show = $state(false);
 
 	function onScroll() {
 		// Set 'scrollY' value.
@@ -57,8 +71,9 @@
             --border-radius:{borderRadius}px;
             --margin:{margin}px;
             --scale: {scale}"
-		on:click={onClick}
+		onclick={onClick}
 		transition:fade
+		aria-label="back to top"
 	>
 		<div class="btn">
 			<svg
@@ -78,7 +93,7 @@
 {/if}
 
 <style lang="scss">
-	@import 'src/styles/carbon/theme.scss';
+	@import 'styles/carbon/theme.scss';
 
 	.back-to-top-button {
 		// Use 'fixed' position to make it stick to the bottom right of the page.

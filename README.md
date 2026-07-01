@@ -27,7 +27,6 @@ Citizens are watching.
   - [Colors](#colors)
   - [Components](#components)
   - [Icons](#icons)
-- [🔎 Query State Conventions](#-query-state-conventions)
 - [Environment Variables](#environment-variables)
 - [🤝 Contributing Guideline](#-contributing-guideline)
 
@@ -35,7 +34,7 @@ Citizens are watching.
 
 ## ⭐ Goal
 
-We want to record and visualise Thai parliament information, including politicians, assemblies, bills, voting processes, and promises.
+We want to record and visualise Thai parliament information, including politicians, assemblies, bills, and voting processes.
 
 This project can be seen as a renovated combination of [They Work for Us](https://github.com/wevisdemo/they-work-for-us), [Law Watch](https://github.com/wevisdemo/law-watch), and [Promise Tracker](https://github.com/wevisdemo/promise-tracker), which aim to support several election eras.
 
@@ -116,6 +115,8 @@ To see and develop custom components from Histoire's stories.
 pnpm run story:dev
 ```
 
+Stories are also available on staging at https://parliament-watch.pages.dev/stories/.
+
 ### Generate a new component
 
 For a shared component
@@ -153,7 +154,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com).
 - We have custom shared components available in [src/components/](src/components/).
-  - To see the shared components' stories, open Histoire locally with `pnpm run story:dev`.
+  - To see the shared components' stories, open [Histoire on staging](https://parliament-watch.pages.dev/stories/) or run locally with `pnpm run story:dev`.
 - If the component is not yet developed:
   - If the component is used by only a specific route, create it in `/src/components/route-name-and-sub-route-if-exist/`.
   - If the component is shared, run `pnpm run gen:component` to generate a new component. Do not forget to update the story file for the component documentation.
@@ -163,16 +164,6 @@ The project design system is based on Carbon Design System v10 with some modific
 - Use [Carbon Icons Svelte](https://carbon-icons-svelte.onrender.com).
 - We have custom icons available in [src/components/icons](src/components/icons), using the same props as Carbon's icons. They are also available in Histoire.
 - See [Figma file](<https://www.figma.com/file/TUob8dLak4FMugrqMQRm3R/Icons---IBM-Design-Language-(Community)>)
-
-## 🔎 Query State Conventions
-
-- Canonical search param is `q`.
-- For checkbox filters:
-  - Use `list` mode when one param should hold selected values (e.g. `voteType=...`).
-  - Use `flags` mode when values should be readable booleans (e.g. `pass=true` + `notPass=true`).
-  - If `flags` mode has additional future values, store them in `fallbackParam` as repeated list values.
-- Query state is canonical-only: pages should read and write only canonical keys.
-- Prefer shared builders from [src/lib/query-state-config.ts](src/lib/query-state-config.ts) instead of inlining config objects in each page.
 
 ## Environment Variables
 

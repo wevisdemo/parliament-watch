@@ -1,7 +1,3 @@
-import type { Assembly } from './assembly';
-import type { Link } from './link';
-import type { Politician } from './politician';
-
 export interface Bill {
 	title: string;
 	description?: string;
@@ -12,11 +8,7 @@ export interface Bill {
 	id: string;
 	nickname: string;
 	categories: string[];
-	attachment?: Link;
-	proposerType: BillProposerType;
-	proposedLedByPolitician?: Politician;
-	coProposedByPoliticians?: (string | Politician)[];
-	proposedByAssembly?: Assembly;
+
 	proposedByPeople?: PeopleProposer;
 }
 

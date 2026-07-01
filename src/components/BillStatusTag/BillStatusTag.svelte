@@ -4,13 +4,15 @@
 	import { Tag } from 'carbon-components-svelte';
 	import { twMerge } from 'tailwind-merge';
 
-	export let isLarge = false;
-	export let status: BillStatus;
+	interface Props {
+		isLarge?: boolean;
+		status: BillStatus;
+		class?: string;
+	}
 
-	let className = '';
-	export { className as class };
+	let { isLarge = false, status, class: className = '' }: Props = $props();
 
-	$: ({ label, colorClass } = billStatusProperty[status]);
+	let { label, colorClass } = $derived(billStatusProperty[status]);
 </script>
 
 <Tag class={twMerge('whitespace-nowrap', colorClass, className)} size={isLarge ? 'default' : 'sm'}

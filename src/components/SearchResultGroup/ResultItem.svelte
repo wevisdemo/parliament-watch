@@ -1,11 +1,14 @@
 <script lang="ts">
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
-	import PromiseStatusTag from '$components/PromiseDetail/PromiseStatusTag.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import type { SearchResultItem } from '$models/search';
 	import HighlightText from './HighlightText.svelte';
 
-	export let item: SearchResultItem;
+	interface Props {
+		item: SearchResultItem;
+	}
+
+	let { item }: Props = $props();
 </script>
 
 <a href={item.url} data-sveltekit-reload>
@@ -24,7 +27,7 @@
 					<p class="text-xs text-text-03">{item.description}</p>
 				{/if}
 			</div>
-			{#if item.billStatus !== undefined || item.voteResult !== undefined || item.proposedBillsCount !== undefined || item.promiseStatus !== undefined}
+			{#if item.billStatus !== undefined || item.voteResult !== undefined || item.proposedBillsCount !== undefined}
 				<div class="shrink-0">
 					{#if item.billStatus}
 						<BillStatusTag status={item.billStatus} />
@@ -34,9 +37,6 @@
 					{/if}
 					{#if item.proposedBillsCount}
 						<p class="label-02 text-text-02">({item.proposedBillsCount} ร่าง)</p>
-					{/if}
-					{#if item.promiseStatus}
-						<PromiseStatusTag status={item.promiseStatus} />
 					{/if}
 				</div>
 			{/if}

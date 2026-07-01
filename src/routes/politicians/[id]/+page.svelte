@@ -1,40 +1,26 @@
 <script lang="ts">
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
+	import LinkTable from '$components/LinkTable/LinkTable.svelte';
+	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import Share from '$components/Share/Share.svelte';
 	import General from '$components/icons/GeneralIcon.svelte';
 	import Politician from '$components/icons/PoliticianIcon.svelte';
 	import PartyDetail from '$components/politicians/PartyDetail.svelte';
+	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
 	import PositionStatus from '$components/politicians/PositionStatus.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import SideNav from '$components/politicians/SideNav.svelte';
+	import { formatDateRange, formatThaiDate } from '$lib/date.js';
 	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
-	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
-	import LinkTable from '$components/LinkTable/LinkTable.svelte';
-	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
+	import { groups } from 'd3-array';
 	import dayjs from 'dayjs';
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
-	import PoliticianVoteSummary from '$components/politicians/PoliticianVoteSummary.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import { groups } from 'd3';
-	import { formatDateRange, formatThaiDate } from '$lib/date.js';
 
-	export let data;
+	let { data } = $props();
 
-	$: ({ politician, agreedVoting, disagreedVoting, votingAbsentStats } = data);
-
-	$: partyMemberships = politician.memberships.filter(
-		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-	);
-	$: currentPartyMembership = partyMemberships.find(isCurrent);
-	$: currentPartyRole = currentPartyMembership?.posts[0].role;
-	$: currentParty = currentPartyMembership?.posts[0].organizations[0];
-	$: membershipInEachParties = groups(partyMemberships, (m) => m.posts[0].organizations[0].name);
-	$: assemblyMemberships = politician.memberships.filter(
-		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
-	);
-	$: currentAssemblyMemberships = assemblyMemberships.filter(isCurrent);
-
-	let currentNavElementIndex = 0;
+	let currentNavElementIndex = $state(0);
 
 	function isCurrent({ end_date }: { end_date: string | null }): boolean {
 		return end_date === null;
@@ -57,6 +43,24 @@
 			return scroller.destroy;
 		}
 	});
+	let { politician, agreedVoting, disagreedVoting, votingAbsentStats } = $derived(data);
+	let partyMemberships = $derived(
+		politician.memberships.filter(
+			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+		)
+	);
+	let currentPartyMembership = $derived(partyMemberships.find(isCurrent));
+	let currentPartyRole = $derived(currentPartyMembership?.posts[0].role);
+	let currentParty = $derived(currentPartyMembership?.posts[0].organizations[0]);
+	let membershipInEachParties = $derived(
+		groups(partyMemberships, (m) => m.posts[0].organizations[0].name)
+	);
+	let assemblyMemberships = $derived(
+		politician.memberships.filter(
+			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+		)
+	);
+	let currentAssemblyMemberships = $derived(assemblyMemberships.filter(isCurrent));
 </script>
 
 <Breadcrumb
@@ -138,7 +142,9 @@
 		/>
 		<div class="flex w-full min-w-0 flex-1 flex-col gap-6">
 			<Section id="personal" title="ข้อมูลพื้นฐาน">
-				<General slot="icon" size="32" />
+				{#snippet icon()}
+					<General size={32} />
+				{/snippet}
 				<div>
 					<p>
 						{#if politician.gender}
@@ -214,10 +220,12 @@
 				{/if}
 			</Section>
 			<Section id="politics" title="ประวัติทางการเมือง">
-				<Politician slot="icon" size="32" />
-				<p slot="header-extension" class="label-01 text-gray-60">
-					หมายเหตุ : ข้อมูลย้อนหลังถึงปี 2562
-				</p>
+				{#snippet icon()}
+					<Politician size={32} />
+				{/snippet}
+				{#snippet headerExtension()}
+					<p class="label-01 text-gray-60">หมายเหตุ : ข้อมูลย้อนหลังถึงปี 2562</p>
+				{/snippet}
 				{#if assemblyMemberships.length}
 					<div>
 						<h3 class="heading-02">{assemblyMemberships.length} ตำแหน่งทางการเมือง</h3>

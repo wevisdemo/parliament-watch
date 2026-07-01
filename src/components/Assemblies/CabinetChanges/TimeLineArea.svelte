@@ -3,11 +3,15 @@
 	import type { TimeLine } from './TimeLine';
 	import TimeLineComponent from './TimeLine.svelte';
 
-	export let timeLineData: TimeLine[];
-	export let startedAt: Date | undefined;
-	export let endedAt: Date | undefined;
-	export let selectedDate: Date;
-	export let handleSelectDate: (date: Date) => void;
+	interface Props {
+		timeLineData: TimeLine[];
+		startedAt: Date | undefined;
+		endedAt: Date | undefined;
+		selectedDate: Date;
+		handleSelectDate: (date: Date) => void;
+	}
+
+	let { timeLineData, startedAt, endedAt, selectedDate, handleSelectDate }: Props = $props();
 </script>
 
 <div class="flex flex-col gap-1 px-[16px] md:px-[64px]">

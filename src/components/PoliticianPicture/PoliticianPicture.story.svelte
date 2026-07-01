@@ -1,7 +1,8 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
 	import PoliticianPicture from './PoliticianPicture.svelte';
-	export let Hst: Hst;
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 
 	let avatar = 'https://placehold.co/128x128?text=politician';
 	let party = {

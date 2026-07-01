@@ -2,22 +2,38 @@
 	import PoliticianPicture from '$components/PoliticianPicture/PoliticianPicture.svelte';
 	import { twMerge } from 'tailwind-merge';
 
-	export let id: string;
-	export let name: string;
-	export let avatar: string | undefined;
-	export let partyLogo: string | undefined = undefined;
-	export let partyName: string | undefined = undefined;
-	export let role: string | null = null;
-	export let isLarge = false;
-	export let isActive = true;
-	export let showAvatar = true;
+	interface Props {
+		id: string;
+		name: string;
+		avatar: string | undefined;
+		partyLogo?: string | undefined;
+		partyName?: string | undefined;
+		role?: string | null;
+		isLarge?: boolean;
+		isActive?: boolean;
+		showAvatar?: boolean;
+	}
 
-	$: imgSize = isLarge ? 64 : 40;
-	$: imgClass = isLarge ? 'w-[64px] h-[64px]' : 'w-[40px] h-[40px]';
-	$: titleClass = isLarge
-		? 'text-lg leading-[28px] font-bold font-serif'
-		: 'text-sm leading-[18px] underline mb-1';
-	$: subtitleClass = isLarge ? 'leading-[18px]' : 'text-xs leading-[16px]';
+	let {
+		id,
+		name,
+		avatar,
+		partyLogo = undefined,
+		partyName = undefined,
+		role = null,
+		isLarge = false,
+		isActive = true,
+		showAvatar = true
+	}: Props = $props();
+
+	let imgSize = $derived(isLarge ? 64 : 40);
+	let imgClass = $derived(isLarge ? 'w-[64px] h-[64px]' : 'w-[40px] h-[40px]');
+	let titleClass = $derived(
+		isLarge
+			? 'text-lg leading-[28px] font-bold font-serif'
+			: 'text-sm leading-[18px] underline mb-1'
+	);
+	let subtitleClass = $derived(isLarge ? 'leading-[18px]' : 'text-xs leading-[16px]');
 </script>
 
 <a

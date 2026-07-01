@@ -1,4 +1,4 @@
-import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
 import {
@@ -16,9 +16,8 @@ import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summar
 import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
 import { error } from '@sveltejs/kit';
-import { interpolateRainbow } from 'd3';
+import { interpolateRainbow } from 'd3-scale-chromatic';
 import dayjs from 'dayjs';
-import type { ComponentProps } from 'svelte';
 
 const MAX_LATEST_VOTE = 5;
 const MAX_CHANGES = 5;
@@ -208,7 +207,7 @@ export async function load({ params }) {
 				}
 			});
 
-	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
+	const latestVoteEvents: VoteCardProps[] = await Promise.all(
 		voteEvents.map(async (voteEvent) => {
 			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
 			const groups = groupedVotes.map((aff) => ({

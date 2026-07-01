@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
 	import NavigationBar from './NavigationBar.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	export let Hst: Hst;
+	export let Hst: HstStory;
 </script>
 
 <Hst.Story title="NavigationBar">

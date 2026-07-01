@@ -1,17 +1,26 @@
 <script lang="ts">
-	import { twMerge } from 'tailwind-merge';
-	import BillStatusTag from '../BillStatusTag/BillStatusTag.svelte';
 	import type { BillStatus } from '$lib/politigraph/genql';
+	import BillStatusTag from '../BillStatusTag/BillStatusTag.svelte';
+	import { twMerge } from 'tailwind-merge';
 
-	export let billStatus: BillStatus;
-	// export let billAmount: string;
-	export let descriptionTitle: string | null;
-	export let descriptionList: Array<string>;
-	export let learnMoreLabel: string;
-	export let learnMoreUrl: string;
+	interface Props {
+		billStatus: BillStatus;
+		// export let billAmount: string;
+		descriptionTitle: string | null;
+		descriptionList: Array<string>;
+		learnMoreLabel: string;
+		learnMoreUrl: string;
+		class?: string;
+	}
 
-	let className = '';
-	export { className as class };
+	let {
+		billStatus,
+		descriptionTitle,
+		descriptionList,
+		learnMoreLabel,
+		learnMoreUrl,
+		class: className = ''
+	}: Props = $props();
 </script>
 
 <div

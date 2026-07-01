@@ -1,9 +1,13 @@
 <script lang="ts">
-	import { twMerge } from 'tailwind-merge';
 	import type { GroupByTab } from '../../../routes/assemblies/[id]/members/[groupby]/+layout.server';
+	import { twMerge } from 'tailwind-merge';
 
-	export let id: string;
-	export let groupByTabs: GroupByTab[];
+	interface Props {
+		id: string;
+		groupByTabs: GroupByTab[];
+	}
+
+	let { id, groupByTabs }: Props = $props();
 </script>
 
 <nav

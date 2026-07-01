@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import AnnouncementBar from './AnnouncementBar.svelte';
 	import type { Announcement } from '$models/announcement';
-	export let Hst: Hst;
+	import AnnouncementBar from './AnnouncementBar.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 
 	const announcements: Announcement[] = [
 		{
@@ -48,7 +49,7 @@
 
 <Hst.Story title="AnnouncementBar">
 	<Hst.Variant title="stacking">
-		{#each announcements as announcement}
+		{#each announcements as announcement, i (i)}
 			<AnnouncementBar {announcement} />
 		{/each}
 	</Hst.Variant>

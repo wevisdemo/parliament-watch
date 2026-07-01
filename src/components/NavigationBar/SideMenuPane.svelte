@@ -1,11 +1,17 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
-	import { createEventDispatcher } from 'svelte';
-	export let isActive = false;
-	const dispatch = createEventDispatcher();
+
+	interface Props {
+		isActive?: boolean;
+		onbackdropClick?: () => void;
+		children?: Snippet;
+	}
+
+	let { isActive = false, onbackdropClick, children }: Props = $props();
 
 	function backdropClick() {
-		dispatch('backdropClick');
+		onbackdropClick?.();
 	}
 </script>
 
@@ -15,7 +21,7 @@
 		transition:slide={{ duration: 350, axis: 'x' }}
 	>
 		<div class="pr-2 pt-2">
-			<slot />
+			{@render children?.()}
 		</div>
 	</aside>
 
@@ -23,6 +29,10 @@
 		class="fixed left-0 top-0 z-0 h-screen w-full overflow-hidden bg-white/50 backdrop-brightness-125"
 		class:hidden={!isActive}
 	>
-		<button class="h-screen w-screen cursor-default border-0 bg-white/0" on:click={backdropClick} />
+		<button
+			class="h-screen w-screen cursor-default border-0 bg-white/0"
+			onclick={backdropClick}
+			aria-label="close menu"
+		></button>
 	</div>
 {/if}

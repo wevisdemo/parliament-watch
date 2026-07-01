@@ -1,7 +1,8 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
 	import PoliticianProfile from './PoliticianProfile.svelte';
-	export let Hst: Hst;
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 
 	let id = 'ปิยบุตร-แสงกนกกุล';
 	let name = 'ปิยบุตร แสงกนกกุล';

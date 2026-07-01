@@ -1,8 +1,24 @@
 <script lang="ts">
-	export let size = 16;
-	export let title: string | undefined = undefined;
+	import type { Snippet } from 'svelte';
+	import type { SVGAttributes } from 'svelte/elements';
 
-	$: labelled = $$props['aria-label'] || $$props['aria-labelledby'] || title;
+	interface Props extends SVGAttributes<SVGSVGElement> {
+		size?: number;
+		title?: string;
+		children?: Snippet;
+	}
+
+	let {
+		size = 16,
+		title,
+		'aria-label': ariaLabel,
+		'aria-labelledby': ariaLabelledBy,
+		tabindex,
+		children,
+		...rest
+	}: Props = $props();
+
+	let label = $derived(ariaLabel || ariaLabelledBy || title);
 </script>
 
 <svg
@@ -12,11 +28,11 @@
 	preserveAspectRatio="xMidYMid meet"
 	width={size}
 	height={size}
-	aria-hidden={labelled ? undefined : true}
-	role={labelled ? 'img' : undefined}
-	focusable={`${Number($$props['tabindex']) === 0}`}
-	{...$$restProps}
+	aria-hidden={label ? undefined : true}
+	role={label ? 'img' : undefined}
+	focusable={`${Number(tabindex) === 0}`}
+	{...rest}
 >
 	{#if title}<title>{title}</title>{/if}
-	<slot />
+	{@render children?.()}
 </svg>

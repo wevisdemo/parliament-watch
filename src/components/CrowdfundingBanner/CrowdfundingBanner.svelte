@@ -1,10 +1,14 @@
 <script lang="ts">
 	import CtaButton from '$components/buttons/CtaButton.svelte';
-	import { ArrowRight } from 'carbon-icons-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	type BannerVariant = 'compact' | 'full';
 
-	export let variant: BannerVariant;
+	interface Props {
+		variant: BannerVariant;
+	}
+
+	let { variant }: Props = $props();
 	const variantClasses = {
 		root: {
 			compact: compactVariantBemClasses('root'),
@@ -65,7 +69,7 @@
 		{/if}
 		<div class={variantClasses.content[variant]}>
 			{#if variant === 'compact'}
-				<span class="banner-crowdfunding__emoji" aria-hidden>🥹</span>
+				<span class="banner-crowdfunding__emoji" aria-hidden="true">🥹</span>
 			{/if}
 			<div class={variantClasses.contentGroup[variant]}>
 				<div class={variantClasses.textContent[variant]}>

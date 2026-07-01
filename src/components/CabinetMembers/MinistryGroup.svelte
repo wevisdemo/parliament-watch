@@ -1,23 +1,29 @@
 <script lang="ts">
-	import type { ComponentProps } from 'svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
+	import type { ComponentProps } from 'svelte';
 
-	export let title = '';
-	export let members: { assemblyRole: string; profile: ComponentProps<PoliticianProfile> }[];
+	interface Props {
+		title?: string;
+		members: { assemblyRole: string; profile: ComponentProps<typeof PoliticianProfile> }[];
+	}
 
-	$: minister = members.filter(
-		(m) =>
-			m.assemblyRole.includes('รัฐมนตรีว่าการ') ||
-			m.assemblyRole.includes('รัฐมนตรีประจำสำนักนายกรัฐมนตรี')
+	let { title = '', members }: Props = $props();
+
+	let minister = $derived(
+		members.filter(
+			(m) =>
+				m.assemblyRole.includes('รัฐมนตรีว่าการ') ||
+				m.assemblyRole.includes('รัฐมนตรีประจำสำนักนายกรัฐมนตรี')
+		)
 	);
-	$: deputyMinister = members.filter((m) => m.assemblyRole.includes('รัฐมนตรีช่วย'));
+	let deputyMinister = $derived(members.filter((m) => m.assemblyRole.includes('รัฐมนตรีช่วย')));
 </script>
 
 <div class="flex min-w-[230px] flex-col gap-[16px] border border-ui-01 pb-[16px]">
 	<div class="flex h-[34px] flex-none items-center bg-ui-01 px-[16px]">
 		<p class="heading-compact-01">{title}</p>
 	</div>
-	{#each minister as { profile }}
+	{#each minister as { profile } (profile.id)}
 		<div class="flex flex-col gap-[8px] px-[24px]">
 			<p class="heading-compact-01">รัฐมนตรี</p>
 			<div class="-mx-2">
@@ -28,7 +34,7 @@
 	{#if deputyMinister.length != 0}
 		<div class="flex flex-col px-[24px]">
 			<p class="heading-compact-01 mb-[8px]">รัฐมนตรีช่วยว่าการ</p>
-			{#each deputyMinister as { profile }}
+			{#each deputyMinister as { profile } (profile.id)}
 				<div class="-mx-2">
 					<PoliticianProfile {...profile} showAvatar={false} />
 				</div>

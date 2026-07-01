@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { menuList } from '$components/NavigationBar/NavigationBar.svelte';
 	import WeVisText from '$components/icons/WeVisText.svelte';
-	import { ArrowUpRight } from 'carbon-icons-svelte';
 	import FooterContact from './FooterContact.svelte';
 	import FooterMenuGroup from './FooterMenuGroup.svelte';
-	import { menuList } from '$components/NavigationBar/NavigationBar.svelte';
+	import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 </script>
 
 <div class="flex flex-col items-center gap-4 bg-white px-6 py-8 text-sm md:px-12 lg:px-16">
@@ -75,11 +75,11 @@
 			<img width="120px" height="34px" src="/images/logo/pw-short-white.png" alt="logo short" />
 		</div>
 		<div class="flex flex-row flex-wrap gap-6 pb-4 text-gray-30">
-			{#each menuList as { label, icon, subs, url } (label)}
+			{#each menuList as { label, icon: Icon, subs, url } (label)}
 				<FooterMenuGroup title={label} menuItems={subs} {url}>
-					<svelte:fragment slot="titleIcon">
-						<svelte:component this={icon} class="text-inverse-link" />
-					</svelte:fragment>
+					{#snippet titleIcon()}
+						<Icon class="text-inverse-link" />
+					{/snippet}
 				</FooterMenuGroup>
 			{/each}
 			<FooterContact />

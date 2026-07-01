@@ -2,12 +2,23 @@
 	import ArrowDown from 'carbon-icons-svelte/lib/ArrowDown.svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
-	export let currentNavElementIndex: number;
-	export let assemblyRolesLength: number;
-	export let partyCount: number;
-	export let agreedVoting: number;
-	export let disagreedVoting: number;
-	export let absentTotal: number;
+	interface Props {
+		currentNavElementIndex: number;
+		assemblyRolesLength: number;
+		partyCount: number;
+		agreedVoting: number;
+		disagreedVoting: number;
+		absentTotal: number;
+	}
+
+	let {
+		currentNavElementIndex,
+		assemblyRolesLength,
+		partyCount,
+		agreedVoting,
+		disagreedVoting,
+		absentTotal
+	}: Props = $props();
 </script>
 
 <nav

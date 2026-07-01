@@ -95,16 +95,6 @@ export function search(
 						url: '/bills/explore?proposername=' + proposer.item.name
 					})
 				)
-			: undefined,
-		promises: searchIndexes.promises
-			? getScoredAndHighlightedResultItems(queries, searchIndexes.promises, keepTopN).map(
-					(promise) => ({
-						heading: promise.item.name.slice(0, 16),
-						headingHighlight: highlight ? promise.highlightedName : undefined,
-						promiseStatus: promise.item.status,
-						url: '/promises/' + promise.item.id
-					})
-				)
 			: undefined
 	};
 }

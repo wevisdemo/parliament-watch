@@ -3,15 +3,16 @@
 	import SearchResultGroup from '$components/SearchResultGroup/SearchResultGroup.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianIcon from '$components/icons/PoliticianIcon.svelte';
-	import PromiseIcon from '$components/icons/PromiseIcon.svelte';
 	import VoteIcon from '$components/icons/VoteIcon.svelte';
 	import type { SearchResults } from '$models/search';
 	import { twMerge } from 'tailwind-merge';
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+		searchResults?: SearchResults | null;
+	}
 
-	export let searchResults: SearchResults | null = null;
+	let { class: className = '', searchResults = null }: Props = $props();
 </script>
 
 {#if searchResults}
@@ -22,27 +23,30 @@
 		{#if Object.values(searchResults).some((results) => results?.length > 0)}
 			{#if searchResults.politicians}
 				<SearchResultGroup heading="นักการเมือง" items={searchResults.politicians}>
-					<PoliticianIcon slot="icon" class="fill-interactive-01" />
+					{#snippet icon()}
+						<PoliticianIcon class="fill-interactive-01" />
+					{/snippet}
 				</SearchResultGroup>
 			{/if}
 			{#if searchResults.votings}
 				<SearchResultGroup heading="การลงมติ" items={searchResults.votings}>
-					<VoteIcon slot="icon" class="fill-interactive-01" />
+					{#snippet icon()}
+						<VoteIcon class="fill-interactive-01" />
+					{/snippet}
 				</SearchResultGroup>
 			{/if}
 			{#if searchResults.bills}
 				<SearchResultGroup heading="การออกกฎหมาย" items={searchResults.bills}>
-					<LawIcon slot="icon" class="fill-interactive-01" />
+					{#snippet icon()}
+						<LawIcon class="fill-interactive-01" />
+					{/snippet}
 				</SearchResultGroup>
 			{/if}
 			{#if searchResults.billProposers}
 				<SearchResultGroup heading="ชื่อผู้เสนอร่าง" items={searchResults.billProposers}>
-					<VoteIcon slot="icon" class="fill-interactive-01" />
-				</SearchResultGroup>
-			{/if}
-			{#if searchResults.promises}
-				<SearchResultGroup heading="คำสัญญา" items={searchResults.promises}>
-					<PromiseIcon slot="icon" class="fill-interactive-01" />
+					{#snippet icon()}
+						<VoteIcon class="fill-interactive-01" />
+					{/snippet}
 				</SearchResultGroup>
 			{/if}
 		{:else}

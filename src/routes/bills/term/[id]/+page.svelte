@@ -1,23 +1,23 @@
 <script lang="ts">
-	import BillCard from '$components/BillCard/BillCard.svelte';
-	import Carousel from '$components/Index/Carousel.svelte';
-	import LawStatusCard from '$components/LawStatusCard/LawStatusCard.svelte';
-	import SearchInput from '$components/SearchInput/SearchInput.svelte';
-	import SearchResult from '$components/SearchResult/SearchResult.svelte';
-	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
-	import { SearchIndexCategory, type SearchResults } from '$models/search';
-	import { Breadcrumb, BreadcrumbItem, Button, Search } from 'carbon-components-svelte';
-	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import LawIcon from '$components/icons/LawIcon.svelte';
-	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
-	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
 	import AssemblyIdRunner, {
 		type AvailableAssembly
 	} from '$components/Assemblies/AssemblyIdRunner.svelte';
+	import BillCard from '$components/BillCard/BillCard.svelte';
+	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
+	import Carousel from '$components/Index/Carousel.svelte';
+	import LawStatusCard from '$components/LawStatusCard/LawStatusCard.svelte';
+	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
+	import SearchInput from '$components/SearchInput/SearchInput.svelte';
+	import SearchResult from '$components/SearchResult/SearchResult.svelte';
+	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
+	import LawIcon from '$components/icons/LawIcon.svelte';
+	import { SearchIndexCategory, type SearchResults } from '$models/search';
+	import { Breadcrumb, BreadcrumbItem, Button, Search } from 'carbon-components-svelte';
+	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	$: ({
+	let {
 		allMpTerms,
 		thisTerm,
 		totalCount,
@@ -26,18 +26,19 @@
 		byProposerType,
 		lastEnactedBills,
 		lastEnactedBillProposers
-	} = data);
+	} = $derived(data);
 
-	let searchResults: SearchResults | null;
+	let searchResults: SearchResults | null = $state(null);
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
 		assembly ? `/bills/term/${assembly.id}` : '';
 
-	$: currentTermIndex = allMpTerms.findIndex((assembly) => assembly.id === thisTerm.id);
-	$: previousTermHref =
-		currentTermIndex > 0 ? `/bills/term/${allMpTerms[currentTermIndex - 1].id}` : '';
+	let currentTermIndex = $derived(allMpTerms.findIndex((assembly) => assembly.id === thisTerm.id));
+	let previousTermHref = $derived(
+		currentTermIndex > 0 ? `/bills/term/${allMpTerms[currentTermIndex - 1].id}` : ''
+	);
 
-	$: exploreLinkExtraParams = { term: thisTerm.id };
+	let exploreLinkExtraParams = $derived({ term: thisTerm.id });
 </script>
 
 <Breadcrumb

@@ -1,3 +1,13 @@
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	interface Props {
+		footer?: Snippet;
+	}
+
+	let { footer }: Props = $props();
+</script>
+
 <section>
 	<div class="svg-container flex w-full flex-col">
 		<div class="px-3">
@@ -107,7 +117,7 @@
 			>
 		</div>
 
-		<slot name="footer" />
+		{@render footer?.()}
 	</div>
 </section>
 

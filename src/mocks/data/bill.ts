@@ -1,6 +1,11 @@
 import { enumBillStatus } from '$lib/politigraph/genql';
 import { enumBillCreatorType } from '$lib/politigraph/genql';
-import { movingForwardPolitician } from './politician';
+
+const mockPolitician = {
+	id: 'พริษฐ์-วัชรสินธุ',
+	firstname: 'พริษฐ์',
+	lastname: 'วัชรสินธุ'
+};
 
 export const inProgressBill = {
 	id: '1',
@@ -13,8 +18,8 @@ export const inProgressBill = {
 	proposedOn: new Date('2023-07-13'),
 	categories: ['สิ่งแวดล้อม', 'ขนส่งมวลชน'],
 	proposerType: enumBillCreatorType.POLITICIAN,
-	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
+	proposedLedByPolitician: mockPolitician,
+	coProposedByPoliticians: [mockPolitician.firstname, mockPolitician.firstname],
 	attachment: {
 		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'
@@ -34,47 +39,8 @@ export const enactedBill = {
 	proposedOn: new Date('2022-07-13'),
 	enactedOn: new Date('2023-07-13'),
 	proposerType: enumBillCreatorType.POLITICIAN,
-	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
-	attachment: {
-		label: 'เอกสารเสนอกฎหมาย',
-		url: 'https://www.google.com'
-	},
-	lisUrl: ''
-};
-
-export const promiseRelatedBill = {
-	id: '3',
-	acceptanceNumber: '3',
-	title: 'ร่างพระราชบัญญัติส่งเสริมการเลี้ยงโค',
-	nickname: 'ร่าง พรบ.ส่งเสริมการเลี้ยงโค',
-	description: '',
-	status: enumBillStatus.IN_PROGRESS,
-	categories: ['เศรษฐกิจ'],
-	proposedOn: new Date('2023-10-04'),
-	proposerType: enumBillCreatorType.POLITICIAN,
-	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
-	attachment: {
-		label: 'เอกสารเสนอกฎหมาย',
-		url: 'https://www.google.com'
-	},
-	lisUrl: ''
-};
-
-export const promiseFulfilledBill = {
-	id: '4',
-	acceptanceNumber: '4',
-	title: 'ร่างพระราชบัญญัติแก้ไขเพิ่มเติมประมวลกฎหมายแพ่งและพาณิชย์',
-	nickname: 'ร่าง พรบ.สมรสเท่าเทียม',
-	description: '',
-	status: enumBillStatus.ENACTED,
-	categories: ['สังคม'],
-	proposedOn: new Date('2023-10-04'),
-	enactedOn: new Date('2024-04-30'),
-	proposerType: enumBillCreatorType.POLITICIAN,
-	proposedLedByPolitician: movingForwardPolitician,
-	coProposedByPoliticians: [movingForwardPolitician.firstname, movingForwardPolitician.firstname],
+	proposedLedByPolitician: mockPolitician,
+	coProposedByPoliticians: [mockPolitician.firstname, mockPolitician.firstname],
 	attachment: {
 		label: 'เอกสารเสนอกฎหมาย',
 		url: 'https://www.google.com'

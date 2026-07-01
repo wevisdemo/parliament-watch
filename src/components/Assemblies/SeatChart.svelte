@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { PartySeat, TooltipProp } from './shared';
 	import AssemblyTooltip from './AssemblyTooltip.svelte';
+	import type { PartySeat, TooltipProp } from './shared';
 
 	interface Point {
 		cx: number;
@@ -15,54 +15,15 @@
 		count: number;
 	}
 
-	export let parties: PartySeat[] = [];
-	export let lineAmounts: number[] = [];
+	interface Props {
+		parties?: PartySeat[];
+		lineAmounts?: number[];
+	}
 
-	let clientWidth = 0;
-	let tooltipProp: TooltipProp | null = null;
+	let { parties = [], lineAmounts = [] }: Props = $props();
 
-	$: outerRadius = Math.max(Math.min((clientWidth - 20) / 2, 224), 0);
-	$: circleDiameter = lineAmounts.length ? Math.max(4, outerRadius / 2 / lineAmounts.length) : 4;
-	$: gap =
-		lineAmounts.length > 1
-			? Math.max(
-					(outerRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
-					1
-				)
-			: 0;
-
-	$: points = ((): Point[] => {
-		if (!parties.length || !lineAmounts.length || outerRadius <= 0) {
-			return [];
-		}
-
-		const nextPoints: Point[] = [];
-		const lineAllocations = lineAmounts.map((amount) => ({ total: amount, count: 0 }));
-
-		for (const party of parties) {
-			for (let i = 0; i < party.count; i++) {
-				const index = getLeastFilledLineIndex(lineAllocations);
-				if (index < 0) continue;
-
-				const line = lineAllocations[index];
-				const radius = outerRadius - index * circleDiameter - index * gap;
-				const seatIndex = line.total > 1 ? line.count / (line.total - 1) : 0.5;
-				const angle = seatIndex * Math.PI + Math.PI;
-
-				nextPoints.push({
-					cx: radius * Math.cos(angle) + outerRadius + circleDiameter,
-					cy: radius * Math.sin(angle) + outerRadius + circleDiameter,
-					color: party.color,
-					additional: party.name,
-					title: party.members?.[i]?.name
-				});
-
-				lineAllocations[index].count++;
-			}
-		}
-
-		return nextPoints;
-	})();
+	let clientWidth = $state(0);
+	let tooltipProp: TooltipProp | null = $state(null);
 
 	function getLeastFilledLineIndex(lineAllocations: LineCalculator[]) {
 		const filledPercents = lineAllocations.map((lineAllocation) =>
@@ -109,6 +70,52 @@
 	function clearTooltip() {
 		tooltipProp = null;
 	}
+	let outerRadius = $derived(Math.max(Math.min((clientWidth - 20) / 2, 224), 0));
+	let circleDiameter = $derived(
+		lineAmounts.length ? Math.max(4, outerRadius / 2 / lineAmounts.length) : 4
+	);
+	let gap = $derived(
+		lineAmounts.length > 1
+			? Math.max(
+					(outerRadius * 0.6 - circleDiameter * lineAmounts.length) / (lineAmounts.length - 1),
+					1
+				)
+			: 0
+	);
+	let points = $derived(
+		((): Point[] => {
+			if (!parties.length || !lineAmounts.length || outerRadius <= 0) {
+				return [];
+			}
+
+			const nextPoints: Point[] = [];
+			const lineAllocations = lineAmounts.map((amount) => ({ total: amount, count: 0 }));
+
+			for (const party of parties) {
+				for (let i = 0; i < party.count; i++) {
+					const index = getLeastFilledLineIndex(lineAllocations);
+					if (index < 0) continue;
+
+					const line = lineAllocations[index];
+					const radius = outerRadius - index * circleDiameter - index * gap;
+					const seatIndex = line.total > 1 ? line.count / (line.total - 1) : 0.5;
+					const angle = seatIndex * Math.PI + Math.PI;
+
+					nextPoints.push({
+						cx: radius * Math.cos(angle) + outerRadius + circleDiameter,
+						cy: radius * Math.sin(angle) + outerRadius + circleDiameter,
+						color: party.color,
+						additional: party.name,
+						title: party.members?.[i]?.name
+					});
+
+					lineAllocations[index].count++;
+				}
+			}
+
+			return nextPoints;
+		})()
+	);
 </script>
 
 <div
@@ -131,11 +138,11 @@
 				role="button"
 				tabindex="0"
 				aria-label={point.title ? `${point.title}, ${point.additional}` : (point.additional ?? '')}
-				on:mouseover={(event) => setTooltipProperty(point, event)}
-				on:focus={(event) => setTooltipProperty(point, event)}
-				on:mouseout={clearTooltip}
-				on:blur={clearTooltip}
-				on:keydown={(event) => {
+				onmouseover={(event) => setTooltipProperty(point, event)}
+				onfocus={(event) => setTooltipProperty(point, event)}
+				onmouseout={clearTooltip}
+				onblur={clearTooltip}
+				onkeydown={(event) => {
 					if (event.key === 'Enter' || event.key === ' ') {
 						event.preventDefault();
 						setTooltipProperty(point, event);

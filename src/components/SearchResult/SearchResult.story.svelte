@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import SearchResult from './SearchResult.svelte';
 	import type { SearchResults } from '$models/search';
 	import { DefaultVotingResult } from '$models/voting';
-	import { PromiseStatus } from '$models/promise';
-	export let Hst: Hst;
+	import SearchResult from './SearchResult.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
+
+	export let Hst: HstStory;
 
 	const noResults: SearchResults = {};
 
@@ -56,18 +56,6 @@
 				description: 'สส.บัญชีรายชื่อ | รวมไทยสร้างชาติ',
 				proposedBillsCount: 1,
 				url: '#n'
-			}
-		],
-		promises: [
-			{
-				heading: 'โครงการ 1 อำเภอ 1 ทุน (ODOS: One District One Scholarship)',
-				promiseStatus: PromiseStatus.notStarted,
-				url: '#o'
-			},
-			{
-				heading: '“รถไฟฟ้า กทม.” 20 บาทตลอดสาย',
-				promiseStatus: PromiseStatus.inProgress,
-				url: '#p'
 			}
 		]
 	};

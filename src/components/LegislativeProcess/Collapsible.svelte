@@ -1,18 +1,21 @@
 <script lang="ts">
+	import type { Legislation } from '../../routes/legislative-process/+page.server';
 	import { Link, Tile } from 'carbon-components-svelte';
 	import { Tag } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
-
+	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
 	import type { ComponentProps } from 'svelte';
-	import type { Legislation } from '../../routes/legislative-process/+page.server';
 
-	export let legislation: Legislation;
-	$: ({ consideredBy, details, endorsedBy, examples, presentedBy, steps, title, stepDescription } =
-		legislation);
+	interface Props {
+		legislation: Legislation;
+	}
 
-	let isOpen = false;
+	let { legislation }: Props = $props();
+	let { consideredBy, details, endorsedBy, examples, presentedBy, steps, title, stepDescription } =
+		$derived(legislation);
+
+	let isOpen = $state(false);
 
 	function toggle(event: MouseEvent) {
 		event.stopPropagation();
@@ -37,7 +40,7 @@
 			<p>{details}</p>
 			<div class="flex flex-row items-center gap-1">
 				<strong class="mr-1 shrink-0 text-sm">เสนอโดย</strong>
-				{#each presentedBy as presenter}
+				{#each presentedBy as presenter (presenter)}
 					<div
 						class="flex flex-row items-baseline after:ml-1 after:content-['/'] last:after:content-none"
 					>
@@ -72,7 +75,7 @@
 				</div>
 				<div class="flex flex-col gap-y-2">
 					<strong>เริ่มต้น</strong>
-					{#each steps as step}
+					{#each steps as step (step)}
 						<div class="flex flex-row items-center gap-1">
 							<CheckmarkFilled size={24} class="fill-green-70" />
 							<hr class="width w-3 border-[1px]" />
@@ -88,7 +91,7 @@
 				<div class="flex flex-col gap-1">
 					<h4 class="font-semibold">ตัวอย่าง</h4>
 					<ul class="list-inside list-disc leading-tight">
-						{#each examples as example}
+						{#each examples as example (example.link)}
 							<li class="whitespace-nowrap">
 								<Link on:click={(event) => event.stopPropagation()} inline href={example.link}>
 									{example.description}
@@ -102,7 +105,7 @@
 	</div>
 
 	<button
-		on:click={toggle}
+		onclick={toggle}
 		class="h-12 w-full bg-[transparent] focus:outline-2 focus:-outline-offset-2 focus:outline-interactive-01"
 	>
 		<div class=" my-auto ml-auto w-12">

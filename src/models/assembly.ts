@@ -1,5 +1,3 @@
-import type { Party } from './party';
-
 export enum AssemblyName {
 	Representatives = 'สภาผู้แทนราษฎร',
 	Senates = 'วุฒิสภา',
@@ -12,8 +10,7 @@ export interface Assembly {
 	startedAt: Date;
 	endedAt?: Date;
 	origin?: string;
-	governmentParties: Party[];
-	oppositionParties: Party[];
+
 	abbreviation: string;
 	mainRoles: string[];
 }

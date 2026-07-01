@@ -1,19 +1,26 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import Footer from '$components/Footer/Footer.svelte';
 	import CookieConsent from '$components/Index/CookieConsent.svelte';
 	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
+	import { DEFAULT_SEO, PROD_URL } from '$lib/seo';
+	import '../styles/index.css';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
-	import '../styles/index.css';
-	import { DEFAULT_SEO, PROD_URL } from '$lib/seo';
+	import type { Snippet } from 'svelte';
 
-	$: title = $page.data?.seo?.title ?? DEFAULT_SEO.title;
-	$: description = $page.data?.seo?.description ?? DEFAULT_SEO.description;
-	$: url = new URL($page.url.pathname, PROD_URL).href;
-	$: og = $page.data?.seo?.og ?? DEFAULT_SEO.og;
+	interface Props {
+		children?: Snippet;
+	}
 
-	let isProd: undefined | boolean = undefined;
+	let { children }: Props = $props();
+
+	let title = $derived(page.data?.seo?.title ?? DEFAULT_SEO.title);
+	let description = $derived(page.data?.seo?.description ?? DEFAULT_SEO.description);
+	let url = $derived(new URL(page.url.pathname, PROD_URL).href);
+	let og = $derived(page.data?.seo?.og ?? DEFAULT_SEO.og);
+
+	let isProd: undefined | boolean = $state(undefined);
 
 	onMount(() => {
 		isProd = window.location.href.startsWith(PROD_URL);
@@ -46,7 +53,7 @@
 <main class="flex min-h-screen flex-col">
 	<NavigationBar />
 	<div class="flex-1">
-		<slot />
+		{@render children?.()}
 	</div>
 	<Footer />
 </main>

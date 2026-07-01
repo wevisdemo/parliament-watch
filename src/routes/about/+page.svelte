@@ -10,7 +10,7 @@
 	import scrollama from 'scrollama';
 	import { onMount } from 'svelte';
 
-	export let data;
+	let { data } = $props();
 
 	const sections = [
 		{ menu: 'เกี่ยวกับเว็บไซต์นี้', menuItem: [{ text: 'ทีมงานร่วมพัฒนา' }] },
@@ -32,9 +32,10 @@
 		}
 	];
 
-	let contentContainer: HTMLElement;
-	let currentNavElementId: string = sections[0].menu;
+	let contentContainer: HTMLElement | undefined = $state();
+	let currentNavElementId: string = $state(sections[0].menu);
 	onMount(() => {
+		if (!contentContainer) return;
 		if (window.matchMedia('(min-width: 672px)').matches) {
 			const scroller = scrollama();
 

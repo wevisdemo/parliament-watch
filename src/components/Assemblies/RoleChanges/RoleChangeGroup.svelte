@@ -1,17 +1,22 @@
 <script lang="ts">
-	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
-	import RoleChangeItem from './RoleChangeItem.svelte';
-	import type { RoleChange } from '$lib/politigraph/assembly/change';
 	import { formatThaiDate } from '$lib/date';
+	import type { RoleChange } from '$lib/politigraph/assembly/change';
+	import RoleChangeItem from './RoleChangeItem.svelte';
+	import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
 
-	export let changeData: RoleChange[];
-	export let selectedDate: Date | undefined;
+	interface Props {
+		changeData: RoleChange[];
+		selectedDate: Date | undefined;
+	}
 
-	$: isFocus =
+	let { changeData, selectedDate }: Props = $props();
+
+	let isFocus = $derived(
 		selectedDate &&
-		selectedDate.getDate() === changeData[0].date.getDate() &&
-		selectedDate.getMonth() === changeData[0].date.getMonth() &&
-		selectedDate.getFullYear() === changeData[0].date.getFullYear();
+			selectedDate.getDate() === changeData[0].date.getDate() &&
+			selectedDate.getMonth() === changeData[0].date.getMonth() &&
+			selectedDate.getFullYear() === changeData[0].date.getFullYear()
+	);
 </script>
 
 <div>
@@ -32,7 +37,7 @@
 		class="border-[1px] border-t-0
 		{isFocus ? ' border-interactive-02' : ' border-interactive-02/0'}"
 	>
-		{#each changeData as roleChangeData}
+		{#each changeData as roleChangeData (roleChangeData.politician.id)}
 			<RoleChangeItem
 				type={roleChangeData.type}
 				role={roleChangeData.role}

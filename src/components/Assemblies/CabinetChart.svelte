@@ -2,7 +2,11 @@
 	import CabinetRole from './CabinetRole.svelte';
 	import type { CabinetSeat } from './shared';
 
-	export let cabinets: CabinetSeat[];
+	interface Props {
+		cabinets: CabinetSeat[];
+	}
+
+	let { cabinets }: Props = $props();
 </script>
 
 <div

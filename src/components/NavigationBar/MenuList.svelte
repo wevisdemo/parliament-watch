@@ -1,16 +1,20 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
-	import { twMerge } from 'tailwind-merge';
 	import MenuComponent from './Menu.svelte';
 	import MenuLink from './MenuLink.svelte';
+	import MenuList from './MenuList.svelte';
+	import { twMerge } from 'tailwind-merge';
 
-	export let menuList: Menu[] = [];
+	interface Props {
+		menuList?: Menu[];
+		additionalClass?: string;
+	}
 
-	export let additionalClass = '';
+	let { menuList = [], additionalClass = '' }: Props = $props();
 </script>
 
 <ul class={twMerge('flex items-center justify-start text-white', additionalClass)}>
-	{#each menuList as menu}
+	{#each menuList as menu (menu.label)}
 		{#if menu.type === 'link' || menu.type === 'both'}
 			<li class="w-full">
 				<MenuLink linkMenu={menu} />
@@ -18,7 +22,7 @@
 		{:else}
 			<li>
 				<MenuComponent {menu}>
-					<svelte:self menuList={menu.subs} additionalClass="flex-col !items-start shadow-xl" />
+					<MenuList menuList={menu.subs} additionalClass="flex-col !items-start shadow-xl" />
 				</MenuComponent>
 			</li>
 		{/if}

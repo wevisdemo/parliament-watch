@@ -1,19 +1,24 @@
 <script lang="ts">
 	import type { Menu } from '$models/menu';
-	import SideMenuLink from './SideMenuLink.svelte';
 	import SideMenu from './SideMenu.svelte';
+	import SideMenuLink from './SideMenuLink.svelte';
+	import SideMenuList from './SideMenuList.svelte';
 
-	export let menuList: Menu[] = [];
+	interface Props {
+		menuList?: Menu[];
+	}
+
+	let { menuList = [] }: Props = $props();
 </script>
 
 <ul>
-	{#each menuList as menu}
+	{#each menuList as menu (menu.label)}
 		<li>
 			{#if menu.type === 'link' || menu.type === 'both'}
 				<SideMenuLink linkMenu={menu} />
 			{:else}
 				<SideMenu {menu}>
-					<svelte:self menuList={menu.subs} />
+					<SideMenuList menuList={menu.subs} />
 				</SideMenu>
 			{/if}
 		</li>

@@ -1,30 +1,41 @@
 <script lang="ts">
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
-	import { ChevronDown } from 'carbon-icons-svelte';
-	import { groups } from 'd3';
+	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
+	import { groups } from 'd3-array';
 	import { onMount } from 'svelte';
 
-	export let name: string;
-	export let count: number;
-	export let parties: {
-		name?: string;
-		image?: string;
+	interface Props {
+		name: string;
 		count: number;
-		options: {
-			name: string;
+		parties: {
+			name?: string;
+			image?: string;
 			count: number;
+			options: {
+				name: string;
+				count: number;
+			}[];
 		}[];
-	}[];
+		maxComparableRowVote?: number;
+		isViewPercent?: boolean;
+		resultColorLookup: Record<string, string | undefined>;
+		getOptionColor: (vote: string) => {
+			className: string;
+			style?: string;
+		};
+	}
 
-	export let maxComparableRowVote = 0;
-	export let isViewPercent = false;
-	export let resultColorLookup: Record<string, string | undefined>;
-	export let getOptionColor: (vote: string) => {
-		className: string;
-		style?: string;
-	};
+	let {
+		name,
+		count,
+		parties,
+		maxComparableRowVote = 0,
+		isViewPercent = false,
+		resultColorLookup,
+		getOptionColor
+	}: Props = $props();
 
-	let isExpanded = false;
+	let isExpanded = $state(false);
 
 	function toggleExpanding() {
 		isExpanded = !isExpanded;
@@ -36,11 +47,11 @@
 		})}%`;
 	}
 
-	$: getBarWidthPercent = (total: number) => {
+	let getBarWidthPercent = $derived((total: number) => {
 		if (isViewPercent) return 100;
 		if (maxComparableRowVote <= 0) return 0;
 		return (total / maxComparableRowVote) * 100;
-	};
+	});
 
 	onMount(() => {
 		if (window.matchMedia(`(min-width: 672px)`).matches) {
@@ -48,27 +59,28 @@
 		}
 	});
 
-	$: allVotes = groups(
-		parties.flatMap((p) => p.options),
-		(v) => v.name
-	).map(([name, votes]) => ({
-		name,
-		count: votes.reduce((sum, { count }) => sum + count, 0)
-	}));
-
-	$: highestVote = allVotes.reduce(
-		(max, current) => (current.count > max.count ? current : max),
-		allVotes[0]
+	let allVotes = $derived(
+		groups(
+			parties.flatMap((p) => p.options),
+			(v) => v.name
+		).map(([optionName, votes]) => ({
+			name: optionName,
+			count: votes.reduce((sum, { count: optionCount }) => sum + optionCount, 0)
+		}))
 	);
 
-	$: isMpNoParty = name === 'สส.ไม่ทราบฝ่าย';
+	let highestVote = $derived(
+		allVotes.reduce((max, current) => (current.count > max.count ? current : max), allVotes[0])
+	);
+
+	let isMpNoParty = $derived(name === 'สส.ไม่ทราบฝ่าย');
 </script>
 
 <div class="flex w-full flex-col border-t border-gray-30 pb-4 md:pb-0">
 	<div
 		class="flex w-full flex-col md:cursor-default"
-		on:click={toggleExpanding}
-		on:keypress={(e) => {
+		onclick={toggleExpanding}
+		onkeypress={(e) => {
 			if (e.code === 'Enter' || e.code === 'Space') toggleExpanding();
 		}}
 		tabindex="0"
@@ -102,7 +114,7 @@
 			{#each allVotes as vote (vote.name)}
 				{@const { className, style } = getOptionColor(vote.name)}
 				<div class="flex items-center gap-x-1">
-					<div class="h-3 w-1 {className}" {style} />
+					<div class="h-3 w-1 {className}" {style}></div>
 					<p class="label-01">
 						{isViewPercent ? formatPercent(vote.count, count) : vote.count}
 					</p>
@@ -152,7 +164,7 @@
 							{#each party.options as partyVote (partyVote.name)}
 								{@const { className, style } = getOptionColor(partyVote.name)}
 								<div class="flex items-center gap-x-1">
-									<div class="h-3 w-1 {className}" {style} />
+									<div class="h-3 w-1 {className}" {style}></div>
 									<p class="label-01">
 										{isViewPercent ? formatPercent(partyVote.count, party.count) : partyVote.count}
 									</p>

@@ -1,4 +1,4 @@
-import { groups } from 'd3';
+import { groups } from 'd3-array';
 
 interface VoteInput {
 	option: string;

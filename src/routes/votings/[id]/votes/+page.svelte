@@ -1,22 +1,42 @@
 <script lang="ts">
-	import type { DefaultVoteOption, CustomVoteOption } from '$models/voting.js';
 	import type {
 		SelectedCheckboxValueType,
 		SelectedComboboxValueType
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
+	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
 	import {
 		buildVoteQueryStateConfig,
 		comboboxQueryConfig,
 		listCheckboxQueryConfig
 	} from '$lib/query-state-config.js';
-	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import type { DefaultVoteOption, CustomVoteOption } from '$models/voting.js';
 
-	export let data;
+	let { data } = $props();
 
-	$: ({ voteEvent, filterOptions, customVoteOptions, votes } = data);
+	let { voteEvent, filterOptions, customVoteOptions, votes } = $derived(data);
 
-	$: comboboxFilterList = [
+	let searchQuery = $state('');
+	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
+		(() => ({
+			filterVoteType: filterOptions.voteOptions,
+			filterPosition: filterOptions.roles
+		}))()
+	);
+	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
+
+	$effect(() => {
+		const defaultValue = {
+			filterVoteType: filterOptions.voteOptions,
+			filterPosition: filterOptions.roles
+		};
+		selectedCheckboxValue = defaultValue;
+	});
+
+	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
+		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
+
+	let comboboxFilterList = $derived([
 		{
 			key: 'filterComboboxType',
 			legend: 'พรรคสังกัด ณ วันที่ลงมติ',
@@ -26,9 +46,9 @@
 				text: type
 			}))
 		}
-	];
+	]);
 
-	$: checkboxFilterList = [
+	let checkboxFilterList = $derived([
 		{
 			key: 'filterPosition',
 			legend: 'ตำแหน่ง',
@@ -45,7 +65,7 @@
 				value: type
 			}))
 		}
-	];
+	]);
 
 	const queryStateConfig = buildVoteQueryStateConfig({
 		checkbox: {
@@ -57,13 +77,9 @@
 		}
 	});
 
-	let searchQuery = '';
-	let selectedCheckboxValue: SelectedCheckboxValueType;
-	let selectedComboboxValue: SelectedComboboxValueType;
-
-	$: filteredData =
+	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
-		Object.values(selectedCheckboxValue).some((e) => e.length === 0)
+			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: votes.filter(({ politician, option, role, party }) => {
 					const search = searchQuery.trim();
@@ -75,10 +91,8 @@
 						selectedCheckboxValue.filterPosition.includes(role) &&
 						(!selectedParty || party?.name === selectedParty)
 					);
-				});
-
-	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
-		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
+				})
+	);
 </script>
 
 <DataPage
@@ -118,7 +132,7 @@
 			<p class="label-01 text-gray-60">หมายเหตุ: ข้อมูลตำแหน่งและสังกัดพรรค ยึดตามวันที่ลงมติ</p>
 		</div>
 	</div>
-	<svelte:fragment slot="table" let:cellKey let:cellValue>
+	{#snippet table({ cellKey, cellValue })}
 		{#if cellKey === 'politician'}
 			{#if cellValue.id}
 				<a
@@ -138,5 +152,5 @@
 				voteOption={customVoteOptions.find((option) => option.label === cellValue) ?? cellValue}
 			/>
 		{/if}
-	</svelte:fragment>
+	{/snippet}
 </DataPage>

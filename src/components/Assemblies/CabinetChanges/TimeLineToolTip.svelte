@@ -3,8 +3,12 @@
 	import SquareIcon from './SquareIcon.svelte';
 	import { type TimeLine } from './TimeLine';
 
-	export let day: TimeLine;
-	export let selectedDate: Date;
+	interface Props {
+		day: TimeLine;
+		selectedDate: Date;
+	}
+
+	let { day, selectedDate }: Props = $props();
 </script>
 
 <div class="label-01 flex flex-col items-start justify-center">

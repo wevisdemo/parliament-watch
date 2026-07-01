@@ -1,32 +1,38 @@
 <script lang="ts">
-	import { type TimeLine, getDateData } from './TimeLine';
-	import { ChevronLeft, ChevronRight } from 'carbon-icons-svelte';
-	import TimeItem from './TimeItem.svelte';
-	import Tooltip from '../Tooltip.svelte';
-	import TimeLineToolTip from './TimeLineToolTip.svelte';
 	import { formatThaiDate, isSameDate, shortMonthNames } from '$lib/date';
-	import { afterUpdate, onMount, tick } from 'svelte';
+	import Tooltip from '../Tooltip.svelte';
+	import TimeItem from './TimeItem.svelte';
+	import { type TimeLine, getDateData } from './TimeLine';
+	import TimeLineToolTip from './TimeLineToolTip.svelte';
+	import ChevronLeft from 'carbon-icons-svelte/lib/ChevronLeft.svelte';
+	import ChevronRight from 'carbon-icons-svelte/lib/ChevronRight.svelte';
+	import { onMount, tick } from 'svelte';
 
-	export let timeLineData: TimeLine[];
-	export let startedAt: Date | undefined;
-	export let endedAt: Date | undefined;
-	export let selectedDate: Date;
-	export let handleSelectDate: (date: Date) => void;
+	interface Props {
+		timeLineData: TimeLine[];
+		startedAt: Date | undefined;
+		endedAt: Date | undefined;
+		selectedDate: Date;
+		handleSelectDate: (date: Date) => void;
+	}
 
-	$: max = Math.max(...timeLineData.map((d) => Math.max(d.in, d.out)));
+	let { timeLineData, startedAt, endedAt, selectedDate, handleSelectDate }: Props = $props();
 
-	$: dateData = getDateData(timeLineData, startedAt, endedAt);
+	let max = $derived(Math.max(...timeLineData.map((d) => Math.max(d.in, d.out))));
+	let dateData = $derived(getDateData(timeLineData, startedAt, endedAt));
 
-	let timelineContainer: HTMLDivElement;
-	let prevStartedAt: Date | undefined;
-	let selectedDateElement: HTMLElement;
+	let timelineContainer: HTMLDivElement | undefined = $state();
+	let selectedDateElement: HTMLElement | undefined = $state();
 
 	const handleNext = () => {
-		timelineContainer.scrollBy({ left: -timelineContainer.clientWidth, behavior: 'smooth' });
+		timelineContainer?.scrollBy({
+			left: -(timelineContainer?.clientWidth ?? 0),
+			behavior: 'smooth'
+		});
 	};
 
 	const handlePrev = () => {
-		timelineContainer.scrollBy({ left: timelineContainer.clientWidth, behavior: 'smooth' });
+		timelineContainer?.scrollBy({ left: timelineContainer?.clientWidth ?? 0, behavior: 'smooth' });
 	};
 
 	const scrollToSelectedDate = async () => {
@@ -40,10 +46,9 @@
 		scrollToSelectedDate();
 	});
 
-	afterUpdate(() => {
-		if (startedAt !== prevStartedAt) {
+	$effect(() => {
+		if (startedAt) {
 			scrollToSelectedDate();
-			prevStartedAt = startedAt;
 		}
 	});
 </script>
@@ -54,7 +59,7 @@
 		bind:this={timelineContainer}
 	>
 		<div class="chevron absolute left-0 -mt-20 w-[16px] bg-ui-01 sm:w-[64px]">
-			<button on:click={handleNext}>
+			<button onclick={handleNext}>
 				<ChevronLeft size={32} />
 			</button>
 		</div>
@@ -81,7 +86,7 @@
 						</div>
 					{/if}
 					{#if isSelectedDate}
-						<div bind:this={selectedDateElement} />
+						<div bind:this={selectedDateElement}></div>
 					{/if}
 					<div class={isSelectedDate ? 'sticky left-0 right-0 z-[2]' : ''}>
 						<Tooltip
@@ -93,16 +98,16 @@
 							<div class="h-[65px]">
 								<TimeItem {day} {selectedDate} {max} {handleSelectDate} />
 							</div>
-							<div slot="tooltip">
+							{#snippet tooltip()}
 								<TimeLineToolTip {day} {selectedDate} />
-							</div>
+							{/snippet}
 						</Tooltip>
 					</div>
 				{/each}
 			{/each}
 		{/each}
 		<div class="chevron absolute right-0 -mt-20 w-[16px] bg-ui-01 sm:w-[64px]">
-			<button on:click={handlePrev}>
+			<button onclick={handlePrev}>
 				<ChevronRight size={32} />
 			</button>
 		</div>

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type AvailableAssembly = {
 		id: string;
 		term: number | null;
@@ -10,38 +10,46 @@
 	import AngleRightIcon from '$components/icons/AngleRightIcon.svelte';
 	import { formatThaiYear } from '$lib/date';
 
-	export let id: string;
-	export let availableAssemblies: AvailableAssembly[] = [];
-	export let getAssemblyPath: (_: AvailableAssembly) => string;
-	export let termPrefix = '';
+	interface Props {
+		id: string;
+		availableAssemblies?: AvailableAssembly[];
+		getAssemblyPath: (_: AvailableAssembly) => string;
+		termPrefix?: string;
+	}
 
-	$: currentIndex = Array.isArray(availableAssemblies)
-		? availableAssemblies.findIndex((assembly) => assembly.id === id)
-		: 0;
+	let { id, availableAssemblies = [], getAssemblyPath, termPrefix = '' }: Props = $props();
 
-	$: prevUrl = currentIndex > 0 ? getAssemblyPath(availableAssemblies[currentIndex - 1]) : null;
+	let currentIndex = $derived(
+		Array.isArray(availableAssemblies)
+			? availableAssemblies.findIndex((assembly) => assembly.id === id)
+			: 0
+	);
 
-	$: nextUrl =
+	let prevUrl = $derived(
+		currentIndex > 0 ? getAssemblyPath(availableAssemblies[currentIndex - 1]) : null
+	);
+
+	let nextUrl = $derived(
 		currentIndex < availableAssemblies.length - 1
 			? getAssemblyPath(availableAssemblies[currentIndex + 1])
-			: null;
+			: null
+	);
 
-	$: yearString = availableAssemblies[currentIndex]?.founding_date
-		? formatThaiYear(availableAssemblies[currentIndex]?.founding_date)
-		: null;
+	let yearString = $derived(
+		availableAssemblies[currentIndex]?.founding_date
+			? formatThaiYear(availableAssemblies[currentIndex]?.founding_date)
+			: null
+	);
 
-	let displayString = '-';
-	$: {
-		if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null && yearString) {
-			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term} | ${yearString}`;
-		} else if (currentIndex >= 0 && availableAssemblies[currentIndex]?.term != null) {
-			displayString = `ชุดที่ ${availableAssemblies[currentIndex].term}`;
-		} else if (yearString) {
-			displayString = `ปี ${yearString}`;
-		} else {
-			displayString = '-';
-		}
-	}
+	let displayString = $derived.by(() => {
+		const assembly = availableAssemblies[currentIndex];
+		const term = assembly?.term;
+		const hasTerm = currentIndex >= 0 && term != null;
+		if (hasTerm && yearString) return `ชุดที่ ${term} | ${yearString}`;
+		if (hasTerm) return `ชุดที่ ${term}`;
+		if (yearString) return `ปี ${yearString}`;
+		return '-';
+	});
 </script>
 
 <div class="ml-[0px] flex items-center md:ml-[16px]">

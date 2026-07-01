@@ -6,8 +6,12 @@
 	import UpperHouseSummary from './UpperHouseSummary.svelte';
 	import { type CabinetSeat, type PartySeat } from './shared';
 
-	export let data: MemberGroup[] = [];
-	export let houseLevel = 'upper';
+	interface Props {
+		data?: MemberGroup[];
+		houseLevel?: string;
+	}
+
+	let { data = [], houseLevel = 'upper' }: Props = $props();
 
 	const getTotalSubgroupsFromGroup = (group: MemberGroup | undefined): PartySeat[] => {
 		if (!group) return [];
@@ -45,7 +49,7 @@
 		return seatLine;
 	};
 
-	$: getLowerHouseTotalPartie = (): PartySeat[] => {
+	let getLowerHouseTotalPartie = $derived((): PartySeat[] => {
 		const governmentGroup = data.find((group) => group.name === 'ฝ่ายรัฐบาล');
 		const oppositeGovGroup = data.find((group) => group.name === 'ฝ่ายค้าน');
 		const governmentParties = getTotalSubgroupsFromGroup(governmentGroup).sort(
@@ -56,26 +60,30 @@
 		);
 
 		return [...governmentParties, ...oppositeGovParties];
-	};
+	});
 
-	$: getUpperHouseTotalPartie = (): PartySeat[] =>
+	let getUpperHouseTotalPartie = $derived((): PartySeat[] =>
 		data.map((group) => ({
 			name: group.name,
 			count: group.total,
 			color: group.color ?? '',
 			members: group.members
-		}));
+		}))
+	);
 
-	$: seatParties =
+	let seatParties = $derived(
 		houseLevel === 'lower' || houseLevel === 'cabinet'
 			? getLowerHouseTotalPartie()
-			: getUpperHouseTotalPartie();
+			: getUpperHouseTotalPartie()
+	);
 
-	$: lineAmounts = distributeLowerHouseSeatLines(
-		seatParties.reduce((a, c) => a + c.count, 0),
-		houseLevel === 'lower' || houseLevel === 'cabinet'
-			? LOWER_HOUSE_ROW_RATIO
-			: UPPER_HOUSE_ROW_RATIO
+	let lineAmounts = $derived(
+		distributeLowerHouseSeatLines(
+			seatParties.reduce((a, c) => a + c.count, 0),
+			houseLevel === 'lower' || houseLevel === 'cabinet'
+				? LOWER_HOUSE_ROW_RATIO
+				: UPPER_HOUSE_ROW_RATIO
+		)
 	);
 
 	const getCabinetGroup = (cabinets: MemberGroup | undefined, groupName: CabinetSeat['role']) => {
@@ -115,7 +123,7 @@
 		return res;
 	};
 
-	$: getSeatCarbinet = (): CabinetSeat[] => {
+	let getSeatCarbinet = $derived((): CabinetSeat[] => {
 		const cabinets = data.find((group) => group.name === 'คณะรัฐมนตรี');
 		const roles: CabinetSeat['role'][] = [
 			'นายกรัฐมนตรี',
@@ -135,9 +143,9 @@
 			});
 		});
 		return cabinetSeat;
-	};
+	});
 
-	$: seatCarbinet = getSeatCarbinet();
+	let seatCarbinet = $derived(getSeatCarbinet());
 </script>
 
 <div class="flex flex-col gap-4 md:flex-row">

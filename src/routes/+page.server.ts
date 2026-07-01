@@ -1,17 +1,10 @@
-import StatCard, { HighlightedReason } from '$components/Index/StatCard.svelte';
-import type VoteCard from '$components/VoteCard/VoteCard.svelte';
+import { HighlightedReason, type StatCardProps } from '$components/Index/StatCard.svelte';
 import { getLatestTerm } from '$lib/politigraph/assembly/term';
 import {
 	getBillCategoryOptions,
 	getRepresentativeTermOptions
 } from '$lib/politigraph/bill/overview';
 import { graphql } from '$lib/politigraph/client';
-import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
-import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
-import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
-import type { ComponentProps } from 'svelte';
-
-const MAX_LATEST_VOTE = 5;
 
 const CHUAN_ID = '891ea463-c463-4f76-840d-e7d24a97d70c';
 const BANYAT_ID = 'e26bbc32-f2d5-41f1-8006-2ea439576771';
@@ -22,12 +15,12 @@ enum PoliticialPosition {
 	Cabinet = 'รัฐมนตรี'
 }
 
-interface LongestServedInPoliticalPositionsPolitician extends ComponentProps<StatCard> {
+interface LongestServedInPoliticalPositionsPolitician extends StatCardProps {
 	position: PoliticialPosition;
 	year: number;
 }
 
-interface MostFrequentlyServedAsMinisterPolitician extends ComponentProps<StatCard> {
+interface MostFrequentlyServedAsMinisterPolitician extends StatCardProps {
 	cabinetTerms: number[];
 }
 
@@ -116,7 +109,7 @@ export async function load() {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const banyatBantadtan = highlightPoliticians.find((p) => p.id === BANYAT_ID)!;
 
-	const highlightedPoliticians: ComponentProps<StatCard>[] = [
+	const highlightedPoliticians: StatCardProps[] = [
 		{
 			reason: HighlightedReason.LongestServedInPoliticalPositions,
 			value: 54,
@@ -142,40 +135,6 @@ export async function load() {
 		}
 	];
 
-	const { voteEvents } = await graphql.query({
-		voteEvents: {
-			__args: {
-				sort: [{ start_date: 'DESC' }],
-				limit: MAX_LATEST_VOTE
-			},
-			id: true,
-			title: true,
-			nickname: true,
-			start_date: true,
-			result: true,
-			end_date: true,
-			organizations: {
-				id: true
-			}
-		}
-	});
-
-	const latestVoteEvents: ComponentProps<VoteCard>[] = await Promise.all(
-		voteEvents.map(async (voteEvent) => {
-			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
-			const mappedGroups = groupedVotes.map((aff) => ({
-				name: aff.name,
-				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
-			}));
-
-			return {
-				...voteEvent,
-				date: voteEvent.start_date,
-				votesSummary: buildVotesSummary({ groups: mappedGroups, result: voteEvent.result })
-			};
-		})
-	);
-
 	const billCategories = await getBillCategoryOptions();
 	const mpTermChoices = await getRepresentativeTermOptions();
 	const latestAssemblyLabels = {
@@ -198,27 +157,8 @@ export async function load() {
 		)}`
 	};
 
-	// const promiseSummary = {
-	// 	total: promises.length,
-	// 	byStatus: groups(
-	// 		promises.filter((p) =>
-	// 			[PromiseStatus.inProgress, PromiseStatus.fulfilled, PromiseStatus.unhonored].includes(
-	// 				p.status
-	// 			)
-	// 		),
-	// 		(p) => p.status
-	// 	).map<PromisesByStatus>(([status, promisesByStatus]) => ({
-	// 		status,
-	// 		samples: promisesByStatus
-	// 			.slice(0, MAX_PROMISES_SAMPLE)
-	// 			.map(({ id, statements }) => ({ id, statements })),
-	// 		count: promisesByStatus.length
-	// 	}))
-	// };
-
 	return {
 		highlightedPoliticians,
-		latestVoteEvents,
 		billCategories,
 		mpTermChoices,
 		latestAssemblyLabels

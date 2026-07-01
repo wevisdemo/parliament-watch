@@ -7,6 +7,9 @@ export default defineConfig({
 	outDir: 'build/stories',
 	vite: {
 		base: process.env.HISTOIRE_BASE || '/',
-		publicDir: 'static'
+		publicDir: 'static',
+		ssr: {
+			noExternal: ['fastest-levenshtein']
+		}
 	}
 });

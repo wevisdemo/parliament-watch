@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let proposerComparisonTableData: { [key: string]: string }[];
+	interface Props {
+		proposerComparisonTableData: { [key: string]: string }[];
+	}
+
+	let { proposerComparisonTableData }: Props = $props();
 </script>
 
 {#if proposerComparisonTableData.length > 0}
@@ -7,15 +11,15 @@
 		<table class="text-sm">
 			<thead class="bg-gray-20">
 				<tr class="h-12 border-b-2">
-					{#each Object.keys(proposerComparisonTableData[0]) as columnHeading}
+					{#each Object.keys(proposerComparisonTableData[0]) as columnHeading (columnHeading)}
 						<th class="text-01 p-4 px-4 font-semibold">{columnHeading}</th>
 					{/each}
 				</tr>
 			</thead>
 			<tbody class="bg-gray-10">
-				{#each Object.values(proposerComparisonTableData) as row}
+				{#each proposerComparisonTableData as row (Object.values(row)[0])}
 					<tr class="h-12">
-						{#each Object.values(row) as cell}
+						{#each Object.values(row) as cell, cellIndex (cellIndex)}
 							<td class="p-4 align-middle">{cell}</td>
 						{/each}
 					</tr>

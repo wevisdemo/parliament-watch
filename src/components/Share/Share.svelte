@@ -1,15 +1,19 @@
 <script lang="ts">
-	import Link from 'carbon-icons-svelte/lib/Link.svelte';
 	import { Tooltip } from 'carbon-components-svelte';
+	import Link from 'carbon-icons-svelte/lib/Link.svelte';
 	import { onMount } from 'svelte';
 
-	export let url = '';
-	export let label = 'แชร์';
-	let copyTooltip = false;
-	let copyTooltipTimeout: ReturnType<typeof setTimeout>;
-	let copyResult = 'Copied!';
+	interface Props {
+		url?: string;
+		label?: string;
+	}
 
-	$: encodedURL = encodeURIComponent(url);
+	let { url = $bindable(''), label = 'แชร์' }: Props = $props();
+	let copyTooltip = $state(false);
+	let copyTooltipTimeout: ReturnType<typeof setTimeout>;
+	let copyResult = $state('Copied!');
+
+	let encodedURL = $derived(encodeURIComponent(url));
 
 	const copyUrl = () => {
 		window.navigator.clipboard
@@ -39,7 +43,8 @@
 	<button
 		class="productive-in-out flex h-[28px] w-[28px] cursor-pointer items-center justify-center rounded-full border border-solid border-black bg-black/0 text-black transition-colors duration-[110ms] hover:bg-black hover:text-white"
 		type="button"
-		on:click={copyUrl}
+		onclick={copyUrl}
+		aria-label="copy link"
 	>
 		<Link />
 		<Tooltip
@@ -56,6 +61,7 @@
 		href={'http://www.facebook.com/sharer/sharer.php?u=' + encodedURL}
 		target="_blank"
 		rel="nofollow noopener noreferrer"
+		aria-label="share on Facebook"
 	>
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 18" width="8" height="18"
 			><path
@@ -71,6 +77,7 @@
 		href={'https://twitter.com/intent/tweet?url=' + encodedURL}
 		target="_blank"
 		rel="nofollow noopener noreferrer"
+		aria-label="share on Twitter"
 	>
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 15" width="16" height="15"
 			><path

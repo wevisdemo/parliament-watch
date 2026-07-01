@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export interface VotingHistory {
 		total: number;
 		latest: {
@@ -24,21 +24,33 @@
 	import Vote from '$components/icons/VoteIcon.svelte';
 	import Section from '$components/politicians/Section.svelte';
 	import { formatDateRange } from '$lib/date.js';
+	import VoteWarningNotification from './VoteWarningNotification.svelte';
 	import { Button } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
-	import VoteWarningNotification from './VoteWarningNotification.svelte';
 
-	export let politicianId: string;
-	export let politicianFirstname: string;
-	export let agreedVoting: VotingHistory;
-	export let disagreedVoting: VotingHistory;
-	export let votingAbsentStats: VotingAbsentStats[];
+	interface Props {
+		politicianId: string;
+		politicianFirstname: string;
+		agreedVoting: VotingHistory;
+		disagreedVoting: VotingHistory;
+		votingAbsentStats: VotingAbsentStats[];
+	}
+
+	let {
+		politicianId,
+		politicianFirstname,
+		agreedVoting,
+		disagreedVoting,
+		votingAbsentStats
+	}: Props = $props();
 
 	const safePercent = (n: number, outOf: number) => Math.round((n / (outOf || 1)) * 10000) / 100;
 </script>
 
 <Section id="votes" title="ประวัติการลงมติ">
-	<Vote slot="icon" size="32" />
+	{#snippet icon()}
+		<Vote size={32} />
+	{/snippet}
 	<VoteWarningNotification />
 	<div class="flex flex-col gap-6">
 		<div class="flex flex-col gap-2">
@@ -64,7 +76,7 @@
 				{/each}
 			</ul>
 			<a
-				href="/politicians/{politicianId}/votes?voteType=เห็นด้วย"
+				href="/politicians/{politicianId}/votes?votetype=agreed"
 				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
@@ -96,7 +108,7 @@
 				{/each}
 			</ul>
 			<a
-				href="/politicians/{politicianId}/votes?voteType=ไม่เห็นด้วย"
+				href="/politicians/{politicianId}/votes?votetype=disagreed"
 				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"
@@ -175,7 +187,7 @@
 				>
 			</div>
 			<a
-				href="/politicians/{politicianId}/votes?voteType=ลา / ขาดลงมติ"
+				href="/politicians/{politicianId}/votes?votetype=absent"
 				class="helper-text-01 mr-auto flex items-center gap-2"
 				target="_blank"
 				rel="nofollow noopener noreferrer"

@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
 	import BaseSvg from './BaseSvg.svelte';
+	import type { ComponentProps } from 'svelte';
+
+	let props: ComponentProps<typeof BaseSvg> = $props();
 </script>
 
-<BaseSvg {...$$restProps}>
+<BaseSvg {...props}>
 	<g clip-path="url(#clip0_2078_194)">
 		<path
 			fill-rule="evenodd"

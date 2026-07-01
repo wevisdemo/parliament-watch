@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { Tag } from 'carbon-components-svelte';
 
-	export let isActive = false;
+	interface Props {
+		isActive?: boolean;
+	}
+
+	let { isActive = false }: Props = $props();
 </script>
 
 <Tag class="label-01 my-0 mr-auto" type={isActive ? 'cyan' : 'warm-gray'}>

@@ -2,13 +2,17 @@
 	import type { HighlightedText } from '$models/search';
 	import { twMerge } from 'tailwind-merge';
 
-	export let textList: HighlightedText[];
-	export let textClass: string;
-	export let textHighlightClass = 'font-bold';
+	interface Props {
+		textList: HighlightedText[];
+		textClass: string;
+		textHighlightClass?: string;
+	}
+
+	let { textList, textClass, textHighlightClass = 'font-bold' }: Props = $props();
 </script>
 
 <span class={twMerge('highlighted-text', textClass)}>
-	{#each textList as text}
+	{#each textList as text, idx (idx)}
 		{#if text.highlight}
 			<span class={textHighlightClass}>{text.text}</span>
 		{:else}

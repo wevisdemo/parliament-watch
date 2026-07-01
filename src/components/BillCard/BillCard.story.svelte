@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Hst } from '@histoire/plugin-svelte';
-	import BillCard from './BillCard.svelte';
 	import { inProgressBill, enactedBill } from '../../mocks/data/bill';
+	import BillCard from './BillCard.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	export let Hst: Hst;
+	export let Hst: HstStory;
 
 	let orientation: 'landscape' | 'portrait' = 'portrait';
 	let isFullWidth = false;

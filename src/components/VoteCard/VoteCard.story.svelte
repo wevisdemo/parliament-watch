@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { DefaultVotingResult } from '$models/voting';
-	import type { ComponentProps } from 'svelte';
-	import VoteCard from './VoteCard.svelte';
-	import type { Hst } from '@histoire/plugin-svelte';
 	import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
+	import { DefaultVotingResult } from '$models/voting';
+	import VoteCard, { type VoteCardProps } from './VoteCard.svelte';
+	import type { Hst as HstStory } from '@histoire/plugin-svelte';
 
-	export let Hst: Hst;
+	let { Hst }: { Hst: HstStory } = $props();
 
 	const sampleGroups = [
 		{
@@ -54,7 +53,7 @@
 		resultSummary: optionsArrayToResultSummary(group.options)
 	}));
 
-	const createVoteCardProps = (props: ComponentProps<VoteCard>) => ({
+	const createVoteCardProps = (props: VoteCardProps) => ({
 		...props,
 		votesSummary: buildVotesSummary({ groups: resultSummaries, result: props.result })
 	});
@@ -73,22 +72,24 @@
 		result: DefaultVotingResult.Failed
 	});
 
-	const dictVoteCardProps: Record<DefaultVotingResult, ComponentProps<VoteCard>> = {
+	const dictVoteCardProps: Record<DefaultVotingResult, VoteCardProps> = {
 		[DefaultVotingResult.Passed]: passedVoting,
 		[DefaultVotingResult.Failed]: failedVoting
 	};
 
-	let result: DefaultVotingResult = DefaultVotingResult.Passed;
-	let candidateName = '';
+	let result: DefaultVotingResult = $state(DefaultVotingResult.Passed);
+	let candidateName = $state('');
 
-	$: isCandidateResult = 'candidate' === (result as string);
-	$: voting = dictVoteCardProps[result] || candidateVoteCardProps;
-	$: candidateVoteCardProps = createVoteCardProps({
-		id: '3',
-		date: '2023-09-02T17:00:00.000Z',
-		title: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
-		result: candidateName || 'Mr. Candidate Krub'
-	});
+	let isCandidateResult = $derived('candidate' === (result as string));
+	let candidateVoteCardProps = $derived(
+		createVoteCardProps({
+			id: '3',
+			date: '2023-09-02T17:00:00.000Z',
+			title: 'เลือกนายกรัฐมนตรีไทย คนที่ 29',
+			result: candidateName || 'Mr. Candidate Krub'
+		})
+	);
+	let voting = $derived(dictVoteCardProps[result] || candidateVoteCardProps);
 </script>
 
 <Hst.Story title="VoteCard">

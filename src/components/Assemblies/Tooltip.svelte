@@ -1,64 +1,60 @@
 <script lang="ts">
-	/**
-	 * @event {null} open
-	 * @event {null} close
-	 */
+	import type { Snippet } from 'svelte';
 
-	/** Specify the tooltip text */
-	export let tooltipText = '';
+	interface Props {
+		tooltipText?: string;
+		open?: boolean;
+		onopen?: () => void;
+		onclose?: () => void;
+		align?: 'start' | 'center' | 'end';
+		direction?: 'top' | 'bottom';
+		id?: string;
+		ref?: HTMLButtonElement | null;
+		tooltipStyle?: string;
+		showAllTime?: boolean;
+		children?: Snippet;
+		tooltip?: Snippet;
+		[key: string]: unknown;
+	}
 
-	/**
-	 * Set to `true` to open the tooltip
-	 */
-	export let open = false;
+	let {
+		tooltipText = '',
+		open = $bindable(false),
+		onopen,
+		onclose,
+		align = 'center',
+		direction = 'bottom',
+		id = 'ccs-' + Math.random().toString(36),
+		ref = $bindable(null),
+		tooltipStyle = '',
+		showAllTime = false,
+		children,
+		tooltip,
+		...rest
+	}: Props = $props();
 
-	/**
-	 * Set the alignment of the tooltip relative to the icon
-	 * @type {"start" | "center" | "end"}
-	 */
-	export let align: 'start' | 'center' | 'end' = 'center';
-
-	/**
-	 * Set the direction of the tooltip relative to the icon
-	 * @type {"top" | "bottom"}
-	 */
-	export let direction: 'top' | 'bottom' = 'bottom';
-
-	/** Set an id for the tooltip div element */
-	export let id = 'ccs-' + Math.random().toString(36);
-
-	/** Obtain a reference to the button HTML element */
-	export let ref = null;
-
-	/** Style the tooltip */
-	export let tooltipStyle = '';
-
-	export let showAllTime = false;
-
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher();
-
-	const hide = () => (open = false || showAllTime);
+	const hide = () => (open = showAllTime);
 
 	const show = () => (open = true);
 
-	$: dispatch(open ? 'open' : 'close');
+	$effect(() => {
+		if (open) onopen?.();
+		else onclose?.();
+	});
 </script>
 
 <svelte:window
-	on:keydown={({ key }) => {
+	onkeydown={({ key }) => {
 		if (key === 'Escape') hide();
 	}}
 />
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
 	class:bx--tooltip--definition={true}
 	class:bx--tooltip--a11y={true}
-	{...$$restProps}
-	on:mouseenter={show}
-	on:mouseleave={hide}
+	{...rest}
+	onmouseenter={show}
+	onmouseleave={hide}
 >
 	<button
 		bind:this={ref}
@@ -76,18 +72,13 @@
 		class:bx--tooltip--align-end={align === 'end'}
 		style="width: 100%;"
 		class="cover"
-		on:click
-		on:mouseover
-		on:mouseenter
-		on:mouseleave
-		on:focus
-		on:focus={show}
-		on:blur={hide}
+		onfocus={show}
+		onblur={hide}
 	>
-		<slot />
+		{@render children?.()}
 	</button>
 	<div role="tooltip" {id} class="bx--assistive-text" style={tooltipStyle}>
-		<slot name="tooltip">{tooltipText}</slot>
+		{#if tooltip}{@render tooltip()}{:else}{tooltipText}{/if}
 	</div>
 </span>
 
