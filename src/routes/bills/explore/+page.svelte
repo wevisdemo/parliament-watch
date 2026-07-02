@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
 	import type {
 		SelectedCheckboxValueType,
@@ -9,10 +8,12 @@
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import { formatThaiDate } from '$lib/date.js';
 	import { billStatusProperty } from '$lib/politigraph/bill/status.js';
+	import {
+		buildVoteQueryStateConfig,
+		listCheckboxQueryConfig,
+		comboboxQueryConfig
+	} from '$lib/query-state-config.js';
 	import { CREATOR_TYPE_LABEL } from '../../../constants/bills.js';
-	import { onMount } from 'svelte';
-
-	let cmpDataPage: DataPage | undefined = $state();
 
 	let { data } = $props();
 
@@ -24,8 +25,23 @@
 		disabled: boolean;
 	}
 
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterTerm: listCheckboxQueryConfig('term'),
+			filterStatus: listCheckboxQueryConfig('status'),
+			filterProposerType: listCheckboxQueryConfig('proposertype')
+		},
+		combobox: {
+			filterProposerName: comboboxQueryConfig('proposername'),
+			filterPartyName: comboboxQueryConfig('party')
+		}
+	});
+
 	let searchQuery = $state('');
-	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
+	let selectedComboboxValue: SelectedComboboxValueType = $state({
+		filterProposerName: undefined,
+		filterPartyName: undefined
+	});
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
 		(() => ({
 			filterTerm: filterOptions.representativeTerms.map((rep) => rep.value),
@@ -34,50 +50,6 @@
 			filterProposerType: filterOptions.proposerTypes
 		}))()
 	);
-
-	$effect(() => {
-		const defaultValue = {
-			filterTerm: filterOptions.representativeTerms.map((rep) => rep.value),
-			filterStatus: filterOptions.statuses,
-			filterCategory: filterOptions.categories,
-			filterProposerType: filterOptions.proposerTypes
-		};
-		selectedCheckboxValue = defaultValue;
-	});
-
-	onMount(() => {
-		if (!cmpDataPage) return;
-
-		const term = page.url.searchParams.get('term');
-		if (term && filterOptions.representativeTerms.find((rep) => rep.value === term)) {
-			selectedCheckboxValue.filterTerm = [term];
-		}
-
-		const status = page.url.searchParams.get('status');
-		if (status && (filterOptions.statuses as string[]).includes(status)) {
-			selectedCheckboxValue.filterStatus = [status];
-		}
-
-		const category = page.url.searchParams.get('category');
-		if (category && filterOptions.categories.includes(category)) {
-			selectedCheckboxValue.filterCategory = [category];
-		}
-
-		const proposerType = page.url.searchParams.get('proposertype');
-		if (proposerType && (filterOptions.proposerTypes as string[]).includes(proposerType)) {
-			selectedCheckboxValue.filterProposerType = [proposerType];
-		}
-
-		const proposerNameParam = page.url.searchParams.get('proposername');
-		if (proposerNameParam) {
-			cmpDataPage.setCombobox('filterProposerName', proposerNameParam);
-		}
-
-		const partyParam = page.url.searchParams.get('party');
-		if (partyParam) {
-			cmpDataPage.setCombobox('filterPartyName', partyParam);
-		}
-	});
 
 	let getProposerName = $derived((): Choice[] => {
 		const peopleOptions = filterOptions.proposerPeople.map((name) => ({
@@ -205,7 +177,6 @@
 </script>
 
 <DataPage
-	bind:this={cmpDataPage}
 	unit="ร่างกฎหมาย"
 	tablePageSize={50}
 	breadcrumbList={[
@@ -216,6 +187,7 @@
 	searchPlaceholder="ชื่อร่างกฎหมาย"
 	{comboboxFilterList}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'proposedOn', value: 'วันที่เสนอ' },
