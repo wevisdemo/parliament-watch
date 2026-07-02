@@ -25,14 +25,6 @@
 	);
 	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
 
-	$effect(() => {
-		const defaultValue = {
-			filterVoteType: filterOptions.voteOptions,
-			filterPosition: filterOptions.roles
-		};
-		selectedCheckboxValue = defaultValue;
-	});
-
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
 

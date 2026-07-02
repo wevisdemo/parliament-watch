@@ -5,8 +5,7 @@
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { formatThaiDate } from '$lib/date.js';
-	import { buildVoteQueryStateConfig, flagsCheckboxQueryConfig } from '$lib/query-state-config.js';
-	import { DefaultVotingResult } from '$models/voting.js';
+	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state-config.js';
 
 	let { data } = $props();
 
@@ -25,15 +24,7 @@
 
 	const queryStateConfig = buildVoteQueryStateConfig({
 		checkbox: {
-			filterResult: flagsCheckboxQueryConfig(
-				{
-					[DefaultVotingResult.Passed]: 'pass',
-					[DefaultVotingResult.Failed]: 'notPass'
-				},
-				{
-					fallbackParam: 'result'
-				}
-			)
+			filterResult: listCheckboxQueryConfig('result')
 		}
 	});
 
@@ -43,13 +34,6 @@
 			filterResult: [...filterOptions.result]
 		}))()
 	);
-
-	$effect(() => {
-		const defaultValue = {
-			filterResult: [...filterOptions.result]
-		};
-		selectedCheckboxValue = defaultValue;
-	});
 
 	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
