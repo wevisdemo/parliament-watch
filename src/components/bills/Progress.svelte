@@ -1,13 +1,13 @@
 <script lang="ts">
-	// import VoteCard, { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
+	import BillCard from '$components/BillCard/BillCard.svelte';
+	import type { ProposerProps } from '$components/Proposer/Proposer.svelte';
 	import { formatThaiDate } from '$lib/date';
-	// import BillCard from '$components/BillCard/BillCard.svelte';
-	// import type { ComponentProps } from 'svelte';
-	import type { Link, BillEvent } from '$lib/politigraph/genql';
+	import type { Link, BillEvent, BillStatus } from '$lib/politigraph/genql';
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
+	import DocumentMultiple_02 from 'carbon-icons-svelte/lib/DocumentMultiple_02.svelte';
 
 	interface Props {
 		type: BillEvent['__typename'];
@@ -15,14 +15,17 @@
 		description: string;
 		date: string | null;
 		links: Pick<Link, 'note' | 'url'>[];
-		// tooltipText: string;
+		mergedIntoBill?: {
+			id: string;
+			nickname: string;
+			title: string | null;
+			proposedOn: Date | null;
+			status: BillStatus;
+			proposer?: ProposerProps['proposer'];
+		};
 	}
 
-	let { type, title, description, date, links }: Props = $props();
-
-	// export let voteEvent: VoteCardProps;
-	// export let mergedIntoBill: Bill | undefined;
-	// export let mergedIntoBillLatestEvent: Event | undefined;
+	let { type, title, description, date, links, mergedIntoBill }: Props = $props();
 </script>
 
 <li class="-mt-1 mb-10 ms-4">
@@ -62,21 +65,16 @@
 					size="small">{links[0].note}</Button
 				>
 			</div>
-			<!-- TODO: Merged bill -->
-			<!-- {:else if mergedIntoBill}
+		{:else if mergedIntoBill}
 			<div class="flex flex-1 flex-col gap-2">
-				<DocumentMultiple_02 size={24} color="#2600A3" />
-				<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
+				<div class="flex flex-row items-center gap-1">
+					<DocumentMultiple_02 size={24} color="#2600A3" />
+					<b class="heading-compact-01">ถูกนำไปรวมร่างกับ</b>
+				</div>
 				<div class="w-full rounded-sm border border-gray-20">
-					<BillCard
-						{...mergedIntoBill}
-						isFullWidth={true}
-					/>
+					<BillCard {...mergedIntoBill} isFullWidth />
 				</div>
-				<div class="text-text-02">
-					{tooltipText}
-				</div>
-			</div> -->
+			</div>
 		{/if}
 	</div>
 </li>

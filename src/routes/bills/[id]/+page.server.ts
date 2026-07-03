@@ -168,6 +168,8 @@ export async function load({ params }) {
 						id: true,
 						title: true,
 						nickname: true,
+						proposal_date: true,
+						status: true,
 						creators: {
 							on_Person: {
 								name: true
@@ -185,33 +187,59 @@ export async function load({ params }) {
 	const proposer = getBillProposer({ creator_type, creators, people_signature_count });
 
 	const parsedEvents = events
-		.map((event) => ({
-			type: event.__typename,
-			title:
-				event.__typename === 'BillMergeEvent'
-					? 'ร่างกฏหมายถูกรวมร่าง'
-					: event.__typename === 'BillRoyalAssentEvent'
-						? 'นำขึ้นทูลเกล้าทูลกระหม่อมถวาย'
+		.map((event) => {
+			const base = {
+				type: event.__typename,
+				title:
+					event.__typename === 'BillMergeEvent'
+						? 'ร่างกฏหมายถูกรวมร่าง'
+						: event.__typename === 'BillRoyalAssentEvent'
+							? 'นำขึ้นทูลเกล้าทูลกระหม่อมถวาย'
+							: event.__typename === 'BillRejectEvent'
+								? 'ตกไป'
+								: event.__typename === 'BillEnactEvent'
+									? 'ออกเป็นกฎหมาย'
+									: event.title ||
+										(event.__typename === 'BillVoteEvent' &&
+											event.classification &&
+											voteEventDefaultTitleDescription.get(event.classification)?.title) ||
+										'อื่นๆ',
+				description:
+					(event.__typename === 'BillRoyalAssentEvent'
+						? event.result
 						: event.__typename === 'BillRejectEvent'
-							? 'ตกไป'
-							: event.__typename === 'BillEnactEvent'
-								? 'ออกเป็นกฎหมาย'
-								: event.title ||
-									(event.__typename === 'BillVoteEvent' &&
-										event.classification &&
-										voteEventDefaultTitleDescription.get(event.classification)?.title) ||
-									'อื่นๆ',
-			description:
-				(event.__typename === 'BillRoyalAssentEvent'
-					? event.result
-					: event.__typename === 'BillRejectEvent'
-						? event.reject_reason
-						: event.__typename === 'BillVoteEvent' &&
-							event.classification &&
-							voteEventDefaultTitleDescription.get(event.classification)?.description) || '',
-			date: event.start_date,
-			links: event.links
-		}))
+							? event.reject_reason
+							: event.__typename === 'BillMergeEvent'
+								? 'ร่างนี้ถูกนำไปรวมกับร่างอื่นในชั้นการพิจารณา'
+								: event.__typename === 'BillVoteEvent' &&
+									event.classification &&
+									voteEventDefaultTitleDescription.get(event.classification)?.description) || '',
+				date: event.start_date,
+				links: event.links
+			};
+
+			if (
+				event.__typename === 'BillMergeEvent' &&
+				event.main_bill_id &&
+				event.main_bill_id !== bill.id
+			) {
+				const mainBill = event.bills.find((b) => b.id === event.main_bill_id);
+				if (mainBill) {
+					return {
+						...base,
+						mergedIntoBill: {
+							id: mainBill.id,
+							nickname: mainBill.nickname || mainBill.title,
+							title: mainBill.nickname ? mainBill.title : null,
+							proposedOn: mainBill.proposal_date ? new Date(mainBill.proposal_date) : null,
+							status: mainBill.status
+						}
+					};
+				}
+			}
+
+			return base;
+		})
 		.sort((a, z) =>
 			a.date && z.date
 				? z.date.localeCompare(a.date) || z.title.localeCompare(a.title)
@@ -219,6 +247,30 @@ export async function load({ params }) {
 		);
 
 	const mergeEvent = events.find((e) => e.__typename === 'BillMergeEvent');
+	let mergedBillProposer: ReturnType<typeof getBillProposer> = undefined;
+	if (mergeEvent?.main_bill_id && mergeEvent.main_bill_id !== bill.id) {
+		const mainBillFromEvent = mergeEvent.bills.find((b) => b.id === mergeEvent.main_bill_id);
+		if (mainBillFromEvent?.proposal_date) {
+			const mergedBillData = await graphql.query({
+				bills: {
+					__args: {
+						where: { id: { eq: mergeEvent.main_bill_id } },
+						limit: 1
+					},
+					...createBillFieldsForProposer(mainBillFromEvent.proposal_date)
+				}
+			});
+			const mergedBill = mergedBillData.bills[0];
+			if (mergedBill) {
+				mergedBillProposer = getBillProposer({
+					creator_type: mergedBill.creator_type,
+					creators: mergedBill.creators,
+					people_signature_count: mergedBill.people_signature_count
+				});
+			}
+		}
+	}
+
 	const mergeEventBills = mergeEvent?.bills.map((b) => ({
 		id: b.id,
 		name: b.nickname ?? b.title,
@@ -241,7 +293,17 @@ export async function load({ params }) {
 						)
 					}
 				: null,
-		events: parsedEvents,
+		events: parsedEvents.map((event) =>
+			'mergedIntoBill' in event && mergedBillProposer
+				? {
+						...event,
+						mergedIntoBill: {
+							...event.mergedIntoBill,
+							proposer: mergedBillProposer
+						}
+					}
+				: event
+		),
 		seo: createSeo({
 			title: bill.nickname ?? bill.title
 		})
