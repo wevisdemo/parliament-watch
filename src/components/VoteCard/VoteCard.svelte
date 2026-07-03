@@ -86,7 +86,7 @@
 <a
 	href="/votings/{id}"
 	class={twMerge(
-		'border-transparent relative flex min-h-[19rem] flex-col gap-y-3 whitespace-pre-wrap p-4 transition-colors',
+		'border-transparent relative flex min-h-[19rem] flex-col gap-2 md:gap-3 whitespace-pre-wrap p-4 transition-colors',
 		isFullWidth ? 'w-full' : 'w-72',
 		theme.bg,
 		theme.hoveredBg,
@@ -100,7 +100,7 @@
 		<VotingResultTag {result} />
 	</div>
 	<h3 class="fluid-heading-03 line-clamp-4 text-text-01">{title}</h3>
-	<VoteStackedBar segments={summary.overall} total={summary.total} class="mt-2" />
+	<VoteStackedBar segments={summary.overall} total={summary.total} />
 	<hr class="border border-ui-03" />
 	<div class="flex flex-col gap-2 text-text-01">
 		{#if highlight}
@@ -116,7 +116,7 @@
 		{#if summary.groups.length}
 			<ul class="list-disc pl-4">
 				{#each highlightGroups() as group (group.name)}
-					<li class="body-compact-01 leading-3">
+					<li class="body-compact-01">
 						<div class="flex items-center justify-between gap-4">
 							<span>{group.name}</span>
 							<span class="text-text-02">

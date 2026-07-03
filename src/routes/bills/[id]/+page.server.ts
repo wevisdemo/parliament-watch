@@ -1,7 +1,11 @@
+import type { VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer.js';
 import { graphql } from '$lib/politigraph/client';
 import type { Event, VoteEventType } from '$lib/politigraph/genql/schema.js';
+import { countVotesInEachOption, groupVotesByAffiliation } from '$lib/politigraph/vote/group.js';
+import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician.js';
 import { createSeo } from '$lib/seo';
+import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary.js';
 import { error } from '@sveltejs/kit';
 
 const eventDefaultSortPriority: Event['__typename'][] = [
@@ -147,7 +151,19 @@ export async function load({ params }) {
 					description: true
 				},
 				on_BillVoteEvent: {
-					classification: true
+					id: true,
+					classification: true,
+					vote_events: {
+						id: true,
+						title: true,
+						nickname: true,
+						start_date: true,
+						end_date: true,
+						result: true,
+						organizations: {
+							id: true
+						}
+					}
 				},
 				on_BillRejectEvent: {
 					reject_reason: true
@@ -189,6 +205,7 @@ export async function load({ params }) {
 	const parsedEvents = events
 		.map((event) => {
 			const base = {
+				id: event.__typename === 'BillVoteEvent' ? event.id : undefined,
 				type: event.__typename,
 				title:
 					event.__typename === 'BillMergeEvent'
@@ -277,6 +294,42 @@ export async function load({ params }) {
 		proposedBy: b.creators[0]?.name
 	}));
 
+	// Build voting data for each BillVoteEvent that has vote_events
+	const billVoteEvents = events.filter(
+		(e) => e.__typename === 'BillVoteEvent' && 'vote_events' in e && e.vote_events?.length > 0
+	) as Array<
+		(typeof events)[number] & {
+			vote_events: Array<{
+				id: string;
+				title: string;
+				nickname: string | null;
+				start_date: string;
+				end_date: string;
+				result: string | null;
+				organizations: { id: string }[];
+			}>;
+		}
+	>;
+
+	const votingByEventId = new Map<string, VoteCardProps>();
+	await Promise.all(
+		billVoteEvents.map(async (billVoteEvent) => {
+			const voteEvent = billVoteEvent.vote_events[0];
+			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
+			const groups = groupedVotes.map((aff) => ({
+				name: aff.name,
+				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
+			}));
+			votingByEventId.set(billVoteEvent.id, {
+				id: voteEvent.id,
+				title: voteEvent.nickname ?? voteEvent.title,
+				date: voteEvent.start_date,
+				result: voteEvent.result,
+				votesSummary: buildVotesSummary({ groups, result: voteEvent.result })
+			});
+		})
+	);
+
 	return {
 		bill,
 		proposer,
@@ -293,17 +346,24 @@ export async function load({ params }) {
 						)
 					}
 				: null,
-		events: parsedEvents.map((event) =>
-			'mergedIntoBill' in event && mergedBillProposer
-				? {
-						...event,
-						mergedIntoBill: {
-							...event.mergedIntoBill,
-							proposer: mergedBillProposer
-						}
+		events: parsedEvents.map((event) => {
+			if ('mergedIntoBill' in event && mergedBillProposer) {
+				return {
+					...event,
+					mergedIntoBill: {
+						...event.mergedIntoBill,
+						proposer: mergedBillProposer
 					}
-				: event
-		),
+				};
+			}
+			if (event.type === 'BillVoteEvent' && event.id) {
+				const voting = votingByEventId.get(event.id);
+				if (voting) {
+					return { ...event, voting };
+				}
+			}
+			return event;
+		}),
 		seo: createSeo({
 			title: bill.nickname ?? bill.title
 		})
