@@ -5,6 +5,11 @@
 	} from '$components/DataPage/DataPage.svelte';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import VotingOptionTag from '$components/VotingOptionTag/VotingOptionTag.svelte';
+	import {
+		buildVoteQueryStateConfig,
+		comboboxQueryConfig,
+		listCheckboxQueryConfig
+	} from '$lib/query-state/config.js';
 	import type { DefaultVoteOption, CustomVoteOption } from '$models/voting.js';
 
 	let { data } = $props();
@@ -19,14 +24,6 @@
 		}))()
 	);
 	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
-
-	$effect(() => {
-		const defaultValue = {
-			filterVoteType: filterOptions.voteOptions,
-			filterPosition: filterOptions.roles
-		};
-		selectedCheckboxValue = defaultValue;
-	});
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';
@@ -62,6 +59,16 @@
 		}
 	]);
 
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterPosition: listCheckboxQueryConfig('position'),
+			filterVoteType: listCheckboxQueryConfig('voteType')
+		},
+		combobox: {
+			filterComboboxType: comboboxQueryConfig('party')
+		}
+	});
+
 	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
 			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
@@ -90,6 +97,7 @@
 	searchPlaceholder="ชื่อ-นามสกุล"
 	{comboboxFilterList}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'politician', value: 'ชื่อ-นามสกุล' },
@@ -119,10 +127,8 @@
 	{#snippet table({ cellKey, cellValue })}
 		{#if cellKey === 'politician'}
 			{#if cellValue.id}
-				<a
-					href="/politicians/{cellValue.id}"
-					class="body-01 text-gray-100 underline"
-					target="_blank">{cellValue.name}</a
+				<a href="/politicians/{cellValue.id}" class="body-01 text-gray-100 underline"
+					>{cellValue.name}</a
 				>
 			{:else}
 				<p class="body-01 text-gray-100">{cellValue.name}</p>

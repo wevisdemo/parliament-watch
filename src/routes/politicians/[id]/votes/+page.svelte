@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import DataPage from '$components/DataPage/DataPage.svelte';
 	import type {
 		CheckboxFilterGroup,
@@ -10,7 +9,7 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
 	import { formatThaiDate, formatYearRange } from '$lib/date.js';
-	import { DefaultVoteOption } from '$models/voting.js';
+	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state/config.js';
 
 	let { data } = $props();
 	let { politician, filterOptions, votes } = $derived(data);
@@ -34,6 +33,13 @@
 		}
 	]);
 
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterAssembly: listCheckboxQueryConfig('assembly'),
+			filterVoteType: listCheckboxQueryConfig('voteType')
+		}
+	});
+
 	let searchQuery = $state('');
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
 		(() => ({
@@ -41,23 +47,6 @@
 			filterVoteType: [...filterOptions.voteOptions]
 		}))()
 	);
-
-	$effect(() => {
-		const voteTypeParam = page.url.searchParams.get('votetype');
-		const filterVoteType =
-			voteTypeParam === 'agreed'
-				? [DefaultVoteOption.Agreed]
-				: voteTypeParam === 'disagreed'
-					? [DefaultVoteOption.Disagreed]
-					: voteTypeParam === 'absent'
-						? [DefaultVoteOption.Absent]
-						: [...filterOptions.voteOptions];
-
-		selectedCheckboxValue = {
-			filterAssembly: filterOptions.assemblies.map((assembly) => assembly.id),
-			filterVoteType
-		};
-	});
 
 	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
@@ -98,6 +87,7 @@
 		{ url: `/politicians/${politician.id}/votes`, label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
@@ -123,10 +113,8 @@
 		{#if cellKey === 'date'}
 			{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 		{:else if cellKey === 'name'}
-			<a
-				class="text-text-01 hover:text-interactive-01 hover:underline"
-				href="/votings/{row.id}"
-				target="_blank">{cellValue}</a
+			<a class="text-text-01 hover:text-interactive-01 hover:underline" href="/votings/{row.id}"
+				>{cellValue}</a
 			>
 		{:else if cellKey === 'option'}
 			<VotingOptionTag voteOption={cellValue} />

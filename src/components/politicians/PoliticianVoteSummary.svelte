@@ -76,9 +76,8 @@
 				{/each}
 			</ul>
 			<a
-				href="/politicians/{politicianId}/votes?votetype=agreed"
+				href="/politicians/{politicianId}/votes?voteType=เห็นด้วย"
 				class="helper-text-01 mr-auto flex items-center gap-2"
-				target="_blank"
 				rel="nofollow noopener noreferrer"
 			>
 				<span>ดู {agreedVoting.total} มติที่เห็นด้วย</span>
@@ -108,9 +107,8 @@
 				{/each}
 			</ul>
 			<a
-				href="/politicians/{politicianId}/votes?votetype=disagreed"
+				href="/politicians/{politicianId}/votes?voteType=ไม่เห็นด้วย"
 				class="helper-text-01 mr-auto flex items-center gap-2"
-				target="_blank"
 				rel="nofollow noopener noreferrer"
 			>
 				<span>ดู {disagreedVoting.total} มติที่ไม่เห็นด้วย</span>
@@ -187,9 +185,8 @@
 				>
 			</div>
 			<a
-				href="/politicians/{politicianId}/votes?votetype=absent"
+				href="/politicians/{politicianId}/votes?voteType=ลา+%2F+ขาดลงมติ"
 				class="helper-text-01 mr-auto flex items-center gap-2"
-				target="_blank"
 				rel="nofollow noopener noreferrer"
 			>
 				<span

@@ -39,10 +39,40 @@
 		ComboboxFilterGroup['key'],
 		ComboboxFilterChoice['id'] | undefined
 	>;
+
+	export interface SearchQueryStateConfig {
+		param?: string;
+	}
+
+	export interface CheckboxListQueryStateConfig {
+		mode: 'list';
+		param?: string;
+	}
+
+	export type CheckboxQueryStateConfig = CheckboxListQueryStateConfig;
+
+	export interface ComboboxQueryStateConfig {
+		param?: string;
+	}
+
+	export interface DataPageQueryStateConfig {
+		search?: SearchQueryStateConfig;
+		checkbox?: Record<CheckboxFilterGroup['key'], CheckboxQueryStateConfig>;
+		combobox?: Record<ComboboxFilterGroup['key'], ComboboxQueryStateConfig>;
+	}
 </script>
 
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
+	import {
+		decodeQueryState,
+		encodeQueryState,
+		type QueryParamValue,
+		type QueryStateConfig
+	} from '$lib/query-state/codec';
+	import { createDebouncedSync } from '$lib/query-state/sync';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -58,7 +88,7 @@
 	import FilterEdit from 'carbon-icons-svelte/lib/FilterEdit.svelte';
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import type { Snippet } from 'svelte';
-	import { onMount, tick, type ComponentProps } from 'svelte';
+	import { onMount, onDestroy, tick, type ComponentProps } from 'svelte';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -77,53 +107,6 @@
 	// Object.values(selectedCheckboxValue).some(e => e.length === 0) ? [] : filteredData;
 	// ```
 
-	// Reactive
-	let tableCurrentPage = $state(1);
-
-	const filterTickAll = (value = true) => {
-		selectedComboboxValue = Object.fromEntries(
-			comboboxFilterList.map((group) => [group.key, undefined])
-		);
-		if (value) {
-			selectedCheckboxValue = Object.fromEntries(
-				checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
-			);
-		} else {
-			selectedCheckboxValue = Object.fromEntries(
-				checkboxFilterList.map((group) => [group.key, []])
-			);
-		}
-	};
-
-	let comboboxInternal: Record<string, string> = $state({});
-	let showFilter = $state(true);
-	let isMobile = $state(false);
-
-	onMount(() => {
-		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
-		isMobile = !showFilter;
-	});
-
-	let previousFromTop = 0;
-	let showHeader = $state(true);
-	function scrollEventHandler() {
-		const currentFromTop = window.scrollY;
-		showHeader = currentFromTop <= previousFromTop;
-		previousFromTop = currentFromTop;
-	}
-
-	let renderCombobox = $state(true);
-	export const setCombobox = (key: string, value: string) => {
-		comboboxInternal[key] = value;
-
-		// Force combobox to evaluate internal value
-		// When combobox rerendered, `select` event will auto fire
-		renderCombobox = false;
-		tick().then(() => {
-			renderCombobox = true;
-		});
-	};
-
 	interface Props {
 		// Just props
 		breadcrumbList: {
@@ -141,6 +124,7 @@
 		searchQuery?: string;
 		selectedComboboxValue?: SelectedComboboxValueType;
 		selectedCheckboxValue?: SelectedCheckboxValueType;
+		queryStateConfig?: DataPageQueryStateConfig;
 		downloadSize?: 'sm' | 'lg' | 'otherPossibleValue';
 		downloadLinks?: ComponentProps<typeof LinkTable>['links'];
 		unit?: string;
@@ -166,12 +150,16 @@
 				checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
 			)
 		),
+		queryStateConfig,
 		downloadSize = 'sm',
 		downloadLinks = [],
 		unit = 'มติ',
 		children,
 		table
 	}: Props = $props();
+
+	// Reactive
+	let tableCurrentPage = $state(1);
 	let checkboxFilterListCount = $derived(
 		Object.values(checkboxFilterList).flatMap(({ choices }) => choices).length
 	);
@@ -180,6 +168,153 @@
 			Object.values(selectedCheckboxValue).flat().length < checkboxFilterListCount ||
 			Object.values(selectedComboboxValue).some((e) => e !== undefined)
 	);
+
+	const filterTickAll = (value = true) => {
+		selectedComboboxValue = Object.fromEntries(
+			comboboxFilterList.map((group) => [group.key, undefined])
+		);
+		if (value) {
+			selectedCheckboxValue = Object.fromEntries(
+				checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
+			);
+		} else {
+			selectedCheckboxValue = Object.fromEntries(
+				checkboxFilterList.map((group) => [group.key, []])
+			);
+		}
+	};
+
+	let comboboxInternal: Record<string, string> = $state({});
+	let showFilter = $state(true);
+	let isMobile = $state(false);
+	let hydratedQueryState = false;
+	let previousSearchQuery = '';
+	let previousNonSearchSyncSignature = '';
+	const SEARCH_QUERY_SYNC_DEBOUNCE_MS = 300;
+
+	const getCheckboxChoices = (): Record<string, QueryParamValue[]> =>
+		Object.fromEntries(
+			checkboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.value)])
+		);
+
+	const getComboboxChoices = (): Record<string, QueryParamValue[]> =>
+		Object.fromEntries(
+			comboboxFilterList.map((group) => [group.key, group.choices.map((choice) => choice.id)])
+		);
+
+	const normalizeQueryStateConfig = (): QueryStateConfig => ({
+		search: queryStateConfig?.search,
+		checkbox: Object.fromEntries(
+			checkboxFilterList.map((group) => [
+				group.key,
+				queryStateConfig?.checkbox?.[group.key] ?? { mode: 'list', param: group.key }
+			])
+		),
+		combobox: Object.fromEntries(
+			comboboxFilterList.map((group) => [
+				group.key,
+				queryStateConfig?.combobox?.[group.key] ?? { param: group.key }
+			])
+		)
+	});
+
+	const getNonSearchSyncSignature = () =>
+		JSON.stringify({ selectedCheckboxValue, selectedComboboxValue });
+
+	const syncUrlQueryState = () => {
+		if (!queryStateConfig) return;
+
+		const config = normalizeQueryStateConfig();
+		const currentUrl = page.url;
+		const encoded = encodeQueryState({
+			baseSearchParams: currentUrl.searchParams,
+			config,
+			searchQuery,
+			selectedCheckboxValue,
+			selectedComboboxValue,
+			checkboxChoices: getCheckboxChoices()
+		});
+		const nextSearch = encoded.toString();
+		const currentSearch = currentUrl.searchParams.toString();
+		if (nextSearch === currentSearch) return;
+
+		const nextUrl = `${currentUrl.pathname}${nextSearch ? `?${nextSearch}` : ''}${currentUrl.hash}`;
+		goto(nextUrl, {
+			replaceState: true,
+			noScroll: true,
+			keepFocus: true,
+			invalidateAll: false
+		});
+	};
+
+	const debouncedSearchSync = createDebouncedSync(syncUrlQueryState, SEARCH_QUERY_SYNC_DEBOUNCE_MS);
+
+	onMount(() => {
+		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
+		isMobile = !showFilter;
+		if (!queryStateConfig) return;
+
+		const config = normalizeQueryStateConfig();
+		const {
+			searchQuery: decodedSearchQuery,
+			selectedCheckboxValue: decodedCheckboxValue,
+			selectedComboboxValue: decodedComboboxValue
+		} = decodeQueryState({
+			searchParams: page.url.searchParams,
+			config,
+			defaultSearchQuery: searchQuery,
+			checkboxChoices: getCheckboxChoices(),
+			comboboxChoices: getComboboxChoices()
+		});
+
+		searchQuery = decodedSearchQuery;
+		selectedCheckboxValue = decodedCheckboxValue as SelectedCheckboxValueType;
+		selectedComboboxValue = decodedComboboxValue as SelectedComboboxValueType;
+		for (const [groupKey, value] of Object.entries(decodedComboboxValue)) {
+			if (value !== undefined) setCombobox(groupKey, String(value));
+		}
+
+		previousSearchQuery = searchQuery;
+		previousNonSearchSyncSignature = getNonSearchSyncSignature();
+		hydratedQueryState = true;
+	});
+
+	onDestroy(() => {
+		debouncedSearchSync.cancel();
+	});
+
+	let previousFromTop = 0;
+	let showHeader = $state(true);
+	function scrollEventHandler() {
+		const currentFromTop = window.scrollY;
+		showHeader = currentFromTop <= previousFromTop;
+		previousFromTop = currentFromTop;
+	}
+
+	let renderCombobox = $state(true);
+	export const setCombobox = (key: string, value: string) => {
+		comboboxInternal[key] = value;
+
+		// Force combobox to evaluate internal value
+		// When combobox rerendered, `select` event will auto fire
+		renderCombobox = false;
+		tick().then(() => {
+			renderCombobox = true;
+		});
+	};
+
+	$effect(() => {
+		if (!hydratedQueryState || !queryStateConfig) return;
+		const currentNonSearchSyncSignature = getNonSearchSyncSignature();
+		if (currentNonSearchSyncSignature !== previousNonSearchSyncSignature) {
+			previousNonSearchSyncSignature = currentNonSearchSyncSignature;
+			previousSearchQuery = searchQuery;
+			debouncedSearchSync.flush();
+		} else if (searchQuery !== previousSearchQuery) {
+			previousSearchQuery = searchQuery;
+			debouncedSearchSync.schedule();
+		}
+	});
 </script>
 
 <svelte:window onscroll={scrollEventHandler} />

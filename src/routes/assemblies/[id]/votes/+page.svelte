@@ -5,6 +5,7 @@
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { formatThaiDate } from '$lib/date.js';
+	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state/config.js';
 
 	let { data } = $props();
 
@@ -21,19 +22,18 @@
 		}
 	]);
 
+	const queryStateConfig = buildVoteQueryStateConfig({
+		checkbox: {
+			filterResult: listCheckboxQueryConfig('result')
+		}
+	});
+
 	let searchQuery = $state('');
 	let selectedCheckboxValue: SelectedCheckboxValueType = $state(
 		(() => ({
 			filterResult: [...filterOptions.result]
 		}))()
 	);
-
-	$effect(() => {
-		const defaultValue = {
-			filterResult: [...filterOptions.result]
-		};
-		selectedCheckboxValue = defaultValue;
-	});
 
 	let filteredData = $derived(
 		selectedCheckboxValue === undefined ||
@@ -63,6 +63,7 @@
 		{ label: 'ประวัติการลงมติ' }
 	]}
 	{checkboxFilterList}
+	{queryStateConfig}
 	{filteredData}
 	tableHeader={[
 		{ key: 'date', value: 'วันที่' },
@@ -89,9 +90,7 @@
 				{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 			</span>
 		{:else if cellKey === 'name'}
-			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline" target="_blank"
-				>{cellValue}</a
-			>
+			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline">{cellValue}</a>
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
 		{:else if cellKey === 'links'}
