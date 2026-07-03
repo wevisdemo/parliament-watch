@@ -72,7 +72,7 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import {
 		decodeQueryState,
@@ -97,7 +97,6 @@
 	import Minimize from 'carbon-icons-svelte/lib/Minimize.svelte';
 	import type { Snippet } from 'svelte';
 	import { onMount, onDestroy, tick, type ComponentProps } from 'svelte';
-	import { get } from 'svelte/store';
 
 	function shouldFilterItem(item: { text: string }, value: undefined | string) {
 		if (!value) return true;
@@ -234,7 +233,7 @@
 		if (!queryStateConfig) return;
 
 		const config = normalizeQueryStateConfig();
-		const currentUrl = get(page).url;
+		const currentUrl = page.url;
 		const encoded = encodeQueryState({
 			baseSearchParams: currentUrl.searchParams,
 			config,
@@ -269,7 +268,7 @@
 			selectedCheckboxValue: decodedCheckboxValue,
 			selectedComboboxValue: decodedComboboxValue
 		} = decodeQueryState({
-			searchParams: get(page).url.searchParams,
+			searchParams: page.url.searchParams,
 			config,
 			defaultSearchQuery: searchQuery,
 			checkboxChoices: getCheckboxChoices(),
