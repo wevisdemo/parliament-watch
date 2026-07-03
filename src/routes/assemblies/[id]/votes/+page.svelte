@@ -90,9 +90,7 @@
 				{formatThaiDate(cellValue, { shortMonth: true, shortYear: true })}
 			</span>
 		{:else if cellKey === 'name'}
-			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline" target="_blank"
-				>{cellValue}</a
-			>
+			<a href="/votings/{row.id}" class="body-01 text-gray-100 underline">{cellValue}</a>
 		{:else if cellKey === 'result'}
 			<VotingResultTag class="m-0 whitespace-nowrap" result={cellValue} />
 		{:else if cellKey === 'links'}

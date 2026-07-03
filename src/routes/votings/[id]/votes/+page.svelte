@@ -127,10 +127,8 @@
 	{#snippet table({ cellKey, cellValue })}
 		{#if cellKey === 'politician'}
 			{#if cellValue.id}
-				<a
-					href="/politicians/{cellValue.id}"
-					class="body-01 text-gray-100 underline"
-					target="_blank">{cellValue.name}</a
+				<a href="/politicians/{cellValue.id}" class="body-01 text-gray-100 underline"
+					>{cellValue.name}</a
 				>
 			{:else}
 				<p class="body-01 text-gray-100">{cellValue.name}</p>
