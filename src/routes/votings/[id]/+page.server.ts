@@ -1,3 +1,4 @@
+import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer.js';
 import { graphql } from '$lib/politigraph/client';
 import { countVotesInEachOption, groupVotesByAffiliation } from '$lib/politigraph/vote/group.js';
 import {
@@ -5,7 +6,6 @@ import {
 	sortPoliticiansVoteByDominantGroup
 } from '$lib/politigraph/vote/with-politician.js';
 import { createSeo } from '$lib/seo';
-import type { Bill } from '$models/bill';
 import { DefaultVoteOption, defaultVoteOptions, type CustomVoteOption } from '$models/voting.js';
 import { error } from '@sveltejs/kit';
 import { groups } from 'd3-array';
@@ -53,6 +53,15 @@ export async function load({ params }) {
 					sort: [{ note: 'ASC' }]
 				},
 				__scalar: true
+			},
+			bill_vote_events: {
+				bills: {
+					id: true,
+					nickname: true,
+					title: true,
+					proposal_date: true,
+					status: true
+				}
 			}
 		}
 	});
@@ -61,8 +70,30 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	// TODO: Not release bill yet
-	const relatedBill: Bill | null = null;
+	const relatedBillSource = voteEvent.bill_vote_events[0]?.bills[0];
+	let relatedBill = null;
+	if (relatedBillSource?.proposal_date) {
+		const billData = await graphql.query({
+			bills: {
+				__args: {
+					where: { id: { eq: relatedBillSource.id } },
+					limit: 1
+				},
+				...createBillFieldsForProposer(relatedBillSource.proposal_date)
+			}
+		});
+		const bill = billData.bills[0];
+		if (bill) {
+			relatedBill = {
+				id: relatedBillSource.id,
+				nickname: relatedBillSource.nickname || relatedBillSource.title,
+				title: relatedBillSource.nickname ? relatedBillSource.title : null,
+				proposedOn: new Date(relatedBillSource.proposal_date),
+				status: relatedBillSource.status,
+				proposer: getBillProposer(bill)
+			};
+		}
+	}
 
 	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 

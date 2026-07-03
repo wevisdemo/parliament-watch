@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
+	import BillCard from '$components/BillCard/BillCard.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
@@ -23,7 +24,7 @@
 
 	let { data } = $props();
 
-	let { voteEvent, results, resultsByAffiliation, votes } = $derived(data);
+	let { voteEvent, relatedBill, results, resultsByAffiliation, votes } = $derived(data);
 
 	const Menu = {
 		Summary: 'summary',
@@ -206,11 +207,9 @@
 				{/if}
 			</div>
 		</div>
-		<div
-			class="mx-auto flex w-full max-w-[1280px] flex-col gap-y-4 md:flex-row md:gap-x-16 md:gap-y-0"
-		>
+		<div class="mx-auto flex w-full max-w-[1280px] flex-col md:flex-row gap-4 md:gap-8">
 			<div class="flex flex-1 flex-col">
-				<div class="flex justify-between">
+				<div class="flex flex-row flex-wrap gap-4 lg:gap-12">
 					{#if voteEvent.start_date}
 						<div>
 							<p class="heading-01">วันที่</p>
@@ -232,18 +231,17 @@
 						</ul>
 					</div>
 				</div>
+				{#if voteEvent.description || relatedBill}
+					<div class="mt-4 md:mt-6 h-[1px] w-full bg-gray-20"></div>
+				{/if}
 				{#if voteEvent.description}
-					<div class="my-4 h-[1px] w-full bg-gray-20"></div>
-					<p class="heading-01">สรุปเนื้อหา</p>
+					<p class="heading-01 mt-4 md:mt-6">สรุปเนื้อหา</p>
 					<p class="body-01">{voteEvent.description}</p>
 				{/if}
-				<!-- {#if relatedBill}
-					<p class="heading-01 mt-4 mb-1">ดูเส้นทางของร่างกฎหมายนี้</p>
-					<BillCard
-						class="w-full md:w-auto"
-						{...relatedBill}
-					/>
-				{/if} -->
+				{#if relatedBill}
+					<p class="heading-01 mt-4 md:mt-6 mb-1">ดูเส้นทางของร่างกฎหมายที่เกี่ยวข้อง</p>
+					<BillCard isFullWidth orientation="landscape" {...relatedBill} />
+				{/if}
 			</div>
 			<div class="flex flex-col gap-2">
 				<LinkTable
