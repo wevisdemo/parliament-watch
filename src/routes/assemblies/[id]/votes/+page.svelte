@@ -5,7 +5,7 @@
 	import LinksCell from '$components/DataPage/LinksCell.svelte';
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { formatThaiDate } from '$lib/date.js';
-	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state-config.js';
+	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state/config.js';
 
 	let { data } = $props();
 

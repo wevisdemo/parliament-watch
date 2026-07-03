@@ -49,15 +49,7 @@
 		param?: string;
 	}
 
-	export interface CheckboxFlagsQueryStateConfig {
-		mode: 'flags';
-		paramsByValue: Record<string, string>;
-		fallbackParam?: string;
-	}
-
-	export type CheckboxQueryStateConfig =
-		| CheckboxListQueryStateConfig
-		| CheckboxFlagsQueryStateConfig;
+	export type CheckboxQueryStateConfig = CheckboxListQueryStateConfig;
 
 	export interface ComboboxQueryStateConfig {
 		param?: string;
@@ -79,8 +71,8 @@
 		encodeQueryState,
 		type QueryParamValue,
 		type QueryStateConfig
-	} from '$lib/query-state';
-	import { createDebouncedSync } from '$lib/query-state-sync';
+	} from '$lib/query-state/codec';
+	import { createDebouncedSync } from '$lib/query-state/sync';
 	import {
 		Breadcrumb,
 		BreadcrumbItem,

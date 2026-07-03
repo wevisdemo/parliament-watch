@@ -9,7 +9,7 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import VoteWarningNotification from '$components/politicians/VoteWarningNotification.svelte';
 	import { formatThaiDate, formatYearRange } from '$lib/date.js';
-	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state-config.js';
+	import { buildVoteQueryStateConfig, listCheckboxQueryConfig } from '$lib/query-state/config.js';
 
 	let { data } = $props();
 	let { politician, filterOptions, votes } = $derived(data);

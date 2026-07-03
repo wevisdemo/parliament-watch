@@ -9,7 +9,7 @@
 		buildVoteQueryStateConfig,
 		comboboxQueryConfig,
 		listCheckboxQueryConfig
-	} from '$lib/query-state-config.js';
+	} from '$lib/query-state/config.js';
 	import type { DefaultVoteOption, CustomVoteOption } from '$models/voting.js';
 
 	let { data } = $props();

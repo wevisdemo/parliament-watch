@@ -12,7 +12,7 @@
 		buildVoteQueryStateConfig,
 		listCheckboxQueryConfig,
 		comboboxQueryConfig
-	} from '$lib/query-state-config.js';
+	} from '$lib/query-state/config.js';
 	import { CREATOR_TYPE_LABEL } from '../../../constants/bills.js';
 
 	let { data } = $props();

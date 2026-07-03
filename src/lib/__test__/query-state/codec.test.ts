@@ -1,4 +1,4 @@
-import { decodeQueryState, encodeQueryState, type QueryStateConfig } from '../query-state';
+import { decodeQueryState, encodeQueryState, type QueryStateConfig } from '../../query-state/codec';
 import { describe, expect, it } from 'vitest';
 
 describe('query-state codec', () => {
@@ -24,9 +24,13 @@ describe('query-state codec', () => {
 			checkboxChoices
 		});
 
-		expect(encoded.toString()).toBe(
-			'tab=votes&q=%E0%B8%87%E0%B8%9A%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%A1%E0%B8%B2%E0%B8%93&voteType=%E0%B9%80%E0%B8%AB%E0%B9%87%E0%B8%99%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2&voteType=%E0%B8%87%E0%B8%94%E0%B8%AD%E0%B8%AD%E0%B8%81%E0%B9%80%E0%B8%AA%E0%B8%B5%E0%B8%A2%E0%B8%87&party=%E0%B8%82'
-		);
+		const expected = new URLSearchParams();
+		expected.set('tab', 'votes');
+		expected.set('q', 'งบประมาณ');
+		expected.append('voteType', 'เห็นด้วย');
+		expected.append('voteType', 'งดออกเสียง');
+		expected.set('party', 'ข');
+		expect(encoded.toString()).toBe(expected.toString());
 
 		const decoded = decodeQueryState({
 			searchParams: encoded,
@@ -45,16 +49,15 @@ describe('query-state codec', () => {
 			search: { param: 'q' },
 			checkbox: {
 				filterResult: {
-					mode: 'flags',
-					paramsByValue: { ผ่าน: 'pass', ไม่ผ่าน: 'notPass' },
-					fallbackParam: 'result'
+					mode: 'list',
+					param: 'result'
 				}
 			}
 		};
 		const checkboxChoices = { filterResult: ['ผ่าน', 'ไม่ผ่าน', 'รอตรวจสอบ'] };
 
 		const encoded = encodeQueryState({
-			baseSearchParams: new URLSearchParams('tab=votes&q=old&pass=true&notPass=true'),
+			baseSearchParams: new URLSearchParams('tab=votes&q=old&result=ผ่าน&result=ไม่ผ่าน'),
 			config,
 			searchQuery: '',
 			selectedCheckboxValue: { filterResult: ['ผ่าน', 'ไม่ผ่าน', 'รอตรวจสอบ'] },
@@ -65,13 +68,12 @@ describe('query-state codec', () => {
 		expect(encoded.toString()).toBe('tab=votes');
 	});
 
-	it('supports pass/notPass flags with fallback values for future results', () => {
+	it('encodes list checkbox with non-default selection', () => {
 		const config: QueryStateConfig = {
 			checkbox: {
 				filterResult: {
-					mode: 'flags',
-					paramsByValue: { ผ่าน: 'pass', ไม่ผ่าน: 'notPass' },
-					fallbackParam: 'result'
+					mode: 'list',
+					param: 'result'
 				}
 			}
 		};
@@ -86,8 +88,7 @@ describe('query-state codec', () => {
 			checkboxChoices
 		});
 
-		expect(encoded.get('notPass')).toBe('true');
-		expect(encoded.getAll('result')).toEqual(['รอตรวจสอบ']);
+		expect(encoded.getAll('result')).toEqual(['ไม่ผ่าน', 'รอตรวจสอบ']);
 
 		const decoded = decodeQueryState({
 			searchParams: encoded,
@@ -125,13 +126,12 @@ describe('query-state codec', () => {
 		expect(reEncoded.has('votetype')).toBe(false);
 	});
 
-	it('falls back to default checkbox selection when params are unknown', () => {
+	it('falls back to empty selection when params are unknown', () => {
 		const config: QueryStateConfig = {
 			checkbox: {
 				filterResult: {
-					mode: 'flags',
-					paramsByValue: { ผ่าน: 'pass', ไม่ผ่าน: 'notPass' },
-					fallbackParam: 'result'
+					mode: 'list',
+					param: 'result'
 				}
 			}
 		};

@@ -1,9 +1,8 @@
 import type {
-	CheckboxFlagsQueryConfig,
 	CheckboxListQueryConfig,
 	ComboboxQueryConfig,
 	QueryStateConfig
-} from '$lib/query-state';
+} from '$lib/query-state/codec';
 
 export const CANONICAL_SEARCH_PARAM = 'q';
 export const DEFAULT_SEARCH_QUERY_CONFIG = {
@@ -14,17 +13,6 @@ export function listCheckboxQueryConfig(param: string): CheckboxListQueryConfig 
 	return {
 		mode: 'list',
 		param
-	};
-}
-
-export function flagsCheckboxQueryConfig(
-	paramsByValue: CheckboxFlagsQueryConfig['paramsByValue'],
-	options?: Pick<CheckboxFlagsQueryConfig, 'fallbackParam'>
-): CheckboxFlagsQueryConfig {
-	return {
-		mode: 'flags',
-		paramsByValue,
-		...(options ?? {})
 	};
 }
 

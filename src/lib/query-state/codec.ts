@@ -9,13 +9,7 @@ export interface CheckboxListQueryConfig {
 	param?: string;
 }
 
-export interface CheckboxFlagsQueryConfig {
-	mode: 'flags';
-	paramsByValue: Record<string, string>;
-	fallbackParam?: string;
-}
-
-export type CheckboxQueryConfig = CheckboxListQueryConfig | CheckboxFlagsQueryConfig;
+export type CheckboxQueryConfig = CheckboxListQueryConfig;
 
 export interface ComboboxQueryConfig {
 	param?: string;
@@ -53,9 +47,6 @@ export interface DecodeQueryStateResult {
 const DEFAULT_SEARCH_PARAM = 'q';
 
 const normalizeValue = (value: QueryParamValue) => String(value);
-
-const isTruthyParam = (value: string | null) =>
-	value !== null && ['true', '1', 'yes', 'on', ''].includes(value.toLowerCase());
 
 const valueLookup = (choices: QueryParamValue[]) =>
 	new Map(choices.map((value) => [normalizeValue(value), value]));
@@ -100,28 +91,6 @@ export function encodeQueryState({
 		const groupConfig = config.checkbox?.[groupKey] ?? { mode: 'list', param: groupKey };
 		const selectedValues = selectedCheckboxValue[groupKey] ?? choices;
 
-		if (groupConfig.mode === 'flags') {
-			for (const param of Object.values(groupConfig.paramsByValue)) next.delete(param);
-			if (groupConfig.fallbackParam) next.delete(groupConfig.fallbackParam);
-
-			if (isDefaultSelection(selectedValues, choices)) continue;
-
-			const selectedSet = new Set(selectedValues.map(normalizeValue));
-			for (const [value, param] of Object.entries(groupConfig.paramsByValue)) {
-				if (selectedSet.has(value)) next.set(param, 'true');
-			}
-
-			if (groupConfig.fallbackParam) {
-				const flagValues = new Set(Object.keys(groupConfig.paramsByValue));
-				for (const selected of selectedValues) {
-					const normalized = normalizeValue(selected);
-					if (flagValues.has(normalized)) continue;
-					next.append(groupConfig.fallbackParam, normalized);
-				}
-			}
-			continue;
-		}
-
 		const listParam = groupConfig.param ?? groupKey;
 		next.delete(listParam);
 		if (isDefaultSelection(selectedValues, choices)) continue;
@@ -152,36 +121,6 @@ export function decodeQueryState({
 	for (const [groupKey, choices] of Object.entries(checkboxChoices)) {
 		const groupConfig = config.checkbox?.[groupKey] ?? { mode: 'list', param: groupKey };
 		const lookup = valueLookup(choices);
-
-		if (groupConfig.mode === 'flags') {
-			const flagValues = Object.keys(groupConfig.paramsByValue);
-			const canonicalFlagParams = Object.values(groupConfig.paramsByValue);
-			const fallbackParams = groupConfig.fallbackParam ? [groupConfig.fallbackParam] : [];
-			const relevantParams = [...canonicalFlagParams, ...fallbackParams];
-
-			if (!relevantParams.some((param) => searchParams.has(param))) {
-				selectedCheckboxValue[groupKey] = choices;
-				continue;
-			}
-
-			const selectedValues: QueryParamValue[] = [];
-			for (const value of flagValues) {
-				const canonicalParam = groupConfig.paramsByValue[value];
-				const valueParam = isTruthyParam(searchParams.get(canonicalParam));
-				if (!valueParam) continue;
-				const mapped = lookup.get(value);
-				if (mapped !== undefined) selectedValues.push(mapped);
-			}
-
-			const fallbackValues = fallbackParams.flatMap((param) => searchParams.getAll(param));
-			for (const fallbackValue of fallbackValues) {
-				const mapped = lookup.get(fallbackValue);
-				if (mapped !== undefined) selectedValues.push(mapped);
-			}
-
-			selectedCheckboxValue[groupKey] = dedupeValues(selectedValues);
-			continue;
-		}
 
 		const listParam = groupConfig.param ?? groupKey;
 		const listValues = collectListParamValues(searchParams, listParam);

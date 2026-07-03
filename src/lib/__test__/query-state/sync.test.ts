@@ -1,4 +1,4 @@
-import { createDebouncedSync } from '../query-state-sync';
+import { createDebouncedSync } from '../../query-state/sync';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('query-state-sync debounce helper', () => {
