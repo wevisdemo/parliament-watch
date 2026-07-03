@@ -202,6 +202,13 @@ export async function load({ params }) {
 
 	const proposer = getBillProposer({ creator_type, creators, people_signature_count });
 
+	const mergeEvent = events.find((e) => e.__typename === 'BillMergeEvent');
+	const mergeEventBills = mergeEvent?.bills.map((b) => ({
+		id: b.id,
+		name: b.nickname ?? b.title,
+		proposedBy: b.creators[0]?.name
+	}));
+
 	const parsedEvents = events
 		.map((event) => {
 			const base = {
@@ -227,7 +234,9 @@ export async function load({ params }) {
 						: event.__typename === 'BillRejectEvent'
 							? event.reject_reason
 							: event.__typename === 'BillMergeEvent'
-								? 'ร่างนี้ถูกนำไปรวมกับร่างอื่นในชั้นการพิจารณา'
+								? event.main_bill_id === bill.id
+									? 'ร่างนี้ถูกใช้เป็นร่างหลักในชั้นการพิจารณา'
+									: 'ร่างนี้ถูกนำไปรวมกับร่างอื่นในชั้นการพิจารณา'
 								: event.__typename === 'BillVoteEvent' &&
 									event.classification &&
 									voteEventDefaultTitleDescription.get(event.classification)?.description) || '',
@@ -235,21 +244,38 @@ export async function load({ params }) {
 				links: event.links
 			};
 
-			if (
-				event.__typename === 'BillMergeEvent' &&
-				event.main_bill_id &&
-				event.main_bill_id !== bill.id
-			) {
-				const mainBill = event.bills.find((b) => b.id === event.main_bill_id);
-				if (mainBill) {
+			if (event.__typename === 'BillMergeEvent' && mergeEventBills) {
+				const mainBillData = event.bills.find((b) => b.id === event.main_bill_id);
+				const isMainBill = event.main_bill_id === bill.id;
+
+				if (isMainBill) {
 					return {
 						...base,
-						mergedIntoBill: {
-							id: mainBill.id,
-							nickname: mainBill.nickname || mainBill.title,
-							title: mainBill.nickname ? mainBill.title : null,
-							proposedOn: mainBill.proposal_date ? new Date(mainBill.proposal_date) : null,
-							status: mainBill.status
+						mergeDetail: {
+							mainBill: mergeEventBills.find((b) => b.id === event.main_bill_id),
+							otherBills: mergeEventBills.filter(
+								(b) => b.id !== bill.id && b.id !== event.main_bill_id
+							)
+						}
+					};
+				} else if (mainBillData && mergeEventBills) {
+					return {
+						...base,
+						mergeDetail: {
+							mainBill: {
+								id: mainBillData.id,
+								name: mainBillData.nickname || mainBillData.title,
+								nickname: mainBillData.nickname || mainBillData.title,
+								title: mainBillData.nickname ? mainBillData.title : null,
+								proposedOn: mainBillData.proposal_date
+									? new Date(mainBillData.proposal_date)
+									: null,
+								status: mainBillData.status,
+								proposedBy: mainBillData.creators[0]?.name
+							},
+							otherBills: mergeEventBills.filter(
+								(b) => b.id !== bill.id && b.id !== event.main_bill_id
+							)
 						}
 					};
 				}
@@ -263,7 +289,6 @@ export async function load({ params }) {
 				: eventDefaultSortPriority.indexOf(z.type) - eventDefaultSortPriority.indexOf(a.type)
 		);
 
-	const mergeEvent = events.find((e) => e.__typename === 'BillMergeEvent');
 	let mergedBillProposer: ReturnType<typeof getBillProposer> = undefined;
 	if (mergeEvent?.main_bill_id && mergeEvent.main_bill_id !== bill.id) {
 		const mainBillFromEvent = mergeEvent.bills.find((b) => b.id === mergeEvent.main_bill_id);
@@ -287,12 +312,6 @@ export async function load({ params }) {
 			}
 		}
 	}
-
-	const mergeEventBills = mergeEvent?.bills.map((b) => ({
-		id: b.id,
-		name: b.nickname ?? b.title,
-		proposedBy: b.creators[0]?.name
-	}));
 
 	// Build voting data for each BillVoteEvent that has vote_events
 	const billVoteEvents = events.filter(
@@ -347,12 +366,14 @@ export async function load({ params }) {
 					}
 				: null,
 		events: parsedEvents.map((event) => {
-			if ('mergedIntoBill' in event && mergedBillProposer) {
+			if ('mergeDetail' in event && event.mergeDetail && mergedBillProposer) {
 				return {
 					...event,
-					mergedIntoBill: {
-						...event.mergedIntoBill,
-						proposer: mergedBillProposer
+					mergeDetail: {
+						...event.mergeDetail,
+						mainBill: event.mergeDetail.mainBill
+							? { ...event.mergeDetail.mainBill, proposer: mergedBillProposer }
+							: event.mergeDetail.mainBill
 					}
 				};
 			}

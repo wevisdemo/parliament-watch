@@ -4,10 +4,17 @@
 	import VoteCard, { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 	import { formatThaiDate } from '$lib/date';
 	import type { Link, BillEvent, BillStatus } from '$lib/politigraph/genql';
+	import MergeDetail from './MergeDetail.svelte';
 	import RoyalGazette from './RoyalGazette.svelte';
 	import { Button } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import CheckmarkFilled from 'carbon-icons-svelte/lib/CheckmarkFilled.svelte';
+
+	interface MergeBill {
+		id: string;
+		name: string;
+		proposedBy?: string;
+	}
 
 	interface Props {
 		type: BillEvent['__typename'];
@@ -15,18 +22,34 @@
 		description: string;
 		date: string | null;
 		links: Pick<Link, 'note' | 'url'>[];
-		mergedIntoBill?: {
-			id: string;
-			nickname: string;
-			title: string | null;
-			proposedOn: Date | null;
-			status: BillStatus;
-			proposer?: ProposerProps['proposer'];
+		mergeDetail?: {
+			mainBill:
+				| (MergeBill & {
+						nickname?: string;
+						title?: string | null;
+						proposedOn?: Date | null;
+						status?: BillStatus;
+						proposer?: ProposerProps['proposer'];
+				  })
+				| undefined;
+			otherBills: MergeBill[];
 		};
 		voting?: VoteCardProps;
+		currentBillId: string;
+		innerWidth: number;
 	}
 
-	let { type, title, description, date, links, mergedIntoBill, voting }: Props = $props();
+	let {
+		type,
+		title,
+		description,
+		date,
+		links,
+		mergeDetail,
+		voting,
+		currentBillId,
+		innerWidth
+	}: Props = $props();
 </script>
 
 <li class="-mt-1 mb-10 ms-4">
@@ -62,13 +85,26 @@
 					size="small">{links[0].note}</Button
 				>
 			</div>
-		{:else if mergedIntoBill}
-			<div class="flex flex-1 flex-col gap-1">
-				<p class="text-text-02">ถูกนำไปรวมร่างกับ</p>
-				<div class="w-full rounded-sm border border-gray-20">
-					<BillCard {...mergedIntoBill} isFullWidth />
+		{:else if mergeDetail}
+			{@const isMainBill = mergeDetail.mainBill?.id === currentBillId}
+			{#if isMainBill}
+				<MergeDetail {currentBillId} {...mergeDetail} {innerWidth} />
+			{:else if mergeDetail.mainBill}
+				<div class="flex flex-1 flex-col gap-1">
+					<p class="text-text-02">ถูกนำไปรวมร่างกับ</p>
+					<div class="w-full rounded-sm border border-gray-20">
+						<BillCard
+							id={mergeDetail.mainBill.id}
+							nickname={mergeDetail.mainBill.nickname ?? mergeDetail.mainBill.name}
+							title={mergeDetail.mainBill.nickname ? (mergeDetail.mainBill.title ?? null) : null}
+							proposedOn={mergeDetail.mainBill.proposedOn ?? null}
+							status={mergeDetail.mainBill.status ?? 'IN_PROGRESS'}
+							proposer={mergeDetail.mainBill.proposer}
+							isFullWidth
+						/>
+					</div>
 				</div>
-			</div>
+			{/if}
 		{/if}
 	</div>
 </li>
