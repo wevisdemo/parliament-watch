@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Breadcrumb from '$components/Breadcrumb/Breadcrumb.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	// import ArrowUpRight from 'carbon-icons-svelte/lib/ArrowUpRight.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
@@ -12,7 +13,6 @@
 	import Section from '$components/politicians/Section.svelte';
 	import SideNav from '$components/politicians/SideNav.svelte';
 	import { formatDateRange, formatThaiDate } from '$lib/date.js';
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import { groups } from 'd3-array';
 	import dayjs from 'dayjs';
 	import scrollama from 'scrollama';
@@ -64,15 +64,12 @@
 </script>
 
 <Breadcrumb
-	noTrailingSlash
-	class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
->
-	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem>นักการเมือง</BreadcrumbItem>
-	<BreadcrumbItem href="/politicians/{politician.id}" isCurrentPage
-		>{politician.name}</BreadcrumbItem
-	>
-</Breadcrumb>
+	items={[
+		{ label: 'หน้าหลัก', url: '/' },
+		{ label: 'นักการเมือง' },
+		{ label: politician.name, url: `/politicians/${politician.id}` }
+	]}
+/>
 <header>
 	<div class="mx-auto w-full max-w-[1200px] px-4 py-8 md:px-16 md:py-12">
 		<PoliticianPicture

@@ -65,6 +65,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import Breadcrumb from '$components/Breadcrumb/Breadcrumb.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import {
 		decodeQueryState,
@@ -74,8 +75,6 @@
 	} from '$lib/query-state/codec';
 	import { createDebouncedSync } from '$lib/query-state/sync';
 	import {
-		Breadcrumb,
-		BreadcrumbItem,
 		Button,
 		Checkbox,
 		ComboBox,
@@ -186,7 +185,6 @@
 
 	let comboboxInternal: Record<string, string> = $state({});
 	let showFilter = $state(true);
-	let isMobile = $state(false);
 	let hydratedQueryState = false;
 	let previousSearchQuery = '';
 	let previousNonSearchSyncSignature = '';
@@ -251,7 +249,6 @@
 
 	onMount(() => {
 		showFilter = window.matchMedia(`(min-width: 672px)`).matches;
-		isMobile = !showFilter;
 		if (!queryStateConfig) return;
 
 		const config = normalizeQueryStateConfig();
@@ -320,29 +317,7 @@
 <svelte:window onscroll={scrollEventHandler} />
 
 <div class="flex min-h-screen flex-col">
-	<Breadcrumb
-		noTrailingSlash
-		class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
-	>
-		{#if isMobile}
-			<BreadcrumbItem href={breadcrumbList[0].url}>{breadcrumbList[0].label}</BreadcrumbItem>
-			{#if breadcrumbList.length > 2}
-				<BreadcrumbItem>...</BreadcrumbItem>
-			{/if}
-			<BreadcrumbItem
-				href={breadcrumbList[breadcrumbList.length - 1].url}
-				isCurrentPage={breadcrumbList.length === 1}
-			>
-				{breadcrumbList[breadcrumbList.length - 1].label}
-			</BreadcrumbItem>
-		{:else}
-			{#each breadcrumbList as breadcrumbItem, idx (breadcrumbItem.label)}
-				<BreadcrumbItem href={breadcrumbItem.url} isCurrentPage={idx === breadcrumbList.length - 1}>
-					{breadcrumbItem.label}
-				</BreadcrumbItem>
-			{/each}
-		{/if}
-	</Breadcrumb>
+	<Breadcrumb items={breadcrumbList} collapseMobile />
 	<header class="bg-ui-01 px-4 py-3 md:px-16">
 		<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">
 			<div class="flex-1">

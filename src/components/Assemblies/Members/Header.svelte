@@ -1,6 +1,7 @@
 <script lang="ts">
+	import Breadcrumb from '$components/Breadcrumb/Breadcrumb.svelte';
 	import AssemblyIdRunner, { type AvailableAssembly } from '../AssemblyIdRunner.svelte';
-	import { Breadcrumb, BreadcrumbItem, Search } from 'carbon-components-svelte';
+	import { Search } from 'carbon-components-svelte';
 	import Download from 'carbon-icons-svelte/lib/Download.svelte';
 	import TableSplit from 'carbon-icons-svelte/lib/TableSplit.svelte';
 
@@ -18,14 +19,13 @@
 </script>
 
 <Breadcrumb
-	noTrailingSlash
-	class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
->
-	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem>นักการเมือง</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies/{id}">{name}</BreadcrumbItem>
-	<BreadcrumbItem href="/assemblies/{id}/members" isCurrentPage>รายชื่อสมาชิก</BreadcrumbItem>
-</Breadcrumb>
+	items={[
+		{ label: 'หน้าหลัก', url: '/' },
+		{ label: 'นักการเมือง' },
+		{ label: name, url: `/assemblies/${id}` },
+		{ label: 'รายชื่อสมาชิก', url: `/assemblies/${id}/members` }
+	]}
+/>
 
 <header class="bg-ui-01 px-4 py-3 md:px-16 md:pb-0">
 	<div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-16">

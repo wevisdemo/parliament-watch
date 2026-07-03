@@ -5,13 +5,14 @@
 	import MainMembers from '$components/Assemblies/MainMembers.svelte';
 	import RoleChangeLog from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
 	import Summary from '$components/Assemblies/Summary.svelte';
+	import Breadcrumb from '$components/Breadcrumb/Breadcrumb.svelte';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 	import NavigationTab from '$components/NavigationTab/NavigationTab.svelte';
 	import ModalLawProcess from '$components/bills/ModalLawProcess.svelte';
 	import GeneralIcon from '$components/icons/GeneralIcon.svelte';
 	import LawIcon from '$components/icons/LawIcon.svelte';
 	import PoliticianChangeIcon from '$components/icons/PoliticianChangeIcon.svelte';
-	import { Breadcrumb, BreadcrumbItem, Button } from 'carbon-components-svelte';
+	import { Button } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 
 	let { data } = $props();
@@ -30,15 +31,13 @@
 
 <div class="px-[16px] md:px-[64px]">
 	<Breadcrumb
-		noTrailingSlash
-		class="my-[8px] [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
-	>
-		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-		<BreadcrumbItem class="hidden md:block">นักการเมือง</BreadcrumbItem>
-		<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
-			>{assembly.name}</BreadcrumbItem
-		>
-	</Breadcrumb>
+		class="my-[8px]"
+		items={[
+			{ label: 'หน้าหลัก', url: '/' },
+			{ label: 'นักการเมือง', hiddenMobile: true },
+			{ label: assembly.name, url: `/assemblies/${assembly.id}`, hiddenMobile: true }
+		]}
+	/>
 	<Header
 		id={assembly.id}
 		name={assembly.name.split(' ')[0]}

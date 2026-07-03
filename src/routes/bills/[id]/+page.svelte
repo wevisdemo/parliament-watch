@@ -1,6 +1,7 @@
 <script lang="ts">
 	import BillCategoryTag from '$components/BillCategoryTag/BillCategoryTag.svelte';
 	import BillStatusTag from '$components/BillStatusTag/BillStatusTag.svelte';
+	import Breadcrumb from '$components/Breadcrumb/Breadcrumb.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
@@ -15,7 +16,6 @@
 	import { showModalListCoProposer } from '$components/bills/store';
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb.js';
 	import { formatThaiDate } from '$lib/date.js';
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import Link from 'carbon-icons-svelte/lib/Link.svelte';
 	import { groups } from 'd3-array';
 	import dayjs from 'dayjs';
@@ -49,15 +49,12 @@
 <svelte:window bind:innerWidth />
 
 <Breadcrumb
-	noTrailingSlash
-	class="body-compact-01 px-4 py-2 [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
->
-	<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-	<BreadcrumbItem href="/bills">ร่างกฎหมายในสภา</BreadcrumbItem>
-	<BreadcrumbItem href="/bills/{bill.id}" isCurrentPage
-		>{trimBreadcrumbTitle(displayName)}</BreadcrumbItem
-	>
-</Breadcrumb>
+	items={[
+		{ label: 'หน้าหลัก', url: '/' },
+		{ label: 'ร่างกฎหมายในสภา', url: '/bills' },
+		{ label: trimBreadcrumbTitle(displayName), url: `/bills/${bill.id}` }
+	]}
+/>
 
 <div class="mx-auto flex w-full max-w-[1200px] flex-col">
 	<section class="px-4 py-8 md:px-16 md:py-12">

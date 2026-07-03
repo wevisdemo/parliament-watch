@@ -4,10 +4,10 @@
 	import Header from '$components/Assemblies/Header.svelte';
 	import RoleChanges from '$components/Assemblies/RoleChanges/RoleChanges.svelte';
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
+	import Breadcrumb from '$components/Breadcrumb/Breadcrumb.svelte';
 	import CabinetMembers from '$components/CabinetMembers/CabinetMembers.svelte';
 	import DatePicker from '$components/DatePicker/DatePicker.svelte';
 	import { formatThaiDate, isDateInRange } from '$lib/date';
-	import { Breadcrumb, BreadcrumbItem } from 'carbon-components-svelte';
 	import { group } from 'd3-array';
 
 	let { data } = $props();
@@ -82,16 +82,14 @@
 <svelte:window bind:innerWidth onscroll={scrollEventHandler} />
 <div class="px-[16px] md:px-[64px]">
 	<Breadcrumb
-		noTrailingSlash
-		class="my-[8px] [&>.bx--breadcrumb]:flex [&>.bx--breadcrumb]:flex-wrap"
-	>
-		<BreadcrumbItem href="/">หน้าหลัก</BreadcrumbItem>
-		<BreadcrumbItem class="hidden md:block">นักการเมือง</BreadcrumbItem>
-		<BreadcrumbItem class="hidden md:block" href="/assemblies/{assembly.id}"
-			>{assembly.name}</BreadcrumbItem
-		>
-		<BreadcrumbItem class="hidden md:block">การปรับ ครม.</BreadcrumbItem>
-	</Breadcrumb>
+		class="my-[8px]"
+		items={[
+			{ label: 'หน้าหลัก', url: '/' },
+			{ label: 'นักการเมือง', hiddenMobile: true },
+			{ label: assembly.name, url: `/assemblies/${assembly.id}`, hiddenMobile: true },
+			{ label: 'การปรับ ครม.', hiddenMobile: true }
+		]}
+	/>
 </div>
 
 <div class="bg-ui-01">

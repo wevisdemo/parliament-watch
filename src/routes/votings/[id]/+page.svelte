@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AffiliationResult from '$components/AffiliationResult/AffiliationResult.svelte';
 	import BillCard from '$components/BillCard/BillCard.svelte';
+	import Breadcrumb from '$components/Breadcrumb/Breadcrumb.svelte';
 	import DataPeriodRemark from '$components/DataPeriodRemark/DataPeriodRemark.svelte';
 	import LinkTable from '$components/LinkTable/LinkTable.svelte';
 	import Share from '$components/Share/Share.svelte';
@@ -10,14 +11,7 @@
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
 	import { formatThaiDate } from '$lib/date.js';
 	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting';
-	import {
-		Breadcrumb,
-		BreadcrumbItem,
-		Button,
-		Modal,
-		Search,
-		Toggle
-	} from 'carbon-components-svelte';
+	import { Button, Modal, Search, Toggle } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import Link from 'carbon-icons-svelte/lib/Link.svelte';
 	import { onMount } from 'svelte';
@@ -172,13 +166,12 @@
 
 <div class="flex flex-col">
 	<Breadcrumb
-		noTrailingSlash
-		class="body-compact-01 w-full overflow-hidden truncate text-ellipsis px-4 py-2 [&>.bx--breadcrumb]:flex"
-	>
-		<BreadcrumbItem href="/">หน้าแรก</BreadcrumbItem>
-		<BreadcrumbItem>การลงมติ</BreadcrumbItem>
-		<BreadcrumbItem>{trimBreadcrumbTitle(voteEvent.nickname || voteEvent.title)}</BreadcrumbItem>
-	</Breadcrumb>
+		items={[
+			{ label: 'หน้าแรก', url: '/' },
+			{ label: 'การลงมติ' },
+			{ label: trimBreadcrumbTitle(voteEvent.nickname || voteEvent.title) }
+		]}
+	/>
 	<header
 		class="flex w-full flex-col gap-y-4 md:gap-y-8 {getBillStatusColor(
 			voteEvent.result
