@@ -94,10 +94,11 @@
 					<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
 					<ul class="body-01 ml-8 list-disc">
 						{#each currentAssemblyMemberships as { posts: [post] }, idx (idx)}
-							<!-- TODO: add link -->
 							<li>
 								{post.role} ใน
-								<a class="text-black" href="/">{post.organizations[0].name}</a>
+								<a class="text-black" href="/assemblies/{post.organizations[0].id}"
+									>{post.organizations[0].name}</a
+								>
 							</li>
 						{/each}
 						{#if currentParty?.name}

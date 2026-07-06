@@ -46,11 +46,10 @@
 				<h2 {...$title} use:$title.action class="heading-03">ขั้นตอนการผ่านกฎหมาย</h2>
 				<button {...$close} use:$close.action><Close width="20" height="20" /></button>
 			</div>
-			<!-- TODO: write descriptive alt text -->
 			<img
 				class="mx-auto h-auto w-full max-w-[330px]"
 				src="/images/bills/lawprocess.svg"
-				alt=""
+				alt="ขั้นตอนการผ่านกฎหมายมี 5 ขั้นตอน ได้แก่ 1. การเสนอร่างกฎหมาย 2. การพิจารณาโดยสภาผู้แทนราษฎร (มี 3 วาระ) 3. การพิจารณาโดยวุฒิสภา (มี 3 วาระ) 4. การวินิิจฉัยของศาลรัฐธรรมนูญ และ 5. การประกาศใช้เป็นกฎหมาย"
 				width="330"
 				height="478"
 				loading="lazy"

@@ -70,11 +70,10 @@
 				<TableSplit />
 				<span class="helper-text-01 ml-[4px]">รายชื่อสมาชิก</span>
 			</a>
-			<!-- TODO:fill link-->
-			<!-- <a href="/" class="flex items-center mt-[12px]">
+			<a href="/files/download/assemblies/{id}-votings.csv" class="mt-[12px] flex items-center">
 				<TableSplit />
 				<span class="helper-text-01 ml-[4px]">ประวัติการลงมติ</span>
-			</a> -->
+			</a>
 		</div>
 		{#if showRemark}
 			<DataPeriodRemark />

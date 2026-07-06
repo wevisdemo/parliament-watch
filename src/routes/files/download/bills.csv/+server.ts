@@ -14,7 +14,7 @@ export async function GET() {
 			nickname: true,
 			status: true,
 			proposal_date: true,
-			// TODO: can maintain category data
+			// TODO: until we have a protocol to maintain bill category data
 			// categories: true,
 			links: {
 				url: true
@@ -30,9 +30,8 @@ export async function GET() {
 			},
 			co_creators: {
 				name: true
-			}
-			// TODO: has people signatory data
-			// people_signature_count: true
+			},
+			people_signature_count: true
 		}
 	});
 
