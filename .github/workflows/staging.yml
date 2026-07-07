@@ -45,6 +45,7 @@ jobs:
         env:
           POLITIGRAPH_URL: https://politigraph.wevis.info/graphql
           POLITIGRAPH_REQUEST_PER_SECOND: 25
+          LOG_TARGET: stdout
       - name: Build stories
         run: pnpm run story:build
       - name: Remove runner IP from Cloudflare list

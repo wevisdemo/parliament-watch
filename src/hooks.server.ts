@@ -1,7 +1,7 @@
 import { logger } from '$lib/logger';
 
-export async function handleError(error) {
-	logger.error(error);
+export async function handleError({ error, status }) {
+	logger.error({ status, err: error }, 'Server error');
 
-	return error;
+	return { message: error instanceof Error ? error.message : 'Internal error' };
 }

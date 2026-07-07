@@ -11,6 +11,14 @@ const config = {
 			'$components/*': './src/components/*',
 			$models: './src/models',
 			'$models/*': './src/models/*'
+		},
+		prerender: {
+			handleHttpError: ({ path, status, message, referrer }) => {
+				console.error(`[prerender] ${status} ${path}`);
+				if (referrer) console.error(`  referrer: ${referrer}`);
+				console.error(`  ${message}`);
+				throw new Error(`Prerender failed: ${status} ${path} - ${message}`);
+			}
 		}
 	}
 };
