@@ -8,9 +8,6 @@ import type { RequestHandler } from './$types';
 
 const VALID_STATUS_VALUES = VOTE_STATUSES.map((s) => s.value);
 
-export const entries = () => VALID_STATUS_VALUES.map((status) => ({ status }));
-export const prerender = true;
-
 export const GET: RequestHandler = async ({ params }) => {
 	const { status } = params;
 

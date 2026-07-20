@@ -1,5 +1,7 @@
 import { createSeo } from '$lib/seo.js';
 
+export const prerender = true;
+
 interface ContributorResponse {
 	login: string;
 	html_url: string;

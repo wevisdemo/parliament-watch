@@ -1,5 +1,7 @@
 import { createSeo } from '$lib/seo';
 
+export const prerender = true;
+
 export interface DutySection {
 	heading: string;
 	details: string[];

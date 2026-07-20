@@ -3,10 +3,6 @@ import { queryAllPeople } from '$lib/politigraph/people';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';
 import { error } from '@sveltejs/kit';
 
-export const prerender = true;
-
-export const entries = () => Object.values(SearchIndexCategory).map((category) => ({ category }));
-
 export async function GET({ params }) {
 	switch (params.category) {
 		case SearchIndexCategory.Politicians: {

@@ -10,10 +10,6 @@ import { DefaultVoteOption, defaultVoteOptions, type CustomVoteOption } from '$m
 import { error } from '@sveltejs/kit';
 import { groups } from 'd3-array';
 
-export async function entries() {
-	return (await graphql.query({ voteEvents: { id: true } })).voteEvents;
-}
-
 export async function load({ params }) {
 	const {
 		voteEvents: [voteEvent]

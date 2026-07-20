@@ -3,8 +3,6 @@ import { graphql } from '$lib/politigraph/client';
 import type { VoteEvent } from '$lib/politigraph/genql/schema';
 import { error } from '@sveltejs/kit';
 
-export const prerender = true;
-
 export async function GET({ params }) {
 	const {
 		organizations: [assembly]

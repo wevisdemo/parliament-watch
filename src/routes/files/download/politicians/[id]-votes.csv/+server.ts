@@ -1,8 +1,6 @@
 import { createCsvFileResponse } from '$lib/csv';
 import { graphql } from '$lib/politigraph/client';
 
-export const prerender = true;
-
 export async function GET({ params }) {
 	const { votes } = await graphql.query({
 		votes: {

@@ -64,10 +64,6 @@ const voteEventDefaultTitleDescription = new Map<
 	]
 ]);
 
-export async function entries() {
-	return (await graphql.query({ bills: { id: true } })).bills;
-}
-
 export async function load({ params }) {
 	const {
 		bills: [bill]

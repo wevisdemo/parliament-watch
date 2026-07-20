@@ -451,11 +451,11 @@
 								<div class="vertical-gray-line"></div>
 								<div class="w-full pt-2 md:w-4/12 md:px-2 md:pt-0">
 									<h5 class="heading-01">แก้ไขเพิ่มเติม</h5>
-									<p class="label-01 mb-2 mt-2 text-gray-60">
+									<div class="label-01 mb-2 mt-2 text-gray-60">
 										โดยลงมติ
 										<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} /> <br />
 										ให้กับมติที่นำไปสู่การแก้ไขเพิ่มเติม
-									</p>
+									</div>
 									<ul>
 										<li>
 											ให้ส่งร่างที่แก้ไขเพิ่มเติมให้ สส.เห็นชอบ หรือตั้ง <br />

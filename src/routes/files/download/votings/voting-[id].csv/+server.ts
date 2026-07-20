@@ -5,8 +5,6 @@ import {
 	sortPoliticiansVoteByDominantGroup
 } from '$lib/politigraph/vote/with-politician';
 
-export const prerender = true;
-
 export async function GET({ params }) {
 	const {
 		voteEvents: [voteEvent]

@@ -1,7 +1,3 @@
-import {
-	getBillCategoryOptions,
-	getRepresentativeTermOptions
-} from '$lib/politigraph/bill/overview';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import { graphql } from '$lib/politigraph/client';
@@ -10,17 +6,6 @@ import { ALL_CATEGORY_KEY } from '../../../../../constants/bills';
 
 const MAX_BILL_BY_STATUS = 3;
 const MAX_ENACTED_BILL = 10;
-
-export const prerender = true;
-
-export async function entries() {
-	const representatives = await getRepresentativeTermOptions();
-	const categories = await getBillCategoryOptions();
-
-	return representatives.flatMap(({ id }) =>
-		categories.map((category) => ({ repId: id, category }))
-	);
-}
 
 export async function GET({ params }) {
 	return new Response(JSON.stringify(await getBillOverviewData(params)), {
