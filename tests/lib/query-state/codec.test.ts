@@ -1,4 +1,4 @@
-import { decodeQueryState, encodeQueryState, type QueryStateConfig } from '../../query-state/codec';
+import { decodeQueryState, encodeQueryState, type QueryStateConfig } from '$lib/query-state/codec';
 import { describe, expect, it } from 'vitest';
 
 describe('query-state codec', () => {

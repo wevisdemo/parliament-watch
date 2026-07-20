@@ -1,4 +1,4 @@
-import { normalizeSearchQuery, calculateScore, highlightText } from '../search';
+import { normalizeSearchQuery, calculateScore, highlightText } from '$lib/search';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('normalizeSearchQuery', () => {

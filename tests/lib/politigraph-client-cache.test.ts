@@ -1,11 +1,11 @@
-import { graphql } from '../politigraph/client';
+import { graphql } from '$lib/politigraph/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.hoisted(() => {
 	process.env.POLITIGRAPH_CACHE_TTL_SECONDS = '1';
 });
 
-vi.mock('../politigraph/genql', () => ({
+vi.mock('$lib/politigraph/genql', () => ({
 	generateQueryOp: (param: Record<string, unknown>) => ({
 		query: JSON.stringify(param),
 		variables: param

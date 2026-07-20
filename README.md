@@ -117,6 +117,9 @@ flowchart TD
   - **/routes** SvelteKit's routes
   - **/styles** Stylesheets, including the custom Carbon Design System, Tailwind, and fonts
 - **/static** Static assets such as logos
+- **/tests**
+  - **/lib** Unit tests for `src/lib` (`pnpm test`)
+  - **/e2e** Journey smoke tests against a running server (`E2E_BASE_URL=... pnpm run test:e2e`)
 
 ## 🪄 Useful Commands
 

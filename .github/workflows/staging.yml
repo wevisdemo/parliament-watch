@@ -30,6 +30,12 @@ jobs:
         run: pnpm run test run
       - name: Build Docker image
         run: docker build -t parliament-watch:${{ github.sha }} .
+      - name: Smoke test the image (pre-deploy)
+        run: |
+          docker run -d --name smoke -p 3000:3000 parliament-watch:${{ github.sha }}
+          timeout 60 bash -c 'until curl -fsS http://localhost:3000/healthz > /dev/null; do sleep 2; done'
+          E2E_BASE_URL=http://localhost:3000 pnpm run test:e2e
+          docker rm -f smoke
       - name: Save image tarball
         run: docker save parliament-watch:${{ github.sha }} | gzip > parliament-watch-image.tar.gz
       - name: Upload image to server
@@ -57,3 +63,5 @@ jobs:
             docker image ls parliament-watch --format '{{.Tag}}' \
               | grep -vE '^(staging|production)$' | tail -n +4 \
               | xargs -r -I {} docker image rm parliament-watch:{} || true
+      - name: Smoke test staging (post-deploy)
+        run: E2E_BASE_URL=https://pwstaging.wevis.info pnpm run test:e2e
