@@ -3,6 +3,7 @@
 	import Footer from '$components/Footer/Footer.svelte';
 	import CookieConsent from '$components/Index/CookieConsent.svelte';
 	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
+	import ProgressBar from '$components/ProgressBar/ProgressBar.svelte';
 	import { DEFAULT_SEO, PROD_URL } from '$lib/seo';
 	import '../styles/index.css';
 	import { InlineNotification } from 'carbon-components-svelte';
@@ -49,6 +50,8 @@
 
 	<link rel="canonical" href={url} />
 </svelte:head>
+
+<ProgressBar />
 
 <main class="flex min-h-screen flex-col">
 	<NavigationBar />
