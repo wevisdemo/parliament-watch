@@ -191,29 +191,11 @@ async function getVotingAbsentStatsByHouseTerm(
 
 			const [
 				{
-					voteEventsConnection,
 					people: [politicianAbsentCount]
 				},
-				{ peopleConnection, votesConnection }
+				{ voteEventsConnection, peopleConnection, votesConnection }
 			] = await Promise.all([
 				graphql.query({
-					voteEventsConnection: {
-						__args: {
-							where: {
-								organizations: {
-									some: {
-										id: { eq: houseTerm.id }
-									}
-								},
-								...voteEventDateFilter
-							}
-						},
-						aggregate: {
-							count: {
-								nodes: true
-							}
-						}
-					},
 					people: {
 						__args: {
 							where: {
@@ -234,6 +216,23 @@ async function getVotingAbsentStatsByHouseTerm(
 					}
 				}),
 				graphql.query({
+					voteEventsConnection: {
+						__args: {
+							where: {
+								organizations: {
+									some: {
+										id: { eq: houseTerm.id }
+									}
+								},
+								...voteEventDateFilter
+							}
+						},
+						aggregate: {
+							count: {
+								nodes: true
+							}
+						}
+					},
 					peopleConnection: {
 						__args: {
 							where: memberWhere

@@ -1,3 +1,4 @@
+import { SEARCH_INDEX_CACHE_CONTROL } from '$lib/cache-control';
 import { graphql } from '$lib/politigraph/client';
 import { queryAllPeople } from '$lib/politigraph/people';
 import { SearchIndexCategory, type SearchIndexes } from '$models/search';
@@ -156,6 +157,7 @@ export async function GET({ params }) {
 const createJSONFileResponse = (indexes: SearchIndexes[SearchIndexCategory]) =>
 	new Response(JSON.stringify(indexes), {
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Cache-Control': SEARCH_INDEX_CACHE_CONTROL
 		}
 	});

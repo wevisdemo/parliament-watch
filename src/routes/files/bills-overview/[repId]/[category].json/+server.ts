@@ -1,3 +1,4 @@
+import { PAGE_CACHE_CONTROL } from '$lib/cache-control';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
 import { billStatusList } from '$lib/politigraph/bill/status';
 import { graphql } from '$lib/politigraph/client';
@@ -10,7 +11,8 @@ const MAX_ENACTED_BILL = 10;
 export async function GET({ params }) {
 	return new Response(JSON.stringify(await getBillOverviewData(params)), {
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Cache-Control': PAGE_CACHE_CONTROL
 		}
 	});
 }

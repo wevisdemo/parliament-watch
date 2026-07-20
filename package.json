@@ -47,6 +47,7 @@
 		"fastest-levenshtein": "^1.0.16",
 		"histoire": "https://pkg.pr.new/histoire-dev/histoire/histoire@607e09e87a278ede3c5ce2f733c21c5f8e1545f9",
 		"keen-slider": "^6.8.6",
+		"lru-cache": "^11.5.2",
 		"pino": "^8.19.0",
 		"pino-pretty": "^10.3.1",
 		"postcss": "^8.4.27",

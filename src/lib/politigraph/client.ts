@@ -1,8 +1,13 @@
 import { generateQueryOp, type Client } from './genql';
+import { LRUCache } from 'lru-cache';
+import { createHash } from 'node:crypto';
 
 const GRAPHQL_URL = process.env.POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql';
 
 const RATE_LIMIT = Number(process.env.POLITIGRAPH_REQUEST_PER_SECOND) || 3;
+
+const CACHE_TTL_SECONDS = Number(process.env.POLITIGRAPH_CACHE_TTL_SECONDS ?? 900);
+const CACHE_MAX_ENTRIES = Number(process.env.POLITIGRAPH_CACHE_MAX_ENTRIES) || 500;
 
 const INTERVAL_MS = 1000;
 const BATCH_TIMEOUT_MS = 200;
@@ -112,17 +117,43 @@ async function executeBatch(batch: QueuedQuery[]) {
 	}
 }
 
+function executeQuery(op: Pick<QueuedQuery, 'query' | 'variables'>): Promise<unknown> {
+	return new Promise((resolve, reject) => {
+		requestQueue.push({ ...op, resolve, reject });
+		startInterval();
+		if (processQueue()) {
+			scheduleBatchTimeout();
+		}
+	});
+}
+
+/**
+ * Stale-while-revalidate result cache in front of the rate-limited queue.
+ * A stale hit returns immediately while refetching in the background;
+ * concurrent identical queries share a single upstream request; when
+ * politigraph errors, the last good value is served instead.
+ */
+const queryCache = new LRUCache<string, object, Pick<QueuedQuery, 'query' | 'variables'>>({
+	max: CACHE_MAX_ENTRIES,
+	ttl: CACHE_TTL_SECONDS * 1000,
+	allowStale: true,
+	allowStaleOnFetchRejection: true,
+	allowStaleOnFetchAbort: true,
+	ignoreFetchAbort: true,
+	noDeleteOnFetchRejection: true,
+	fetchMethod: (_key, _staleValue, { context }) => executeQuery(context) as Promise<object>
+});
+
 export const graphql: Pick<Client, 'query'> = {
-	query: async (param) =>
-		new Promise((resolve, reject) => {
-			requestQueue.push({
-				...generateQueryOp(param),
-				resolve: resolve as (value: unknown) => void,
-				reject
-			});
-			startInterval();
-			if (processQueue()) {
-				scheduleBatchTimeout();
-			}
-		})
+	query: async (param) => {
+		const op = generateQueryOp(param);
+
+		if (CACHE_TTL_SECONDS <= 0) {
+			return executeQuery(op) as never;
+		}
+
+		const key = createHash('sha1').update(JSON.stringify(op)).digest('hex');
+
+		return (await queryCache.fetch(key, { context: op })) as never;
+	}
 };

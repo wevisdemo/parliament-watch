@@ -1,6 +1,11 @@
 import { graphql } from '../politigraph/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.hoisted(() => {
+	// exercise the batching queue directly, without the result cache
+	process.env.POLITIGRAPH_CACHE_TTL_SECONDS = '0';
+});
+
 vi.mock('$env/static/private', () => ({
 	POLITIGRAPH_URL: 'http://test/graphql',
 	POLITIGRAPH_REQUEST_PER_SECOND: 3

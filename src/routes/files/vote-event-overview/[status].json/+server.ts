@@ -1,5 +1,6 @@
 import { MAX_LATEST_VOTE, VOTE_STATUSES } from '$components/Index/VotingContent.svelte';
 import { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
+import { PAGE_CACHE_CONTROL } from '$lib/cache-control';
 import { graphql } from '$lib/politigraph/client';
 import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
 import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
@@ -59,7 +60,8 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	return new Response(JSON.stringify(latestVoteEvents), {
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Cache-Control': PAGE_CACHE_CONTROL
 		}
 	});
 };
