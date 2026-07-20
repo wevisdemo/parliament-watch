@@ -1,23 +1,18 @@
-name: Copy Staging to Production
+name: Promote staging to production
 on:
   workflow_dispatch:
 jobs:
   deploy-to-production:
     runs-on: ubuntu-latest
     steps:
-      - name: Download build artifact
-        uses: dawidd6/action-download-artifact@v20
+      - name: Promote staging image and deploy
+        uses: appleboy/ssh-action@v1
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: staging.yml
-          workflow_conclusion: success
-          name: build-main
-      - name: Upload to server
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          remote_host: ${{ secrets.PRODUCTION_HOST }}
-          remote_user: bot
-          remote_key: ${{ secrets.SSH_KEY }}
-          remote_path: ${{ secrets.PRODUCTION_PATH }}
-          switches: -azvP --chown=bot:deployer --chmod=g+w --delete
-          path: ./
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: bot
+          key: ${{ secrets.SSH_KEY }}
+          script_stop: true
+          script: |
+            cd ${{ secrets.PRODUCTION_PATH }}
+            docker tag parliament-watch:staging parliament-watch:production
+            docker compose up -d --wait production

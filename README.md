@@ -11,6 +11,8 @@ Citizens are watching.
 
 - [⭐ Goal](#-goal)
 - [🌎 Deployment](#-deployment)
+  - [One-time server setup](#one-time-server-setup)
+  - [Rollback](#rollback)
 - [🍱 Tech Stack](#-tech-stack)
   - [Front-end](#front-end)
   - [Local development](#local-development)
@@ -43,7 +45,26 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 | Name                  | URL                                |
 | --------------------- | ---------------------------------- |
 | Production            | https://parliamentwatch.wevis.info |
-| Staging (main branch) | https://parliament-watch.pages.dev |
+| Staging (main branch) | https://pwstaging.wevis.info       |
+
+The app is served with SvelteKit's Node adapter as a Docker container. Staging and production run as two [docker-compose.yml](docker-compose.yml) services on the same server as Politigraph, selected by image alias tags: CI loads an immutable `parliament-watch:<git-sha>` image on the server, then moves the `:staging`/`:production` tag and restarts only that service.
+
+### One-time server setup
+
+1. Create the deploy directory (the `PRODUCTION_PATH` GitHub secret must point here) and copy [docker-compose.yml](docker-compose.yml) and the [Caddyfile](Caddyfile) into it.
+2. Adjust `POLITIGRAPH_URL`: use Politigraph's docker network service name if the API runs in docker (add a `networks` section), or keep `host.docker.internal` with the correct port if it runs on the host.
+3. The bundled [Caddy](https://caddyserver.com) service terminates TLS with an auto-generated self-signed certificate, compresses dynamic responses, and routes each hostname to its container — set the Cloudflare SSL mode to **Full** (or mount a Cloudflare Origin CA certificate and switch the `tls` directive for Full strict).
+
+### Rollback
+
+Images of the last few deploys stay loaded on the server (CI prunes older ones). To roll production back to a previous sha:
+
+```sh
+docker tag parliament-watch:<previous-sha> parliament-watch:production
+docker compose up -d production
+```
+
+`docker image ls parliament-watch` lists what is available.
 
 ## 🍱 Tech Stack
 
@@ -67,8 +88,8 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 
 ### CI/CD pipeline
 
-- **Staging**: Each push will trigger the [GitHub Actions workflow](.github/workflows/staging.yml) to build the site, upload the build artifact, and deploy it to [Cloudflare Pages](https://pages.cloudflare.com). It can also be triggered manually.
-- **Production**: The [GitHub Actions workflow](.github/workflows/staging.yml) can only be triggered manually to download the latest build artifact and upload it to our server through SSH.
+- **Staging**: Each push to `main` triggers the [GitHub Actions workflow](.github/workflows/staging.yml) to test, build the Docker image, rsync it to the server as a tarball, load and start the staging container, and poll `/healthz`. It can also be triggered manually.
+- **Production**: The [production workflow](.github/workflows/production.yml) can only be triggered manually. It does not rebuild: over SSH, it retags the image validated on staging as `:production`, restarts the production service, and polls `/healthz` — exact-bits promotion.
 
 ## 💾 Data Source
 
@@ -115,7 +136,7 @@ To see and develop custom components from Histoire's stories.
 pnpm run story:dev
 ```
 
-Stories are also available on staging at https://parliament-watch.pages.dev/stories/.
+Stories are also available on staging at https://pwstaging.wevis.info/stories/.
 
 ### Generate a new component
 
@@ -154,7 +175,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com).
 - We have custom shared components available in [src/components/](src/components/).
-  - To see the shared components' stories, open [Histoire on staging](https://parliament-watch.pages.dev/stories/) or run locally with `pnpm run story:dev`.
+  - To see the shared components' stories, open [Histoire on staging](https://pwstaging.wevis.info/stories/) or run locally with `pnpm run story:dev`.
 - If the component is not yet developed:
   - If the component is used by only a specific route, create it in `/src/components/route-name-and-sub-route-if-exist/`.
   - If the component is shared, run `pnpm run gen:component` to generate a new component. Do not forget to update the story file for the component documentation.
@@ -167,11 +188,17 @@ The project design system is based on Carbon Design System v10 with some modific
 
 ## Environment Variables
 
-You can customize the Politigraph GraphQL endpoint by setting these environment variables. The default is `https://politigraph.wevis.info/graphql`.
+All variables are optional for local development; production values are set in [docker-compose.yml](docker-compose.yml).
 
-```env
-POLITIGRAPH_URL="GraphQL endpoint URL"
-```
+| Variable                         | Meaning                                                                                            |
+| -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `ORIGIN`                         | Public origin, required by the Node adapter for absolute URLs and CSRF                             |
+| `PORT`                           | Server listen port (default 3000)                                                                  |
+| `POLITIGRAPH_URL`                | GraphQL endpoint (default `https://politigraph.wevis.info/graphql`; a local address in production) |
+| `POLITIGRAPH_REQUEST_PER_SECOND` | Upstream rate limit (safety valve, default 3)                                                      |
+| `POLITIGRAPH_CACHE_TTL_SECONDS`  | Query result cache TTL, `0` disables (default 900)                                                 |
+| `POLITIGRAPH_CACHE_MAX_ENTRIES`  | Query result cache size bound (default 500)                                                        |
+| `LOG_TARGET`                     | `stdout` or `file` for pino logs (see [logger.ts](src/lib/logger.ts))                              |
 
 ## 🤝 Contributing Guideline
 

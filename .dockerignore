@@ -1,0 +1,9 @@
+node_modules
+build
+.svelte-kit
+.histoire
+.git
+.github
+docker-compose.yml
+Caddyfile
+.env*

@@ -1,0 +1,11 @@
+parliamentwatch.wevis.info {
+	tls internal
+	encode zstd gzip
+	reverse_proxy production:3000
+}
+
+pwstaging.wevis.info {
+	tls internal
+	encode zstd gzip
+	reverse_proxy staging:3000
+}
