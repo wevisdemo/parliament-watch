@@ -52,7 +52,7 @@
 
 <main class="flex min-h-screen flex-col">
 	<NavigationBar />
-	<div class="flex-1">
+	<div class="flex flex-col flex-1">
 		{@render children?.()}
 	</div>
 	<Footer />
