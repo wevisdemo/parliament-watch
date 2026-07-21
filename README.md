@@ -47,13 +47,25 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 | Production            | https://parliamentwatch.wevis.info |
 | Staging (main branch) | https://pwstaging.wevis.info       |
 
-The app is served with SvelteKit's Node adapter as a Docker container. Staging and production run as two [docker-compose.yml](docker-compose.yml) services on the same server as Politigraph, selected by image alias tags: CI loads an immutable `parliament-watch:<git-sha>` image on the server, then moves the `:staging`/`:production` tag and restarts only that service.
+The app is served with SvelteKit's Node adapter as a Docker container. Staging and production run as two [docker-compose.yml](docker-compose.yml) services on the same server, reaching Politigraph's origin server directly (bypassing Cloudflare — see server setup below), selected by image alias tags: CI loads an immutable `parliament-watch:<git-sha>` image on the server, then moves the `:latest` (staging) / `:production` tag and restarts only that service.
+
+Each service is memory-capped in [docker-compose.yml](docker-compose.yml) (`mem_limit` plus `NODE_OPTIONS=--max-old-space-size` set below it, so V8 garbage-collects before the container is OOM-killed). With Politigraph on a separate host, caddy + production + staging fit on a **1 GB** server. Production is prioritized for real users; staging is capped well below production's budget. The per-service LRU result cache is bounded by both entry count (`POLITIGRAPH_CACHE_MAX_ENTRIES`) and total bytes (`POLITIGRAPH_CACHE_MAX_BYTES`) so it evicts instead of growing unbounded. A ~1 GB swap file is recommended as a spike buffer.
 
 ### One-time server setup
 
 1. Create the deploy directory (the `PRODUCTION_PATH` GitHub secret must point here) and copy [docker-compose.yml](docker-compose.yml) and the [Caddyfile](Caddyfile) into it.
-2. Adjust `POLITIGRAPH_URL`: use Politigraph's docker network service name if the API runs in docker (add a `networks` section), or keep `host.docker.internal` with the correct port if it runs on the host.
+2. Create a `.env` file in the deploy directory (compose reads it automatically) with:
+   - `POLITIGRAPH_URL=https://politigraph.wevis.info/graphql`
+   - `POLITIGRAPH_ORIGIN_IP=<politigraph origin server IP>` — keep it out of the repo; it is a secret. `extra_hosts` pins `politigraph.wevis.info` to this IP so SSR queries hit the origin directly, bypassing Cloudflare's proxy and its rate limit. The domain URL is kept so SNI, Host header, and certificate hostname still match; the image trusts [Cloudflare's origin root CA](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca/) (baked in at build via `NODE_EXTRA_CA_CERTS`) so the origin's Cloudflare Origin CA certificate verifies without touching TLS validation settings.
 3. The bundled [Caddy](https://caddyserver.com) service terminates TLS with an auto-generated self-signed certificate, compresses dynamic responses, and routes each hostname to its container — set the Cloudflare SSL mode to **Full** (or mount a Cloudflare Origin CA certificate and switch the `tls` directive for Full strict).
+4. Verify the Cloudflare bypass from inside a running container:
+
+   ```sh
+   docker compose exec production node -e \
+     "fetch('https://politigraph.wevis.info/graphql',{method:'POST',headers:{'content-type':'application/json'},body:'{\"query\":\"{ __typename }\"}'}).then((r)=>{console.log([...r.headers.keys()].includes('cf-ray')?'via cloudflare!':'direct to origin');return r.text();}).then(console.log)"
+   ```
+
+   Expected: `direct to origin` and `{"data":{"__typename":"Query"}}` — a `cf-ray` header would mean requests still pass through Cloudflare.
 
 ### Rollback
 
@@ -89,7 +101,7 @@ docker compose up -d production
 ### CI/CD pipeline
 
 - **Staging**: Each push to `main` triggers the [GitHub Actions workflow](.github/workflows/staging.yml) to test, build the Docker image, rsync it to the server as a tarball, load and start the staging container, and poll `/healthz`. It can also be triggered manually.
-- **Production**: The [production workflow](.github/workflows/production.yml) can only be triggered manually. It does not rebuild: over SSH, it retags the image validated on staging as `:production`, restarts the production service, and polls `/healthz` — exact-bits promotion.
+- **Production**: The [production workflow](.github/workflows/production.yml) can only be triggered manually. It does not rebuild: over SSH, it retags the image validated on staging as `:production`, restarts the production service, and polls `/healthz` — exact-bits promotion. It then stops the staging container (now a duplicate of production) to free server resources until the next push to `main` deploys a fresh staging build.
 
 ## 💾 Data Source
 
@@ -139,7 +151,7 @@ To see and develop custom components from Histoire's stories.
 pnpm run story:dev
 ```
 
-Stories are also available on staging at https://pwstaging.wevis.info/stories/.
+Stories are baked into the deployed image and available at https://parliamentwatch.wevis.info/stories/.
 
 ### Generate a new component
 
@@ -178,7 +190,7 @@ The project design system is based on Carbon Design System v10 with some modific
 
 - Use [Carbon Components Svelte](https://carbon-components-svelte.onrender.com).
 - We have custom shared components available in [src/components/](src/components/).
-  - To see the shared components' stories, open [Histoire on staging](https://pwstaging.wevis.info/stories/) or run locally with `pnpm run story:dev`.
+  - To see the shared components' stories, open [Histoire on production](https://parliamentwatch.wevis.info/stories/) or run locally with `pnpm run story:dev`.
 - If the component is not yet developed:
   - If the component is used by only a specific route, create it in `/src/components/route-name-and-sub-route-if-exist/`.
   - If the component is shared, run `pnpm run gen:component` to generate a new component. Do not forget to update the story file for the component documentation.
@@ -200,7 +212,8 @@ All variables are optional for local development; production values are set in [
 | `POLITIGRAPH_URL`                | GraphQL endpoint (default `https://politigraph.wevis.info/graphql`; a local address in production) |
 | `POLITIGRAPH_REQUEST_PER_SECOND` | Upstream rate limit (safety valve, default 3)                                                      |
 | `POLITIGRAPH_CACHE_TTL_SECONDS`  | Query result cache TTL, `0` disables (default 900)                                                 |
-| `POLITIGRAPH_CACHE_MAX_ENTRIES`  | Query result cache size bound (default 500)                                                        |
+| `POLITIGRAPH_CACHE_MAX_ENTRIES`  | Query result cache entry-count bound (default 500)                                                 |
+| `POLITIGRAPH_CACHE_MAX_BYTES`    | Query result cache total-size bound in bytes (default 33554432, i.e. 32 MiB)                       |
 | `LOG_TARGET`                     | `stdout` or `file` for pino logs (see [logger.ts](src/lib/logger.ts))                              |
 
 ## 🤝 Contributing Guideline

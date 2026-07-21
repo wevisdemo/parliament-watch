@@ -7,7 +7,6 @@ on:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/production.yml'
       - '.github/workflows/update-ranking.yml'
-  workflow_dispatch:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -46,7 +45,7 @@ jobs:
           remote_key: ${{ secrets.SSH_KEY }}
           remote_path: ${{ secrets.PRODUCTION_PATH }}
           switches: -azvP
-          path: parliament-watch-image.tar.gz
+          path: parliament-watch-image.tar.gz Caddyfile docker-compose.yml
       - name: Load image and deploy staging
         uses: appleboy/ssh-action@v1
         with:
@@ -58,10 +57,12 @@ jobs:
             cd ${{ secrets.PRODUCTION_PATH }}
             docker load < parliament-watch-image.tar.gz
             rm parliament-watch-image.tar.gz
-            docker tag parliament-watch:${{ github.sha }} parliament-watch:staging
+            docker tag parliament-watch:${{ github.sha }} parliament-watch:latest
+            docker compose up -d caddy
+            docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
             docker compose up -d --wait staging
             docker image ls parliament-watch --format '{{.Tag}}' \
-              | grep -vE '^(staging|production)$' | tail -n +4 \
+              | grep -vE '^(latest|production)$' | tail -n +4 \
               | xargs -r -I {} docker image rm parliament-watch:{} || true
       - name: Smoke test staging (post-deploy)
         run: E2E_BASE_URL=https://pwstaging.wevis.info pnpm run test:e2e

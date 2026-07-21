@@ -8,6 +8,7 @@ const RATE_LIMIT = Number(process.env.POLITIGRAPH_REQUEST_PER_SECOND) || 3;
 
 const CACHE_TTL_SECONDS = Number(process.env.POLITIGRAPH_CACHE_TTL_SECONDS ?? 900);
 const CACHE_MAX_ENTRIES = Number(process.env.POLITIGRAPH_CACHE_MAX_ENTRIES) || 500;
+const CACHE_MAX_BYTES = Number(process.env.POLITIGRAPH_CACHE_MAX_BYTES) || 32 * 1024 * 1024;
 
 const INTERVAL_MS = 1000;
 const BATCH_TIMEOUT_MS = 200;
@@ -135,6 +136,8 @@ function executeQuery(op: Pick<QueuedQuery, 'query' | 'variables'>): Promise<unk
  */
 const queryCache = new LRUCache<string, object, Pick<QueuedQuery, 'query' | 'variables'>>({
 	max: CACHE_MAX_ENTRIES,
+	maxSize: CACHE_MAX_BYTES,
+	sizeCalculation: (value) => JSON.stringify(value).length || 1,
 	ttl: CACHE_TTL_SECONDS * 1000,
 	allowStale: true,
 	allowStaleOnFetchRejection: true,

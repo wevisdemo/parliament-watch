@@ -1,4 +1,3 @@
-# node:24-slim has no curl, so the healthcheck uses node's built-in fetch
 x-healthcheck: &healthcheck
   test:
     [
@@ -15,48 +14,72 @@ x-healthcheck: &healthcheck
 services:
   caddy:
     image: caddy:2-alpine
+    container_name: caddy
     restart: unless-stopped
+    mem_limit: 64m
     ports:
       - '80:80'
       - '443:443'
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data
-      - caddy-config:/config
+      - caddy:/data
 
   production:
     image: parliament-watch:production
+    container_name: production
     restart: unless-stopped
     healthcheck: *healthcheck
-    ports:
-      - '127.0.0.1:3000:3000'
+    mem_limit: 600m
+    mem_reservation: 384m
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      # Resolve politigraph to its origin server directly
+      # The image trust Cloudflare's origin root CA via NODE_EXTRA_CA_CERTS.
+      - 'politigraph.wevis.info:${POLITIGRAPH_ORIGIN_IP:?set POLITIGRAPH_ORIGIN_IP in .env}'
     environment:
       # ORIGIN is required by adapter-node for absolute URLs and CSRF
       ORIGIN: https://parliamentwatch.wevis.info
       PORT: 3000
-      POLITIGRAPH_URL: http://host.docker.internal:4000/graphql
+      # Keep V8's heap under mem_limit so it GCs before the container is OOM-killed
+      NODE_OPTIONS: --max-old-space-size=448
+      POLITIGRAPH_URL: $POLITIGRAPH_URL
       POLITIGRAPH_REQUEST_PER_SECOND: 25
       POLITIGRAPH_CACHE_TTL_SECONDS: 900
       LOG_TARGET: stdout
 
   staging:
-    image: parliament-watch:staging
+    image: parliament-watch:latest
+    container_name: staging
     restart: unless-stopped
     healthcheck: *healthcheck
-    ports:
-      - '127.0.0.1:3001:3000'
+    mem_limit: 200m
+    mem_reservation: 128m
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - 'politigraph.wevis.info:${POLITIGRAPH_ORIGIN_IP:?set POLITIGRAPH_ORIGIN_IP in .env}'
     environment:
       ORIGIN: https://pwstaging.wevis.info
       PORT: 3000
-      POLITIGRAPH_URL: http://host.docker.internal:4000/graphql
+      NODE_OPTIONS: --max-old-space-size=144
+      POLITIGRAPH_URL: $POLITIGRAPH_URL
       POLITIGRAPH_REQUEST_PER_SECOND: 25
       POLITIGRAPH_CACHE_TTL_SECONDS: 60
+      POLITIGRAPH_CACHE_MAX_ENTRIES: 100
       LOG_TARGET: stdout
 
+  beszel-agent:
+    image: henrygd/beszel-agent:0.16
+    container_name: beszel-agent
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    volumes:
+      - beszel_agent:/var/lib/beszel-agent
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: 45876
+      HUB_URL: $BESZEL_AGENT_HUB_URL
+      TOKEN: $BESZEL_AGENT_TOKEN
+      KEY: $BESZEL_AGENT_KEY
+
 volumes:
-  caddy-data:
-  caddy-config:
+  caddy:
+  beszel_agent:

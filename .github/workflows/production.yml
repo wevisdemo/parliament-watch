@@ -14,5 +14,6 @@ jobs:
           script_stop: true
           script: |
             cd ${{ secrets.PRODUCTION_PATH }}
-            docker tag parliament-watch:staging parliament-watch:production
+            docker tag parliament-watch:latest parliament-watch:production
             docker compose up -d --wait production
+            docker compose stop staging
