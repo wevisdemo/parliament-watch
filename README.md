@@ -53,7 +53,7 @@ Each service is memory-capped in [docker-compose.yml](docker-compose.yml) (`mem_
 
 ### One-time server setup
 
-1. Create the deploy directory (the `PRODUCTION_PATH` GitHub secret must point here) and copy [docker-compose.yml](docker-compose.yml) and the [Caddyfile](Caddyfile) into it.
+1. Create the deploy directory (the `SSH_PATH` GitHub secret must point here) and copy [docker-compose.yml](docker-compose.yml) and the [Caddyfile](Caddyfile) into it.
 2. Create a `.env` file in the deploy directory (compose reads it automatically) with:
    - `POLITIGRAPH_URL=https://politigraph.wevis.info/graphql`
    - `POLITIGRAPH_ORIGIN_IP=<politigraph origin server IP>` — keep it out of the repo; it is a secret. `extra_hosts` pins `politigraph.wevis.info` to this IP so SSR queries hit the origin directly, bypassing Cloudflare's proxy and its rate limit. The domain URL is kept so SNI, Host header, and certificate hostname still match; the image trusts [Cloudflare's origin root CA](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca/) (baked in at build via `NODE_EXTRA_CA_CERTS`) so the origin's Cloudflare Origin CA certificate verifies without touching TLS validation settings.

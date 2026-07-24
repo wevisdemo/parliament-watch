@@ -16,7 +16,7 @@ FROM node:24-slim
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Trust Cloudflare's origin root CA so ParliementWatch can call the politigraph origin
+# Trust Cloudflare's origin root CA so Parliament Watch can call the politigraph origin
 ADD https://developers.cloudflare.com/ssl/static/origin_ca_rsa_root.pem /etc/ssl/cloudflare-origin-ca.pem
 ENV NODE_EXTRA_CA_CERTS=/etc/ssl/cloudflare-origin-ca.pem
 

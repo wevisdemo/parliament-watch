@@ -5,15 +5,26 @@ jobs:
   deploy-to-production:
     runs-on: ubuntu-latest
     steps:
+      - name: Ensure the latest staging run succeeded
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          conclusion=$(gh run list --repo ${{ github.repository }} --workflow staging.yml \
+            --branch main --limit 1 --json conclusion --jq '.[0].conclusion')
+          if [ "$conclusion" != "success" ]; then
+            echo "Latest staging run conclusion is '$conclusion' — refusing to promote an unvalidated image."
+            exit 1
+          fi
       - name: Promote staging image and deploy
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.PRODUCTION_HOST }}
+          host: ${{ secrets.SSH_HOST }}
           username: bot
           key: ${{ secrets.SSH_KEY }}
-          script_stop: true
           script: |
-            cd ${{ secrets.PRODUCTION_PATH }}
+            set -e
+            cd ${{ secrets.SSH_PATH }}
             docker tag parliament-watch:latest parliament-watch:production
             docker compose up -d --wait production
             docker compose stop staging

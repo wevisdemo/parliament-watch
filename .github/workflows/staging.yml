@@ -40,21 +40,21 @@ jobs:
       - name: Upload image to server
         uses: burnett01/rsync-deployments@6.0.0
         with:
-          remote_host: ${{ secrets.PRODUCTION_HOST }}
+          remote_host: ${{ secrets.SSH_HOST }}
           remote_user: bot
           remote_key: ${{ secrets.SSH_KEY }}
-          remote_path: ${{ secrets.PRODUCTION_PATH }}
+          remote_path: ${{ secrets.SSH_PATH }}
           switches: -azvP
           path: parliament-watch-image.tar.gz Caddyfile docker-compose.yml
       - name: Load image and deploy staging
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.PRODUCTION_HOST }}
+          host: ${{ secrets.SSH_HOST }}
           username: bot
           key: ${{ secrets.SSH_KEY }}
-          script_stop: true
           script: |
-            cd ${{ secrets.PRODUCTION_PATH }}
+            set -e
+            cd ${{ secrets.SSH_PATH }}
             docker load < parliament-watch-image.tar.gz
             rm parliament-watch-image.tar.gz
             docker tag parliament-watch:${{ github.sha }} parliament-watch:latest
