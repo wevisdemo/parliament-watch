@@ -1,3 +1,4 @@
+import type { CandidateType } from '$lib/politigraph/assembly/filter';
 import {
 	getMemberGroup,
 	type PoliticianSubGroup,
@@ -104,6 +105,12 @@ function getPoliticianSummary(
 		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 	);
 
+	const candidateType: CandidateType | undefined = assemblyMembership?.list_number
+		? 'บัญชีรายชื่อ'
+		: assemblyMembership?.province && assemblyMembership.district_number
+			? 'แบ่งเขต'
+			: undefined;
+
 	return {
 		id,
 		name,
@@ -122,11 +129,7 @@ function getPoliticianSummary(
 					: assemblyMembership?.province && assemblyMembership.district_number
 						? `${assemblyMembership?.province} เขต ${assemblyMembership.district_number}`
 						: assemblyMembership?.label,
-		candidateType: assemblyMembership?.list_number
-			? 'บัญชีรายชื่อ'
-			: assemblyMembership?.province && assemblyMembership.district_number
-				? 'แบ่งเขต'
-				: undefined,
+		candidateType,
 		assemblyRoleName: assemblyMembership?.posts[0].role
 	};
 }

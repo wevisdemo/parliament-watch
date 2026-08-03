@@ -3,6 +3,8 @@
 	import Tab from '$components/Assemblies/Members/Tab.svelte';
 	import BackToTopButton from '$components/BackToTopButton/BackToTopButton.svelte';
 	import PoliticianProfile from '$components/PoliticianProfile/PoliticianProfile.svelte';
+	import { matchMember } from '$lib/politigraph/assembly/filter';
+	import { createDebouncedSync } from '$lib/query-state/sync';
 	import { GroupByOption } from '$models/assembly';
 	import type { PoliticianSummaryGroupBy } from './+page.server';
 	import {
@@ -19,6 +21,7 @@
 	import { onMount } from 'svelte';
 
 	const NON_PARTISAN = 'ไม่สังกัดพรรค';
+	const SEARCH_DEBOUNCE_MS = 250;
 
 	let { data } = $props();
 	let { assembly, groups, groupByTabs, isDataHasSubgroup, availableAssemblies, isCabinet } =
@@ -30,39 +33,41 @@
 	let isByDistrict = $state(true);
 	let isByPartylist = $state(true);
 
-	let formattedSearchQuery = $derived(searchQuery.trim());
+	let debouncedSearchQuery = $state('');
+	let pendingSearchQuery = '';
+	const debouncedSearchSync = createDebouncedSync(() => {
+		debouncedSearchQuery = pendingSearchQuery;
+	}, SEARCH_DEBOUNCE_MS);
+
+	$effect(() => {
+		pendingSearchQuery = searchQuery;
+		debouncedSearchSync.schedule();
+		return debouncedSearchSync.cancel;
+	});
+
+	let formattedSearchQuery = $derived(debouncedSearchQuery.trim());
+	let filterOptions = $derived({
+		searchQuery: formattedSearchQuery,
+		isByDistrict,
+		isByPartylist
+	});
 	let filteredGroup = $derived(
 		formattedSearchQuery === '' && isByDistrict && isByPartylist
 			? groups
-			: (groups.map((group) => {
-					if ('subgroups' in group) {
-						return {
-							...group,
-							subgroups: group.subgroups.map((subgroup) => {
-								return {
+			: (groups.map((group) =>
+					'subgroups' in group
+						? {
+								...group,
+								subgroups: group.subgroups.map((subgroup) => ({
 									...subgroup,
-									members: subgroup.members.filter((member) => {
-										return (
-											member.name.includes(formattedSearchQuery) &&
-											((isByDistrict && member.candidateType === 'แบ่งเขต') ||
-												(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
-										);
-									})
-								};
-							})
-						};
-					}
-					return {
-						...group,
-						members: group.members.filter((member) => {
-							return (
-								member.name.includes(formattedSearchQuery) &&
-								((isByDistrict && member.candidateType === 'แบ่งเขต') ||
-									(isByPartylist && member.candidateType === 'บัญชีรายชื่อ'))
-							);
-						})
-					};
-				}) as PoliticianSummaryGroupBy)
+									members: subgroup.members.filter((member) => matchMember(member, filterOptions))
+								}))
+							}
+						: {
+								...group,
+								members: group.members.filter((member) => matchMember(member, filterOptions))
+							}
+				) as PoliticianSummaryGroupBy)
 	);
 
 	const getSubgroupHeadingId = (group: { name: string }, name?: string) =>
