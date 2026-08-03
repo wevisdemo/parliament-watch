@@ -23,7 +23,7 @@
 			filterPosition: filterOptions.roles
 		}))()
 	);
-	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: '' });
+	let selectedComboboxValue: SelectedComboboxValueType = $state({ filterComboboxType: undefined });
 
 	const generalVoteType = (voteOption: DefaultVoteOption | CustomVoteOption | string) =>
 		typeof voteOption === 'string' ? (voteOption as string) : 'อื่นๆ';

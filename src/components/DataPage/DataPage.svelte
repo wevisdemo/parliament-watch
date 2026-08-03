@@ -73,6 +73,7 @@
 		type QueryParamValue,
 		type QueryStateConfig
 	} from '$lib/query-state/codec';
+	import { clampPage, isFilterEdited } from '$lib/query-state/data-page-state';
 	import { createDebouncedSync } from '$lib/query-state/sync';
 	import {
 		Button,
@@ -139,7 +140,7 @@
 		checkboxFilterList,
 		filteredData,
 		tableHeader,
-		tablePageSize = 10,
+		tablePageSize = 50,
 		searchQuery = $bindable(''),
 		selectedComboboxValue = $bindable(
 			Object.fromEntries(comboboxFilterList.map((group) => [group.key, undefined]))
@@ -163,10 +164,31 @@
 		Object.values(checkboxFilterList).flatMap(({ choices }) => choices).length
 	);
 	let isFilterNotDefault = $derived(
-		searchQuery ||
-			Object.values(selectedCheckboxValue).flat().length < checkboxFilterListCount ||
-			Object.values(selectedComboboxValue).some((e) => e !== undefined)
+		isFilterEdited({
+			searchQuery,
+			selectedCheckboxValue,
+			selectedComboboxValue,
+			checkboxChoicesCount: checkboxFilterListCount
+		})
 	);
+
+	let tableTotalPages = $derived(Math.max(Math.ceil(filteredData.length / tablePageSize), 1));
+	let filterSignature = $derived(
+		JSON.stringify({ searchQuery, selectedCheckboxValue, selectedComboboxValue })
+	);
+	let previousFilterSignature: string | undefined;
+
+	$effect(() => {
+		if (previousFilterSignature !== undefined && filterSignature !== previousFilterSignature) {
+			tableCurrentPage = 1;
+		}
+		previousFilterSignature = filterSignature;
+	});
+
+	$effect(() => {
+		const clampedPage = clampPage(tableCurrentPage, tablePageSize, filteredData.length);
+		if (clampedPage !== tableCurrentPage) tableCurrentPage = clampedPage;
+	});
 
 	const filterTickAll = (value = true) => {
 		selectedComboboxValue = Object.fromEntries(
@@ -463,17 +485,19 @@
 						}}
 					/>
 				{/if}
-				<Pagination
-					class="overflow-x-hidden"
-					pageSize={tablePageSize}
-					bind:page={tableCurrentPage}
-					totalItems={filteredData.length}
-					pageSizeInputDisabled
-					forwardText="หน้าถัดไป"
-					backwardText="หน้าก่อนหน้า"
-					itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} ${unit}`}
-					pageRangeText={(_, total) => `จาก ${total} หน้า`}
-				/>
+				{#key tableTotalPages}
+					<Pagination
+						class="overflow-x-hidden"
+						pageSize={tablePageSize}
+						bind:page={tableCurrentPage}
+						totalItems={filteredData.length}
+						pageSizeInputDisabled
+						forwardText="หน้าถัดไป"
+						backwardText="หน้าก่อนหน้า"
+						itemRangeText={(min, max, total) => `${min} - ${max} จาก ${total} ${unit}`}
+						pageRangeText={(_, total) => `จาก ${total} หน้า`}
+					/>
+				{/key}
 			</div>
 		</div>
 	</div>

@@ -46,6 +46,9 @@ export interface DecodeQueryStateResult {
 
 const DEFAULT_SEARCH_PARAM = 'q';
 
+/** Marks "user deselected every choice", so it does not decode back as "all selected". */
+const EMPTY_SELECTION_VALUE = '';
+
 const normalizeValue = (value: QueryParamValue) => String(value);
 
 const valueLookup = (choices: QueryParamValue[]) =>
@@ -94,6 +97,10 @@ export function encodeQueryState({
 		const listParam = groupConfig.param ?? groupKey;
 		next.delete(listParam);
 		if (isDefaultSelection(selectedValues, choices)) continue;
+		if (selectedValues.length === 0) {
+			next.append(listParam, EMPTY_SELECTION_VALUE);
+			continue;
+		}
 		for (const selected of selectedValues) next.append(listParam, normalizeValue(selected));
 	}
 
@@ -126,6 +133,10 @@ export function decodeQueryState({
 		const listValues = collectListParamValues(searchParams, listParam);
 		if (listValues.length === 0) {
 			selectedCheckboxValue[groupKey] = choices;
+			continue;
+		}
+		if (listValues.length === 1 && listValues[0] === EMPTY_SELECTION_VALUE) {
+			selectedCheckboxValue[groupKey] = [];
 			continue;
 		}
 

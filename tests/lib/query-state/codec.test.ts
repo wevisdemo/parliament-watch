@@ -126,6 +126,135 @@ describe('query-state codec', () => {
 		expect(reEncoded.has('votetype')).toBe(false);
 	});
 
+	it('round-trips an empty checkbox selection instead of restoring every choice', () => {
+		const config: QueryStateConfig = {
+			checkbox: {
+				filterResult: {
+					mode: 'list',
+					param: 'result'
+				}
+			}
+		};
+		const checkboxChoices = { filterResult: ['ผ่าน', 'ไม่ผ่าน', 'รอตรวจสอบ'] };
+
+		const encoded = encodeQueryState({
+			baseSearchParams: new URLSearchParams(),
+			config,
+			searchQuery: '',
+			selectedCheckboxValue: { filterResult: [] },
+			selectedComboboxValue: {},
+			checkboxChoices
+		});
+
+		expect(encoded.getAll('result')).toEqual(['']);
+
+		const decoded = decodeQueryState({
+			searchParams: encoded,
+			config,
+			checkboxChoices,
+			comboboxChoices: {}
+		});
+		expect(decoded.selectedCheckboxValue.filterResult).toEqual([]);
+
+		const reEncoded = encodeQueryState({
+			baseSearchParams: new URLSearchParams(),
+			config,
+			searchQuery: '',
+			selectedCheckboxValue: decoded.selectedCheckboxValue,
+			selectedComboboxValue: decoded.selectedComboboxValue,
+			checkboxChoices
+		});
+		expect(reEncoded.toString()).toBe(encoded.toString());
+	});
+
+	it('keeps absence of a param meaning "all choices selected"', () => {
+		const config: QueryStateConfig = {
+			checkbox: {
+				filterResult: {
+					mode: 'list',
+					param: 'result'
+				}
+			}
+		};
+		const checkboxChoices = { filterResult: ['ผ่าน', 'ไม่ผ่าน', 'รอตรวจสอบ'] };
+
+		const decoded = decodeQueryState({
+			searchParams: new URLSearchParams(),
+			config,
+			checkboxChoices,
+			comboboxChoices: {}
+		});
+
+		expect(decoded.selectedCheckboxValue.filterResult).toEqual(checkboxChoices.filterResult);
+	});
+
+	it('round-trips a partial selection alongside unknown values', () => {
+		const config: QueryStateConfig = {
+			checkbox: {
+				filterResult: {
+					mode: 'list',
+					param: 'result'
+				}
+			}
+		};
+		const checkboxChoices = { filterResult: ['ผ่าน', 'ไม่ผ่าน', 'รอตรวจสอบ'] };
+
+		const decoded = decodeQueryState({
+			searchParams: new URLSearchParams('result=ผ่าน&result=ไม่รู้จัก'),
+			config,
+			checkboxChoices,
+			comboboxChoices: {}
+		});
+		expect(decoded.selectedCheckboxValue.filterResult).toEqual(['ผ่าน']);
+
+		const reEncoded = encodeQueryState({
+			baseSearchParams: new URLSearchParams(),
+			config,
+			searchQuery: '',
+			selectedCheckboxValue: decoded.selectedCheckboxValue,
+			selectedComboboxValue: decoded.selectedComboboxValue,
+			checkboxChoices
+		});
+		expect(reEncoded.getAll('result')).toEqual(['ผ่าน']);
+	});
+
+	it('re-encodes a fully unknown selection as an explicit empty selection', () => {
+		const config: QueryStateConfig = {
+			checkbox: {
+				filterResult: {
+					mode: 'list',
+					param: 'result'
+				}
+			}
+		};
+		const checkboxChoices = { filterResult: ['ผ่าน', 'ไม่ผ่าน', 'รอตรวจสอบ'] };
+
+		const decoded = decodeQueryState({
+			searchParams: new URLSearchParams('result=ไม่รู้จัก'),
+			config,
+			checkboxChoices,
+			comboboxChoices: {}
+		});
+
+		const reEncoded = encodeQueryState({
+			baseSearchParams: new URLSearchParams(),
+			config,
+			searchQuery: '',
+			selectedCheckboxValue: decoded.selectedCheckboxValue,
+			selectedComboboxValue: decoded.selectedComboboxValue,
+			checkboxChoices
+		});
+		expect(reEncoded.getAll('result')).toEqual(['']);
+		expect(
+			decodeQueryState({
+				searchParams: reEncoded,
+				config,
+				checkboxChoices,
+				comboboxChoices: {}
+			}).selectedCheckboxValue.filterResult
+		).toEqual([]);
+	});
+
 	it('falls back to empty selection when params are unknown', () => {
 		const config: QueryStateConfig = {
 			checkbox: {

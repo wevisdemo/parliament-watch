@@ -55,7 +55,6 @@
 </script>
 
 <DataPage
-	tablePageSize={50}
 	breadcrumbList={[
 		{ url: '/', label: 'หน้าหลัก' },
 		{ label: 'นักการเมือง' },
