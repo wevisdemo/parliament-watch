@@ -82,17 +82,17 @@ export function getMemberGroup(
 				const province = memberships.find(
 					(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
 				)?.province;
-				return province && provinceRegionMap.get(province);
+				return (province && provinceRegionMap.get(province)) || UNKNOWN_LABEL;
 			}).map(([region, membersByRegion]) => ({
-				name: region || UNKNOWN_LABEL,
+				name: region,
 				subgroups: groupMembersBy(
 					membersByRegion,
 					({ memberships }) =>
 						memberships.find(
 							(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
-						)?.province
+						)?.province || UNKNOWN_LABEL
 				).map(([province, membersByProvince]) => ({
-					name: province || UNKNOWN_LABEL,
+					name: province,
 					members: membersByProvince
 				}))
 			}));
@@ -131,7 +131,7 @@ export function getMemberGroup(
 					const birthDate = dayjs(birth_date);
 					const age = dayjs().diff(birthDate, 'year');
 
-					if (age > 71) return '71 ปีขึ้นไป';
+					if (age >= 71) return '71 ปีขึ้นไป';
 					if (age > 55) return '56-70 ปี';
 					if (age > 40) return '41-55 ปี';
 					return '25-40 ปี';
@@ -183,12 +183,7 @@ export function getMemberGroup(
 export function groupMembersBy<M, T>(members: M[], groupBy: (member: M) => T): [T, M[]][] {
 	const groupMap = members.reduce((map, member) => {
 		const group = groupBy(member);
-
-		if (group) {
-			map.set(group, [...(map.get(group) || []), member]);
-		}
-
-		return map;
+		return map.set(group, [...(map.get(group) || []), member]);
 	}, new Map<T, M[]>());
 
 	return [...groupMap.entries()].sort((a, z) => z[1].length - a[1].length);
@@ -203,7 +198,7 @@ export function createSubgroupByPartyOrAppointmentMethod(
 				members,
 				({ memberships }) =>
 					memberships.find((m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY')
-						?.label ?? UNKNOWN_LABEL
+						?.label || UNKNOWN_LABEL
 			).map(([method, membersByRole]) => ({
 				name: method,
 				members: membersByRole
@@ -212,14 +207,14 @@ export function createSubgroupByPartyOrAppointmentMethod(
 				members,
 				({ memberships }) =>
 					memberships.find((m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY')
-						?.posts[0].organizations[0].name ?? UNKNOWN_LABEL
+						?.posts[0].organizations[0].name || UNKNOWN_LABEL
 			).map(([partyName, membersByParty]) => {
 				const { name, image } =
 					membersByParty[0].memberships.find((m) => m.posts[0].organizations[0].name === partyName)
 						?.posts[0].organizations[0] ?? noParty;
 
 				return {
-					name: name,
+					name: name || UNKNOWN_LABEL,
 					image: image,
 					members: membersByParty
 				};

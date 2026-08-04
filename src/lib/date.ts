@@ -54,13 +54,28 @@ export const shortMonthNames = [
 	string
 ];
 
+const parsePositiveInteger = (value?: string) =>
+	value !== undefined && /^\d+$/.test(value.trim()) ? Number(value) : NaN;
+
+/**
+ * Parses a Thai date string (e.g. "1 มกราคม 2567") into a Date.
+ * @param dateString - The date string, expected as day, month name and Buddhist-era year.
+ * @returns The parsed date, or an Invalid Date when any part cannot be parsed.
+ */
 export function parseThaiDate(dateString: string): Date {
 	const [day, month, year] = dateString.split(' ');
-	let monthIndex = longMonthNames.indexOf(month);
-	if (monthIndex === -1) {
-		monthIndex = shortMonthNames.indexOf(month);
+	const monthIndex = [longMonthNames, shortMonthNames]
+		.map((monthNames) => monthNames.indexOf(month))
+		.find((index) => index !== -1);
+
+	const dayNumber = parsePositiveInteger(day);
+	const yearNumber = parsePositiveInteger(year);
+
+	if (monthIndex === undefined || Number.isNaN(dayNumber) || Number.isNaN(yearNumber)) {
+		return new Date(NaN);
 	}
-	return new Date(+year - 543, monthIndex, +day);
+
+	return new Date(yearNumber - 543, monthIndex, dayNumber);
 }
 
 export const getStartOfDay = (date: Date) =>

@@ -30,6 +30,17 @@ describe('parse and format Thai date', () => {
 			const parsedDate = parseThaiDate(dateString);
 			expect(parsedDate).toEqual(expectedDate);
 		});
+
+		it.each([
+			{ case: 'unknown month', dateString: '1 มกรา 2565' },
+			{ case: 'missing year', dateString: '1 มกราคม' },
+			{ case: 'missing month and year', dateString: '1' },
+			{ case: 'non numeric day', dateString: 'หนึ่ง มกราคม 2565' },
+			{ case: 'non numeric year', dateString: '1 มกราคม สองพัน' },
+			{ case: 'empty string', dateString: '' }
+		])('should return an invalid date for $case', ({ dateString }) => {
+			expect(parseThaiDate(dateString).getTime()).toBeNaN();
+		});
 	});
 
 	describe('format', () => {

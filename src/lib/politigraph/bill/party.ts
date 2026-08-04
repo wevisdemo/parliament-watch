@@ -38,6 +38,7 @@ export function getInvolvedPartyIdSet(bill: BillInput, proposedDate = dayjs(bill
 
 function getOrgIdFromMembershipOnDate(memberships: MembershipInput[], date: Dayjs) {
 	return memberships.find(
-		({ start_date, end_date }) => date.isAfter(start_date) && (!end_date || date.isBefore(end_date))
-	)?.posts[0].organizations[0].id;
+		({ start_date, end_date }) =>
+			!date.isBefore(start_date) && (!end_date || !date.isAfter(end_date))
+	)?.posts?.[0]?.organizations?.[0]?.id;
 }

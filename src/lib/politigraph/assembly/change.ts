@@ -60,8 +60,8 @@ function getPartyLogoAtDate(memberships: AssemblyMember['memberships'], date: st
 					start_date <= date &&
 					(!end_date || date < end_date)
 			)
-			.sort((a, z) => z.start_date.localeCompare(a.start_date))
-			.at(-1)?.posts[0].organizations[0] ?? noParty;
+			.toSorted((a, z) => z.start_date.localeCompare(a.start_date))
+			.at(0)?.posts[0].organizations[0] ?? noParty;
 
 	return image;
 }
