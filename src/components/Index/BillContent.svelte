@@ -43,15 +43,32 @@
 		loadBillOverviewData();
 	});
 
+	let latestRequestId = 0;
+
 	async function loadBillOverviewData() {
+		const requestId = ++latestRequestId;
 		isLoading = true;
 
-		billOverview = (await (
-			await fetch(`/files/bills-overview/${selectedMpTermId}/${selectedCategory}.json`)
-		).json()) as BillOverviewData;
+		try {
+			const res = await fetch(`/files/bills-overview/${selectedMpTermId}/${selectedCategory}.json`);
 
-		isLoading = false;
-		carousalKey = selectedMpTermId + selectedCategory;
+			if (!res.ok) {
+				throw new Error(`Failed to load bill overview: ${res.status}`);
+			}
+
+			const data = (await res.json()) as BillOverviewData;
+
+			if (requestId !== latestRequestId) return;
+
+			billOverview = data;
+			carousalKey = selectedMpTermId + selectedCategory;
+		} catch (e) {
+			console.error(e);
+		} finally {
+			if (requestId === latestRequestId) {
+				isLoading = false;
+			}
+		}
 	}
 
 	function selectCategory(category: string) {

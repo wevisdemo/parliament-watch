@@ -1,9 +1,10 @@
 import { createCsvFileResponse } from '$lib/csv';
 import { graphql } from '$lib/politigraph/client';
+import { error } from '@sveltejs/kit';
 
 export async function GET({ params }) {
 	const {
-		organizations: [{ dissolution_date }]
+		organizations: [assembly]
 	} = await graphql.query({
 		organizations: {
 			__args: {
@@ -14,6 +15,12 @@ export async function GET({ params }) {
 			dissolution_date: true
 		}
 	});
+
+	if (!assembly) {
+		error(404);
+	}
+
+	const { dissolution_date } = assembly;
 
 	const { posts } = await graphql.query({
 		posts: {

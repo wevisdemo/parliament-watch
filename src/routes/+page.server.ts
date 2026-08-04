@@ -104,36 +104,36 @@ export async function load() {
 		};
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	const chuanLeekpai = highlightPoliticians.find((p) => p.id === CHUAN_ID)!;
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	const banyatBantadtan = highlightPoliticians.find((p) => p.id === BANYAT_ID)!;
+	const chuanLeekpai = highlightPoliticians.find((p) => p.id === CHUAN_ID);
+	const banyatBantadtan = highlightPoliticians.find((p) => p.id === BANYAT_ID);
 
 	const highlightedPoliticians: StatCardProps[] = [
-		{
-			reason: HighlightedReason.LongestServedInPoliticalPositions,
-			value: 54,
-			...chuanLeekpai,
-			position: PoliticialPosition.MP,
-			year: 2512
-		} as LongestServedInPoliticalPositionsPolitician,
-		{
+		chuanLeekpai &&
+			({
+				reason: HighlightedReason.LongestServedInPoliticalPositions,
+				value: 54,
+				...chuanLeekpai,
+				position: PoliticialPosition.MP,
+				year: 2512
+			} as LongestServedInPoliticalPositionsPolitician),
+		banyatBantadtan && {
 			reason: HighlightedReason.MostFrequentlyElectedInConstituency,
 			value: 12,
 			...banyatBantadtan
 		},
-		{
-			reason: HighlightedReason.MostFrequentlyServedAsMinister,
-			value: 5,
-			...chuanLeekpai,
-			cabinetTerms: [38, 42, 43, 45, 53]
-		} as MostFrequentlyServedAsMinisterPolitician,
-		{
+		chuanLeekpai &&
+			({
+				reason: HighlightedReason.MostFrequentlyServedAsMinister,
+				value: 5,
+				...chuanLeekpai,
+				cabinetTerms: [38, 42, 43, 45, 53]
+			} as MostFrequentlyServedAsMinisterPolitician),
+		chuanLeekpai && {
 			reason: HighlightedReason.MostDiverseServedAsMinister,
 			value: 6,
 			...chuanLeekpai
 		}
-	];
+	].filter((card) => card !== undefined);
 
 	const billCategories = await getBillCategoryOptions();
 	const mpTermChoices = await getRepresentativeTermOptions();

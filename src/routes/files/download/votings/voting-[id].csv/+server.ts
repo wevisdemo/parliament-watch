@@ -4,6 +4,7 @@ import {
 	queryPoliticiansVote,
 	sortPoliticiansVoteByDominantGroup
 } from '$lib/politigraph/vote/with-politician';
+import { error } from '@sveltejs/kit';
 
 export async function GET({ params }) {
 	const {
@@ -23,6 +24,10 @@ export async function GET({ params }) {
 			end_date: true
 		}
 	});
+
+	if (!voteEvent) {
+		error(404);
+	}
 
 	const votes = sortPoliticiansVoteByDominantGroup(await queryPoliticiansVote(voteEvent));
 

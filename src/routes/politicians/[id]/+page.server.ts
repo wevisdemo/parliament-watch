@@ -97,9 +97,9 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const latestVotings = votes.sort((a, z) =>
-		z.vote_events[0].start_date.localeCompare(a.vote_events[0].start_date)
-	);
+	const latestVotings = votes
+		.filter(({ vote_events }) => vote_events.length > 0)
+		.toSorted((a, z) => z.vote_events[0].start_date.localeCompare(a.vote_events[0].start_date));
 
 	const agreedVoting = getLatestVotingHistory(latestVotings, DefaultVoteOption.Agreed);
 	const disagreedVoting = getLatestVotingHistory(latestVotings, DefaultVoteOption.Disagreed);
@@ -293,7 +293,9 @@ function getLatestVotingHistory(
 	votes: (Pick<Vote, 'option'> & { vote_events: Pick<VoteEvent, 'id' | 'title' | 'result'>[] })[],
 	selectedOption: DefaultVoteOption
 ): VotingHistory {
-	const filteredVotes = votes.filter(({ option }) => option === selectedOption);
+	const filteredVotes = votes.filter(
+		({ option, vote_events }) => option === selectedOption && vote_events.length > 0
+	);
 
 	return {
 		total: filteredVotes.length,

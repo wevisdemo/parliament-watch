@@ -64,21 +64,23 @@ export async function load({ params }) {
 		}
 	});
 
+	const votesWithEvent = votes.filter(({ vote_events }) => vote_events.length > 0);
+
 	const filterOptions = {
-		assemblies: votes
+		assemblies: votesWithEvent
 			.flatMap((v) => v.vote_events[0].organizations)
-			.reduce<(typeof votes)[number]['vote_events'][number]['organizations']>(
+			.reduce<(typeof votesWithEvent)[number]['vote_events'][number]['organizations']>(
 				(uniques, org) => (uniques.some((u) => u.id === org.id) ? uniques : [...uniques, org]),
 				[]
 			)
-			.sort((a, z) => a.name.localeCompare(z.name)),
+			.toSorted((a, z) => a.name.localeCompare(z.name)),
 		voteOptions: defaultVoteOptions
 	};
 
 	return {
 		politician,
 		filterOptions,
-		votes,
+		votes: votesWithEvent,
 		seo: createSeo({
 			title: `ประวัติการลงมติ ${politician.name}`
 		})

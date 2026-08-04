@@ -164,7 +164,11 @@ export async function load() {
 			__args: {
 				where: {
 					id: {
-						in: [...bills.flatMap((bill) => bill.proposerParties).reduce((acc, s) => acc.union(s))]
+						in: [
+							...bills
+								.flatMap((bill) => bill.proposerParties)
+								.reduce((acc, s) => acc.union(s), new Set<string>())
+						]
 					}
 				}
 			},
