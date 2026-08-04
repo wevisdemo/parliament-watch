@@ -2,10 +2,8 @@ import type { VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer.js';
 import { graphql } from '$lib/politigraph/client';
 import type { Event, VoteEventType } from '$lib/politigraph/genql/schema.js';
-import { countVotesInEachOption, groupVotesByAffiliation } from '$lib/politigraph/vote/group.js';
-import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician.js';
+import { toVoteCardProps } from '$lib/politigraph/vote/card.js';
 import { createSeo } from '$lib/seo';
-import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary.js';
 import { error } from '@sveltejs/kit';
 
 const eventDefaultSortPriority: Event['__typename'][] = [
@@ -330,17 +328,13 @@ export async function load({ params }) {
 	await Promise.all(
 		billVoteEvents.map(async (billVoteEvent) => {
 			const voteEvent = billVoteEvent.vote_events[0];
-			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
-			const groups = groupedVotes.map((aff) => ({
-				name: aff.name,
-				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
-			}));
+			const { id, date, result, votesSummary } = await toVoteCardProps(voteEvent);
 			votingByEventId.set(billVoteEvent.id, {
-				id: voteEvent.id,
+				id,
 				title: voteEvent.nickname ?? voteEvent.title,
-				date: voteEvent.start_date,
-				result: voteEvent.result,
-				votesSummary: buildVotesSummary({ groups, result: voteEvent.result })
+				date,
+				result,
+				votesSummary
 			});
 		})
 	);

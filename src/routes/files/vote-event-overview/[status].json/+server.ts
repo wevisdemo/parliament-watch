@@ -2,9 +2,7 @@ import { MAX_LATEST_VOTE, VOTE_STATUSES } from '$components/Index/VotingContent.
 import { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 import { PAGE_CACHE_CONTROL } from '$lib/cache-control';
 import { graphql } from '$lib/politigraph/client';
-import { groupVotesByAffiliation, countVotesInEachOption } from '$lib/politigraph/vote/group';
-import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
-import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
+import { toVoteCardProps } from '$lib/politigraph/vote/card';
 import type { RequestHandler } from './$types';
 
 const VALID_STATUS_VALUES = VOTE_STATUSES.map((s) => s.value);
@@ -43,19 +41,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	});
 
 	const latestVoteEvents: VoteCardProps[] = await Promise.all(
-		voteEvents.map(async (voteEvent) => {
-			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
-			const mappedGroups = groupedVotes.map((aff) => ({
-				name: aff.name,
-				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
-			}));
-
-			return {
-				...voteEvent,
-				date: voteEvent.start_date,
-				votesSummary: buildVotesSummary({ groups: mappedGroups, result: voteEvent.result })
-			};
-		})
+		voteEvents.map((voteEvent) => toVoteCardProps(voteEvent))
 	);
 
 	return new Response(JSON.stringify(latestVoteEvents), {

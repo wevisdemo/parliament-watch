@@ -29,32 +29,19 @@ export interface VoteGroupSummary {
 	options: VoteOptionSlice[];
 }
 
-export type HighlightSource = 'result' | 'override';
-
-export interface VotesSummaryHighlight extends VoteOptionSlice {
-	source: HighlightSource;
-}
-
 export interface VotesSummary {
 	total: number;
 	optionOrder: string[];
 	winnerOption: string | null;
-	highlight: VotesSummaryHighlight | null;
+	highlight: VoteOptionSlice | null;
 	overall: VoteOptionSlice[];
 	groups: VoteGroupSummary[];
-}
-
-export interface HighlightOverride {
-	option: string | null;
-	label?: string;
-	source?: HighlightSource;
 }
 
 export interface BuildVotesSummaryOptions {
 	groups?: VoteGroupResult[];
 	result?: string | null;
 	optionOrder?: string[];
-	highlightOverride?: HighlightOverride;
 }
 
 export function resolveHighlightOption(
@@ -71,8 +58,7 @@ export function resolveHighlightOption(
 export function buildVotesSummary({
 	groups = [],
 	result = null,
-	optionOrder,
-	highlightOverride
+	optionOrder
 }: BuildVotesSummaryOptions): VotesSummary {
 	const canonicalOrder = deriveOptionOrder(groups, optionOrder);
 	const groupSummaries = groups.map((group) => normalizeGroup(group, canonicalOrder));
@@ -83,13 +69,9 @@ export function buildVotesSummary({
 	);
 	const winnerFromTally = findWinnerByTotals(totalsByOption);
 	const winnerOption = result ? getWinningOption(result) : winnerFromTally;
-	const highlightOption = highlightOverride?.option ?? resolveHighlightOption(result, winnerOption);
+	const highlightOption = resolveHighlightOption(result, winnerOption);
 	const highlight = highlightOption
-		? {
-				...buildSlice(highlightOption, totalsByOption.get(highlightOption) ?? 0, total),
-				source: highlightOverride ? (highlightOverride.source ?? 'override') : 'result',
-				label: highlightOverride?.label ?? highlightOption
-			}
+		? buildSlice(highlightOption, totalsByOption.get(highlightOption) ?? 0, total)
 		: null;
 
 	return {
@@ -111,7 +93,7 @@ export function optionsArrayToResultSummary(
 	}, {});
 }
 
-function deriveOptionOrder(groups: VoteGroupResult[], preferredOrder?: string[]): string[] {
+export function deriveOptionOrder(groups: VoteGroupResult[], preferredOrder?: string[]): string[] {
 	const baseOrder = preferredOrder?.length ? [...preferredOrder] : [...defaultVoteOptions];
 	const seen = new Set(baseOrder);
 	const extras: string[] = [];
@@ -157,8 +139,8 @@ function aggregateTotals(groups: VoteGroupSummary[], optionOrder: string[]): Map
 	return totals;
 }
 
-function findWinnerByTotals(totals: Map<string, number>): string | null {
-	const entries = [...totals.entries()].sort((a, z) => z[1] - a[1]);
+export function findWinnerByTotals(totals: Map<string, number>): string | null {
+	const entries = [...totals.entries()].toSorted((a, z) => z[1] - a[1]);
 	if (!entries.length || entries[0][1] === 0) return null;
 	const [, second] = entries;
 	return second && second[1] === entries[0][1] ? null : entries[0][0];

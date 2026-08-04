@@ -8,11 +8,8 @@ import {
 	getAvailableAssemblies
 } from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/client';
-import { countVotesInEachOption } from '$lib/politigraph/vote/group';
-import { groupVotesByAffiliation } from '$lib/politigraph/vote/group';
-import { queryPoliticiansVote } from '$lib/politigraph/vote/with-politician';
+import { toVoteCardProps } from '$lib/politigraph/vote/card';
 import { createSeo } from '$lib/seo';
-import { buildVotesSummary, optionsArrayToResultSummary } from '$lib/vote-summary';
 import { GroupByOption } from '$models/assembly';
 import type { Bill } from '$models/bill';
 import { error } from '@sveltejs/kit';
@@ -208,19 +205,7 @@ export async function load({ params }) {
 			});
 
 	const latestVoteEvents: VoteCardProps[] = await Promise.all(
-		voteEvents.map(async (voteEvent) => {
-			const groupedVotes = groupVotesByAffiliation(await queryPoliticiansVote(voteEvent));
-			const groups = groupedVotes.map((aff) => ({
-				name: aff.name,
-				resultSummary: optionsArrayToResultSummary(countVotesInEachOption(aff.votes))
-			}));
-
-			return {
-				...voteEvent,
-				date: voteEvent.start_date,
-				votesSummary: buildVotesSummary({ groups, result: voteEvent.result })
-			};
-		})
+		voteEvents.map((voteEvent) => toVoteCardProps(voteEvent))
 	);
 
 	const latestBills: BillSummary[] = [];
