@@ -32,11 +32,11 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const availableAssemblies = await getAvailableAssemblies({
-		classification: assembly.classification
-	});
+	const [availableAssemblies, members] = await Promise.all([
+		getAvailableAssemblies({ classification: assembly.classification }),
+		queryAssemblyMembers(assembly)
+	]);
 
-	const members = await queryAssemblyMembers(assembly);
 	const changes = getRoleChanges(assembly.id, members);
 
 	return {

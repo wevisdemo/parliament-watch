@@ -1,11 +1,9 @@
 import { PAGE_CACHE_CONTROL } from '$lib/cache-control';
-import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/bill/proposer';
-import { billStatusList } from '$lib/politigraph/bill/status';
-import { graphql } from '$lib/politigraph/client';
+import { queryLastEnactedBillsWithProposers } from '$lib/politigraph/bill/enacted';
+import { queryBillsForSummary, summarizeBillsByStatus } from '$lib/politigraph/bill/summary';
 import type { BillWhere } from '$lib/politigraph/genql';
 import { ALL_CATEGORY_KEY } from '../../../../../constants/bills';
 
-const MAX_BILL_BY_STATUS = 3;
 const MAX_ENACTED_BILL = 10;
 
 export async function GET({ params }) {
@@ -27,69 +25,16 @@ async function getBillOverviewData({ repId, category }: { repId: string; categor
 		organizations: { some: { id: { eq: repId } } }
 	};
 
-	const billSummaryByStatuses = await Promise.all(
-		billStatusList.map((status) => {
-			const where: BillWhere = {
-				status: { eq: status },
-				...billConditions
-			};
+	const [bills, { lastEnactedBills, lastEnactedBillProposers }] = await Promise.all([
+		queryBillsForSummary(billConditions),
+		queryLastEnactedBillsWithProposers(billConditions, MAX_ENACTED_BILL)
+	]);
 
-			return graphql.query({
-				billsConnection: {
-					__args: { where },
-					totalCount: true
-				},
-				bills: {
-					__args: { where, sort: [{ proposal_date: 'DESC' }], limit: MAX_BILL_BY_STATUS },
-					id: true,
-					title: true,
-					nickname: true
-				}
-			});
-		})
-	);
+	const billSummaryByStatuses = summarizeBillsByStatus(bills).map(({ samples, count }) => ({
+		billsConnection: { totalCount: count },
+		bills: samples.map(({ id, title, nickname }) => ({ id, title, nickname }))
+	}));
 
-	const lastEnactedBills = (
-		await graphql.query({
-			billEnactEvents: {
-				__args: {
-					where: {
-						NOT: { start_date: { eq: null } },
-						bills: {
-							some: billConditions
-						}
-					},
-					sort: [{ start_date: 'DESC' }],
-					limit: MAX_ENACTED_BILL
-				},
-				start_date: true,
-				bills: {
-					id: true,
-					title: true,
-					nickname: true,
-					proposal_date: true
-				}
-			}
-		})
-	).billEnactEvents.map(({ start_date, bills }) => ({ enact_date: start_date, ...bills[0] }));
-
-	const lastEnactedBillProposers = (
-		await Promise.all(
-			lastEnactedBills.map(({ id, proposal_date }) =>
-				graphql.query({
-					bills: {
-						__args: {
-							where: {
-								id: { eq: id }
-							},
-							limit: 1
-						},
-						...createBillFieldsForProposer(proposal_date)
-					}
-				})
-			)
-		)
-	).map(({ bills }) => getBillProposer(bills[0]));
 	return {
 		billSummaryByStatuses,
 		lastEnactedBills,

@@ -1,8 +1,12 @@
 import type { ProposerProps } from '$components/Proposer/Proposer.svelte';
 import { type Bill, type BillGenqlSelection } from '../genql';
 
+/**
+ * Selects the fields `getBillProposer` needs. Omit `proposalDate` to fetch memberships of every
+ * period, then narrow them per bill with `keepProposerMembershipsOnDate`.
+ */
 export function createBillFieldsForProposer<S extends BillGenqlSelection>(
-	proposalDate: Bill['proposal_date']
+	proposalDate?: Bill['proposal_date']
 ): S {
 	return {
 		creator_type: true,
@@ -20,8 +24,10 @@ export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 				memberships: {
 					__args: {
 						where: {
-							start_date: { lte: proposalDate },
-							OR: [{ end_date: { eq: null } }, { end_date: { gte: proposalDate } }],
+							...(proposalDate !== undefined && {
+								start_date: { lte: proposalDate },
+								OR: [{ end_date: { eq: null } }, { end_date: { gte: proposalDate } }]
+							}),
 							posts: {
 								some: {
 									organizations: {
@@ -40,6 +46,8 @@ export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 							}
 						}
 					},
+					start_date: true,
+					end_date: true,
 					posts: {
 						label: true,
 						organizations: {
@@ -55,6 +63,36 @@ export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 		},
 		people_signature_count: true
 	} as S;
+}
+
+interface MembershipPeriod {
+	start_date: string | null;
+	end_date: string | null;
+}
+
+function isMembershipActiveOn({ start_date, end_date }: MembershipPeriod, date: string | null) {
+	if (!date || !start_date) return false;
+
+	return start_date <= date && (end_date === null || end_date >= date);
+}
+
+/** JS equivalent of the membership date filter in `createBillFieldsForProposer`. */
+export function keepProposerMembershipsOnDate<
+	B extends { creators: { memberships?: MembershipPeriod[] }[] }
+>(bill: B, proposalDate: string | null): B {
+	return {
+		...bill,
+		creators: bill.creators.map((creator) =>
+			creator.memberships
+				? {
+						...creator,
+						memberships: creator.memberships.filter((membership) =>
+							isMembershipActiveOn(membership, proposalDate)
+						)
+					}
+				: creator
+		)
+	};
 }
 
 export function getBillProposer<

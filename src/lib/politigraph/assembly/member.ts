@@ -29,20 +29,10 @@ export async function getAvailableAssemblies({
 
 export async function queryAssemblyMembers({
 	id,
-	classification,
 	founding_date,
 	dissolution_date
-}: Pick<Organization, 'id' | 'classification' | 'founding_date' | 'dissolution_date'>) {
+}: Pick<Organization, 'id' | 'founding_date' | 'dissolution_date'>) {
 	const { people } = await graphql.query({
-		organizations: {
-			__args: {
-				where: {
-					classification: { eq: classification }
-				}
-			},
-			id: true,
-			term: true
-		},
 		people: {
 			__args: {
 				where: {

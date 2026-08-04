@@ -65,10 +65,10 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const availableAssemblies = await getAvailableAssemblies({
-		classification: assembly.classification
-	});
-	const members = await queryAssemblyMembers(assembly);
+	const [availableAssemblies, members] = await Promise.all([
+		getAvailableAssemblies({ classification: assembly.classification }),
+		queryAssemblyMembers(assembly)
+	]);
 
 	const isSenates = assembly.classification === 'HOUSE_OF_SENATE';
 	const isCabinet = assembly.classification === 'CABINET';

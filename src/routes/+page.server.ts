@@ -135,8 +135,10 @@ export async function load() {
 		}
 	].filter((card) => card !== undefined);
 
-	const billCategories = await getBillCategoryOptions();
-	const mpTermChoices = await getRepresentativeTermOptions();
+	const [billCategories, mpTermChoices] = await Promise.all([
+		getBillCategoryOptions(),
+		getRepresentativeTermOptions()
+	]);
 	const latestAssemblyLabels = {
 		representative: buildAssemblyLabel(
 			'สมาชิกสภาผู้แทนราษฎร',

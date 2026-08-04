@@ -53,10 +53,10 @@ export async function load({ params }) {
 	const isSenates = assembly.classification === 'HOUSE_OF_SENATE';
 	const isCabinet = assembly.classification === 'CABINET';
 
-	const availableAssemblies = await getAvailableAssemblies({
-		classification: assembly.classification
-	});
-	const members = await queryAssemblyMembers(assembly);
+	const [availableAssemblies, members] = await Promise.all([
+		getAvailableAssemblies({ classification: assembly.classification }),
+		queryAssemblyMembers(assembly)
+	]);
 	const groups = getMemberGroup(members, params.groupby as GroupByOption, isSenates, isCabinet);
 	const isDataHasSubgroup = 'subgroups' in groups[0];
 
