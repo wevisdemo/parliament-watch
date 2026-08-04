@@ -8,10 +8,23 @@ export interface ExternalPoliticianRanking {
 	updatedAt: Date;
 }
 
-export async function fetchExternalPoliticianRanking() {
+export async function fetchExternalPoliticianRanking(): Promise<ExternalPoliticianRanking> {
 	const res = await fetch(GITHUB_PAGE_URL + OUT_FILE);
 
-	if (!res.ok) throw res.statusText;
+	if (!res.ok) throw new Error(`Failed to fetch ${OUT_FILE}: ${res.status} ${res.statusText}`);
 
-	return res.json() as Promise<ExternalPoliticianRanking>;
+	const { politicianWithMostWikipediaVisit, updatedAt } = (await res.json()) as Omit<
+		ExternalPoliticianRanking,
+		'updatedAt'
+	> & { updatedAt: string };
+
+	const updatedAtDate = new Date(updatedAt);
+
+	if (!politicianWithMostWikipediaVisit || Number.isNaN(updatedAtDate.getTime()))
+		throw new Error(`Malformed ${OUT_FILE}`);
+
+	return {
+		politicianWithMostWikipediaVisit,
+		updatedAt: updatedAtDate
+	};
 }

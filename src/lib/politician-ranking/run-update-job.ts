@@ -90,27 +90,36 @@ async function writePoliticianRankingFile() {
 			}
 		})
 	).people.map(({ id, image, memberships }) => {
+		const getClassification = (membership: (typeof memberships)[number]) =>
+			membership.posts[0]?.organizations[0]?.classification;
+
 		const assembly = memberships.find(
-			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+			(m) => getClassification(m) && getClassification(m) !== 'POLITICAL_PARTY'
 		);
-		const party = memberships.find(
-			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-		);
+		const party = memberships.find((m) => getClassification(m) === 'POLITICAL_PARTY');
 
 		return {
 			id,
 			avatar: image ?? '/images/politicians/_placeholder.webp',
-			label: assembly?.posts[0].label ?? '',
-			partyName: party?.posts[0].organizations[0].name ?? '',
-			partyLogo: party?.posts[0].organizations[0].image ?? '/images/parties/_placeholder.webp'
+			label: assembly?.posts[0]?.label ?? '',
+			partyName: party?.posts[0]?.organizations[0]?.name ?? '',
+			partyLogo: party?.posts[0]?.organizations[0]?.image ?? '/images/parties/_placeholder.webp'
 		};
 	});
+
+	const highlightPolitician = highlightPoliticians.find(
+		(p) => p.id === politicianWithMostWikipediaVisit.id
+	);
+
+	if (!highlightPolitician)
+		throw new Error(
+			`Politician ${politicianWithMostWikipediaVisit.id} has no profile in politigraph`
+		);
 
 	const rankingFile: ExternalPoliticianRanking = {
 		politicianWithMostWikipediaVisit: {
 			...politicianWithMostWikipediaVisit,
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			...highlightPoliticians.find((p) => p.id === politicianWithMostWikipediaVisit.id)!
+			...highlightPolitician
 		},
 		updatedAt: new Date()
 	};

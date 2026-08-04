@@ -8,44 +8,49 @@ interface PoliticianResult extends PoliticianInput {
 	value: number;
 }
 
-let wikiResult: PoliticianResult;
+const BATCH_SIZE = 10;
 
 export async function getPoliticianWithMostViewLastMonth(politicians: PoliticianInput[]) {
-	if (!wikiResult) {
-		wikiResult = await _getPoliticianWithMostViewLastMonth(politicians);
-	}
-	return wikiResult;
+	const results = await fetchLastMonthViewsInBatches(politicians);
+
+	const [politicianWithMostView] = results
+		.filter((result) => result !== null)
+		.toSorted((a, z) => z.value - a.value);
+
+	if (!politicianWithMostView) throw new Error('Could not find any politicians page on wikipedia');
+
+	return politicianWithMostView;
 }
 
-export async function _getPoliticianWithMostViewLastMonth(politicians: PoliticianInput[]) {
-	let result: PoliticianResult | undefined = undefined;
+async function fetchLastMonthViewsInBatches(politicians: PoliticianInput[]) {
+	const batches = Array.from({ length: Math.ceil(politicians.length / BATCH_SIZE) }, (_, index) =>
+		politicians.slice(index * BATCH_SIZE, (index + 1) * BATCH_SIZE)
+	);
 
-	for (const politician of politicians) {
-		const res = await fetch(getWikipediaViewEndpoint(politician.name));
+	const resultsByBatch = await batches.reduce<Promise<(PoliticianResult | null)[][]>>(
+		async (previous, batch) => [
+			...(await previous),
+			await Promise.all(batch.map(fetchLastMonthView))
+		],
+		Promise.resolve([])
+	);
 
-		if (res.ok) {
-			const data = await res.json();
+	return resultsByBatch.flat();
+}
 
-			if (data?.items?.[0]?.views) {
-				const { views } = data.items[0];
+async function fetchLastMonthView(politician: PoliticianInput): Promise<PoliticianResult | null> {
+	const res = await fetch(getWikipediaViewEndpoint(politician.name));
 
-				if (!result || views > result.value) {
-					result = {
-						...politician,
-						value: views
-					};
-				}
-			}
-		}
-	}
+	if (!res.ok) return null;
 
-	if (!result) throw 'Could not find any politicians page on wikipedia';
+	const data = await res.json();
+	const views = data?.items?.[0]?.views;
 
-	return result;
+	return views ? { ...politician, value: views } : null;
 }
 
 function getWikipediaViewEndpoint(name: string) {
-	const article = name.replaceAll(' ', '_');
+	const article = encodeURIComponent(name.replaceAll(' ', '_'));
 	const fromDate = dayjs().subtract(1, 'month').startOf('month').format('YYYYMMDD');
 	const toDate = dayjs().subtract(1, 'month').endOf('month').format('YYYYMMDD');
 
