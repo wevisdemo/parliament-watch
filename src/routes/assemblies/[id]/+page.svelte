@@ -104,6 +104,7 @@
 			</Button>
 		</section>
 	{/if}
+
 	{#if latestBills.length}
 		<section id="latest-bills" class="py-8">
 			<div class="flex flex-col items-start md:flex-row md:items-center md:justify-between">
@@ -120,7 +121,7 @@
 			</div>
 			<LatestBills {latestBills} />
 			<Button
-				href="/bills/explore?proposername={assembly.id}"
+				href="/bills/explore?proposername={encodeURIComponent(assembly.name)}"
 				kind="secondary"
 				icon={ArrowRight}
 				class="w-full max-w-none"
@@ -129,7 +130,6 @@
 			</Button>
 		</section>
 	{/if}
-
 	{#if latestVoteEvents.length}
 		<section id="latest-votes">
 			<LatestVotes votes={latestVoteEvents} assemblyId={assembly.id} />

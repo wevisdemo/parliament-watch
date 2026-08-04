@@ -9,24 +9,20 @@
 	}
 
 	let { latestBills }: Props = $props();
-
-	let sortByProposedOn = $derived(
-		latestBills.sort((a, b) => new Date(b.proposedOn).getTime() - new Date(a.proposedOn).getTime())
-	);
 </script>
 
 <DataTable
 	headers={[
-		{ key: 'proposedOn', value: 'วันที่เสนอ' },
+		{ key: 'proposalDate', value: 'วันที่เสนอ' },
 		{ key: 'nickname', value: 'ชื่อร่าง' },
 		{ key: 'status', value: 'สถานะ' }
 	]}
-	rows={sortByProposedOn}
+	rows={latestBills}
 >
 	{#snippet cell({ cell, row })}
-		{#if cell.key === 'proposedOn'}
+		{#if cell.key === 'proposalDate'}
 			<span class="text-gray-60">
-				{formatThaiDate(cell.value, { shortMonth: true, shortYear: true })}
+				{cell.value ? formatThaiDate(cell.value, { shortMonth: true, shortYear: true }) : '-'}
 			</span>
 		{:else if cell.key === 'nickname'}
 			<a

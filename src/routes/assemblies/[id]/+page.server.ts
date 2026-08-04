@@ -1,4 +1,4 @@
-import { type VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
+import type { VoteCardProps } from '$components/VoteCard/VoteCard.svelte';
 import { getRoleChanges } from '$lib/politigraph/assembly/change';
 import { getMemberGroup, noParty } from '$lib/politigraph/assembly/groupby';
 import {
@@ -7,17 +7,50 @@ import {
 	type AssemblyMember,
 	getAvailableAssemblies
 } from '$lib/politigraph/assembly/member';
+import { setBillNicknameFromTitleAsFallback } from '$lib/politigraph/bill/summary';
 import { graphql } from '$lib/politigraph/client';
+import type { Bill, BillStatus } from '$lib/politigraph/genql';
 import { toVoteCardProps } from '$lib/politigraph/vote/card';
 import { createSeo } from '$lib/seo';
 import { GroupByOption } from '$models/assembly';
-import type { Bill } from '$models/bill';
 import { error } from '@sveltejs/kit';
 import { interpolateRainbow } from 'd3-scale-chromatic';
 import dayjs from 'dayjs';
 
 const MAX_LATEST_VOTE = 5;
+const MAX_LATEST_BILL = 10;
 const MAX_CHANGES = 5;
+
+export interface BillSummary {
+	id: string;
+	nickname: string;
+	proposalDate: Bill['proposal_date'];
+	status: BillStatus;
+}
+
+async function queryLatestBillsProposedBy(organizationId: string): Promise<BillSummary[]> {
+	const { bills } = await graphql.query({
+		bills: {
+			__args: {
+				where: { creators: { some: { Organization: { id: { eq: organizationId } } } } }
+			},
+			id: true,
+			title: true,
+			nickname: true,
+			status: true,
+			proposal_date: true
+		}
+	});
+
+	return bills
+		.map(({ status, proposal_date, ...bill }) => ({
+			...setBillNicknameFromTitleAsFallback(bill),
+			proposalDate: proposal_date,
+			status
+		}))
+		.toSorted((a, z) => (z.proposalDate ?? '').localeCompare(a.proposalDate ?? ''))
+		.slice(0, MAX_LATEST_BILL);
+}
 
 export interface Summary {
 	totalMembers: number;
@@ -34,8 +67,6 @@ export interface MemberGroup {
 	color?: string;
 	subgroups?: { name: string; color: string; count: number; members?: AssemblyMember[] }[];
 }
-
-export type BillSummary = Pick<Bill, 'id' | 'proposedOn' | 'nickname' | 'status'>;
 
 export async function load({ params }) {
 	const {
@@ -204,11 +235,10 @@ export async function load({ params }) {
 				}
 			});
 
-	const latestVoteEvents: VoteCardProps[] = await Promise.all(
-		voteEvents.map((voteEvent) => toVoteCardProps(voteEvent))
-	);
-
-	const latestBills: BillSummary[] = [];
+	const [latestVoteEvents, latestBills]: [VoteCardProps[], BillSummary[]] = await Promise.all([
+		Promise.all(voteEvents.map((voteEvent) => toVoteCardProps(voteEvent))),
+		isCabinet ? queryLatestBillsProposedBy(assembly.id) : []
+	]);
 
 	const changes = isCabinet ? getRoleChanges(assembly.id, members, MAX_CHANGES) : null;
 
