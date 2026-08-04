@@ -83,11 +83,12 @@
 <div class="px-[16px] md:px-[64px]">
 	<Breadcrumb
 		class="my-[8px]"
+		collapseMobile
 		items={[
 			{ label: 'หน้าหลัก', url: '/' },
-			{ label: 'นักการเมือง', hiddenMobile: true },
-			{ label: assembly.name, url: `/assemblies/${assembly.id}`, hiddenMobile: true },
-			{ label: 'การปรับ ครม.', hiddenMobile: true }
+			{ label: 'นักการเมือง' },
+			{ label: assembly.name, url: `/assemblies/${assembly.id}` },
+			{ label: 'การปรับ ครม.' }
 		]}
 	/>
 </div>

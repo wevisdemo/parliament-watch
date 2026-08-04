@@ -6,8 +6,6 @@
 	export interface BreadcrumbEntry {
 		label: string;
 		url?: string;
-		hiddenMobile?: boolean;
-		hiddenDesktop?: boolean;
 	}
 
 	interface Props {
@@ -44,7 +42,7 @@
 	{#if children}
 		{@render children()}
 	{:else if collapseMobile && isMobile}
-		<BreadcrumbItem href={items[0].url} class="min-w-0 max-w-[40vw] shrink">
+		<BreadcrumbItem href={items[0].url} class="min-w-0 max-w-[40vw] shrink [&>*]:min-w-0">
 			<span class="block truncate align-middle">{items[0].label}</span>
 		</BreadcrumbItem>
 		{#if items.length > 2}
@@ -52,23 +50,18 @@
 		{/if}
 		<BreadcrumbItem
 			href={items[items.length - 1].url}
-			isCurrentPage={items.length === 1}
-			class="min-w-0 max-w-[50vw] shrink"
+			isCurrentPage
+			class="min-w-0 max-w-[50vw] shrink [&>*]:min-w-0"
 		>
 			<span class="block truncate align-middle">{items[items.length - 1].label}</span>
 		</BreadcrumbItem>
 	{:else}
 		{#each items as item, idx (item.label)}
 			{@const isLast = idx === items.length - 1}
-			{@const hiddenClass = item.hiddenMobile
-				? 'hidden md:block'
-				: item.hiddenDesktop
-					? 'md:hidden'
-					: ''}
 			<BreadcrumbItem
 				href={item.url}
 				isCurrentPage={isLast}
-				class="min-w-0 max-w-[50vw] shrink md:max-w-none {hiddenClass}"
+				class="min-w-0 max-w-[50vw] shrink md:max-w-none [&>*]:min-w-0"
 			>
 				<span class="block truncate align-middle">{item.label}</span>
 			</BreadcrumbItem>
