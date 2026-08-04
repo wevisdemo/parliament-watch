@@ -11,7 +11,7 @@ export async function load({ fetch }) {
 	const res = await fetch('https://api.github.com/repos/wevisdemo/parliament-watch/contributors');
 
 	if (!res.ok) {
-		throw 'Can not fetch Github contributors';
+		throw new Error(`Can not fetch Github contributors: ${res.status} ${res.statusText}`);
 	}
 
 	const developers = ((await res.json()) as ContributorResponse[]).map((c) => ({

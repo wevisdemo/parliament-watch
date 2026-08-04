@@ -44,7 +44,13 @@
 		votingAbsentStats
 	}: Props = $props();
 
-	const safePercent = (n: number, outOf: number) => Math.round((n / (outOf || 1)) * 10000) / 100;
+	const formatPercent = (value: number) => `${Math.round(value * 100) / 100}`;
+	const safePercent = (n: number, outOf: number) => formatPercent((n / (outOf || 1)) * 100);
+
+	const votingSections = $derived([
+		{ voting: agreedVoting, option: 'เห็นด้วย', headingClass: 'bg-teal-40' },
+		{ voting: disagreedVoting, option: 'ไม่เห็นด้วย', headingClass: 'bg-red-50 text-white' }
+	]);
 </script>
 
 <Section id="votes" title="ประวัติการลงมติ">
@@ -53,74 +59,46 @@
 	{/snippet}
 	<VoteWarningNotification />
 	<div class="flex flex-col gap-6">
-		<div class="flex flex-col gap-2">
-			<h3 class="body-02 bg-teal-40 px-2 py-1">
-				{agreedVoting.latest.length} มติล่าสุด ที่{politicianFirstname}<span class="heading-02"
-					>เห็นด้วย</span
+		{#each votingSections as { voting, option, headingClass } (option)}
+			<div class="flex flex-col gap-2">
+				<h3 class="body-02 px-2 py-1 {headingClass}">
+					{voting.latest.length} มติล่าสุด ที่{politicianFirstname}<span class="heading-02"
+						>{option}</span
+					>
+				</h3>
+				<ul class="body-01 ml-8 flex list-disc flex-col gap-2">
+					{#each voting.latest as latestVoting, idx (idx)}
+						<li>
+							<a
+								class="flex cursor-pointer items-start gap-1 text-black no-underline"
+								href="/votings/{latestVoting.id}"
+							>
+								<span class="max-w-max flex-1 underline">{latestVoting.title}</span>
+								<VotingResultTag
+									class="m-0 cursor-pointer whitespace-nowrap"
+									result={latestVoting.result}
+								/>
+							</a>
+						</li>
+					{/each}
+				</ul>
+				<a
+					href="/politicians/{politicianId}/votes?voteType={option}"
+					class="helper-text-01 mr-auto flex items-center gap-2"
+					rel="nofollow noopener noreferrer"
 				>
-			</h3>
-			<ul class="body-01 ml-8 flex list-disc flex-col gap-2">
-				{#each agreedVoting.latest as voting, idx (idx)}
-					<li>
-						<a
-							class="flex cursor-pointer items-start gap-1 text-black no-underline"
-							href="/votings/{voting.id}"
-						>
-							<span class="max-w-max flex-1 underline">{voting.title}</span>
-							<VotingResultTag
-								class="m-0 cursor-pointer whitespace-nowrap"
-								result={voting.result}
-							/>
-						</a>
-					</li>
-				{/each}
-			</ul>
-			<a
-				href="/politicians/{politicianId}/votes?voteType=เห็นด้วย"
-				class="helper-text-01 mr-auto flex items-center gap-2"
-				rel="nofollow noopener noreferrer"
-			>
-				<span>ดู {agreedVoting.total} มติที่เห็นด้วย</span>
-				<ArrowRight />
-			</a>
-		</div>
-		<div class="flex flex-col gap-2">
-			<h3 class="body-02 bg-red-50 px-2 py-1 text-white">
-				{disagreedVoting.latest.length} มติล่าสุด ที่{politicianFirstname}<span class="heading-02"
-					>ไม่เห็นด้วย</span
-				>
-			</h3>
-			<ul class="body-01 ml-8 flex list-disc flex-col gap-2">
-				{#each disagreedVoting.latest as voting, idx (idx)}
-					<li>
-						<a
-							class="flex cursor-pointer items-start gap-1 text-black no-underline"
-							href="/votings/{voting.id}"
-						>
-							<span class="max-w-max flex-1 underline">{voting.title}</span>
-							<VotingResultTag
-								class="m-0 cursor-pointer whitespace-nowrap"
-								result={voting.result}
-							/>
-						</a>
-					</li>
-				{/each}
-			</ul>
-			<a
-				href="/politicians/{politicianId}/votes?voteType=ไม่เห็นด้วย"
-				class="helper-text-01 mr-auto flex items-center gap-2"
-				rel="nofollow noopener noreferrer"
-			>
-				<span>ดู {disagreedVoting.total} มติที่ไม่เห็นด้วย</span>
-				<ArrowRight />
-			</a>
-		</div>
+					<span>ดู {voting.total} มติที่{option}</span>
+					<ArrowRight />
+				</a>
+			</div>
+		{/each}
 		<div class="flex flex-col gap-2">
 			<h3 class="body-02 heading-02 bg-gray-20 px-2 py-1">การลา / ขาดลงมติ</h3>
 			{#if votingAbsentStats.length > 0}
 				<ul class="body-02 ml-8 list-disc">
 					{#each votingAbsentStats as stat (stat.assemblyId)}
 						{@const absentPercentage = safePercent(stat.absentVoting, stat.totalVoting)}
+						{@const averagePercentage = formatPercent(stat.averageAbsentVotingPercent)}
 						<li>
 							<span class="underline">{stat.assemblyName}</span>
 							<span class="text-gray-60"
@@ -131,13 +109,11 @@
 							><br />
 							{politicianFirstname} ลา / ขาดลงมติ {stat.absentVoting} มติ จากทั้งหมด {stat.totalVoting}
 							มติของสภาชุดนี้ คิดเป็น {absentPercentage}% ซึ่ง{absentPercentage ===
-							stat.averageAbsentVotingPercent
+							averagePercentage
 								? 'เท่ากับ'
-								: absentPercentage < stat.averageAbsentVotingPercent
+								: Number(absentPercentage) < Number(averagePercentage)
 									? 'น้อยกว่า'
-									: 'มากกว่า'}ค่าเฉลี่ยของสมาชิกสภาชุดเดียวกัน (ค่าเฉลี่ย = {stat.averageAbsentVotingPercent.toPrecision(
-								2
-							)}%)
+									: 'มากกว่า'}ค่าเฉลี่ยของสมาชิกสภาชุดเดียวกัน (ค่าเฉลี่ย = {averagePercentage}%)
 						</li>
 					{/each}
 				</ul>
