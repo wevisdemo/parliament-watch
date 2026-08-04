@@ -30,6 +30,7 @@
 	}: Props = $props();
 
 	let searchResults: SearchResults | null = $state(null);
+	let isSearchLoading = $state(false);
 </script>
 
 <section {id} class={className}>
@@ -51,9 +52,14 @@
 					placeholder={searchPlaceholder}
 					categories={searchCategories}
 					bind:searchResults
+					bind:isLoading={isSearchLoading}
 				/>
-				{#if searchResults}
-					<SearchResult {searchResults} class="absolute left-0 z-10 w-full" />
+				{#if searchResults || isSearchLoading}
+					<SearchResult
+						{searchResults}
+						isLoading={isSearchLoading}
+						class="absolute left-0 z-10 w-full"
+					/>
 				{/if}
 			</div>
 		{/if}

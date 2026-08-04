@@ -1,4 +1,5 @@
-import { normalizeSearchQuery, calculateScore, highlightText } from '$lib/search';
+import { normalizeSearchQuery, calculateScore, highlightText, search } from '$lib/search';
+import { SearchIndexCategory } from '$models/search';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('normalizeSearchQuery', () => {
@@ -79,6 +80,44 @@ describe('calculateScore', () => {
 		expect(result).length(1);
 		expect(result[0].score).toEqual(0);
 	});
+});
+
+describe('calculateScore fuzzy matching', () => {
+	it('should match misspelled query within distance threshold', () => {
+		const result = calculateScore(['สมชาย'], [{ name: 'สมชัย ใจดี' }]);
+		expect(result[0].score).toBeGreaterThan(0);
+		expect(Math.max(...result[0].matchedIndices)).toBeLessThan('สมชัย ใจดี'.length);
+	});
+
+	it('should not match query beyond distance threshold', () => {
+		const result = calculateScore(['สมชาย'], [{ name: 'ประยุทธ์ มั่นคง' }]);
+		expect(result[0].score).toEqual(0);
+	});
+
+	it('should fuzzy match when the query is longer than the name', () => {
+		const result = calculateScore(['สมชายย'], [{ name: 'สมชาย' }]);
+		expect(result[0].score).toBeGreaterThan(0);
+		expect(Math.max(...result[0].matchedIndices)).toBeLessThan('สมชาย'.length);
+	});
+
+	it('should skip fuzzy matching for queries shorter than 3 characters', () => {
+		const result = calculateScore(['กข'], [{ name: 'กก' }]);
+		expect(result[0].score).toEqual(0);
+	});
+});
+
+describe('search', () => {
+	it.each(['สมชาย & สมหญิง', 'สมชาย + สมหญิง', 'สมชาย # สมหญิง'])(
+		'should encode bill proposer name %s in the result url',
+		(name) => {
+			const results = search(name, {
+				[SearchIndexCategory.BillProposers]: [{ name, proposedBillsCount: 1 }]
+			});
+			expect(results.billProposers?.[0].url).toEqual(
+				'/bills/explore?proposername=' + encodeURIComponent(name)
+			);
+		}
+	);
 });
 
 describe('highlightText', () => {

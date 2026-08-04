@@ -29,6 +29,7 @@
 	} = $derived(data);
 
 	let searchResults: SearchResults | null = $state(null);
+	let isSearchLoading = $state(false);
 
 	const getAssemblyPath = (assembly: AvailableAssembly) =>
 		assembly ? `/bills/term/${assembly.id}` : '';
@@ -63,9 +64,14 @@
 			placeholder="ชื่อร่างกฎหมาย หรือ ชื่อผู้เสนอร่าง"
 			categories={[SearchIndexCategory.Bills, SearchIndexCategory.BillProposers]}
 			bind:searchResults
+			bind:isLoading={isSearchLoading}
 		/>
-		{#if searchResults}
-			<SearchResult {searchResults} class="absolute left-0 z-10 w-full" />
+		{#if searchResults || isSearchLoading}
+			<SearchResult
+				{searchResults}
+				isLoading={isSearchLoading}
+				class="absolute left-0 z-10 w-full"
+			/>
 		{/if}
 	</div>
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>

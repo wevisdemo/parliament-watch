@@ -62,6 +62,10 @@
 </script>
 
 <Hst.Story title="SearchResult" layout={{ type: 'grid', width: '350px' }}>
+	<Hst.Variant title="Loading">
+		<SearchResult isLoading />
+	</Hst.Variant>
+
 	<Hst.Variant title="No Results">
 		<SearchResult searchResults={noResults} />
 	</Hst.Variant>

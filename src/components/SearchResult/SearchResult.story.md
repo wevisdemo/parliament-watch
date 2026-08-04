@@ -13,6 +13,7 @@ icon: 'carbon:search-locate'
 | Props          | Type            | Meaning                            |
 | -------------- | --------------- | ---------------------------------- |
 | `searchResult` | `SearchResults` | ผลลัพธ์ที่ได้จาก `<SearchInput />` |
+| `isLoading`    | `boolean`       | แสดง skeleton ระหว่างโหลด index    |
 | `politician`   | `boolean`       | แสดงผลลัพธ์นักการเมือง             |
 | `voting`       | `boolean`       | แสดงผลลัพธ์การลงมติ                |
 | `bill`         | `boolean`       | แสดงผลลัพธ์การออกกฎหมาย            |

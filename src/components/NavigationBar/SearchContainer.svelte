@@ -21,6 +21,7 @@
 	}: Props = $props();
 	let searchInput: HTMLInputElement | null = $state(null);
 	let searchValue = $state('');
+	let isSearchLoading = $state(false);
 	let elContainer: HTMLDivElement | undefined = $state();
 
 	function searchClickHandle() {
@@ -66,6 +67,7 @@
 				<SearchInput
 					bind:ref={searchInput}
 					bind:searchResults
+					bind:isLoading={isSearchLoading}
 					bind:searchValue
 					categories={[
 						SearchIndexCategory.Politicians,
@@ -86,7 +88,7 @@
 			</div>
 		{/if}
 	</div>
-	{#if searchResults !== null}
-		<SearchResult {searchResults} />
+	{#if searchResults !== null || isSearchLoading}
+		<SearchResult {searchResults} isLoading={isSearchLoading} />
 	{/if}
 </div>

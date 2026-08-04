@@ -7,6 +7,8 @@ import type {
 } from '$models/search';
 import { distance } from 'fastest-levenshtein';
 
+const MIN_FUZZY_QUERY_LENGTH = 3;
+
 /**
  * Tokenizes the given text into an array of words.
  * If the Intl.Segmenter API is available, it will be used to segment the text into words.
@@ -91,7 +93,7 @@ export function search(
 						headingHighlight: highlight ? proposer.highlightedName : undefined,
 						description: proposer.item.description,
 						proposedBillsCount: proposer.item.proposedBillsCount,
-						url: '/bills/explore?proposername=' + proposer.item.name
+						url: '/bills/explore?proposername=' + encodeURIComponent(proposer.item.name)
 					})
 				)
 			: undefined
@@ -118,11 +120,12 @@ export function calculateScore<T extends { name: string }>(
 	searchItems: T[],
 	includeAllQuery = true
 ): ScoreResultItem<T>[] {
+	const normalizedQueries = queries.map((q) => q.toLowerCase());
+
 	return searchItems.map((item: T) => {
 		let score = 0;
-		const matchedIndices: number[] = [];
+		const matchedIndices = new Set<number>();
 		const stringMenu = item.name.toLowerCase();
-		const normalizedQueries = queries.map((q) => q.toLowerCase());
 		for (const query of normalizedQueries) {
 			let matchedIndex = 0;
 			let startIndex = 0;
@@ -138,36 +141,24 @@ export function calculateScore<T extends { name: string }>(
 
 				// Add matched indices
 				for (let i = matchedIndex; i < endMatchedIndex; i++) {
-					// Skip if already added
-					if (matchedIndices.includes(i)) continue;
-					matchedIndices.push(i);
+					matchedIndices.add(i);
 				}
 
 				// Set the start index of next search
 				startIndex = endMatchedIndex;
 			}
 
-			if (addedScore == 0) {
-				// Try fuzzy match using sliding window
-				let bestDistance = Infinity;
-				let bestIndex = -1;
-
-				for (let i = 0; i <= stringMenu.length - query.length; i++) {
-					const sub = stringMenu.slice(i, i + query.length);
-					const d = distance(sub, query);
-					if (d < bestDistance) {
-						bestDistance = d;
-						bestIndex = i;
-					}
-				}
+			if (addedScore == 0 && query.length >= MIN_FUZZY_QUERY_LENGTH) {
+				const { bestDistance, bestIndex } = findClosestWindow(stringMenu, query);
 
 				// Accept fuzzy match if close enough
 				const threshold = Math.max(1, Math.floor(query.length / 3));
 				if (bestDistance <= threshold) {
 					const similarity = 1 - bestDistance / query.length;
 					addedScore += (similarity * query.length * 0.2) / stringMenu.length;
-					for (let i = bestIndex; i < bestIndex + query.length; i++) {
-						if (!matchedIndices.includes(i)) matchedIndices.push(i);
+					const endIndex = Math.min(bestIndex + query.length, stringMenu.length);
+					for (let i = bestIndex; i < endIndex; i++) {
+						matchedIndices.add(i);
 					}
 				}
 			}
@@ -194,9 +185,35 @@ export function calculateScore<T extends { name: string }>(
 		return {
 			item,
 			score,
-			matchedIndices
+			matchedIndices: [...matchedIndices]
 		};
 	});
+}
+
+/**
+ * Finds the window of `text` with the smallest edit distance to `query`.
+ * When `text` is shorter than `query`, the whole text is compared instead.
+ * @param text - The lowercased text to search in.
+ * @param query - The lowercased query to match.
+ * @returns The smallest distance found and the index of the window that produced it.
+ */
+function findClosestWindow(text: string, query: string) {
+	if (text.length < query.length) {
+		return { bestDistance: distance(text, query), bestIndex: 0 };
+	}
+
+	let bestDistance = Infinity;
+	let bestIndex = -1;
+
+	for (let i = 0; i <= text.length - query.length; i++) {
+		const d = distance(text.slice(i, i + query.length), query);
+		if (d < bestDistance) {
+			bestDistance = d;
+			bestIndex = i;
+		}
+	}
+
+	return { bestDistance, bestIndex };
 }
 
 /**
@@ -232,14 +249,15 @@ function postCalculateScore<T extends { name: string }>(
  * @returns An array of objects representing the highlighted text.
  */
 export function highlightText(text: string, indices: number[]): HighlightedText[] {
+	const highlightedIndices = new Set(indices);
 	const result: HighlightedText[] = [];
 	for (let index = 0; index < text.length; index++) {
 		const char = text[index];
 		if (
 			// If the current character is highlighted,
-			indices.includes(index) &&
+			highlightedIndices.has(index) &&
 			// and the previous character is not highlighted,
-			!indices.includes(index - 1)
+			!highlightedIndices.has(index - 1)
 		) {
 			result.push({
 				text: '',
@@ -248,7 +266,7 @@ export function highlightText(text: string, indices: number[]): HighlightedText[
 		} else if (
 			// If the current character is not highlighted,
 			// and the previous character is highlighted,
-			(!indices.includes(index) && indices.includes(index - 1)) ||
+			(!highlightedIndices.has(index) && highlightedIndices.has(index - 1)) ||
 			// the result array is empty
 			result.length == 0
 		) {
