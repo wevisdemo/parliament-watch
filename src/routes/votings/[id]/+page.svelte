@@ -10,11 +10,11 @@
 	import VotingResultTag from '$components/VotingResultTag/VotingResultTag.svelte';
 	import { trimBreadcrumbTitle } from '$lib/breadcrumb';
 	import { formatThaiDate } from '$lib/date.js';
+	import { createDebouncedSync } from '$lib/query-state/sync';
 	import { DefaultVoteOption, DefaultVotingResult, type CustomVoteOption } from '$models/voting';
 	import { Button, Modal, Search, Toggle } from 'carbon-components-svelte';
 	import ArrowRight from 'carbon-icons-svelte/lib/ArrowRight.svelte';
 	import Link from 'carbon-icons-svelte/lib/Link.svelte';
-	import { onMount } from 'svelte';
 
 	let { data } = $props();
 
@@ -27,15 +27,20 @@
 	} as const;
 	type MenuValue = (typeof Menu)[keyof typeof Menu];
 
+	const menuTabs = [
+		{ id: Menu.Summary, label: 'สรุป' },
+		{ id: Menu.ByParty, label: 'รายสังกัด' },
+		{ id: Menu.ByPerson, label: 'รายคน' }
+	];
+
+	const SEARCH_DEBOUNCE_MS = 250;
+	const VOTER_ROWS_STEP = 50;
+
 	let open = $state(false);
 	let selectedMenu: MenuValue = $state(Menu.Summary);
 	let isViewPercent = $state(false);
 	let searchQuery = $state('');
-
-	interface AnchorElement extends HTMLElement {
-		offsetTop: number;
-		offsetHeight: number;
-	}
+	let visibleVoterCount = $state(VOTER_ROWS_STEP);
 
 	function getVoteColor(option: DefaultVoteOption | CustomVoteOption | string): {
 		className: string;
@@ -81,27 +86,29 @@
 		if (el) el.scrollIntoView({ behavior: 'smooth' });
 	}
 
-	function onScroll() {
-		const scrollY = window.scrollY;
-		const anchorEls = document.querySelectorAll<AnchorElement>(
-			`#${Menu.Summary}, #${Menu.ByParty}, #${Menu.ByPerson}`
+	$effect(() => {
+		if (!voteEvent.id || votes.length === 0) return;
+
+		const anchorEls = menuTabs
+			.map(({ id }) => document.getElementById(id))
+			.filter((el) => el !== null);
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) selectedMenu = entry.target.id as MenuValue;
+				}
+			},
+			{ rootMargin: '-48px 0px -80% 0px' }
 		);
 
-		for (const el of anchorEls) {
-			const top = el.offsetTop;
-			const bottom = top + el.offsetHeight;
+		anchorEls.forEach((el) => observer.observe(el));
 
-			if (scrollY >= top && scrollY <= bottom) {
-				selectedMenu = el.id.replace('#', '') as MenuValue;
-				break;
-			}
-		}
-	}
+		return () => observer.disconnect();
+	});
 
-	onMount(() => {
-		window.addEventListener('scroll', onScroll, { passive: true });
-
-		return () => window.removeEventListener('scroll', onScroll);
+	$effect(() => {
+		if (voteEvent.id) visibleVoterCount = VOTER_ROWS_STEP;
 	});
 
 	const resultColorLookup: Record<string, string | undefined> = {
@@ -109,9 +116,9 @@
 		[DefaultVoteOption.Agreed]: 'text-teal-50',
 		[DefaultVotingResult.Failed]: 'text-red-50',
 		[DefaultVoteOption.Disagreed]: 'text-red-50',
-		[DefaultVoteOption.Abstain]: 'gray-80',
-		[DefaultVoteOption.Novote]: 'gray-50',
-		[DefaultVoteOption.Absent]: 'gray-20'
+		[DefaultVoteOption.Abstain]: 'text-gray-80',
+		[DefaultVoteOption.Novote]: 'text-gray-50',
+		[DefaultVoteOption.Absent]: 'text-gray-20'
 	};
 
 	let winningOption = $derived(
@@ -155,13 +162,34 @@
 		}, 0)
 	);
 
+	let debouncedSearchQuery = $state('');
+	let pendingSearchQuery = '';
+	const debouncedSearchSync = createDebouncedSync(() => {
+		if (pendingSearchQuery === debouncedSearchQuery) return;
+
+		debouncedSearchQuery = pendingSearchQuery;
+		visibleVoterCount = VOTER_ROWS_STEP;
+	}, SEARCH_DEBOUNCE_MS);
+
+	$effect(() => {
+		pendingSearchQuery = searchQuery.trim().toLowerCase();
+		debouncedSearchSync.schedule();
+		return debouncedSearchSync.cancel;
+	});
+
+	let optionByLabel = $derived(
+		new Map(
+			results.map(({ option }) => [typeof option === 'string' ? option : option.label, option])
+		)
+	);
+
 	let voterSearchResult = $derived(
-		searchQuery.trim()
-			? votes.filter((v) =>
-					v.politician.name.trim().toLowerCase().includes(searchQuery.trim().toLowerCase())
-				)
+		debouncedSearchQuery
+			? votes.filter((v) => v.politician.name.trim().toLowerCase().includes(debouncedSearchQuery))
 			: votes
 	);
+
+	let visibleVoters = $derived(voterSearchResult.slice(0, visibleVoterCount));
 </script>
 
 <div class="flex flex-col">
@@ -257,35 +285,19 @@
 				<div class="body-compact-01 my-3 text-center text-gray-60 md:my-8">ไม่พบข้อมูล</div>
 			{:else}
 				<div
-					class="voting-jumpnav sticky top-0 z-10 mt-4 flex w-full items-center gap-x-[1px] bg-white"
+					class="voting-jumpnav sticky top-0 z-10 mt-4 flex w-full items-center gap-x-[1px] bg-white transition-[top] will-change-[top]"
 				>
-					<button
-						class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
-						Menu.Summary
-							? 'border-blue-60 font-bold text-gray-100'
-							: 'border-gray-30 text-gray-60'}"
-						onclick={() => scrollTo(Menu.Summary)}
-					>
-						สรุป
-					</button>
-					<button
-						class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
-						Menu.ByParty
-							? 'border-blue-60 font-bold text-gray-100'
-							: 'border-gray-30 text-gray-60'}"
-						onclick={() => scrollTo(Menu.ByParty)}
-					>
-						รายสังกัด
-					</button>
-					<button
-						class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
-						Menu.ByPerson
-							? 'border-blue-60 font-bold text-gray-100'
-							: 'border-gray-30 text-gray-60'}"
-						onclick={() => scrollTo(Menu.ByPerson)}
-					>
-						รายคน
-					</button>
+					{#each menuTabs as { id, label } (id)}
+						<button
+							class="body-compact-01 flex w-1/3 cursor-pointer items-center justify-center border-b-[2px] px-4 py-[11px] {selectedMenu ===
+							id
+								? 'border-blue-60 font-bold text-gray-100'
+								: 'border-gray-30 text-gray-60'}"
+							onclick={() => scrollTo(id)}
+						>
+							{label}
+						</button>
+					{/each}
 				</div>
 				<h2 id={Menu.Summary} class="fluid-heading-04 mt-6 md:mt-10">สรุปผลการลงมติ</h2>
 				<div class="mt-4 flex flex-col">
@@ -379,12 +391,7 @@
 							{maxComparableRowVote}
 							{isViewPercent}
 							{resultColorLookup}
-							getOptionColor={(label) =>
-								getVoteColor(
-									results.find(({ option }) =>
-										typeof option === 'string' ? option === label : option.label === label
-									)?.option ?? label
-								)}
+							getOptionColor={(label) => getVoteColor(optionByLabel.get(label) ?? label)}
 						/>
 					{/each}
 				</div>
@@ -421,13 +428,9 @@
 							การลงมติ
 						</div>
 					</div>
-					{#if voterSearchResult.length}
-						{#each voterSearchResult as { id, politician, role, party, option } (politician.id ?? id)}
-							{@const voteOption = results.find((result) =>
-								typeof result.option === 'string'
-									? option === result.option
-									: option === result.option.label
-							)?.option}
+					{#if visibleVoters.length}
+						{#each visibleVoters as { id, politician, role, party, option } (politician.id ?? id)}
+							{@const voteOption = optionByLabel.get(option)}
 							<div class="flex w-full border-t border-gray-30">
 								<div class="body-01 w-[112px] px-4 py-[11px] md:w-1/4 md:py-[15px]">
 									{#if politician.id}
@@ -462,6 +465,20 @@
 							ไม่พบบุคคลที่ค้นหา
 						</div>
 					{/if}
+					{#if voterSearchResult.length > visibleVoters.length}
+						<div class="flex w-full flex-col items-center gap-1 border-t border-gray-30 py-4">
+							<p class="label-01 text-gray-60">
+								แสดง {visibleVoters.length} จาก {voterSearchResult.length} คน
+							</p>
+							<Button
+								kind="tertiary"
+								size="small"
+								onclick={() => (visibleVoterCount += VOTER_ROWS_STEP)}
+							>
+								ดูเพิ่มเติม
+							</Button>
+						</div>
+					{/if}
 				</div>
 			{/if}
 		</div>
@@ -469,11 +486,6 @@
 </div>
 
 <style lang="postcss">
-	.voting-jumpnav {
-		@apply transition-[top];
-		will-change: top;
-	}
-
 	:global(html.navbar-shown) .voting-jumpnav {
 		top: 48px;
 	}

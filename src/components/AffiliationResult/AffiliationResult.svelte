@@ -1,21 +1,19 @@
 <script lang="ts">
 	import VoteChartTooltip from '$components/VoteChartTooltip/VoteChartTooltip.svelte';
+	import {
+		findHighestVote,
+		sumVotesByOption,
+		type AffiliationParty
+	} from '$lib/politigraph/vote/affiliation';
 	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
-	import { groups } from 'd3-array';
 	import { onMount } from 'svelte';
+
+	const DESKTOP_MEDIA_QUERY = '(min-width: 672px)';
 
 	interface Props {
 		name: string;
 		count: number;
-		parties: {
-			name?: string;
-			image?: string;
-			count: number;
-			options: {
-				name: string;
-				count: number;
-			}[];
-		}[];
+		parties: AffiliationParty[];
 		maxComparableRowVote?: number;
 		isViewPercent?: boolean;
 		resultColorLookup: Record<string, string | undefined>;
@@ -36,9 +34,10 @@
 	}: Props = $props();
 
 	let isExpanded = $state(false);
+	let isDesktop = $state(false);
 
 	function toggleExpanding() {
-		isExpanded = !isExpanded;
+		if (!isDesktop) isExpanded = !isExpanded;
 	}
 
 	function formatPercent(value: number, total: number) {
@@ -54,25 +53,22 @@
 	});
 
 	onMount(() => {
-		if (window.matchMedia(`(min-width: 672px)`).matches) {
-			isExpanded = true;
-		}
+		const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
+		const syncIsDesktop = () => {
+			isDesktop = mediaQuery.matches;
+		};
+
+		syncIsDesktop();
+		mediaQuery.addEventListener('change', syncIsDesktop);
+
+		return () => mediaQuery.removeEventListener('change', syncIsDesktop);
 	});
 
-	let allVotes = $derived(
-		groups(
-			parties.flatMap((p) => p.options),
-			(v) => v.name
-		).map(([optionName, votes]) => ({
-			name: optionName,
-			count: votes.reduce((sum, { count: optionCount }) => sum + optionCount, 0)
-		}))
-	);
-
-	let highestVote = $derived(
-		allVotes.reduce((max, current) => (current.count > max.count ? current : max), allVotes[0])
-	);
-
+	let allVotes = $derived(sumVotesByOption(parties));
+	let highestVote = $derived(findHighestVote(allVotes));
+	let isContentVisible = $derived(isDesktop || isExpanded);
+	let partiesPanelId = $derived('aff-' + name.replace(/\s/g, '-'));
+	let hasPartiesPanel = $derived(parties.length > 1);
 	let isMpNoParty = $derived(name === 'สส.ไม่ทราบฝ่าย');
 </script>
 
@@ -84,8 +80,8 @@
 			if (e.code === 'Enter' || e.code === 'Space') toggleExpanding();
 		}}
 		tabindex="0"
-		aria-expanded={isExpanded}
-		aria-controls="aff-{name.replace(/\s/g, '-')}"
+		aria-expanded={isContentVisible}
+		aria-controls={hasPartiesPanel ? partiesPanelId : undefined}
 		role="button"
 	>
 		<div class="mt-2 flex items-center gap-x-1">
@@ -101,15 +97,17 @@
 					: ''}"
 			/>
 		</div>
-		<div
-			class="mt-1 flex items-center gap-x-1 {resultColorLookup[highestVote.name] ??
-				'text-purple-70'}"
-		>
-			<p class="heading-03">
-				{isViewPercent ? formatPercent(highestVote.count, count) : highestVote.count + ' คน'}
-			</p>
-			<p class="heading-03">{highestVote.name}</p>
-		</div>
+		{#if highestVote}
+			<div
+				class="mt-1 flex items-center gap-x-1 {resultColorLookup[highestVote.name] ??
+					'text-purple-70'}"
+			>
+				<p class="heading-03">
+					{isViewPercent ? formatPercent(highestVote.count, count) : highestVote.count + ' คน'}
+				</p>
+				<p class="heading-03">{highestVote.name}</p>
+			</div>
+		{/if}
 		<div class="mt-1 flex items-center gap-x-3">
 			{#each allVotes as vote (vote.name)}
 				{@const { className, style } = getOptionColor(vote.name)}
@@ -139,10 +137,10 @@
 			{/each}
 		</div>
 	</div>
-	{#if parties.length > 1}
+	{#if hasPartiesPanel}
 		<div
-			id={'aff-' + name.replace(/\s/g, '-')}
-			class="{isExpanded ? 'flex' : 'hidden'} mt-4 w-full flex-col gap-y-4 md:flex"
+			id={partiesPanelId}
+			class="{isContentVisible ? 'flex' : 'hidden'} mt-4 w-full flex-col gap-y-4 md:flex"
 		>
 			{#each parties as party (party.name)}
 				<div class="flex items-start gap-x-1">

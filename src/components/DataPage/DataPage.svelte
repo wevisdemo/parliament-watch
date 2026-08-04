@@ -300,14 +300,22 @@
 
 	onDestroy(() => {
 		debouncedSearchSync.cancel();
+		if (scrollFrame) cancelAnimationFrame(scrollFrame);
 	});
 
 	let previousFromTop = 0;
+	let scrollFrame = 0;
 	let showHeader = $state(true);
 	function scrollEventHandler() {
-		const currentFromTop = window.scrollY;
-		showHeader = currentFromTop <= previousFromTop;
-		previousFromTop = currentFromTop;
+		if (scrollFrame) return;
+
+		scrollFrame = requestAnimationFrame(() => {
+			scrollFrame = 0;
+			const currentFromTop = window.scrollY;
+			const shouldShowHeader = currentFromTop <= previousFromTop;
+			if (shouldShowHeader !== showHeader) showHeader = shouldShowHeader;
+			previousFromTop = currentFromTop;
+		});
 	}
 
 	let renderCombobox = $state(true);
