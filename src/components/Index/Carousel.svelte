@@ -28,7 +28,7 @@
 	}: Props = $props();
 
 	let elCarousel: HTMLElement | undefined = $state();
-	let slider: KeenSliderInstance | undefined = $state();
+	let slider: KeenSliderInstance | undefined = $state.raw();
 	let disableLeft = $state(false);
 	let disableRight = $state(false);
 
