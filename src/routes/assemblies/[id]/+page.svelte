@@ -45,6 +45,7 @@
 		startedAt={assembly.founding_date ? new Date(assembly.founding_date) : new Date()}
 		endedAt={assembly.dissolution_date ? new Date(assembly.dissolution_date) : undefined}
 		description={assembly.description}
+		updatedAt={assembly.updated_at ?? assembly.created_at}
 		{availableAssemblies}
 	/>
 

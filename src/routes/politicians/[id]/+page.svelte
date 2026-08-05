@@ -119,7 +119,7 @@
 						}
 					]}
 				/>
-				<DataPeriodRemark />
+				<DataPeriodRemark updatedAt={data.politician.updated_at ?? data.politician.created_at} />
 				<Share label="แชร์ประวัติ" />
 			</div>
 		</div>

@@ -85,7 +85,9 @@ export async function load({ params }) {
 			term: true,
 			description: true,
 			founding_date: true,
-			dissolution_date: true
+			dissolution_date: true,
+			updated_at: true,
+			created_at: true
 		}
 	});
 

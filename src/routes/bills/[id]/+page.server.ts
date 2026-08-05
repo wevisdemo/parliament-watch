@@ -80,6 +80,8 @@ export async function load({ params }) {
 			proposal_date: true,
 			text: true,
 			categories: true,
+			updated_at: true,
+			created_at: true,
 			links: {
 				url: true,
 				note: true

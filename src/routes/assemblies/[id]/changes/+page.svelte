@@ -98,6 +98,7 @@
 		<Header
 			{...assembly}
 			name="การปรับคณะรัฐมนตรี"
+			updatedAt={data.lastUpdatedAt}
 			{availableAssemblies}
 			showStatus={false}
 			showRemark={false}

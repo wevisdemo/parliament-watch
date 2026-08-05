@@ -273,7 +273,7 @@
 						url
 					}))}
 				/>
-				<DataPeriodRemark />
+				<DataPeriodRemark updatedAt={data.voteEvent.updated_at ?? data.voteEvent.created_at} />
 				<Share label="แชร์หน้านี้" />
 			</div>
 		</div>

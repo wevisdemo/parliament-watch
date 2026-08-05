@@ -14,6 +14,7 @@
 		startedAt: Date;
 		endedAt: Date | undefined;
 		description: string | null;
+		updatedAt: Date | string | null;
 		linkPostfix?: string;
 		showStatus?: boolean;
 		showRemark?: boolean;
@@ -26,6 +27,7 @@
 		startedAt,
 		endedAt,
 		description,
+		updatedAt,
 		linkPostfix = '',
 		showStatus = true,
 		showRemark = true
@@ -76,7 +78,7 @@
 			</a>
 		</div>
 		{#if showRemark}
-			<DataPeriodRemark />
+			<DataPeriodRemark {updatedAt} />
 			<Share label="แชร์" />
 		{/if}
 	</div>

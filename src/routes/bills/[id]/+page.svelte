@@ -112,7 +112,7 @@
 					icon={Link}
 					links={bill.links.map(({ url, note }) => ({ url, label: note ?? url }))}
 				/>
-				<DataPeriodRemark />
+				<DataPeriodRemark updatedAt={data.bill.updated_at ?? data.bill.created_at} />
 				<Share label="แชร์หน้านี้" />
 			</div>
 		</div>

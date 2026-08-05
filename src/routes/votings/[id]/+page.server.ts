@@ -28,6 +28,8 @@ export async function load({ params }) {
 			start_date: true,
 			end_date: true,
 			pass_condition: true,
+			updated_at: true,
+			created_at: true,
 			organizations: {
 				id: true,
 				name: true,

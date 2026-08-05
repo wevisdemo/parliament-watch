@@ -29,6 +29,8 @@ export async function load({ params }) {
 			birth_date: true,
 			educations: true,
 			previous_occupations: true,
+			updated_at: true,
+			created_at: true,
 			links: {
 				note: true,
 				url: true

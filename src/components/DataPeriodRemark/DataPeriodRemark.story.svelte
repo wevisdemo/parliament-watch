@@ -7,10 +7,10 @@
 
 <Hst.Story title="DataPeriodRemark" layout={{ type: 'grid' }}>
 	<Hst.Variant title="With Start Date">
-		<DataPeriodRemark withStartDate />
+		<DataPeriodRemark updatedAt="2025-01-15" withStartDate />
 	</Hst.Variant>
 
 	<Hst.Variant title="Without Start Date">
-		<DataPeriodRemark />
+		<DataPeriodRemark updatedAt="2025-01-15" />
 	</Hst.Variant>
 </Hst.Story>
