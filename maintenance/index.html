@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="th">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="noindex" />
+		<title>Parliament Watch</title>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="https://cdn.jsdelivr.net/gh/wevisdemo/parliament-watch@main/static/favicon-32x32.png"
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			@font-face {
+				font-family: 'Kondolar Thai';
+				font-weight: 700;
+				font-display: swap;
+				src: url(https://design-systems.wevis.info/KondolarThai-Bold.otf) format('opentype');
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				min-height: 100svh;
+				display: flex;
+				flex-direction: column;
+				font-family: 'IBM Plex Sans Thai Looped', ui-sans-serif, system-ui, sans-serif;
+				color: #161616;
+				background: #fff;
+			}
+			header {
+				position: relative;
+				flex: 1;
+				min-height: 400px;
+				overflow: hidden;
+				background: linear-gradient(to top, #cceeff, #fdfeff);
+			}
+			header img {
+				position: absolute;
+				bottom: 0;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 100%;
+				max-width: 1280px;
+				height: auto;
+			}
+			header div {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 10px;
+				padding: 0 16px 80px;
+				text-align: center;
+			}
+			h1 {
+				margin: 0;
+				max-width: 1280px;
+				font-family: 'Kondolar Thai', ui-serif, Georgia, serif;
+				font-weight: 700;
+				line-height: 1.19;
+				font-size: 2.625rem;
+				text-wrap: balance;
+			}
+			@media (min-width: 42rem) {
+				h1 {
+					font-size: calc(2.625rem + 0.75 * (100vw - 42rem) / 24);
+				}
+			}
+			@media (min-width: 66rem) {
+				h1 {
+					font-size: calc(3.375rem + 0.375 * (100vw - 66rem) / 16);
+				}
+			}
+			p {
+				margin: 0;
+				max-width: 40rem;
+				font-size: 1rem;
+				line-height: 1.5;
+			}
+			small {
+				font-size: 0.75rem;
+				line-height: 1.33;
+				color: #6f6f6f;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<img
+				src="https://cdn.jsdelivr.net/gh/wevisdemo/parliament-watch@main/static/images/sapasathan.svg"
+				alt=""
+				width="634"
+				height="153"
+			/>
+			<div>
+				<h1>ปิดปรับปรุงชั่วคราว</h1>
+				<p>
+					Parliament Watch กำลังอัปเดตระบบและฐานข้อมูล
+					<span style="white-space: nowrap">กรุณากลับมาใหม่อีกครั้งในอีกสักครู่</span>
+				</p>
+				<small>We are updating our system. Please check back shortly.</small>
+			</div>
+		</header>
+	</body>
+</html>

@@ -13,6 +13,7 @@ Citizens are watching.
 - [🌎 Deployment](#-deployment)
   - [One-time server setup](#one-time-server-setup)
   - [Rollback](#rollback)
+  - [Maintenance mode](#maintenance-mode)
 - [🍱 Tech Stack](#-tech-stack)
   - [Front-end](#front-end)
   - [Local development](#local-development)
@@ -77,6 +78,17 @@ docker compose up -d production
 ```
 
 `docker image ls parliament-watch` lists what is available.
+
+### Maintenance mode
+
+Caddy serves `maintenance/index.html` with `503` + `Retry-After` whenever the app container is unreachable, so stopping the container _is_ maintenance mode. For a planned window (DB migration, Politigraph upgrade):
+
+1. Skip `update-ranking.yml` if the window overlaps the 1st of the month; it queries Politigraph from GitHub Actions.
+2. `docker compose stop production staging` — the maintenance page appears immediately and no Politigraph queries are made.
+3. Migrate the database and update Politigraph.
+4. Run the staging workflow (the build prerenders pages, so Politigraph must be back), verify on pwstaging, then promote to production.
+
+After editing `Caddyfile` or the page, reload with `docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile`.
 
 ## 🍱 Tech Stack
 

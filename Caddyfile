@@ -1,11 +1,28 @@
+(maintenance) {
+	handle_errors {
+		@down expression {err.status_code} in [502, 503, 504]
+		handle @down {
+			header Retry-After 3600
+			header Cache-Control no-store
+			rewrite * /
+			file_server {
+				root /srv/maintenance
+				status 503
+			}
+		}
+	}
+}
+
 parliamentwatch.wevis.info {
 	tls internal
 	encode zstd gzip
 	reverse_proxy production:3000
+	import maintenance
 }
 
 pwstaging.wevis.info {
 	tls internal
 	encode zstd gzip
 	reverse_proxy staging:3000
+	import maintenance
 }

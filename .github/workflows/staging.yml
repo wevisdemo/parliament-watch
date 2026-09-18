@@ -45,7 +45,7 @@ jobs:
           remote_key: ${{ secrets.SSH_KEY }}
           remote_path: ${{ secrets.SSH_PATH }}
           switches: -azvP
-          path: parliament-watch-image.tar.gz Caddyfile docker-compose.yml
+          path: parliament-watch-image.tar.gz Caddyfile docker-compose.yml maintenance
       - name: Load image and deploy staging
         uses: appleboy/ssh-action@v1
         with:
