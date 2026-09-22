@@ -28,30 +28,6 @@ export interface BillSummary {
 	status: BillStatus;
 }
 
-async function queryLatestBillsProposedBy(organizationId: string): Promise<BillSummary[]> {
-	const { bills } = await graphql.query({
-		bills: {
-			__args: {
-				where: { creators: { some: { Organization: { id: { eq: organizationId } } } } }
-			},
-			id: true,
-			title: true,
-			nickname: true,
-			status: true,
-			proposal_date: true
-		}
-	});
-
-	return bills
-		.map(({ status, proposal_date, ...bill }) => ({
-			...setBillNicknameFromTitleAsFallback(bill),
-			proposalDate: proposal_date,
-			status
-		}))
-		.toSorted((a, z) => (z.proposalDate ?? '').localeCompare(a.proposalDate ?? ''))
-		.slice(0, MAX_LATEST_BILL);
-}
-
 export interface Summary {
 	totalMembers: number;
 	highlightGroup: MemberGroup[];
@@ -70,7 +46,7 @@ export interface MemberGroup {
 
 export async function load({ params }) {
 	const {
-		organizations: [assembly]
+		organizations: [organization]
 	} = await graphql.query({
 		organizations: {
 			__args: {
@@ -87,13 +63,30 @@ export async function load({ params }) {
 			founding_date: true,
 			dissolution_date: true,
 			updated_at: true,
-			created_at: true
+			created_at: true,
+			created_motions: {
+				__args: {
+					where: { typename: ['Bill'] },
+					sort: [{ proposal_date: 'DESC' }],
+					limit: MAX_LATEST_BILL
+				},
+				__typename: true,
+				on_Bill: {
+					id: true,
+					title: true,
+					nickname: true,
+					status: true,
+					proposal_date: true
+				}
+			}
 		}
 	});
 
-	if (!assembly) {
+	if (!organization) {
 		error(404);
 	}
+
+	const { created_motions, ...assembly } = organization;
 
 	const [availableAssemblies, members] = await Promise.all([
 		getAvailableAssemblies({ classification: assembly.classification }),
@@ -237,10 +230,19 @@ export async function load({ params }) {
 				}
 			});
 
-	const [latestVoteEvents, latestBills]: [VoteCardProps[], BillSummary[]] = await Promise.all([
-		Promise.all(voteEvents.map((voteEvent) => toVoteCardProps(voteEvent))),
-		isCabinet ? queryLatestBillsProposedBy(assembly.id) : []
-	]);
+	const latestVoteEvents: VoteCardProps[] = await Promise.all(
+		voteEvents.map((voteEvent) => toVoteCardProps(voteEvent))
+	);
+
+	const latestBills: BillSummary[] = isCabinet
+		? created_motions
+				.filter((motion) => motion.__typename === 'Bill')
+				.map(({ status, proposal_date, ...bill }) => ({
+					...setBillNicknameFromTitleAsFallback(bill),
+					proposalDate: proposal_date,
+					status
+				}))
+		: [];
 
 	const changes = isCabinet ? getRoleChanges(assembly.id, members, MAX_CHANGES) : null;
 
