@@ -31,7 +31,7 @@ jobs:
         run: docker build -t parliament-watch:${{ github.sha }} .
       - name: Smoke test the image (pre-deploy)
         run: |
-          docker run -d --name smoke -p 3000:3000 parliament-watch:${{ github.sha }}
+          docker run -d --name smoke -p 3000:3000 -e POLITIGRAPH_CLIENT_NAME=parliament-watch-ci parliament-watch:${{ github.sha }}
           timeout 60 bash -c 'until curl -fsS http://localhost:3000/healthz > /dev/null; do sleep 2; done'
           E2E_BASE_URL=http://localhost:3000 pnpm run test:e2e
           docker rm -f smoke

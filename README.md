@@ -222,6 +222,7 @@ All variables are optional for local development; production values are set in [
 | `ORIGIN`                         | Public origin, required by the Node adapter for absolute URLs and CSRF                             |
 | `PORT`                           | Server listen port (default 3000)                                                                  |
 | `POLITIGRAPH_URL`                | GraphQL endpoint (default `https://politigraph.wevis.info/graphql`; a local address in production) |
+| `POLITIGRAPH_CLIENT_NAME`        | `apollographql-client-name` header sent to politigraph (default `parliament-watch-dev`)            |
 | `POLITIGRAPH_REQUEST_PER_SECOND` | Upstream rate limit (safety valve, default 3)                                                      |
 | `POLITIGRAPH_CACHE_TTL_SECONDS`  | Query result cache TTL, `0` disables (default 900)                                                 |
 | `POLITIGRAPH_CACHE_MAX_ENTRIES`  | Query result cache entry-count bound (default 500)                                                 |

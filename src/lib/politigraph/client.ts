@@ -3,6 +3,7 @@ import { LRUCache } from 'lru-cache';
 import { createHash } from 'node:crypto';
 
 const GRAPHQL_URL = process.env.POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql';
+export const CLIENT_NAME = process.env.POLITIGRAPH_CLIENT_NAME || 'parliament-watch-dev';
 
 const RATE_LIMIT = Number(process.env.POLITIGRAPH_REQUEST_PER_SECOND) || 3;
 
@@ -77,7 +78,8 @@ async function executeBatch(batch: QueuedQuery[]) {
 		const response = await fetch(GRAPHQL_URL, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'apollographql-client-name': CLIENT_NAME
 			},
 			body: JSON.stringify(queries)
 		});

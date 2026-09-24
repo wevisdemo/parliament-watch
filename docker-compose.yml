@@ -43,6 +43,7 @@ services:
       # Keep V8's heap under mem_limit so it GCs before the container is OOM-killed
       NODE_OPTIONS: --max-old-space-size=448
       POLITIGRAPH_URL: $POLITIGRAPH_URL
+      POLITIGRAPH_CLIENT_NAME: parliament-watch-prod
       POLITIGRAPH_REQUEST_PER_SECOND: 25
       POLITIGRAPH_CACHE_TTL_SECONDS: 900
       LOG_TARGET: stdout
@@ -61,6 +62,7 @@ services:
       PORT: 3000
       NODE_OPTIONS: --max-old-space-size=144
       POLITIGRAPH_URL: $POLITIGRAPH_URL
+      POLITIGRAPH_CLIENT_NAME: parliament-watch-staging
       POLITIGRAPH_REQUEST_PER_SECOND: 25
       POLITIGRAPH_CACHE_TTL_SECONDS: 60
       POLITIGRAPH_CACHE_MAX_ENTRIES: 100

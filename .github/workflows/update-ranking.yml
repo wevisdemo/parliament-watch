@@ -24,6 +24,8 @@ jobs:
         run: pnpm run test run
       - name: Fetch politician ranking data
         run: pnpm run update:politician-ranking
+        env:
+          POLITIGRAPH_CLIENT_NAME: parliament-watch-ranking
       - name: Deploy to Github Page
         uses: JamesIves/github-pages-deploy-action@v4
         with:
