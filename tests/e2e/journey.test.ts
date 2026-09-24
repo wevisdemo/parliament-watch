@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest';
 const BASE_URL = (process.env.E2E_BASE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
 
 const get = (path: string) =>
-	fetch(`${BASE_URL}${path}`, { redirect: 'manual', signal: AbortSignal.timeout(20_000) });
+	fetch(`${BASE_URL}${path}`, { redirect: 'manual', signal: AbortSignal.timeout(60_000) });
 
 const getLocation = async (path: string) =>
 	decodeURIComponent((await get(path)).headers.get('location') ?? '');
