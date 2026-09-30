@@ -113,6 +113,8 @@
 					<li>น้ำใส ศุภวงศ์</li>
 					<li>พิชญา โชนะโต</li>
 					<li>มนสิชา ศรีสวนแตง</li>
+					<li>สปัญญา ศรีสุข</li>
+					<li>ชินธิป เอกก้านตรง</li>
 				</ul>
 			</div>
 			<div class="mt-2">
@@ -120,6 +122,8 @@
 				<ul class="name-list">
 					<li>อาลาวีย์ วาแม</li>
 					<li>ภัณฑิรา มั่นสัมฤทธิ์</li>
+					<li>อัญชิสา บุญแก้ว</li>
+					<li>ณภัทร แต้เถา</li>
 				</ul>
 			</div>
 			<div class="mt-2">
@@ -152,14 +156,29 @@
 						target="_blank"
 						rel="nofollow noopener noreferrer"
 						>กองทุนรวม<span class="whitespace-nowrap">ธรรมาภิบาลไทย</span> (CG Fund)</a
-					> ซึ่งนำมาใช้เป็นต้นทุนในการรวบรวมข้อมูล ออกแบบ พัฒนาเว็บไซต์ ประสานงาน บริหารจัดการ ตลอดจนการจัด
-					Meetup เพื่อดำเนินโครงการ
+					>
+					ซึ่งนำมาใช้เป็นต้นทุนในการรวบรวมข้อมูล ออกแบบ พัฒนาเว็บไซต์ ประสานงาน บริหารจัดการ ตลอดจนการจัด
+					Meetup เพื่อดำเนินโครงการ และได้รับการสนับสนุนเซิร์ฟเวอร์จาก
+					<a
+						href="https://nimblo.cloud/"
+						target="_blank"
+						rel="sponsored nofollow noopener noreferrer">Nimblo Cloud</a
+					>
 				</p>
 			</div>
 		</section>
 		<section class="flex flex-col gap-2 py-6 md:py-9">
 			<h2 id="เกี่ยวกับข้อมูลในเว็บไซต์" class="fluid-heading-04">เกี่ยวกับข้อมูลในเว็บไซต์</h2>
 			<hr class="border-t-solid my-2 border-t border-t-ui-03" role="none" />
+
+			<p>
+				ข้อมูลทั้งหมดในเว็บไซต์นี้มาจาก
+				<a href="https://politigraph.wevis.info/" target="_blank" rel="noopener noreferrer"
+					>Politigraph</a
+				>
+				ฐานข้อมูลเปิดด้านการเมืองไทยที่ WeVis พัฒนาและดูแล รายละเอียดในหน้านี้เป็นเพียงสรุป โปรดอ้างอิงเอกสารของ
+				Politigraph เป็นหลัก
+			</p>
 
 			<h3 id="ที่มาและข้อจำกัดข้อมูล" class="fluid-heading-03 mt-2">ที่มาและข้อจำกัดข้อมูล</h3>
 			<ul class="list-disc">
@@ -172,65 +191,77 @@
 						rel="nofollow noopener noreferrer">msbis.parliament.go.th</a
 					>
 					โดยมีจำนวนน้อยกว่ามติที่มีการโหวตจริง เนื่องจากเว็บไซต์ต้นทางมักเผยแพร่ไม่ครบหรือไม่ทันทีหลังการโหวต
-					และฐานข้อมูลนี้ไม่รวมการลงมติร่างกฎหมายวาระ 2 ซึ่งเป็นการลงมติรายมาตราที่มีจำนวนมาก
+					และฐานข้อมูลนี้ไม่รวมการลงมติร่างกฎหมายวาระ 2 ซึ่งเป็นการลงมติรายมาตราที่มีจำนวนมาก (<a
+						href="https://politigraph.wevis.info/schema/vote-event/#การอัพเดตข้อมูลและสถานะการเผยแพร่"
+						target="_blank"
+						rel="noopener noreferrer">อ่านเพิ่มเติมใน Politigraph</a
+					>)
 				</li>
 				<li>
-					<strong>การเสนอกฎหมาย:</strong> มาจากเว็บไซต์ระบบสารสนเทศด้านนิตียบัญญัติ
+					<strong>การเสนอกฎหมาย:</strong> มาจากเว็บไซต์ระบบสารสนเทศด้านนิติบัญญัติ
 					<a href="http://lis.parliament.go.th/" target="_blank" rel="nofollow noopener noreferrer"
 						>lis.parliament.go.th</a
 					>
-					ซึ่งไม่ได้เผยแพร่ทันทีที่สถานะของร่างกฎหมายมีการเปลี่ยนแปลง
+					ซึ่งไม่ได้เผยแพร่ทันทีที่สถานะของร่างกฎหมายมีการเปลี่ยนแปลง (<a
+						href="https://politigraph.wevis.info/schema/bill/#การอัพเดตข้อมูลและสถานะการเผยแพร่"
+						target="_blank"
+						rel="noopener noreferrer">อ่านเพิ่มเติมใน Politigraph</a
+					>)
 				</li>
 			</ul>
 
 			<h3 id="กระบวนการจัดทำข้อมูล" class="fluid-heading-03 mt-2">กระบวนการจัดทำข้อมูล</h3>
-			<ul class="list-disc">
-				<li>
-					ในกรณีที่ข้อมูลต้นทางอยู่ในรูปแบบไฟล์เอกสาร PDF หรือรูปภาพ
-					ข้อมูลจะถูกแปลงเป็นตารางด้วยวิธี OCR
-					ซึ่งอาจมีความคลาดเคลื่อนขึ้นอยู่กับคุณภาพของไฟล์ต้นทาง
-				</li>
-				<li>
-					ในกรณีที่ข้อมูลต้นทางเป็นเนื้อหาบนเว็บไซต์โดยตรง ข้อมูลจะถูกดึง (scrape)
-					และนำมาจัดโครงสร้างใหม่ในรูปแบบ machine-readable
-				</li>
-				<li>
-					แม้จะมีการตรวจสอบความถูกต้องเบื้องต้นโดยทีมงานแล้ว ข้อมูลอาจยังมีความคลาดเคลื่อนอยู่บ้าง
-					จึงแนะนำให้ตรวจสอบกับข้อมูลต้นทางก่อนนำไปใช้อ้างอิงหากพบข้อมูลที่ไม่ถูกต้องหรือไม่เป็นปัจจุบัน
-					มีข้อสงสัย ต้องการสอบถาม แจ้งแก้ไขเพิ่มเติมข้อมูล หรือมีข้อเสนอแนะ สามารถติดต่อได้ที่
-					<a href="mailto:team@wevis.info">team@wevis.info</a>
-				</li>
-			</ul>
+			<p>
+				Politigraph รวบรวมข้อมูลจากเว็บไซต์ทางการของภาครัฐด้วยระบบอัตโนมัติ แปลงให้อยู่ในรูปแบบ
+				machine-readable และมีทีมข้อมูลของ WeVis คอยตรวจทาน
+				<a
+					href="https://politigraph.wevis.info/getting-started/#โครงสร้างของระบบ"
+					target="_blank"
+					rel="noopener noreferrer">อ่านขั้นตอนการจัดทำข้อมูลใน Politigraph</a
+				>
+				และดู<a
+					href="https://politigraph.wevis.info/schema/timestamps/"
+					target="_blank"
+					rel="noopener noreferrer">รอบการอัปเดตข้อมูล</a
+				>
+			</p>
+			<p>
+				แม้จะมีการตรวจสอบความถูกต้องโดยทีมงานแล้ว ข้อมูลอาจยังมีความคลาดเคลื่อนอยู่บ้าง
+				จึงแนะนำให้ตรวจสอบกับข้อมูลต้นทางก่อนนำไปใช้อ้างอิง
+				หากพบข้อมูลที่ไม่ถูกต้องหรือไม่เป็นปัจจุบัน มีข้อสงสัย หรือมีข้อเสนอแนะ สามารถติดต่อได้ที่
+				<a href="mailto:team@wevis.info">team@wevis.info</a>
+			</p>
 
 			<h3 id="นโยบายการนำข้อมูลไปใช้ต่อ" class="fluid-heading-03 mt-2">
 				นโยบายการนำข้อมูลไปใช้ต่อ
 			</h3>
 			<p>
-				ทีมงานตั้งใจเปิดข้อมูลเป็น Open Data ภายใต้เงื่อนไข<a
+				ข้อมูลเปิดเป็น Open Data ภายใต้เงื่อนไข
+				<a
 					href="https://creativecommons.org/licenses/by-nc/4.0/"
 					target="_blank"
-					rel="nofollow noopener noreferrer">Attribution-NonCommercial 4.0 International</a
+					rel="nofollow noopener noreferrer">CC BY-NC 4.0</a
 				>
-				ซึ่งหมายถึง สามารถนำข้อมูลไปใช้ ดัดแปลง ต่อยอดได้ แต่ห้ามนำไปใช้ทางการค้าหรือแสวงหาผลกำไรจากผลงาน
-				และต้องให้เครดิตกับ WeVis
+				ตาม<a
+					href="https://politigraph.wevis.info/getting-started/usage/#การอนุญาตใช้งาน-license"
+					target="_blank"
+					rel="noopener noreferrer">การอนุญาตใช้งานของ Politigraph</a
+				>
+				หากต้องการนำข้อมูลไปใช้ต่อ สามารถดาวน์โหลดไฟล์ CSV จากหน้าต่างๆ ในเว็บไซต์นี้ หรือดึงข้อมูลโดยตรงผ่าน
+				<a
+					href="https://politigraph.wevis.info/getting-started/usage/"
+					target="_blank"
+					rel="noopener noreferrer">Politigraph API</a
+				>
 			</p>
 			<p>
-				ข้อมูลทั้งหมดภายในเว็บไซต์ถูกรวบจากช่องทางต่างๆ ภายใต้ข้อจำกัดในหลายๆ ด้าน ทาง WeVis
-				ไม่สามารถรับผิดชอบต่อผลกระทบใดๆ หากมีข้อมูลที่ผิดพลาดหรือไม่อัปเดตล่าสุด
-				หากมีข้อสงสัยต้องการสอบถามเพิ่มเติม
-				ประสงค์แจ้งเปลี่ยนแปลงหรือเพิ่มเติมข้อมูลเพื่อความถูกต้อง หรือมีข้อเสนอแนะใดๆ
-				สามารถติดต่อได้ที่ team@wevis.info
-			</p>
-			<p>
-				ด้าน Source Code ทางทีมมีความตั้งใจที่พัฒนาทุกโปรเจ็กต์ให้เป็น Open Source ภายใต้เงื่อนไข <a
+				ส่วน Source Code ของเว็บไซต์นี้เปิดเป็น Open Source ภายใต้เงื่อนไข
+				<a
 					href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
 					target="_blank"
-					rel="nofollow noopener noreferrer"
-					>Attribution-NonCommercial-ShareAlike 4.0 International</a
+					rel="nofollow noopener noreferrer">CC BY-NC-SA 4.0</a
 				>
-				ซึ่งหมายถึง สามารถนำผลงานไปใช้ ดัดแปลง ต่อยอดได้ แต่ห้ามนำไปใช้ทางการค้าหรือแสวงหาผลกำไรจากผลงาน
-				และต้องแจ้งทราบและให้เครดิตกับเจ้าของผลงาน โดยที่ผลงานที่เกิดขึ้นมาจะต้องอยู่ภายใต้เงื่อนไขแบบเดียวกันกับใบอนุญาต
-				Creative Commons ของต้นฉบับ โดย WeVis Ltd. และ Punch Up Ltd. เป็น ผู้อนุญาต (licensor) ร่วมกัน
+				โดย WeVis Ltd. และ Punch Up Ltd. เป็นผู้อนุญาต (licensor) ร่วมกัน
 			</p>
 		</section>
 		<section class="flex flex-col gap-2 py-6 md:py-9">

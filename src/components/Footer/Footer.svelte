@@ -34,38 +34,37 @@
 			href="https://www.opensocietyfoundations.org/"
 			target="_blank"
 			rel="nofollow noopener noreferrer">กองทุนรวมธรรมาภิบาลไทย (CG Fund)</a
-		> ซึ่งนำมาใช้เป็นต้นทุนในการรวมรวมข้อมูล ออกแบบ พัฒนาเว็บไซต์ ประสานงาน บริหารจัดการ ตลอดจนการจัด
-		Meetup เพื่อดำเนินโครงการ
+		>
+		ซึ่งนำมาใช้เป็นต้นทุนในการรวมรวมข้อมูล ออกแบบ พัฒนาเว็บไซต์ ประสานงาน บริหารจัดการ ตลอดจนการจัด Meetup
+		เพื่อดำเนินโครงการ และได้รับการสนับสนุนเซิร์ฟเวอร์จาก
+		<a href="https://nimblo.cloud/" target="_blank" rel="sponsored nofollow noopener noreferrer"
+			>Nimblo Cloud</a
+		>
 	</p>
 	<div class="max-w-[1200px]">
 		<div class="font-semibold">ข้อตกลงในการใช้งาน (Terms of Use)</div>
 
 		<div>
-			ทีมงานตั้งใจเปิดข้อมูลเป็น Open Data ภายใต้เงื่อนไข<a
+			ข้อมูลในเว็บไซต์นี้มาจาก
+			<a href="https://politigraph.wevis.info/" target="_blank" rel="noopener noreferrer"
+				>Politigraph</a
+			>
+			เปิดเป็น Open Data ภายใต้เงื่อนไข
+			<a
 				href="https://creativecommons.org/licenses/by-nc/4.0/"
 				target="_blank"
-				rel="nofollow noopener noreferrer">Attribution-NonCommercial 4.0 International</a
+				rel="nofollow noopener noreferrer">CC BY-NC 4.0</a
 			>
-			ซึ่งหมายถึง สามารถนำข้อมูลไปใช้ ดัดแปลง ต่อยอดได้ แต่ห้ามนำไปใช้ทางการค้าหรือแสวงหาผลกำไรจากผลงาน
-			และต้องให้เครดิตกับ WeVis
-		</div>
-
-		<div>
-			ข้อมูลทั้งหมดภายในเว็บไซต์ถูกรวบจากช่องทางต่างๆ ภายใต้ข้อจำกัดในหลายๆ ด้าน ทาง WeVis
-			ไม่สามารถรับผิดชอบต่อผลกระทบใดๆ หากมีข้อมูลที่ผิดพลาดหรือไม่อัปเดตล่าสุด
-			หากมีข้อสงสัยต้องการสอบถามเพิ่มเติม ประสงค์แจ้งเปลี่ยนแปลงหรือเพิ่มเติมข้อมูลเพื่อความถูกต้อง
-			หรือมีข้อเสนอแนะใดๆ สามารถติดต่อได้ที่ team@wevis.info
-		</div>
-
-		<div>
-			ด้าน Source Code ทางทีมมีความตั้งใจที่พัฒนาทุกโปรเจ็กต์ให้เป็น Open Source ภายใต้เงื่อนไข <a
+			ส่วน Source Code เปิดเป็น Open Source ภายใต้เงื่อนไข
+			<a
 				href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
 				target="_blank"
-				rel="nofollow noopener noreferrer">Attribution-NonCommercial-ShareAlike 4.0 International</a
+				rel="nofollow noopener noreferrer">CC BY-NC-SA 4.0</a
 			>
-			ซึ่งหมายถึง สามารถนำผลงานไปใช้ ดัดแปลง ต่อยอดได้ แต่ห้ามนำไปใช้ทางการค้าหรือแสวงหาผลกำไรจากผลงาน
-			และต้องแจ้งทราบและให้เครดิตกับเจ้าของผลงาน โดยที่ผลงานที่เกิดขึ้นมาจะต้องอยู่ภายใต้เงื่อนไขแบบเดียวกันกับใบอนุญาต
-			Creative Commons ของต้นฉบับ โดย WeVis Ltd. และ Punch Up Ltd. เป็น ผู้อนุญาต (licensor) ร่วมกัน
+			และเนื่องจากข้อมูลทั้งหมดภายในเว็บไซต์ถูกรวบจากช่องทางต่างๆ ภายใต้ข้อจำกัดในหลายๆ ด้าน ทาง WeVis
+			ไม่สามารถรับผิดชอบต่อผลกระทบใดๆ หากมีข้อมูลที่ผิดพลาดหรือไม่อัปเดตล่าสุด หากมีข้อสงสัยต้องการสอบถามเพิ่มเติม
+			ประสงค์แจ้งเปลี่ยนแปลงหรือเพิ่มเติมข้อมูลเพื่อความถูกต้อง หรือมีข้อเสนอแนะใดๆ สามารถติดต่อได้ที่
+			team@wevis.info
 		</div>
 	</div>
 </div>
