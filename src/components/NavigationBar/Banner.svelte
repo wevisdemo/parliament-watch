@@ -1,5 +1,5 @@
 <script lang="ts">
-	const alt = 'WeVis Paliament Watch';
+	const alt = 'WeVis Parliament Watch';
 </script>
 
 <a href="/" class="flex items-center px-4">
