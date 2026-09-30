@@ -8,7 +8,9 @@ interface ContributorResponse {
 }
 
 export async function load({ fetch }) {
-	const res = await fetch('https://api.github.com/repos/wevisdemo/parliament-watch/contributors');
+	const res = await fetch(
+		'https://api.github.com/repos/wevisdemo/parliament-watch/contributors?per_page=100'
+	);
 
 	if (!res.ok) {
 		throw new Error(`Can not fetch Github contributors: ${res.status} ${res.statusText}`);
