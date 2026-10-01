@@ -48,6 +48,8 @@ This project can be seen as a renovated combination of [They Work for Us](https:
 | Production            | https://parliamentwatch.wevis.info |
 | Staging (main branch) | https://pwstaging.wevis.info       |
 
+The server is sponsored by [Nimblo Cloud](https://nimblo.cloud/).
+
 The app is served with SvelteKit's Node adapter as a Docker container. Staging and production run as two [docker-compose.yml](docker-compose.yml) services on the same server, reaching Politigraph's origin server directly (bypassing Cloudflare — see server setup below), selected by image alias tags: CI loads an immutable `parliament-watch:<git-sha>` image on the server, then moves the `:latest` (staging) / `:production` tag and restarts only that service.
 
 Each service is memory-capped in [docker-compose.yml](docker-compose.yml) (`mem_limit` plus `NODE_OPTIONS=--max-old-space-size` set below it, so V8 garbage-collects before the container is OOM-killed). With Politigraph on a separate host, caddy + production + staging fit on a **1 GB** server. Production is prioritized for real users; staging is capped well below production's budget. The per-service LRU result cache is bounded by both entry count (`POLITIGRAPH_CACHE_MAX_ENTRIES`) and total bytes (`POLITIGRAPH_CACHE_MAX_BYTES`) so it evicts instead of growing unbounded. A ~1 GB swap file is recommended as a spike buffer.
@@ -106,14 +108,14 @@ After editing `Caddyfile` or the page, reload with `docker compose exec caddy ca
 - Husky and lint-staged will
   - Lint (ESLint) and format (Prettier) code before committing
   - Validate that commit message is aligned with [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) using commitlint
-  - Run svelte-check before pushing
-- For VS Code users, format on save is enabled and the [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) will be recommended when you open the project.
-- [Hygen](http://www.hygen.io) for code generation
+  - Run svelte-check and unit tests before pushing
+- For VS Code users, the workspace settings enable format on save with the [prettier-vscode extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
+- [Hygen](https://github.com/jondot/hygen) for code generation
 
 ### CI/CD pipeline
 
-- **Staging**: Each push to `main` triggers the [GitHub Actions workflow](.github/workflows/staging.yml) to test, build the Docker image, rsync it to the server as a tarball, load and start the staging container, and poll `/healthz`. It can also be triggered manually.
-- **Production**: The [production workflow](.github/workflows/production.yml) can only be triggered manually. It does not rebuild: over SSH, it retags the image validated on staging as `:production`, restarts the production service, and polls `/healthz` — exact-bits promotion. It then stops the staging container (now a duplicate of production) to free server resources until the next push to `main` deploys a fresh staging build.
+- **Staging**: Each push to `main` triggers the [GitHub Actions workflow](.github/workflows/staging.yml) to test, build the Docker image, run the e2e smoke tests against the image, rsync it to the server as a tarball, load and start the staging container, wait for `/healthz`, then run the e2e smoke tests again against pwstaging.
+- **Production**: The [production workflow](.github/workflows/production.yml) can only be triggered manually, and refuses to run unless the latest staging run succeeded. It does not rebuild: over SSH, it retags the image validated on staging as `:production`, restarts the production service, and polls `/healthz` — exact-bits promotion. It then stops the staging container (now a duplicate of production) to free server resources until the next push to `main` deploys a fresh staging build.
 
 ## 💾 Data Source
 
@@ -124,19 +126,26 @@ flowchart TD
     B[Politigraph's GraphQL] --> |fetched by| C(GenQL's generated client)
     C --> |used in| D(Svelte's routes)
     D --> |Svelte SSR| E(dev/prod website)
-    C --> |used in| G(Scheduled GitHub Action)
-    F(External data source) --> |fetched by| G
-    G --> |build| H(JSON on GitHub Page)
-    H --> |fetched by| E(SvelteKit SSR Website)
+    C --> |used in| G(Monthly GitHub Action)
+    F(Wikipedia page views) --> |fetched by| G
+    G --> |build| H(Politician ranking JSON on GitHub Pages)
+    H --> |fetched by| E
 ```
+
+The data is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) as described in [Politigraph's license](https://politigraph.wevis.info/getting-started/usage/#การอนุญาตใช้งาน-license). The source code of this project is licensed under [CC BY-NC-SA 4.0](LICENSE).
 
 ## 🗃️ Directory Structure
 
 - **/\_templates** Hygen's code generation templates
 - **/.husky** Husky's git hooks
+- **/docs** Planning documents
+- **/maintenance** Maintenance page served by Caddy
+- **/scripts** One-off scripts such as benchmarks and data migrations
 - **/src** main source code
   - **/components** Svelte's components
-  - **/mocks** Mock data while we still do not have a backend
+  - **/constants** Shared constants such as menus and announcements
+  - **/lib** Shared logic, including the Politigraph client and its cache
+  - **/mocks** Mock data for Histoire stories
   - **/models** Main data structures defined with TypeScript interfaces
   - **/routes** SvelteKit's routes
   - **/styles** Stylesheets, including the custom Carbon Design System, Tailwind, and fonts
@@ -217,17 +226,19 @@ The project design system is based on Carbon Design System v10 with some modific
 
 All variables are optional for local development; production values are set in [docker-compose.yml](docker-compose.yml).
 
-| Variable                         | Meaning                                                                                            |
-| -------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `ORIGIN`                         | Public origin, required by the Node adapter for absolute URLs and CSRF                             |
-| `PORT`                           | Server listen port (default 3000)                                                                  |
-| `POLITIGRAPH_URL`                | GraphQL endpoint (default `https://politigraph.wevis.info/graphql`; a local address in production) |
-| `POLITIGRAPH_CLIENT_NAME`        | `apollographql-client-name` header sent to politigraph (default `parliament-watch-dev`)            |
-| `POLITIGRAPH_REQUEST_PER_SECOND` | Upstream rate limit (safety valve, default 3)                                                      |
-| `POLITIGRAPH_CACHE_TTL_SECONDS`  | Query result cache TTL, `0` disables (default 900)                                                 |
-| `POLITIGRAPH_CACHE_MAX_ENTRIES`  | Query result cache entry-count bound (default 500)                                                 |
-| `POLITIGRAPH_CACHE_MAX_BYTES`    | Query result cache total-size bound in bytes (default 33554432, i.e. 32 MiB)                       |
-| `LOG_TARGET`                     | `stdout` or `file` for pino logs (see [logger.ts](src/lib/logger.ts))                              |
+| Variable                         | Meaning                                                                                                                       |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `ORIGIN`                         | Public origin, required by the Node adapter for absolute URLs and CSRF                                                        |
+| `PORT`                           | Server listen port (default 3000)                                                                                             |
+| `POLITIGRAPH_URL`                | GraphQL endpoint (default `https://politigraph.wevis.info/graphql`)                                                           |
+| `POLITIGRAPH_ORIGIN_IP`          | Server `.env` only: Politigraph origin IP that docker-compose pins the domain to (see [server setup](#one-time-server-setup)) |
+| `POLITIGRAPH_CLIENT_NAME`        | `apollographql-client-name` header sent to politigraph (default `parliament-watch-dev`)                                       |
+| `POLITIGRAPH_REQUEST_PER_SECOND` | Upstream rate limit (safety valve, default 3)                                                                                 |
+| `POLITIGRAPH_CACHE_TTL_SECONDS`  | Query result cache TTL, `0` disables (default 900)                                                                            |
+| `POLITIGRAPH_CACHE_MAX_ENTRIES`  | Query result cache entry-count bound (default 500)                                                                            |
+| `POLITIGRAPH_CACHE_MAX_BYTES`    | Query result cache total-size bound in bytes (default 33554432, i.e. 32 MiB)                                                  |
+| `LOG_TARGET`                     | `stdout` or `file` for pino logs (see [logger.ts](src/lib/logger.ts))                                                         |
+| `E2E_BASE_URL`                   | Server URL that `pnpm run test:e2e` runs against                                                                              |
 
 ## 🤝 Contributing Guideline
 
