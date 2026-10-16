@@ -19,6 +19,9 @@
 
 <svelte:head>
 	<title>{[page.status, message, '- Parliament Watch'].filter(Boolean).join(' ')}</title>
+	{#if page.status === 404}
+		<meta name="robots" content="noindex" />
+	{/if}
 </svelte:head>
 
 <div
