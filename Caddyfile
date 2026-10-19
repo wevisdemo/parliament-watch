@@ -16,7 +16,6 @@
 parliamentwatch.wevis.info {
 	tls internal
 	encode zstd gzip
-	header X-Robots-Tag noindex
 	reverse_proxy production:3000
 	import maintenance
 }
