@@ -59,7 +59,7 @@ jobs:
             rm parliament-watch-image.tar.gz
             docker tag parliament-watch:${{ github.sha }} parliament-watch:latest
             docker compose up -d caddy
-            docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
+            timeout 30 sh -c 'until docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile; do sleep 1; done'
             docker compose up -d --wait staging
             docker image ls parliament-watch --format '{{.Tag}}' \
               | grep -vE '^(latest|production)$' | tail -n +4 \
