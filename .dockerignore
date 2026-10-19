@@ -5,5 +5,5 @@ build
 .git
 .github
 docker-compose.yml
-Caddyfile
+caddy
 .env*

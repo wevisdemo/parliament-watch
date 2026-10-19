@@ -21,7 +21,7 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy:/etc/caddy:ro
       - ./maintenance:/srv/maintenance:ro
       - caddy:/data
 
