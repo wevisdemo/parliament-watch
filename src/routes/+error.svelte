@@ -19,6 +19,7 @@
 
 <svelte:head>
 	<title>{[page.status, message, '- Parliament Watch'].filter(Boolean).join(' ')}</title>
+	<meta name="robots" content="noindex" />
 </svelte:head>
 
 <div

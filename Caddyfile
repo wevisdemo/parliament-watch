@@ -23,6 +23,7 @@ parliamentwatch.wevis.info {
 pwstaging.wevis.info {
 	tls internal
 	encode zstd gzip
+	header X-Robots-Tag noindex
 	reverse_proxy staging:3000
 	import maintenance
 }
