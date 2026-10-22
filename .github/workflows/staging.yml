@@ -1,5 +1,6 @@
 name: Build and deploy to staging
 on:
+  workflow_dispatch:
   push:
     branches: ['main']
     paths-ignore:
