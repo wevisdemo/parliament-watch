@@ -124,7 +124,7 @@ export async function load() {
 		return {
 			...bill,
 			categories: bill.categories?.length ? bill.categories : [OTHER_CATEGORY_KEY],
-			purposedAtMpAssemblyId: bill.organizations[0]?.id,
+			mpAssemblyIds: bill.organizations.map(({ id }) => id),
 			proposerType: bill.creator_type,
 			proposer: bill.creators[0] ?? {
 				__typename: null,
@@ -198,7 +198,7 @@ export async function load() {
 	}
 
 	const representativeTerms: CheckboxFilterChoice[] = data.organizations
-		.filter(({ id }) => bills.some((bill) => bill.purposedAtMpAssemblyId === id))
+		.filter(({ id }) => bills.some((bill) => bill.mpAssemblyIds.includes(id)))
 		.sort((a, z) => (z.founding_date ?? '').localeCompare(a.founding_date ?? ''))
 		.map((assembly) => ({
 			label: `${assembly.name} (${formatYearRange(assembly.founding_date, assembly.dissolution_date)})`,

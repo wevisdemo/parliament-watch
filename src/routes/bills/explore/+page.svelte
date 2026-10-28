@@ -101,7 +101,7 @@
 	let checkboxFilterList = $derived([
 		{
 			key: 'filterTerm',
-			legend: 'สมัยที่เสนอ',
+			legend: 'สมัยที่เสนอหรือพิจารณา',
 			choices: filterOptions.representativeTerms
 		},
 		{
@@ -155,8 +155,7 @@
 						const { filterTerm, filterStatus, filterProposerType } = selectedCheckboxValue;
 
 						return (
-							bill.purposedAtMpAssemblyId &&
-							filterTerm.includes(bill.purposedAtMpAssemblyId) &&
+							bill.mpAssemblyIds.some((id) => filterTerm.includes(id)) &&
 							filterStatus.includes(bill.status) &&
 							// TODO: until we have a protocol to maintain bill category data
 							// filterCategory.some((category) => bill.categories.includes(category as string)) &&

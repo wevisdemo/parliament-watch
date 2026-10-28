@@ -146,6 +146,9 @@
 					{/each}
 				</div>
 			</div>
+			<p class="helper-text-02 text-gray-60">
+				*นับรวมร่างกฎหมายทุกฉบับที่เสนอหรือพิจารณาโดยสภาชุดนี้
+			</p>
 		{/if}
 
 		{#if billOverview.billSummaryByStatuses.length && billOverview.billSummaryByStatuses.some((s) => s.bills.length)}

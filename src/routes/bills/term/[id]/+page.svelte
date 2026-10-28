@@ -77,14 +77,17 @@
 	<p class="body-compact-01 text-text-03">เช่น สุราก้าวหน้า หรือ เท่าภิภพ ลิ้มจิตรกร</p>
 </section>
 
-<section class="h-[60px] bg-ui-03 px-4">
-	<div class="mx-auto flex h-full max-w-[1280px] items-center justify-center">
+<section class="bg-ui-03 p-4">
+	<div class="mx-auto flex max-w-[1280px] flex-col items-center justify-center gap-1">
 		<AssemblyIdRunner
 			id={thisTerm.id}
 			availableAssemblies={allMpTerms}
 			{getAssemblyPath}
 			termPrefix="สส."
 		/>
+		<p class="helper-text-01 text-text-02">
+			*นับรวมร่างกฎหมายทุกฉบับที่เสนอหรือพิจารณาโดยสภาชุดนี้
+		</p>
 	</div>
 </section>
 

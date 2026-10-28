@@ -11,7 +11,7 @@
 
 {#if cellValue.length}
 	<div class="flex flex-row gap-2">
-		{#each cellValue as { note, url } (note)}
+		{#each cellValue as { note, url }, i (i)}
 			{@const Icon = url.includes('.pdf') ? DocumentPdf : NotebookReference}
 			<a href={url} target="_blank" rel="noopener noreferrer" title={note}
 				><Icon></Icon><span class="sr-only">{note}</span></a
