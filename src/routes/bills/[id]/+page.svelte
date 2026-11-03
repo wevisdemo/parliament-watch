@@ -123,7 +123,7 @@
 
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
-				<h1 class="fluid-heading-04 text-text-primary">รายชื่อผู้เสนอกฎหมาย</h1>
+				<h2 class="fluid-heading-04 text-text-primary">รายชื่อผู้เสนอกฎหมาย</h2>
 				<hr class="border-gray-30" />
 				<div class="flex flex-col gap-7 md:flex-row">
 					<div class="flex flex-col gap-3 md:w-1/3">
@@ -191,7 +191,7 @@
 	{#if events.length > 0}
 		<section class="px-4 py-8 md:px-16 md:py-12">
 			<div class="flex flex-col gap-5">
-				<h1 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h1>
+				<h2 class="fluid-heading-04 text-text-primary">เส้นทางกฎหมาย</h2>
 				<hr class="border-gray-30" />
 				<div class="flex flex-col justify-between md:flex-row">
 					<div class="flex items-center gap-1">

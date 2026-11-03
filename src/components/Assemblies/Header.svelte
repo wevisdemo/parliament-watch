@@ -44,7 +44,7 @@
 >
 	<div class="w-full max-w-[900px]">
 		<div class="flex flex-col md:flex-row">
-			<h2 class="fluid-heading-05">{name}</h2>
+			<h1 class="fluid-heading-05">{name}</h1>
 			<AssemblyIdRunner {id} {availableAssemblies} {getAssemblyPath} />
 		</div>
 		{#if showStatus}

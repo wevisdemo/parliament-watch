@@ -34,7 +34,7 @@
 			style="max-width: 650px; max-height:394px;"
 		>
 			<div class="flex items-start justify-between gap-5 p-4">
-				<h1 class="heading-03 text-start">รายชื่อผู้ร่วมเสนอกฎหมาย</h1>
+				<h2 class="heading-03 text-start">รายชื่อผู้ร่วมเสนอกฎหมาย</h2>
 				<button onclick={close}><CloseLarge /></button>
 			</div>
 			<div class="flex flex-col">

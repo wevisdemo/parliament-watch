@@ -21,7 +21,7 @@
 
 			scroller
 				.setup({
-					step: bodyContainer.querySelectorAll('h2,h1'),
+					step: bodyContainer.querySelectorAll('h2,h3'),
 					// @ts-expect-error Documentation บอกว่าใช้ string ที่มี px ได้ https://github.com/russellsamora/scrollama#:~:text=number%20(0%20%2D%201%2C%20or%20string%20with%20%22px%22)
 					offset: '33px'
 				})

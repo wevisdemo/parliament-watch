@@ -35,7 +35,7 @@
 	class="border border-solid border-gray-30 bg-teal-10 p-0 hover:cursor-pointer"
 >
 	<div class="flex flex-col gap-y-4 p-5">
-		<h3 class="fluid-heading-03 mb-2">{title}</h3>
+		<h4 class="fluid-heading-03 mb-2">{title}</h4>
 		<div class="flex flex-col gap-2">
 			<p>{details}</p>
 			<div class="flex flex-row items-center gap-1">
@@ -68,7 +68,7 @@
 		>
 			<div class="flex flex-col gap-y-4 overflow-hidden">
 				<div>
-					<h4 class="font-semibold leading-loose">ขั้นตอน</h4>
+					<h5 class="type-h4 font-semibold leading-loose">ขั้นตอน</h5>
 					{#if stepDescription}
 						<p class="leading-snug">{stepDescription}</p>
 					{/if}
@@ -89,7 +89,7 @@
 					<strong>สำเร็จ</strong>
 				</div>
 				<div class="flex flex-col gap-1">
-					<h4 class="font-semibold">ตัวอย่าง</h4>
+					<h5 class="type-h4 font-semibold">ตัวอย่าง</h5>
 					<ul class="list-inside list-disc leading-tight">
 						{#each examples as example (example.link)}
 							<li class="whitespace-nowrap">

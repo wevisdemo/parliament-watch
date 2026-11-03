@@ -15,11 +15,11 @@
 </script>
 
 <section class={SECTION_CLASS}>
-	<h1 class="fluid-heading-05 {HEADING_CLASS}" id="แนะนำภาพรวม">แนะนำภาพรวม</h1>
+	<h2 class="fluid-heading-05 {HEADING_CLASS}" id="แนะนำภาพรวม">แนะนำภาพรวม</h2>
 	<div>
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="การออกกฎหมายตามรัฐธรรมนูญ-2560">
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="การออกกฎหมายตามรัฐธรรมนูญ-2560">
 			การออกกฎหมายตามรัฐธรรมนูญ 2560
-		</h2>
+		</h3>
 		<hr class={DIVIDER_CLASS} />
 		<p class="body-02 mt-6">
 			<strong
@@ -42,13 +42,13 @@
 		</p>
 	</div>
 	<div>
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="กฎหมายบังคับใช้ได้อย่างไร">
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="กฎหมายบังคับใช้ได้อย่างไร">
 			กฎหมายบังคับใช้ได้อย่างไร
-		</h2>
-		<hr class={DIVIDER_CLASS} />
-		<h3 class="fluid-heading-03 {HEADING_CLASS}" id="กฎหมายที่ออกโดยรัฐสภา-3-ขั้นตอน">
-			กฎหมายที่ออกโดยรัฐสภา ต้องผ่านกระบวนการ 3 ขั้นตอนสำคัญ
 		</h3>
+		<hr class={DIVIDER_CLASS} />
+		<h4 class="fluid-heading-03 {HEADING_CLASS}" id="กฎหมายที่ออกโดยรัฐสภา-3-ขั้นตอน">
+			กฎหมายที่ออกโดยรัฐสภา ต้องผ่านกระบวนการ 3 ขั้นตอนสำคัญ
+		</h4>
 		<div class="grid grid-cols-1 gap-3 md:grid-cols-[1fr_16px_1fr_16px_1fr]">
 			<ProcessCard imgSrc="images/legislative-process/process-01.png" title="เสนอร่างกฎหมาย">
 				ผู้มีสิทธิเสนอร่างของกฎหมายแต่ละประเภท จะแตกต่างกัน
@@ -91,7 +91,7 @@
 		</ol>
 	</div>
 	<div>
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="กฎหมายในเว็บไซต์นี้">กฎหมายในเว็บไซต์นี้</h2>
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="กฎหมายในเว็บไซต์นี้">กฎหมายในเว็บไซต์นี้</h3>
 		<hr class={DIVIDER_CLASS} />
 		<p class="body-02 mb-4 mt-6">
 			เว็บไซต์ Parliament Watch มุ่งนำเสนอกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา
@@ -109,9 +109,9 @@
 	<div class="flex flex-col gap-4">
 		<div>
 			<div class="mb-6">
-				<h2 class="fluid-heading-04 {HEADING_CLASS}" id="ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา">
+				<h3 class="fluid-heading-04 {HEADING_CLASS}" id="ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา">
 					ประเภทของกฎหมายที่ผ่านการพิจารณาโดยรัฐสภา
-				</h2>
+				</h3>
 				<hr class={DIVIDER_CLASS} />
 			</div>
 			<p>
@@ -126,7 +126,7 @@
 		</div>
 	</div>
 	<div>
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="สถานะของกฎหมาย">สถานะของกฎหมาย</h2>
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="สถานะของกฎหมาย">สถานะของกฎหมาย</h3>
 		<hr class={DIVIDER_CLASS} />
 		<p class="mt-6">
 			การจัดแบ่งสถานะของร่างกฎหมายบนเว็บไซต์ Parliament Watch เป็นการจัดแบ่งที่ทีม WeVis
@@ -135,9 +135,9 @@
 			ไม่ได้เป็นสถานะของร่างกฎหมายอย่างเป็นทางการ
 		</p>
 
-		<h3 class="fluid-heading-03 {HEADING_CLASS}">
+		<h4 class="fluid-heading-03 {HEADING_CLASS}">
 			สถานะของกฎหมายในเว็บไซต์นี้ แบ่งได้เป็น 3 ประเภท
-		</h3>
+		</h4>
 		<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 			{#each billStatuses as billStatus (billStatus.billStatus)}
 				<BillStatusCard {...billStatus} />

@@ -280,7 +280,7 @@
 	</header>
 	<div class="px-4 py-6 md:px-12 md:py-16">
 		<div class="mx-auto flex w-full max-w-[1280px] flex-col">
-			<h1 class="fluid-heading-05 text-center">ผลการลงมติ</h1>
+			<h2 class="fluid-heading-05 text-center">ผลการลงมติ</h2>
 			{#if votes.length === 0}
 				<div class="body-compact-01 my-3 text-center text-gray-60 md:my-8">ไม่พบข้อมูล</div>
 			{:else}
@@ -371,7 +371,7 @@
 				</button>
 				<div class="mt-20 flex w-full flex-col">
 					<div class="flex flex-col items-start gap-x-3 md:flex-row md:items-center">
-						<h1 id={Menu.ByParty} class="fluid-heading-04">ผลการลงมติรายสังกัด</h1>
+						<h2 id={Menu.ByParty} class="fluid-heading-04">ผลการลงมติรายสังกัด</h2>
 						<div class="flex items-center">
 							<Toggle
 								class="outline-none"

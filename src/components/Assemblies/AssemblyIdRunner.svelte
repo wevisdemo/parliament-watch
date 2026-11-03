@@ -59,7 +59,7 @@
 			class="ml-[0px] mr-[16px] w-[20px] rotate-180"
 		/>
 	</a>
-	<h3 class="fluid-heading-03">{termPrefix} {displayString}</h3>
+	<p class="fluid-heading-03">{termPrefix} {displayString}</p>
 	<a class={!nextUrl ? 'pointer-events-none cursor-none' : ''} href={nextUrl}>
 		<AngleRightIcon fill={!nextUrl ? '#16161640' : '#3904E9'} class="ml-[16px] mr-[0px] w-[20px]" />
 	</a>

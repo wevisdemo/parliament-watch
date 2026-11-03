@@ -7,13 +7,13 @@
 </script>
 
 <section class={SECTION_CLASS}>
-	<h1 class="fluid-heading-05 {HEADING_CLASS}" id="เข้าใจการลงมติของ-สส.และ-สว.">
+	<h2 class="fluid-heading-05 {HEADING_CLASS}" id="เข้าใจการลงมติของ-สส.และ-สว.">
 		เข้าใจการลงมติของ สส.และ สว.
-	</h1>
+	</h2>
 	<div>
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="การลงมติคืออะไร-เกิดขึ้นในขั้นตอนไหนบ้าง?">
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="การลงมติคืออะไร-เกิดขึ้นในขั้นตอนไหนบ้าง?">
 			การลงมติคืออะไร เกิดขึ้นในขั้นตอนไหนบ้าง?
-		</h2>
+		</h3>
 		<hr class={DIVIDER_CLASS} />
 		<p class="mt-6">
 			การลงมติ เป็นส่วนหนึ่งของการประชุมสภา ใช้ในกระบวนการพิจารณาเรื่องต่างๆ
@@ -26,7 +26,7 @@
 	</div>
 	<div class="grid gap-4">
 		<div>
-			<h2 class="fluid-heading-04 {HEADING_CLASS}" id="วิธีการลงมติ">วิธีการลงมติ</h2>
+			<h3 class="fluid-heading-04 {HEADING_CLASS}" id="วิธีการลงมติ">วิธีการลงมติ</h3>
 			<hr class={DIVIDER_CLASS} />
 			<div class="mt-6">
 				<p>การลงมติในสภากระทำผ่านการออกเสียงลงคะแนน ซึ่งแบ่งเป็น 2 กรณี</p>
@@ -103,7 +103,7 @@
 		</div>
 	</div>
 	<div class="my-6">
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="ประเภทการลงมติ">ประเภทการลงมติ</h2>
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="ประเภทการลงมติ">ประเภทการลงมติ</h3>
 		<hr class={DIVIDER_CLASS} />
 		<div class="mt-6 flex flex-col gap-4">
 			<p>โดยทั่วไป การประชุมจะกำหนดให้ สส.และ สว.แสดงเจตจำนงต่อประเด็นที่ใช้ลงมติดังนี้</p>
@@ -137,7 +137,7 @@
 		</div>
 	</div>
 	<div class="my-6">
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="ผลการลงมติ">ผลการลงมติ</h2>
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="ผลการลงมติ">ผลการลงมติ</h3>
 		<hr class={DIVIDER_CLASS} />
 		<div class="mt-6 flex flex-col gap-4">
 			<p>

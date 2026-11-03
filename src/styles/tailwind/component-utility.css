@@ -1,6 +1,10 @@
 @tailwind components;
 
 @layer components {
+	.type-h4 {
+		@apply text-[1.25rem] font-normal leading-[1.4] tracking-[0];
+	}
+
 	.accordion-content-full.bx--accordion > .bx--accordion__item > .bx--accordion__content {
 		@apply p-0;
 	}

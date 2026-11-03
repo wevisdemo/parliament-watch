@@ -16,11 +16,11 @@
 </script>
 
 <section class={SECTION_CLASS}>
-	<h1 class="fluid-heading-05 {HEADING_CLASS}" id="ขั้นตอนการออกกฎหมายโดยรัฐสภา">
+	<h2 class="fluid-heading-05 {HEADING_CLASS}" id="ขั้นตอนการออกกฎหมายโดยรัฐสภา">
 		ขั้นตอนการออกกฎหมายโดยรัฐสภา
-	</h1>
+	</h2>
 	<div>
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="ขั้นตอนทั่วไป">ขั้นตอนทั่วไป</h2>
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="ขั้นตอนทั่วไป">ขั้นตอนทั่วไป</h3>
 		<hr class="{DIVIDER_CLASS} mb-6" />
 		<p>
 			ขั้นตอนการพิจารณาร่างกฎหมายแต่ละประเภทจะมีความแตกต่างกันในบางรายละเอียด แต่โดยทั่วไปแล้ว
@@ -32,17 +32,17 @@
 			<img src="images/legislative-process/general-process.webp" alt="" class="max-w-[440px]" />
 		</div>
 		<div class="py-6">
-			<h3 class="fluid-heading-03 {HEADING_CLASS}" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}" id="การเสนอร่างกฎหมาย">1. การเสนอร่างกฎหมาย</h4>
 			<p class="py-4">ผู้มีสิทธิเสนอร่างกฎหมาย และลำดับชั้นของกฎหมายที่เสนอได้</p>
 			<ComparisonTable {proposerComparisonTableData} />
 		</div>
 		<div>
-			<h3 class="fluid-heading-03 {HEADING_CLASS}">2. การพิจารณาโดยสภาผู้แทนราษฏร</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}">2. การพิจารณาโดยสภาผู้แทนราษฏร</h4>
 			<p>
 				เมื่อร่างกฎหมายถูกเสนอเข้าสู่สภาแล้ว จะเข้าสู่ขั้นตอนต่อไปคือการพิจารณาโดย
 				สส.ในขั้นตอนนี้จะแบ่งเป็น 3 วาระ ได้แก่
 			</p>
-			<h4 class="heading-02 {HEADING_CLASS}">2.1. วาระที่หนึ่ง : ขั้นรับหลักการ</h4>
+			<h5 class="heading-02 {HEADING_CLASS}">2.1. วาระที่หนึ่ง : ขั้นรับหลักการ</h5>
 			<p>
 				เป็นการพิจารณาหลักการของร่างกฎหมาย ผู้เสนอฯ ต้องชี้แจงความจำเป็นที่ต้องออกกฎหมายนั้นๆ
 				ในกระบวนการพิจารณา สส.ในสภาจะอภิปรายเหตุผล ถามข้อสงสัยและตั้งข้อสังเกต
@@ -58,7 +58,7 @@
 				passedDescription="ร่างกฎหมายจะถูกนำไปพิจารณาวาระที่สอง"
 				failedDescription="ร่างกฎหมายนั้นก็จะตกไปและไม่ถูกพิจารณาต่อ"
 			/>
-			<h4 class="heading-02 {HEADING_CLASS}">2.2. วาระที่สอง : ขั้นกรรมาธิการ</h4>
+			<h5 class="heading-02 {HEADING_CLASS}">2.2. วาระที่สอง : ขั้นกรรมาธิการ</h5>
 			<p class="body-02">
 				เป็นการพิจารณาร่างกฎหมายเป็นรายมาตรา อาจเพิ่ม
 				ตัดทอนหรือแก้ไขบางมาตราหรือเปลี่ยนถ้อยคำให้สมบูรณ์ขึ้น
@@ -91,7 +91,7 @@
 					</li>
 				</ul>
 			</GrayBox>
-			<h4 class="heading-02 {HEADING_CLASS}">2.3. วาระที่สาม : ขั้นลงมติเห็นชอบ</h4>
+			<h5 class="heading-02 {HEADING_CLASS}">2.3. วาระที่สาม : ขั้นลงมติเห็นชอบ</h5>
 			<p class="body-02">
 				เป็นการลงมติเห็นชอบร่างกฎหมายทั้งฉบับ ไม่มีการอภิปรายหรือแก้ไขข้อความใดๆ
 			</p>
@@ -101,7 +101,7 @@
 			/>
 		</div>
 		<div>
-			<h3 class="fluid-heading-03 {HEADING_CLASS}">3. การพิจารณาร่างกฎหมายโดยวุฒิสภา</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}">3. การพิจารณาร่างกฎหมายโดยวุฒิสภา</h4>
 			<p class="body-02">
 				เมื่อ สส.มีมติเห็นชอบ ร่างกฎหมายจะถูกส่งต่อไปยัง สว.โดยการพิจารณาจะมี 3 วาระเช่นเดียวกัน
 				แต่มีเงื่อนไขว่าต้องเสร็จภายในเวลาที่กำหนดไว้
@@ -114,7 +114,7 @@
 				<li>ร่างกฎหมายที่เกี่ยวกับการเงินต้องพิจารณาให้เสร็จภายใน 30 วัน</li>
 				<li>ทั้งนี้ สว.สามารถลงมติขยายเวลาออกไปเป็นกรณีพิเศษได้ไม่เกิน 30 วัน</li>
 			</ul>
-			<GrayBox title="ผลลัพธ์" titleClass="mb-2">
+			<GrayBox title="ผลลัพธ์" titleClass="mb-2" titleLevel={5}>
 				<p class="body-02">
 					สว.<strong class="heading-02">ไม่มีอำนาจ ‘ปัดตก’</strong> หรือทำให้ร่างกฎหมายที่
 					สส.มีมติเห็นชอบแล้วหายไปได้ แต่ สว.<strong class="heading-02">สามารถเพิ่มขั้นตอน</strong
@@ -128,7 +128,7 @@
 					</div>
 					<VerticalGrayLine />
 					<div class="w-full pt-2 md:w-4/12 md:px-2 md:pt-0">
-						<h5 class="heading-01">แก้ไขเพิ่มเติม</h5>
+						<h6 class="heading-01">แก้ไขเพิ่มเติม</h6>
 						<div class="label-01 mb-2 mt-2 text-gray-60">
 							โดยลงมติ
 							<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} /> <br />
@@ -166,13 +166,13 @@
 			</GrayBox>
 		</div>
 		<div>
-			<h3 class="fluid-heading-03 {HEADING_CLASS}">4. ศาลรัฐธรรมนูญวินิจฉัยร่างกฎหมาย</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}">4. ศาลรัฐธรรมนูญวินิจฉัยร่างกฎหมาย</h4>
 			<p class="body-02">
 				โดยทั่วไป เมื่อร่างกฎหมายได้รับความเห็นชอบจากรัฐสภาแล้ว ก็จะเข้าสู่ขั้นตอนการประกาศใช้
 				แต่ถ้าหากนายกรัฐมนตรี หรือ สมาชิกไม่น้อยกว่า 1 ใน 10 ของแต่ละสภาหรือทั้งสองสภารวมกัน
 				เห็นว่าร่างกฎหมายขัดหรือแย้งต่อรัฐธรรมนูญ ให้ส่งศาลรัฐธรรมนูญเพื่อวินิฉัย
 			</p>
-			<GrayBox title="ผลลัพธ์" titleClass="mb-2">
+			<GrayBox title="ผลลัพธ์" titleClass="mb-2" titleLevel={5}>
 				<div class="body-01 flex w-full flex-col md:flex-row">
 					<div class="w-full md:w-4/12">
 						<VotingResultTag class="m-0" result={DefaultVotingResult.Passed} />
@@ -180,7 +180,7 @@
 					</div>
 					<VerticalGrayLine />
 					<div class="w-full pt-2 md:w-4/12 md:pt-0">
-						<h5 class="heading-01 mb-2">แก้ไขเพิ่มเติม</h5>
+						<h6 class="heading-01 mb-2">แก้ไขเพิ่มเติม</h6>
 						<p class="body-01">ถ้ามีข้อความที่ขัดต่อรัฐธรรมนูญ</p>
 					</div>
 					<VerticalGrayLine />
@@ -192,7 +192,7 @@
 			</GrayBox>
 		</div>
 		<div>
-			<h3 class="fluid-heading-03 {HEADING_CLASS}">5. การประกาศใช้เป็นกฎหมาย</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}">5. การประกาศใช้เป็นกฎหมาย</h4>
 			<p class="body-02">
 				เมื่อร่างกฎหมายได้รับความเห็นชอบจากรัฐสภาแล้ว ให้นายกรัฐมนตรีรอไว้ 5 วัน
 				แล้วให้ขึ้นทูลเกล้าฯ เพื่อให้พระมหากษัตริย์ทรงลงพระปรมาภิไธยภายใน 20 วัน
@@ -201,9 +201,9 @@
 		</div>
 	</div>
 	<div class="mb-6">
-		<h2 class="fluid-heading-04 {HEADING_CLASS}" id="ขั้นตอนพิเศษของกฎหมายบางประเภท">
+		<h3 class="fluid-heading-04 {HEADING_CLASS}" id="ขั้นตอนพิเศษของกฎหมายบางประเภท">
 			ขั้นตอนพิเศษของกฎหมายบางประเภท
-		</h2>
+		</h3>
 		<hr class={DIVIDER_CLASS} />
 		<p class="my-6">
 			ในกระบวนการออกกฎหมายหรือแก้กฎหมายบางประเภทจะใช้ <strong
@@ -212,7 +212,7 @@
 			และ <strong>มีเงื่อนไขเพิ่มเติม</strong> ได้แก่
 		</p>
 		<div class="body-02 mt-10">
-			<h3 class="fluid-heading-03 {HEADING_CLASS}">การพิจารณาร่าง พ.ร.ป.</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}">การพิจารณาร่าง พ.ร.ป.</h4>
 			<p>
 				ขั้นตอนในการพิจารณาร่าง พ.ร.ป.จะดำเนินในรูปแบบเดียวกันกับการออก พ.ร.บ.เว้นแต่ใน<strong
 					>เงื่อนไขเพิ่มเติม</strong
@@ -247,7 +247,7 @@
 			</ol>
 		</div>
 		<div class="body-02 mt-10">
-			<h3 class="fluid-heading-03 {HEADING_CLASS}">การแก้ไขบทบัญญัติในรัฐธรรมนูญ</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}">การแก้ไขบทบัญญัติในรัฐธรรมนูญ</h4>
 			<p>
 				เมื่อเข้าสู่ขั้นตอนการพิจารณาของรัฐสภา การประชุมร่วมกันจะมีทั้งหมด 3 วาระ
 				เช่นเดียวกันกับการออก พ.ร.บ.แต่ปรากฏ<strong>เงื่อนไขเพิ่มเติม</strong>ดังนี้
@@ -298,7 +298,7 @@
 			</ol>
 		</div>
 		<div class="body-02 mt-10">
-			<h3 class="fluid-heading-03 {HEADING_CLASS}">การพิจารณาร่าง พ.ร.บ.งบประมาณประจำปี</h3>
+			<h4 class="fluid-heading-03 {HEADING_CLASS}">การพิจารณาร่าง พ.ร.บ.งบประมาณประจำปี</h4>
 			<p>
 				ขั้นตอนในการพิจารณาร่าง พ.ร.บ.งบประมาณประจำปี จะแตกต่างจากการออก
 				พ.ร.บ.ทั่วไปในขั้นตอนการพิจารณาของ สว.โดยมีรายละเอียดดังนี้
