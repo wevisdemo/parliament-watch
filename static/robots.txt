@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /files/download/
+
+Sitemap: https://parliamentwatch.wevis.info/sitemap.xml

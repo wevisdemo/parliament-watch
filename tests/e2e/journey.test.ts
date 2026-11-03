@@ -119,6 +119,38 @@ describe('static pages', () => {
 	it('legislative process', () => expectPage('/legislative-process', 'text/html'));
 });
 
+describe('seo files', () => {
+	it('sitemap.xml lists canonical pages only', async () => {
+		const res = await expectPage('/sitemap.xml', 'application/xml');
+		const xml = await res.text();
+		const locs = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(([, loc]) => loc);
+
+		expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+		expect(locs.length).toBeGreaterThan(0);
+		for (const loc of locs) {
+			expect(loc).toMatch(/^https:\/\/parliamentwatch\.wevis\.info\//);
+			expect(loc).not.toMatch(/\/votes$|\/changes$|\/latest\/|\/files\/|\/healthz|\/members\//);
+		}
+		for (const path of [
+			'/',
+			`/politicians/${encodeURIComponent(politicianId)}`,
+			`/bills/${encodeURIComponent(billId)}`,
+			`/votings/${encodeURIComponent(votingId)}`,
+			`/assemblies/${encodeURIComponent(repAssemblyId)}`,
+			`/bills/term/${encodeURIComponent(billsTermPath.replace('/bills/term/', ''))}`
+		]) {
+			expect(locs, path).toContain(`https://parliamentwatch.wevis.info${path}`);
+		}
+	});
+
+	it('robots.txt', async () => {
+		const res = await expectPage('/robots.txt', 'text/plain');
+		const text = await res.text();
+		expect(text).toContain('Disallow: /files/download/');
+		expect(text).toContain('Sitemap: https://parliamentwatch.wevis.info/sitemap.xml');
+	});
+});
+
 describe('client-fetched assets', () => {
 	it.each(['politicians', 'bills', 'votings', 'billProposers'])(
 		'search index: %s',
