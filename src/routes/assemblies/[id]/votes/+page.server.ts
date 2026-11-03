@@ -1,6 +1,6 @@
 import { getAvailableAssemblies } from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/client';
-import { createSeo } from '$lib/seo';
+import { createSeo } from '$lib/seo/meta';
 import { DefaultVotingResult, RESULT_CONFIRMATION_PENDING } from '$models/voting';
 import { error } from '@sveltejs/kit';
 
@@ -78,7 +78,8 @@ export async function load({ params }) {
 		voteEvents: eventsWithNotNullResult,
 		filterOptions,
 		seo: createSeo({
-			title: `การลงมติ ${assembly.name}`
+			title: `การลงมติ ${assembly.name}`,
+			description: `การลงมติทั้งหมด ${voteEvents.length.toLocaleString()} ครั้ง พร้อมผลการลงมติ`
 		})
 	};
 }

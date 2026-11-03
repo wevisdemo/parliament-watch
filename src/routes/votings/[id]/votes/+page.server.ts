@@ -3,7 +3,7 @@ import {
 	queryPoliticiansVote,
 	sortPoliticiansVoteByDominantGroup
 } from '$lib/politigraph/vote/with-politician';
-import { createSeo } from '$lib/seo';
+import { createSeo } from '$lib/seo/meta';
 import type { CustomVoteOption } from '$models/voting';
 import { defaultVoteOptions } from '$models/voting';
 import { error } from '@sveltejs/kit';
@@ -70,7 +70,8 @@ export async function load({ params }) {
 		customVoteOptions,
 		votes,
 		seo: createSeo({
-			title: `ผลการลงมติรายคน ${voteEvent.nickname || voteEvent.title}`
+			title: `ผลการลงมติรายคน ${voteEvent.nickname || voteEvent.title}`,
+			description: 'ดูว่าใครลงมติอย่างไร กรองตามพรรค ตำแหน่ง และการลงมติ'
 		})
 	};
 }

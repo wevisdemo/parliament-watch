@@ -10,8 +10,8 @@ import {
 	type AssemblyMember
 } from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/client';
-import { createSeo } from '$lib/seo';
-import { GroupByOption } from '$models/assembly';
+import { createSeo } from '$lib/seo/meta';
+import { GroupByOption, groupByOptionLabelMap } from '$models/assembly';
 import { error } from '@sveltejs/kit';
 
 interface PoliticianSummaryGroup {
@@ -88,7 +88,8 @@ export async function load({ params }) {
 		isDataHasSubgroup,
 		availableAssemblies,
 		seo: createSeo({
-			title: `สมาชิก ${assembly.name}`
+			title: `สมาชิก ${assembly.name}`,
+			description: `รายชื่อสมาชิกทั้งหมด ${members.length.toLocaleString()} คน จัดกลุ่มตาม${groupByOptionLabelMap.get(params.groupby as GroupByOption)}`
 		}),
 		isCabinet
 	};

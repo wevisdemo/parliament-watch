@@ -1,4 +1,4 @@
-import { PROD_URL } from '$lib/seo';
+import { PROD_URL } from '$lib/seo/meta';
 import { createSitemapXml } from '$lib/seo/sitemap';
 import { describe, expect, it } from 'vitest';
 

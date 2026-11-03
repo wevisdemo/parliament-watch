@@ -1,4 +1,4 @@
-import { createSeo } from '$lib/seo.js';
+import { createSeo } from '$lib/seo/meta';
 
 export const prerender = true;
 
@@ -24,7 +24,9 @@ export async function load({ fetch }) {
 	return {
 		developers,
 		seo: createSeo({
-			title: 'เกี่ยวกับเว็บไซต์นี้'
+			title: 'เกี่ยวกับเว็บไซต์นี้',
+			description:
+				'Parliament Watch โดย WeVis รวบรวมข้อมูลเปิดของรัฐสภาไทย ที่มาของข้อมูล และทีมผู้พัฒนา'
 		})
 	};
 }

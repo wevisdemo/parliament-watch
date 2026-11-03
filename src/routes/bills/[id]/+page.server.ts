@@ -3,7 +3,8 @@ import { createBillFieldsForProposer, getBillProposer } from '$lib/politigraph/b
 import { graphql } from '$lib/politigraph/client';
 import type { Event, VoteEventType } from '$lib/politigraph/genql/schema.js';
 import { toVoteCardProps } from '$lib/politigraph/vote/card.js';
-import { createSeo } from '$lib/seo';
+import { describeBill } from '$lib/seo/description';
+import { createSeo } from '$lib/seo/meta';
 import { error } from '@sveltejs/kit';
 
 const eventDefaultSortPriority: Event['__typename'][] = [
@@ -378,7 +379,8 @@ export async function load({ params }) {
 			return event;
 		}),
 		seo: createSeo({
-			title: bill.nickname ?? bill.title
+			title: bill.nickname ?? bill.title,
+			description: describeBill(bill, proposer)
 		})
 	};
 }

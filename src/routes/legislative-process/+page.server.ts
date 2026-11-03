@@ -1,4 +1,4 @@
-import { createSeo } from '$lib/seo';
+import { createSeo } from '$lib/seo/meta';
 
 export const prerender = true;
 
@@ -284,7 +284,9 @@ export function load() {
 		},
 		legislations,
 		seo: createSeo({
-			title: 'รัฐออกกฎหมายอย่างไร'
+			title: 'รัฐออกกฎหมายอย่างไร',
+			description:
+				'อธิบายขั้นตอนการออกกฎหมายของไทย ตั้งแต่การเสนอร่าง การพิจารณาของ สส. และ สว. จนถึงการประกาศใช้'
 		})
 	};
 }

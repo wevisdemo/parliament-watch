@@ -5,7 +5,8 @@ import {
 	queryPoliticiansVote,
 	sortPoliticiansVoteByDominantGroup
 } from '$lib/politigraph/vote/with-politician.js';
-import { createSeo } from '$lib/seo';
+import { describeVoting } from '$lib/seo/description';
+import { createSeo } from '$lib/seo/meta';
 import { DefaultVoteOption, defaultVoteOptions, type CustomVoteOption } from '$models/voting.js';
 import { error } from '@sveltejs/kit';
 import { groups } from 'd3-array';
@@ -137,7 +138,8 @@ export async function load({ params }) {
 		resultsByAffiliation,
 		votes,
 		seo: createSeo({
-			title: `การลงมติ ${voteEvent.nickname || voteEvent.title}`
+			title: `การลงมติ ${voteEvent.nickname || voteEvent.title}`,
+			description: describeVoting(voteEvent, defaultOptionResults)
 		})
 	};
 }

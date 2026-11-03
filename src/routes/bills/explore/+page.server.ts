@@ -8,7 +8,7 @@ import { billStatusList } from '$lib/politigraph/bill/status';
 import { graphql } from '$lib/politigraph/client';
 import type { BillStatus } from '$lib/politigraph/genql';
 import { type BillCreatorType, enumBillCreatorType } from '$lib/politigraph/genql';
-import { createSeo } from '$lib/seo';
+import { createSeo } from '$lib/seo/meta';
 import dayjs from 'dayjs';
 
 const OTHER_CATEGORY_KEY = 'อื่นๆ';
@@ -219,7 +219,9 @@ export async function load() {
 		filterOptions,
 		bills,
 		seo: createSeo({
-			title: 'สำรวจร่างกฎหมายในสภาแบบละเอียด'
+			title: 'สำรวจร่างกฎหมายในสภาแบบละเอียด',
+			description:
+				'ค้นหาและกรองร่างกฎหมายทั้งหมดในสภา ตามสถานะ หมวด ผู้เสนอ และสมัยสภา พร้อมดาวน์โหลดข้อมูล'
 		})
 	};
 }

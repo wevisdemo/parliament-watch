@@ -5,6 +5,7 @@ import {
 	getAvailableAssemblies
 } from '$lib/politigraph/assembly/member';
 import { graphql } from '$lib/politigraph/client';
+import { createSeo } from '$lib/seo/meta';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
@@ -50,6 +51,10 @@ export async function load({ params }) {
 		},
 		availableAssemblies,
 		cabinetPositions: members.flatMap(parseMemberWithAssemblyRoles),
-		changes
+		changes,
+		seo: createSeo({
+			title: `การเปลี่ยนแปลงสมาชิก ${assembly.name}`,
+			description: 'ใครเข้า ใครออก และเมื่อไร'
+		})
 	};
 }

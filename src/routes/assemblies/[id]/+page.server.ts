@@ -11,7 +11,8 @@ import { setBillNicknameFromTitleAsFallback } from '$lib/politigraph/bill/summar
 import { graphql } from '$lib/politigraph/client';
 import type { Bill, BillStatus } from '$lib/politigraph/genql';
 import { toVoteCardProps } from '$lib/politigraph/vote/card';
-import { createSeo } from '$lib/seo';
+import { describeAssembly } from '$lib/seo/description';
+import { createSeo } from '$lib/seo/meta';
 import { GroupByOption } from '$models/assembly';
 import { error } from '@sveltejs/kit';
 import { interpolateRainbow } from 'd3-scale-chromatic';
@@ -256,7 +257,8 @@ export async function load({ params }) {
 		latestVoteEvents,
 		latestBills,
 		seo: createSeo({
-			title: assembly.name
+			title: assembly.name,
+			description: describeAssembly(assembly.founding_date, summary.totalMembers)
 		})
 	};
 }

@@ -1,5 +1,5 @@
 import { graphql } from '$lib/politigraph/client';
-import { createSeo } from '$lib/seo';
+import { createSeo } from '$lib/seo/meta';
 import { defaultVoteOptions } from '$models/voting';
 import { error } from '@sveltejs/kit';
 
@@ -82,7 +82,8 @@ export async function load({ params }) {
 		filterOptions,
 		votes: votesWithEvent,
 		seo: createSeo({
-			title: `ประวัติการลงมติ ${politician.name}`
+			title: `ประวัติการลงมติ ${politician.name}`,
+			description: `ลงมติทั้งหมด ${votesWithEvent.length.toLocaleString()} ครั้ง ค้นหาและกรองตามผลการลงมติ`
 		})
 	};
 }

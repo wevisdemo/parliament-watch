@@ -14,7 +14,8 @@ import {
 } from '$lib/politigraph/bill/summary';
 import { graphql } from '$lib/politigraph/client';
 import type { BillWhere } from '$lib/politigraph/genql';
-import { createSeo } from '$lib/seo';
+import { describeBillsInTerm } from '$lib/seo/description';
+import { createSeo } from '$lib/seo/meta';
 import { error } from '@sveltejs/kit';
 
 const LATEST_ENACTED_BILL_LIMIT = 10;
@@ -139,7 +140,8 @@ export async function load({ params }) {
 		lastEnactedBills,
 		lastEnactedBillProposers,
 		seo: createSeo({
-			title: 'สำรวจร่างกฎหมายในสภา'
+			title: `สำรวจร่างกฎหมายในสภา ภายใต้ สส. ชุดที่ ${thisTerm.term}`,
+			description: describeBillsInTerm(thisTerm.term, totalCount, byStatus)
 		})
 	};
 }

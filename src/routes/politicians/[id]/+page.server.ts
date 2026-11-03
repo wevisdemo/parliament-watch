@@ -4,7 +4,8 @@ import type {
 } from '$components/politicians/PoliticianVoteSummary.svelte';
 import { graphql } from '$lib/politigraph/client';
 import type { Vote, VoteEvent } from '$lib/politigraph/genql/schema';
-import { createSeo } from '$lib/seo';
+import { describePolitician } from '$lib/seo/description';
+import { createSeo } from '$lib/seo/meta';
 import { DefaultVoteOption } from '$models/voting';
 import { error } from '@sveltejs/kit';
 
@@ -116,7 +117,8 @@ export async function load({ params }) {
 		disagreedVoting,
 		votingAbsentStats,
 		seo: createSeo({
-			title: politician.name
+			title: politician.name,
+			description: describePolitician(politician.memberships)
 		})
 	};
 }

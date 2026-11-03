@@ -1,4 +1,4 @@
-import { PROD_URL } from '$lib/seo';
+import { PROD_URL } from '$lib/seo/meta';
 
 export const STATIC_PATHS = ['/', '/about', '/legislative-process', '/bills/explore'];
 

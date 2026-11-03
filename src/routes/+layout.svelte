@@ -4,7 +4,7 @@
 	import CookieConsent from '$components/Index/CookieConsent.svelte';
 	import NavigationBar from '$components/NavigationBar/NavigationBar.svelte';
 	import ProgressBar from '$components/ProgressBar/ProgressBar.svelte';
-	import { DEFAULT_SEO, PROD_URL } from '$lib/seo';
+	import { DEFAULT_SEO, PROD_URL } from '$lib/seo/meta';
 	import '../styles/index.css';
 	import { InlineNotification } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
