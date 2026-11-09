@@ -31,12 +31,7 @@ export async function queryPoliticiansVote(voteEvent: {
 							posts: {
 								some: {
 									organizations: {
-										some: {
-											OR: [
-												{ id: { in: voteEvent.organizations.map((o) => o.id) } },
-												{ classification: { eq: 'POLITICAL_PARTY' } }
-											]
-										}
+										some: { id: { in: voteEvent.organizations.map((o) => o.id) } }
 									}
 								}
 							}
@@ -44,24 +39,19 @@ export async function queryPoliticiansVote(voteEvent: {
 					},
 					label: true,
 					posts: {
-						role: true,
 						organizations: {
-							id: true,
-							name: true,
-							classification: true,
-							abbreviation: true,
-							image: true,
-							memberships: {
-								posts: {
-									role: true
-								}
-							}
+							abbreviation: true
 						}
 					}
 				}
 			},
 			voter_name_raw: true,
-			voter_party: true,
+			voter_affiliations: {
+				__args: { where: { classification: { eq: 'POLITICAL_PARTY' } } },
+				id: true,
+				name: true,
+				image: true
+			},
 			option: true
 		},
 		posts: {
@@ -110,15 +100,9 @@ export async function queryPoliticiansVote(voteEvent: {
 		posts.flatMap((p) => p.memberships.map((m) => [m.members[0].id, p.role]))
 	);
 
-	return votes.map(({ id, option, voter_name_raw, voter_party, voters: [politician] }) => {
-		const partyMembership = politician?.memberships.find(
-			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-		);
-
-		const assemblyRole = politician?.memberships.find(
-			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
-		);
-		const party = partyMembership?.posts[0].organizations[0];
+	return votes.map(({ id, option, voter_name_raw, voter_affiliations, voters: [politician] }) => {
+		const assemblyRole = politician?.memberships[0];
+		const party = voter_affiliations[0];
 
 		return {
 			id: id,
@@ -129,11 +113,9 @@ export async function queryPoliticiansVote(voteEvent: {
 			},
 			party: party
 				? {
-						name:
-							party.name ??
-							(voter_party?.startsWith('พรรค') ? voter_party.replace('พรรค', '') : undefined),
+						name: party.name,
 						image: party.image ?? undefined,
-						side: party && partySideMap.get(party.id)
+						side: partySideMap.get(party.id)
 					}
 				: undefined,
 			role: assemblyRole
