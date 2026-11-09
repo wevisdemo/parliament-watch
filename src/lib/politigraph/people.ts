@@ -26,7 +26,7 @@ export async function queryAllPeople<TSelection extends PersonGenqlSelection>(
 	const { client = graphql, where } = options;
 	const people: Array<FieldsSelection<Person, NonNullable<TSelection>>> = [];
 	let after: string | undefined = undefined;
-	let hasNextPage = true;
+	let hasNextPage: boolean;
 
 	do {
 		const { peopleConnection } = (await client.query({

@@ -55,7 +55,7 @@
 <li class="-mt-1 mb-10 ms-4">
 	<CheckmarkFilled size={24} class="absolute -start-3 bg-ui-background" />
 
-	<div class="flex flex-col md:flex-row gap-1">
+	<div class="flex flex-col gap-1 md:flex-row">
 		<div class="ml-1 flex w-full max-w-md flex-col md:pr-6">
 			{#if date}
 				<p>

@@ -228,7 +228,7 @@
 				{/if}
 			</div>
 		</div>
-		<div class="mx-auto flex w-full max-w-[1280px] flex-col md:flex-row gap-4 md:gap-8">
+		<div class="mx-auto flex w-full max-w-[1280px] flex-col gap-4 md:flex-row md:gap-8">
 			<div class="flex flex-1 flex-col">
 				<div class="flex flex-row flex-wrap gap-4 lg:gap-12">
 					{#if voteEvent.start_date}
@@ -253,14 +253,14 @@
 					</div>
 				</div>
 				{#if voteEvent.description || relatedBill}
-					<div class="mt-4 md:mt-6 h-[1px] w-full bg-gray-20"></div>
+					<div class="mt-4 h-[1px] w-full bg-gray-20 md:mt-6"></div>
 				{/if}
 				{#if voteEvent.description}
 					<p class="heading-01 mt-4 md:mt-6">สรุปเนื้อหา</p>
 					<p class="body-01">{voteEvent.description}</p>
 				{/if}
 				{#if relatedBill}
-					<p class="heading-01 mt-4 md:mt-6 mb-1">ดูเส้นทางของร่างกฎหมายที่เกี่ยวข้อง</p>
+					<p class="heading-01 mb-1 mt-4 md:mt-6">ดูเส้นทางของร่างกฎหมายที่เกี่ยวข้อง</p>
 					<BillCard isFullWidth orientation="landscape" {...relatedBill} />
 				{/if}
 			</div>

@@ -86,7 +86,7 @@
 <a
 	href="/votings/{id}"
 	class={twMerge(
-		'border-transparent relative flex min-h-[19rem] flex-col gap-2 md:gap-3 whitespace-pre-wrap p-4 transition-colors',
+		'border-transparent relative flex min-h-[19rem] flex-col gap-2 whitespace-pre-wrap p-4 transition-colors md:gap-3',
 		isFullWidth ? 'w-full' : 'w-72',
 		theme.bg,
 		theme.hoveredBg,

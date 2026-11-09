@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { createRequire } from 'node:module';
 import pino from 'pino';
 
 enum LogTarget {
@@ -20,7 +21,7 @@ function getSelectedTransport(): pino.TransportTargetOptions[] {
 	if (import.meta.env.DEV || process.env.LOG_TARGET === LogTarget.Stdout) {
 		return [
 			{
-				target: 'pino-pretty',
+				target: createRequire(import.meta.url).resolve('pino-pretty'),
 				options: {
 					colorize: true
 				}

@@ -127,7 +127,7 @@ export function calculateScore<T extends { name: string }>(
 		const matchedIndices = new Set<number>();
 		const stringMenu = item.name.toLowerCase();
 		for (const query of normalizedQueries) {
-			let matchedIndex = 0;
+			let matchedIndex: number;
 			let startIndex = 0;
 			let addedScore = 0;
 

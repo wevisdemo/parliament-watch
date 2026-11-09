@@ -4,7 +4,7 @@ import { Column, parseCsv, asString, Tuple, createTransformer } from 'sheethuahu
 const provinceTable = Tuple([
 	Column(
 		'ProvinceNameThai',
-		createTransformer((province) => province.replace('จังหวัด', ''))
+		createTransformer({ decode: (province) => province.replace('จังหวัด', '') })
 	),
 	Column('Region_RDPB', asString())
 ]);
