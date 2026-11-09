@@ -25,6 +25,9 @@
 				<h1 class="fluid-heading-04">ประวัติการลงมติ{name.split(' ').at(0)}</h1>
 				<AssemblyIdRunner {id} {availableAssemblies} {getAssemblyPath} />
 			</div>
+			<p class="body-01 text-gray-60">
+				หมายเหตุ: แสดงเฉพาะการลงมติในวาระที่ 1 และ 3 ของการพิจารณาร่างกฎหมาย
+			</p>
 			<p class="body-01">ผลลัพธ์จากเงื่อนไขการกรอง: {voteCount} มติ</p>
 		</div>
 	</div>
