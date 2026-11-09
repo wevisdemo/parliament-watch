@@ -176,7 +176,21 @@ export async function load({ params }) {
 				},
 				on_BillMergeEvent: {
 					start_date: true,
-					main_bill_id: true,
+					main_bill: {
+						id: true,
+						title: true,
+						nickname: true,
+						proposal_date: true,
+						status: true,
+						creators: {
+							on_Person: {
+								name: true
+							},
+							on_Organization: {
+								name: true
+							}
+						}
+					},
 					bills: {
 						id: true,
 						title: true,
@@ -200,11 +214,12 @@ export async function load({ params }) {
 	const proposer = getBillProposer({ creator_type, creators, people_signature_count });
 
 	const mergeEvent = events.find((e) => e.__typename === 'BillMergeEvent');
-	const mergeEventBills = mergeEvent?.bills.map((b) => ({
+	const toMergeBill = (b: NonNullable<typeof mergeEvent>['bills'][number]) => ({
 		id: b.id,
 		name: b.nickname ?? b.title,
 		proposedBy: b.creators[0]?.name
-	}));
+	});
+	const mergeEventBills = mergeEvent?.bills.map(toMergeBill);
 
 	const parsedEvents = events
 		.map((event) => {
@@ -231,7 +246,7 @@ export async function load({ params }) {
 						: event.__typename === 'BillRejectEvent'
 							? event.reject_reason
 							: event.__typename === 'BillMergeEvent'
-								? event.main_bill_id === bill.id
+								? event.main_bill?.id === bill.id
 									? 'ร่างนี้ถูกใช้เป็นร่างหลักในชั้นการพิจารณา'
 									: 'ร่างนี้ถูกนำไปรวมกับร่างอื่นในชั้นการพิจารณา'
 								: event.__typename === 'BillVoteEvent' &&
@@ -242,20 +257,17 @@ export async function load({ params }) {
 			};
 
 			if (event.__typename === 'BillMergeEvent' && mergeEventBills) {
-				const mainBillData = event.bills.find((b) => b.id === event.main_bill_id);
-				const isMainBill = event.main_bill_id === bill.id;
+				const mainBillData = event.main_bill;
 
-				if (isMainBill) {
+				if (mainBillData?.id === bill.id) {
 					return {
 						...base,
 						mergeDetail: {
-							mainBill: mergeEventBills.find((b) => b.id === event.main_bill_id),
-							otherBills: mergeEventBills.filter(
-								(b) => b.id !== bill.id && b.id !== event.main_bill_id
-							)
+							mainBill: toMergeBill(mainBillData),
+							otherBills: mergeEventBills.filter((b) => b.id !== bill.id)
 						}
 					};
-				} else if (mainBillData && mergeEventBills) {
+				} else if (mainBillData) {
 					return {
 						...base,
 						mergeDetail: {
@@ -271,7 +283,7 @@ export async function load({ params }) {
 								proposedBy: mainBillData.creators[0]?.name
 							},
 							otherBills: mergeEventBills.filter(
-								(b) => b.id !== bill.id && b.id !== event.main_bill_id
+								(b) => b.id !== bill.id && b.id !== mainBillData.id
 							)
 						}
 					};
@@ -287,26 +299,24 @@ export async function load({ params }) {
 		);
 
 	let mergedBillProposer: ReturnType<typeof getBillProposer> = undefined;
-	if (mergeEvent?.main_bill_id && mergeEvent.main_bill_id !== bill.id) {
-		const mainBillFromEvent = mergeEvent.bills.find((b) => b.id === mergeEvent.main_bill_id);
-		if (mainBillFromEvent?.proposal_date) {
-			const mergedBillData = await graphql.query({
-				bills: {
-					__args: {
-						where: { id: { eq: mergeEvent.main_bill_id } },
-						limit: 1
-					},
-					...createBillFieldsForProposer(mainBillFromEvent.proposal_date)
-				}
-			});
-			const mergedBill = mergedBillData.bills[0];
-			if (mergedBill) {
-				mergedBillProposer = getBillProposer({
-					creator_type: mergedBill.creator_type,
-					creators: mergedBill.creators,
-					people_signature_count: mergedBill.people_signature_count
-				});
+	const mainBill = mergeEvent?.main_bill;
+	if (mainBill?.proposal_date && mainBill.id !== bill.id) {
+		const mergedBillData = await graphql.query({
+			bills: {
+				__args: {
+					where: { id: { eq: mainBill.id } },
+					limit: 1
+				},
+				...createBillFieldsForProposer(mainBill.proposal_date)
 			}
+		});
+		const mergedBill = mergedBillData.bills[0];
+		if (mergedBill) {
+			mergedBillProposer = getBillProposer({
+				creator_type: mergedBill.creator_type,
+				creators: mergedBill.creators,
+				people_signature_count: mergedBill.people_signature_count
+			});
 		}
 	}
 
@@ -352,10 +362,8 @@ export async function load({ params }) {
 		mergeDetail:
 			mergeEvent && mergeEventBills
 				? {
-						mainBill: mergeEventBills.find((b) => b.id === mergeEvent.main_bill_id),
-						otherBills: mergeEventBills.filter(
-							(b) => b.id !== bill.id && b.id !== mergeEvent.main_bill_id
-						)
+						mainBill: mainBill ? toMergeBill(mainBill) : undefined,
+						otherBills: mergeEventBills.filter((b) => b.id !== bill.id && b.id !== mainBill?.id)
 					}
 				: null,
 		events: parsedEvents.map((event) => {
