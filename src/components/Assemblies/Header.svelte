@@ -78,7 +78,7 @@
 			</a>
 		</div>
 		{#if showRemark}
-			<DataPeriodRemark {updatedAt} />
+			<DataPeriodRemark {updatedAt} variant="changed" />
 			<Share label="แชร์" />
 		{/if}
 	</div>

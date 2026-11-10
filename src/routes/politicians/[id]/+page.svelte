@@ -129,7 +129,10 @@
 						]}
 					/>
 				{/if}
-				<DataPeriodRemark updatedAt={data.politician.updated_at ?? data.politician.created_at} />
+				<DataPeriodRemark
+					updatedAt={data.politician.updated_at ?? data.politician.created_at}
+					variant="profile"
+				/>
 				<Share label="แชร์ประวัติ" />
 			</div>
 		</div>

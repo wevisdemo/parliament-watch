@@ -40,7 +40,7 @@
 					class="whitespace-nowrap">ความเคลื่อนไหว</span
 				><span class="whitespace-nowrap">รัฐสภา</span>
 			</h1>
-			<DataPeriodRemark updatedAt={data.lastUpdatedAt} withStartDate />
+			<DataPeriodRemark updatedAt={data.timestamps.lastNodeUpdatedAt} variant="coverage" />
 		</div>
 	</header>
 	<nav>

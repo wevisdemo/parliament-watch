@@ -6,11 +6,23 @@
 </script>
 
 <Hst.Story title="DataPeriodRemark" layout={{ type: 'grid' }}>
-	<Hst.Variant title="With Start Date">
-		<DataPeriodRemark updatedAt="2025-01-15" withStartDate />
+	<Hst.Variant title="Updated">
+		<DataPeriodRemark updatedAt="2025-01-15" />
 	</Hst.Variant>
 
-	<Hst.Variant title="Without Start Date">
-		<DataPeriodRemark updatedAt="2025-01-15" />
+	<Hst.Variant title="Coverage">
+		<DataPeriodRemark updatedAt="2025-01-15" variant="coverage" />
+	</Hst.Variant>
+
+	<Hst.Variant title="Changed">
+		<DataPeriodRemark updatedAt="2025-01-15" variant="changed" />
+	</Hst.Variant>
+
+	<Hst.Variant title="Profile">
+		<DataPeriodRemark updatedAt="2025-01-15" variant="profile" />
+	</Hst.Variant>
+
+	<Hst.Variant title="Scraped">
+		<DataPeriodRemark updatedAt="2025-01-15" variant="scraped" />
 	</Hst.Variant>
 </Hst.Story>

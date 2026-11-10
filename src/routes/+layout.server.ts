@@ -7,7 +7,9 @@ export async function load({ setHeaders }) {
 		setHeaders({ 'cache-control': PAGE_CACHE_CONTROL });
 	}
 
-	const { lastUpdatedAt } = await graphql.query({ lastUpdatedAt: true });
+	const { timestamps } = await graphql.query({
+		timestamps: { lastNodeUpdatedAt: true, lastBillScrapedAt: true }
+	});
 
-	return { lastUpdatedAt: lastUpdatedAt ?? null };
+	return { timestamps };
 }

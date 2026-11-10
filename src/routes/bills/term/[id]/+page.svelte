@@ -52,7 +52,7 @@
 <header class="flex flex-col items-center gap-2 px-4 py-10 text-center">
 	<LawIcon width="36" height="36" />
 	<h1 class="fluid-heading-05 text-balance">สำรวจร่างกฎหมายในสภา</h1>
-	<DataPeriodRemark updatedAt={data.lastUpdatedAt} withStartDate />
+	<DataPeriodRemark updatedAt={data.timestamps.lastBillScrapedAt} variant="scraped" />
 </header>
 
 <section class="mx-auto flex w-full max-w-[1280px] flex-col gap-2 px-4 py-6">
