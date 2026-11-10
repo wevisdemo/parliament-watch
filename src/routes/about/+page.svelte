@@ -14,14 +14,7 @@
 
 	const sections = [
 		{ menu: 'เกี่ยวกับเว็บไซต์นี้', menuItem: [{ text: 'ทีมงานร่วมพัฒนา' }] },
-		{
-			menu: 'เกี่ยวกับข้อมูลในเว็บไซต์',
-			menuItem: [
-				{ text: 'ที่มาและข้อจำกัดข้อมูล' },
-				{ text: 'กระบวนการจัดทำข้อมูล' },
-				{ text: 'นโยบายการนำข้อมูลไปใช้ต่อ' }
-			]
-		},
+		{ menu: 'เกี่ยวกับข้อมูลในเว็บไซต์', menuItem: [] },
 		{
 			menu: 'เกี่ยวกับ WeVis',
 			menuItem: [
@@ -172,97 +165,15 @@
 			<hr class="border-t-solid my-2 border-t border-t-ui-03" role="none" />
 
 			<p>
-				ข้อมูลทั้งหมดในเว็บไซต์นี้มาจาก
-				<a href="https://politigraph.wevis.info/" target="_blank" rel="noopener noreferrer"
+				ข้อมูลทั้งหมดในเว็บไซต์นี้มาจาก <a href="https://politigraph.wevis.info" target="_blank"
 					>Politigraph</a
-				>
-				ฐานข้อมูลเปิดด้านการเมืองไทยที่ WeVis พัฒนาและดูแล รายละเอียดในหน้านี้เป็นเพียงสรุป โปรดอ้างอิงเอกสารของ
+				> ฐานข้อมูลเปิดด้านการเมืองไทยที่ WeVis พัฒนาและดูแล รายละเอียดในหน้านี้เป็นเพียงสรุป โปรดอ้างอิงเอกสารของ
 				Politigraph เป็นหลัก
 			</p>
-
-			<h3 id="ที่มาและข้อจำกัดข้อมูล" class="fluid-heading-03 mt-2">ที่มาและข้อจำกัดข้อมูล</h3>
-			<ul class="list-disc">
-				<li>
-					<strong>การลงมติ:</strong> มาจากเอกสารบันทึกการออกเสียงและลงคะแนน (ใบประมวลผลการลงมติ)
-					ในเว็บไซต์
-					<a
-						href="http://msbis.parliament.go.th/"
-						target="_blank"
-						rel="nofollow noopener noreferrer">msbis.parliament.go.th</a
-					>
-					โดยมีจำนวนน้อยกว่ามติที่มีการโหวตจริง เนื่องจากเว็บไซต์ต้นทางมักเผยแพร่ไม่ครบหรือไม่ทันทีหลังการโหวต
-					และฐานข้อมูลนี้ไม่รวมการลงมติร่างกฎหมายวาระ 2 ซึ่งเป็นการลงมติรายมาตราที่มีจำนวนมาก (<a
-						href="https://politigraph.wevis.info/schema/vote-event/#การอัพเดตข้อมูลและสถานะการเผยแพร่"
-						target="_blank"
-						rel="noopener noreferrer">อ่านเพิ่มเติมใน Politigraph</a
-					>)
-				</li>
-				<li>
-					<strong>การเสนอกฎหมาย:</strong> มาจากเว็บไซต์ระบบสารสนเทศด้านนิติบัญญัติ
-					<a href="http://lis.parliament.go.th/" target="_blank" rel="nofollow noopener noreferrer"
-						>lis.parliament.go.th</a
-					>
-					ซึ่งไม่ได้เผยแพร่ทันทีที่สถานะของร่างกฎหมายมีการเปลี่ยนแปลง (<a
-						href="https://politigraph.wevis.info/schema/bill/#การอัพเดตข้อมูลและสถานะการเผยแพร่"
-						target="_blank"
-						rel="noopener noreferrer">อ่านเพิ่มเติมใน Politigraph</a
-					>)
-				</li>
-			</ul>
-
-			<h3 id="กระบวนการจัดทำข้อมูล" class="fluid-heading-03 mt-2">กระบวนการจัดทำข้อมูล</h3>
-			<p>
-				Politigraph รวบรวมข้อมูลจากเว็บไซต์ทางการของภาครัฐด้วยระบบอัตโนมัติ แปลงให้อยู่ในรูปแบบ
-				machine-readable และมีทีมข้อมูลของ WeVis คอยตรวจทาน
-				<a
-					href="https://politigraph.wevis.info/getting-started/#โครงสร้างของระบบ"
-					target="_blank"
-					rel="noopener noreferrer">อ่านขั้นตอนการจัดทำข้อมูลใน Politigraph</a
-				>
-				และดู<a
-					href="https://politigraph.wevis.info/schema/timestamps/"
-					target="_blank"
-					rel="noopener noreferrer">รอบการอัปเดตข้อมูล</a
-				>
-			</p>
-			<p>
-				แม้จะมีการตรวจสอบความถูกต้องโดยทีมงานแล้ว ข้อมูลอาจยังมีความคลาดเคลื่อนอยู่บ้าง
-				จึงแนะนำให้ตรวจสอบกับข้อมูลต้นทางก่อนนำไปใช้อ้างอิง
-				หากพบข้อมูลที่ไม่ถูกต้องหรือไม่เป็นปัจจุบัน มีข้อสงสัย หรือมีข้อเสนอแนะ สามารถติดต่อได้ที่
-				<a href="mailto:team@wevis.info">team@wevis.info</a>
-			</p>
-
-			<h3 id="นโยบายการนำข้อมูลไปใช้ต่อ" class="fluid-heading-03 mt-2">
-				นโยบายการนำข้อมูลไปใช้ต่อ
-			</h3>
-			<p>
-				ข้อมูลเปิดเป็น Open Data ภายใต้เงื่อนไข
-				<a
-					href="https://creativecommons.org/licenses/by-nc/4.0/"
-					target="_blank"
-					rel="nofollow noopener noreferrer">CC BY-NC 4.0</a
-				>
-				ตาม<a
-					href="https://politigraph.wevis.info/getting-started/usage/#การอนุญาตใช้งาน-license"
-					target="_blank"
-					rel="noopener noreferrer">การอนุญาตใช้งานของ Politigraph</a
-				>
-				หากต้องการนำข้อมูลไปใช้ต่อ สามารถดาวน์โหลดไฟล์ CSV จากหน้าต่างๆ ในเว็บไซต์นี้ หรือดึงข้อมูลโดยตรงผ่าน
-				<a
-					href="https://politigraph.wevis.info/getting-started/usage/"
-					target="_blank"
-					rel="noopener noreferrer">Politigraph API</a
-				>
-			</p>
-			<p>
-				ส่วน Source Code ของเว็บไซต์นี้เปิดเป็น Open Source ภายใต้เงื่อนไข
-				<a
-					href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-					target="_blank"
-					rel="nofollow noopener noreferrer">CC BY-NC-SA 4.0</a
-				>
-				โดย WeVis Ltd. และ Punch Up Ltd. เป็นผู้อนุญาต (licensor) ร่วมกัน
-			</p>
+			<div class="data-source-content">
+				<!-- eslint-disable-next-line svelte/no-at-html-tags -- fetched at build time from WeVis's own Politigraph docs -->
+				{@html data.dataSourceHtml}
+			</div>
 		</section>
 		<section class="flex flex-col gap-2 py-6 md:py-9">
 			<h2 id="เกี่ยวกับ-WeVis" class="fluid-heading-04">เกี่ยวกับ WeVis</h2>
@@ -386,5 +297,14 @@
 	a {
 		@apply underline;
 		color: inherit;
+	}
+
+	.data-source-content :global(table) {
+		@apply block border-collapse overflow-x-auto border border-ui-03;
+	}
+
+	.data-source-content :global(th),
+	.data-source-content :global(td) {
+		@apply min-w-[10rem] border border-ui-03 p-2 align-top;
 	}
 </style>
