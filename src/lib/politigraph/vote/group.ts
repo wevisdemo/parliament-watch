@@ -14,7 +14,7 @@ function resolveGroupName(vote: VoteInput) {
 		return `สส.${vote.party.side.replace('พรรค', '')}`;
 	}
 
-	if (vote.role.startsWith('สส.')) {
+	if (vote.party || vote.role.startsWith('สส.')) {
 		return UNKNOWN_REPRESENTATIVE_GROUP;
 	}
 
