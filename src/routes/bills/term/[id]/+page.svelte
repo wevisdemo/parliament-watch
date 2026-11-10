@@ -55,7 +55,7 @@
 	<DataPeriodRemark updatedAt={data.lastUpdatedAt} withStartDate />
 </header>
 
-<section class="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-6">
+<section class="mx-auto flex w-full max-w-[1280px] flex-col gap-2 px-4 py-6">
 	<h2 class="fluid-heading-03">ค้นด้วยชื่อ</h2>
 	<div class="relative">
 		<SearchInput
