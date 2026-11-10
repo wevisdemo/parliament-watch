@@ -43,7 +43,7 @@
 			return scroller.destroy;
 		}
 	});
-	let { politician, agreedVoting, disagreedVoting, votingAbsentStats } = $derived(data);
+	let { politician, hasVotes, agreedVoting, disagreedVoting, votingAbsentStats } = $derived(data);
 	let partyMemberships = $derived(
 		politician.memberships.filter(
 			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
@@ -61,6 +61,14 @@
 		)
 	);
 	let currentAssemblyMemberships = $derived(assemblyMemberships.filter(isCurrent));
+	let hasPersonalInfo = $derived(
+		[
+			politician.gender,
+			politician.birth_date,
+			politician.educations,
+			politician.previous_occupations
+		].some(Boolean) || politician.links.length > 0
+	);
 </script>
 
 <Breadcrumb
@@ -111,14 +119,16 @@
 				{/if}
 			</div>
 			<div class="flex flex-col gap-2">
-				<LinkTable
-					links={[
-						{
-							label: 'ผลการลงมติรายคน',
-							url: `/files/download/politicians/${politician.id}-votes.csv`
-						}
-					]}
-				/>
+				{#if hasVotes}
+					<LinkTable
+						links={[
+							{
+								label: 'ผลการลงมติรายคน',
+								url: `/files/download/politicians/${politician.id}-votes.csv`
+							}
+						]}
+					/>
+				{/if}
 				<DataPeriodRemark updatedAt={data.politician.updated_at ?? data.politician.created_at} />
 				<Share label="แชร์ประวัติ" />
 			</div>
@@ -134,6 +144,7 @@
 			{currentNavElementIndex}
 			assemblyRolesLength={assemblyMemberships.length}
 			partyCount={membershipInEachParties.length}
+			showVoting={hasVotes}
 			agreedVoting={agreedVoting.total}
 			disagreedVoting={disagreedVoting.total}
 			absentTotal={votingAbsentStats.reduce((total, stat) => total + stat.absentVoting, 0)}
@@ -143,6 +154,9 @@
 				{#snippet icon()}
 					<General size={32} />
 				{/snippet}
+				{#if !hasPersonalInfo}
+					<p class="body-01 text-gray-60">ไม่มีข้อมูล</p>
+				{/if}
 				<div>
 					<p>
 						{#if politician.gender}
@@ -254,13 +268,15 @@
 					</div>
 				{/if}
 			</Section>
-			<PoliticianVoteSummary
-				politicianId={politician.id}
-				politicianFirstname={politician.firstname}
-				{agreedVoting}
-				{disagreedVoting}
-				{votingAbsentStats}
-			/>
+			{#if hasVotes}
+				<PoliticianVoteSummary
+					politicianId={politician.id}
+					politicianFirstname={politician.firstname}
+					{agreedVoting}
+					{disagreedVoting}
+					{votingAbsentStats}
+				/>
+			{/if}
 		</div>
 	</div>
 </div>

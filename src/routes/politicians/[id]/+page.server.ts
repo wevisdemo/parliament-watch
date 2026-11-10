@@ -113,6 +113,7 @@ export async function load({ params }) {
 
 	return {
 		politician,
+		hasVotes: latestVotings.length > 0,
 		agreedVoting,
 		disagreedVoting,
 		votingAbsentStats,

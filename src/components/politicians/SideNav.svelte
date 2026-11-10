@@ -6,6 +6,7 @@
 		currentNavElementIndex: number;
 		assemblyRolesLength: number;
 		partyCount: number;
+		showVoting: boolean;
 		agreedVoting: number;
 		disagreedVoting: number;
 		absentTotal: number;
@@ -15,6 +16,7 @@
 		currentNavElementIndex,
 		assemblyRolesLength,
 		partyCount,
+		showVoting,
 		agreedVoting,
 		disagreedVoting,
 		absentTotal
@@ -59,23 +61,25 @@
 				{/if}
 			</a>
 		</li>
-		<li
-			class="ease-productive-in-out group bg-inverse-02 transition-colors duration-[114ms] hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05"
-			data-active={currentNavElementIndex === 2 || null}
-		>
-			<a href="#votes" class="block p-4 text-white no-underline">
-				<div class="flex justify-between">
-					<span>ประวัติการลงมติ</span>
-					<ArrowDown class="md:hidden" />
-					<ArrowRight class="hidden md:group-data-[active]:block" />
-				</div>
-				<ul class="label-01 text-white/60">
-					<li>เห็นด้วย {agreedVoting} มติ</li>
-					<li>ไม่เห็นด้วย {disagreedVoting} มติ</li>
-					<li>ลา / ขาดลงมติ {absentTotal} มติ</li>
-				</ul>
-			</a>
-		</li>
+		{#if showVoting}
+			<li
+				class="ease-productive-in-out group bg-inverse-02 transition-colors duration-[114ms] hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05"
+				data-active={currentNavElementIndex === 2 || null}
+			>
+				<a href="#votes" class="block p-4 text-white no-underline">
+					<div class="flex justify-between">
+						<span>ประวัติการลงมติ</span>
+						<ArrowDown class="md:hidden" />
+						<ArrowRight class="hidden md:group-data-[active]:block" />
+					</div>
+					<ul class="label-01 text-white/60">
+						<li>เห็นด้วย {agreedVoting} มติ</li>
+						<li>ไม่เห็นด้วย {disagreedVoting} มติ</li>
+						<li>ลา / ขาดลงมติ {absentTotal} มติ</li>
+					</ul>
+				</a>
+			</li>
+		{/if}
 		<!-- <li
 				class="group bg-inverse-02 hover:bg-[#313131] md:data-[active]:bg-ui-05 md:data-[active]:hover:bg-ui-05 transition-colors duration-[112ms] ease-productive-in-out"
 				data-active={currentNavElementIndex === 3 || null}
