@@ -14,7 +14,7 @@
 <ul>
 	{#each menuList as menu (menu.label)}
 		<li>
-			{#if menu.type === 'link' || menu.type === 'both'}
+			{#if menu.type === 'link'}
 				<SideMenuLink linkMenu={menu} />
 			{:else}
 				<SideMenu {menu}>
@@ -22,7 +22,7 @@
 				</SideMenu>
 			{/if}
 		</li>
-		{#if menu.type === 'root' || menu.type === 'both'}
+		{#if menu.type === 'root'}
 			<hr class="z-40 m-0 border-0 border-b border-gray-30/20 p-0" />
 		{/if}
 	{/each}

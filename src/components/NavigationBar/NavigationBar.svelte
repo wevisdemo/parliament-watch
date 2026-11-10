@@ -22,8 +22,15 @@
 		{
 			label: 'การลงมติ',
 			icon: VoteIcon,
-			url: '/assemblies/latest/representative/votes',
-			type: MenuTypes.both
+			type: MenuTypes.root,
+			subs: [
+				{
+					label: 'สภาผู้แทนราษฎร',
+					url: '/assemblies/latest/representative/votes',
+					type: MenuTypes.link
+				},
+				{ label: 'วุฒิสภา', url: '/assemblies/latest/senate/votes', type: MenuTypes.link }
+			]
 		},
 		{
 			label: 'การเสนอกฎหมาย',

@@ -8,15 +8,12 @@
 	}
 
 	let { linkMenu, additionalClass = '' }: Props = $props();
-
-	let hoverClass = $derived(linkMenu.type === 'both' ? 'hover:bg-gray-90' : 'hover:bg-gray-80');
 </script>
 
 <a
 	href={linkMenu.url}
 	class={twMerge(
-		'flex items-center px-4 text-gray-30 hover:text-gray-10',
-		hoverClass,
+		'flex items-center px-4 text-gray-30 hover:bg-gray-80 hover:text-gray-10',
 		'no-underline decoration-gray-30 transition-all duration-200',
 		additionalClass
 	)}

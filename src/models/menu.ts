@@ -2,8 +2,7 @@ import type { Component } from 'svelte';
 
 export enum MenuTypes {
 	root = 'root',
-	link = 'link',
-	both = 'both'
+	link = 'link'
 }
 
 export interface Menu {
