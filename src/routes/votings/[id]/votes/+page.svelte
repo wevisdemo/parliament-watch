@@ -94,7 +94,8 @@
 		{ url: `/votings/${voteEvent.id}`, label: voteEvent.nickname || voteEvent.title },
 		{ label: 'ผลการลงมติรายคน' }
 	]}
-	searchPlaceholder="ชื่อ-นามสกุล"
+	searchPlaceholder="ชื่อผู้ลงมติ"
+	unit="คน"
 	{comboboxFilterList}
 	{checkboxFilterList}
 	{queryStateConfig}
