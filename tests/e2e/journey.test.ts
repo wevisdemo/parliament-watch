@@ -175,7 +175,8 @@ describe('client-fetched assets', () => {
 
 describe('csv downloads', () => {
 	const expectCsv = async (path: string) => {
-		const res = await expectPage(path, 'text/csv');
+		const res = await expectPage(path, 'text/csv; charset=utf-8');
+		expect(res.headers.get('content-disposition'), path).toBe('attachment');
 		const text = await res.text();
 		expect(text.trim().length, path).toBeGreaterThan(0);
 		expect(text, path).toContain(',');
