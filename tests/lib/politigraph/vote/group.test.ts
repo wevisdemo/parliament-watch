@@ -33,4 +33,17 @@ describe('groupVotesByAffiliation', () => {
 
 		expect(names).toEqual(['สว.', 'ไม่พบข้อมูล']);
 	});
+
+	it('orders government, opposition and unknown สส. groups first, regardless of size', () => {
+		const names = groupVotesByAffiliation([
+			vote('สว. กลุ่ม 1'),
+			vote('สว. กลุ่ม 1'),
+			vote('สส. แบ่งเขต', { name: 'ค' }),
+			vote('สส. แบ่งเขต', { name: 'ค' }),
+			vote('สส. แบ่งเขต', { side: 'พรรคฝ่ายค้าน', name: 'ข' }),
+			vote('สส. แบ่งเขต', { side: 'พรรคฝ่ายรัฐบาล', name: 'ก' })
+		]).map(({ name }) => name);
+
+		expect(names).toEqual(['สส.ฝ่ายรัฐบาล', 'สส.ฝ่ายค้าน', 'สส.ไม่ทราบฝ่าย', 'สว.']);
+	});
 });

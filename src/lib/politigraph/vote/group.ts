@@ -9,6 +9,16 @@ interface VoteInput {
 
 export const UNKNOWN_REPRESENTATIVE_GROUP = `สส.${AssemblyPartyGroup.Unknown}`;
 const SENATE_GROUP = 'สว.';
+const REPRESENTATIVE_GROUP_ORDER = [
+	`สส.${AssemblyPartyGroup.Government}`,
+	`สส.${AssemblyPartyGroup.Opposition}`,
+	UNKNOWN_REPRESENTATIVE_GROUP
+];
+
+const getGroupOrder = (name: string) => {
+	const index = REPRESENTATIVE_GROUP_ORDER.indexOf(name);
+	return index === -1 ? REPRESENTATIVE_GROUP_ORDER.length : index;
+};
 
 function resolveGroupName(vote: VoteInput) {
 	if (vote.party?.side) {
@@ -32,7 +42,9 @@ export function groupVotesByAffiliation<T extends VoteInput>(voteInputs: T[]) {
 			name,
 			votes
 		}))
-		.sort((a, z) => z.votes.length - a.votes.length);
+		.sort(
+			(a, z) => getGroupOrder(a.name) - getGroupOrder(z.name) || z.votes.length - a.votes.length
+		);
 }
 
 export function countVotesInEachOption<T extends VoteInput>(voteInputs: T[]) {

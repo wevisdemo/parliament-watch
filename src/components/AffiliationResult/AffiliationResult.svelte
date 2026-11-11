@@ -69,7 +69,7 @@
 	let highestVote = $derived(findHighestVote(allVotes));
 	let isContentVisible = $derived(isDesktop || isExpanded);
 	let partiesPanelId = $derived('aff-' + name.replace(/\s/g, '-'));
-	let hasPartiesPanel = $derived(parties.length > 1);
+	let hasPartiesPanel = $derived(parties.some((party) => party.name));
 	let isMpNoParty = $derived(name === UNKNOWN_REPRESENTATIVE_GROUP);
 </script>
 
