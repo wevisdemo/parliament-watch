@@ -95,8 +95,10 @@
 			<div class="mt-2">
 				<strong class="block">เขียนโปรแกรม</strong>
 				<ul class="name-list">
-					{#each data.developers as { username, url } (username)}
-						<li><a href={url} target="_blank" rel="nofollow noopener noreferrer">{username}</a></li>
+					{#each data.developers as { login, html_url } (login)}
+						<li>
+							<a href={html_url} target="_blank" rel="nofollow noopener noreferrer">{login}</a>
+						</li>
 					{/each}
 				</ul>
 			</div>
