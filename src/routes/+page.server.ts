@@ -56,28 +56,19 @@ export async function load() {
 					__args: {
 						where: {
 							end_date: { eq: null },
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												in: [
-													'CABINET',
-													'HOUSE_OF_REPRESENTATIVE',
-													'HOUSE_OF_SENATE',
-													'POLITICAL_PARTY'
-												]
-											}
-										}
+							post: {
+								organization: {
+									classification: {
+										in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE', 'POLITICAL_PARTY']
 									}
 								}
 							}
 						}
 					},
-					posts: {
+					post: {
 						label: true,
 						role: true,
-						organizations: {
+						organization: {
 							classification: true,
 							name: true,
 							image: true
@@ -88,19 +79,19 @@ export async function load() {
 		})
 	).people.map(({ image, memberships, ...rest }) => {
 		const assembly = memberships.find(
-			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+			(m) => m.post?.organization?.classification !== 'POLITICAL_PARTY'
 		);
 		const party = memberships.find(
-			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+			(m) => m.post?.organization?.classification === 'POLITICAL_PARTY'
 		);
 
 		return {
 			...rest,
 			avatar: image ?? '',
-			label: assembly?.posts[0].label ?? '',
-			partyImage: party?.posts[0].organizations[0].name ?? '',
-			partyLogo: party?.posts[0].organizations[0].image ?? '',
-			partyName: party?.posts[0].organizations[0].name ?? ''
+			label: assembly?.post?.label ?? '',
+			partyImage: party?.post?.organization?.name ?? '',
+			partyLogo: party?.post?.organization?.image ?? '',
+			partyName: party?.post?.organization?.name ?? ''
 		};
 	});
 

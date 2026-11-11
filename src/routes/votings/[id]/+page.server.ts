@@ -38,7 +38,7 @@ export async function load({ params }) {
 				posts: {
 					role: true,
 					memberships: {
-						members: {
+						member: {
 							on_Organization: {
 								id: true,
 								image: true
@@ -54,7 +54,7 @@ export async function load({ params }) {
 				__scalar: true
 			},
 			bill_vote_events: {
-				bills: {
+				bill: {
 					id: true,
 					nickname: true,
 					title: true,
@@ -69,7 +69,7 @@ export async function load({ params }) {
 		error(404);
 	}
 
-	const relatedBillSource = voteEvent.bill_vote_events[0]?.bills[0];
+	const relatedBillSource = voteEvent.bill_vote_events[0]?.bill;
 	let relatedBill = null;
 	if (relatedBillSource?.proposal_date) {
 		const billData = await graphql.query({

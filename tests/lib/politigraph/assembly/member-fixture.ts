@@ -40,21 +40,17 @@ export function createMembership({
 		province,
 		start_date,
 		end_date,
-		posts: [
-			{
-				role,
-				organizations: [
-					{
-						id: organizationId,
-						classification,
-						name: organizationName,
-						image: organizationImage,
-						color: '',
-						memberships: []
-					}
-				]
+		post: {
+			role,
+			organization: {
+				id: organizationId,
+				classification,
+				name: organizationName,
+				image: organizationImage,
+				color: '',
+				memberships: []
 			}
-		]
+		}
 	};
 }
 

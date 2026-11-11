@@ -162,21 +162,17 @@ async function queryBillsInTerm(where: BillWhere) {
 					memberships: {
 						__args: {
 							where: {
-								posts: {
-									some: {
-										organizations: {
-											some: {
-												classification: { eq: 'POLITICAL_PARTY' }
-											}
-										}
+								post: {
+									organization: {
+										classification: { eq: 'POLITICAL_PARTY' }
 									}
 								}
 							}
 						},
 						start_date: true,
 						end_date: true,
-						posts: {
-							organizations: {
+						post: {
+							organization: {
 								id: true
 							}
 						}
@@ -188,14 +184,10 @@ async function queryBillsInTerm(where: BillWhere) {
 				memberships: {
 					__args: {
 						where: {
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												eq: 'POLITICAL_PARTY'
-											}
-										}
+							post: {
+								organization: {
+									classification: {
+										eq: 'POLITICAL_PARTY'
 									}
 								}
 							}
@@ -203,8 +195,8 @@ async function queryBillsInTerm(where: BillWhere) {
 					},
 					start_date: true,
 					end_date: true,
-					posts: {
-						organizations: {
+					post: {
+						organization: {
 							id: true
 						}
 					}

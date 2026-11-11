@@ -38,13 +38,9 @@ export async function queryAssemblyMembers({
 				where: {
 					memberships: {
 						some: {
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											id: { eq: id }
-										}
-									}
+							post: {
+								organization: {
+									id: { eq: id }
 								}
 							}
 						}
@@ -62,24 +58,16 @@ export async function queryAssemblyMembers({
 					where: {
 						OR: [
 							{
-								posts: {
-									some: {
-										organizations: {
-											some: {
-												id: { eq: id }
-											}
-										}
+								post: {
+									organization: {
+										id: { eq: id }
 									}
 								}
 							},
 							{
-								posts: {
-									some: {
-										organizations: {
-											some: {
-												classification: { eq: 'POLITICAL_PARTY' }
-											}
-										}
+								post: {
+									organization: {
+										classification: { eq: 'POLITICAL_PARTY' }
 									}
 								},
 								OR: [{ end_date: { eq: null } }, { end_date: { gte: founding_date } }],
@@ -95,9 +83,9 @@ export async function queryAssemblyMembers({
 				province: true,
 				start_date: true,
 				end_date: true,
-				posts: {
+				post: {
 					role: true,
-					organizations: {
+					organization: {
 						id: true,
 						classification: true,
 						name: true,
@@ -106,29 +94,25 @@ export async function queryAssemblyMembers({
 						memberships: {
 							__args: {
 								where: {
-									posts: {
-										some: {
-											role: { startsWith: 'พรรคฝ่าย' },
-											organizations: {
-												some: {
-													classification: { eq: 'CABINET' },
-													OR: [
-														{ dissolution_date: { eq: null } },
-														{ dissolution_date: { gte: founding_date } }
-													],
-													...(dissolution_date
-														? {
-																founding_date: { lte: dissolution_date }
-															}
-														: {})
-												}
-											}
+									post: {
+										role: { startsWith: 'พรรคฝ่าย' },
+										organization: {
+											classification: { eq: 'CABINET' },
+											OR: [
+												{ dissolution_date: { eq: null } },
+												{ dissolution_date: { gte: founding_date } }
+											],
+											...(dissolution_date
+												? {
+														founding_date: { lte: dissolution_date }
+													}
+												: {})
 										}
 									}
 								},
 								sort: [{ start_date: 'DESC' }]
 							},
-							posts: {
+							post: {
 								role: true
 							}
 						}
@@ -142,12 +126,11 @@ export async function queryAssemblyMembers({
 }
 
 export function parseMemberWithAssemblyRoles({ id, name, image, memberships }: AssemblyMember) {
-	const party = memberships.find(
-		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-	)?.posts[0].organizations[0];
+	const party = memberships.find((m) => m.post?.organization?.classification === 'POLITICAL_PARTY')
+		?.post?.organization;
 
 	return memberships
-		.filter((m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY')
+		.filter((m) => m.post?.organization?.classification !== 'POLITICAL_PARTY')
 		.map((m) => ({
 			profile: {
 				id,
@@ -156,6 +139,6 @@ export function parseMemberWithAssemblyRoles({ id, name, image, memberships }: A
 				partyName: party?.name ?? noParty.name,
 				partyLogo: party?.image ?? noParty.image
 			},
-			assemblyRole: m.posts[0].role ?? ''
+			assemblyRole: m.post?.role ?? ''
 		}));
 }

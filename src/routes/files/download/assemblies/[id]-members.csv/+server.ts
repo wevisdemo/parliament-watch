@@ -26,10 +26,8 @@ export async function GET({ params }) {
 		posts: {
 			__args: {
 				where: {
-					organizations: {
-						some: {
-							id: { eq: params.id }
-						}
+					organization: {
+						id: { eq: params.id }
 					}
 				}
 			},
@@ -41,20 +39,16 @@ export async function GET({ params }) {
 				list_number: true,
 				start_date: true,
 				end_date: true,
-				members: {
+				member: {
 					on_Person: {
 						prefix: true,
 						name: true,
 						memberships: {
 							__args: {
 								where: {
-									posts: {
-										some: {
-											organizations: {
-												some: {
-													classification: { eq: 'POLITICAL_PARTY' }
-												}
-											}
+									post: {
+										organization: {
+											classification: { eq: 'POLITICAL_PARTY' }
 										}
 									},
 									...(dissolution_date
@@ -69,8 +63,8 @@ export async function GET({ params }) {
 								sort: [{ start_date: 'DESC' }],
 								limit: 1
 							},
-							posts: {
-								organizations: {
+							post: {
+								organization: {
 									name: true
 								}
 							}
@@ -83,17 +77,24 @@ export async function GET({ params }) {
 
 	return createCsvFileResponse(
 		posts.flatMap(({ role, memberships }) =>
-			memberships.flatMap(({ members, ...restMembership }) =>
-				members
-					// filter out organization as a member (government/opposition party in assembly)
-					.filter((m) => m.memberships)
-					.map(({ memberships: [partyMember], ...restPeople }) => ({
+			memberships.flatMap(({ member, ...restMembership }) => {
+				// filter out organization as a member (government/opposition party in assembly)
+				if (!member || !('memberships' in member)) return [];
+
+				const {
+					memberships: [partyMember],
+					...restPeople
+				} = member;
+
+				return [
+					{
 						role,
 						...restPeople,
-						party: partyMember?.posts[0]?.organizations[0]?.name,
+						party: partyMember?.post?.organization?.name,
 						...restMembership
-					}))
-			)
+					}
+				];
+			})
 		)
 	);
 }

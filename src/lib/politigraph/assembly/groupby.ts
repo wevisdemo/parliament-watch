@@ -61,8 +61,8 @@ function sortGroupsByLabelOrder<M, T extends string>(
 
 function getPartySide({ memberships }: AssemblyMember) {
 	const cabinetRole = memberships.find(
-		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-	)?.posts[0].organizations[0].memberships[0]?.posts[0].role;
+		(m) => m.post?.organization?.classification === 'POLITICAL_PARTY'
+	)?.post?.organization?.memberships[0]?.post?.role;
 
 	return (
 		[AssemblyPartyGroup.Government, AssemblyPartyGroup.Opposition].find((side) =>
@@ -92,7 +92,7 @@ export function getMemberGroup(
 		case GroupByOption.Province: {
 			return groupMembersBy(members, ({ memberships }) => {
 				const province = memberships.find(
-					(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+					(m) => m.post?.organization?.classification !== 'POLITICAL_PARTY'
 				)?.province;
 				return (province && provinceRegionMap.get(province)) || UNKNOWN_LABEL;
 			}).map(([region, membersByRegion]) => ({
@@ -100,9 +100,8 @@ export function getMemberGroup(
 				subgroups: groupMembersBy(
 					membersByRegion,
 					({ memberships }) =>
-						memberships.find(
-							(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
-						)?.province || UNKNOWN_LABEL
+						memberships.find((m) => m.post?.organization?.classification !== 'POLITICAL_PARTY')
+							?.province || UNKNOWN_LABEL
 				).map(([province, membersByProvince]) => ({
 					name: province,
 					members: membersByProvince
@@ -209,7 +208,7 @@ export function createSubgroupByPartyOrAppointmentMethod(
 		? groupMembersBy(
 				members,
 				({ memberships }) =>
-					memberships.find((m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY')
+					memberships.find((m) => m.post?.organization?.classification !== 'POLITICAL_PARTY')
 						?.label || UNKNOWN_LABEL
 			).map(([method, membersByRole]) => ({
 				name: method,
@@ -218,12 +217,12 @@ export function createSubgroupByPartyOrAppointmentMethod(
 		: groupMembersBy(
 				members,
 				({ memberships }) =>
-					memberships.find((m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY')
-						?.posts[0].organizations[0].name || UNKNOWN_LABEL
+					memberships.find((m) => m.post?.organization?.classification === 'POLITICAL_PARTY')?.post
+						?.organization?.name || UNKNOWN_LABEL
 			).map(([partyName, membersByParty]) => {
 				const { name, image } =
-					membersByParty[0].memberships.find((m) => m.posts[0].organizations[0].name === partyName)
-						?.posts[0].organizations[0] ?? noParty;
+					membersByParty[0].memberships.find((m) => m.post?.organization?.name === partyName)?.post
+						?.organization ?? noParty;
 
 				return {
 					name: name || UNKNOWN_LABEL,

@@ -15,7 +15,7 @@ const membership = (
 	end_date: string | null
 ) => ({
 	end_date,
-	posts: [{ role, organizations: [{ classification, name }] }]
+	post: { role, organization: { classification, name } }
 });
 
 describe('describePolitician', () => {

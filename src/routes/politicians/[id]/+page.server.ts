@@ -39,19 +39,10 @@ export async function load({ params }) {
 			memberships: {
 				__args: {
 					where: {
-						posts: {
-							some: {
-								organizations: {
-									some: {
-										classification: {
-											in: [
-												'CABINET',
-												'HOUSE_OF_REPRESENTATIVE',
-												'HOUSE_OF_SENATE',
-												'POLITICAL_PARTY'
-											]
-										}
-									}
+						post: {
+							organization: {
+								classification: {
+									in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE', 'POLITICAL_PARTY']
 								}
 							}
 						}
@@ -60,9 +51,9 @@ export async function load({ params }) {
 				},
 				start_date: true,
 				end_date: true,
-				posts: {
+				post: {
 					role: true,
-					organizations: {
+					organization: {
 						id: true,
 						classification: true,
 						name: true,
@@ -77,17 +68,15 @@ export async function load({ params }) {
 		votes: {
 			__args: {
 				where: {
-					voters: {
-						some: {
-							id: {
-								eq: params.id
-							}
+					voter: {
+						id: {
+							eq: params.id
 						}
 					}
 				}
 			},
 			option: true,
-			vote_events: {
+			vote_event: {
 				id: true,
 				title: true,
 				result: true,
@@ -100,26 +89,29 @@ export async function load({ params }) {
 		error(404);
 	}
 
+	const memberships = politician.memberships.flatMap(({ post, ...membership }) =>
+		post?.organization
+			? [{ ...membership, post: { ...post, organization: post.organization } }]
+			: []
+	);
+
 	const latestVotings = votes
-		.filter(({ vote_events }) => vote_events.length > 0)
-		.toSorted((a, z) => z.vote_events[0].start_date.localeCompare(a.vote_events[0].start_date));
+		.flatMap(({ option, vote_event }) => (vote_event ? [{ option, vote_event }] : []))
+		.toSorted((a, z) => z.vote_event.start_date.localeCompare(a.vote_event.start_date));
 
 	const agreedVoting = getLatestVotingHistory(latestVotings, DefaultVoteOption.Agreed);
 	const disagreedVoting = getLatestVotingHistory(latestVotings, DefaultVoteOption.Disagreed);
-	const votingAbsentStats = await getVotingAbsentStatsByHouseTerm(
-		politician.id,
-		politician.memberships
-	);
+	const votingAbsentStats = await getVotingAbsentStatsByHouseTerm(politician.id, memberships);
 
 	return {
-		politician,
+		politician: { ...politician, memberships },
 		hasVotes: latestVotings.length > 0,
 		agreedVoting,
 		disagreedVoting,
 		votingAbsentStats,
 		seo: createSeo({
 			title: politician.name,
-			description: describePolitician(politician.memberships)
+			description: describePolitician(memberships)
 		})
 	};
 }
@@ -127,25 +119,21 @@ export async function load({ params }) {
 async function getVotingAbsentStatsByHouseTerm(
 	politicianId: string,
 	memberships: {
-		posts: {
-			organizations: {
+		post: {
+			organization: {
 				id: string;
 				classification: string;
 				name: string;
 				founding_date: string | null;
 				dissolution_date: string | null;
-			}[];
-		}[];
+			};
+		};
 	}[]
 ): Promise<VotingAbsentStats[]> {
 	const houseTerms = memberships
-		.map((membership) => membership.posts[0]?.organizations[0])
+		.map(({ post }) => post.organization)
 		.filter(
-			(
-				organization
-			): organization is NonNullable<
-				(typeof memberships)[number]['posts'][number]['organizations'][number]
-			> =>
+			(organization) =>
 				(organization.classification === 'HOUSE_OF_REPRESENTATIVE' ||
 					organization.classification === 'HOUSE_OF_SENATE') &&
 				Boolean(organization.founding_date)
@@ -166,13 +154,9 @@ async function getVotingAbsentStatsByHouseTerm(
 			const memberWhere = {
 				memberships: {
 					some: {
-						posts: {
-							some: {
-								organizations: {
-									some: {
-										id: { eq: houseTerm.id }
-									}
-								}
+						post: {
+							organization: {
+								id: { eq: houseTerm.id }
 							}
 						}
 					}
@@ -181,15 +165,13 @@ async function getVotingAbsentStatsByHouseTerm(
 			const absentVotesWhere = {
 				node: {
 					option: { eq: DefaultVoteOption.Absent },
-					vote_events: {
-						some: {
-							organizations: {
-								some: {
-									id: { eq: houseTerm.id }
-								}
-							},
-							...voteEventDateFilter
-						}
+					vote_event: {
+						organizations: {
+							some: {
+								id: { eq: houseTerm.id }
+							}
+						},
+						...voteEventDateFilter
 					}
 				}
 			};
@@ -252,19 +234,15 @@ async function getVotingAbsentStatsByHouseTerm(
 						__args: {
 							where: {
 								option: { eq: DefaultVoteOption.Absent },
-								vote_events: {
-									some: {
-										organizations: {
-											some: {
-												id: { eq: houseTerm.id }
-											}
-										},
-										...voteEventDateFilter
-									}
+								vote_event: {
+									organizations: {
+										some: {
+											id: { eq: houseTerm.id }
+										}
+									},
+									...voteEventDateFilter
 								},
-								voters: {
-									some: memberWhere
-								}
+								voter: memberWhere
 							}
 						},
 						aggregate: {
@@ -295,18 +273,16 @@ async function getVotingAbsentStatsByHouseTerm(
 }
 
 function getLatestVotingHistory(
-	votes: (Pick<Vote, 'option'> & { vote_events: Pick<VoteEvent, 'id' | 'title' | 'result'>[] })[],
+	votes: (Pick<Vote, 'option'> & { vote_event: Pick<VoteEvent, 'id' | 'title' | 'result'> })[],
 	selectedOption: DefaultVoteOption
 ): VotingHistory {
-	const filteredVotes = votes.filter(
-		({ option, vote_events }) => option === selectedOption && vote_events.length > 0
-	);
+	const filteredVotes = votes.filter(({ option }) => option === selectedOption);
 
 	return {
 		total: filteredVotes.length,
 		latest: filteredVotes
 			.slice(0, MAX_LATEST_VOTE)
-			.map(({ option, vote_events: [{ id, title, result }] }) => ({
+			.map(({ option, vote_event: { id, title, result } }) => ({
 				id,
 				title,
 				option,

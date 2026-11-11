@@ -65,14 +65,10 @@ export async function load() {
 					memberships: {
 						__args: {
 							where: {
-								posts: {
-									some: {
-										organizations: {
-											some: {
-												classification: {
-													eq: 'POLITICAL_PARTY'
-												}
-											}
+								post: {
+									organization: {
+										classification: {
+											eq: 'POLITICAL_PARTY'
 										}
 									}
 								}
@@ -80,8 +76,8 @@ export async function load() {
 						},
 						start_date: true,
 						end_date: true,
-						posts: {
-							organizations: {
+						post: {
+							organization: {
 								id: true
 							}
 						}
@@ -93,14 +89,10 @@ export async function load() {
 				memberships: {
 					__args: {
 						where: {
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												eq: 'POLITICAL_PARTY'
-											}
-										}
+							post: {
+								organization: {
+									classification: {
+										eq: 'POLITICAL_PARTY'
 									}
 								}
 							}
@@ -108,8 +100,8 @@ export async function load() {
 					},
 					start_date: true,
 					end_date: true,
-					posts: {
-						organizations: {
+					post: {
+						organization: {
 							id: true
 						}
 					}

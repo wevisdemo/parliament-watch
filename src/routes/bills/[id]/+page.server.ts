@@ -114,22 +114,18 @@ export async function load({ params }) {
 						where: {
 							start_date: { lte: bill.proposal_date },
 							OR: [{ end_date: { eq: null } }, { end_date: { gte: bill.proposal_date } }],
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												eq: 'POLITICAL_PARTY'
-											}
-										}
+							post: {
+								organization: {
+									classification: {
+										eq: 'POLITICAL_PARTY'
 									}
 								}
 							}
 						},
 						limit: 1
 					},
-					posts: {
-						organizations: {
+					post: {
+						organization: {
 							id: true,
 							name: true,
 							image: true,
@@ -148,7 +144,7 @@ export async function load({ params }) {
 				on_BillVoteEvent: {
 					id: true,
 					classification: true,
-					vote_events: {
+					vote_event: {
 						id: true,
 						title: true,
 						nickname: true,
@@ -318,29 +314,15 @@ export async function load({ params }) {
 		}
 	}
 
-	// Build voting data for each BillVoteEvent that has vote_events
-	const billVoteEvents = events.filter(
-		(e) => e.__typename === 'BillVoteEvent' && 'vote_events' in e && e.vote_events?.length > 0
-	) as Array<
-		(typeof events)[number] & {
-			vote_events: Array<{
-				id: string;
-				title: string;
-				nickname: string | null;
-				start_date: string;
-				end_date: string;
-				result: string | null;
-				organizations: { id: string }[];
-			}>;
-		}
-	>;
+	const billVoteEvents = events.flatMap((e) =>
+		e.__typename === 'BillVoteEvent' && e.vote_event ? [{ id: e.id, voteEvent: e.vote_event }] : []
+	);
 
 	const votingByEventId = new Map<string, VoteCardProps>();
 	await Promise.all(
-		billVoteEvents.map(async (billVoteEvent) => {
-			const voteEvent = billVoteEvent.vote_events[0];
+		billVoteEvents.map(async ({ id: billVoteEventId, voteEvent }) => {
 			const { id, date, result, votesSummary } = await toVoteCardProps(voteEvent);
-			votingByEventId.set(billVoteEvent.id, {
+			votingByEventId.set(billVoteEventId, {
 				id,
 				title: voteEvent.nickname ?? voteEvent.title,
 				date,
@@ -355,7 +337,7 @@ export async function load({ params }) {
 		proposer,
 		coProposers: co_creators.map(({ memberships, ...politician }) => ({
 			...politician,
-			party: memberships[0]?.posts[0]?.organizations[0]
+			party: memberships[0]?.post?.organization ?? undefined
 		})),
 		mergeDetail:
 			mergeEvent && mergeEventBills

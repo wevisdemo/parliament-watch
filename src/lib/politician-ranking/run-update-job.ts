@@ -27,14 +27,10 @@ async function writePoliticianRankingFile() {
 				memberships: {
 					some: {
 						end_date: { eq: null },
-						posts: {
-							some: {
-								organizations: {
-									some: {
-										classification: {
-											in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
-										}
-									}
+						post: {
+							organization: {
+								classification: {
+									in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE']
 								}
 							}
 						}
@@ -61,28 +57,19 @@ async function writePoliticianRankingFile() {
 					__args: {
 						where: {
 							end_date: { eq: null },
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												in: [
-													'CABINET',
-													'HOUSE_OF_REPRESENTATIVE',
-													'HOUSE_OF_SENATE',
-													'POLITICAL_PARTY'
-												]
-											}
-										}
+							post: {
+								organization: {
+									classification: {
+										in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE', 'POLITICAL_PARTY']
 									}
 								}
 							}
 						}
 					},
-					posts: {
+					post: {
 						role: true,
 						label: true,
-						organizations: {
+						organization: {
 							classification: true,
 							name: true,
 							image: true
@@ -93,7 +80,7 @@ async function writePoliticianRankingFile() {
 		})
 	).people.map(({ id, image, memberships }) => {
 		const getClassification = (membership: (typeof memberships)[number]) =>
-			membership.posts[0]?.organizations[0]?.classification;
+			membership.post?.organization?.classification;
 
 		const assembly = memberships.find(
 			(m) => getClassification(m) && getClassification(m) !== 'POLITICAL_PARTY'
@@ -103,9 +90,9 @@ async function writePoliticianRankingFile() {
 		return {
 			id,
 			avatar: image ?? '/images/politicians/_placeholder.webp',
-			label: assembly?.posts[0]?.label ?? '',
-			partyName: party?.posts[0]?.organizations[0]?.name ?? '',
-			partyLogo: party?.posts[0]?.organizations[0]?.image ?? '/images/parties/_placeholder.webp'
+			label: assembly?.post?.label ?? '',
+			partyName: party?.post?.organization?.name ?? '',
+			partyLogo: party?.post?.organization?.image ?? '/images/parties/_placeholder.webp'
 		};
 	});
 

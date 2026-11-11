@@ -14,27 +14,18 @@ export async function GET({ params }) {
 					__args: {
 						where: {
 							end_date: { eq: null },
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												in: [
-													'CABINET',
-													'HOUSE_OF_REPRESENTATIVE',
-													'HOUSE_OF_SENATE',
-													'POLITICAL_PARTY'
-												]
-											}
-										}
+							post: {
+								organization: {
+									classification: {
+										in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE', 'POLITICAL_PARTY']
 									}
 								}
 							}
 						}
 					},
 					label: true,
-					posts: {
-						organizations: {
+					post: {
+						organization: {
 							classification: true,
 							name: true,
 							abbreviation: true,
@@ -49,25 +40,16 @@ export async function GET({ params }) {
 					id,
 					name,
 					description: memberships
-						.sort((a, z) =>
-							a.posts[0].organizations[0].classification.localeCompare(
-								z.posts[0].organizations[0].classification
-							)
+						.flatMap(({ post, label }) =>
+							post?.organization ? [{ org: post.organization, label }] : []
 						)
-						.map(
-							({
-								posts: [
-									{
-										organizations: [org]
-									}
-								],
-								label
-							}) =>
-								org.classification === 'POLITICAL_PARTY'
-									? `พรรค${org.name}`
-									: [org.abbreviation, label, org.term && `ชุดที่ ${org.term}`]
-											.filter((value) => value)
-											.join(' ')
+						.sort((a, z) => a.org.classification.localeCompare(z.org.classification))
+						.map(({ org, label }) =>
+							org.classification === 'POLITICAL_PARTY'
+								? `พรรค${org.name}`
+								: [org.abbreviation, label, org.term && `ชุดที่ ${org.term}`]
+										.filter((value) => value)
+										.join(' ')
 						)
 						.join(' | ')
 				}))

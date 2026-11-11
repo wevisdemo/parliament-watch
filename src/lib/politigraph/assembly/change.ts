@@ -18,7 +18,7 @@ export function getRoleChanges(
 	return members
 		.flatMap((member) =>
 			member.memberships
-				.filter((membership) => membership.posts[0].organizations[0].id === assemblyId)
+				.filter((membership) => membership.post?.organization?.id === assemblyId)
 				.flatMap((membership) => {
 					const politician = {
 						image: member.image,
@@ -26,12 +26,13 @@ export function getRoleChanges(
 						id: member.id,
 						partyLogo: getPartyLogoAtDate(member.memberships, membership.start_date)
 					};
+					const role = membership.post?.role ?? '';
 
 					return [
 						{
 							date: new Date(membership.start_date),
 							type: 'in' as const,
-							role: membership.posts[0].role,
+							role,
 							politician
 						},
 						...(membership.end_date
@@ -39,7 +40,7 @@ export function getRoleChanges(
 									{
 										date: new Date(membership.end_date),
 										type: 'out' as const,
-										role: membership.posts[0].role,
+										role,
 										politician
 									}
 								]
@@ -55,13 +56,13 @@ function getPartyLogoAtDate(memberships: AssemblyMember['memberships'], date: st
 	const { image } =
 		memberships
 			.filter(
-				({ posts, start_date, end_date }) =>
-					posts[0].organizations[0].classification === 'POLITICAL_PARTY' &&
+				({ post, start_date, end_date }) =>
+					post?.organization?.classification === 'POLITICAL_PARTY' &&
 					start_date <= date &&
 					(!end_date || date < end_date)
 			)
 			.toSorted((a, z) => z.start_date.localeCompare(a.start_date))
-			.at(0)?.posts[0].organizations[0] ?? noParty;
+			.at(0)?.post?.organization ?? noParty;
 
 	return image;
 }

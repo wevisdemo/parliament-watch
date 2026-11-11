@@ -45,20 +45,14 @@
 	});
 	let { politician, hasVotes, agreedVoting, disagreedVoting, votingAbsentStats } = $derived(data);
 	let partyMemberships = $derived(
-		politician.memberships.filter(
-			(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-		)
+		politician.memberships.filter((m) => m.post.organization.classification === 'POLITICAL_PARTY')
 	);
 	let currentPartyMembership = $derived(partyMemberships.find(isCurrent));
-	let currentPartyRole = $derived(currentPartyMembership?.posts[0].role);
-	let currentParty = $derived(currentPartyMembership?.posts[0].organizations[0]);
-	let membershipInEachParties = $derived(
-		groups(partyMemberships, (m) => m.posts[0].organizations[0].name)
-	);
+	let currentPartyRole = $derived(currentPartyMembership?.post.role);
+	let currentParty = $derived(currentPartyMembership?.post.organization);
+	let membershipInEachParties = $derived(groups(partyMemberships, (m) => m.post.organization.name));
 	let assemblyMemberships = $derived(
-		politician.memberships.filter(
-			(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
-		)
+		politician.memberships.filter((m) => m.post.organization.classification !== 'POLITICAL_PARTY')
 	);
 	let currentAssemblyMemberships = $derived(assemblyMemberships.filter(isCurrent));
 	let hasPersonalInfo = $derived(
@@ -95,17 +89,17 @@
 				</h1>
 				<PositionStatus
 					isActive={currentAssemblyMemberships.some(
-						(m) => isCurrent(m) && !m.posts[0].organizations[0].dissolution_date
+						(m) => isCurrent(m) && !m.post.organization.dissolution_date
 					)}
 				/>
 				{#if currentAssemblyMemberships.length}
 					<h2 class="heading-01 -mb-2">ตำแหน่งปัจจุบัน</h2>
 					<ul class="body-01 ml-8 list-disc">
-						{#each currentAssemblyMemberships as { posts: [post] }, idx (idx)}
+						{#each currentAssemblyMemberships as { post }, idx (idx)}
 							<li>
 								{post.role} ใน
-								<a class="text-black" href="/assemblies/{post.organizations[0].id}"
-									>{post.organizations[0].name}</a
+								<a class="text-black" href="/assemblies/{post.organization.id}"
+									>{post.organization.name}</a
 								>
 							</li>
 						{/each}
@@ -245,11 +239,11 @@
 					<div>
 						<h3 class="heading-02">{assemblyMemberships.length} ตำแหน่งทางการเมือง</h3>
 						<ul class="ml-8 list-disc">
-							{#each assemblyMemberships as { posts: [post], start_date, end_date }, idx (idx)}
+							{#each assemblyMemberships as { post, start_date, end_date }, idx (idx)}
 								<li>
 									{post.role}
-									<a class="text-black underline" href="/assemblies/{post.organizations[0].id}">
-										{post.organizations[0].name}
+									<a class="text-black underline" href="/assemblies/{post.organization.id}">
+										{post.organization.name}
 									</a>
 									<span class="body-compact-02 text-gray-60">
 										({formatDateRange(start_date, end_date, { shortMonth: true, hideDay: true })})

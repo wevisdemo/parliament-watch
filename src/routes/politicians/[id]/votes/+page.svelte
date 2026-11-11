@@ -53,7 +53,7 @@
 			Object.values(selectedCheckboxValue).some((e) => e.length === 0)
 			? []
 			: votes
-					.filter(({ option, vote_events: [{ title, nickname, organizations }] }) => {
+					.filter(({ option, vote_event: { title, nickname, organizations } }) => {
 						const search = searchQuery.trim();
 						if (search && !title.includes(search) && !(nickname && nickname.includes(search))) {
 							return false;
@@ -65,7 +65,7 @@
 							) && selectedCheckboxValue.filterVoteType.includes(option)
 						);
 					})
-					.map(({ option, vote_events: [{ id, start_date, title, nickname, result, links }] }) => ({
+					.map(({ option, vote_event: { id, start_date, title, nickname, result, links } }) => ({
 						id,
 						date: start_date,
 						name: nickname || title,

@@ -100,10 +100,10 @@ function getPoliticianSummary(
 	dissolutionDate: string | null
 ) {
 	const partyMembership = memberships.find(
-		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+		(m) => m.post?.organization?.classification === 'POLITICAL_PARTY'
 	);
 	const assemblyMembership = memberships.find(
-		(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
+		(m) => m.post?.organization?.classification !== 'POLITICAL_PARTY'
 	);
 
 	const candidateType: CandidateType | undefined = assemblyMembership?.list_number
@@ -119,8 +119,8 @@ function getPoliticianSummary(
 		isActive:
 			!assemblyMembership?.end_date ||
 			(!!dissolutionDate && assemblyMembership.end_date.localeCompare(dissolutionDate) >= 0),
-		partyName: partyMembership?.posts[0].organizations[0].name,
-		partyLogo: partyMembership?.posts[0].organizations[0].image ?? undefined,
+		partyName: partyMembership?.post?.organization?.name,
+		partyLogo: partyMembership?.post?.organization?.image ?? undefined,
 		role:
 			assemblyMembership?.end_date &&
 			(!dissolutionDate || assemblyMembership.end_date.localeCompare(dissolutionDate) < 0)
@@ -131,6 +131,6 @@ function getPoliticianSummary(
 						? `${assemblyMembership?.province} เขต ${assemblyMembership.district_number}`
 						: assemblyMembership?.label,
 		candidateType,
-		assemblyRoleName: assemblyMembership?.posts[0].role
+		assemblyRoleName: assemblyMembership?.post?.role
 	};
 }

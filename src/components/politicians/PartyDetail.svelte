@@ -5,7 +5,7 @@
 	interface Props {
 		party: string;
 		memberships: (Pick<Membership, 'start_date' | 'end_date'> & {
-			posts: Pick<Post, 'role'>[];
+			post: Pick<Post, 'role'>;
 		})[];
 	}
 
@@ -24,7 +24,7 @@
 	</span>
 	<span class="label-01 block">
 		ตำแหน่ง :
-		{#each memberships as { posts: [post], start_date, end_date }, idx (idx)}
+		{#each memberships as { post, start_date, end_date }, idx (idx)}
 			<span>
 				{post.role}
 				<span class="text-gray-60">

@@ -25,23 +25,19 @@ export async function load({ params }) {
 		votes: {
 			__args: {
 				where: {
-					voters: {
-						some: {
-							id: { eq: politician.id }
-						}
+					voter: {
+						id: { eq: politician.id }
 					},
-					vote_events: {
-						some: {
-							organizations: {
-								some: {
-									classification: { in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE'] }
-								}
+					vote_event: {
+						organizations: {
+							some: {
+								classification: { in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE'] }
 							}
 						}
 					}
 				}
 			},
-			vote_events: {
+			vote_event: {
 				id: true,
 				title: true,
 				nickname: true,
@@ -64,12 +60,14 @@ export async function load({ params }) {
 		}
 	});
 
-	const votesWithEvent = votes.filter(({ vote_events }) => vote_events.length > 0);
+	const votesWithEvent = votes.flatMap(({ option, vote_event }) =>
+		vote_event ? [{ option, vote_event }] : []
+	);
 
 	const filterOptions = {
 		assemblies: votesWithEvent
-			.flatMap((v) => v.vote_events[0].organizations)
-			.reduce<(typeof votesWithEvent)[number]['vote_events'][number]['organizations']>(
+			.flatMap((v) => v.vote_event.organizations)
+			.reduce<(typeof votesWithEvent)[number]['vote_event']['organizations']>(
 				(uniques, org) => (uniques.some((u) => u.id === org.id) ? uniques : [...uniques, org]),
 				[]
 			)

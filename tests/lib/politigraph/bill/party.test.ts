@@ -8,7 +8,7 @@ const partyMembership = (
 ) => ({
 	start_date,
 	end_date,
-	posts: [{ organizations: [{ id: organizationId }] }]
+	post: { organization: { id: organizationId } }
 });
 
 const billWith = (memberships: ReturnType<typeof partyMembership>[]) => ({
@@ -43,7 +43,7 @@ describe('getInvolvedPartyIdSet', () => {
 	it('should not throw when a matching membership has no post', () => {
 		const parties = getInvolvedPartyIdSet({
 			proposal_date: '2023-06-01',
-			creators: [{ memberships: [{ start_date: '2023-01-01', end_date: null, posts: [] }] }],
+			creators: [{ memberships: [{ start_date: '2023-01-01', end_date: null, post: null }] }],
 			co_creators: []
 		});
 

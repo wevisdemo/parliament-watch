@@ -6,15 +6,13 @@ export async function GET({ params }) {
 		votes: {
 			__args: {
 				where: {
-					voters: {
-						some: {
-							id: { eq: params.id }
-						}
+					voter: {
+						id: { eq: params.id }
 					}
 				}
 			},
 			option: true,
-			vote_events: {
+			vote_event: {
 				title: true,
 				result: true,
 				start_date: true,
@@ -25,10 +23,7 @@ export async function GET({ params }) {
 
 	return createCsvFileResponse(
 		votes
-			.map(({ option, vote_events }) => ({
-				...(vote_events[0] ?? {}),
-				option
-			}))
+			.flatMap(({ option, vote_event }) => (vote_event ? [{ ...vote_event, option }] : []))
 			.sort((a, z) => z.start_date.localeCompare(a.start_date))
 	);
 }

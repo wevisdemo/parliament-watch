@@ -28,19 +28,10 @@ export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 								start_date: { lte: proposalDate },
 								OR: [{ end_date: { eq: null } }, { end_date: { gte: proposalDate } }]
 							}),
-							posts: {
-								some: {
-									organizations: {
-										some: {
-											classification: {
-												in: [
-													'CABINET',
-													'HOUSE_OF_REPRESENTATIVE',
-													'HOUSE_OF_SENATE',
-													'POLITICAL_PARTY'
-												]
-											}
-										}
+							post: {
+								organization: {
+									classification: {
+										in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE', 'POLITICAL_PARTY']
 									}
 								}
 							}
@@ -48,9 +39,9 @@ export function createBillFieldsForProposer<S extends BillGenqlSelection>(
 					},
 					start_date: true,
 					end_date: true,
-					posts: {
+					post: {
 						label: true,
-						organizations: {
+						organization: {
 							id: true,
 							classification: true,
 							name: true,
@@ -113,10 +104,10 @@ export function getBillProposer<
 	if (creator_type === 'POLITICIAN') {
 		if (!creator) return undefined;
 		const assemblyMembership = creator.memberships.find(
-			(m) => m.posts[0]?.organizations[0]?.classification !== 'POLITICAL_PARTY'
+			(m) => m.post?.organization?.classification !== 'POLITICAL_PARTY'
 		);
 		const partyMembership = creator.memberships.find(
-			(m) => m.posts[0]?.organizations[0]?.classification === 'POLITICAL_PARTY'
+			(m) => m.post?.organization?.classification === 'POLITICAL_PARTY'
 		);
 
 		return {
@@ -124,9 +115,9 @@ export function getBillProposer<
 			id: creator.id,
 			name: creator.name,
 			image: creator.image,
-			assemblyPost: assemblyMembership?.posts[0]?.label,
-			assembly: assemblyMembership?.posts[0]?.organizations[0],
-			party: partyMembership?.posts[0]?.organizations[0]
+			assemblyPost: assemblyMembership?.post?.label,
+			assembly: assemblyMembership?.post?.organization ?? undefined,
+			party: partyMembership?.post?.organization ?? undefined
 		};
 	}
 

@@ -12,15 +12,13 @@ export async function queryPoliticiansVote(voteEvent: {
 		votes: {
 			__args: {
 				where: {
-					vote_events: {
-						some: {
-							id: { eq: voteEvent.id }
-						}
+					vote_event: {
+						id: { eq: voteEvent.id }
 					}
 				}
 			},
 			id: true,
-			voters: {
+			voter: {
 				id: true,
 				name: true,
 				memberships: {
@@ -28,52 +26,46 @@ export async function queryPoliticiansVote(voteEvent: {
 						where: {
 							start_date: { lte: voteEvent.start_date },
 							OR: [{ end_date: { eq: null } }, { end_date: { gte: voteEvent.start_date } }],
-							posts: {
-								some: {
-									organizations: {
-										some: { id: { in: voteEvent.organizations.map((o) => o.id) } }
-									}
+							post: {
+								organization: {
+									id: { in: voteEvent.organizations.map((o) => o.id) }
 								}
 							}
 						}
 					},
 					label: true,
-					posts: {
-						organizations: {
+					post: {
+						organization: {
 							abbreviation: true
 						}
 					}
 				}
 			},
 			voter_name_raw: true,
-			voter_affiliations: {
-				__args: { where: { classification: { eq: 'POLITICAL_PARTY' } } },
+			voter_affiliation: {
 				id: true,
 				name: true,
-				image: true
+				image: true,
+				classification: true
 			},
 			option: true
 		},
 		posts: {
 			__args: {
 				where: {
-					organizations: {
-						some: {
-							classification: { eq: 'CABINET' },
-							founding_date: { lte: voteEvent.start_date },
-							OR: [
-								{ dissolution_date: { eq: null } },
-								{ dissolution_date: { gte: voteEvent.start_date } }
-							]
-						}
+					organization: {
+						classification: { eq: 'CABINET' },
+						founding_date: { lte: voteEvent.start_date },
+						OR: [
+							{ dissolution_date: { eq: null } },
+							{ dissolution_date: { gte: voteEvent.start_date } }
+						]
 					},
 					memberships: {
 						some: {
-							members: {
-								some: {
-									Organization: {
-										classification: { eq: 'POLITICAL_PARTY' }
-									}
+							member: {
+								Organization: {
+									classification: { eq: 'POLITICAL_PARTY' }
 								}
 							}
 						}
@@ -81,13 +73,13 @@ export async function queryPoliticiansVote(voteEvent: {
 				}
 			},
 			role: true,
-			organizations: {
+			organization: {
 				name: true,
 				founding_date: true,
 				dissolution_date: true
 			},
 			memberships: {
-				members: {
+				member: {
 					on_Organization: {
 						id: true
 					}
@@ -97,12 +89,13 @@ export async function queryPoliticiansVote(voteEvent: {
 	});
 
 	const partySideMap = new Map(
-		posts.flatMap((p) => p.memberships.map((m) => [m.members[0].id, p.role]))
+		posts.flatMap((p) => p.memberships.map((m) => [m.member?.id, p.role]))
 	);
 
-	return votes.map(({ id, option, voter_name_raw, voter_affiliations, voters: [politician] }) => {
+	return votes.map(({ id, option, voter_name_raw, voter_affiliation, voter: politician }) => {
 		const assemblyRole = politician?.memberships[0];
-		const party = voter_affiliations[0];
+		const party =
+			voter_affiliation?.classification === 'POLITICAL_PARTY' ? voter_affiliation : undefined;
 
 		return {
 			id: id,
@@ -119,7 +112,7 @@ export async function queryPoliticiansVote(voteEvent: {
 					}
 				: undefined,
 			role: assemblyRole
-				? `${assemblyRole.posts[0].organizations[0].abbreviation} ${assemblyRole.label ?? ''}`.trim()
+				? `${assemblyRole.post?.organization?.abbreviation ?? ''} ${assemblyRole.label ?? ''}`.trim()
 				: NO_INFO_LABEL
 		};
 	});

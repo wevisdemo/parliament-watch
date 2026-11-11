@@ -16,13 +16,13 @@ export async function queryLastEnactedBillsWithProposers(where: BillWhere, limit
 			__args: {
 				where: {
 					NOT: { start_date: { eq: null } },
-					bills: { some: where }
+					bill: where
 				},
 				sort: [{ start_date: 'DESC' }],
 				limit
 			},
 			start_date: true,
-			bills: {
+			bill: {
 				id: true,
 				title: true,
 				nickname: true,
@@ -31,9 +31,9 @@ export async function queryLastEnactedBillsWithProposers(where: BillWhere, limit
 		}
 	});
 
-	const lastEnactedBills = billEnactEvents
-		.filter(({ bills }) => bills.length > 0)
-		.map(({ start_date, bills }) => ({ enact_date: start_date, ...bills[0] }));
+	const lastEnactedBills = billEnactEvents.flatMap(({ start_date, bill }) =>
+		bill ? [{ enact_date: start_date, ...bill }] : []
+	);
 
 	if (lastEnactedBills.length === 0) {
 		return { lastEnactedBills, lastEnactedBillProposers: [] };

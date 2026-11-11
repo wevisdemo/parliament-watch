@@ -98,9 +98,7 @@ export async function load({ params }) {
 	const isCabinet = assembly.classification === 'CABINET';
 
 	const activeMembers = members.filter(({ memberships }) => {
-		const assemblyMembership = memberships.find(
-			(m) => m.posts[0].organizations[0].id === assembly.id
-		);
+		const assemblyMembership = memberships.find((m) => m.post?.organization?.id === assembly.id);
 
 		if (!assemblyMembership) return false;
 
@@ -115,8 +113,8 @@ export async function load({ params }) {
 		.filter(
 			({ memberships }) =>
 				!memberships
-					.find((m) => m.posts[0].organizations[0].id === assembly.id)
-					?.posts[0].role.startsWith('สมาชิก')
+					.find((m) => m.post?.organization?.id === assembly.id)
+					?.post?.role.startsWith('สมาชิก')
 		)
 		.flatMap(parseMemberWithAssemblyRoles)
 		.filter((member) => !member.assemblyRole.startsWith('สมาชิก'))
@@ -144,8 +142,8 @@ export async function load({ params }) {
 							...party,
 							color:
 								party.members[0].memberships.find(
-									(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
-								)?.posts[0].organizations[0]?.color ?? noParty.color,
+									(m) => m.post?.organization?.classification === 'POLITICAL_PARTY'
+								)?.post?.organization?.color ?? noParty.color,
 							count: party.members.length
 						})),
 						total: group.subgroups.reduce((sum, subGroup) => sum + subGroup.members.length, 0)

@@ -11,11 +11,11 @@ interface BillProposerInput {
 }
 
 interface MembershipInput extends Pick<Membership, 'start_date' | 'end_date'> {
-	posts: {
-		organizations: {
+	post: {
+		organization: {
 			id: string;
-		}[];
-	}[];
+		} | null;
+	} | null;
 }
 
 export function getInvolvedPartyIdSet(bill: BillInput, proposedDate = dayjs(bill.proposal_date)) {
@@ -40,5 +40,5 @@ function getOrgIdFromMembershipOnDate(memberships: MembershipInput[], date: Dayj
 	return memberships.find(
 		({ start_date, end_date }) =>
 			!date.isBefore(start_date) && (!end_date || !date.isAfter(end_date))
-	)?.posts?.[0]?.organizations?.[0]?.id;
+	)?.post?.organization?.id;
 }

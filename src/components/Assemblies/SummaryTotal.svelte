@@ -92,8 +92,8 @@
 					const membersFilter =
 						subgroup.members?.filter(({ memberships }) => {
 							const role = memberships.find(
-								(m) => m.posts[0].organizations[0].classification !== 'POLITICAL_PARTY'
-							)?.posts[0].role;
+								(m) => m.post?.organization?.classification !== 'POLITICAL_PARTY'
+							)?.post?.role;
 
 							if (!role) return [];
 

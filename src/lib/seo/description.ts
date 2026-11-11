@@ -12,16 +12,15 @@ const formatShortDate = (date: string) => formatThaiDate(date, { shortMonth: tru
 
 interface Membership {
 	end_date: string | null;
-	posts: { role: string; organizations: { classification: string; name: string }[] }[];
+	post: { role: string; organization: { classification: string; name: string } };
 }
 
-const isParty = ({ posts }: Membership) =>
-	posts[0]?.organizations[0]?.classification === 'POLITICAL_PARTY';
+const isParty = ({ post }: Membership) => post.organization.classification === 'POLITICAL_PARTY';
 
 export function describePolitician(memberships: Membership[]): string {
 	const current = memberships.filter(({ end_date }) => !end_date);
-	const position = current.find((m) => !isParty(m))?.posts[0]?.role;
-	const party = current.find(isParty)?.posts[0]?.organizations[0]?.name;
+	const position = current.find((m) => !isParty(m))?.post.role;
+	const party = current.find(isParty)?.post.organization.name;
 
 	return joinClauses(
 		position,
