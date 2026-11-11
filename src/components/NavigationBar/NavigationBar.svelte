@@ -46,8 +46,12 @@
 			icon: WeVisIcon,
 			type: MenuTypes.root,
 			subs: [
-				{ label: 'ที่มาของโครงการ', url: '/about#เกี่ยวกับเว็บไซต์นี้', type: MenuTypes.link },
-				{ label: 'ข้อมูลในเว็บนี้', url: '/about#เกี่ยวกับข้อมูลในเว็บไซต์', type: MenuTypes.link },
+				{ label: 'เกี่ยวกับเว็บไซต์นี้', url: '/about#เกี่ยวกับเว็บไซต์นี้', type: MenuTypes.link },
+				{
+					label: 'เกี่ยวกับข้อมูลในเว็บไซต์',
+					url: '/about#เกี่ยวกับข้อมูลในเว็บไซต์',
+					type: MenuTypes.link
+				},
 				{ label: 'เกี่ยวกับ WeVis', url: '/about#เกี่ยวกับ-WeVis', type: MenuTypes.link }
 			]
 		}
