@@ -302,7 +302,7 @@
 	}
 
 	.data-source-content :global(table) {
-		@apply block border-collapse overflow-x-auto border border-ui-03;
+		@apply my-4 block border-collapse overflow-x-auto border border-ui-03;
 	}
 
 	.data-source-content :global(th),
