@@ -38,7 +38,8 @@ export const assemblyStaticInfoMap = {
 
 export enum AssemblyPartyGroup {
 	Government = 'ฝ่ายรัฐบาล',
-	Opposition = 'ฝ่ายค้าน'
+	Opposition = 'ฝ่ายค้าน',
+	Unknown = 'ไม่ทราบฝ่าย'
 }
 
 export enum GroupByOption {

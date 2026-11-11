@@ -5,6 +5,7 @@
 		sumVotesByOption,
 		type AffiliationParty
 	} from '$lib/politigraph/vote/affiliation';
+	import { UNKNOWN_REPRESENTATIVE_GROUP } from '$lib/politigraph/vote/group';
 	import ChevronDown from 'carbon-icons-svelte/lib/ChevronDown.svelte';
 	import { onMount } from 'svelte';
 
@@ -69,7 +70,7 @@
 	let isContentVisible = $derived(isDesktop || isExpanded);
 	let partiesPanelId = $derived('aff-' + name.replace(/\s/g, '-'));
 	let hasPartiesPanel = $derived(parties.length > 1);
-	let isMpNoParty = $derived(name === 'สส.ไม่ทราบฝ่าย');
+	let isMpNoParty = $derived(name === UNKNOWN_REPRESENTATIVE_GROUP);
 </script>
 
 <div class="flex w-full flex-col border-t border-gray-30 pb-4 md:pb-0">

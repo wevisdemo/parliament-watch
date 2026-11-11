@@ -1,3 +1,4 @@
+import { AssemblyPartyGroup } from '$models/assembly';
 import { groups } from 'd3-array';
 
 interface VoteInput {
@@ -6,7 +7,7 @@ interface VoteInput {
 	role: string;
 }
 
-const UNKNOWN_REPRESENTATIVE_GROUP = 'สส.ไม่ทราบฝ่าย';
+export const UNKNOWN_REPRESENTATIVE_GROUP = `สส.${AssemblyPartyGroup.Unknown}`;
 const SENATE_GROUP = 'สว.';
 
 function resolveGroupName(vote: VoteInput) {

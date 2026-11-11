@@ -16,6 +16,12 @@ const EDUCATION_GROUP_ORDER = [
 	UNKNOWN_LABEL
 ];
 
+const PARTY_SIDE_ORDER = [
+	AssemblyPartyGroup.Government,
+	AssemblyPartyGroup.Opposition,
+	AssemblyPartyGroup.Unknown
+];
+
 const sexTranslationMap = new Map([
 	[enumGender.MALE, 'ชาย'],
 	[enumGender.FEMALE, 'หญิง']
@@ -53,6 +59,18 @@ function sortGroupsByLabelOrder<M, T extends string>(
 	});
 }
 
+function getPartySide({ memberships }: AssemblyMember) {
+	const cabinetRole = memberships.find(
+		(m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY'
+	)?.posts[0].organizations[0].memberships[0]?.posts[0].role;
+
+	return (
+		[AssemblyPartyGroup.Government, AssemblyPartyGroup.Opposition].find((side) =>
+			cabinetRole?.endsWith(side)
+		) ?? AssemblyPartyGroup.Unknown
+	);
+}
+
 export function getMemberGroup(
 	members: AssemblyMember[],
 	groupby: GroupByOption,
@@ -63,18 +81,12 @@ export function getMemberGroup(
 		case GroupByOption.Party: {
 			return isCabinet
 				? createSubgroupByPartyOrAppointmentMethod(members, isSenates)
-				: groupMembersBy(members, ({ memberships }) =>
-						memberships
-							.find((m) => m.posts[0].organizations[0].classification === 'POLITICAL_PARTY')
-							?.posts[0].organizations[0].memberships[0]?.posts[0].role.endsWith(
-								AssemblyPartyGroup.Opposition
-							)
-							? AssemblyPartyGroup.Opposition
-							: AssemblyPartyGroup.Government
-					).map(([side, membersBySide]) => ({
-						name: side,
-						subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
-					}));
+				: sortGroupsByLabelOrder(groupMembersBy(members, getPartySide), PARTY_SIDE_ORDER).map(
+						([side, membersBySide]) => ({
+							name: side,
+							subgroups: createSubgroupByPartyOrAppointmentMethod(membersBySide, isSenates)
+						})
+					);
 		}
 
 		case GroupByOption.Province: {

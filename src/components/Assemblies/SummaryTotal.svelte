@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { AssemblyPartyGroup } from '$models/assembly';
 	import type { MemberGroup } from '../../routes/assemblies/[id]/+page.server';
 	import CabinetChart from './CabinetChart.svelte';
 	import LowerHouseSummary from './LowerHouseSummary.svelte';
@@ -50,16 +51,14 @@
 	};
 
 	let getLowerHouseTotalPartie = $derived((): PartySeat[] => {
-		const governmentGroup = data.find((group) => group.name === 'ฝ่ายรัฐบาล');
-		const oppositeGovGroup = data.find((group) => group.name === 'ฝ่ายค้าน');
-		const governmentParties = getTotalSubgroupsFromGroup(governmentGroup).sort(
-			(a, b) => b.count - a.count
-		);
-		const oppositeGovParties = getTotalSubgroupsFromGroup(oppositeGovGroup).sort(
-			(a, b) => a.count - b.count
-		);
+		const partiesOf = (side: AssemblyPartyGroup) =>
+			getTotalSubgroupsFromGroup(data.find((group) => group.name === side));
 
-		return [...governmentParties, ...oppositeGovParties];
+		return [
+			...partiesOf(AssemblyPartyGroup.Government).sort((a, b) => b.count - a.count),
+			...partiesOf(AssemblyPartyGroup.Opposition).sort((a, b) => a.count - b.count),
+			...partiesOf(AssemblyPartyGroup.Unknown).sort((a, b) => a.count - b.count)
+		];
 	});
 
 	let getUpperHouseTotalPartie = $derived((): PartySeat[] =>

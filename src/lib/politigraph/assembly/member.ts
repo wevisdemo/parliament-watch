@@ -112,13 +112,15 @@ export async function queryAssemblyMembers({
 											organizations: {
 												some: {
 													classification: { eq: 'CABINET' },
+													OR: [
+														{ dissolution_date: { eq: null } },
+														{ dissolution_date: { gte: founding_date } }
+													],
 													...(dissolution_date
 														? {
 																founding_date: { lte: dissolution_date }
 															}
-														: {
-																dissolution_date: { eq: null }
-															})
+														: {})
 												}
 											}
 										}
