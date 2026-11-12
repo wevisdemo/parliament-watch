@@ -144,7 +144,7 @@ export async function load({ params }) {
 				on_BillVoteEvent: {
 					id: true,
 					classification: true,
-					vote_event: {
+					vote_events: {
 						id: true,
 						title: true,
 						nickname: true,
@@ -315,7 +315,9 @@ export async function load({ params }) {
 	}
 
 	const billVoteEvents = events.flatMap((e) =>
-		e.__typename === 'BillVoteEvent' && e.vote_event ? [{ id: e.id, voteEvent: e.vote_event }] : []
+		e.__typename === 'BillVoteEvent' && e.vote_events[0]
+			? [{ id: e.id, voteEvent: e.vote_events[0] }]
+			: []
 	);
 
 	const votingByEventId = new Map<string, VoteCardProps>();
