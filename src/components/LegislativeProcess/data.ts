@@ -37,7 +37,6 @@ export const sections = [
 export const billStatuses = [
 	{
 		billStatus: enumBillStatus.IN_PROGRESS,
-		billAmount: 'xxxx',
 		descriptionTitle: 'ร่างกฎหมายอยู่ในขั้นตอนใดขั้นตอนหนึ่ง ได้แก่',
 		descriptionList: [
 			'ถูกเสนอเข้าสภา',
@@ -52,7 +51,6 @@ export const billStatuses = [
 	},
 	{
 		billStatus: enumBillStatus.ENACTED,
-		billAmount: 'xxxx',
 		descriptionTitle: 'บังคับใช้เมื่อ',
 		descriptionList: ['พระมหากษัตริย์ลงพระปรมาภิไธย', 'ประกาศบนราชกิจจานุเบกษา'],
 		learnMoreLabel: 'สำรวจกฎหมายที่บังคับใช้',
@@ -61,7 +59,6 @@ export const billStatuses = [
 	},
 	{
 		billStatus: enumBillStatus.REJECTED,
-		billAmount: 'xxxx',
 		descriptionTitle: 'ตัวอย่างสาเหตุที่ทำให้กฎหมายตกไป',
 		descriptionList: [
 			'นายกรัฐมนตรีไม่รับรอง',
@@ -76,7 +73,6 @@ export const billStatuses = [
 	},
 	{
 		billStatus: enumBillStatus.MERGED,
-		billAmount: 'xxxx',
 		descriptionTitle:
 			'ร่างกฎหมายฉบับหนึ่งสามารถถูกผนวกกับร่างอื่นในรัฐสภา เพื่อพิจารณาออกเป็นกฎหมายบทเดียวกันได้ เมื่อร่างกฎหมายมีวัตถุประสงค์เดียวกัน ซึ่งจะถูกผนวกกับร่างอื่นในชั้นการพิจารณาโดยสภาผู้แทนฯ หรือในสภาร่วม โดยขึ้นอยู่กับว่าเป็นการพิจารณากฎหมายประเภทใด',
 		descriptionList: [],

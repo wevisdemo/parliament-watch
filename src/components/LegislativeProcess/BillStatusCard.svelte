@@ -5,7 +5,6 @@
 
 	interface Props {
 		billStatus: BillStatus;
-		// export let billAmount: string;
 		descriptionTitle: string | null;
 		descriptionList: Array<string>;
 		learnMoreLabel: string;
