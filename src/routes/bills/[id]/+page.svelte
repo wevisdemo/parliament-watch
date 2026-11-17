@@ -102,7 +102,7 @@
 						{/each}
 					</div>
 				{/if}
-				{#if mergeDetail}
+				{#if mergeDetail && (mergeDetail.mainBill?.id !== bill.id || mergeDetail.otherBills.length)}
 					<MergeDetail currentBillId={bill.id} {...mergeDetail} {innerWidth} />
 				{/if}
 			</div>

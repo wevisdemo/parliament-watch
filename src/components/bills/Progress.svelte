@@ -88,7 +88,9 @@
 		{:else if mergeDetail}
 			{@const isMainBill = mergeDetail.mainBill?.id === currentBillId}
 			{#if isMainBill}
-				<MergeDetail {currentBillId} {...mergeDetail} {innerWidth} />
+				{#if mergeDetail.otherBills.length}
+					<MergeDetail {currentBillId} {...mergeDetail} {innerWidth} />
+				{/if}
 			{:else if mergeDetail.mainBill}
 				<div class="flex flex-1 flex-col gap-1">
 					<p class="text-text-02">ถูกนำไปรวมร่างกับ</p>
