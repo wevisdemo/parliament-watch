@@ -40,7 +40,7 @@
 				<div class="mt-[8px] flex flex-wrap gap-[4px]">
 					{#each group.subgroups || [] as party (party.name)}
 						<div class="mr-[8px] flex w-[152px] justify-between md:mr-[24px]">
-							<div class="flex items-center space-x-[2px]">
+							<div class="flex items-center gap-1">
 								<div
 									class="h-[8px] w-[8px] rounded-[100%]"
 									style="background-color: {party.color || '#8D8D8D'}"
@@ -53,5 +53,10 @@
 				</div>
 			</div>
 		{/each}
+		<p class="label-01 text-gray-60">
+			*หมายเหตุ: สถานะฝ่ายรัฐบาลและฝ่ายค้านพิจารณาจากรายชื่อในวิปรัฐบาล/วิปฝ่ายค้าน
+			ตำแหน่งในคณะรัฐมนตรี และการประกาศจัดตั้งรัฐบาลโดยพรรคการเมือง
+			ส่วนพรรคที่ไม่เข้าเกณฑ์ทั้งสองฝ่ายจะไม่ถูกระบุฝ่าย
+		</p>
 	</div>
 </div>
