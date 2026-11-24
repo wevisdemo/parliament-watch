@@ -1,3 +1,4 @@
+import { logger } from '$lib/logger';
 import { createSeo } from '$lib/seo/meta';
 import { LRUCache } from 'lru-cache';
 import { marked } from 'marked';
@@ -27,17 +28,28 @@ const remoteTextCache = new LRUCache<string, string>({
 	}
 });
 
+async function fetchRemoteText(url: string): Promise<string | null> {
+	try {
+		return await remoteTextCache.forceFetch(url);
+	} catch (err) {
+		logger.error({ err, url }, 'Remote text unavailable');
+		return null;
+	}
+}
+
 export async function load() {
 	const [contributorsJson, dataSourceMd] = await Promise.all([
-		remoteTextCache.forceFetch(
+		fetchRemoteText(
 			'https://api.github.com/repos/wevisdemo/parliament-watch/contributors?per_page=100'
 		),
-		remoteTextCache.forceFetch('https://politigraph.wevis.info/data-source.md')
+		fetchRemoteText('https://politigraph.wevis.info/data-source.md')
 	]);
 
-	const developers = JSON.parse(contributorsJson) as ContributorResponse[];
+	const developers = contributorsJson
+		? (JSON.parse(contributorsJson) as ContributorResponse[])
+		: [];
 
-	const dataSourceHtml = await marked.parse(dataSourceMd);
+	const dataSourceHtml = dataSourceMd ? await marked.parse(dataSourceMd) : '';
 
 	return {
 		developers,

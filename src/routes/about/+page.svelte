@@ -92,16 +92,18 @@
 				</li>
 			</ul>
 			<h3 id="ทีมงานร่วมพัฒนา" class="fluid-heading-03 mt-2">ทีมงานร่วมพัฒนา</h3>
-			<div class="mt-2">
-				<strong class="block">เขียนโปรแกรม</strong>
-				<ul class="name-list">
-					{#each data.developers as { login, html_url } (login)}
-						<li>
-							<a href={html_url} target="_blank" rel="nofollow noopener noreferrer">{login}</a>
-						</li>
-					{/each}
-				</ul>
-			</div>
+			{#if data.developers.length}
+				<div class="mt-2">
+					<strong class="block">เขียนโปรแกรม</strong>
+					<ul class="name-list">
+						{#each data.developers as { login, html_url } (login)}
+							<li>
+								<a href={html_url} target="_blank" rel="nofollow noopener noreferrer">{login}</a>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
 			<div class="mt-2">
 				<strong class="block">ออกแบบ</strong>
 				<ul class="name-list">
