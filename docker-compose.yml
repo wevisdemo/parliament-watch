@@ -13,7 +13,7 @@ x-healthcheck: &healthcheck
 
 services:
   caddy:
-    image: caddy:2-alpine
+    image: caddy:2.11-alpine
     container_name: caddy
     restart: unless-stopped
     mem_limit: 64m
@@ -69,7 +69,7 @@ services:
       LOG_TARGET: stdout
 
   beszel-agent:
-    image: henrygd/beszel-agent:0.16
+    image: henrygd/beszel-agent:0.21
     container_name: beszel-agent
     restart: unless-stopped
     privileged: true
