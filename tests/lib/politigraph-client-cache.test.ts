@@ -117,4 +117,16 @@ describe('graphql query cache', () => {
 
 		await vi.advanceTimersByTimeAsync(DEFAULT_TIMEOUT_MS);
 	});
+
+	it('rejects with the upstream error when nothing is cached', async () => {
+		vi.mocked(fetch).mockResolvedValueOnce({
+			ok: true,
+			json: vi.fn().mockResolvedValueOnce([{ errors: [{ message: 'GitHub responded 403' }] }])
+		} as never);
+
+		const result = graphql.query({ __name: 'Test', posts: { id: true } });
+		const assertion = expect(result).rejects.toThrow('GitHub responded 403');
+		await vi.advanceTimersByTimeAsync(200);
+		await assertion;
+	});
 });

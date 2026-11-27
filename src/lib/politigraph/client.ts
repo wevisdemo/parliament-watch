@@ -237,9 +237,17 @@ export const graphql: NamedQueryClient = {
 		const key = createHash('sha1').update(JSON.stringify(op)).digest('hex');
 		checkForDataChange();
 
-		return (await queryCache.fetch(key, {
+		const status: LRUCache.Status<string, object, Pick<QueuedQuery, 'query' | 'variables'>> = {};
+		const value = await queryCache.fetch(key, {
 			context: op,
-			forceRefresh: isCachedBeforeDataChange(key)
-		})) as never;
+			forceRefresh: isCachedBeforeDataChange(key),
+			status
+		});
+
+		if (value === undefined) {
+			throw status.fetchError ?? new Error('Politigraph returned no data');
+		}
+
+		return value as never;
 	}
 };
