@@ -7,7 +7,7 @@ import { error } from '@sveltejs/kit';
 export async function GET({ params }) {
 	switch (params.category) {
 		case SearchIndexCategory.Politicians: {
-			const people = await queryAllPeople({
+			const people = await queryAllPeople('SearchIndexPoliticians', {
 				id: true,
 				name: true,
 				memberships: {
@@ -60,6 +60,7 @@ export async function GET({ params }) {
 
 		case SearchIndexCategory.Bills: {
 			const { bills } = await graphql.query({
+				__name: 'SearchIndexBills',
 				bills: {
 					__args: {
 						sort: [{ title: 'ASC' }]
@@ -82,6 +83,7 @@ export async function GET({ params }) {
 
 		case SearchIndexCategory.BillProposers: {
 			const people = await queryAllPeople(
+				'SearchIndexBillProposers',
 				{
 					name: true,
 					created_motionsConnection: {
@@ -109,6 +111,7 @@ export async function GET({ params }) {
 
 		case SearchIndexCategory.Votings: {
 			const { voteEvents } = await graphql.query({
+				__name: 'SearchIndexVotings',
 				voteEvents: {
 					__args: {
 						sort: [{ start_date: 'ASC' }]

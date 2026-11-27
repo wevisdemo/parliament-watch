@@ -10,6 +10,7 @@ export async function GET({ params }) {
 	const {
 		voteEvents: [voteEvent]
 	} = await graphql.query({
+		__name: 'VotingCsv',
 		voteEvents: {
 			__args: {
 				where: {

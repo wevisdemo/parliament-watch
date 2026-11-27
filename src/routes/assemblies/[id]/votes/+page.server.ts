@@ -8,6 +8,7 @@ export async function load({ params }) {
 	const {
 		organizations: [assembly]
 	} = await graphql.query({
+		__name: 'AssemblyVotesPage',
 		organizations: {
 			__args: {
 				where: {
@@ -31,6 +32,7 @@ export async function load({ params }) {
 	});
 
 	const { voteEvents } = await graphql.query({
+		__name: 'AssemblyVotesPageVoteEvents',
 		voteEvents: {
 			__args: {
 				where: {

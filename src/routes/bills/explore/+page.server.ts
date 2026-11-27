@@ -25,6 +25,7 @@ interface FilterOptions {
 
 export async function load() {
 	const data = await graphql.query({
+		__name: 'BillExplorePage',
 		organizations: {
 			__args: {
 				where: {
@@ -152,6 +153,7 @@ export async function load() {
 	].sort((a, z) => a.localeCompare(z));
 
 	const eligibleParties = await graphql.query({
+		__name: 'BillExploreEligibleParties',
 		organizations: {
 			__args: {
 				where: {

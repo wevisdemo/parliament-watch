@@ -1,5 +1,5 @@
-import { graphql } from '$lib/politigraph/client';
-import type { Client, FieldsSelection } from '$lib/politigraph/genql';
+import { graphql, type NamedQueryClient } from '$lib/politigraph/client';
+import type { FieldsSelection } from '$lib/politigraph/genql';
 import type { Person, PersonGenqlSelection, PersonWhere } from '$lib/politigraph/genql/schema';
 
 const PEOPLE_PAGE_SIZE = 1000;
@@ -16,10 +16,11 @@ type PeoplePage<TSelection extends PersonGenqlSelection> = {
 
 type QueryAllPeopleOptions = {
 	where?: PersonWhere;
-	client?: Pick<Client, 'query'>;
+	client?: NamedQueryClient;
 };
 
 export async function queryAllPeople<TSelection extends PersonGenqlSelection>(
+	name: string,
 	selection: TSelection,
 	options: QueryAllPeopleOptions = {}
 ): Promise<Array<FieldsSelection<Person, NonNullable<TSelection>>>> {
@@ -30,6 +31,7 @@ export async function queryAllPeople<TSelection extends PersonGenqlSelection>(
 
 	do {
 		const { peopleConnection } = (await client.query({
+			__name: name,
 			peopleConnection: {
 				__args: {
 					first: PEOPLE_PAGE_SIZE,

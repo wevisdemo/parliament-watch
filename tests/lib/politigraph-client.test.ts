@@ -14,7 +14,12 @@ const hangUntilAborted = (_url: unknown, init?: RequestInit) =>
 	);
 
 const queryBatches = (count: number) =>
-	Array.from({ length: count * 5 }, (_, i) => graphql.query({ bills: { id: true, i } } as never));
+	Array.from({ length: count * 5 }, (_, i) =>
+		graphql.query({
+			__name: 'Test',
+			bills: { __args: { where: { id: { eq: String(i) } } }, id: true }
+		})
+	);
 
 vi.mock('$env/static/private', () => ({
 	POLITIGRAPH_URL: 'http://test/graphql',
@@ -44,7 +49,7 @@ describe('graphql batching client', () => {
 		const fetchMock = vi.mocked(fetch);
 		fetchMock.mockRejectedValueOnce(new Error('network down'));
 
-		const request = graphql.query({ bills: { id: true } });
+		const request = graphql.query({ __name: 'Test', bills: { id: true } });
 		const assertion = expect(request).rejects.toThrow('network down');
 
 		await vi.advanceTimersByTimeAsync(200);
@@ -59,7 +64,7 @@ describe('graphql batching client', () => {
 			json: vi.fn().mockRejectedValueOnce(new Error('invalid json'))
 		} as never);
 
-		const request = graphql.query({ bills: { id: true } });
+		const request = graphql.query({ __name: 'Test', bills: { id: true } });
 		const assertion = expect(request).rejects.toThrow('invalid json');
 
 		await vi.advanceTimersByTimeAsync(200);
@@ -79,8 +84,8 @@ describe('graphql batching client', () => {
 				])
 		} as never);
 
-		const success = graphql.query({ bills: { id: true } });
-		const failure = graphql.query({ people: { id: true } });
+		const success = graphql.query({ __name: 'Test', bills: { id: true } });
+		const failure = graphql.query({ __name: 'Test', people: { id: true } });
 		const successAssertion = expect(success).resolves.toEqual({ bills: [{ id: '1' }] });
 		const failureAssertion = expect(failure).rejects.toThrow('boom');
 

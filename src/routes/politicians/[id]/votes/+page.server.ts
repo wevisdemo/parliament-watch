@@ -7,6 +7,7 @@ export async function load({ params }) {
 	const {
 		people: [politician]
 	} = await graphql.query({
+		__name: 'PoliticianVotesPage',
 		people: {
 			__args: {
 				where: { id: { eq: params.id } }
@@ -22,6 +23,7 @@ export async function load({ params }) {
 	}
 
 	const { votes } = await graphql.query({
+		__name: 'PoliticianVotesPageVotes',
 		votes: {
 			__args: {
 				where: {

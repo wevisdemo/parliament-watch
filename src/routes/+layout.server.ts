@@ -8,6 +8,7 @@ export async function load({ setHeaders }) {
 	}
 
 	const { timestamps } = await graphql.query({
+		__name: 'LayoutTimestamps',
 		timestamps: { lastNodeUpdatedAt: true, lastBillScrapedAt: true }
 	});
 

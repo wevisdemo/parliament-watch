@@ -23,6 +23,7 @@ const LATEST_ENACTED_BILL_LIMIT = 10;
 export async function load({ params }) {
 	const allMpTerms = (
 		await graphql.query({
+			__name: 'BillTermPageTerms',
 			organizations: {
 				__args: {
 					where: { classification: { eq: 'HOUSE_OF_REPRESENTATIVE' } },
@@ -86,6 +87,7 @@ export async function load({ params }) {
 	const partiesLogo = new Map(
 		(
 			await graphql.query({
+				__name: 'BillTermPagePartyLogos',
 				organizations: {
 					__args: {
 						where: {
@@ -148,6 +150,7 @@ export async function load({ params }) {
 
 async function queryBillsInTerm(where: BillWhere) {
 	const { bills } = await graphql.query({
+		__name: 'BillTermPageBills',
 		bills: {
 			__args: { where, sort: [{ proposal_date: 'DESC' }] },
 			id: true,

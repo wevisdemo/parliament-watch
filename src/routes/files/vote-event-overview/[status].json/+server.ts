@@ -18,6 +18,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	}
 
 	const { voteEvents } = await graphql.query({
+		__name: 'VoteEventOverview',
 		voteEvents: {
 			__args: {
 				...(status === 'passed'

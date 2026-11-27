@@ -8,6 +8,7 @@ export async function getBillCategoryOptions() {
 		...new Set(
 			(
 				await graphql.query({
+					__name: 'BillCategoryOptions',
 					bills: {
 						__args: {
 							where: {
@@ -25,6 +26,7 @@ export async function getBillCategoryOptions() {
 export async function getRepresentativeTermOptions() {
 	return (
 		await graphql.query({
+			__name: 'RepresentativeTermOptions',
 			organizations: {
 				__args: {
 					where: {

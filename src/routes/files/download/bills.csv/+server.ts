@@ -3,6 +3,7 @@ import { graphql } from '$lib/politigraph/client';
 
 export async function GET() {
 	const { bills } = await graphql.query({
+		__name: 'BillsCsv',
 		bills: {
 			__args: {
 				sort: [{ proposal_date: 'DESC' }]

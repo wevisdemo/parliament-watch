@@ -3,6 +3,7 @@ import { graphql } from '$lib/politigraph/client';
 
 export async function GET({ params }) {
 	const { votes } = await graphql.query({
+		__name: 'PoliticianVotesCsv',
 		votes: {
 			__args: {
 				where: {

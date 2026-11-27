@@ -9,6 +9,7 @@ export type LatestAssemblyClassification = Extract<
 export async function getLatestTerm(classification: LatestAssemblyClassification) {
 	return (
 		await graphql.query({
+			__name: 'LatestAssemblyTerm',
 			organizations: {
 				__args: {
 					sort: [{ founding_date: 'DESC' }],

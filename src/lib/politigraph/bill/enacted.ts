@@ -12,6 +12,7 @@ import {
  */
 export async function queryLastEnactedBillsWithProposers(where: BillWhere, limit: number) {
 	const { billEnactEvents } = await graphql.query({
+		__name: 'LastEnactedBills',
 		billEnactEvents: {
 			__args: {
 				where: {
@@ -40,6 +41,7 @@ export async function queryLastEnactedBillsWithProposers(where: BillWhere, limit
 	}
 
 	const { bills: billsWithCreators } = await graphql.query({
+		__name: 'LastEnactedBillProposers',
 		bills: {
 			__args: {
 				where: { id: { in: lastEnactedBills.map(({ id }) => id) } }

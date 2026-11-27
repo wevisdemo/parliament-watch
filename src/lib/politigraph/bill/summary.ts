@@ -16,6 +16,7 @@ export type BillForSummary = Pick<
  */
 export async function queryBillsForSummary(where: BillWhere): Promise<BillForSummary[]> {
 	const { bills } = await graphql.query({
+		__name: 'BillsForSummary',
 		bills: {
 			__args: { where, sort: [{ proposal_date: 'DESC' }] },
 			id: true,

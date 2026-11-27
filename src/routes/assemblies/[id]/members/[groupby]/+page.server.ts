@@ -31,6 +31,7 @@ export async function load({ params }) {
 	const {
 		organizations: [assembly]
 	} = await graphql.query({
+		__name: 'AssemblyMembersGroupPage',
 		organizations: {
 			__args: {
 				where: {

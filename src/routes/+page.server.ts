@@ -43,6 +43,7 @@ export async function load() {
 
 	const highlightPoliticians = (
 		await graphql.query({
+			__name: 'HomeHighlightPoliticians',
 			people: {
 				__args: {
 					where: {

@@ -16,6 +16,7 @@ export async function load({ params }) {
 		people: [politician],
 		votes
 	} = await graphql.query({
+		__name: 'PoliticianPage',
 		people: {
 			__args: {
 				where: { id: { eq: params.id } }
@@ -183,6 +184,7 @@ async function getVotingAbsentStatsByHouseTerm(
 				{ voteEventsConnection, peopleConnection, votesConnection }
 			] = await Promise.all([
 				graphql.query({
+					__name: 'PoliticianPageAbsentCount',
 					people: {
 						__args: {
 							where: {
@@ -203,6 +205,7 @@ async function getVotingAbsentStatsByHouseTerm(
 					}
 				}),
 				graphql.query({
+					__name: 'PoliticianPageTermTotals',
 					voteEventsConnection: {
 						__args: {
 							where: {

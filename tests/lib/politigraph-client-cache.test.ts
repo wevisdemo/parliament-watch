@@ -48,8 +48,8 @@ describe('graphql query cache', () => {
 		const fetchMock = vi.mocked(fetch);
 		fetchMock.mockResolvedValueOnce(mockResponse({ bills: [{ id: '1' }] }));
 
-		const first = graphql.query({ bills: { id: true } });
-		const second = graphql.query({ bills: { id: true } });
+		const first = graphql.query({ __name: 'Test', bills: { id: true } });
+		const second = graphql.query({ __name: 'Test', bills: { id: true } });
 
 		await vi.advanceTimersByTimeAsync(200);
 
@@ -62,11 +62,13 @@ describe('graphql query cache', () => {
 		const fetchMock = vi.mocked(fetch);
 		fetchMock.mockResolvedValueOnce(mockResponse({ people: [{ id: '1' }] }));
 
-		const first = graphql.query({ people: { id: true } });
+		const first = graphql.query({ __name: 'Test', people: { id: true } });
 		await vi.advanceTimersByTimeAsync(200);
 		expect(await first).toEqual({ people: [{ id: '1' }] });
 
-		expect(await graphql.query({ people: { id: true } })).toEqual({ people: [{ id: '1' }] });
+		expect(await graphql.query({ __name: 'Test', people: { id: true } })).toEqual({
+			people: [{ id: '1' }]
+		});
 		expect(fetchMock).toHaveBeenCalledTimes(1);
 	});
 
@@ -74,7 +76,7 @@ describe('graphql query cache', () => {
 		const fetchMock = vi.mocked(fetch);
 		fetchMock.mockResolvedValueOnce(mockResponse({ voteEvents: [{ id: '1' }] }));
 
-		const first = graphql.query({ voteEvents: { id: true } });
+		const first = graphql.query({ __name: 'Test', voteEvents: { id: true } });
 		await vi.advanceTimersByTimeAsync(200);
 		expect(await first).toEqual({ voteEvents: [{ id: '1' }] });
 
@@ -82,7 +84,7 @@ describe('graphql query cache', () => {
 		await vi.advanceTimersByTimeAsync(1500);
 		fetchMock.mockRejectedValue(new Error('politigraph down'));
 
-		const staleHit = graphql.query({ voteEvents: { id: true } });
+		const staleHit = graphql.query({ __name: 'Test', voteEvents: { id: true } });
 		await vi.advanceTimersByTimeAsync(200);
 		expect(await staleHit).toEqual({ voteEvents: [{ id: '1' }] });
 		expect(fetchMock).toHaveBeenCalledTimes(2);
@@ -92,14 +94,14 @@ describe('graphql query cache', () => {
 		const fetchMock = vi.mocked(fetch);
 		fetchMock.mockResolvedValueOnce(mockResponse({ organizations: [{ id: '1' }] }));
 
-		const first = graphql.query({ organizations: { id: true } });
+		const first = graphql.query({ __name: 'Test', organizations: { id: true } });
 		await vi.advanceTimersByTimeAsync(200);
 		expect(await first).toEqual({ organizations: [{ id: '1' }] });
 
 		await vi.advanceTimersByTimeAsync(1500);
 		fetchMock.mockImplementation(hangUntilAborted);
 
-		expect(await graphql.query({ organizations: { id: true } })).toEqual({
+		expect(await graphql.query({ __name: 'Test', organizations: { id: true } })).toEqual({
 			organizations: [{ id: '1' }]
 		});
 		await vi.advanceTimersByTimeAsync(200);
@@ -107,7 +109,7 @@ describe('graphql query cache', () => {
 
 		await vi.advanceTimersByTimeAsync(DEFAULT_TIMEOUT_MS);
 
-		expect(await graphql.query({ organizations: { id: true } })).toEqual({
+		expect(await graphql.query({ __name: 'Test', organizations: { id: true } })).toEqual({
 			organizations: [{ id: '1' }]
 		});
 		await vi.advanceTimersByTimeAsync(200);

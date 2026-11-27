@@ -9,6 +9,7 @@ export async function queryPoliticiansVote(voteEvent: {
 	organizations: { id: string }[];
 }) {
 	const { votes, posts } = await graphql.query({
+		__name: 'VoteEventPoliticianVotes',
 		votes: {
 			__args: {
 				where: {

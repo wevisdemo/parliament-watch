@@ -6,6 +6,7 @@ export async function GET({ params }) {
 	const {
 		organizations: [assembly]
 	} = await graphql.query({
+		__name: 'AssemblyMembersCsv',
 		organizations: {
 			__args: {
 				where: {
@@ -23,6 +24,7 @@ export async function GET({ params }) {
 	const { dissolution_date } = assembly;
 
 	const { posts } = await graphql.query({
+		__name: 'AssemblyMembersCsvPosts',
 		posts: {
 			__args: {
 				where: {

@@ -1,4 +1,9 @@
-import { generateQueryOp, type Client } from './genql';
+import {
+	generateQueryOp,
+	type FieldsSelection,
+	type Query,
+	type QueryGenqlSelection
+} from './genql';
 import { LRUCache } from 'lru-cache';
 import { createHash } from 'node:crypto';
 
@@ -185,7 +190,14 @@ const queryCache = new LRUCache<string, object, Pick<QueuedQuery, 'query' | 'var
 	fetchMethod: (_key, _staleValue, { context }) => executeQuery(context) as Promise<object>
 });
 
-export const graphql: Pick<Client, 'query'> = {
+/** `__name` becomes the GraphQL operation name */
+export interface NamedQueryClient {
+	query<R extends QueryGenqlSelection & { __name: string }>(
+		request: R
+	): Promise<FieldsSelection<Query, R>>;
+}
+
+export const graphql: NamedQueryClient = {
 	query: async (param) => {
 		const op = generateQueryOp(param);
 

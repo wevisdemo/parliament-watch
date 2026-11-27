@@ -1,4 +1,4 @@
-import { CLIENT_NAME } from '$lib/politigraph/client';
+import { CLIENT_NAME, type NamedQueryClient } from '$lib/politigraph/client';
 import { createClient } from '$lib/politigraph/genql';
 import { queryAllPeople } from '$lib/politigraph/people';
 import { OUT_FILE, type ExternalPoliticianRanking } from '.';
@@ -8,7 +8,7 @@ import { join } from 'path';
 
 const OUT_DIR = './out';
 
-const graphql = createClient({
+const graphql: NamedQueryClient = createClient({
 	url: process.env.POLITIGRAPH_URL || 'https://politigraph.wevis.info/graphql',
 	headers: { 'apollographql-client-name': CLIENT_NAME }
 });
@@ -17,6 +17,7 @@ async function writePoliticianRankingFile() {
 	console.info('Fetching politicians...');
 
 	const people = await queryAllPeople(
+		'RankingJobPeople',
 		{
 			id: true,
 			name: true
@@ -45,6 +46,7 @@ async function writePoliticianRankingFile() {
 
 	const highlightPoliticians = (
 		await graphql.query({
+			__name: 'RankingJobHighlightPoliticians',
 			people: {
 				__args: {
 					where: {

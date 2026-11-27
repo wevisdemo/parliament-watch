@@ -19,6 +19,7 @@ export async function load({ params }) {
 	const {
 		voteEvents: [voteEvent]
 	} = await graphql.query({
+		__name: 'VotingVotesPage',
 		voteEvents: {
 			__args: {
 				where: {

@@ -67,6 +67,7 @@ export async function load({ params }) {
 	const {
 		bills: [bill]
 	} = await graphql.query({
+		__name: 'BillPage',
 		bills: {
 			__args: {
 				where: {
@@ -95,6 +96,7 @@ export async function load({ params }) {
 	const {
 		bills: [{ creator_type, creators, co_creators, people_signature_count, events }]
 	} = await graphql.query({
+		__name: 'BillPageProposers',
 		bills: {
 			__args: {
 				where: {
@@ -296,6 +298,7 @@ export async function load({ params }) {
 	const mainBill = mergeEvent?.main_bill;
 	if (mainBill?.proposal_date && mainBill.id !== bill.id) {
 		const mergedBillData = await graphql.query({
+			__name: 'BillPageMergedMainBill',
 			bills: {
 				__args: {
 					where: { id: { eq: mainBill.id } },

@@ -15,6 +15,7 @@ export async function load({ params }) {
 	const {
 		voteEvents: [voteEvent]
 	} = await graphql.query({
+		__name: 'VotingPage',
 		voteEvents: {
 			__args: {
 				where: {
@@ -73,6 +74,7 @@ export async function load({ params }) {
 	let relatedBill = null;
 	if (relatedBillSource?.proposal_date) {
 		const billData = await graphql.query({
+			__name: 'VotingPageRelatedBill',
 			bills: {
 				__args: {
 					where: { id: { eq: relatedBillSource.id } },

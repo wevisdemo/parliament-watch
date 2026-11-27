@@ -5,8 +5,9 @@ import { STATIC_PATHS, createPath, createSitemapXml } from '$lib/seo/sitemap';
 
 export async function GET() {
 	const [people, { bills, voteEvents, organizations }] = await Promise.all([
-		queryAllPeople({ id: true }),
+		queryAllPeople('SitemapPeople', { id: true }),
 		graphql.query({
+			__name: 'Sitemap',
 			bills: { id: true },
 			voteEvents: { id: true },
 			organizations: {

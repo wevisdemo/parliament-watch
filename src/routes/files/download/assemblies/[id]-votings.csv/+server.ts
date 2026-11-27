@@ -7,6 +7,7 @@ export async function GET({ params }) {
 	const {
 		organizations: [assembly]
 	} = await graphql.query({
+		__name: 'AssemblyVotingsCsv',
 		organizations: {
 			__args: {
 				where: {

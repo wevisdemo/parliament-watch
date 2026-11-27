@@ -49,6 +49,7 @@ export async function load({ params }) {
 	const {
 		organizations: [organization]
 	} = await graphql.query({
+		__name: 'AssemblyPage',
 		organizations: {
 			__args: {
 				where: {
@@ -205,6 +206,7 @@ export async function load({ params }) {
 	const { voteEvents } = isCabinet
 		? { voteEvents: [] }
 		: await graphql.query({
+				__name: 'AssemblyPageLatestVoteEvents',
 				voteEvents: {
 					__args: {
 						where: {
