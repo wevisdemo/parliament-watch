@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
 	const {
-		people: [politician]
+		people: [person]
 	} = await graphql.query({
 		__name: 'PoliticianVotesPage',
 		people: {
@@ -14,57 +14,52 @@ export async function load({ params }) {
 			},
 			id: true,
 			prefix: true,
-			name: true
-		}
-	});
-
-	if (!politician) {
-		error(404);
-	}
-
-	const { votes } = await graphql.query({
-		__name: 'PoliticianVotesPageVotes',
-		votes: {
-			__args: {
-				where: {
-					voter: {
-						id: { eq: politician.id }
-					},
-					vote_event: {
-						organizations: {
-							some: {
-								classification: { in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE'] }
+			name: true,
+			votes: {
+				__args: {
+					where: {
+						vote_event: {
+							organizations: {
+								some: {
+									classification: { in: ['CABINET', 'HOUSE_OF_REPRESENTATIVE', 'HOUSE_OF_SENATE'] }
+								}
 							}
 						}
 					}
-				}
-			},
-			vote_event: {
-				id: true,
-				title: true,
-				nickname: true,
-				result: true,
-				start_date: true,
-				links: {
-					__args: {
-						sort: [{ note: 'ASC' }]
-					},
-					__scalar: true
 				},
-				organizations: {
+				vote_event: {
 					id: true,
-					name: true,
-					founding_date: true,
-					dissolution_date: true
-				}
-			},
-			option: true
+					title: true,
+					nickname: true,
+					result: true,
+					start_date: true,
+					links: {
+						__args: {
+							sort: [{ note: 'ASC' }]
+						},
+						__scalar: true
+					},
+					organizations: {
+						id: true,
+						name: true,
+						founding_date: true,
+						dissolution_date: true
+					}
+				},
+				option: true
+			}
 		}
 	});
 
-	const votesWithEvent = votes.flatMap(({ option, vote_event }) =>
-		vote_event ? [{ option, vote_event }] : []
-	);
+	if (!person) {
+		error(404);
+	}
+
+	const { votes, ...politician } = person;
+
+	const votesWithEvent = votes
+		.flatMap(({ option, vote_event }) => (vote_event ? [{ option, vote_event }] : []))
+		.toSorted((a, z) => z.vote_event.start_date.localeCompare(a.vote_event.start_date));
 
 	const filterOptions = {
 		assemblies: votesWithEvent

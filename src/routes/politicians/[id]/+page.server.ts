@@ -13,8 +13,7 @@ const MAX_LATEST_VOTE = 5;
 
 export async function load({ params }) {
 	const {
-		people: [politician],
-		votes
+		people: [politician]
 	} = await graphql.query({
 		__name: 'PoliticianPage',
 		people: {
@@ -64,24 +63,27 @@ export async function load({ params }) {
 						dissolution_date: true
 					}
 				}
-			}
-		},
-		votes: {
-			__args: {
-				where: {
-					voter: {
-						id: {
-							eq: params.id
-						}
+			},
+			votes: {
+				__args: {
+					where: {
+						option: { in: [DefaultVoteOption.Agreed, DefaultVoteOption.Disagreed] }
 					}
+				},
+				option: true,
+				vote_event: {
+					id: true,
+					title: true,
+					result: true,
+					start_date: true
 				}
 			},
-			option: true,
-			vote_event: {
-				id: true,
-				title: true,
-				result: true,
-				start_date: true
+			votesConnection: {
+				aggregate: {
+					count: {
+						nodes: true
+					}
+				}
 			}
 		}
 	});
@@ -89,6 +91,8 @@ export async function load({ params }) {
 	if (!politician) {
 		error(404);
 	}
+
+	const { votes, votesConnection, ...politicianInfo } = politician;
 
 	const memberships = politician.memberships.flatMap(({ post, ...membership }) =>
 		post?.organization
@@ -105,8 +109,8 @@ export async function load({ params }) {
 	const votingAbsentStats = await getVotingAbsentStatsByHouseTerm(politician.id, memberships);
 
 	return {
-		politician: { ...politician, memberships },
-		hasVotes: latestVotings.length > 0,
+		politician: { ...politicianInfo, memberships },
+		hasVotes: votesConnection.aggregate.count.nodes > 0,
 		agreedVoting,
 		disagreedVoting,
 		votingAbsentStats,

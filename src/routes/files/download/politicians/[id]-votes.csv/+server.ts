@@ -2,22 +2,22 @@ import { createCsvFileResponse } from '$lib/csv';
 import { graphql } from '$lib/politigraph/client';
 
 export async function GET({ params }) {
-	const { votes } = await graphql.query({
+	const {
+		people: [{ votes } = { votes: [] }]
+	} = await graphql.query({
 		__name: 'PoliticianVotesCsv',
-		votes: {
+		people: {
 			__args: {
-				where: {
-					voter: {
-						id: { eq: params.id }
-					}
-				}
+				where: { id: { eq: params.id } }
 			},
-			option: true,
-			vote_event: {
-				title: true,
-				result: true,
-				start_date: true,
-				end_date: true
+			votes: {
+				option: true,
+				vote_event: {
+					title: true,
+					result: true,
+					start_date: true,
+					end_date: true
+				}
 			}
 		}
 	});
