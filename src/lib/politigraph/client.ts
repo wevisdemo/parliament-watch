@@ -21,6 +21,7 @@ const CACHE_MAX_BYTES = Number(process.env.POLITIGRAPH_CACHE_MAX_BYTES) || 32 * 
 const INTERVAL_MS = 1000;
 const BATCH_TIMEOUT_MS = 200;
 const MAX_BATCH_SIZE = 5;
+const CHANGE_CHECK_MS = 5 * 60 * 1000;
 
 interface QueuedQuery {
 	query: string;
@@ -190,6 +191,34 @@ const queryCache = new LRUCache<string, object, Pick<QueuedQuery, 'query' | 'var
 	fetchMethod: (_key, _staleValue, { context }) => executeQuery(context) as Promise<object>
 });
 
+let lastChangeCheckAt = Date.now();
+let lastNodeUpdatedAt: string | null | undefined;
+let dataChangedAt = 0;
+
+/** Entries cached before Politigraph's data last changed get refreshed in the background */
+function checkForDataChange() {
+	if (Date.now() - lastChangeCheckAt < CHANGE_CHECK_MS) return;
+	lastChangeCheckAt = Date.now();
+
+	executeQuery(
+		generateQueryOp({ __name: 'DataChangeCheck', timestamps: { lastNodeUpdatedAt: true } })
+	)
+		.then((data) => {
+			const updatedAt = (data as { timestamps: { lastNodeUpdatedAt: string | null } }).timestamps
+				.lastNodeUpdatedAt;
+			if (lastNodeUpdatedAt !== undefined && updatedAt !== lastNodeUpdatedAt) {
+				dataChangedAt = Date.now();
+			}
+			lastNodeUpdatedAt = updatedAt;
+		})
+		.catch(() => {});
+}
+
+function isCachedBeforeDataChange(key: string) {
+	const remainingTtl = queryCache.getRemainingTTL(key);
+	return remainingTtl > 0 && Date.now() - (CACHE_TTL_SECONDS * 1000 - remainingTtl) < dataChangedAt;
+}
+
 /** `__name` becomes the GraphQL operation name */
 export interface NamedQueryClient {
 	query<R extends QueryGenqlSelection & { __name: string }>(
@@ -206,7 +235,11 @@ export const graphql: NamedQueryClient = {
 		}
 
 		const key = createHash('sha1').update(JSON.stringify(op)).digest('hex');
+		checkForDataChange();
 
-		return (await queryCache.fetch(key, { context: op })) as never;
+		return (await queryCache.fetch(key, {
+			context: op,
+			forceRefresh: isCachedBeforeDataChange(key)
+		})) as never;
 	}
 };
