@@ -185,7 +185,7 @@ async function getVotingAbsentStatsByHouseTerm(
 				{
 					people: [politicianAbsentCount]
 				},
-				{ voteEventsConnection, peopleConnection, votesConnection }
+				{ voteEvents, peopleConnection }
 			] = await Promise.all([
 				graphql.query({
 					__name: 'PoliticianPageAbsentCount',
@@ -210,7 +210,7 @@ async function getVotingAbsentStatsByHouseTerm(
 				}),
 				graphql.query({
 					__name: 'PoliticianPageTermTotals',
-					voteEventsConnection: {
+					voteEvents: {
 						__args: {
 							where: {
 								organizations: {
@@ -221,9 +221,19 @@ async function getVotingAbsentStatsByHouseTerm(
 								...voteEventDateFilter
 							}
 						},
-						aggregate: {
-							count: {
-								nodes: true
+						votesConnection: {
+							__args: {
+								where: {
+									node: {
+										option: { eq: DefaultVoteOption.Absent },
+										voter: memberWhere
+									}
+								}
+							},
+							aggregate: {
+								count: {
+									nodes: true
+								}
 							}
 						}
 					},
@@ -236,34 +246,16 @@ async function getVotingAbsentStatsByHouseTerm(
 								nodes: true
 							}
 						}
-					},
-					votesConnection: {
-						__args: {
-							where: {
-								option: { eq: DefaultVoteOption.Absent },
-								vote_event: {
-									organizations: {
-										some: {
-											id: { eq: houseTerm.id }
-										}
-									},
-									...voteEventDateFilter
-								},
-								voter: memberWhere
-							}
-						},
-						aggregate: {
-							count: {
-								nodes: true
-							}
-						}
 					}
 				})
 			]);
 
-			const totalVoting = voteEventsConnection.aggregate.count.nodes;
+			const totalVoting = voteEvents.length;
 			const totalMembers = peopleConnection.aggregate.count.nodes;
-			const totalAbsentVoting = votesConnection.aggregate.count.nodes;
+			const totalAbsentVoting = voteEvents.reduce(
+				(total, { votesConnection }) => total + votesConnection.aggregate.count.nodes,
+				0
+			);
 
 			return {
 				assemblyId: houseTerm.id,
