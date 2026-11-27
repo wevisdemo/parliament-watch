@@ -8,48 +8,48 @@ export async function queryPoliticiansVote(voteEvent: {
 	end_date: string;
 	organizations: { id: string }[];
 }) {
-	const { votes, posts } = await graphql.query({
+	const { voteEvents, posts } = await graphql.query({
 		__name: 'VoteEventPoliticianVotes',
-		votes: {
+		voteEvents: {
 			__args: {
 				where: {
-					vote_event: {
-						id: { eq: voteEvent.id }
-					}
+					id: { eq: voteEvent.id }
 				}
 			},
-			id: true,
-			voter: {
+			votes: {
 				id: true,
-				name: true,
-				memberships: {
-					__args: {
-						where: {
-							start_date: { lte: voteEvent.start_date },
-							OR: [{ end_date: { eq: null } }, { end_date: { gte: voteEvent.start_date } }],
-							post: {
-								organization: {
-									id: { in: voteEvent.organizations.map((o) => o.id) }
+				voter: {
+					id: true,
+					name: true,
+					memberships: {
+						__args: {
+							where: {
+								start_date: { lte: voteEvent.start_date },
+								OR: [{ end_date: { eq: null } }, { end_date: { gte: voteEvent.start_date } }],
+								post: {
+									organization: {
+										id: { in: voteEvent.organizations.map((o) => o.id) }
+									}
 								}
 							}
-						}
-					},
-					label: true,
-					post: {
-						organization: {
-							abbreviation: true
+						},
+						label: true,
+						post: {
+							organization: {
+								abbreviation: true
+							}
 						}
 					}
-				}
-			},
-			voter_name_raw: true,
-			voter_affiliation: {
-				id: true,
-				name: true,
-				image: true,
-				classification: true
-			},
-			option: true
+				},
+				voter_name_raw: true,
+				voter_affiliation: {
+					id: true,
+					name: true,
+					image: true,
+					classification: true
+				},
+				option: true
+			}
 		},
 		posts: {
 			__args: {
@@ -92,6 +92,8 @@ export async function queryPoliticiansVote(voteEvent: {
 	const partySideMap = new Map(
 		posts.flatMap((p) => p.memberships.map((m) => [m.member?.id, p.role]))
 	);
+
+	const votes = voteEvents[0]?.votes ?? [];
 
 	return votes.map(({ id, option, voter_name_raw, voter_affiliation, voter: politician }) => {
 		const assemblyRole = politician?.memberships[0];
