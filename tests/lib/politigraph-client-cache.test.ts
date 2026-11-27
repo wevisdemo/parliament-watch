@@ -12,6 +12,16 @@ vi.mock('$lib/politigraph/genql', () => ({
 	})
 }));
 
+// lru-cache keeps the real `performance` from module load, out of reach of fake timers
+const realPerformance = globalThis.performance;
+
+const DEFAULT_TIMEOUT_MS = 20_000;
+
+const hangUntilAborted = (_url: unknown, init?: RequestInit) =>
+	new Promise<never>((_, reject) =>
+		init?.signal?.addEventListener('abort', () => reject(init.signal?.reason))
+	);
+
 const mockResponse = (data: unknown) =>
 	({
 		ok: true,
@@ -21,12 +31,16 @@ const mockResponse = (data: unknown) =>
 describe('graphql query cache', () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
+		vi.spyOn(realPerformance, 'now').mockImplementation(() => Date.now());
 		vi.stubGlobal('fetch', vi.fn());
 	});
 
-	afterEach(() => {
+	afterEach(async () => {
+		// let lru-cache's 1ms clock debounce reset, or its cached time freezes
+		await vi.advanceTimersByTimeAsync(1);
 		vi.clearAllTimers();
 		vi.useRealTimers();
+		vi.restoreAllMocks();
 		vi.unstubAllGlobals();
 	});
 
@@ -71,5 +85,34 @@ describe('graphql query cache', () => {
 		const staleHit = graphql.query({ voteEvents: { id: true } });
 		await vi.advanceTimersByTimeAsync(200);
 		expect(await staleHit).toEqual({ voteEvents: [{ id: '1' }] });
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+	});
+
+	it('keeps serving the stale value when a refresh times out', async () => {
+		const fetchMock = vi.mocked(fetch);
+		fetchMock.mockResolvedValueOnce(mockResponse({ organizations: [{ id: '1' }] }));
+
+		const first = graphql.query({ organizations: { id: true } });
+		await vi.advanceTimersByTimeAsync(200);
+		expect(await first).toEqual({ organizations: [{ id: '1' }] });
+
+		await vi.advanceTimersByTimeAsync(1500);
+		fetchMock.mockImplementation(hangUntilAborted);
+
+		expect(await graphql.query({ organizations: { id: true } })).toEqual({
+			organizations: [{ id: '1' }]
+		});
+		await vi.advanceTimersByTimeAsync(200);
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+
+		await vi.advanceTimersByTimeAsync(DEFAULT_TIMEOUT_MS);
+
+		expect(await graphql.query({ organizations: { id: true } })).toEqual({
+			organizations: [{ id: '1' }]
+		});
+		await vi.advanceTimersByTimeAsync(200);
+		expect(fetchMock).toHaveBeenCalledTimes(3);
+
+		await vi.advanceTimersByTimeAsync(DEFAULT_TIMEOUT_MS);
 	});
 });

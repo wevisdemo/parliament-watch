@@ -233,7 +233,7 @@ All variables are optional for local development; production values are set in [
 | `POLITIGRAPH_URL`                | GraphQL endpoint (default `https://politigraph.wevis.info/graphql`)                                                           |
 | `POLITIGRAPH_ORIGIN_IP`          | Server `.env` only: Politigraph origin IP that docker-compose pins the domain to (see [server setup](#one-time-server-setup)) |
 | `POLITIGRAPH_CLIENT_NAME`        | `apollographql-client-name` header sent to politigraph (default `parliament-watch-dev`)                                       |
-| `POLITIGRAPH_REQUEST_PER_SECOND` | Upstream rate limit (safety valve, default 3)                                                                                 |
+| `POLITIGRAPH_REQUEST_PER_SECOND` | Upstream rate limit in batches of up to 5 queries (safety valve, default 3)                                                   |
 | `POLITIGRAPH_CACHE_TTL_SECONDS`  | Query result cache TTL, `0` disables (default 900)                                                                            |
 | `POLITIGRAPH_CACHE_MAX_ENTRIES`  | Query result cache entry-count bound (default 500)                                                                            |
 | `POLITIGRAPH_CACHE_MAX_BYTES`    | Query result cache total-size bound in bytes (default 33554432, i.e. 32 MiB)                                                  |

@@ -6,6 +6,8 @@ const GRAPHQL_URL = process.env.POLITIGRAPH_URL || 'https://politigraph.wevis.in
 export const CLIENT_NAME = process.env.POLITIGRAPH_CLIENT_NAME || 'parliament-watch-dev';
 
 const RATE_LIMIT = Number(process.env.POLITIGRAPH_REQUEST_PER_SECOND) || 3;
+const MAX_CONCURRENT_BATCHES = 2;
+const REQUEST_TIMEOUT_MS = 20 * 1000;
 
 const CACHE_TTL_SECONDS = Number(process.env.POLITIGRAPH_CACHE_TTL_SECONDS ?? 900);
 const CACHE_MAX_ENTRIES = Number(process.env.POLITIGRAPH_CACHE_MAX_ENTRIES) || 500;
@@ -20,29 +22,47 @@ interface QueuedQuery {
 	variables?: Record<string, unknown>;
 	resolve: (value: unknown) => void;
 	reject: (reason?: unknown) => void;
+	enqueuedAt: number;
 }
 
 const requestQueue: Array<QueuedQuery> = [];
 let processedInCurrentWindow = 0;
+let windowStartedAt = 0;
+let batchesInFlight = 0;
 let intervalId: ReturnType<typeof setInterval> | null = null;
 let batchTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
 function startInterval() {
 	if (intervalId) return;
-	intervalId = setInterval(() => {
-		processedInCurrentWindow = 0;
-		processQueue(true);
-	}, INTERVAL_MS);
+	intervalId = setInterval(() => processQueue(true), INTERVAL_MS);
 }
 
 function processQueue(force = false): boolean {
-	while (processedInCurrentWindow < RATE_LIMIT && requestQueue.length > 0) {
+	const now = Date.now();
+	const windowElapsed = now - windowStartedAt;
+	if (windowElapsed >= INTERVAL_MS || windowElapsed < 0) {
+		windowStartedAt = now;
+		processedInCurrentWindow = 0;
+	}
+
+	while (
+		processedInCurrentWindow < RATE_LIMIT &&
+		batchesInFlight < MAX_CONCURRENT_BATCHES &&
+		requestQueue.length > 0
+	) {
 		if (requestQueue.length >= MAX_BATCH_SIZE || (force && requestQueue.length > 0)) {
 			const batch: QueuedQuery[] = [];
 			let batchSize = 0;
 
 			while (batchSize < MAX_BATCH_SIZE && requestQueue.length > 0) {
-				batch.push(requestQueue.shift() as QueuedQuery);
+				const queued = requestQueue.shift() as QueuedQuery;
+				if (now - queued.enqueuedAt >= REQUEST_TIMEOUT_MS) {
+					queued.reject(
+						new Error(`Politigraph request queued too long (over ${REQUEST_TIMEOUT_MS} ms)`)
+					);
+					continue;
+				}
+				batch.push(queued);
 				batchSize++;
 			}
 
@@ -74,6 +94,15 @@ function scheduleBatchTimeout() {
 async function executeBatch(batch: QueuedQuery[]) {
 	const queries = batch.map((q) => ({ query: q.query, variables: q.variables }));
 
+	batchesInFlight++;
+	// AbortSignal.timeout runs on Node's internal timers, which vitest's fake timers can't advance
+	const controller = new AbortController();
+	const timeoutId = setTimeout(
+		() =>
+			controller.abort(new Error(`Politigraph request timed out after ${REQUEST_TIMEOUT_MS} ms`)),
+		REQUEST_TIMEOUT_MS
+	);
+
 	try {
 		const response = await fetch(GRAPHQL_URL, {
 			method: 'POST',
@@ -81,7 +110,8 @@ async function executeBatch(batch: QueuedQuery[]) {
 				'Content-Type': 'application/json',
 				'apollographql-client-name': CLIENT_NAME
 			},
-			body: JSON.stringify(queries)
+			body: JSON.stringify(queries),
+			signal: controller.signal
 		});
 
 		if (!response.ok) {
@@ -117,12 +147,18 @@ async function executeBatch(batch: QueuedQuery[]) {
 		});
 	} catch (error) {
 		batch.forEach((q) => q.reject(error));
+	} finally {
+		clearTimeout(timeoutId);
+		batchesInFlight--;
+		if (processQueue()) {
+			scheduleBatchTimeout();
+		}
 	}
 }
 
 function executeQuery(op: Pick<QueuedQuery, 'query' | 'variables'>): Promise<unknown> {
 	return new Promise((resolve, reject) => {
-		requestQueue.push({ ...op, resolve, reject });
+		requestQueue.push({ ...op, resolve, reject, enqueuedAt: Date.now() });
 		startInterval();
 		if (processQueue()) {
 			scheduleBatchTimeout();
